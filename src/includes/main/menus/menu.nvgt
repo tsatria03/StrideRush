@@ -1,0 +1,20 @@
+void mainmenu()
+{
+setupmenu(true);
+m.add_item("start game", "start");
+m.add_item("exit game", "ex");
+m.intro_text="Main menu. Choose an option with your arrow keys, then press enter to activate one.";
+int mres=m.run();
+string main=mres<0?"":m.selected_item_id;
+// Escape and exit game both quit right away, with no confirm.
+if(mres<0 or main=="ex")
+{
+speak("exiting");
+m.fade_music();
+exit();
+}
+if(main=="start")
+{
+dlg("The game isn't playable yet."); // a dlg so the menu's intro, spoken when it reopens, can't cut the message off
+}
+}

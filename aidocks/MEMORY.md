@@ -56,4 +56,4 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
-- [Skeleton plan](plans/project_skeleton_plan.md) — IN PROGRESS: Sections 1 (launcher), 2 (sr.nvgt + includes) and 3 (dep shims) BUILT; Section 4 (main menu) not built, so no compile yet; 4 sections (sr.py launcher; sr.nvgt + glob includes; shims and trims for the SimpleFighter-copied deps; form_menu main menu); all decisions settled (flat sound root, no keyhook, Escape exits right away, version.nvgt tracked, sr/errors.txt ignored); ready to build
+- [Skeleton plan](plans/project_skeleton_plan.md) — ALL 4 SECTIONS BUILT (launcher, sr.nvgt + includes, dep shims, main menu); awaiting the dev's first launch test, then commit version.nvgt; 4 sections (sr.py launcher; sr.nvgt + glob includes; shims and trims for the SimpleFighter-copied deps; form_menu main menu); all decisions settled (flat sound root, no keyhook, Escape exits right away, version.nvgt tracked, sr/errors.txt ignored); ready to build

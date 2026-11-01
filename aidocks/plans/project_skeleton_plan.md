@@ -1,11 +1,11 @@
 ---
 name: project_skeleton_plan
-description: IN PROGRESS (Sections 1-3 built) - first step of Stride Rush, a bare launchable skeleton (sr.py launcher, src/sr.nvgt entry, glob includes, version mirror, shims for the SimpleFighter-copied deps, a form_menu main menu), in 4 sections
+description: ALL 4 SECTIONS BUILT, awaiting the dev's first launch test - first step of Stride Rush, a bare launchable skeleton (sr.py launcher, src/sr.nvgt entry, glob includes, version mirror, shims for the SimpleFighter-copied deps, a form_menu main menu), in 4 sections
 metadata:
   type: project
 ---
 
-Status: recorded 2026-11-01 at the dev's request. Nothing built. The dev said "do not build any nvgt code" yet, so each section waits for its own go-ahead ([[feedback_confirm_before_implementing]], [[feedback_describe_dont_show_code]]).
+Status: recorded and fully built on 2026-11-01, one section per go-ahead. Not yet launch-tested by the dev; any compile errors from that first test land in sr/errors.txt. After the first launch creates src/includes/version.nvgt, the dev commits it (decision 4). Built one section per go-ahead ([[feedback_confirm_before_implementing]], [[feedback_describe_dont_show_code]]).
 
 Goal: the game launches, speaks a main menu and exits cleanly. No gameplay, settings, saves, keybinds or updater.
 
@@ -62,7 +62,13 @@ The deps are SimpleFighter copies and reference SimpleFighter globals and functi
 - setupmenu.nvgt edit: repoint the main/menus/<menutype> paths to ui/menus/<menutype> (ToyMania tree, [[project_sound_layout]]).
 - form_menu.nvgt calls writepreffs() when the menu music volume changes. Until preferences exist, supply a minimal writepreffs() or no-op it; decide when building.
 
-Section 4: main menu
+Section 4: main menu. BUILT 2026-11-01, on top of commit 9a9f944.
+- Built: menus/menu.nvgt mainmenu(), with setupmenu(true) and two items, "start game" and "exit game".
+- Escape and "exit game" share one branch: speak "exiting", m.fade_music(), exit(). That's the same wording as SimpleFighter.
+- Start game shows dlg("The game isn't playable yet."), not a bare speak(). main() reopens the menu straight away, and its spoken intro would cut a bare speak() off.
+- Replace the start branch with the real game entry once gameplay exists.
+
+Original plan:
 - menus/menu.nvgt mainmenu() on form_menu via setupmenu(true):
   - Start game: a placeholder that speaks one sentence ([[feedback_one_sentence_game_messages]]).
   - Exit: quits right away.
