@@ -1,6 +1,6 @@
 ---
 name: project_skeleton_plan
-description: IN PROGRESS (Section 1 built) - first step of Stride Rush, a bare launchable skeleton (sr.py launcher, src/sr.nvgt entry, glob includes, version mirror, shims for the SimpleFighter-copied deps, a form_menu main menu), in 4 sections
+description: IN PROGRESS (Sections 1-2 built) - first step of Stride Rush, a bare launchable skeleton (sr.py launcher, src/sr.nvgt entry, glob includes, version mirror, shims for the SimpleFighter-copied deps, a form_menu main menu), in 4 sections
 metadata:
   type: project
 ---
@@ -20,7 +20,13 @@ Section 1: launcher (Python, not NVGT). BUILT 2026-11-01.
   - Renames needed: SimpleFighter to Stride Rush in messages, the temp-log prefix, and the script path.
 - .gitignore: add sr/errors.txt. Keep src/includes/version.nvgt tracked (decision 4).
 
-Section 2: entry and include tree
+Section 2: entry and include tree. BUILT 2026-11-01, on top of commit c0e0f69.
+- Built: src/sr.nvgt and src/includes/includes.nvgt (both CRLF). preglobals() is the engine hook the legacy engine calls before globals initialize (bool preglobals(), nvgt_angelscript.cpp); returning false stops the launch.
+- Left out on purpose, compared with sf.nvgt:
+  - #pragma plugin nvgt_curl: only the future updater needs it.
+  - SimpleFighter's typedef line. (dummy.load("dummy") was dropped at first, then restored at the dev's correction; it's required for HRTF, see [[project_nvgt_hrtf_dummy_sound]].)
+  - Every SimpleFighter-only startup step: packs, char/shield/weapon parsing, macros, saves, controls, update check, sound download.
+- Doesn't compile yet: main() uses dummy, hrtf, gamstence and initialize_sound_pools() (Section 3) and mainmenu() (Section 4). version.nvgt doesn't exist until the launcher's first run creates it. Commit it after that run (decision 4).
 - src/sr.nvgt. It holds:
   - preglobals(): a screen reader and sound system check, with alert() fatals.
   - main(), in this order: HRTF and pitch limits (no keyhook, see decision 2), initialize_sound_pools(), show_window("Stride Rush, version "+version), the single-instance block, then loop on mainmenu().
@@ -34,6 +40,7 @@ The deps are SimpleFighter copies and reference SimpleFighter globals and functi
   - menutype ("default"), plus the menu prefs setupmenu reads: first_letter, side_scrolling and speak_menu_position.
   - The temp sound_pool that dlg.nvgt plays through, and the form_menu m instance setupmenu configures (check whether form_menu.nvgt already declares m).
   - The single-instance object.
+  - sound dummy; (required for HRTF) and bool hrtf, which defaults to false like SimpleFighter until preferences exist.
 - globals/decpool.nvgt: initialize_sound_pools() with an all_pools list, following SimpleFighter ([[project_audio_model]]).
 - dlg.nvgt edits (dialog themes, dev-settled 2026-11-01):
   - Dialogs get a theme folder at sounds/ui/dialogs/<foldername>/, chosen by a dialog-theme global in dec.nvgt that defaults to "default".

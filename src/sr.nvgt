@@ -1,0 +1,38 @@
+#include"includes/includes.nvgt"
+
+bool preglobals()
+{
+if (!SCREEN_READER_AVAILABLE)
+{
+alert("Error", "cannot load screen reader components");
+}
+else if (!SOUND_AVAILABLE)
+{
+alert("Error", "cannot load soundsystem");
+}
+else
+{
+return true;
+}
+return false;
+}
+
+void main()
+{
+dummy.load("dummy"); // must load before sound_global_hrtf is set, or HRTF doesn't take effect
+sound_global_hrtf = hrtf;
+sound_pitch_lower_limit = 0.05;
+sound_pitch_upper_limit = 10.00;
+initialize_sound_pools();
+show_window("Stride Rush, version "+version);
+if(gamstence.is_already_running)
+{
+alert("Error", "You can only have one instance of this game running!");
+exit();
+}
+while(true)
+{
+wait(5);
+mainmenu();
+}
+}

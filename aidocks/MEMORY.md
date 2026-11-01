@@ -28,6 +28,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Block comment star-slash](general/project_angelscript_block_comment_star_slash.md) — an asterisk followed by a slash inside /* */ closes the comment early
 - [key_pressed one-shot](general/project_nvgt_key_pressed_oneshot.md) — read a key once per frame and branch inside
 - [Sound preload cache](general/project_nvgt_sound_preload_cache.md) — reloading changed audio under the same filename replays the old clip
+- [HRTF dummy sound](general/project_nvgt_hrtf_dummy_sound.md) — dummy.load("dummy") must run before sound_global_hrtf is set; looks like dead code, never remove it
 - [Sound device indexing](general/project_sound_device_indexing.md) — device list is 0 No sound, 1 Default, 2+ named; no synthetic Default
 - [Transient flags per-frame reset](general/project_transient_flags_per_frame_reset.md) — a timed lockout must be re-held each frame after any per-frame flag reset
 
@@ -38,7 +39,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [List modified files](general/feedback_list_modified_files.md) — end editing turns with "Files changed:" plus a relaunch note
 - [Don't run or build the game](general/feedback_dont_run_or_build_the_game.md) — never launch or compile; the dev verifies
 - [Verify code while fixing](general/feedback_verify_code_while_fixing.md) — locate by symbol, confirm the finding, flag adjacent bugs
-- [Check git log](general/feedback_check_git_log_for_commits.md) — the dev commits between turns; never commit unless asked
+- [Check git log](general/feedback_check_git_log_for_commits.md) — always check the latest commit before each section; the dev commits between turns; never commit unless asked
 - [Stage commits before big changes](general/feedback_stage_commits_before_big_changes.md) — flag a commit break point before a risky stage
 - [CLAUDE.md length](general/feedback_claudemd_length.md) — lean dispatcher under 40,000 chars when one is written
 - [Changelog rules](general/feedback_changelog_rules.md) — player-facing prose, newest on top, bump build/version.txt per block
@@ -55,4 +56,4 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
-- [Skeleton plan](plans/project_skeleton_plan.md) — IN PROGRESS: Section 1 (launcher) BUILT; Sections 2-4 not built; 4 sections (sr.py launcher; sr.nvgt + glob includes; shims and trims for the SimpleFighter-copied deps; form_menu main menu); all decisions settled (flat sound root, no keyhook, Escape exits right away, version.nvgt tracked, sr/errors.txt ignored); ready to build
+- [Skeleton plan](plans/project_skeleton_plan.md) — IN PROGRESS: Sections 1 (launcher) and 2 (sr.nvgt + includes) BUILT; Sections 3-4 not built, so no compile yet; 4 sections (sr.py launcher; sr.nvgt + glob includes; shims and trims for the SimpleFighter-copied deps; form_menu main menu); all decisions settled (flat sound root, no keyhook, Escape exits right away, version.nvgt tracked, sr/errors.txt ignored); ready to build

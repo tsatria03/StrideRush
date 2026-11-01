@@ -1,0 +1,8 @@
+/* Every folder is glob-included, so dropping a new .nvgt file into one of these folders is all the wiring it needs.
+main/parsers is left out until it holds a file; there are no map files yet. */
+#include"version.nvgt"
+
+#include"main/deps/*"
+#include"main/functions/*"
+#include"main/globals/*"
+#include"main/menus/*"
