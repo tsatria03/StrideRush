@@ -1,0 +1,18 @@
+double convert_to_pan(double length, double index, double range1, double range2)
+{
+try
+{
+double range = range2 - range1;
+double percent = index / (length - 1);
+double value = range1 + range * percent;
+return value;
+}
+catch
+{
+return 0;
+}
+}
+void sort_naturally(array<string>& inout arr)
+{
+arr.sort(natural_number_sort);
+}

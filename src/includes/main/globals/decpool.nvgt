@@ -1,0 +1,15 @@
+/* Every positioned game pool goes in all_pools, so setup (and later pausing, resuming and listener updates) reaches all of them at once.
+temp (dialogs), menupool (form_menu) and formpool (form) are UI pools and stay out of it. */
+sound_pool@[] all_pools(0);
+
+void initialize_sound_pools()
+{
+all_pools = {p};
+for (uint i = 0; i < all_pools.length(); i++)
+{
+@all_pools[i].mixer = mixer();
+all_pools[i].max_distance = 0;
+all_pools[i].pan_step = 2.5;
+all_pools[i].volume_step = 2.5;
+}
+}

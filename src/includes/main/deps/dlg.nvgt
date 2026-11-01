@@ -1,7 +1,7 @@
-bool dlg(string message, bool dlgcoppy=true, bool dlgsound=false, int timeout=-1, string stztype="")
+bool dlg(string message, bool dlgcoppy=true, bool dlgsound=false, int timeout=-1)
 {
 timer timeouter;
-if(dlgsound==true) temp.play_stationary(get_pack_sound("main/menus/"+menutype+"/*error*"),false);
+if(dlgsound==true) temp.play_stationary(get_pack_sound("ui/dialogs/"+dlgtype+"/*error*"),false);
 speak(message);
 while(true)
 {
@@ -11,7 +11,7 @@ return false;
 if (key_repeating(KEY_C) and dlgcoppy==true)
 {
 temp.destroy_all();
-if(stztype != "") temp.play_stationary(get_map_sound("builder/zones/story zones/"+stztype+"/*copy*"),false);
+temp.play_stationary(get_pack_sound("ui/dialogs/"+dlgtype+"/*copy*"),false);
 speak("Text copied");
 clipboard_copy_text(message);
 }
@@ -32,25 +32,25 @@ break;
 }
 return false;
 }
-void dlgmessage(string messages, string stztype="")
+void dlgmessage(string messages)
 {
-if(stztype != "") temp.play_stationary(get_map_sound("builder/zones/story zones/"+stztype+"/*open*"),false);
+temp.play_stationary(get_pack_sound("ui/dialogs/"+dlgtype+"/*open*"),false);
 string[] d = string_split(messages, "--", true);
-bool escaped = dlg(d[0], dlgsound:false, stztype:stztype);
+bool escaped = dlg(d[0], dlgsound:false);
 if (escaped)
 {
-if(stztype != "") temp.play_stationary(get_map_sound("builder/zones/story zones/"+stztype+"/*close*"),false);
+temp.play_stationary(get_pack_sound("ui/dialogs/"+dlgtype+"/*close*"),false);
 return;
 }
 for (uint i = 1; i < d.length(); i++)
 {
-if(stztype != "") temp.play_stationary(get_map_sound("builder/zones/story zones/"+stztype+"/*scroll*"),false);
-escaped = dlg(d[i], dlgsound:false, stztype:stztype);
+temp.play_stationary(get_pack_sound("ui/dialogs/"+dlgtype+"/*scroll*"),false);
+escaped = dlg(d[i], dlgsound:false);
 if (escaped)
 {
-if(stztype != "") temp.play_stationary(get_map_sound("builder/zones/story zones/"+stztype+"/*close*"),false);
+temp.play_stationary(get_pack_sound("ui/dialogs/"+dlgtype+"/*close*"),false);
 return;
 }
 }
-if(stztype != "") temp.play_stationary(get_map_sound("builder/zones/story zones/"+stztype+"/*close*"),false);
+temp.play_stationary(get_pack_sound("ui/dialogs/"+dlgtype+"/*close*"),false);
 }

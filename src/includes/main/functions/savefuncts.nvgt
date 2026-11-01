@@ -1,0 +1,5 @@
+/* form_menu calls writepreffs() when the menu music volume changes. There are no saved preferences yet, so this does nothing for now.
+Replace it with the real save when preferences are added. */
+void writepreffs()
+{
+}
