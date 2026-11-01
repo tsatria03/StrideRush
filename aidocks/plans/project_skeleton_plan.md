@@ -1,6 +1,6 @@
 ---
 name: project_skeleton_plan
-description: PLANNED, NOT BUILT - first step of Stride Rush, a bare launchable skeleton (sr.py launcher, src/sr.nvgt entry, glob includes, version mirror, shims for the SimpleFighter-copied deps, a form_menu main menu), in 4 sections
+description: IN PROGRESS (Section 1 built) - first step of Stride Rush, a bare launchable skeleton (sr.py launcher, src/sr.nvgt entry, glob includes, version mirror, shims for the SimpleFighter-copied deps, a form_menu main menu), in 4 sections
 metadata:
   type: project
 ---
@@ -9,7 +9,10 @@ Status: recorded 2026-11-01 at the dev's request. Nothing built. The dev said "d
 
 Goal: the game launches, speaks a main menu and exits cleanly. No gameplay, settings, saves, keybinds or updater.
 
-Section 1: launcher (Python, not NVGT)
+Section 1: launcher (Python, not NVGT). BUILT 2026-11-01.
+- Built: sr/sr.py (CRLF) and the /sr/errors.txt line in .gitignore.
+- One deliberate difference from sf.py: sync_version() reads version.nvgt with newline="". SimpleFighter's read translates CRLF to LF, so its "unchanged" check never matches and it rewrites the file every launch. Harmless, but the bug is still in SimpleFighter.
+
 - sr/sr.py, adapted from SimpleFighter's sf/sf.py.
   - Runs C:\nvgt\nvgt.exe ../src/sr.nvgt with cwd sr/ under CREATE_NO_WINDOW.
   - Watches 5 seconds for an early exit and writes compile errors to sr/errors.txt.
@@ -32,9 +35,11 @@ The deps are SimpleFighter copies and reference SimpleFighter globals and functi
   - The temp sound_pool that dlg.nvgt plays through, and the form_menu m instance setupmenu configures (check whether form_menu.nvgt already declares m).
   - The single-instance object.
 - globals/decpool.nvgt: initialize_sound_pools() with an all_pools list, following SimpleFighter ([[project_audio_model]]).
-- dlg.nvgt edits:
-  - Remove the story-zone stztype parameter and its get_map_sound calls.
-  - Repoint the error sound to Stride Rush's menu folder.
+- dlg.nvgt edits (dialog themes, dev-settled 2026-11-01):
+  - Dialogs get a theme folder at sounds/ui/dialogs/<foldername>/, chosen by a dialog-theme global in dec.nvgt that defaults to "default".
+  - Replace the story-zone stztype parameter and its get_map_sound("builder/zones/story zones/...") calls with get_pack_sound("ui/dialogs/"+theme+"/*open*") and the same for close, scroll and copy.
+  - Dialogs then always play their theme sounds, rather than only when a story-zone type is passed.
+  - The error sound moves from main/menus/<menutype>/ to the dialog theme: ui/dialogs/<theme>/*error* (dev-settled 2026-11-01).
 - setupmenu.nvgt edit: repoint the main/menus/<menutype> paths to ui/menus/<menutype> (ToyMania tree, [[project_sound_layout]]).
 - form_menu.nvgt calls writepreffs() when the menu music volume changes. Until preferences exist, supply a minimal writepreffs() or no-op it; decide when building.
 

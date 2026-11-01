@@ -10,7 +10,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Build pipeline](general/project_build_pipeline.md) — build/ tools adapted from SimpleFighter (StrideRush, password StrideSprinter, v1.0, sounds bundled); V<version>0 tag format; site page not created yet
 - [Entity pattern](general/project_entity_pattern.md) — one file per object: pool, handle array, class, spawn/check/remove/destroy_all, sentinel-null removal, one clear registry
 - [Audio model](general/project_audio_model.md) — pool per category, listener every frame, HRTF pref; kept handles must be looping or persistent
-- [Sound layout](general/project_sound_layout.md) — sr/sounds/ follows ToyMania's tree, NO top-level sound packs (sounds/ is the root); wildcard random-variant lookup; all folders and code paths lowercase (misc/player)
+- [Sound layout](general/project_sound_layout.md) — sr/sounds/ follows ToyMania's tree, NO top-level sound packs (sounds/ is the root); menu and dialog themes at ui/menus/<name> and ui/dialogs/<name> (dlg error sound in the dialog theme); equipment/objects use per-type folders like items/<itemname> (ToyMania-style); weapons add a category level (weapons/melee/<name>, weapons/artillery/<name>); item grouping deferred; wildcard random-variant lookup; all folders and code paths lowercase (misc/player)
 - [Memory folder layout](general/feedback_memory_folder_layout.md) — memories go in aidocks/: general/ for topics, plans/ for completed or in-progress plans; CRLF files
 
 ## Reference repos (read only)
@@ -43,6 +43,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [CLAUDE.md length](general/feedback_claudemd_length.md) — lean dispatcher under 40,000 chars when one is written
 - [Changelog rules](general/feedback_changelog_rules.md) — player-facing prose, newest on top, bump build/version.txt per block
 - [Update build/version.txt](general/feedback_update_build_version_txt.md) — version.txt is the source of truth; version.nvgt is generated
+- [Docks later](general/feedback_docks_later.md) — don't update sr/docks/ yet; readme at first playable, changelog at first release; todo list is player-facing entries only
 - [Dock line length 1024](general/feedback_dock_line_length_1024.md) — lines in sr/docks/ stay at or under 1024 chars
 - [One-sentence game messages](general/feedback_one_sentence_game_messages.md) — in-game speech is one sentence, no trailing advice
 - [Menus say canceled](general/feedback_menus_say_canceled.md) — every escape, Back or No path speaks "canceled"
@@ -54,4 +55,4 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
-- [Skeleton plan](plans/project_skeleton_plan.md) — PLANNED, NOT BUILT: 4 sections (sr.py launcher; sr.nvgt + glob includes; shims and trims for the SimpleFighter-copied deps; form_menu main menu); all decisions settled (flat sound root, no keyhook, Escape exits right away, version.nvgt tracked, sr/errors.txt ignored); ready to build
+- [Skeleton plan](plans/project_skeleton_plan.md) — IN PROGRESS: Section 1 (launcher) BUILT; Sections 2-4 not built; 4 sections (sr.py launcher; sr.nvgt + glob includes; shims and trims for the SimpleFighter-copied deps; form_menu main menu); all decisions settled (flat sound root, no keyhook, Escape exits right away, version.nvgt tracked, sr/errors.txt ignored); ready to build
