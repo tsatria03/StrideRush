@@ -1,0 +1,55 @@
+# Stride Rush memory index
+
+The [[name]] links across these memories resolve to aidocks/general/<name>.md or aidocks/plans/<name>.md. Add a one-line pointer here for every new memory. "Memory" always means this folder.
+
+## Project
+- [Runner overview](general/project_runner_overview.md) — audio runner in legacy NVGT, scaffold only, not a repo yet, named Stride Rush (assets in sr/, top folder still ClassicRunner), user/ excluded, no CLAUDE.md yet
+- [Game design](general/project_game_design.md) — basic 2d side-scroller, no lane switching (later expansion), jump on cue over hazards or die, speed-up step timer with oneshot footsteps, ToyMania sound layout
+- [Engine pinned to legacy nvgt](general/project_engine_pinned_nvgt.md) — target C:\nvgt (BASS), source in misc/Legacy-NVGT; C:\nvgt2 only for testing others' games
+- [Entity pattern](general/project_entity_pattern.md) — one file per object: pool, handle array, class, spawn/check/remove/destroy_all, sentinel-null removal, one clear registry
+- [Audio model](general/project_audio_model.md) — pool per category, listener every frame, HRTF pref; kept handles must be looping or persistent
+- [Sound layout](general/project_sound_layout.md) — sr/sounds/ follows ToyMania; get_sound() wildcard random-variant lookup; misc/PLAYER case pitfall
+- [Memory folder layout](general/feedback_memory_folder_layout.md) — memories go in aidocks/: general/ for topics, plans/ for completed or in-progress plans; CRLF files
+
+## Reference repos (read only)
+- [SimpleFighter reference](general/reference_simplefighter_readonly.md) — games/SimpleFighter is object/entity reference material; strictly read only, never modify
+- [ToyMania reference](general/reference_toymania_readonly.md) — games/ToyMania is the sound-layout, scoring and difficulty reference; read only; scoring/difficulty only when the dev asks
+- [ToyMania architecture](general/reference_toymania_architecture.md) — launcher, glob includes, build pipeline, game loop, menus, keybinds; closest template for the skeleton
+- [ToyMania scoring and difficulty](general/reference_toymania_scoring_difficulty.md) — session/lifetime stats, savedata, achievements, 5-tier difficulty ladder, bugs not to copy
+- [SimpleFighter architecture](general/reference_simplefighter_architecture.md) — launcher, map format and dispatcher, menus, dialogs, settings, key_config
+- [SimpleFighter movement and jump](general/reference_simplefighter_movement_jump.md) — 2d step, footstep, jump state machine, gravity, hazard death and pause paths
+
+## NVGT / AngelScript gotchas
+- [Braceless if](general/project_angelscript_braceless_if.md) — a braceless branch holds one statement; a second orphans the else and breaks the compile
+- [Reserved words](general/project_angelscript_reserved_words.md) — never name a variable out, in, inout, shared, final, from
+- [while(true) return](general/project_angelscript_while_true_return.md) — a non-void function returning only inside while(true) still needs a trailing return
+- [Block comment star-slash](general/project_angelscript_block_comment_star_slash.md) — an asterisk followed by a slash inside /* */ closes the comment early
+- [key_pressed one-shot](general/project_nvgt_key_pressed_oneshot.md) — read a key once per frame and branch inside
+- [Sound preload cache](general/project_nvgt_sound_preload_cache.md) — reloading changed audio under the same filename replays the old clip
+- [Sound device indexing](general/project_sound_device_indexing.md) — device list is 0 No sound, 1 Default, 2+ named; no synthetic Default
+- [Transient flags per-frame reset](general/project_transient_flags_per_frame_reset.md) — a timed lockout must be re-held each frame after any per-frame flag reset
+
+## Feedback: how the dev wants me to work
+- [Confirm before implementing](general/feedback_confirm_before_implementing.md) — a design discussion is a request for a plan; wait for go-ahead; one step at a time
+- [Ask one question at a time](general/feedback_ask_one_question_at_a_time.md) — one question per turn, with a recommendation
+- [Describe, don't show code](general/feedback_describe_dont_show_code.md) — give all section plans up front, build per go-ahead, never paste code in chat
+- [List modified files](general/feedback_list_modified_files.md) — end editing turns with "Files changed:" plus a relaunch note
+- [Don't run or build the game](general/feedback_dont_run_or_build_the_game.md) — never launch or compile; the dev verifies
+- [Verify code while fixing](general/feedback_verify_code_while_fixing.md) — locate by symbol, confirm the finding, flag adjacent bugs
+- [Check git log](general/feedback_check_git_log_for_commits.md) — the dev commits between turns; never commit unless asked (once a repo exists)
+- [Stage commits before big changes](general/feedback_stage_commits_before_big_changes.md) — flag a commit break point before a risky stage
+- [CLAUDE.md length](general/feedback_claudemd_length.md) — lean dispatcher under 40,000 chars when one is written
+- [Changelog rules](general/feedback_changelog_rules.md) — player-facing prose, newest on top, bump build/version.txt per block
+- [Update build/version.txt](general/feedback_update_build_version_txt.md) — version.txt is the source of truth; version.nvgt is generated
+- [Dock line length 1024](general/feedback_dock_line_length_1024.md) — lines in sr/docks/ stay at or under 1024 chars
+- [One-sentence game messages](general/feedback_one_sentence_game_messages.md) — in-game speech is one sentence, no trailing advice
+- [Menus say canceled](general/feedback_menus_say_canceled.md) — every escape, Back or No path speaks "canceled"
+- [Yes/No menu labels](general/feedback_yes_no_menu_labels.md) — items exactly Yes then No; context in the prompt
+- [Multiline comment style](general/feedback_multiline_comment_style.md) — multi-line comments are one /* */ block
+- [Don't flag indentation](general/feedback_dont_flag_indentation.md) — AngelScript ignores whitespace; don't reformat
+- [No CRLF normalization](general/feedback_no_crlf_normalization.md) — new files CRLF, preserve endings on edit, never a tree-wide normalizer
+- [Don't name others' games](general/feedback_dont_name_others_games.md) — in committed files, name only the dev's own games
+- [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
+
+## Plans
+(none yet)
