@@ -3,12 +3,14 @@
 The [[name]] links across these memories resolve to aidocks/general/<name>.md or aidocks/plans/<name>.md. Add a one-line pointer here for every new memory. "Memory" always means this folder.
 
 ## Project
-- [Runner overview](general/project_runner_overview.md) — audio runner in legacy NVGT, scaffold only, not a repo yet, named Stride Rush (assets in sr/, top folder still ClassicRunner), user/ excluded, no CLAUDE.md yet
+- [Runner overview](general/project_runner_overview.md) — audio runner in legacy NVGT, scaffold only, git repo tsatria03/StrideRush on main, assets in sr/, user/ excluded, no CLAUDE.md yet
 - [Game design](general/project_game_design.md) — basic 2d side-scroller, no lane switching (later expansion), jump on cue over hazards or die, speed-up step timer with oneshot footsteps, ToyMania sound layout
 - [Engine pinned to legacy nvgt](general/project_engine_pinned_nvgt.md) — target C:\nvgt (BASS), source in misc/Legacy-NVGT; C:\nvgt2 only for testing others' games
+- [Tech decisions](general/project_tech_decisions.md) — form_menu not custom_menu; no map files for now; SimpleFighter sound glob functions; SimpleFighter updater later; no JAWS keyhook; deps copied from SimpleFighter
+- [Build pipeline](general/project_build_pipeline.md) — build/ tools adapted from SimpleFighter (StrideRush, password StrideSprinter, v1.0, sounds bundled); V<version>0 tag format; site page not created yet
 - [Entity pattern](general/project_entity_pattern.md) — one file per object: pool, handle array, class, spawn/check/remove/destroy_all, sentinel-null removal, one clear registry
 - [Audio model](general/project_audio_model.md) — pool per category, listener every frame, HRTF pref; kept handles must be looping or persistent
-- [Sound layout](general/project_sound_layout.md) — sr/sounds/ follows ToyMania; get_sound() wildcard random-variant lookup; misc/PLAYER case pitfall
+- [Sound layout](general/project_sound_layout.md) — sr/sounds/ follows ToyMania's tree, NO top-level sound packs (sounds/ is the root); wildcard random-variant lookup; all folders and code paths lowercase (misc/player)
 - [Memory folder layout](general/feedback_memory_folder_layout.md) — memories go in aidocks/: general/ for topics, plans/ for completed or in-progress plans; CRLF files
 
 ## Reference repos (read only)
@@ -36,7 +38,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [List modified files](general/feedback_list_modified_files.md) — end editing turns with "Files changed:" plus a relaunch note
 - [Don't run or build the game](general/feedback_dont_run_or_build_the_game.md) — never launch or compile; the dev verifies
 - [Verify code while fixing](general/feedback_verify_code_while_fixing.md) — locate by symbol, confirm the finding, flag adjacent bugs
-- [Check git log](general/feedback_check_git_log_for_commits.md) — the dev commits between turns; never commit unless asked (once a repo exists)
+- [Check git log](general/feedback_check_git_log_for_commits.md) — the dev commits between turns; never commit unless asked
 - [Stage commits before big changes](general/feedback_stage_commits_before_big_changes.md) — flag a commit break point before a risky stage
 - [CLAUDE.md length](general/feedback_claudemd_length.md) — lean dispatcher under 40,000 chars when one is written
 - [Changelog rules](general/feedback_changelog_rules.md) — player-facing prose, newest on top, bump build/version.txt per block
@@ -52,4 +54,4 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
-(none yet)
+- [Skeleton plan](plans/project_skeleton_plan.md) — PLANNED, NOT BUILT: 4 sections (sr.py launcher; sr.nvgt + glob includes; shims and trims for the SimpleFighter-copied deps; form_menu main menu); all decisions settled (flat sound root, no keyhook, Escape exits right away, version.nvgt tracked, sr/errors.txt ignored); ready to build

@@ -1,13 +1,15 @@
 ---
 name: project_runner_overview
-description: What this game is (an audio runner in legacy NVGT), its pre-repo status, the undecided name, and the excluded user/ folder
+description: What this game is (an audio runner in legacy NVGT), its name and repo status, folder names, and the excluded user/ folder
 metadata:
   type: project
 ---
 
 An audio-only runner game in NVGT. The player rides a one-way, constantly moving belt (rightward in 2d) past obstacles placed on a map. A timer in the game script advances the player and plays a oneshot footstep on each tick, and the tick interval shrinks over time so the run speeds up. Goal: a simple core that users can easily expand in code.
 
-Status as of 2026-11-01: scaffolding only (src/includes/main/..., csr/ assets with docks, sounds, data, lib), no scripts yet. Not a git repository yet. Name chosen 2026-11-01: Stride Rush (picked over Echo Stride and Full Stride). The asset folder is sr/ (was csr/) and the release folder is releases/windows/StrideRush. The top-level project folder is still named ClassicRunner because the dev can't rename it mid-session; they will rename it later. The GitHub repo will be created later under the new name.
+Name chosen 2026-11-01: Stride Rush (picked over Echo Stride and Full Stride). The project folder is games/StrideRush (was ClassicRunner), the asset folder sr/ (was csr/), and the release folder releases/windows/StrideRush.
+
+Status as of 2026-11-01: a git repo on branch main with remote origin https://github.com/tsatria03/StrideRush. The initial commit holds .gitattributes, .gitignore, LICENSE, README.md, the four sr/docks/ files and aidocks/. The rest is scaffold folders only; no scripts yet.
 
 Engine: the legacy fork at C:\nvgt, source at misc/Legacy-NVGT. The user/ folder is excluded for now; the dev will discuss it later.
 

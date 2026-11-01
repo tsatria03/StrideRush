@@ -33,4 +33,6 @@ UI and input:
 
 Pools: one sound_pool per category, declared in dec.nvgt. decpool.nvgt adds pause_pools, resume_pools and the fade helpers.
 
+Overridden by [[project_tech_decisions]]: Stride Rush uses form_menu instead of custom_menu, SimpleFighter's sound glob functions, and SimpleFighter's updater. Its deps/ came from SimpleFighter.
+
 **How to apply:** when the dev asks for the skeleton, propose adapting these pieces with paths renamed (tm to sr) and the pitfalls in [[reference_toymania_scoring_difficulty]] avoided. Line numbers drift, so search by symbol.
