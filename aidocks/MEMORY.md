@@ -3,10 +3,10 @@
 The [[name]] links across these memories resolve to aidocks/general/<name>.md or aidocks/plans/<name>.md. Add a one-line pointer here for every new memory. "Memory" always means this folder.
 
 ## Project
-- [Runner overview](general/project_runner_overview.md) — audio runner in legacy NVGT, scaffold only, git repo tsatria03/StrideRush on main, assets in sr/, user/ excluded, no CLAUDE.md yet
-- [Game design](general/project_game_design.md) — basic 2d side-scroller, no lane switching (later expansion), jump on cue over hazards or die, speed-up step timer with oneshot footsteps, ToyMania sound layout
+- [Runner overview](general/project_runner_overview.md) — audio runner in legacy NVGT, launchable skeleton (main menu, no gameplay), git repo tsatria03/StrideRush on main, assets in sr/, CLAUDE.md written 2026-11-01 as a dispatcher
+- [Game design](general/project_game_design.md) — basic 2d side-scroller, no lane switching (later expansion), jump or duck on cue or die, weapons/hands later, speed-up step timer with oneshot footsteps, ToyMania sound layout
 - [Engine pinned to legacy nvgt](general/project_engine_pinned_nvgt.md) — target C:\nvgt (BASS), source in misc/Legacy-NVGT; C:\nvgt2 only for testing others' games
-- [Tech decisions](general/project_tech_decisions.md) — form_menu not custom_menu; no map files for now; SimpleFighter sound glob functions; SimpleFighter updater later; no JAWS keyhook; deps copied from SimpleFighter
+- [Tech decisions](general/project_tech_decisions.md) — offline single player, no networking (updater HTTP excepted); form_menu not custom_menu; no map files for now; SimpleFighter sound glob functions; SimpleFighter updater later; no JAWS keyhook; deps copied from SimpleFighter
 - [Build pipeline](general/project_build_pipeline.md) — build/ tools adapted from SimpleFighter (StrideRush, password StrideSprinter, v1.0, sounds bundled); V<version>0 tag format; site page not created yet
 - [Entity pattern](general/project_entity_pattern.md) — one file per object: pool, handle array, class, spawn/check/remove/destroy_all, sentinel-null removal, one clear registry
 - [Audio model](general/project_audio_model.md) — pool per category, listener every frame, HRTF pref; kept handles must be looping or persistent
@@ -18,6 +18,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [ToyMania reference](general/reference_toymania_readonly.md) — games/ToyMania is the sound-layout, scoring and difficulty reference; read only; scoring/difficulty only when the dev asks
 - [ToyMania architecture](general/reference_toymania_architecture.md) — launcher, glob includes, build pipeline, game loop, menus, keybinds; closest template for the skeleton
 - [ToyMania scoring and difficulty](general/reference_toymania_scoring_difficulty.md) — session/lifetime stats, savedata, achievements, 5-tier difficulty ladder, bugs not to copy
+- [CaveDefender buffer](general/reference_cavedefender_buffer.md) — the speech-buffer system to port (user/CaveDefender-main client deps/buffer.nvgt, read only), its keys, and the CaveDefender-only parts to adapt
 - [SimpleFighter architecture](general/reference_simplefighter_architecture.md) — launcher, map format and dispatcher, menus, dialogs, settings, key_config
 - [SimpleFighter movement and jump](general/reference_simplefighter_movement_jump.md) — 2d step, footstep, jump state machine, gravity, hazard death and pause paths
 
@@ -34,6 +35,8 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 
 ## Feedback: how the dev wants me to work
 - [Confirm before implementing](general/feedback_confirm_before_implementing.md) — a design discussion is a request for a plan; wait for go-ahead; one step at a time
+- [Plans record Q&A](general/feedback_plans_record_qna.md) — several gameplay plans get discussed before any game code; log every Q&A in the plan file
+- [Tell when to commit plans](general/feedback_tell_when_to_commit_plans.md) — flag when a plan is settled with all Q&A recorded so the dev can commit it
 - [Ask one question at a time](general/feedback_ask_one_question_at_a_time.md) — one question per turn, with a recommendation
 - [Describe, don't show code](general/feedback_describe_dont_show_code.md) — give all section plans up front, build per go-ahead, never paste code in chat
 - [List modified files](general/feedback_list_modified_files.md) — end editing turns with "Files changed:" plus a relaunch note
@@ -56,4 +59,5 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
-- [Skeleton plan](plans/project_skeleton_plan.md) — ALL 4 SECTIONS BUILT (launcher, sr.nvgt + includes, dep shims, main menu); awaiting the dev's first launch test, then commit version.nvgt; 4 sections (sr.py launcher; sr.nvgt + glob includes; shims and trims for the SimpleFighter-copied deps; form_menu main menu); all decisions settled (flat sound root, no keyhook, Escape exits right away, version.nvgt tracked, sr/errors.txt ignored); ready to build
+- [Controls plan](plans/project_controls_plan.md) — SETTLED, NOT BUILT: dev-set keys (Up/W jump, Down/S duck, lanes reserved, Tab/Z and Enter/C hands, Space-only fire, X ammo, R reload, 1-0 weapons, readouts H health/Q distance/E speed/T time/F score, Esc/P pause, Home/End ambience, PgUp/PgDn music), rebindable via key_config; status readouts on letters, not F keys; CaveDefender buffer keys kept as-is; in-game F1 opens the view-bindings screen and F2 opens settings (SimpleFighter-style tabs), both pausing; mid-run F2 shows only Game/Menu/Speech tabs (General, Keyboard, Sound hidden), no rebinding mid-run; no settings in the pause menu, no Alt shortcuts; unlisted keys pending; Q&A log
+- [Skeleton plan](plans/project_skeleton_plan.md) — COMPLETE: launcher, sr.nvgt + includes, dep shims and main menu built, launch-tested and committed (d0e340f); 4 sections (sr.py launcher; sr.nvgt + glob includes; shims and trims for the SimpleFighter-copied deps; form_menu main menu); all decisions settled (flat sound root, no keyhook, Escape exits right away, version.nvgt tracked, sr/errors.txt ignored); ready to build

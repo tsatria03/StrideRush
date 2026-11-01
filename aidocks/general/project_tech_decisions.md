@@ -1,12 +1,13 @@
 ---
 name: project_tech_decisions
-description: Settled tech choices - form_menu (not ToyMania's custom_menu), no map files for now, SimpleFighter's sound glob functions, SimpleFighter's updater later, deps copied from SimpleFighter
+description: Settled tech choices - offline single player with no networking, form_menu (not ToyMania's custom_menu), no map files for now, SimpleFighter's sound glob functions, SimpleFighter's updater later, deps copied from SimpleFighter
 metadata:
   type: project
 ---
 
 Settled by the dev on 2026-11-01:
 
+- Offline, single player. No networking systems: no server, no client netcode, no chats, no keepalive callbacks. Strip any networking from code ported from CaveDefender. The one exception is the future updater, a plain HTTP download through the nvgt_curl plugin. The dev confirmed on 2026-11-01 that it stays, because it isn't part of the game mechanics.
 - Menus: form_menu plus setupmenu (SimpleFighter's), not ToyMania's custom_menu. Both are already in src/includes/main/deps/.
 - No customizable or authored map files. That's "much much later". Obstacles come from game code, not a map parser. src/includes/main/parsers/ exists but has no map role for now.
 - Sound lookup: wildcard globbing (find_sound_in_disk picks a random match). Use whichever of SimpleFighter's packfuncts.nvgt or ToyMania's extrafuncts.nvgt is more up to date.

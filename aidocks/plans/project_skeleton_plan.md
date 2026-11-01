@@ -1,11 +1,11 @@
 ---
 name: project_skeleton_plan
-description: ALL 4 SECTIONS BUILT, awaiting the dev's first launch test - first step of Stride Rush, a bare launchable skeleton (sr.py launcher, src/sr.nvgt entry, glob includes, version mirror, shims for the SimpleFighter-copied deps, a form_menu main menu), in 4 sections
+description: COMPLETE (built, launch-tested and committed 2026-11-01 as d0e340f) - first step of Stride Rush, a bare launchable skeleton (sr.py launcher, src/sr.nvgt entry, glob includes, version mirror, shims for the SimpleFighter-copied deps, a form_menu main menu), in 4 sections
 metadata:
   type: project
 ---
 
-Status: recorded and fully built on 2026-11-01, one section per go-ahead. Not yet launch-tested by the dev; any compile errors from that first test land in sr/errors.txt. After the first launch creates src/includes/version.nvgt, the dev commits it (decision 4). Built one section per go-ahead ([[feedback_confirm_before_implementing]], [[feedback_describe_dont_show_code]]).
+Status: COMPLETE 2026-11-01. The dev launch-tested it (the main menu test passed, with no compile errors on the first try) and committed it as d0e340f "Added a skelliton foundation for the game". That commit includes the generated src/includes/version.nvgt (decision 4). Built one section per go-ahead ([[feedback_confirm_before_implementing]], [[feedback_describe_dont_show_code]]).
 
 Goal: the game launches, speaks a main menu and exits cleanly. No gameplay, settings, saves, keybinds or updater.
 
