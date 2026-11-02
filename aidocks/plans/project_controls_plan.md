@@ -22,7 +22,7 @@ Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFight
 - Buffer keys (CaveDefender's, kept as-is): comma and period for messages, the brackets for categories, Shift with either pair for first and last, Shift+M mute, Shift+C copy, Alt+Shift+C review, Shift+B buffer menu, Shift+backslash export.
 - F1 (during a game): open the view-key-bindings screen, the same one as the settings Keyboard tab's "View current keyboard bindings". It pauses the run while open (settled 2026-11-01).
 - F2 (during a game): open the settings panel, SimpleFighter-style tabs. No Alt-letter shortcuts. During a run it shows only the Game, Menu and Speech tabs; General, Keyboard and Sound are hidden, exactly like SimpleFighter's settingsmenu(true). Viewing key bindings mid-run is F1's job (settled 2026-11-01).
-- H: health and lives readout, for later (added by the dev 2026-11-01).
+- L: lives readout, how many lives you have (dev, 2026-11-01). H is UNUSED; it was the health/lives key, replaced by L. There's no separate health, only lives.
 - Q: distance traveled readout.
 - E: current speed readout.
 - T: time in this run readout.
@@ -63,4 +63,5 @@ Q&A log:
   - SimpleFighter reference: on a map it shows only Game, Menu and Speech, opened by the pf/preffs command, which calls pause_pools() then settingsmenu(true). The ingame flag hides General, Keyboard and Sound.
 - Q: Is duck held or a timed slide? A: Held. duck.ogg means the player holds Down/S; unduck.ogg means they release it (dev, 2026-11-01). For the movement plan: Up while ducking, and Down in mid-air (flag 3) still need rules.
 - Q: Can you duck forever? A: No. It auto-unducks after about 1 to 2 seconds. You can unduck early by releasing, but that raises the chance of smashing into something (dev, 2026-11-01).
+- Q: (dev note) Lives key? A: L shows how many lives you have. H is unused (dev, 2026-11-01).
 - Q: Does the no-networking rule remove the updater? A: No. The updater stays, because it isn't part of the game mechanics (dev, 2026-11-01).

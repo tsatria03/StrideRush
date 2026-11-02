@@ -7,13 +7,17 @@ metadata:
 
 No top-level sound packs: there will never be a sounds/<packname>/ level, so sr/sounds/ is the root and paths go straight to the category. Settled 2026-11-01. *.ogg and *.wav are gitignored, so this memory is the repo's only record of which clips exist; keep it in step with the folder.
 
-Current tree (rescanned 2026-11-01 after the dev's second reorganization; 279 files with the weapons, the switch and the construction examples added). objects/ is now grouped the way SimpleFighter's builder categories are; the rest keeps ToyMania's top level.
+Current tree (rescanned 2026-11-01 after the dev's second reorganization; 287 files with the weapons, the switch, the construction examples, the new player clips and the shield added). objects/ is now grouped the way SimpleFighter's builder categories are; the rest keeps ToyMania's top level.
 - equipments/weapons (added 2026-11-01, 69 files; ToyMania's ten weapons). Weapons keep a category level, weapons/<category>/<weaponname>/.
   - melee: bat, boot, club, feat, fist, hammer, knife, laser. Most have draw, fire1-3 and hit1-3; fist has fire1-2; laser has a single draw, fire and hit.
   - artillery: machine_gun and pistol, with draw, empty, fail, fire, hit, ping, reload and shell1-2.
   - Ten weapons is exactly the ten number-row slots (1 to 0) in [[project_controls_plan]].
 - misc/game: pause, resume.
-- misc/player: jump, duck, unduck, life, give, turn, and inv1 to inv6.
+- misc/player: jump, rise, land, duck, unduck, life, death, hit, give, turn, and inv1 to inv6. rise, land, death and hit were added 2026-11-01.
+  - Jump plays misc/player/jump and misc/player/rise together. Landing plays misc/player/land together with the platform tile's land clip (dev, 2026-11-01).
+  - hit: plays when a force field, mine or spike hits the player, at the same moment as the obstacle's own clips (dev, 2026-11-01). It's Stride Rush's version of SimpleFighter's character hurt sound.
+  - death: plays when the player dies, but only from force fields, mines and spikes. Hazards don't use it, since they bring their own fall clip (dev, 2026-11-01).
+- equipments/shields/steel: wear, hit, break, remove (added 2026-11-01; renamed from the misspelled "steal" by Claude at the dev's request the same day). For later; the dev will describe it when its time comes.
 - objects/audio/musics and objects/audio/sources: empty. Music tracks and ambience loops for runs go here (they replaced the old objects/sources/tracks and ambiences).
 - objects/construction (example elements added 2026-11-01; 279 files total in sounds/ now):
   - platforms: carpet, cement, concrete, ledge, marble. Each has fall, land and step1-5; cement has step1-10. There are no hurt or death clips; the wildcard handles any number of steps. More favorites may follow.
@@ -27,12 +31,12 @@ Current tree (rescanned 2026-11-01 after the dev's second reorganization; 279 fi
 - objects/traps/force_fields/electric, electric2: on, off, hit. Renamed from "force fields" by the dev on 2026-11-01, so no folder name has a space.
 - objects/traps/hazards: chasm, chasm2, electricity, electricity2, electricity4, fire, lava, pit, quicksand, water, water2. Each has loop and fall.
 - objects/traps/mines/mine, mine2, mine3: spawn, light, loop, hit, explode.
-- objects/traps/spikes/electric_ray, large_spike: loop, hit, hurt (.wav), death1-2.
+- objects/traps/spikes/electric_ray, large_spike: loop and hit only. The dev trimmed these for Stride Rush on 2026-11-01, removing hurt (.wav) and death1-2, so spikes have no clips for being smashed.
 - ui/dialogs/default, ui/menus/default: empty so far. ui/other was removed.
 
 misc/player notes:
 - duck plays when the player presses and holds Down/S; unduck plays on release, or when ducking auto-unducks after about 1 to 2 seconds (dev, 2026-11-01).
-- There's no land clip here; landing comes from the platform tile's land clip.
+- Landing layers misc/player/land with the platform tile's land clip; neither replaces the other.
 - life plays when a life is lost but the run continues. In the basic game (1 life) it's never heard.
 - give and inv1-6 are ToyMania-style inventory sounds. turn is a ToyMania clip; its use is open, possibly lane changes.
 
