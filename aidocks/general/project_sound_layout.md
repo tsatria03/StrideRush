@@ -12,7 +12,10 @@ Current tree (rescanned 2026-11-01 after the dev's second reorganization; 300 fi
   - melee: bat, boot, club, feat, fist, hammer, knife, laser. Most have draw, fire1-3 and hit1-3; fist has fire1-2; laser has a single draw, fire and hit.
   - artillery: machine_gun and pistol, with draw, empty, fail, fire, hit, ping, reload and shell1-2.
   - Ten weapons is exactly the ten number-row slots (1 to 0) in [[project_controls_plan]].
-- misc/game: pause, resume, and hazcount1 to hazcount5 (the hazard ledge countdown, added 2026-11-02 from the friend's template; built in hazard.nvgt).
+- misc/game: pause, resume. hazcount1 to hazcount5 were here (added earlier on 2026-11-02) but the dev removed them later that day, replacing them with misc/trap.
+- misc/trap/<type>/warn1 to warn5 (added by the dev, 2026-11-02): a distinct 5-step warning countdown per obstacle type, for force_fields, hazards, mines, projectiles and spikes. warn5 is the last, "act now" cue. Folder names match objects/traps/<type> (projectiles matches objects/kombat/projectiles), so code can build the path from the type name. This resolves the old "warning cues deferred until sounds exist" problem ([[project_run_plan]]).
+  - hazard.nvgt's countdown was repointed from misc/game/hazcount to misc/trap/hazards/warn the same day (it had gone silent when hazcount was removed).
+  - Lesson: sr/sounds is gitignored (*.ogg), so a removed or renamed sound never shows in git status. Grep src for any old path whenever the dev reorganizes sounds.
 - misc/player: jump, rise, land, duck, unduck, life, death, hit, give, turn, and inv1 to inv6. rise, land, death and hit were added 2026-11-01.
   - Jump plays misc/player/jump and misc/player/rise together. Landing plays misc/player/land together with the platform tile's land clip (dev, 2026-11-01).
   - hit: plays when a force field, mine or spike hits the player, at the same moment as the obstacle's own clips (dev, 2026-11-01). It's Stride Rush's version of SimpleFighter's character hurt sound.
@@ -28,7 +31,7 @@ Current tree (rescanned 2026-11-01 after the dev's second reorganization; 300 fi
 - objects/transitions/doors/door, door2, door3, door4: open, close, move, loop, grant, deny, jam1-2, hurt, death.
 - objects/transitions/teleporters/tp: loop, move.
 - objects/interaction/switches/switch: press (added 2026-11-01, for the future hand-operated force field). Moved there from transitions by the dev the same day, matching SimpleFighter's builder, which files switches under interaction.
-- objects/traps/force_fields/electric, electric2: on, off, hit. Renamed from "force fields" by the dev on 2026-11-01, so no folder name has a space.
+- objects/traps/force_fields/electric, electric2: on, off, hit. on and off are both LOOPS, a distinct one for each state: on while the field is active, off while it's inactive (dev, 2026-11-02). Don't assume a clip is a oneshot just because it isn't named loop. Renamed from "force fields" by the dev on 2026-11-01, so no folder name has a space.
 - objects/traps/hazards: chasm, chasm2, electricity, electricity2, electricity4, fire, lava, pit, quicksand, water, water2. Each has loop and fall.
 - objects/traps/mines/mine, mine2, mine3: spawn, light, loop, hit, explode.
 - objects/traps/spikes/electric_ray, large_spike: loop and hit only. The dev trimmed these for Stride Rush on 2026-11-01, removing hurt (.wav) and death1-2, so spikes have no clips for being smashed.

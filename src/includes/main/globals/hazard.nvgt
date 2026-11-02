@@ -51,8 +51,8 @@ return;
 if (me_x > max(hazards[i].ledge_end, hazards[i].x + spawn_distance())) remove_hazard(i);
 }
 }
-/* The countdown: one cue per ledge step before a hazard, the LAST ones of hazcount1 to hazcount5, so the final ledge
-step always plays hazcount5 ("jump now"). Five ledge steps hear 1 to 5; three hear 3 to 5; one hears only 5. Each cue
+/* The countdown: one cue per ledge step before a hazard, the LAST ones of misc/trap/hazards warn1 to warn5, so the
+final ledge step always plays warn5 ("jump now"). Five ledge steps hear 1 to 5; three hear 3 to 5; one hears only 5. Each cue
 plays in 2d (never stationary) at the ledge tile you've just stepped onto, not at the hazard. Runs once per step. */
 void hazard_countdown()
 {
@@ -61,7 +61,7 @@ for (uint i = 0; i < hazards.length(); i++)
 if (@hazards[i] == null) continue;
 int steps_left = int(hazards[i].x - me_x);
 if (steps_left < 1 or steps_left > 5 or me_x < hazards[i].ledge_start) continue;
-hazardpool.play_2d(get_pack_sound("misc/game/hazcount" + (6 - steps_left) + "*"), me_x, 0, me_x, 0, false);
+hazardpool.play_2d(get_pack_sound("misc/trap/hazards/warn" + (6 - steps_left) + "*"), me_x, 0, me_x, 0, false);
 }
 }
 void remove_hazard(uint i)

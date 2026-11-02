@@ -12,6 +12,7 @@ Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFight
 - Down or S: duck, held. duck.ogg plays on press. Ducking auto-unducks after about 1 to 2 seconds even if the key is still held (tunable), and releasing early unducks sooner; unduck.ogg plays either way. Unducking early raises the chance of smashing into what you were ducking under (dev, 2026-11-01). Slides under obstacles you can't jump.
 - Left or Q: lane switch left ("turning"). Lanes are a later expansion, so these keys are reserved now (FINAL, dev, 2026-11-02).
 - Right or E: lane switch right (reserved, as above).
+- How hands work (dev, 2026-11-02): either hand opens doors and turns off force fields. The interaction's sound (switch press, door opening) plays in 2d, panned to the hand used, so you hear which hand did it ([[project_force_fields_plan]]).
 - Tab or A: left interact hand, for doors and similar objects (FINAL, dev, 2026-11-02).
 - Enter or D: right interact hand, for doors and similar objects (FINAL, dev, 2026-11-02).
 - Space: shoot with an ammo weapon, or swing a melee weapon (ToyMania-style). Space only; no left or right Control (settled 2026-11-01).
