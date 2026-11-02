@@ -1,14 +1,27 @@
-/* Places obstacles ahead of the player as the run goes. Types and themes are random, from whatever folders exist at
-runtime. Section 6 adds spikes and mines to the type pick. The next obstacle's ledge width is decided together with the
-gap to it, so the floor between one hazard's ledge and the next one's is always there, however the speed changes. */
+/* Places obstacles ahead of the player as the run goes. The type (hazards, spikes or mines) and its theme are random,
+from whatever folders exist at runtime. The next obstacle's type and ledge width are decided together with the gap to
+it, so the floor before a hazard's ledge is always there however the speed changes. Only hazards have ledges. */
 double next_spawn_x = 0;
-int next_ledge_before = 1; // set properly by reset_spawner()
+string next_type = "";
+int next_ledge_before = 0;
 
-// The first hazard sits a full spawn distance, its ledge and a minimum stretch of floor into the run.
+// The first obstacle sits a full spawn distance, its ledge and a minimum stretch of floor into the run.
 void reset_spawner()
 {
-next_ledge_before = ledge_before_tiles();
+choose_next_obstacle();
 next_spawn_x = spawn_distance() + next_ledge_before + floor_tiles(min_floor_time);
+}
+// Picks the next obstacle's type at random among the trap folders that have themes, and its ledge (hazards only).
+void choose_next_obstacle()
+{
+string[] types = {"hazards", "spikes", "mines"};
+string[] available;
+for (uint i = 0; i < types.length(); i++)
+{
+if (get_pack_sound_folders("objects/traps/" + types[i] + "/*").length() > 0) available.insert_last(types[i]);
+}
+next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
+next_ledge_before = next_type == "hazards" ? ledge_before_tiles() : 0;
 }
 // spawn_ahead_time at the current speed, in tiles.
 int spawn_distance()
@@ -20,24 +33,28 @@ int floor_tiles(int ms)
 {
 return int(max(min_floor_tiles, ceil(double(ms) / step_time)));
 }
-/* The gap from one hazard to the next: the previous one's ledge after, a random stretch of normal floor
-(min_floor_time to max_floor_time), the next one's ledge before (ledge_before), and the hazard tile itself. */
+/* The gap from one obstacle to the next: room for a hazard's ledge after (kept for every type, to be safe), a random
+stretch of normal floor (min_floor_time to max_floor_time), the next one's ledge before (ledge_before), and its tile. */
 int next_gap(int ledge_before)
 {
 int floor_len = random(floor_tiles(min_floor_time), floor_tiles(max_floor_time));
 return int(max(min_gap_tiles, ledge_after_tiles + floor_len + ledge_before + 1));
 }
-// An obstacle appears spawn_distance() before its ledge starts, so its loop is heard that long before the countdown.
+// An obstacle appears spawn_distance() before its ledge starts (or before it, with no ledge), so its sound comes first.
 void spawn_check()
 {
 if (me_x + spawn_distance() + next_ledge_before < next_spawn_x) return;
-place_obstacle(next_spawn_x, next_ledge_before);
-next_ledge_before = ledge_before_tiles();
+place_obstacle(next_spawn_x, next_type, next_ledge_before);
+choose_next_obstacle();
 next_spawn_x += next_gap(next_ledge_before);
 }
-void place_obstacle(double x, int ledge_before)
+void place_obstacle(double x, string type, int ledge_before)
 {
-string[] themes = get_pack_sound_folders("objects/traps/hazards/*");
+if (type == "") return;
+string[] themes = get_pack_sound_folders("objects/traps/" + type + "/*");
 if (themes.length() == 0) return;
-spawn_hazard(x, themes[random(0, themes.length() - 1)], ledge_before);
+string theme = themes[random(0, themes.length() - 1)];
+if (type == "hazards") spawn_hazard(x, theme, ledge_before);
+else if (type == "spikes") spawn_spike(x, theme);
+else if (type == "mines") spawn_mine(x, theme);
 }

@@ -1,0 +1,83 @@
+/* Spikes: jump-over obstacles that cost spike_life_cost (1) if you're on the ground when you step onto their tile.
+Sounds (dev, 2026-11-02): the theme's loop clip is one SWING, played once per swing on the spike's own rhythm, a random
+swing time between spike_swing_min and spike_swing_max picked when it appears, so some spikes are fast and others slow.
+The hit clip is the spike hitting you, played together with the player's hit; with lives left the run carries on,
+otherwise it ends with the player's death and the tile's fall. Swings are positioned oneshots at the spike's tile and
+fade out behind you once passed. No ledges.
+Swings are timed off runtimer, which pauses with the game, so a pause freezes every spike's rhythm.
+Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_spikes() shrinks the array. */
+sound_pool spikepool;
+class spike
+{
+double x;
+string theme;
+int swing_time;
+int64 next_swing;
+}
+spike@[] spikes(0);
+
+void spawn_spike(double sx, string theme)
+{
+spike s;
+s.x = sx;
+s.theme = theme;
+s.swing_time = random(spike_swing_min, spike_swing_max);
+s.next_swing = runtimer.elapsed; // the first swing plays straight away
+for (uint i = 0; i < spikes.length(); i++)
+{
+if (@spikes[i] == null)
+{
+@spikes[i] = s;
+return;
+}
+}
+spikes.insert_last(s);
+}
+// Runs every frame: each spike swings again once its swing time has passed.
+void spike_swing()
+{
+for (uint i = 0; i < spikes.length(); i++)
+{
+if (@spikes[i] == null) continue;
+if (runtimer.elapsed < spikes[i].next_swing) continue;
+spikepool.play_2d(get_pack_sound("objects/traps/spikes/" + spikes[i].theme + "/*loop*"), me_x, 0, spikes[i].x, 0, false);
+spikes[i].next_swing = runtimer.elapsed + spikes[i].swing_time;
+}
+}
+// Runs once per step, right after the move: stepping onto a spike's tile while grounded costs lives.
+void spike_check()
+{
+for (uint i = 0; i < spikes.length(); i++)
+{
+if (@spikes[i] == null) continue;
+if (me_x == spikes[i].x and is_grounded())
+{
+string hit_clip = get_pack_sound("objects/traps/spikes/" + spikes[i].theme + "/*hit*");
+/* A fatal hit plays the spike's hit through p (silence_run() clears spikepool, which cut it off) and no player hit,
+since end_run_hit() plays the player's death instead. */
+if (is_fatal(spike_life_cost))
+{
+p.play_stationary(hit_clip, false);
+lose_lives(spike_life_cost);
+end_run_hit();
+return;
+}
+spikepool.play_2d(hit_clip, me_x, 0, spikes[i].x, 0, false);
+p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+lose_lives(spike_life_cost);
+}
+// Kept swinging until it's as far behind as obstacles appear ahead, so its swings fade out behind you.
+if (me_x > spikes[i].x + spawn_distance()) remove_spike(i);
+}
+}
+void remove_spike(uint i)
+{
+if (i >= spikes.length() or @spikes[i] == null) return;
+@spikes[i] = null;
+}
+// The only place allowed to shrink the array. Also cuts off any swing still sounding.
+void destroy_all_spikes()
+{
+spikepool.destroy_all();
+spikes.resize(0);
+}

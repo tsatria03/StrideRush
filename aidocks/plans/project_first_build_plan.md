@@ -202,7 +202,43 @@ Section 5: spawner, hazards and ledges. BUILT 2026-11-02, on top of a92870a; all
 - Listener: every pool's listener follows x (2d). Obstacle loops are positioned at their x. Each obstacle pool is registered in all_pools (decpool.nvgt), so it gets max_distance 0 and the 2.5 pan and volume steps.
 - Test: hazards approach, ledge footsteps play before and after, jumping clears them, and failing plays the hazard's fall and returns to the menu.
 
-Section 6: spikes and mines
+Section 6: spikes and mines. BUILT 2026-11-02, on top of 4d47f6c; SECTION 6 COMPLETE, all 5 tests passed (2026-11-02): the obstacle mix, spikes, mines, pause with an armed mine, and a longer mixed run. Changes made during testing are below (spike swing, fatal hit sounds, waiting for object sounds, the testing lives menu).
+- As built:
+  - globals/spike.nvgt (new): spikepool, class spike (x, theme, loopslot), spawn_spike(), spike_check(), remove_spike(), destroy_all_spikes().
+  - globals/mine.nvgt (new): minepool, class mine (x, theme, armed, spent, loopslot), mine_arm_distance(), spawn_mine(), mine_check(), silence_mine(), remove_mine(), destroy_all_mines().
+  - spawner.nvgt: choose_next_obstacle() picks the next type at random among hazards, spikes and mines (only those with theme folders), together with its ledge (hazards only), before the gap is set. place_obstacle(x, type, ledge_before) dispatches to the right spawn function.
+  - run.nvgt: step_check() runs hazard_check(), spike_check() and mine_check() in turn, each followed by a stop if the run ended.
+  - decpool.nvgt: spikepool and minepool added to all_pools. endrun.nvgt: clear_run_objects() also destroys spikes and mines.
+  - tuning.nvgt: mine_arm_time 1500 and mine_arm_min_tiles 2 (3 tiles at 500 ms).
+- Behavior:
+  - Contact is checked on arrival while grounded, like hazards.
+  - Spike: its hit plus misc/player hit together, then lose_lives(1). Its loop fades out behind you once passed.
+  - Mine: spawn plays when it appears; light and the ticking loop start at the arm distance. Jumped over, it goes quiet behind you; stepped on, explode, the mine's hit and the player's hit play together, then lose_lives(2).
+  - With 1 life, spikes and mines end the run through end_run_hit(): player death, then the tile's fall, then the main menu.
+  - The hit sounds can overlap the start of the death sound, as in SimpleFighter's checkdeath flow.
+- SPIKE SWING (dev, 2026-11-02), like SimpleFighter's configurable spike speed:
+  - Each spike gets a random swing_time between spike_swing_min (500) and spike_swing_max (1000) ms when it appears, so some are fast and some slow.
+  - The theme's loop clip is ONE swing, played once per swing as a positioned oneshot; hit is the spike hitting you.
+  - The contact rule is unchanged (hit on arrival while grounded). Swings are sound only, not timed danger, since the belt controls arrival.
+  - spike.nvgt: spike_swing() runs every frame from run_loop(); next_swing is timed off runtimer, so a pause freezes the rhythm. There's no kept loop handle any more. destroy_all_spikes() calls spikepool.destroy_all() to cut any swing still sounding.
+- FATAL HIT SOUNDS (dev, 2026-11-02): when a spike or mine hit is fatal, the player hit no longer plays; only the player's death does.
+  - Before, the player hit and death overlapped, and the object's hit got cut off because silence_run() clears spikepool and minepool.
+  - lives.nvgt: new is_fatal(cost), checked first.
+  - On a fatal hit, spike.nvgt and mine.nvgt play the object's hit (plus explode for a mine) through p, which silence_run() leaves alone, then call end_run_hit().
+  - Non-fatal hits are unchanged: the object's hit at its tile, the player's hit, then the life sound.
+  - This revises the end-of-run plan's mine and spike death order ([[project_end_of_run_plan]]): object sounds and player death, with no player hit, then the tile's fall.
+  - Follow-up fix (dev, 2026-11-02): mine sounds were still cut off. The death's dlgplay only waited for itself, so a longer explode or hit overlapped the tile's fall and was then cleared by finish_run(). end_run_hit() now calls the new wait_for_pool(p) after the death, waiting until the object's sounds have finished (Enter skips) before the tile's fall.
+- TESTING TOOL (dev request, 2026-11-02): a lives menu after the speed menu.
+  - menus/menu.nvgt: choose_start_lives() lists max_test_lives (5, in tuning.nvgt) down to 1, in the order the dev asked for: 5, 4, 3, 2, 1. It's source-only via SCRIPT_COMPILED, like the speed menu; a compiled release starts with starting_lives. Escape says "canceled" and returns to the main menu.
+  - run.nvgt: start_run() and reset_run() take an optional starting_life_count.
+  - This makes spike and mine hits with lives left testable: the hit, then the life sound, and the run continues.
+- Not given ledges or the countdown: per [[project_obstacles_plan]], those are for hazards. Ask the dev after testing whether spikes and mines should get them too.
+- Tests, one at a time:
+  1. the obstacle mix
+  2. spikes cleared and hit
+  3. mines armed, cleared and hit
+  4. pause with an armed mine
+  5. a longer mixed run
 - globals/spike.nvgt (entity pattern):
   - spikepool, the array and class spike, with a loop.
   - spike_check(): on contact while grounded, the spike's hit and misc/player hit together, then lose_lives(spike cost). On the last life, end_run_hit().

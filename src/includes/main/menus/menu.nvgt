@@ -17,8 +17,10 @@ if(main=="start")
 {
 int speed = choose_start_speed();
 if (speed < 0) return; // escaped the speed menu: back to the main menu
+int run_lives = choose_start_lives();
+if (run_lives < 0) return; // escaped the lives menu: back to the main menu
 m.fade_music();
-start_run(speed); // returns when the run ends, and main()'s loop reopens this menu
+start_run(speed, run_lives); // returns when the run ends, and main()'s loop reopens this menu
 }
 }
 /* TESTING ONLY: pick the starting step time, from start_step_time down to min_step_time in 50 ms steps. It only
@@ -31,6 +33,25 @@ m.intro_text = "Choose a starting speed for testing.";
 for (int t = start_step_time; t >= min_step_time; t -= 50)
 {
 m.add_item(t + " ms", "" + t);
+}
+int mres = m.run();
+if (mres < 0)
+{
+speak("canceled");
+return -1;
+}
+return int(parse_int(m.selected_item_id));
+}
+/* TESTING ONLY: pick the starting lives, listed from max_test_lives down to 1 (dev's order). It only appears when
+running from source; a compiled release always starts with starting_lives. Returns -1 if escaped. */
+int choose_start_lives()
+{
+if (SCRIPT_COMPILED) return starting_lives;
+setupmenu();
+m.intro_text = "Choose how many lives to start with for testing.";
+for (int n = max_test_lives; n >= 1; n--)
+{
+m.add_item(n == 1 ? "1 life" : n + " lives", "" + n);
 }
 int mres = m.run();
 if (mres < 0)

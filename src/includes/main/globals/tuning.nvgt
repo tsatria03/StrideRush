@@ -37,8 +37,17 @@ const int min_floor_time = 1000;
 const int max_floor_time = 4000;
 const int min_floor_tiles = 2;
 
+// Each spike swings on its own rhythm: a random swing time between these, picked when it appears (dev, 2026-11-02).
+const int spike_swing_min = 500;
+const int spike_swing_max = 1000;
+
+// A mine arms (light, then its ticking loop) when you're within mine_arm_time of it at the current speed, never under mine_arm_min_tiles.
+const int mine_arm_time = 1500;
+const int mine_arm_min_tiles = 2;
+
 // Lives at the start of every run, and what each obstacle costs. ends_run means the run ends however many lives are left.
 const int starting_lives = 1;
+const int max_test_lives = 5; // the most the source-only testing lives menu offers
 const int ends_run = -1;
 const int hazard_life_cost = ends_run;
 const int spike_life_cost = 1;

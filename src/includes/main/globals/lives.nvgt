@@ -1,8 +1,13 @@
 /* Losing lives. Returns true if the run carries on (with the life sound), or false when the cost ends the run, in which
 case the caller plays its own ending (end_run_hazard or end_run_hit). With 1 starting life, any hit ends the run. */
+// True if paying this cost would end the run. Callers check it first so a fatal hit plays the death, not the player hit.
+bool is_fatal(int cost)
+{
+return cost == ends_run or lives - cost <= 0;
+}
 bool lose_lives(int cost)
 {
-if (cost == ends_run or lives - cost <= 0)
+if (is_fatal(cost))
 {
 lives = 0;
 return false;

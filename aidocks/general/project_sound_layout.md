@@ -32,6 +32,7 @@ Current tree (rescanned 2026-11-01 after the dev's second reorganization; 300 fi
 - objects/traps/hazards: chasm, chasm2, electricity, electricity2, electricity4, fire, lava, pit, quicksand, water, water2. Each has loop and fall.
 - objects/traps/mines/mine, mine2, mine3: spawn, light, loop, hit, explode.
 - objects/traps/spikes/electric_ray, large_spike: loop and hit only. The dev trimmed these for Stride Rush on 2026-11-01, removing hurt (.wav) and death1-2, so spikes have no clips for being smashed.
+  - Meaning (dev, 2026-11-02): loop.ogg is ONE SWING, played once per swing on the spike's random rhythm (500 to 1000 ms), not looped continuously. hit.ogg is the spike hitting you.
 - ui (flattened 2026-11-01; 300 files total in sounds/ now):
   - ui/menu: click, close, edge, enter, open, wrap, speaker. There's no music clip, so menu music is silent for now. speaker is a speaker-test clip.
   - ui/dialog: open, close, scroll, copy, error. Renamed from ui/dlg; the dev also fixed "coppy" to copy and added error.

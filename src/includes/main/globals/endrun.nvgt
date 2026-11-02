@@ -9,14 +9,35 @@ silence_run();
 if (fall_clip != "") dlgplay(fall_clip);
 finish_run();
 }
-// A spike or mine on the last life: the player's death sound, then the fall clip of the tile they're on.
+/* A spike or mine on the last life. The caller plays the object's sounds (spike hit, or mine explode and hit) through p
+just before this, which silence_run() leaves alone. Those and the player's death play together; only once ALL of them
+have finished does the tile's fall play, so nothing is cut off. Enter skips, as in dlgplay. */
 void end_run_hit()
 {
 string tile = tile_at(me_x);
 silence_run();
 dlgplay(get_pack_sound("misc/player/*death*"));
+wait_for_pool(p);
 if (tile != "") dlgplay(get_pack_sound("objects/construction/platforms/" + tile + "/*fall*"));
 finish_run();
+}
+// Blocks until every sound in the pool has finished, or Enter is pressed.
+void wait_for_pool(sound_pool@ pool)
+{
+while (true)
+{
+bool playing = false;
+for (uint i = 0; i < pool.items.length(); i++)
+{
+if (@pool.items[i].handle != null and pool.items[i].handle.playing)
+{
+playing = true;
+break;
+}
+}
+if (!playing or key_pressed(KEY_RETURN)) return;
+wait(5);
+}
 }
 // Stops the run's music, ambience and every obstacle, so only the death sounds are heard.
 void silence_run()
@@ -24,10 +45,12 @@ void silence_run()
 stop_run_audio();
 clear_run_objects();
 }
-// Every object type's destroy_all goes here (Section 6 adds spikes and mines).
+// Every object type's destroy_all goes here.
 void clear_run_objects()
 {
 destroy_all_hazards();
+destroy_all_spikes();
+destroy_all_mines();
 }
 void finish_run()
 {

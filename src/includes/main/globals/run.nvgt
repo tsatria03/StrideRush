@@ -10,11 +10,11 @@ sound_pool muspool, ambpool;
 int musslot = -1, ambslot = -1;
 int music_volume = music_start_volume, ambience_volume = ambience_start_volume;
 
-void reset_run(int starting_step_time = start_step_time)
+void reset_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives)
 {
 me_x = 0;
 step_time = starting_step_time;
-lives = starting_lives;
+lives = starting_life_count;
 steptimer.restart();
 speeduptimer.restart();
 runtimer.restart();
@@ -24,10 +24,10 @@ reset_player();
 reset_spawner();
 update_listeners();
 }
-// starting_step_time is normally start_step_time; the testing speed menu (source runs only) can start faster.
-void start_run(int starting_step_time = start_step_time)
+// Normally start_step_time and starting_lives; the source-only testing menus can start faster or with more lives.
+void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives)
 {
-reset_run(starting_step_time);
+reset_run(starting_step_time, starting_life_count);
 start_run_audio();
 running = true;
 run_loop();
@@ -60,7 +60,8 @@ wait(5);
 jump_check();
 duck_check();
 step_check();
-if (!running) break; // a hazard hit on this step ended the run; skip the rest of the frame
+if (!running) break; // an obstacle hit on this step ended the run; skip the rest of the frame
+spike_swing();
 speedup_check();
 run_input();
 }
@@ -72,7 +73,12 @@ steptimer.restart();
 me_x += 1;
 update_listeners();
 spawn_check();
-hazard_check(); // only on arriving at a tile: in the air at that moment means the hazard is cleared
+// Obstacle contact only on arriving at a tile: in the air at that moment means the obstacle is cleared.
+hazard_check();
+if (!running) return;
+spike_check();
+if (!running) return;
+mine_check();
 if (!running) return;
 surface_check(); // before the footstep, so a new surface is heard on its first step
 play_step();
