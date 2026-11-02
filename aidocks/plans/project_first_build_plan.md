@@ -83,7 +83,7 @@ Section 3: jump and duck. BUILT 2026-11-02, on top of f824cef; all 7 tests passe
   - globals/player.nvgt (new): me_y, jump_state, ducked, jumptimer and ducktimer, plus reset_player(), is_grounded(), is_ducked(), jump_check(), start_jump(), player_land(), duck_check(), start_duck() and stop_duck().
   - tuning.nvgt: jump_height 5, jump_tick 100, duck_time 1500.
   - run.nvgt: reset_run() calls reset_player(); run_loop() calls jump_check() and duck_check() after step_check().
-  - surface.nvgt: play_step() is silent in the air (a crouch still steps).
+  - surface.nvgt: play_step() is silent in the air. A crouch originally still stepped; it's silent too since the Section 4 revision.
   - pause.nvgt: pause_game() and resume_game() also pause and resume jumptimer and ducktimer.
 - Sound lookups: the crouch uses "misc/player/duck*" and the stand-up "unduck*", because "*duck*" would also match unduck.ogg. Jump plays *jump* and *rise* together; landing plays misc/player *land* with the tile's *land*.
 - On landing, a Down still held starts a crouch (from open question 2).
@@ -104,7 +104,20 @@ Section 3: jump and duck. BUILT 2026-11-02, on top of f824cef; all 7 tests passe
 - Overlap (open question 2, settled): Up while crouched jumps at once; Down in the air is ignored.
 - Test: jump and duck at different speeds; at high speed one jump covers many tiles.
 
-Section 4: lives and the end of a run
+Section 4: lives and the end of a run. BUILT 2026-11-02, on top of fd2cd49; check passed.
+- As built:
+  - globals/lives.nvgt (new): lose_lives(cost) returns true if the run continues (with the life sound) or false if the caller must end the run.
+  - globals/endrun.nvgt (new): end_run_hazard(fall_clip), end_run_hit(), silence_run(), clear_run_objects() (empty until Sections 5 and 6 add their destroy_all calls) and finish_run().
+  - tuning.nvgt: ends_run = -1, hazard_life_cost = ends_run, spike_life_cost 1, mine_life_cost 2.
+  - run.nvgt: run_loop() breaks right after step_check() if the run ended on that step. After the loop, start_run() also calls clear_run_objects() and p.destroy_all(), so quitting from pause cleans up the same way a death does.
+- Design detail: both endings call silence_run() BEFORE the blocking death sounds, so music, ambience and other obstacles' loops never play over the death. In the hit ending, the tile is read before silencing.
+- Nothing triggers these until Section 5, so the check is: it compiles, and a normal run (including quit from pause) still works. PASSED (2026-11-02).
+- Change made alongside Section 4 at the dev's request: play_step() is silent while crouched (open question 1, revised).
+- Also at the dev's request (2026-11-02): a crouch cooldown, so Down can't be spammed.
+  - After standing up, or after a crouch is cancelled by a jump, crouching is blocked for duck_cooldown, 1000 ms in tuning.nvgt, about as long as a jump lasts.
+  - player.nvgt: duckcooldowntimer and can_duck(), used by both the Down press and the held-Down-on-landing crouch. reset_player() forces the timer so a new run can crouch at once.
+  - pause.nvgt pauses and resumes the cooldown timer too.
+- Tests passed (2026-11-02): no footsteps while crouched, and the crouch cooldown blocks repeat presses for about a second.
 - globals/lives.nvgt:
   - lose_lives(cost): with lives left after the cost, play misc/player life and keep running. Otherwise end the run. A cost meaning "ends the run" always ends it.
 - globals/endrun.nvgt:
@@ -148,7 +161,7 @@ Section 7: player docs (added by the dev, 2026-11-01). Done only after Section 6
 - All lines stay at or under 1024 characters ([[feedback_dock_line_length_1024]]). As of 2026-11-01 all four dock files are empty.
 
 Open questions to settle before or while building, one at a time:
-1. SETTLED (dev, 2026-11-01): ducking is a crouch, not a slide, so footsteps keep playing while ducked. A slide, with its own sliding sound in place of footsteps, could come later if the dev finds the sound.
+1. SETTLED (dev, 2026-11-01): ducking is a crouch, not a slide. REVISED after playtesting (dev, 2026-11-02): footsteps do NOT play while crouched. Steps on a crouch felt wrong, and other similar runners go silent too. The duck sound marks the start, unduck the end, and the silence between them is the crouched state. A slide, with its own sliding sound, could come later if the dev finds the sound.
 2. SETTLED (dev agreed, 2026-11-01): Up while crouched cancels the crouch and jumps right away. The jump and rise sounds play; unduck is skipped. Down in mid-air is ignored; there's no fast-fall sound, and a still-held Down starts a crouch on landing anyway.
 3. SETTLED (dev agreed, 2026-11-01): obstacles spawn a fixed TIME ahead, about 3 seconds at the current speed (tunable), so the warning never shrinks as the run speeds up. Within that window the loop fades in by distance, using the pool settings already in decpool.nvgt: pan_step and volume_step 2.5 per tile, the dev's usual values, and max_distance 0, so no cutoff. Every obstacle pool must be registered in all_pools to get those settings. Reference: the friend's template placed a whole level's hazards at once and relied only on distance fading, which works for short fixed levels but not an endless run.
 4. SETTLED and BUILT (dev, 2026-11-01): the buffer categories are "all" and "misc". sr.nvgt calls create_buffer("misc") at startup, which creates "all" first. Readouts and other run speech go through speak_buffer(text) (default "misc") rather than bare speak(). More categories, such as achievements or events, come later, created in alphabetical order like CookieCraze.

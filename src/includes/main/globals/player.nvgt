@@ -1,11 +1,12 @@
 /* The player's jump and crouch. me_y is the height above the belt (0 is the ground). A jump rises to jump_height and
 falls back, one height per jump_tick, so it lasts about the same time at any speed. Crouching is held: it ends on
 release, or by itself after duck_time. Overlaps: Up while crouched cancels the crouch and jumps at once (no unduck
-sound); Down in the air is ignored, but a Down still held on landing starts a crouch. */
+sound); Down in the air is ignored, but a Down still held on landing starts a crouch. After standing up (or a crouch
+cancelled by a jump), crouching is blocked for duck_cooldown so Down can't be spammed. */
 int me_y = 0;
 int jump_state = 0; // 0 on the ground, 1 rising, 2 falling
 bool ducked = false;
-timer jumptimer, ducktimer;
+timer jumptimer, ducktimer, duckcooldowntimer;
 
 void reset_player()
 {
@@ -14,6 +15,11 @@ jump_state = 0;
 ducked = false;
 jumptimer.restart();
 ducktimer.restart();
+duckcooldowntimer.force(duck_cooldown); // a new run can crouch straight away
+}
+bool can_duck()
+{
+return is_grounded() and !ducked and duckcooldowntimer.elapsed >= duck_cooldown;
 }
 bool is_grounded()
 {
@@ -41,7 +47,11 @@ if (me_y <= 0) player_land();
 }
 void start_jump()
 {
+if (ducked)
+{
 ducked = false; // Up while crouched jumps straight away, without the unduck sound
+duckcooldowntimer.restart();
+}
 jump_state = 1;
 jumptimer.restart();
 p.play_stationary(get_pack_sound("misc/player/*jump*"), false);
@@ -55,7 +65,7 @@ jump_state = 0;
 p.play_stationary(get_pack_sound("misc/player/*land*"), false);
 string tile = tile_at(me_x);
 if (tile != "") p.play_stationary(get_pack_sound("objects/construction/platforms/" + tile + "/*land*"), false);
-if (controls.action_triggered("duck_held")) start_duck();
+if (controls.action_triggered("duck_held") and can_duck()) start_duck();
 }
 void duck_check()
 {
@@ -64,7 +74,7 @@ if (ducked and (controls.action_triggered("duck_release") or ducktimer.elapsed >
 stop_duck();
 return;
 }
-if (controls.action_triggered("duck") and is_grounded() and !ducked) start_duck();
+if (controls.action_triggered("duck") and can_duck()) start_duck();
 }
 // "duck*" rather than "*duck*", which would also match unduck.ogg.
 void start_duck()
@@ -76,5 +86,6 @@ p.play_stationary(get_pack_sound("misc/player/duck*"), false);
 void stop_duck()
 {
 ducked = false;
+duckcooldowntimer.restart();
 p.play_stationary(get_pack_sound("misc/player/unduck*"), false);
 }

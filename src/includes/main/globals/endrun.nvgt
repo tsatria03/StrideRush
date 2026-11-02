@@ -1,0 +1,35 @@
+/* The two ways a run ends. Both silence the run first (music, ambience and every obstacle), play their death sounds
+blocking with dlgplay (Enter skips), then stop the run so start_run() returns and the main menu reopens. There's no
+results dialog in the basic build. */
+
+// A hazard: its own fall clip is the whole death; no player death sound and no tile fall.
+void end_run_hazard(string fall_clip)
+{
+silence_run();
+if (fall_clip != "") dlgplay(fall_clip);
+finish_run();
+}
+// A spike or mine on the last life: the player's death sound, then the fall clip of the tile they're on.
+void end_run_hit()
+{
+string tile = tile_at(me_x);
+silence_run();
+dlgplay(get_pack_sound("misc/player/*death*"));
+if (tile != "") dlgplay(get_pack_sound("objects/construction/platforms/" + tile + "/*fall*"));
+finish_run();
+}
+// Stops the run's music, ambience and every obstacle, so only the death sounds are heard.
+void silence_run()
+{
+stop_run_audio();
+clear_run_objects();
+}
+// Every object type's destroy_all goes here (Sections 5 and 6 add hazards, spikes and mines).
+void clear_run_objects()
+{
+}
+void finish_run()
+{
+p.destroy_all();
+running = false;
+}

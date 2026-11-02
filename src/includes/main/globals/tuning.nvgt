@@ -18,9 +18,15 @@ const int jump_tick = 100;
 
 // Crouching: holding Down crouches, and it stands up on its own after duck_time even if Down is still held.
 const int duck_time = 1500;
+// After standing up, crouching is blocked for duck_cooldown, about as long as a jump lasts, so Down can't be spammed.
+const int duck_cooldown = 1000;
 
-// Lives at the start of every run.
+// Lives at the start of every run, and what each obstacle costs. ends_run means the run ends however many lives are left.
 const int starting_lives = 1;
+const int ends_run = -1;
+const int hazard_life_cost = ends_run;
+const int spike_life_cost = 1;
+const int mine_life_cost = 2;
 
 // Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. Home/End and Page Up/Down move by volume_change.
 const int min_volume = -50;

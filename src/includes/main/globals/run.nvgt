@@ -27,7 +27,10 @@ reset_run();
 start_run_audio();
 running = true;
 run_loop();
+// Also covers quitting from the pause menu; after a death these were already done and repeating them is harmless.
 stop_run_audio();
+clear_run_objects();
+p.destroy_all();
 }
 // A random music track and a random ambience, found at runtime; an empty folder just stays silent.
 void start_run_audio()
@@ -50,6 +53,7 @@ while (running)
 {
 wait(5);
 step_check();
+if (!running) break; // an obstacle hit on this step can end the run; don't run the rest of the frame
 jump_check();
 duck_check();
 speedup_check();

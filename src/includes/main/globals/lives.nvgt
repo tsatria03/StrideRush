@@ -1,0 +1,13 @@
+/* Losing lives. Returns true if the run carries on (with the life sound), or false when the cost ends the run, in which
+case the caller plays its own ending (end_run_hazard or end_run_hit). With 1 starting life, any hit ends the run. */
+bool lose_lives(int cost)
+{
+if (cost == ends_run or lives - cost <= 0)
+{
+lives = 0;
+return false;
+}
+lives -= cost;
+p.play_stationary(get_pack_sound("misc/player/*life*"), false);
+return true;
+}
