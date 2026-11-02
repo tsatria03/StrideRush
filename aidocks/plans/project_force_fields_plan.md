@@ -1,11 +1,25 @@
 ---
 name: project_force_fields_plan
-description: IN DISCUSSION (started 2026-11-02) - force fields as the next obstacle type after the first build; how they're passed, warned, hit and placed; Q&A log
+description: SETTLED, NOT BUILT (2026-11-02; 3 build sections) - force fields as the next obstacle type after the first build; how they're passed, warned, hit and placed; Q&A log
 metadata:
   type: project
 ---
 
-Status: IN DISCUSSION, started 2026-11-02 on top of a785be4. The dev chose force fields as the next feature because "they are sort of like hazards". No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]).
+Status: SETTLED 2026-11-02 (started on top of a785be4; settled on top of 62a3ad0). The dev chose force fields as the next feature because "they are sort of like hazards". Not built: build one section per go-ahead ([[feedback_describe_dont_show_code]]).
+
+Build sections:
+Section 1: the force field obstacle, without hands. Fields are always on, so every one hits you, which tests everything except the switch.
+- New globals/forcefield.nvgt, with forcefieldpool, a forcefield class (x, theme, state, loopslot, countdown_start, plus the try-used and spent flags), spawn, check, countdown, remove and destroy_all.
+  - A field spawns playing its on loop at its tile. Its countdown uses misc/trap/force_fields/warn.
+  - Contact on arrival hits you whatever your height. A survivable hit plays the field's hit and misc/player/hit, costs forcefield_life_cost, cancels any jump or crouch, moves me_x forward forcefield_knockback_tiles, and plays the landing pair. A fatal hit plays its hit through p, then end_run_hit().
+- tuning.nvgt: forcefield_life_cost 1 and forcefield_knockback_tiles 5.
+- Wiring, per the new-obstacle checklist: obstacle_types and place_obstacle() in spawner.nvgt, the knockback extra in the gap after a field, all_pools, clear_run_objects(), and the check and countdown calls in step_check(). The testing spawn menu picks the type up automatically.
+- player.nvgt may need a small helper to cancel a jump or crouch silently.
+Section 2: the hands and the switch.
+- run_input() reads hand_left and hand_right. During a field's warn5 step, a press plays objects/interaction/switches/switch/press panned to that hand, and the field swaps its on loop for its off loop and is passed safely.
+- During its earlier countdown steps, a press plays the panned press but uses up the field's try, so it stays on. With no field counting down, a press does nothing.
+- Panning: either play_2d a tunable offset left or right of me_x, or a stationary play with a tunable pan. Pick whichever sounds clearer in testing; a tuning value either way.
+Section 3: docks. Changelog entries in 1.0 (it has room for 5 more), the readme (force fields, the hand keys and the knockback), and the todo list (move force fields to finished).
 
 Already recorded elsewhere:
 - Obstacles plan ([[project_obstacles_plan]]): force fields were parked as a potential hand-interaction obstacle. The idea was a full-height field that stays on, switched off with an interact hand at a switch placed before it. Hitting it while on plays hit and costs lives, with the amount decided later. A plain on/off timing gate was rejected, because the belt controls speed, so arriving while it's on or off would be luck.
@@ -22,4 +36,18 @@ Sounds (rescanned 2026-11-02):
 Q&A log:
 - Q: How does the player get past a force field: switch it off with a hand on cue, or jump over it like a hazard? (Asked 2026-11-02; Claude recommended the hand.) The dev's first reply corrected the sounds (on and off are state loops). A: a switch (dev, 2026-11-02). You click it off with a switch, and you hear the off loop as you pass it. So the field is ahead on its on loop; pressing a hand at the switch plays switch/press and swaps the field to its off loop; you then run past the inactive field hearing off. Not jumped.
 - Q: Which hand works the switch: either hand, or one particular hand? (Asked 2026-11-02; Claude recommended either hand.) A: either hand (dev, 2026-11-02), as a game-wide rule for hands: either hand opens doors and turns off force fields. The switch press plays in 2d, panned to the hand used, so you hear which hand pressed it: left hand on the left, right hand on the right. Door openings do the same. Planned approach: play it a small offset from the player (me_x minus or plus an offset, tunable), so the pan comes from the 2d position.
-- Q: When can the switch be pressed: only on a countdown's final cue, or any time within a short reach window before the field? (Asked 2026-11-02; Claude recommended a reach window matching the countdown steps.) A: pending.
+- Q: When can the switch be pressed: only on a countdown's final cue, or any time within a short reach window before the field? (Asked 2026-11-02; Claude recommended a reach window matching the countdown steps.) The dev asked for both options with pros and cons. Option 1 (final cue only): matches warn5's "act now", the most skill, its own character; but a 1-step window (500 ms down to 100 ms) and it invites mashing unless early presses are punished. Option 2 (any countdown step): forgiving at slow speeds, hazard-like, nothing to mash; but little challenge when slow, and the same 1 step at 100 ms. Both are stricter than a jump at top speed; a time-based minimum window could fix that for either. A: OPTION 1, final cue only (dev, 2026-11-02): "I want more of a challenge... option 2 feels like you pressing it any time you want." The press counts only on the warn5 step, the last step before the field.
+- Q: What does a press that's too early (on a countdown step before warn5) do: nothing, or use up your one try so the field stays on? (Asked 2026-11-02; Claude recommended it uses up your try, against mashing.) A: it uses up your try (dev agreed, 2026-11-02). An early press during the countdown still plays switch/press, panned to the hand used, but the field stays on its on loop and later presses on that field do nothing, so you run into it. A press before the countdown starts (no field in countdown) is ignored completely and silently.
+- Q: What does hitting a force field cost: 1 life like spikes, 2 like mines, or the whole run like hazards? (Asked 2026-11-02; Claude recommended 1 life.) A: 1 life (dev, 2026-11-02), as forcefield_life_cost in tuning.nvgt.
+- Knockback (dev, 2026-11-02): when you don't switch a field off in time and run into it, it moves you 5 steps, like SimpleFighter's force field. SimpleFighter reference (read only): forcefield_hit() in src/includes/builder/traps/forcefield.nvgt calls pbounce(5), and pbounce() in globals/map.nvgt moves the player 5 steps OPPOSITE to the facing direction (facing right means me.x -= 5). So in SimpleFighter it's a push BACK, while the dev described it as "go forward 5 steps".
+- Q: Which way does the knockback push you, forward past the field or back before it? (Asked 2026-11-02; Claude recommended forward.) A: FORWARD (dev, 2026-11-02), 5 steps past the field, as forcefield_knockback_tiles in tuning.nvgt. A push back would put you before a field that's still on, and the belt would carry you into it again in a loop. The spawner must leave at least that many extra tiles of floor after a force field so the push can't land you on or past the next obstacle's countdown (details still to settle).
+- Q: Can you jump over a force field instead of switching it off? (Asked 2026-11-02; Claude recommended no: it's full height, so a jump still hits it.) A: NOT allowed (dev, 2026-11-02; first typed "now allowed", then confirmed "not"). Neither jumping nor ducking gets you past a field. Its contact check ignores is_grounded() and ducked, unlike the jump-over obstacles. The switch on warn5 is the only way through.
+- Q: How does the 5-step knockback sound: an instant throw that lands with the landing sounds 5 tiles ahead, or 5 fast footsteps? (Asked 2026-11-02; Claude recommended the instant throw with landing sounds.) A: the instant throw, landing with the tile's land sound together with the character's land sound, misc/player/land (dev, 2026-11-02). Same pair as a normal jump landing (player_land()).
+- Q: Are Claude's proposed defaults for the remaining details OK (listed below)? (Asked 2026-11-02.) A: yes, all seven (dev, 2026-11-02, after asking for number 4 to be explained again).
+  1. After a field: one you switched off stays off, its off loop fading behind you. One you missed stays on, its on loop fading behind you. Both are dropped a spawn distance behind, like the others.
+  2. Hit while jumping or crouched: the jump or crouch is cancelled (no unduck sound), then the throw and landing.
+  3. A fatal hit: no throw. The field's hit plays through p, then misc/player/death, then the tile's fall, as with spikes.
+  4. Spacing: the gap after a force field gets forcefield_knockback_tiles (5) extra tiles, so the throw lands on clear floor before the next countdown.
+  5. Spawning: force fields join the random mix with an equal chance, a random theme (electric or electric2), and appear in the testing spawn menu. Their folder is objects/traps/force_fields.
+  6. The switch window is the whole warn5 step: from arriving on that tile until the next step moves you onto the field.
+  7. Pause freezes everything, as with the other obstacles.
