@@ -12,7 +12,7 @@ Current tree (rescanned 2026-11-01 after the dev's second reorganization; 300 fi
   - melee: bat, boot, club, feat, fist, hammer, knife, laser. Most have draw, fire1-3 and hit1-3; fist has fire1-2; laser has a single draw, fire and hit.
   - artillery: machine_gun and pistol, with draw, empty, fail, fire, hit, ping, reload and shell1-2.
   - Ten weapons is exactly the ten number-row slots (1 to 0) in [[project_controls_plan]].
-- misc/game: pause, resume.
+- misc/game: pause, resume, and hazcount1 to hazcount5 (the hazard ledge countdown, added 2026-11-02 from the friend's template; built in hazard.nvgt).
 - misc/player: jump, rise, land, duck, unduck, life, death, hit, give, turn, and inv1 to inv6. rise, land, death and hit were added 2026-11-01.
   - Jump plays misc/player/jump and misc/player/rise together. Landing plays misc/player/land together with the platform tile's land clip (dev, 2026-11-01).
   - hit: plays when a force field, mine or spike hits the player, at the same moment as the obstacle's own clips (dev, 2026-11-01). It's Stride Rush's version of SimpleFighter's character hurt sound.

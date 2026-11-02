@@ -5,7 +5,8 @@ metadata:
   type: project
 ---
 
-Status: written 2026-11-01 at the dev's request, on top of commit 44e4172. All 7 open questions were settled the same day, one at a time. No sections built yet. (Question 4's speak_buffer and the all/misc buffers were built early, at the dev's request.) Build one section per go-ahead, with no plan recap per section and no code in chat ([[feedback_describe_dont_show_code]]). Check the latest commit before each section ([[feedback_check_git_log_for_commits]]). Rescan sr/sounds before each section ([[feedback_sounds_before_features]]). Flag a commit point after each section.
+Status: COMPLETE (2026-11-02). All 7 sections are built, tested and committed; the game is in 69dedf8 and the docks in 0f0ccff.
+Written 2026-11-01 at the dev's request, on top of commit 44e4172. All 7 open questions were settled the same day, one at a time. No sections built yet. (Question 4's speak_buffer and the all/misc buffers were built early, at the dev's request.) Build one section per go-ahead, with no plan recap per section and no code in chat ([[feedback_describe_dont_show_code]]). Check the latest commit before each section ([[feedback_check_git_log_for_commits]]). Rescan sr/sounds before each section ([[feedback_sounds_before_features]]). Flag a commit point after each section.
 
 Designs this plan implements: [[project_run_plan]], [[project_obstacles_plan]], [[project_end_of_run_plan]], [[project_controls_plan]]. Object files follow [[project_entity_pattern]]. Sounds follow [[project_sound_layout]].
 

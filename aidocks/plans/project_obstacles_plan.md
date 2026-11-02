@@ -1,11 +1,11 @@
 ---
 name: project_obstacles_plan
-description: SETTLED FOR THE FIRST BUILD, NOT BUILT (duck-under, force fields and full-height types later) - which obstacles are jumped over, ducked under, or need another action (weapon, hand, later lane change); proposed three-height model; Q&A log
+description: FIRST BUILD BUILT (hazards with ledges and countdown, spikes, mines; 2026-11-02) (duck-under, force fields and full-height types later) - which obstacles are jumped over, ducked under, or need another action (weapon, hand, later lane change); proposed three-height model; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED for the first build on 2026-11-01: jump-over hazards, spikes and mines, with placement rules. Still to come: duck-under (once its sounds exist), force fields with hands, and full-height obstacles. Game-over flow belongs to a later death/end-of-run plan. Started 2026-11-01. The dev says they always get confused between duck and jump obstacles, and which obstacle fits which, and the same will be true of turning (lane changes) later. This plan settles that. No code until the go-ahead ([[feedback_plans_record_qna]]).
+Status: BUILT and tested in the first build (Sections 5 and 6, committed by 69dedf8; [[project_first_build_plan]]). Settled 2026-11-01: jump-over hazards, spikes and mines, with placement rules. Only hazards have ledges and the countdown; whether spikes and mines get them too was left open, and the todo list carries "warning cues for more kinds of obstacles". Still to come: duck-under (once its sounds exist), force fields with hands, and full-height obstacles. Game-over flow belongs to a later death/end-of-run plan. Started 2026-11-01. The dev says they always get confused between duck and jump obstacles, and which obstacle fits which, and the same will be true of turning (lane changes) later. This plan settles that. No code until the go-ahead ([[feedback_plans_record_qna]]).
 
 Model AGREED by the dev ("exactly right", 2026-11-01): every obstacle sits at one of three heights, and the height decides the action.
 - Low: on the ground with open space above it. Jump over it with Up. Examples: pits and floor gaps, fire, spikes, mines, logs and low barriers.

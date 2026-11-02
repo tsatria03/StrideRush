@@ -1,11 +1,11 @@
 ---
 name: project_end_of_run_plan
-description: SETTLED FOR THE BASIC BUILD, NOT BUILT (results dialog deferred to scoring) - what happens when a run ends (a game-ending hazard, or losing the last life): the sounds at the moment of loss, any spoken results, and where the player goes next; Q&A log
+description: BUILT in the first build (2026-11-02; results dialog deferred to scoring) - what happens when a run ends (a game-ending hazard, or losing the last life): the sounds at the moment of loss, any spoken results, and where the player goes next; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED for the basic build on 2026-11-01. Death sounds are per obstacle kind, then straight back to the main menu. Started 2026-11-01. No code until the go-ahead ([[feedback_plans_record_qna]]).
+Status: BUILT and tested in the first build (Sections 4 and 6, committed by 69dedf8; code in globals/endrun.nvgt and lives.nvgt). Settled 2026-11-01. Death sounds are per obstacle kind, then straight back to the main menu.
 
 Already settled elsewhere:
 - The player starts with 1 life. Hazards end the game regardless; spikes cost 1 life and mines 2. So in the basic game any mishap ends the run ([[project_obstacles_plan]]).

@@ -11,4 +11,6 @@ sr/docks/changelog.txt is the source of truth for what shipped. It is a record, 
 
 Newest on top applies inside a block too, not just between blocks (dev, 2026-11-02): the latest entry is the first line under the header, and the oldest is the last line of the block.
 
+A version block holds at most 20 entries (dev, 2026-11-02: with 14 entries, "1.0 has room for 6 more entries"). When a block is full, the next entry starts a new block on top with the next version number, paired with a build/version.txt bump. Blocks have no intro or summary line: the dev removed "The first release of Stride Rush..." from 1.0, so every line under the header is an entry.
+
 **How to apply:** describe the observable change in a sentence or two. Trust the changelog over the readme or todo list when they disagree. Keep lines short ([[feedback_dock_line_length_1024]]).

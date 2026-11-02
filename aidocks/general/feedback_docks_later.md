@@ -1,6 +1,6 @@
 ---
 name: feedback_docks_later
-description: Don't update sr/docks/ (readme, changelog, todo, credits) yet; early work isn't player facing, and the dev will say when docks need writing
+description: HOLD LIFTED 2026-11-02 - sr/docks/ was held until first-build Section 7, which is now written (readme, changelog, todo list); from now on player-facing changes get docks entries; todo list is player-facing only
 metadata:
   type: feedback
 ---

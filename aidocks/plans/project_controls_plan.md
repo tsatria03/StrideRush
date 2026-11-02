@@ -1,11 +1,11 @@
 ---
 name: project_controls_plan
-description: SETTLED, NOT BUILT - Stride Rush in-game key layout (dev-set 2026-11-01), rebindable via SimpleFighter's key_config; item keys and jump/duck overlap deferred to later plans; includes a Q&A log
+description: SETTLED, PARTLY BUILT (jump, crouch, L/Z/C/T readouts, volume, pause, Alt+F4 and buffer keys work; lanes, hands, weapons, F score, F1 and F2 not yet) - Stride Rush in-game key layout (dev-set 2026-11-01), rebindable via SimpleFighter's key_config; item keys and jump/duck overlap deferred to later plans; includes a Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-01. Not built; the keys get written into keyboard.ini when input is built. Two things are deferred: the item keys go to the items plan (the brackets are taken by the buffer), and the jump/duck overlap rules go to the movement plan ([[feedback_plans_record_qna]]).
+Status: SETTLED 2026-11-01. PARTLY BUILT in the first build (2026-11-02): every binding is in keyboard.ini. The keys with code behind them are jump, crouch (held, with a 1.5 s auto-stand and a 1 s cooldown), the L, Z, C and T readouts, the volume keys, pause, Alt+F4 and the buffer keys. Lanes, hands, weapons, F (score), F1 and F2 are bound but unread until their features are built. Two things are deferred: the item keys go to the items plan (the brackets are taken by the buffer), and the jump/duck overlap rules go to the movement plan ([[feedback_plans_record_qna]]).
 
 Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFighter's key_config class (deps/key_config.nvgt, already in Stride Rush) and a keyboard.ini, like SimpleFighter's data/main/config/keyboard.ini ([[reference_simplefighter_architecture]]):
 - Up or W: jump.

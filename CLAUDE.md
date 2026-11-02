@@ -8,7 +8,18 @@ This file is a **lean dispatcher**. It carries the orientation you need before y
 
 **Stride Rush** (v1.0, early development) is an audio-only 2d side-scrolling runner written in **NVGT** (Non-Visual Game Toolkit, an AngelScript-based engine). There is no visual rendering: output is screen-reader speech plus HRTF spatial audio through NVGT's sound_pool. The player rides a one-way belt to the right; a step timer moves them and plays a oneshot footstep each tick, the tick speeds up over time, and they must jump or duck on cue past obstacles or die. It is **offline, single player**, built to be a simple core that users can easily expand in code. See **[[project_runner_overview]]** and **[[project_game_design]]**.
 
-Current state: a launchable skeleton (launcher, entry script, dep shims, a two-item form_menu main menu). **No gameplay yet**; gameplay is designed through discussed plans first ([[feedback_plans_record_qna]]).
+Current state: **the first build is complete and v1.0 is playable** ([[project_first_build_plan]]; game in 69dedf8, docks in 0f0ccff). It has an endless run on a step timer (500 ms down to 100 ms) with footsteps on random platform surfaces, jump and a silent crouch, and hazards with ledges and a countdown. Spikes and mines cost lives, and deaths sound different by obstacle. There's a pause menu, readouts, volume keys and the speech buffer. Lanes, hands, weapons, doors, force fields, duck-under obstacles, scoring, settings (F1/F2) and the updater are still to come. New gameplay is designed through discussed plans first ([[feedback_plans_record_qna]]).
+
+Gameplay code lives in `src/includes/main/globals/`:
+- `tuning.nvgt`: every tunable number.
+- `run.nvgt`: the run loop, step order and readouts.
+- `surface.nvgt` and `player.nvgt`: surfaces, footsteps, jump and crouch.
+- `spawner.nvgt`: picks and places obstacles.
+- `hazard.nvgt`, `spike.nvgt`, `mine.nvgt`: one file per obstacle type.
+- `lives.nvgt` and `endrun.nvgt`: lives and how a run ends.
+- `decpool.nvgt`: the pool registry.
+
+A new obstacle type touches its own file, `spawner.nvgt`, `clear_run_objects()` in `endrun.nvgt`, `all_pools`, and a check call in `step_check()` ([[project_entity_pattern]]). The speed and lives menus in `menus/menu.nvgt` are testing only (`SCRIPT_COMPILED` hides them in releases); keep them out of the docks.
 
 ## Layout: code and assets are split
 
@@ -49,7 +60,7 @@ No test suite or linter. **The dev runs and builds the game, never Claude**: don
 - **`dummy.load("dummy")` must run before `sound_global_hrtf` is set.** It looks like dead code; it isn't ([[project_nvgt_hrtf_dummy_sound]]).
 - **Offline only.** No networking systems; the future updater's HTTP download is the one exception ([[project_tech_decisions]]).
 - **Keys are never rebindable during a run.** Mid-run, F1 views bindings and F2 opens settings with only Game, Menu, and Speech tabs ([[project_controls_plan]]).
-- **Don't write `sr/docks/` yet.** The readme starts at the first playable runner, the changelog at the first release; the todo list holds only player-facing entries ([[feedback_docks_later]]).
+- **Docks are live.** Player-facing changes get an `sr/docks/changelog.txt` entry. Newest goes on top, inside a block too; a block holds at most 20 entries with no intro line, and a new block pairs with a `build/version.txt` bump ([[feedback_changelog_rules]]). Finished `todo list.txt` items move to its finished section, newest first. The todo list holds only player-facing entries ([[feedback_docks_later]]). Dock lines stay at or under 1024 characters ([[feedback_dock_line_length_1024]]).
 
 ## Working style (triggers)
 
@@ -59,6 +70,7 @@ No test suite or linter. **The dev runs and builds the game, never Claude**: don
 - **Multi-section builds:** give all section plans up front, build one section per go-ahead, never paste code into chat ([[feedback_describe_dont_show_code]]).
 - **Check the latest commit before every section**, and never commit or push unless asked ([[feedback_check_git_log_for_commits]]).
 - **End file-editing turns with a "Files changed:" list** plus a relaunch note ([[feedback_list_modified_files]]).
+- **Test steps one at a time**: one step per message with what to hear, then ask "Did it pass?" ([[feedback_test_steps_one_at_a_time]]).
 - **Player-facing speech:** one sentence ([[feedback_one_sentence_game_messages]]); every cancel path says "canceled" ([[feedback_menus_say_canceled]]); yes/no menus are exactly Yes then No ([[feedback_yes_no_menu_labels]]).
 - **Code style:** multi-line comments are one `/* */` block ([[feedback_multiline_comment_style]]); don't flag or fix indentation ([[feedback_dont_flag_indentation]]).
 - **Keep this file under 40,000 characters.** Move detail into memory, don't expand it here ([[feedback_claudemd_length]]).

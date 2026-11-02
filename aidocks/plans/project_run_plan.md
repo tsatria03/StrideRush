@@ -1,11 +1,16 @@
 ---
 name: project_run_plan
-description: SETTLED, NOT BUILT (warning cues deferred) - the core run of Stride Rush (Start game begins a run, a step timer moves the player right one tile per tick with a oneshot footstep, the tick speeds up over time); includes a Q&A log
+description: BUILT in the first build (2026-11-02; hazard countdown built, other warning cues still deferred) - the core run of Stride Rush (Start game begins a run, a step timer moves the player right one tile per tick with a oneshot footstep, the tick speeds up over time); includes a Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-01, with warning cues deferred until the dev finds sounds. The timing numbers are defaults to tune by playtest. No code until the dev gives a go-ahead ([[feedback_plans_record_qna]]).
+Status: BUILT and tested in the first build (Sections 1 and 2, committed by 69dedf8; [[project_first_build_plan]]). Settled 2026-11-01. What changed while building:
+- The speed cap is 100 ms, not 50.
+- Footsteps are silent while crouched.
+- Music and ambience folders are still empty, so runs are silent there until the dev adds tracks.
+- Warning cues: only hazards have one, the 5-step hazcount countdown on their ledges (sounds added 2026-11-02). Spikes and mines warn through their own swing, light and ticking. Per-action cue sets for duck and lane change remain deferred until their sounds exist.
+The timing numbers live in tuning.nvgt.
 
 Scope: what happens from Start game until a run ends. That covers the belt, the step timer, footsteps, the speed-up curve, and the run's overall shape. Out of scope for this plan: obstacles and jump/duck ([[project_game_design]]), death details, weapons, items and scoring.
 
