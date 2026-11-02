@@ -9,7 +9,7 @@ Status: SETTLED 2026-11-01. Not built; the keys get written into keyboard.ini wh
 
 Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFighter's key_config class (deps/key_config.nvgt, already in Stride Rush) and a keyboard.ini, like SimpleFighter's data/main/config/keyboard.ini ([[reference_simplefighter_architecture]]):
 - Up or W: jump.
-- Down or S: duck. Slides under obstacles you can't jump.
+- Down or S: duck, held. duck.ogg plays on press. Ducking auto-unducks after about 1 to 2 seconds even if the key is still held (tunable), and releasing early unducks sooner; unduck.ogg plays either way. Unducking early raises the chance of smashing into what you were ducking under (dev, 2026-11-01). Slides under obstacles you can't jump.
 - Left or A: lane switch left. Lanes are a later expansion, so these keys are reserved now.
 - Right or D: lane switch right (reserved, as above).
 - Tab or Z: left interact hand, for doors and similar objects.
@@ -61,4 +61,6 @@ Q&A log:
 - Q: Can keys be rebound mid-run? A: No. During a run, keys can only be viewed, never rebound (dev, 2026-11-01). When F2 opens settings mid-run, the Keyboard tab shows only "View current keyboard bindings" and hides "Rebind keyboard controls". Rebinding happens only from settings opened outside a run. Whether the General and Sound tabs show mid-run is still open.
 - Q: Which settings tabs show mid-run? A: Hide General, Keyboard and Sound (dev, 2026-11-01). F2 mid-run shows only Game, Menu and Speech, matching SimpleFighter. This replaces the "Keyboard tab view-only" detail above: the Keyboard tab is hidden entirely mid-run, and F1 remains the in-run way to view bindings.
   - SimpleFighter reference: on a map it shows only Game, Menu and Speech, opened by the pf/preffs command, which calls pause_pools() then settingsmenu(true). The ingame flag hides General, Keyboard and Sound.
+- Q: Is duck held or a timed slide? A: Held. duck.ogg means the player holds Down/S; unduck.ogg means they release it (dev, 2026-11-01). For the movement plan: Up while ducking, and Down in mid-air (flag 3) still need rules.
+- Q: Can you duck forever? A: No. It auto-unducks after about 1 to 2 seconds. You can unduck early by releasing, but that raises the chance of smashing into something (dev, 2026-11-01).
 - Q: Does the no-networking rule remove the updater? A: No. The updater stays, because it isn't part of the game mechanics (dev, 2026-11-01).

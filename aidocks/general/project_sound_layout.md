@@ -5,7 +5,17 @@ metadata:
   type: project
 ---
 
-sr/sounds/ copies ToyMania's tree, not SimpleFighter's. Scaffolded folders as of 2026-11-01: equipments/items, equipments/weapons, misc/game, misc/player, misc/store, objects/doors, objects/platforms, objects/sources/ambiences, objects/sources/tracks, ui/dialogs/default, ui/menus/default, ui/other. No sound files yet, and no pack folder level yet.
+sr/sounds/ copies ToyMania's tree, not SimpleFighter's.
+
+State as of the dev's update on 2026-11-01 (14 files; *.ogg is gitignored, so sounds aren't in git):
+- Folders: equipments/items, equipments/weapons/artillery, equipments/weapons/melee, misc/game, misc/player, objects/doors, objects/platforms (empty for now; the dev's favorite tiles go here), objects/sources/ambiences, objects/sources/tracks, ui/dialogs/default, ui/menus/default, ui/other.
+- misc/store was removed, so there's no store folder now.
+- misc/game: pause, resume.
+- misc/player: jump, duck, unduck, life, give, turn, and inv1 to inv6.
+  - duck plays when the player presses and holds Down/S; unduck plays when they release it (dev, 2026-11-01). Ducking is held, but it auto-unducks after about 1 to 2 seconds, which also plays unduck.
+  - There's no land clip here; landing comes from the platform tile's land clip.
+  - life suggests a lives system. give and inv1-6 are inventory sounds (ToyMania-style give, and an inventory cycle panned by position).
+  - turn is a ToyMania clip; its use in Stride Rush is open, possibly lane changes.
 
 How ToyMania does it (reference, in ToyMania's src/includes/main/functions/extrafuncts.nvgt):
 - Packs: sounds/<pack>/..., with three selectors soundpack, dlgpack and menupack, each defaulting to "default".

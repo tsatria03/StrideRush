@@ -18,8 +18,10 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [ToyMania reference](general/reference_toymania_readonly.md) — games/ToyMania is the sound-layout, scoring and difficulty reference; read only; scoring/difficulty only when the dev asks
 - [ToyMania architecture](general/reference_toymania_architecture.md) — launcher, glob includes, build pipeline, game loop, menus, keybinds; closest template for the skeleton
 - [ToyMania scoring and difficulty](general/reference_toymania_scoring_difficulty.md) — session/lifetime stats, savedata, achievements, 5-tier difficulty ladder, bugs not to copy
+- [Friend's runner template](general/reference_friend_runner_template.md) — a friend's BGT runner in user/: auto-step with a shrinking interval, 5-step hazard countdown cues, jump arc, 10 level tracks; its bugs; don't name it in committed files
 - [CaveDefender buffer](general/reference_cavedefender_buffer.md) — the speech-buffer system to port (user/CaveDefender-main client deps/buffer.nvgt, read only), its keys, and the CaveDefender-only parts to adapt
 - [SimpleFighter architecture](general/reference_simplefighter_architecture.md) — launcher, map format and dispatcher, menus, dialogs, settings, key_config
+- [SimpleFighter builder objects](general/reference_simplefighter_builder_objects.md) — the 81 builder object docs as an obstacle/pickup reference: jump/duck/destroy/hand/collect/zone roles, clips (turbulence template not used)
 - [SimpleFighter movement and jump](general/reference_simplefighter_movement_jump.md) — 2d step, footstep, jump state machine, gravity, hazard death and pause paths
 
 ## NVGT / AngelScript gotchas
@@ -59,5 +61,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
+- [Obstacles plan](plans/project_obstacles_plan.md) — IN DISCUSSION: which obstacles are jumped, ducked, or need a weapon/hand/lane change; agreed three-height model (low jump, high duck, full = hands); feet vs hands; first build low and high only; duck and jump timing limits
+- [Run plan](plans/project_run_plan.md) — SETTLED, NOT BUILT: endless run; timer speed-up 500 ms minus 10 ms every 10 s to a 50 ms floor; footstep every step; random platform stretches of 50-200 tiles; random music and ambience; warning cues deferred; Q&A log
 - [Controls plan](plans/project_controls_plan.md) — SETTLED, NOT BUILT: dev-set keys (Up/W jump, Down/S duck, lanes reserved, Tab/Z and Enter/C hands, Space-only fire, X ammo, R reload, 1-0 weapons, readouts H health/Q distance/E speed/T time/F score, Esc/P pause, Home/End ambience, PgUp/PgDn music), rebindable via key_config; status readouts on letters, not F keys; CaveDefender buffer keys kept as-is; in-game F1 opens the view-bindings screen and F2 opens settings (SimpleFighter-style tabs), both pausing; mid-run F2 shows only Game/Menu/Speech tabs (General, Keyboard, Sound hidden), no rebinding mid-run; no settings in the pause menu, no Alt shortcuts; unlisted keys pending; Q&A log
 - [Skeleton plan](plans/project_skeleton_plan.md) — COMPLETE: launcher, sr.nvgt + includes, dep shims and main menu built, launch-tested and committed (d0e340f); 4 sections (sr.py launcher; sr.nvgt + glob includes; shims and trims for the SimpleFighter-copied deps; form_menu main menu); all decisions settled (flat sound root, no keyhook, Escape exits right away, version.nvgt tracked, sr/errors.txt ignored); ready to build
