@@ -15,6 +15,12 @@ Section 1: the force field obstacle, without hands. Fields are always on, so eve
 - tuning.nvgt: forcefield_life_cost 1 and forcefield_knockback_tiles 5.
 - Wiring, per the new-obstacle checklist: obstacle_types and place_obstacle() in spawner.nvgt, the knockback extra in the gap after a field, all_pools, clear_run_objects(), and the check and countdown calls in step_check(). The testing spawn menu picks the type up automatically.
 - player.nvgt may need a small helper to cancel a jump or crouch silently.
+- BUILT 2026-11-02 on top of d8907eb. SECTION 1 COMPLETE: all 6 tests passed (2026-11-02): the approach and countdown, the hit and throw, jumping or crouching doesn't help, the last life, spacing at 100 ms, and a mixed run with pause. As built:
+  - forcefield.nvgt is a new file. The hit plays stationary through p, not positioned at the field, because the throw moves you 5 tiles away at once.
+  - forcefield_check() returns true on a throw. step_check() then plays play_landing() instead of a footstep, after surface_check(), so the landing uses the tile you land on.
+  - player.nvgt: player_land() was split into play_landing() (the sounds) and the Down-held crouch. cancel_movement() ends a jump or crouch silently, and a cut-short crouch still starts its cooldown.
+  - spawner.nvgt adds the 5 extra tiles after a placed force field in spawn_check().
+  - The spawn menu shows "force fields", with the underscore replaced for speech.
 Section 2: the hands and the switch.
 - run_input() reads hand_left and hand_right. During a field's warn5 step, a press plays objects/interaction/switches/switch/press panned to that hand, and the field swaps its on loop for its off loop and is passed safely.
 - During its earlier countdown steps, a press plays the panned press but uses up the field's try, so it stays on. With no field counting down, a press does nothing.

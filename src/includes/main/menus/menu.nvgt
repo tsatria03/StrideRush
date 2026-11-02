@@ -69,7 +69,7 @@ setupmenu();
 m.intro_text = "Choose which obstacles spawn for testing.";
 for (uint i = 0; i < obstacle_types.length(); i++)
 {
-m.add_item(obstacle_types[i], obstacle_types[i]);
+m.add_item(obstacle_types[i].replace("_", " ", true), obstacle_types[i]); // "force_fields" reads as "force fields"
 }
 m.add_item("all", "all");
 int mres = m.run();

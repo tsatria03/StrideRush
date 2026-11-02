@@ -56,6 +56,11 @@ const int ends_run = -1;
 const int hazard_life_cost = ends_run;
 const int spike_life_cost = 1;
 const int mine_life_cost = 2;
+const int forcefield_life_cost = 1;
+
+/* Running into an active force field throws you this many tiles forward past it (dev, 2026-11-02). The gap after every
+force field gets the same number of extra tiles, so the throw always lands on clear floor before the next countdown. */
+const int forcefield_knockback_tiles = 5;
 
 // Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. Home/End and Page Up/Down move by volume_change.
 const int min_volume = -50;

@@ -82,11 +82,16 @@ spike_check();
 if (!running) return;
 mine_check();
 if (!running) return;
+bool thrown = forcefield_check(); // true if a force field threw the player forward this step
+if (!running) return;
 surface_check(); // before the footstep, so a new surface is heard on its first step
-play_step();
+// A throw lands with the landing sounds instead of a footstep, on the tile it lands on.
+if (thrown) play_landing();
+else play_step();
 hazard_countdown();
 spike_countdown();
 mine_countdown();
+forcefield_countdown();
 }
 void speedup_check()
 {

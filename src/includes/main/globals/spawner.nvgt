@@ -1,4 +1,4 @@
-/* Places obstacles ahead of the player as the run goes. The type (hazards, spikes or mines) and its theme are random,
+/* Places obstacles ahead of the player as the run goes. The type (hazards, spikes, mines or force fields) and its theme are random,
 from whatever folders exist at runtime. The next obstacle's type and countdown length are decided together with the
 gap to it, so the floor before its countdown is always there however the speed changes. Every type counts down; only
 hazards turn their countdown steps into ledge tiles. */
@@ -6,7 +6,7 @@ double next_spawn_x = 0;
 string next_type = "";
 int next_countdown = 0;
 // Every obstacle type the spawner knows; a new type is added here. The testing spawn menu lists these too.
-string[] obstacle_types = {"hazards", "spikes", "mines"};
+string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields"};
 // "all", or one type from obstacle_types; set by start_run(). Only the source-only testing menu picks anything but all.
 string spawn_only = "all";
 
@@ -56,8 +56,11 @@ void spawn_check()
 {
 if (me_x + spawn_distance() + next_countdown < next_spawn_x) return;
 place_obstacle(next_spawn_x, next_type, next_countdown);
+string placed = next_type;
 choose_next_obstacle();
 next_spawn_x += next_gap(next_countdown);
+// A force field's throw needs room after it, so the gap after one gets that many extra tiles.
+if (placed == "force_fields") next_spawn_x += forcefield_knockback_tiles;
 }
 void place_obstacle(double x, string type, int countdown)
 {
@@ -68,6 +71,7 @@ string theme = themes[random(0, themes.length() - 1)];
 if (type == "hazards") spawn_hazard(x, theme, countdown);
 else if (type == "spikes") spawn_spike(x, theme, countdown);
 else if (type == "mines") spawn_mine(x, theme, countdown);
+else if (type == "force_fields") spawn_forcefield(x, theme, countdown);
 }
 /* One countdown cue for an obstacle of this type at ox, whose countdown starts at countdown_start: the LAST ones of
 misc/trap/<type>/warn1 to warn5, so the step before the obstacle always plays warn5 ("act now"). Five countdown steps
