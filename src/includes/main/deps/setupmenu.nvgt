@@ -2,7 +2,7 @@ void setupmenu(bool music_added = false, string musicpath = "", string clicksoun
 {
 m.reset(true);
 if (music_added) {
-m.add_music(musicpath != "" ? musicpath : get_pack_sound("ui/menus/" + menutype + "/*music*"));
+m.add_music(musicpath != "" ? musicpath : get_pack_sound("ui/menu/*music*"));
 m.play_music();
 }
 else m.add_music("");
@@ -12,10 +12,10 @@ m.first_letter_navigation=first_letter;
 m.side_scrolling=side_scrolling;
 m.speak_position_information=speak_menu_position;
 
-m.click_sound = clicksound != "" ? clicksound : get_pack_sound("ui/menus/" + menutype + "/*click*");
-m.close_sound = closesound != "" ? closesound : get_pack_sound("ui/menus/" + menutype + "/*close*");
-m.edge_sound = edgesound != "" ? edgesound : get_pack_sound("ui/menus/" + menutype + "/*edge*");
-m.enter_sound = entersound != "" ? entersound : get_pack_sound("ui/menus/" + menutype + "/*enter*");
-m.open_sound = opensound != "" ? opensound : get_pack_sound("ui/menus/" + menutype + "/*open*");
-m.wrap_sound = wrapsound != "" ? wrapsound : get_pack_sound("ui/menus/" + menutype + "/*wrap*");
+m.click_sound = clicksound != "" ? clicksound : get_pack_sound("ui/menu/*click*");
+m.close_sound = closesound != "" ? closesound : get_pack_sound("ui/menu/*close*");
+m.edge_sound = edgesound != "" ? edgesound : get_pack_sound("ui/menu/*edge*");
+m.enter_sound = entersound != "" ? entersound : get_pack_sound("ui/menu/*enter*");
+m.open_sound = opensound != "" ? opensound : get_pack_sound("ui/menu/*open*");
+m.wrap_sound = wrapsound != "" ? wrapsound : get_pack_sound("ui/menu/*wrap*");
 }

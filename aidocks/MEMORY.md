@@ -10,7 +10,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Build pipeline](general/project_build_pipeline.md) — build/ tools adapted from SimpleFighter (StrideRush, password StrideSprinter, v1.0, sounds bundled); V<version>0 tag format; site page not created yet
 - [Entity pattern](general/project_entity_pattern.md) — one file per object: pool, handle array, class, spawn/check/remove/destroy_all, sentinel-null removal, one clear registry
 - [Audio model](general/project_audio_model.md) — pool per category, listener every frame, HRTF pref; kept handles must be looping or persistent
-- [Sound layout](general/project_sound_layout.md) — NO top-level sound packs (sounds/ is the root); objects/ grouped by SimpleFighter builder categories (audio, construction, interaction, kombat, transitions, traps); current clip inventory; menu and dialog themes at ui/menus/<name> and ui/dialogs/<name> (dlg error sound in the dialog theme); one theme folder per object type (e.g. traps/hazards/pit); weapons add a category level (weapons/melee/<name>, weapons/artillery/<name>); keys sit under interaction/items/other; wildcard random-variant lookup; all folders and code paths lowercase (misc/player)
+- [Sound layout](general/project_sound_layout.md) — NO top-level sound packs (sounds/ is the root); objects/ grouped by SimpleFighter builder categories (audio, construction, interaction, kombat, transitions, traps); current clip inventory; NO menu or dialog themes (flat ui/menu, ui/dialog, ui/buffer, ui/other; ui/other's "coppied" spelling and the missing menu music noted); one theme folder per object type (e.g. traps/hazards/pit); weapons add a category level (weapons/melee/<name>, weapons/artillery/<name>); keys sit under interaction/items/other; wildcard random-variant lookup; all folders and code paths lowercase (misc/player)
 - [Memory folder layout](general/feedback_memory_folder_layout.md) — memories go in aidocks/: general/ for topics, plans/ for completed or in-progress plans; CRLF files
 
 ## Reference repos (read only)
@@ -32,6 +32,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [key_pressed one-shot](general/project_nvgt_key_pressed_oneshot.md) — read a key once per frame and branch inside
 - [Sound preload cache](general/project_nvgt_sound_preload_cache.md) — reloading changed audio under the same filename replays the old clip
 - [HRTF dummy sound](general/project_nvgt_hrtf_dummy_sound.md) — dummy.load("dummy") must run before sound_global_hrtf is set; looks like dead code, never remove it
+- [Not built-ins](general/project_nvgt_not_builtins.md) — min, max (extrafuncts) and vd (dec.nvgt) are game-defined, not engine built-ins; verify ported names, don't assume
 - [Sound device indexing](general/project_sound_device_indexing.md) — device list is 0 No sound, 1 Default, 2+ named; no synthetic Default
 - [Transient flags per-frame reset](general/project_transient_flags_per_frame_reset.md) — a timed lockout must be re-held each frame after any per-frame flag reset
 

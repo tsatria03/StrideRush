@@ -32,7 +32,7 @@ No test suite or linter. **The dev runs and builds the game, never Claude**: don
 |---|---|
 | **[[project_tech_decisions]]** | pick a library, menu class, sound lookup, or anything ported from another game (form_menu, no networking, no keyhook, no map files) |
 | NVGT / AngelScript gotchas | write any .nvgt (a compile error means the game won't launch): **[[project_angelscript_braceless_if]]**, **[[project_angelscript_reserved_words]]**, **[[project_angelscript_while_true_return]]**, **[[project_angelscript_block_comment_star_slash]]**, **[[project_nvgt_key_pressed_oneshot]]**, **[[project_nvgt_sound_preload_cache]]**, **[[project_nvgt_hrtf_dummy_sound]]** |
-| **[[project_sound_layout]]** | add a sound path or folder (flat `sounds/` root, no packs, themes, per-type folders, all lowercase) |
+| **[[project_sound_layout]]** | add a sound path or folder (flat `sounds/` root, no packs, no menu/dialog themes, per-type folders, all lowercase, underscores not spaces) |
 | **[[project_audio_model]]** | add a sound_pool or keep a sound handle (looping/persistent rule) |
 | **[[project_entity_pattern]]** | add an object type (one file per type, sentinel-null removal, one clear registry) |
 | **[[project_controls_plan]]** | add or change any key binding |
@@ -44,7 +44,8 @@ No test suite or linter. **The dev runs and builds the game, never Claude**: don
 
 - **Reference repos are read only.** Never edit SimpleFighter, ToyMania, or CaveDefender; read them, then write the adapted code here.
 - **CRLF line endings are enforced** on `*.nvgt/.py/.txt/.bat/.ps1/.md/.ini`. Create new files with CRLF and preserve endings on edit; never run a tree-wide normalizer ([[feedback_no_crlf_normalization]]).
-- **No top-level sound packs.** `get_pack_sound(path)` looks in `sounds/` + path; the only selectors are the menu theme (`menutype`, `ui/menus/<name>/`) and dialog theme (`dlgtype`, `ui/dialogs/<name>/`) ([[project_sound_layout]]).
+- **No sound packs or themes.** `get_pack_sound(path)` looks in `sounds/` + path. Menu sounds are flat in `ui/menu/`, dialog sounds in `ui/dialog/`, buffer cues in `ui/buffer/`, and copy/export cues in `ui/other/`; there's no menu or dialog theme selector ([[project_sound_layout]]).
+- **Nothing gets built until its sounds exist.** Rescan `sr/sounds/` before a build section ([[feedback_sounds_before_features]]).
 - **`dummy.load("dummy")` must run before `sound_global_hrtf` is set.** It looks like dead code; it isn't ([[project_nvgt_hrtf_dummy_sound]]).
 - **Offline only.** No networking systems; the future updater's HTTP download is the one exception ([[project_tech_decisions]]).
 - **Keys are never rebindable during a run.** Mid-run, F1 views bindings and F2 opens settings with only Game, Menu, and Speech tabs ([[project_controls_plan]]).

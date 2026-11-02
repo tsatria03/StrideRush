@@ -1,13 +1,13 @@
 ---
 name: project_sound_layout
-description: sr/sounds/ layout - no top-level packs (sounds/ is the root); objects/ grouped by SimpleFighter builder categories (audio, construction, interaction, kombat, transitions, traps) with one theme folder per type; wildcard lookup picks a random numbered variant
+description: sr/sounds/ layout - no top-level packs (sounds/ is the root), no menu or dialog themes (flat ui/menu, ui/dialog, ui/buffer, ui/other); objects/ grouped by SimpleFighter builder categories (audio, construction, interaction, kombat, transitions, traps) with one theme folder per type; wildcard lookup picks a random numbered variant
 metadata:
   type: project
 ---
 
 No top-level sound packs: there will never be a sounds/<packname>/ level, so sr/sounds/ is the root and paths go straight to the category. Settled 2026-11-01. *.ogg and *.wav are gitignored, so this memory is the repo's only record of which clips exist; keep it in step with the folder.
 
-Current tree (rescanned 2026-11-01 after the dev's second reorganization; 287 files with the weapons, the switch, the construction examples, the new player clips and the shield added). objects/ is now grouped the way SimpleFighter's builder categories are; the rest keeps ToyMania's top level.
+Current tree (rescanned 2026-11-01 after the dev's second reorganization; 300 files with the weapons, the switch, the construction examples, the new player clips, the shield and the flat ui folders added). objects/ is now grouped the way SimpleFighter's builder categories are; the rest keeps ToyMania's top level.
 - equipments/weapons (added 2026-11-01, 69 files; ToyMania's ten weapons). Weapons keep a category level, weapons/<category>/<weaponname>/.
   - melee: bat, boot, club, feat, fist, hammer, knife, laser. Most have draw, fire1-3 and hit1-3; fist has fire1-2; laser has a single draw, fire and hit.
   - artillery: machine_gun and pistol, with draw, empty, fail, fire, hit, ping, reload and shell1-2.
@@ -32,7 +32,12 @@ Current tree (rescanned 2026-11-01 after the dev's second reorganization; 287 fi
 - objects/traps/hazards: chasm, chasm2, electricity, electricity2, electricity4, fire, lava, pit, quicksand, water, water2. Each has loop and fall.
 - objects/traps/mines/mine, mine2, mine3: spawn, light, loop, hit, explode.
 - objects/traps/spikes/electric_ray, large_spike: loop and hit only. The dev trimmed these for Stride Rush on 2026-11-01, removing hurt (.wav) and death1-2, so spikes have no clips for being smashed.
-- ui/dialogs/default, ui/menus/default: empty so far. ui/other was removed.
+- ui (flattened 2026-11-01; 300 files total in sounds/ now):
+  - ui/menu: click, close, edge, enter, open, wrap, speaker. There's no music clip, so menu music is silent for now. speaker is a speaker-test clip.
+  - ui/dialog: open, close, scroll, copy, error. Renamed from ui/dlg; the dev also fixed "coppy" to copy and added error.
+  - ui/buffer: choose, switch. These are the CaveDefender buffer's item and category cues. The enable and disable clips were removed again.
+  - ui/other: complete, copied, export, toggleon, toggleoff. toggleon and toggleoff are back (for buffer mute and unmute). They live in ui/other, not CaveDefender's ui/misc; the adapted buffer.nvgt uses ui/other. copied.ogg was renamed from the misspelled "coppied" by Claude at the dev's request (2026-11-01).
+  - Two different copy sounds (dev, 2026-11-01): ui/dialog/copy is for plain C on a dialog (dlg()'s copy key; the dev confirmed plain C, not Ctrl+C). ui/other/copied is for copying stats, for later with scoring, like ToyMania's copy-results option. Don't swap them.
 
 misc/player notes:
 - duck plays when the player presses and holds Down/S; unduck plays on release, or when ducking auto-unducks after about 1 to 2 seconds (dev, 2026-11-01).
@@ -41,7 +46,7 @@ misc/player notes:
 - give and inv1-6 are ToyMania-style inventory sounds. turn is a ToyMania clip; its use is open, possibly lane changes.
 
 Themes and type folders:
-- Menus use ui/menus/<name>/ (menutype) and dialogs use ui/dialogs/<name>/ (dlgtype); both default to "default". Dialog clips are open, close, scroll, copy and error.
+- NO menu or dialog themes (dev, 2026-11-01; this supersedes the earlier ui/menus/<name> and ui/dialogs/<name> theme decision). Menu sounds live directly in ui/menu/ and dialog sounds directly in ui/dialog/. The menutype and dlgtype selectors are no longer needed.
 - Every object type is a named theme folder holding that type's clips, so a new folder is new content with no code change. Code lists them with get_pack_sound_folders(), e.g. "objects/traps/hazards/*".
 - Clip names follow SimpleFighter's builder conventions (loop, fall, hit, hurt, death, on, off, spawn, explode, open, close, grant, deny and so on; see [[reference_simplefighter_builder_objects]]).
 - Item grouping: the earlier lean was flat items/<name>/, but the dev has now put keys under items/other/. Confirm when items are designed.
@@ -50,4 +55,4 @@ Naming rule: multi-word folder names use underscores, never spaces (as in force_
 
 Pitfall: keep every folder and every path in code lowercase. ToyMania's misc/PLAYER folder versus its code's misc/player only works on Windows. Stride Rush's player folder is lowercase.
 
-**How to apply:** get_pack_sound builds "sounds/" + path. The only selectors are the menu and dialog theme names, never a whole-tree soundpack selector. Lookup code is SimpleFighter's glob functions ([[project_tech_decisions]]). Related: [[project_audio_model]], [[reference_toymania_readonly]].
+**How to apply:** get_pack_sound builds "sounds/" + path. There are no sound selectors at all now: no whole-tree soundpack, and no menu or dialog themes. Lookup code is SimpleFighter's glob functions ([[project_tech_decisions]]). Related: [[project_audio_model]], [[reference_toymania_readonly]].

@@ -32,6 +32,21 @@ Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFight
 
 Later features named by these keys: ducking, weapons (number row plus fire, ammo check and reload), the two interact hands, lanes, a pause menu, and separate ambience and music volume.
 
+keyboard.ini WRITTEN 2026-11-01 at sr/data/config/keyboard.ini (CRLF, 46 bindings). It replaced the dev's copied SimpleFighter file entirely. Action names, by section:
+- [movement]: jump, duck (press), duck_held (down), duck_release (release), lane_left, lane_right
+- [interaction]: hand_left, hand_right
+- [combat]: fire, ammo_check, reload, weapon_1 to weapon_10 (keys 1 to 0)
+- [info]: info_lives, info_distance, info_speed, info_time, info_score
+- [volume]: ambience_up and ambience_down (Home and End), music_up and music_down (Page Up and Page Down), all repeating
+- [screens]: pause, view_bindings (F1), settings (F2)
+- [buffer]: buffer_item_previous, buffer_item_next, buffer_item_first, buffer_item_last, buffer_previous, buffer_next, buffer_first, buffer_last, buffer_mute, buffer_copy_item, buffer_review_item, buffer_menu, buffer_export
+
+Notes:
+- The buffer keys are in keyboard.ini so key_config's consumed-key rule can work. A single-key binding (hand_right on C, or the bracket keys) is skipped in any frame where a held modifier combo on the same key fires (Shift+C copy). If the buffer read raw keys, as CaveDefender's buffercheck() does, Shift+C would also fire the right hand.
+- Caveat for coding: the consumed rule only protects single-key bindings. Alt+Shift+C (review) also satisfies Shift+C (copy), because copy's only modifier, Shift, is down. The buffer code must check review first, or skip copy while Alt is held, the way CaveDefender reads C once and branches on Alt.
+- Code should query actions with controls.action_triggered(name). It uses each binding's own trigger from the ini (press, :repeat, :down, :release), so the ini decides behavior. action_pressed and action_repeating override the ini's trigger. controls is loaded at startup by load_controls() (functions/controlfuncts.nvgt).
+- Letters and digits resolve through SDL key names (kc_name_to_code falls back to get_key_code), so 1 to 0 and the letter keys need no registration.
+
 Rule: status readouts go on letter keys, never function keys (dev, 2026-11-01). Function keys are for screens: F1 key bindings, F2 settings.
 
 Still unassigned: item keys (deferred). Record any new key here when it's settled.
@@ -64,4 +79,5 @@ Q&A log:
 - Q: Is duck held or a timed slide? A: Held. duck.ogg means the player holds Down/S; unduck.ogg means they release it (dev, 2026-11-01). For the movement plan: Up while ducking, and Down in mid-air (flag 3) still need rules.
 - Q: Can you duck forever? A: No. It auto-unducks after about 1 to 2 seconds. You can unduck early by releasing, but that raises the chance of smashing into something (dev, 2026-11-01).
 - Q: (dev note) Lives key? A: L shows how many lives you have. H is unused (dev, 2026-11-01).
+- Q: Adapt the dev's copied SimpleFighter keyboard.ini to this plan, with the buffer keys included? A: Yes (dev, 2026-11-01). Written as listed above.
 - Q: Does the no-networking rule remove the updater? A: No. The updater stays, because it isn't part of the game mechanics (dev, 2026-11-01).

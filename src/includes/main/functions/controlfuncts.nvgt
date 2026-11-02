@@ -1,0 +1,16 @@
+// Loads the key bindings into controls at startup. A missing or broken keyboard.ini stops the game, like SimpleFighter.
+bool load_controls()
+{
+string kpath = "data/config/keyboard.ini";
+if (!file_exists(kpath))
+{
+alert("Error", "Missing keyboard.ini at " + kpath + ".");
+return false;
+}
+if (!controls.load_keyboard(kpath))
+{
+alert("Error", "Failed to load " + kpath + ". Please reinstall the game.");
+return false;
+}
+return true;
+}

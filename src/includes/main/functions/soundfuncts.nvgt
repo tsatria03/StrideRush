@@ -1,5 +1,5 @@
 /* Wildcard sound lookup, trimmed from SimpleFighter's packfuncts.nvgt. There are no sound packs, so sounds/ is the root and every path goes straight to its category.
-A path like "ui/menus/default/*click*" matches click.ogg, click1.ogg, click2.ogg and so on, and a random match is played, so adding variations is just adding numbered files. */
+A path like "ui/menu/*click*" matches click.ogg, click1.ogg, click2.ogg and so on, and a random match is played, so adding variations is just adding numbered files. */
 string find_sound_in_disk(string soundname)
 {
 string[] snd=find_files(soundname);

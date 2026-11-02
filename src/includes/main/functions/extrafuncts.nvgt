@@ -12,6 +12,30 @@ catch
 return 0;
 }
 }
+// min and max aren't engine built-ins in the legacy fork; SimpleFighter and CaveDefender define them the same way.
+double min(double a, double b)
+{
+return (a < b) ? a : b;
+}
+double max(double a, double b)
+{
+return (a > b) ? a : b;
+}
+// Maps a position in a list onto a pitch range; the speech buffer uses it to pitch its cues by position.
+double convert_to_pitch(double length,double index,double min_pitch=0,double max_pitch=200)
+{
+try
+{
+double range=max_pitch-min_pitch;
+double percent=index/(length-1);
+double value=min_pitch+range*percent;
+return value;
+}
+catch
+{
+return 100;
+}
+}
 void sort_naturally(array<string>& inout arr)
 {
 arr.sort(natural_number_sort);

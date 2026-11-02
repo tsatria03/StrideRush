@@ -7,6 +7,22 @@ metadata:
 
 Source: the dev's CaveDefender game, in Stride Rush's user/ folder at user/CaveDefender-main/src/client/includes/main/deps/buffer.nvgt (423 lines). The file is gitignored here. Treat it as read only, like the other reference games ([[reference_simplefighter_readonly]]). The dev chose it over ToyMania's 243-line buffer.nvgt on 2026-11-01, because ToyMania's has bugs and CaveDefender's is more up to date.
 
+STATUS 2026-11-01: the dev copied it unchanged into Stride Rush as src/includes/main/deps/buffer.nvgt. deps/ is glob-included, so it compiles with the game, and as-is it references things Stride Rush doesn't have:
+- the spool pool and the logfile global
+- net_keepalive_cb
+- alt_is_down, shift_is_down, control_is_down and convert_to_pitch
+- the CaveDefender logs path
+- sounds/ui/misc and sounds/ui/buffer clips that don't exist yet
+ADAPTED the same day (dev go-ahead):
+- Removed: net_keepalive_cb, ensure_buffer and remove_buffer (rank-gated chats), and format_number. Counts are plain numbers now.
+- Logs go to tsatria03/StrideRush/logs through buffer_log_dir().
+- Sounds come through get_pack_sound: ui/buffer/*switch* and *choose*, and ui/other/*toggleon* and *toggleoff*.
+- buffer_menu() uses setupmenu() and item ids instead of numeric indexes.
+- The four item-nav functions share a new announce_buffer_item().
+- The local "temp" in add_buffer_item was renamed to "item", so it no longer shadows the global temp pool.
+- buffercheck() reads the keyboard.ini [buffer] actions with controls.action_triggered(), so each binding's own trigger applies. It checks review before copy (the Alt+Shift+C caveat).
+- buffercheck() isn't called anywhere yet; the game loop will call it. No buffer categories are created yet; Stride Rush's categories are still undecided.
+
 What it does:
 - Named buffers (categories) of spoken messages. An "all" buffer is created automatically and collects every message. "alerts" and "all" can't be muted.
 - add_buffer_item(buffer, text, speak) logs a message and speaks it unless that buffer is muted.

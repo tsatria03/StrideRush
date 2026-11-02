@@ -30,6 +30,7 @@ if(gamstence.is_already_running)
 alert("Error", "You can only have one instance of this game running!");
 exit();
 }
+if (!load_controls()) exit();
 while(true)
 {
 wait(5);

@@ -42,6 +42,13 @@ As built (all CRLF):
 - functions/savefuncts.nvgt: an empty writepreffs() stub, so the menu music volume doesn't persist yet.
 - deps/dlg.nvgt: stztype is removed from dlg() and dlgmessage(). The copy, error, open, scroll and close sounds come from ui/dialogs/<dlgtype>/.
 - deps/setupmenu.nvgt: main/menus/ is now ui/menus/.
+- FOLLOW-UP DONE (2026-11-01, on top of b2d3c4b): after the dev dropped menu and dialog themes, setupmenu.nvgt now uses ui/menu/*x* and dlg.nvgt uses ui/dialog/*x*. The menutype and dlgtype globals are removed from dec.nvgt.
+- Same follow-up section, buffer and controls (2026-11-01):
+  - deps/buffer.nvgt adapted from the dev's verbatim CaveDefender copy ([[reference_cavedefender_buffer]]).
+  - dec.nvgt gained key_config controls, sound_pool spool and file logfile.
+  - functions/controlfuncts.nvgt adds load_controls(), which reads data/config/keyboard.ini; main() exits if it fails, like SimpleFighter.
+  - functions/extrafuncts.nvgt gained convert_to_pitch().
+  - The dev's first launch failed: "No matching symbol" for max and vd in buffer.nvgt. Fixed by adding min and max to extrafuncts.nvgt and virtual_dialogs vd to dec.nvgt ([[project_nvgt_not_builtins]]). The dev's relaunch then passed (2026-11-01): it compiles, keyboard.ini loads, and the menu uses ui/menu sounds.
 - form_menu.nvgt already declares menuwrap, first_letter, side_scrolling, speak_menu_position, menumusvolume and menupool, so dec.nvgt doesn't.
 - A dependency scan of deps/ against SimpleFighter's non-dep code found only convert_to_pan, get_pack_sound, get_map_sound, writepreffs, temp, menutype and m. Everything else they call is an engine built-in or defined inside deps/.
 
