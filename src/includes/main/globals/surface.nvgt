@@ -1,0 +1,41 @@
+/* The ground under the belt. Surfaces are whatever folders exist in sounds/objects/construction/platforms, found at
+runtime, so adding or removing a folder changes the pool with no code change. "ledge" is reserved for the edges
+around hazards and is never picked as a normal surface. */
+string current_surface = "";
+double surface_end_x = 0;
+
+void reset_surface()
+{
+current_surface = "";
+pick_surface();
+}
+// Picks a random surface other than ledge and other than the current one, so the change is always audible.
+void pick_surface()
+{
+string[] tiles = get_pack_sound_folders("objects/construction/platforms/*");
+string[] choices;
+for (uint i = 0; i < tiles.length(); i++)
+{
+if (tiles[i] == "ledge" or tiles[i] == current_surface) continue;
+choices.insert_last(tiles[i]);
+}
+// With only one usable surface, keep it; with none at all, footsteps stay silent.
+if (choices.length() > 0) current_surface = choices[random(0, choices.length() - 1)];
+surface_end_x = me_x + random(surface_min_tiles, surface_max_tiles);
+}
+void surface_check()
+{
+if (me_x >= surface_end_x) pick_surface();
+}
+// The tile under a position. Section 5 adds ledge ranges around hazards here.
+string tile_at(double x)
+{
+return current_surface;
+}
+// A oneshot footstep on every step, never thinned, at any speed.
+void play_step()
+{
+string tile = tile_at(me_x);
+if (tile == "") return;
+p.play_stationary(get_pack_sound("objects/construction/platforms/" + tile + "/*step*"), false);
+}

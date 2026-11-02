@@ -45,7 +45,7 @@ Section 1: tuning, run loop, pause, readouts and volume. BUILT 2026-11-01, on to
   - step_check(): when the step timer passes the interval, x advances one tile. Section 2 adds the footstep here.
   - speedup_check(): every period, shortens the interval down to the floor.
   - run_input(): pause, readouts, volume and buffercheck().
-- Readouts (one sentence each, spoken through speak_buffer into "misc"): L lives, Q distance in tiles, E speed in steps per second, T run time. F (score) waits for scoring (open question 6).
+- Readouts (one sentence each, spoken through speak_buffer into "misc"): L lives, Z distance in tiles, C speed as the step time in ms, T run time. (Built with Q and E and steps per second; the keys moved to Z and C on 2026-11-02 when Q and E became the hands, and speed changed to ms.) F (score) waits for scoring (open question 6).
 - Volume: Home and End change the ambience pool's volume; Page Up and Page Down change music.
 - globals/decpool.nvgt: adds pause_pools() and resume_pools() (from SimpleFighter) and registers the new pools.
 - menus/pause.nvgt: pause_menu(), a form_menu loop with exactly "resume game" and "quit game". Quit game ends the run and returns to the main menu after a Yes/No confirm and reads the confirm menu's OWN result (the ToyMania bug). pause_game() and resume_game() pause and resume every timer and pool. Escape in the pause menu resumes.
@@ -53,7 +53,22 @@ Section 1: tuning, run loop, pause, readouts and volume. BUILT 2026-11-01, on to
 - F1 (view bindings) and F2 (settings) are both left OUT of this build (dev, 2026-11-01; open question 5). Their keyboard.ini actions (view_bindings, settings) stay in the file, unused for now.
 - Test: start a run, hear the readouts change, pause and resume, exit to the menu.
 
-Section 2: surfaces and footsteps
+Section 2: surfaces and footsteps. BUILT 2026-11-02, on top of 778fcab; all 5 tests passed.
+- As built:
+  - globals/surface.nvgt (new) with reset_surface(), pick_surface(), surface_check(), tile_at() and play_step().
+  - tuning.nvgt: surface_min_tiles 50 and surface_max_tiles 200.
+  - run.nvgt: reset_run() calls reset_surface(); step_check() calls surface_check() and then play_step() after each move, so a new surface is heard on its first step.
+- Surfaces at build time: carpet, cement, concrete and marble, with ledge excluded.
+- Also changed during Section 2 testing (dev, 2026-11-02): the E readout now says "Your speed is <step_time> ms." (for example 500 ms, falling toward 50 ms) instead of steps per second.
+- play_step() has no ground check yet. Section 3 adds it once jumping exists. Footsteps play in pool p, which pauses with the run.
+- Tests, one at a time:
+  1. footsteps at the start
+  2. footsteps speed up
+  3. the surface changes after a while
+  4. each new run starts on a random surface
+  5. pause stops footsteps and resume continues them
+- SECTION 2 COMPLETE: all 5 tests passed (2026-11-02).
+- Final keyset applied after Section 2 (dev, 2026-11-02): hands on Tab/A and Enter/D, lanes on Left/Q and Right/E, readouts on Z (distance) and C (speed). Tested: Z and C speak, and A, D, Q and E do nothing yet.
 - globals/surface.nvgt:
   - State: the current surface tile and the x where the stretch ends.
   - pick_surface(): random from get_pack_sound_folders("objects/construction/platforms/*"), always skipping "ledge" and the current tile so it audibly changes. If no tiles exist, footsteps are silent.

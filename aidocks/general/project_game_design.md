@@ -8,7 +8,7 @@ metadata:
 Settled by the dev on 2026-11-01:
 
 - Style: a basic 2d side-scroller. The player rides a one-way belt to the right; movement is automatic.
-- No lane switching. Lanes may come later as an expansion, so don't design them out, but don't build them now. Left/A and Right/D are already reserved for them.
+- No lane switching. Lanes may come later as an expansion, so don't design them out, but don't build them now. Left/Q and Right/E are already reserved for them ("turning"; the final keyset from 2026-11-02).
 - Hazards: as an obstacle approaches, the player must jump on cue. Failing to jump means death.
 - Ducking (added 2026-11-01): Down or S slides under obstacles that need it. So obstacles come in jump-over and duck-under kinds.
 - Later features: weapons (ToyMania-style, number row plus Space to fire, X ammo check and R reload), left and right interact hands for doors and similar objects, a pause menu, and separate ambience and music volume keys. Full key list: [[project_controls_plan]].

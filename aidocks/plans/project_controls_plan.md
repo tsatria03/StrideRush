@@ -10,10 +10,10 @@ Status: SETTLED 2026-11-01. Not built; the keys get written into keyboard.ini wh
 Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFighter's key_config class (deps/key_config.nvgt, already in Stride Rush) and a keyboard.ini, like SimpleFighter's data/main/config/keyboard.ini ([[reference_simplefighter_architecture]]):
 - Up or W: jump.
 - Down or S: duck, held. duck.ogg plays on press. Ducking auto-unducks after about 1 to 2 seconds even if the key is still held (tunable), and releasing early unducks sooner; unduck.ogg plays either way. Unducking early raises the chance of smashing into what you were ducking under (dev, 2026-11-01). Slides under obstacles you can't jump.
-- Left or A: lane switch left. Lanes are a later expansion, so these keys are reserved now.
-- Right or D: lane switch right (reserved, as above).
-- Tab or Z: left interact hand, for doors and similar objects.
-- Enter or C: right interact hand, for doors and similar objects.
+- Left or Q: lane switch left ("turning"). Lanes are a later expansion, so these keys are reserved now (FINAL, dev, 2026-11-02).
+- Right or E: lane switch right (reserved, as above).
+- Tab or A: left interact hand, for doors and similar objects (FINAL, dev, 2026-11-02).
+- Enter or D: right interact hand, for doors and similar objects (FINAL, dev, 2026-11-02).
 - Space: shoot with an ammo weapon, or swing a melee weapon (ToyMania-style). Space only; no left or right Control (settled 2026-11-01).
 - X: ammo check, for non-melee weapons.
 - R: reload an ammo weapon.
@@ -23,8 +23,8 @@ Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFight
 - F1 (during a game): open the view-key-bindings screen, the same one as the settings Keyboard tab's "View current keyboard bindings". It pauses the run while open (settled 2026-11-01).
 - F2 (during a game): open the settings panel, SimpleFighter-style tabs. No Alt-letter shortcuts. During a run it shows only the Game, Menu and Speech tabs; General, Keyboard and Sound are hidden, exactly like SimpleFighter's settingsmenu(true). Viewing key bindings mid-run is F1's job (settled 2026-11-01).
 - L: lives readout, how many lives you have (dev, 2026-11-01). H is UNUSED; it was the health/lives key, replaced by L. There's no separate health, only lives.
-- Q: distance traveled readout.
-- E: current speed readout.
+- Z: distance traveled readout (moved from Q, dev, 2026-11-02).
+- C: current speed readout, spoken as the step time in ms (moved from E, dev, 2026-11-02).
 - T: time in this run readout.
 - F: score or money readout.
 - Home and End: ambience volume.
@@ -83,4 +83,6 @@ Q&A log:
 - Q: (dev note) Lives key? A: L shows how many lives you have. H is unused (dev, 2026-11-01).
 - Q: Adapt the dev's copied SimpleFighter keyboard.ini to this plan, with the buffer keys included? A: Yes (dev, 2026-11-01). Written as listed above.
 - Q: F1 and F2 in the first playable build? A: Leave both out for now (dev, 2026-11-01). The bindings stay in keyboard.ini for later.
+- Q: (dev, 2026-11-02) Key switch: Q and E become the left and right hands instead of Z and C. Tab and Enter stay as the other hand keys. That frees Z and C. A: Z replaces Q for distance and C replaces E for speed (dev, 2026-11-02). keyboard.ini updated: hand_left=TAB,Q, hand_right=RETURN,E, info_distance=Z, info_speed=C. Plain C (speed) and Shift+C (buffer copy) don't clash thanks to the consumed-key rule.
+- Q: (dev, 2026-11-02) Final keyset decision? A: A and D are the left and right hands (with Tab and Enter). Q and E are for turning, meaning switching lanes when lanes arrive (with Left and Right). This supersedes Q and E as hands and A and D as lanes. keyboard.ini: hand_left=TAB,A, hand_right=RETURN,D, lane_left=LEFT,Q, lane_right=RIGHT,E. Readouts stay on Z (distance) and C (speed).
 - Q: Does the no-networking rule remove the updater? A: No. The updater stays, because it isn't part of the game mechanics (dev, 2026-11-01).

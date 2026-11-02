@@ -18,6 +18,7 @@ lives = starting_lives;
 steptimer.restart();
 speeduptimer.restart();
 runtimer.restart();
+reset_surface();
 }
 void start_run()
 {
@@ -57,6 +58,8 @@ void step_check()
 if (steptimer.elapsed < step_time) return;
 steptimer.restart();
 me_x += 1;
+surface_check(); // before the footstep, so a new surface is heard on its first step
+play_step();
 }
 void speedup_check()
 {
@@ -73,7 +76,7 @@ return;
 }
 if (controls.action_triggered("info_lives")) speak_buffer(lives == 1 ? "You have 1 life." : "You have " + lives + " lives.");
 if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase());
-if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + round(1000.0 / step_time, 1) + " steps per second.");
+if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + step_time + " ms."); // the step interval itself, which shrinks as you speed up
 if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".");
 if (controls.action_triggered("music_up")) change_music_volume(volume_change);
 if (controls.action_triggered("music_down")) change_music_volume(-volume_change);

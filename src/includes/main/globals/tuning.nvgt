@@ -8,6 +8,10 @@ const int speedup_period = 10000;
 const int speedup_amount = 10;
 const int min_step_time = 50;
 
+// Surfaces: the ground switches to a new random platform after a random stretch between these lengths.
+const int surface_min_tiles = 50;
+const int surface_max_tiles = 200;
+
 // Lives at the start of every run.
 const int starting_lives = 1;
 
