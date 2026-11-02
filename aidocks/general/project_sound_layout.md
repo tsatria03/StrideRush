@@ -7,7 +7,7 @@ metadata:
 
 No top-level sound packs: there will never be a sounds/<packname>/ level, so sr/sounds/ is the root and paths go straight to the category. Settled 2026-11-01. *.ogg and *.wav are gitignored, so this memory is the repo's only record of which clips exist; keep it in step with the folder.
 
-Current tree (rescanned 2026-11-01 after the dev's second reorganization; 234 files with the weapons and switch added). objects/ is now grouped the way SimpleFighter's builder categories are; the rest keeps ToyMania's top level.
+Current tree (rescanned 2026-11-01 after the dev's second reorganization; 279 files with the weapons, the switch and the construction examples added). objects/ is now grouped the way SimpleFighter's builder categories are; the rest keeps ToyMania's top level.
 - equipments/weapons (added 2026-11-01, 69 files; ToyMania's ten weapons). Weapons keep a category level, weapons/<category>/<weaponname>/.
   - melee: bat, boot, club, feat, fist, hammer, knife, laser. Most have draw, fire1-3 and hit1-3; fist has fire1-2; laser has a single draw, fire and hit.
   - artillery: machine_gun and pistol, with draw, empty, fail, fire, hit, ping, reload and shell1-2.
@@ -15,7 +15,10 @@ Current tree (rescanned 2026-11-01 after the dev's second reorganization; 234 fi
 - misc/game: pause, resume.
 - misc/player: jump, duck, unduck, life, give, turn, and inv1 to inv6.
 - objects/audio/musics and objects/audio/sources: empty. Music tracks and ambience loops for runs go here (they replaced the old objects/sources/tracks and ambiences).
-- objects/construction/platforms: empty; the dev's favorite floor tiles go here (each with step1-5, land, fall, hurt, death). objects/construction/walls: empty.
+- objects/construction (example elements added 2026-11-01; 279 files total in sounds/ now):
+  - platforms: carpet, cement, concrete, ledge, marble. Each has fall, land and step1-5; cement has step1-10. There are no hurt or death clips; the wildcard handles any number of steps. More favorites may follow.
+  - "ledge" is for hazards (dev, 2026-11-01): the ground turns to ledge just before and after a hazard, like SimpleFighter's hazard auto-ledges. It is NOT a normal surface, so the random surface picker must exclude it ([[project_obstacles_plan]]).
+  - walls/walldirt: bump, death, hurt1-3. That's the first full-height obstacle sound and the first thing for weapons to hit (hurt on each hit, death when smashed, bump on running into it).
 - objects/interaction/items/other/<color>_key: black, green, orange, pink, purple, red and yellow keys (ToyMania keys). Clips: spawn, loop1-4, get, use, break; yellow has spawn1-2, use1-2 and a single loop. Items now sit under interaction with an "other" grouping level (the earlier equipments/items folder is gone).
 - objects/kombat/projectiles: empty.
 - objects/transitions/doors/door, door2, door3, door4: open, close, move, loop, grant, deny, jam1-2, hurt, death.

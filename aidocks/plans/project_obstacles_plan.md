@@ -19,6 +19,7 @@ First build (narrowed by the dev, 2026-11-01): jump-over obstacles only, built f
 
 Per-type behavior (settled one type at a time):
 - Hazards (objects/traps/hazards, every theme: chasm, chasm2, electricity, electricity2, electricity4, fire, lava, pit, quicksand, water, water2): running into any of them ENDS THE GAME regardless of lives (dev, 2026-11-01). Jump over them. Clips: a positioned loop while ahead, and fall on contact.
+  - Ledges (dev, 2026-11-01): the ground turns to the "ledge" platform tile just before and after each hazard, like SimpleFighter's hazard auto-ledges. The change in footstep sound is itself a warning that a hazard is next. Its sounds exist, so it's allowed under the sounds-first rule. The ledge tile is excluded from the random surface stretches in [[project_run_plan]]. Width: ledges are at least 2 tiles wide on either side of a hazard (dev, 2026-11-01), a tunable minimum. The ledge before a hazard also widens as the run speeds up, so it always lasts long enough to hear, with 2 tiles as the floor (dev agreed, 2026-11-01). It works the same way as the speed-aware minimum gap; the target duration is tunable. The after-side stays at least 2 tiles.
 - Spikes (objects/traps/spikes: electric_ray, large_spike): cost 1 life. Running into one plays hit. Its death1-2 clips are for smashing it with a weapon later, like SimpleFighter's destroyable spikes. The loop plays while ahead; hurt is spare (dev, "exactly right", 2026-11-01).
 - Mines (objects/traps/mines: mine, mine2, mine3): cost 2 lives. Jump over them like spikes and hazards (dev, 2026-11-01).
   1. spawn plays quietly when the mine appears ahead.
@@ -64,3 +65,6 @@ Q&A log:
 - Q: (dev) Would time-based obstacles like force fields add depth? A (Claude): not as plain timing gates, because in a forced-speed runner the player can't control when they arrive, so it's luck. Options with depth: a flickering jump obstacle, a hands obstacle switched off with an interact hand, or a rhythm-changing zone. Recommended leaving them out of the first build, with the hands version for later.
 - Q: Record force fields as out of the first build, with the hands idea for later? A: Yes, add it as a potential obstacle with hand interaction (dev, 2026-11-01).
 - Q: Random spacing with a speed-aware minimum gap, random type and theme? A: Yes (dev, 2026-11-01). The dev also added a switches folder for the future hand-operated force field, first under transitions, then moved to objects/interaction/switches/switch/press.
+- Q: Is the ledge platform for hazards, or just a favorite surface? A: For hazards (dev, 2026-11-01).
+- Q: How many ledge tiles before and after a hazard? A: At least 2 tiles wide on either side (dev, 2026-11-01).
+- Q: Should the ledge before a hazard widen with speed so it stays audible, with 2 tiles as the floor? A: Yes (dev, 2026-11-01).
