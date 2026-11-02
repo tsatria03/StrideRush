@@ -9,4 +9,6 @@ sr/docks/changelog.txt is the source of truth for what shipped. It is a record, 
 
 **Why:** players read it; engine internals, file names and how-to instructions don't belong there.
 
+Newest on top applies inside a block too, not just between blocks (dev, 2026-11-02): the latest entry is the first line under the header, and the oldest is the last line of the block.
+
 **How to apply:** describe the observable change in a sentence or two. Trust the changelog over the readme or todo list when they disagree. Keep lines short ([[feedback_dock_line_length_1024]]).

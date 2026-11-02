@@ -1,0 +1,15 @@
+New in 1.0.
+Added mines, which light up and start ticking as you get close, and cost 2 lives if you step on one.
+Added spikes, which swing back and forth and cost 1 life if they hit you.
+Added ledges in front of every hazard, with a step-by-step countdown that tells you when the hazard is coming.
+Added hazards, including pits, chasms, fire, lava, water, quicksand and electricity, which end your run if you fall into one.
+Added death sounds for each kind of obstacle, after which you return to the main menu.
+Added a lives system. You start each run with 1 life, and the run ends when your last life is gone.
+Added crouching, which you hold to stay down, with your footsteps going quiet while you're crouched.
+Added jumping, with a landing sound for the ground you come down on.
+Added footstep sounds on every step, with the ground changing between carpet, cement, concrete and marble as you run.
+Added speech buffers, so you can review, copy and export everything the game has spoken during a run.
+Added a pause menu, where you can resume the game or quit back to the main menu.
+Added keys to change the music and ambience volume during a run.
+Added keys to hear your lives, distance, speed and running time.
+Added endless runs that start at 500 milliseconds per step and speed up by 10 milliseconds every 10 seconds, up to a top speed of 100 milliseconds per step.

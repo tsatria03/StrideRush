@@ -16,4 +16,6 @@ When each file starts (agreed 2026-11-01, then updated the same day):
 - credits.txt: when outside sounds or code need crediting.
 - todo list.txt: holds only player-facing entries, never internal or plumbing tasks. Developer tasks go in aidocks/plans/.
 
+UPDATE 2026-11-02: Section 7 is written, so the hold is lifted. From here on, player-facing changes get changelog entries (a new block pairs with a version bump), and finished todo entries move to the "already finished" section.
+
 **How to apply:** don't add changelog, readme or todo entries as part of building sections. Track what would need documenting in the relevant aidocks/plans/ file instead, and raise it when the dev says the docks are due.

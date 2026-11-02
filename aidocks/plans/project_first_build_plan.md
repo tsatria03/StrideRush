@@ -257,6 +257,7 @@ Section 7: player docs (added by the dev, 2026-11-01). Done only after Section 6
 - sr/docks/todo list.txt: player-facing entries only, such as warning cues, duck-under obstacles, lanes, weapons, doors, force fields, scoring, settings (F1 and F2), and levels ([[feedback_docks_later]]).
 - credits.txt isn't in this section unless the dev asks.
 - All lines stay at or under 1024 characters ([[feedback_dock_line_length_1024]]). As of 2026-11-01 all four dock files are empty.
+- WRITTEN (dev's go-ahead, 2026-11-02, after Section 6 was committed in 69dedf8): readme.txt, changelog.txt ("New in 1.0.") and todo list.txt, in the dev's earlier readme style ("Keyboard commands", "Letter L: ..., if pressed."; todo "****Unfinished." and "##...finished" sections). build/version.txt stays 1.0. The source-only testing menus aren't mentioned. Music and ambience are described only through their volume keys, since sounds/objects/audio/musics and sources are empty for now. Awaiting the dev's review.
 
 Open questions to settle before or while building, one at a time:
 1. SETTLED (dev, 2026-11-01): ducking is a crouch, not a slide. REVISED after playtesting (dev, 2026-11-02): footsteps do NOT play while crouched. Steps on a crouch felt wrong, and other similar runners go silent too. The duck sound marks the start, unduck the end, and the silence between them is the crouched state. A slide, with its own sliding sound, could come later if the dev finds the sound.

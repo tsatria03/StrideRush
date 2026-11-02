@@ -1,0 +1,32 @@
+####These are the things that need to be finished for future versions of the game.
+
+****Unfinished. Add obstacles that you have to crouch under.
+****Unfinished. Add warning cues for more kinds of obstacles.
+****Unfinished. Add lanes that you can switch between.
+****Unfinished. Add weapons, with ammo and reloading for the ones that take them.
+****Unfinished. Add doors that you open with your hands.
+****Unfinished. Add force fields that you switch off with your hands.
+****Unfinished. Add keys and other items to pick up along the way.
+****Unfinished. Add a score, and a results screen at the end of each run.
+****Unfinished. Add a settings menu.
+****Unfinished. Add a screen that shows every key binding.
+****Unfinished. Add levels.
+****Unfinished. Add an updater.
+
+##These are the things that are already finished from earlier versions of the game.
+
+**Finished. Add mines that light up and tick as you get close.
+**Finished. Add spikes that swing back and forth.
+**Finished. Add a countdown on the ledge before every hazard.
+**Finished. Add hazards that end your run if you fall into one.
+**Finished. Add different death sounds for each kind of obstacle.
+**Finished. Add a lives system, with spikes and mines costing lives.
+**Finished. Add crouching, with your footsteps going quiet while you're crouched.
+**Finished. Add jumping, with a landing sound for the ground you come down on.
+**Finished. Add footsteps on every step, with the ground changing as you run.
+**Finished. Add speech buffers for reviewing what the game has spoken.
+**Finished. Add a pause menu.
+**Finished. Add keys to change the music and ambience volume.
+**Finished. Add keys to hear your lives, distance, speed and running time.
+**Finished. Add endless runs that speed up over time.
+
