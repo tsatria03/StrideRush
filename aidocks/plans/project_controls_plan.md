@@ -77,7 +77,10 @@ Q&A log:
 - Q: Which settings tabs show mid-run? A: Hide General, Keyboard and Sound (dev, 2026-11-01). F2 mid-run shows only Game, Menu and Speech, matching SimpleFighter. This replaces the "Keyboard tab view-only" detail above: the Keyboard tab is hidden entirely mid-run, and F1 remains the in-run way to view bindings.
   - SimpleFighter reference: on a map it shows only Game, Menu and Speech, opened by the pf/preffs command, which calls pause_pools() then settingsmenu(true). The ingame flag hides General, Keyboard and Sound.
 - Q: Is duck held or a timed slide? A: Held. duck.ogg means the player holds Down/S; unduck.ogg means they release it (dev, 2026-11-01). For the movement plan: Up while ducking, and Down in mid-air (flag 3) still need rules.
+- Q: Overlap (flag 3): Up while crouched, and Down in mid-air? A: Up while crouched cancels the crouch and jumps right away, skipping unduck. Down in mid-air is ignored (dev agreed with Claude's recommendation, 2026-11-01).
+- Q: Is ducking a crouch or a slide? A: More of a crouch (dev, 2026-11-01). Footsteps keep playing while ducked.
 - Q: Can you duck forever? A: No. It auto-unducks after about 1 to 2 seconds. You can unduck early by releasing, but that raises the chance of smashing into something (dev, 2026-11-01).
 - Q: (dev note) Lives key? A: L shows how many lives you have. H is unused (dev, 2026-11-01).
 - Q: Adapt the dev's copied SimpleFighter keyboard.ini to this plan, with the buffer keys included? A: Yes (dev, 2026-11-01). Written as listed above.
+- Q: F1 and F2 in the first playable build? A: Leave both out for now (dev, 2026-11-01). The bindings stay in keyboard.ini for later.
 - Q: Does the no-networking rule remove the updater? A: No. The updater stays, because it isn't part of the game mechanics (dev, 2026-11-01).

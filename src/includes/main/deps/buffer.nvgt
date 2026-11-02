@@ -13,7 +13,7 @@ name=n;
 }class buffer
 {
 string name;
-bool interrupt=false;
+bool interrupt=true; // CookieCraze-style: a category speaks over current speech unless set false (speak_buffer reads this)
 bool muted=false;
 buffer_item@[]items;
 int bpos;

@@ -21,7 +21,8 @@ ADAPTED the same day (dev go-ahead):
 - The four item-nav functions share a new announce_buffer_item().
 - The local "temp" in add_buffer_item was renamed to "item", so it no longer shadows the global temp pool.
 - buffercheck() reads the keyboard.ini [buffer] actions with controls.action_triggered(), so each binding's own trigger applies. It checks review before copy (the Alt+Shift+C caveat).
-- buffercheck() isn't called anywhere yet; the game loop will call it. No buffer categories are created yet; Stride Rush's categories are still undecided.
+- buffercheck() isn't called anywhere yet; the game loop will call it.
+- Later the same day: categories "all" and "misc" are created at startup. The class's interrupt default was flipped to true (CookieCraze-style), and lines arrive through speak_buffer() in speech.nvgt ([[project_first_build_plan]] question 4).
 
 What it does:
 - Named buffers (categories) of spoken messages. An "all" buffer is created automatically and collects every message. "alerts" and "all" can't be muted.

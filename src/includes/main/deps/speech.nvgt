@@ -9,6 +9,10 @@
  * 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
 */
+/* Altered source version, modified for Stride Rush (marked as such per clause 2 of the license above):
+ * - Added speak_buffer(), adapted from CookieCraze's, which logs a line to a speech-buffer category and speaks it.
+ * - tts_dump_config() no longer asks for the name of voice -1 when no voice is chosen; it saves "default" and keeps the rest.
+*/
 
 #include "form.nvgt"
 
@@ -36,6 +40,17 @@ bool speak(string text, bool interrupt = tts_default_interrupt, text_processing_
 		raw_speak(text, interrupt);
 	return true;
 }
+/* Logs text to a speech-buffer category, then speaks it unless that category is muted. A category whose interrupt is
+off queues its line instead of cutting off current speech. An unknown category just speaks, without logging. */
+bool speak_buffer(string text, string buffer_name = "misc", bool interrupt = tts_default_interrupt) {
+	int buffer_index = get_buffer_index(buffer_name);
+	if (buffer_index > -1) {
+		add_buffer_item(buffer_name, text, false);
+		if (buffers[buffer_index].muted) return false;
+		if (!buffers[buffer_index].interrupt) interrupt = false;
+	}
+	return speak(text, interrupt);
+}
 void raw_speak(string text, bool interrupt) {
 	if (interrupt and tts.speaking) tts.stop();
 	if (@tts_config_form != null) {
@@ -62,7 +77,7 @@ void stop_speech() {
 }
 
 string tts_dump_config(tts_voice@ v, bool save_screen_reader_setting = false) {
-	string o = v.get_voice_name(v.voice) + "||";
+	string o = (v.voice < 0 ? "" : v.get_voice_name(v.voice)) + "||";
 	if (o == "||") o = "default||";
 	o += v.rate + "||" + v.pitch + "||" + v.volume;
 	if (save_screen_reader_setting) o += "||" + (use_sr? "1" : "0");

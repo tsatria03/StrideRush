@@ -9,4 +9,4 @@ When a plan or decision needs clarifying, ask exactly one question per turn and 
 
 **Why:** the dev reads by screen reader; a wall of questions is hard to work through linearly, and they've asked for one at a time in their other games.
 
-**How to apply:** pick the single highest-leverage question, state a recommendation so a one-word answer works, and wait. Related: [[feedback_confirm_before_implementing]].
+**How to apply:** pick the single highest-leverage question, state a recommendation so a one-word answer works, and wait. The dev asked on 2026-11-01 that EVERY question explicitly say what Claude recommends, as a clearly labelled "My recommendation:" line with the reason, never left implied. Related: [[feedback_confirm_before_implementing]].

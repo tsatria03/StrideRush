@@ -15,6 +15,7 @@ Settled by the dev on 2026-11-01:
   - So use SimpleFighter's, trimmed of the map and builder pack parts.
   - Settled: no top-level sound packs, ever. sounds/ is the root, with no sounds/<packname>/ or decompiled/ level ([[project_sound_layout]]). SimpleFighter's .spack pack-file layer (find_sound_in_pack, the pack caches and the folder index) goes too, leaving the disk glob functions with a "sounds/" prefix.
 - Updater: needed "much much later". Take SimpleFighter's main/globals/updater.nvgt (139 lines, check_for_updates and get_download_url), not ToyMania's 220-line one. The SimpleFighter-specific parts to change are the 7z password, the archive name, sf.exe in restart, the "sf folder" text and the downloadsounds() URLs.
+- Speech: SimpleFighter's speech.nvgt is the base (newer than CookieCraze's: braille output, a text-processing hook, voice pitch), plus speak_buffer() and a default-voice fix taken from CookieCraze's ideas (dev, 2026-11-01). Run speech goes through speak_buffer(text, category), with "misc" as the default category.
 - No JAWS keyhook: the dev doesn't want it. Don't add deps/keyhook.nvgt, a kh keyhook global or an install_keyhook() call, even though both reference games have them.
 - deps/ (added by the dev on 2026-11-01) are byte-identical copies of SimpleFighter's, except form.nvgt. That file has SimpleFighter's keyboard-theme typing sounds (the get_pack_sound("main/keyboards/...") calls) removed, so Stride Rush has no keyboard themes.
 
