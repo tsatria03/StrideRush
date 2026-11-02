@@ -9,9 +9,10 @@ As of 2026-11-01 the dev expects most early work (the launcher, the skeleton, th
 
 **Why:** the docks are player-facing records ([[feedback_changelog_rules]]). Writing them for internal plumbing is noise, and the dev wants to choose when they start.
 
-When each file starts (agreed 2026-11-01):
-- readme.txt: at the first playable runner (Start game runs, the belt moves, jump and death work).
-- changelog.txt: at the first real release, opening with a "New in 1.0." block.
+When each file starts (agreed 2026-11-01, then updated the same day):
+- UPDATE: the readme, changelog and todo list are all written together as Section 7 of the first build plan, after Section 6 is done, not after Section 5 ([[project_first_build_plan]]).
+- readme.txt: the first readme comes in Section 7.
+- changelog.txt: its first block, "New in 1.0.", also comes in Section 7.
 - credits.txt: when outside sounds or code need crediting.
 - todo list.txt: holds only player-facing entries, never internal or plumbing tasks. Developer tasks go in aidocks/plans/.
 

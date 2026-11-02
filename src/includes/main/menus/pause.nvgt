@@ -1,0 +1,55 @@
+/* The pause menu: exactly "resume game" and "quit game". Pausing freezes the run's timers and every game pool; quit
+asks Yes/No and, on Yes, ends the run so start_run() returns to the main menu. The confirm reads its OWN menu result
+(ToyMania's pause menu read the outer menu's result, so answering No still quit). */
+void pause_game()
+{
+steptimer.pause();
+speeduptimer.pause();
+runtimer.pause();
+pause_pools();
+}
+void resume_game()
+{
+resume_pools();
+steptimer.resume();
+speeduptimer.resume();
+runtimer.resume();
+}
+void pause_menu()
+{
+pause_game();
+temp.play_stationary(get_pack_sound("misc/game/*pause*"), false);
+while (true)
+{
+setupmenu();
+m.intro_text = "Pause menu.";
+m.add_item("resume game", "resume");
+m.add_item("quit game", "quit");
+int mres = m.run();
+string choice = mres < 0 ? "" : m.selected_item_id;
+// Escape resumes, the same as choosing resume game.
+if (mres < 0 or choice == "resume")
+{
+temp.play_stationary(get_pack_sound("misc/game/*resume*"), false);
+resume_game();
+return;
+}
+if (choice == "quit" and confirm_quit())
+{
+running = false;
+return;
+}
+}
+}
+bool confirm_quit()
+{
+setupmenu();
+m.intro_text = "Do you want to quit to the main menu?";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int confirmres = m.run();
+string confirm = confirmres < 0 ? "" : m.selected_item_id;
+if (confirm == "yes") return true;
+speak("canceled");
+return false;
+}

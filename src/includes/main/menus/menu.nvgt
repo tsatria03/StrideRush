@@ -15,6 +15,7 @@ exit();
 }
 if(main=="start")
 {
-dlg("The game isn't playable yet."); // a dlg so the menu's intro, spoken when it reopens, can't cut the message off
+m.fade_music();
+start_run(); // returns when the run ends, and main()'s loop reopens this menu
 }
 }

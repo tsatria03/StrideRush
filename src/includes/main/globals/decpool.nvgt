@@ -1,15 +1,39 @@
-/* Every positioned game pool goes in all_pools, so setup (and later pausing, resuming and listener updates) reaches all of them at once.
-temp (dialogs), menupool (form_menu) and formpool (form) are UI pools and stay out of it. */
+/* Every game pool goes in all_pools, so setup, pausing, resuming (and later listener updates) reach all of them at once.
+temp (dialogs), spool (speech buffer), menupool (form_menu) and formpool (form) are UI pools and stay out of it, so
+menu, dialog and buffer sounds still play while the run is paused. */
 sound_pool@[] all_pools(0);
 
 void initialize_sound_pools()
 {
-all_pools = {p};
+all_pools = {p, muspool, ambpool};
 for (uint i = 0; i < all_pools.length(); i++)
 {
 @all_pools[i].mixer = mixer();
 all_pools[i].max_distance = 0;
 all_pools[i].pan_step = 2.5;
 all_pools[i].volume_step = 2.5;
+}
+}
+// Pauses only sounds that are playing, so resume_pools() can't wake one that had already finished.
+void pause_pools()
+{
+for (uint h = 0; h < all_pools.length(); h++)
+{
+for (uint i = 0; i < all_pools[h].items.length(); i++)
+{
+if (@all_pools[h].items[i].handle == null) continue;
+if (all_pools[h].items[i].handle.playing == false) continue;
+all_pools[h].pause_sound(i);
+}
+}
+}
+void resume_pools()
+{
+for (uint h = 0; h < all_pools.length(); h++)
+{
+for (uint i = 0; i < all_pools[h].items.length(); i++)
+{
+all_pools[h].resume_sound(i);
+}
 }
 }

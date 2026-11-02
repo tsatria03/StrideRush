@@ -41,6 +41,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Plans record Q&A](general/feedback_plans_record_qna.md) — several gameplay plans get discussed before any game code; log every Q&A in the plan file
 - [Tell when to commit plans](general/feedback_tell_when_to_commit_plans.md) — flag when a plan is settled with all Q&A recorded so the dev can commit it
 - [Ask one question at a time](general/feedback_ask_one_question_at_a_time.md) — one question per turn, with a recommendation
+- [Test steps one at a time](general/feedback_test_steps_one_at_a_time.md) — give one numbered test step per message with what to hear, ask if it passed, wait
 - [Describe, don't show code](general/feedback_describe_dont_show_code.md) — give all section plans up front, build per go-ahead, never paste code in chat
 - [List modified files](general/feedback_list_modified_files.md) — end editing turns with "Files changed:" plus a relaunch note
 - [Don't run or build the game](general/feedback_dont_run_or_build_the_game.md) — never launch or compile; the dev verifies
@@ -51,7 +52,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Changelog rules](general/feedback_changelog_rules.md) — player-facing prose, newest on top, bump build/version.txt per block
 - [Update build/version.txt](general/feedback_update_build_version_txt.md) — version.txt is the source of truth; version.nvgt is generated
 - [Sounds before features](general/feedback_sounds_before_features.md) — nothing gets built until its sounds exist in sr/sounds; design it and defer
-- [Docks later](general/feedback_docks_later.md) — don't update sr/docks/ yet; readme at first playable, changelog at first release; todo list is player-facing entries only
+- [Docks later](general/feedback_docks_later.md) — don't update sr/docks/ yet; readme, changelog and todo list are all written in first-build Section 7, after Section 6; todo list is player-facing entries only
 - [Dock line length 1024](general/feedback_dock_line_length_1024.md) — lines in sr/docks/ stay at or under 1024 chars
 - [One-sentence game messages](general/feedback_one_sentence_game_messages.md) — in-game speech is one sentence, no trailing advice
 - [Menus say canceled](general/feedback_menus_say_canceled.md) — every escape, Back or No path speaks "canceled"
@@ -63,7 +64,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
-- [First build plan](plans/project_first_build_plan.md) — SETTLED, NOT BUILT (pause menu: resume game / quit game): 6 sections (tuning and run loop; surfaces and footsteps; jump and duck; lives and end of run; spawner, hazards and ledges; spikes and mines); open questions 1-5 settled (crouch keeps footsteps, Up-while-crouched jumps, spawn 3 s ahead, all+misc buffers, no F1/F2 yet, no F score yet, two-item pause menu); all 7 questions settled
+- [First build plan](plans/project_first_build_plan.md) — IN PROGRESS: Section 1 BUILT and tested; Sections 2-7 to go (pause menu: resume game / quit game): 7 sections (tuning and run loop; surfaces and footsteps; jump and duck; lives and end of run; spawner, hazards and ledges; spikes and mines; player docs); open questions 1-5 settled (crouch keeps footsteps, Up-while-crouched jumps, spawn 3 s ahead, all+misc buffers, no F1/F2 yet, no F score yet, two-item pause menu); all 7 questions settled
 - [End-of-run plan](plans/project_end_of_run_plan.md) — SETTLED FOR BASIC BUILD: hazards play their own fall; spikes and mines play hit sounds, then player death, then the tile's fall on the last life; then straight to the main menu (results dialog deferred); Q&A log
 - [Obstacles plan](plans/project_obstacles_plan.md) — SETTLED FOR FIRST BUILD (hazards end the game, spikes cost 1 life, mines 2; random spacing with a speed-aware minimum gap; force fields later with hands): which obstacles are jumped, ducked, or need a weapon/hand/lane change; agreed three-height model (low jump, high duck, full = hands); feet vs hands; first build is jump-over only from the hazard, spike and mine sounds (duck-under when its sounds exist); 1 starting life; tunable life cost per type; duck and jump timing limits
 - [Run plan](plans/project_run_plan.md) — SETTLED, NOT BUILT: endless run; timer speed-up 500 ms minus 10 ms every 10 s to a 50 ms floor; footstep every step; random platform stretches of 50-200 tiles; random music and ambience; warning cues deferred; Q&A log

@@ -1,0 +1,112 @@
+/* The run: the belt carries the player one tile per step, the step interval shrinks over time, and the run ends when
+running goes false (quitting from the pause menu now; dying in later sections). start_run() always returns to its
+caller, so main()'s loop reopens the main menu without stacking menu calls. */
+double me_x = 0;
+int step_time = start_step_time;
+int lives = starting_lives;
+bool running = false;
+timer steptimer, speeduptimer, runtimer;
+sound_pool muspool, ambpool;
+int musslot = -1, ambslot = -1;
+int music_volume = music_start_volume, ambience_volume = ambience_start_volume;
+
+void reset_run()
+{
+me_x = 0;
+step_time = start_step_time;
+lives = starting_lives;
+steptimer.restart();
+speeduptimer.restart();
+runtimer.restart();
+}
+void start_run()
+{
+reset_run();
+start_run_audio();
+running = true;
+run_loop();
+stop_run_audio();
+}
+// A random music track and a random ambience, found at runtime; an empty folder just stays silent.
+void start_run_audio()
+{
+string track = get_pack_sound("objects/audio/musics/*");
+if (track != "") musslot = muspool.play_stationary_extended(track, true, 0, 0, music_volume, 100, false);
+string ambience = get_pack_sound("objects/audio/sources/*");
+if (ambience != "") ambslot = ambpool.play_stationary_extended(ambience, true, 0, 0, ambience_volume, 100, false);
+}
+void stop_run_audio()
+{
+muspool.destroy_all();
+ambpool.destroy_all();
+musslot = -1;
+ambslot = -1;
+}
+void run_loop()
+{
+while (running)
+{
+wait(5);
+step_check();
+speedup_check();
+run_input();
+}
+}
+void step_check()
+{
+if (steptimer.elapsed < step_time) return;
+steptimer.restart();
+me_x += 1;
+}
+void speedup_check()
+{
+if (speeduptimer.elapsed < speedup_period) return;
+speeduptimer.restart();
+step_time = int(max(min_step_time, step_time - speedup_amount));
+}
+void run_input()
+{
+if (controls.action_triggered("pause"))
+{
+pause_menu();
+return;
+}
+if (controls.action_triggered("info_lives")) speak_buffer(lives == 1 ? "You have 1 life." : "You have " + lives + " lives.");
+if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase());
+if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + round(1000.0 / step_time, 1) + " steps per second.");
+if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".");
+if (controls.action_triggered("music_up")) change_music_volume(volume_change);
+if (controls.action_triggered("music_down")) change_music_volume(-volume_change);
+if (controls.action_triggered("ambience_up")) change_ambience_volume(volume_change);
+if (controls.action_triggered("ambience_down")) change_ambience_volume(-volume_change);
+buffercheck();
+}
+string distance_phrase()
+{
+int tiles = int(me_x);
+return tiles == 1 ? "You have run 1 tile." : "You have run " + tiles + " tiles.";
+}
+// "1 minute and 5 seconds", "45 seconds" and so on, for the time readout.
+string time_phrase(int64 ms)
+{
+int total = int(ms / 1000);
+int minutes = total / 60;
+int seconds = total % 60;
+string sec_text = seconds == 1 ? "1 second" : seconds + " seconds";
+if (minutes == 0) return sec_text;
+string min_text = minutes == 1 ? "1 minute" : minutes + " minutes";
+return min_text + " and " + sec_text;
+}
+// Spoken the ToyMania way: "track" plus the music volume and "source" plus the ambience volume, in decibels (for example "track -10").
+void change_music_volume(int delta)
+{
+music_volume = int(max(min_volume, min(0, music_volume + delta)));
+if (musslot > -1) muspool.update_sound_start_values(musslot, 0, music_volume, 100);
+speak_buffer("track " + music_volume);
+}
+void change_ambience_volume(int delta)
+{
+ambience_volume = int(max(min_volume, min(0, ambience_volume + delta)));
+if (ambslot > -1) ambpool.update_sound_start_values(ambslot, 0, ambience_volume, 100);
+speak_buffer("source " + ambience_volume);
+}

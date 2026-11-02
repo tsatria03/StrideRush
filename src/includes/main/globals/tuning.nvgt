@@ -1,0 +1,18 @@
+/* Every tunable number in one place, so playtesting changes are a one-line edit and a relaunch. Times are in
+milliseconds and distances in tiles. Later sections add their own values here (surfaces, ledges, gaps, jump, duck,
+mines and life costs). */
+
+// The belt: the step interval starts here and shrinks by speedup_amount every speedup_period, never below min_step_time.
+const int start_step_time = 500;
+const int speedup_period = 10000;
+const int speedup_amount = 10;
+const int min_step_time = 50;
+
+// Lives at the start of every run.
+const int starting_lives = 1;
+
+// Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. Home/End and Page Up/Down move by volume_change.
+const int min_volume = -50;
+const int volume_change = 1; // 1 per press, like ToyMania (dev, 2026-11-02)
+const int music_start_volume = 0; // full volume at the start, like ToyMania (dev, 2026-11-02)
+const int ambience_start_volume = 0;

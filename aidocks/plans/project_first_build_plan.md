@@ -1,6 +1,6 @@
 ---
 name: project_first_build_plan
-description: PLANNED AND SETTLED (all 7 open questions answered), NOT BUILT - build plan for the first playable runner, in 6 sections (tuning and run loop, surfaces and footsteps, jump and duck, lives and end of run, hazards with spawner and ledges, spikes and mines); files, functions, and open questions; built one section per go-ahead
+description: PLANNED AND SETTLED (all 7 open questions answered), NOT BUILT - build plan for the first playable runner, in 7 sections (tuning and run loop, surfaces and footsteps, jump and duck, lives and end of run, hazards with spawner and ledges, spikes and mines, then player docs); files, functions, and open questions; built one section per go-ahead
 metadata:
   type: project
 ---
@@ -13,7 +13,20 @@ Where files go: new files go in the existing glob-included folders (main/globals
 
 All input goes through controls.action_triggered() with the keyboard.ini action names. All tunable numbers live in one file.
 
-Section 1: tuning, run loop, pause, readouts and volume
+Section 1: tuning, run loop, pause, readouts and volume. BUILT 2026-11-01, on top of 4baed8b; all 11 tests passed 2026-11-02.
+- As built: globals/tuning.nvgt, globals/run.nvgt, menus/pause.nvgt (all new); globals/decpool.nvgt (pause_pools, resume_pools, and muspool and ambpool added to all_pools); menus/menu.nvgt (start game calls m.fade_music() then start_run()).
+- Differences from the plan:
+  - tuning.nvgt holds only Section 1's values. Each later section adds its own, so no number is invented before its design is used.
+  - The volume step constant is named volume_change, to avoid confusion with sound_pool's own volume_step member.
+  - The quit confirm is a small menu of its own, with items "Yes" then "No" and the prompt "Do you want to quit to the main menu?". form_menu's yes_no() uses lowercase items and puts the prompt in the list, which breaks [[feedback_yes_no_menu_labels]]. No or Escape speaks "canceled" and returns to the pause menu.
+  - Escape in the pause menu resumes with the resume sound and doesn't say "canceled", since resuming is the action, like SimpleFighter.
+- Volume runs from -50 to 0 dB, starting at 0 dB (changed from -10 at the dev's request, 2026-11-02). It's spoken the ToyMania way, "track -10" for music and "source -10" for ambience, at the dev's request during testing (2026-11-02). The first version spoke percentages.
+- Test results (one step at a time, [[feedback_test_steps_one_at_a_time]]):
+  - Passed: 1 distance, 2 speed, 3 time, 4 lives.
+  - 5 volume: passed, with the wording changed to track and source, and the step changed from 2 to 1 per press, like ToyMania (dev, 2026-11-02). The retest passed. The dev then set both starting volumes to 0 dB instead of -10.
+  - Passed: 6 pause, 7 resume (the run stays frozen while paused), 8 quit with No or Escape (says canceled and returns to the pause menu), 9 quit with Yes (back to the main menu), 10 a fresh second run, 11 speech buffer (comma, period and Shift with each, with the choose click).
+  - SECTION 1 COMPLETE: all 11 tests passed (2026-11-02). Music and ambience are silent until objects/audio/musics and sources have files.
+- The engine's timer.restart() also unpauses (Legacy-NVGT timestuff.cpp), so a run started after quitting from pause begins unpaused.
 - globals/tuning.nvgt: every tunable number as a named constant, in one place.
   - start step 500 ms; speed-up 10 ms every 10 s; floor 50 ms
   - surface stretch 50 to 200 tiles
@@ -95,6 +108,13 @@ Section 6: spikes and mines
   - Once passed, the loop goes quiet.
 - spawner.nvgt adds spikes and mines to the random type pick.
 - Test: all three obstacle types mixed. With 1 life, any hit ends the run with the right sounds.
+
+Section 7: player docs (added by the dev, 2026-11-01). Done only after Section 6 is built and tested; no docs during Sections 1 to 6.
+- sr/docks/readme.txt: the first real readme, covering what the game is, the goal, the keys (jump, crouch, the L, Q, E and T readouts, pause, volume, buffer keys), the obstacle types and how each ends or costs lives, and the lives system.
+- sr/docks/changelog.txt: the first block, a "New in 1.0." header and player-facing entries for everything the first build ships ([[feedback_changelog_rules]]).
+- sr/docks/todo list.txt: player-facing entries only, such as warning cues, duck-under obstacles, lanes, weapons, doors, force fields, scoring, settings (F1 and F2), and levels ([[feedback_docks_later]]).
+- credits.txt isn't in this section unless the dev asks.
+- All lines stay at or under 1024 characters ([[feedback_dock_line_length_1024]]). As of 2026-11-01 all four dock files are empty.
 
 Open questions to settle before or while building, one at a time:
 1. SETTLED (dev, 2026-11-01): ducking is a crouch, not a slide, so footsteps keep playing while ducked. A slide, with its own sliding sound in place of footsteps, could come later if the dev finds the sound.
