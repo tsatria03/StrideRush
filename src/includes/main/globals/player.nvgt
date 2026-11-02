@@ -1,0 +1,80 @@
+/* The player's jump and crouch. me_y is the height above the belt (0 is the ground). A jump rises to jump_height and
+falls back, one height per jump_tick, so it lasts about the same time at any speed. Crouching is held: it ends on
+release, or by itself after duck_time. Overlaps: Up while crouched cancels the crouch and jumps at once (no unduck
+sound); Down in the air is ignored, but a Down still held on landing starts a crouch. */
+int me_y = 0;
+int jump_state = 0; // 0 on the ground, 1 rising, 2 falling
+bool ducked = false;
+timer jumptimer, ducktimer;
+
+void reset_player()
+{
+me_y = 0;
+jump_state = 0;
+ducked = false;
+jumptimer.restart();
+ducktimer.restart();
+}
+bool is_grounded()
+{
+return jump_state == 0;
+}
+bool is_ducked()
+{
+return ducked;
+}
+void jump_check()
+{
+if (controls.action_triggered("jump") and is_grounded()) start_jump();
+if (jump_state == 0 or jumptimer.elapsed < jump_tick) return;
+jumptimer.restart();
+if (jump_state == 1)
+{
+me_y++;
+if (me_y >= jump_height) jump_state = 2;
+}
+else
+{
+me_y--;
+if (me_y <= 0) player_land();
+}
+}
+void start_jump()
+{
+ducked = false; // Up while crouched jumps straight away, without the unduck sound
+jump_state = 1;
+jumptimer.restart();
+p.play_stationary(get_pack_sound("misc/player/*jump*"), false);
+p.play_stationary(get_pack_sound("misc/player/*rise*"), false);
+}
+// The player's own land sound together with the current surface's land clip.
+void player_land()
+{
+me_y = 0;
+jump_state = 0;
+p.play_stationary(get_pack_sound("misc/player/*land*"), false);
+string tile = tile_at(me_x);
+if (tile != "") p.play_stationary(get_pack_sound("objects/construction/platforms/" + tile + "/*land*"), false);
+if (controls.action_triggered("duck_held")) start_duck();
+}
+void duck_check()
+{
+if (ducked and (controls.action_triggered("duck_release") or ducktimer.elapsed >= duck_time))
+{
+stop_duck();
+return;
+}
+if (controls.action_triggered("duck") and is_grounded() and !ducked) start_duck();
+}
+// "duck*" rather than "*duck*", which would also match unduck.ogg.
+void start_duck()
+{
+ducked = true;
+ducktimer.restart();
+p.play_stationary(get_pack_sound("misc/player/duck*"), false);
+}
+void stop_duck()
+{
+ducked = false;
+p.play_stationary(get_pack_sound("misc/player/unduck*"), false);
+}

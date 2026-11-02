@@ -12,6 +12,13 @@ const int min_step_time = 50;
 const int surface_min_tiles = 50;
 const int surface_max_tiles = 200;
 
+// Jumping: rise one height every jump_tick up to jump_height, then fall back the same way (about a second in the air).
+const int jump_height = 5;
+const int jump_tick = 100;
+
+// Crouching: holding Down crouches, and it stands up on its own after duck_time even if Down is still held.
+const int duck_time = 1500;
+
 // Lives at the start of every run.
 const int starting_lives = 1;
 

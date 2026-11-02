@@ -78,7 +78,23 @@ Section 2: surfaces and footsteps. BUILT 2026-11-02, on top of 778fcab; all 5 te
 - step_check() calls play_step().
 - Test: hear the surface change every so often.
 
-Section 3: jump and duck
+Section 3: jump and duck. BUILT 2026-11-02, on top of f824cef; all 7 tests passed (2026-11-02). Added after testing at the dev's request: Alt+F4 quits the whole program from inside a run (exit_program in keyboard.ini, checked in run_input()). Tested and passed.
+- As built:
+  - globals/player.nvgt (new): me_y, jump_state, ducked, jumptimer and ducktimer, plus reset_player(), is_grounded(), is_ducked(), jump_check(), start_jump(), player_land(), duck_check(), start_duck() and stop_duck().
+  - tuning.nvgt: jump_height 5, jump_tick 100, duck_time 1500.
+  - run.nvgt: reset_run() calls reset_player(); run_loop() calls jump_check() and duck_check() after step_check().
+  - surface.nvgt: play_step() is silent in the air (a crouch still steps).
+  - pause.nvgt: pause_game() and resume_game() also pause and resume jumptimer and ducktimer.
+- Sound lookups: the crouch uses "misc/player/duck*" and the stand-up "unduck*", because "*duck*" would also match unduck.ogg. Jump plays *jump* and *rise* together; landing plays misc/player *land* with the tile's *land*.
+- On landing, a Down still held starts a crouch (from open question 2).
+- Tests, one at a time:
+  1. jump sounds and silence in the air
+  2. landing sounds
+  3. crouch sounds and steps while crouched
+  4. auto stand-up after 1.5 s
+  5. Up while crouched jumps
+  6. Down in the air, then held on landing
+  7. pause mid-jump
 - globals/player.nvgt:
   - State: height y (0 is ground), jumping/rising/falling, a jump timer, ducked, a duck timer.
   - jump_check(): on "jump" while on the ground, play misc/player jump and rise together. If you're crouched, the crouch is cancelled first, with no unduck sound. Then rise 1 per jump tick up to the jump height, and fall back the same way.

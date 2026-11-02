@@ -18,6 +18,7 @@ Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFight
 - X: ammo check, for non-melee weapons.
 - R: reload an ammo weapon.
 - 1 through 0: select a weapon (ten slots).
+- Alt+F4 (during a run only): quit the whole program, no confirm (dev, 2026-11-02).
 - Escape or P: pause, which opens a pause menu. The pause menu does NOT hold settings (changed 2026-11-01; see F2).
 - Buffer keys (CaveDefender's, kept as-is): comma and period for messages, the brackets for categories, Shift with either pair for first and last, Shift+M mute, Shift+C copy, Alt+Shift+C review, Shift+B buffer menu, Shift+backslash export.
 - F1 (during a game): open the view-key-bindings screen, the same one as the settings Keyboard tab's "View current keyboard bindings". It pauses the run while open (settled 2026-11-01).
@@ -85,4 +86,5 @@ Q&A log:
 - Q: F1 and F2 in the first playable build? A: Leave both out for now (dev, 2026-11-01). The bindings stay in keyboard.ini for later.
 - Q: (dev, 2026-11-02) Key switch: Q and E become the left and right hands instead of Z and C. Tab and Enter stay as the other hand keys. That frees Z and C. A: Z replaces Q for distance and C replaces E for speed (dev, 2026-11-02). keyboard.ini updated: hand_left=TAB,Q, hand_right=RETURN,E, info_distance=Z, info_speed=C. Plain C (speed) and Shift+C (buffer copy) don't clash thanks to the consumed-key rule.
 - Q: (dev, 2026-11-02) Final keyset decision? A: A and D are the left and right hands (with Tab and Enter). Q and E are for turning, meaning switching lanes when lanes arrive (with Left and Right). This supersedes Q and E as hands and A and D as lanes. keyboard.ini: hand_left=TAB,A, hand_right=RETURN,D, lane_left=LEFT,Q, lane_right=RIGHT,E. Readouts stay on Z (distance) and C (speed).
+- Q: (dev, 2026-11-02) Alt+F4? A: Quits the entire program, only within an actual run, with no confirm. It says "exiting" (the same word as the main menu's exit) and closes. keyboard.ini [screens]: exit_program=ALT+F4, read in run_input().
 - Q: Does the no-networking rule remove the updater? A: No. The updater stays, because it isn't part of the game mechanics (dev, 2026-11-01).

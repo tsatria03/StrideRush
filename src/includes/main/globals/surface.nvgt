@@ -32,9 +32,10 @@ string tile_at(double x)
 {
 return current_surface;
 }
-// A oneshot footstep on every step, never thinned, at any speed.
+// A oneshot footstep on every step, never thinned, at any speed. Silent in the air; a crouch still steps.
 void play_step()
 {
+if (!is_grounded()) return;
 string tile = tile_at(me_x);
 if (tile == "") return;
 p.play_stationary(get_pack_sound("objects/construction/platforms/" + tile + "/*step*"), false);

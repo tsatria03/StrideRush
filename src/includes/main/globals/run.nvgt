@@ -19,6 +19,7 @@ steptimer.restart();
 speeduptimer.restart();
 runtimer.restart();
 reset_surface();
+reset_player();
 }
 void start_run()
 {
@@ -49,6 +50,8 @@ while (running)
 {
 wait(5);
 step_check();
+jump_check();
+duck_check();
 speedup_check();
 run_input();
 }
@@ -73,6 +76,12 @@ if (controls.action_triggered("pause"))
 {
 pause_menu();
 return;
+}
+// Alt+F4 closes the whole program, from inside a run only, with no confirm.
+if (controls.action_triggered("exit_program"))
+{
+speak("exiting");
+exit();
 }
 if (controls.action_triggered("info_lives")) speak_buffer(lives == 1 ? "You have 1 life." : "You have " + lives + " lives.");
 if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase());

@@ -6,6 +6,8 @@ void pause_game()
 steptimer.pause();
 speeduptimer.pause();
 runtimer.pause();
+jumptimer.pause();
+ducktimer.pause();
 pause_pools();
 }
 void resume_game()
@@ -14,6 +16,8 @@ resume_pools();
 steptimer.resume();
 speeduptimer.resume();
 runtimer.resume();
+jumptimer.resume();
+ducktimer.resume();
 }
 void pause_menu()
 {
