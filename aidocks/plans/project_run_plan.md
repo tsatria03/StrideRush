@@ -11,7 +11,7 @@ Status: BUILT and tested in the first build (Sections 1 and 2, committed by 69de
 - Music and ambience folders are still empty, so runs are silent there until the dev adds tracks.
 - Warning cues: only hazards have one, the 5-step hazcount countdown on their ledges (sounds added 2026-11-02). Spikes and mines warn through their own swing, light and ticking. Per-action cue sets for duck and lane change remain deferred until their sounds exist.
 The timing numbers live in tuning.nvgt.
-- UPDATE (dev, 2026-11-02, after the first build): the dev added per-type warning cue sets, sounds/misc/trap/<type>/warn1 to warn5, for force_fields, hazards, mines, projectiles and spikes. They replace misc/game/hazcount and supply the distinct per-obstacle cues this plan was waiting for ([[project_sound_layout]]). Applying them to spikes and mines, and repointing hazards, is being discussed.
+- UPDATE (dev, 2026-11-02, after the first build): the dev added per-type warning cue sets, sounds/misc/trap/<type>/warn1 to warn5, for force_fields, hazards, mines, projectiles and spikes. They replace misc/game/hazcount and supply the distinct per-obstacle cues this plan was waiting for ([[project_sound_layout]]). Hazards were repointed to them the same day, and spikes and mines got their own countdowns ([[project_obstacles_plan]]). The duck and lane cue sets wait for those features; force_fields and projectiles cues wait for their obstacles.
 
 Scope: what happens from Start game until a run ends. That covers the belt, the step timer, footsteps, the speed-up curve, and the run's overall shape. Out of scope for this plan: obstacles and jump/duck ([[project_game_design]]), death details, weapons, items and scoring.
 

@@ -24,9 +24,11 @@ reset_player();
 reset_spawner();
 update_listeners();
 }
-// Normally start_step_time and starting_lives; the source-only testing menus can start faster or with more lives.
-void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives)
+/* Normally start_step_time, starting_lives and every obstacle type; the source-only testing menus can start faster, with
+more lives, or with only one obstacle type. */
+void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives, string only_type = "all")
 {
+spawn_only = only_type; // before reset_run(), whose reset_spawner() picks the first obstacle
 reset_run(starting_step_time, starting_life_count);
 start_run_audio();
 running = true;
@@ -83,6 +85,8 @@ if (!running) return;
 surface_check(); // before the footstep, so a new surface is heard on its first step
 play_step();
 hazard_countdown();
+spike_countdown();
+mine_countdown();
 }
 void speedup_check()
 {

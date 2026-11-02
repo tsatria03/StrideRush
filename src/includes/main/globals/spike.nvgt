@@ -3,7 +3,7 @@ Sounds (dev, 2026-11-02): the theme's loop clip is one SWING, played once per sw
 swing time between spike_swing_min and spike_swing_max picked when it appears, so some spikes are fast and others slow.
 The hit clip is the spike hitting you, played together with the player's hit; with lives left the run carries on,
 otherwise it ends with the player's death and the tile's fall. Swings are positioned oneshots at the spike's tile and
-fade out behind you once passed. No ledges.
+fade out behind you once passed. No ledges, but a countdown on the normal floor before it, like a hazard's.
 Swings are timed off runtimer, which pauses with the game, so a pause freezes every spike's rhythm.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_spikes() shrinks the array. */
 sound_pool spikepool;
@@ -13,14 +13,17 @@ double x;
 string theme;
 int swing_time;
 int64 next_swing;
+double countdown_start;
 }
 spike@[] spikes(0);
 
-void spawn_spike(double sx, string theme)
+// countdown comes from the spawner, the same countdown_steps() a hazard's ledge uses.
+void spawn_spike(double sx, string theme, int countdown)
 {
 spike s;
 s.x = sx;
 s.theme = theme;
+s.countdown_start = sx - countdown;
 s.swing_time = random(spike_swing_min, spike_swing_max);
 s.next_swing = runtimer.elapsed; // the first swing plays straight away
 for (uint i = 0; i < spikes.length(); i++)
@@ -68,6 +71,15 @@ lose_lives(spike_life_cost);
 }
 // Kept swinging until it's as far behind as obstacles appear ahead, so its swings fade out behind you.
 if (me_x > spikes[i].x + spawn_distance()) remove_spike(i);
+}
+}
+// The countdown: one misc/trap/spikes warn cue per step before each spike (see play_countdown()). Runs once per step.
+void spike_countdown()
+{
+for (uint i = 0; i < spikes.length(); i++)
+{
+if (@spikes[i] == null) continue;
+play_countdown(spikepool, "spikes", spikes[i].x, spikes[i].countdown_start);
 }
 }
 void remove_spike(uint i)

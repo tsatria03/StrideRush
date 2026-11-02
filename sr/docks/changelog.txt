@@ -1,5 +1,6 @@
 New in 1.0.
-Added mines, which light up and start ticking as you get close, and cost 2 lives if you step on one.
+Added a warning countdown before spikes and mines, the same way hazards have one, with different sounds for each kind of obstacle so you can tell which one is coming.
+Added mines, which light up and start ticking as you get close, cost 2 lives if you step on one, and fade out behind you once you jump over them.
 Added spikes, which swing back and forth and cost 1 life if they hit you.
 Added ledges in front of every hazard, with a step-by-step countdown that tells you when the hazard is coming.
 Added hazards, including pits, chasms, fire, lava, water, quicksand and electricity, which end your run if you fall into one.

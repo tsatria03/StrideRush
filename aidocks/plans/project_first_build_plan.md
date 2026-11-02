@@ -210,7 +210,7 @@ Section 6: spikes and mines. BUILT 2026-11-02, on top of 4d47f6c; SECTION 6 COMP
   - spawner.nvgt: choose_next_obstacle() picks the next type at random among hazards, spikes and mines (only those with theme folders), together with its ledge (hazards only), before the gap is set. place_obstacle(x, type, ledge_before) dispatches to the right spawn function.
   - run.nvgt: step_check() runs hazard_check(), spike_check() and mine_check() in turn, each followed by a stop if the run ended.
   - decpool.nvgt: spikepool and minepool added to all_pools. endrun.nvgt: clear_run_objects() also destroys spikes and mines.
-  - tuning.nvgt: mine_arm_time 1500 and mine_arm_min_tiles 2 (3 tiles at 500 ms).
+  - tuning.nvgt: mine_arm_time 1500 and mine_arm_min_tiles 2 (3 tiles at 500 ms). Later replaced by mine_arm_lead_time and mine_arm_lead_min_tiles, so a mine arms before its countdown ([[project_obstacles_plan]]).
 - Behavior:
   - Contact is checked on arrival while grounded, like hazards.
   - Spike: its hit plus misc/player hit together, then lose_lives(1). Its loop fades out behind you once passed.
@@ -233,6 +233,10 @@ Section 6: spikes and mines. BUILT 2026-11-02, on top of 4d47f6c; SECTION 6 COMP
   - menus/menu.nvgt: choose_start_lives() lists max_test_lives (5, in tuning.nvgt) down to 1, in the order the dev asked for: 5, 4, 3, 2, 1. It's source-only via SCRIPT_COMPILED, like the speed menu; a compiled release starts with starting_lives. Escape says "canceled" and returns to the main menu.
   - run.nvgt: start_run() and reset_run() take an optional starting_life_count.
   - This makes spike and mine hits with lives left testable: the hit, then the life sound, and the run continues.
+- THIRD TESTING MENU (dev request, 2026-11-02, after the first build): a spawn menu between the speed and lives menus. The start order was speed, spawn, then lives; the dev then reordered it (same day) to lives, speed, then spawn. Escape steps back one menu (dev, same day): spawn to speed to lives, and escaping lives returns to the main menu. All three escapes are silent, including lives back to the main menu, since they're nested menus (dev, same day). It's a small stage loop in mainmenu().
+  - menus/menu.nvgt choose_spawn_types() lists each type in spawner.nvgt's obstacle_types, then "all", in the dev's order: hazards, spikes, mines, all. Future types like force fields appear in it automatically once they're added to obstacle_types.
+  - It's source-only via SCRIPT_COMPILED; a release always spawns all. Escape says "canceled" and returns to the main menu.
+  - start_run() takes an optional only_type (default "all") and sets spawner.nvgt's spawn_only before reset_run(). choose_next_obstacle() then skips every other type.
 - Not given ledges or the countdown: per [[project_obstacles_plan]], those are for hazards. Ask the dev after testing whether spikes and mines should get them too.
 - Tests, one at a time:
   1. the obstacle mix

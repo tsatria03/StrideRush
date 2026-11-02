@@ -21,18 +21,20 @@ const int duck_time = 1500;
 // After standing up, crouching is blocked for duck_cooldown, about as long as a jump lasts, so Down can't be spammed.
 const int duck_cooldown = 1000;
 
-/* Obstacle placement. An obstacle appears spawn_ahead_time before its ledge starts, at the current speed, so you always
-hear its loop that long before its countdown begins. Spacing is built from a random stretch of normal floor between one
-hazard's ledge after and the next one's ledge before (min_floor_time to max_floor_time below), never under min_gap_tiles. */
+/* Obstacle placement. An obstacle appears spawn_ahead_time before its countdown starts, at the current speed, so you
+always hear it that long before its countdown begins. Spacing is built from a random stretch of normal floor between
+one obstacle's ledge after and the next one's countdown (min_floor_time to max_floor_time below), never under
+min_gap_tiles. */
 const int spawn_ahead_time = 3000;
 const int min_gap_tiles = 6;
 
-/* Ledges around a hazard (dev, 2026-11-02). The ledge before has one step per ledge_ms of step time, rounded up: 5 at
-500 ms, 4 at 400, 3 at 300, 2 at 200, 1 at 100. It's built to carry the hazard countdown later, one cue per ledge step,
-so at slow speeds you jump on its last steps. The ledge after is a fixed ledge_after_tiles. */
-const int ledge_ms = 100;
+/* The warning countdown before every obstacle (dev, 2026-11-02): one step per countdown_ms of step time, rounded up: 5
+at 500 ms, 4 at 400, 3 at 300, 2 at 200, 1 at 100, one cue per step, so at slow speeds you jump on its last steps. A
+hazard's ledge before covers exactly its countdown; spikes and mines count down on normal floor. A hazard's ledge
+after is a fixed ledge_after_tiles. */
+const int countdown_ms = 100;
 const int ledge_after_tiles = 2;
-// Normal floor between one hazard's ledge and the next one's: a random min_floor_time to max_floor_time at the current speed, never under min_floor_tiles.
+// Normal floor between one obstacle and the next one's countdown: a random min_floor_time to max_floor_time at the current speed, never under min_floor_tiles.
 const int min_floor_time = 1000;
 const int max_floor_time = 4000;
 const int min_floor_tiles = 2;
@@ -41,9 +43,11 @@ const int min_floor_tiles = 2;
 const int spike_swing_min = 500;
 const int spike_swing_max = 1000;
 
-// A mine arms (light, then its ticking loop) when you're within mine_arm_time of it at the current speed, never under mine_arm_min_tiles.
-const int mine_arm_time = 1500;
-const int mine_arm_min_tiles = 2;
+/* A mine arms (light, then its ticking loop) mine_arm_lead_time before its countdown starts, at the current speed, never
+under mine_arm_lead_min_tiles, so light always comes first and the countdown follows (dev, 2026-11-02): 1 tile ahead of
+the countdown at 500 ms, 5 at 100 ms, giving light the same half second to finish at any speed. */
+const int mine_arm_lead_time = 500;
+const int mine_arm_lead_min_tiles = 1;
 
 // Lives at the start of every run, and what each obstacle costs. ends_run means the run ends however many lives are left.
 const int starting_lives = 1;

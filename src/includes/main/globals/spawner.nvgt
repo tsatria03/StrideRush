@@ -1,27 +1,38 @@
 /* Places obstacles ahead of the player as the run goes. The type (hazards, spikes or mines) and its theme are random,
-from whatever folders exist at runtime. The next obstacle's type and ledge width are decided together with the gap to
-it, so the floor before a hazard's ledge is always there however the speed changes. Only hazards have ledges. */
+from whatever folders exist at runtime. The next obstacle's type and countdown length are decided together with the
+gap to it, so the floor before its countdown is always there however the speed changes. Every type counts down; only
+hazards turn their countdown steps into ledge tiles. */
 double next_spawn_x = 0;
 string next_type = "";
-int next_ledge_before = 0;
+int next_countdown = 0;
+// Every obstacle type the spawner knows; a new type is added here. The testing spawn menu lists these too.
+string[] obstacle_types = {"hazards", "spikes", "mines"};
+// "all", or one type from obstacle_types; set by start_run(). Only the source-only testing menu picks anything but all.
+string spawn_only = "all";
 
-// The first obstacle sits a full spawn distance, its ledge and a minimum stretch of floor into the run.
+// The first obstacle sits a full spawn distance, its countdown and a minimum stretch of floor into the run.
 void reset_spawner()
 {
 choose_next_obstacle();
-next_spawn_x = spawn_distance() + next_ledge_before + floor_tiles(min_floor_time);
+next_spawn_x = spawn_distance() + next_countdown + floor_tiles(min_floor_time);
 }
-// Picks the next obstacle's type at random among the trap folders that have themes, and its ledge (hazards only).
+/* Picks the next obstacle's type at random among the trap folders that have themes (only spawn_only's type, unless it's
+"all"), and its countdown length. */
 void choose_next_obstacle()
 {
-string[] types = {"hazards", "spikes", "mines"};
 string[] available;
-for (uint i = 0; i < types.length(); i++)
+for (uint i = 0; i < obstacle_types.length(); i++)
 {
-if (get_pack_sound_folders("objects/traps/" + types[i] + "/*").length() > 0) available.insert_last(types[i]);
+if (spawn_only != "all" and obstacle_types[i] != spawn_only) continue;
+if (get_pack_sound_folders("objects/traps/" + obstacle_types[i] + "/*").length() > 0) available.insert_last(obstacle_types[i]);
 }
 next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
-next_ledge_before = next_type == "hazards" ? ledge_before_tiles() : 0;
+next_countdown = next_type == "" ? 0 : countdown_steps();
+}
+// The countdown before an obstacle: one step per countdown_ms of the current step time, rounded up, at least 1.
+int countdown_steps()
+{
+return int(max(1, ceil(double(step_time) / countdown_ms)));
 }
 // spawn_ahead_time at the current speed, in tiles.
 int spawn_distance()
@@ -34,27 +45,37 @@ int floor_tiles(int ms)
 return int(max(min_floor_tiles, ceil(double(ms) / step_time)));
 }
 /* The gap from one obstacle to the next: room for a hazard's ledge after (kept for every type, to be safe), a random
-stretch of normal floor (min_floor_time to max_floor_time), the next one's ledge before (ledge_before), and its tile. */
-int next_gap(int ledge_before)
+stretch of normal floor (min_floor_time to max_floor_time), the next one's countdown, and its tile. */
+int next_gap(int countdown)
 {
 int floor_len = random(floor_tiles(min_floor_time), floor_tiles(max_floor_time));
-return int(max(min_gap_tiles, ledge_after_tiles + floor_len + ledge_before + 1));
+return int(max(min_gap_tiles, ledge_after_tiles + floor_len + countdown + 1));
 }
-// An obstacle appears spawn_distance() before its ledge starts (or before it, with no ledge), so its sound comes first.
+// An obstacle appears spawn_distance() before its countdown starts, so its sound comes first.
 void spawn_check()
 {
-if (me_x + spawn_distance() + next_ledge_before < next_spawn_x) return;
-place_obstacle(next_spawn_x, next_type, next_ledge_before);
+if (me_x + spawn_distance() + next_countdown < next_spawn_x) return;
+place_obstacle(next_spawn_x, next_type, next_countdown);
 choose_next_obstacle();
-next_spawn_x += next_gap(next_ledge_before);
+next_spawn_x += next_gap(next_countdown);
 }
-void place_obstacle(double x, string type, int ledge_before)
+void place_obstacle(double x, string type, int countdown)
 {
 if (type == "") return;
 string[] themes = get_pack_sound_folders("objects/traps/" + type + "/*");
 if (themes.length() == 0) return;
 string theme = themes[random(0, themes.length() - 1)];
-if (type == "hazards") spawn_hazard(x, theme, ledge_before);
-else if (type == "spikes") spawn_spike(x, theme);
-else if (type == "mines") spawn_mine(x, theme);
+if (type == "hazards") spawn_hazard(x, theme, countdown);
+else if (type == "spikes") spawn_spike(x, theme, countdown);
+else if (type == "mines") spawn_mine(x, theme, countdown);
+}
+/* One countdown cue for an obstacle of this type at ox, whose countdown starts at countdown_start: the LAST ones of
+misc/trap/<type>/warn1 to warn5, so the step before the obstacle always plays warn5 ("act now"). Five countdown steps
+hear 1 to 5; three hear 3 to 5; one hears only 5. Each cue plays in 2d (never stationary) at the tile you've just
+stepped onto, not at the obstacle. Each type's countdown function calls this once per step for each of its obstacles. */
+void play_countdown(sound_pool@ pool, string type, double ox, double countdown_start)
+{
+int steps_left = int(ox - me_x);
+if (steps_left < 1 or steps_left > 5 or me_x < countdown_start) return;
+pool.play_2d(get_pack_sound("misc/trap/" + type + "/warn" + (6 - steps_left) + "*"), me_x, 0, me_x, 0, false);
 }

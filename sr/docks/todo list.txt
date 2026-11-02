@@ -15,6 +15,7 @@
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add a warning countdown before spikes and mines.
 **Finished. Add mines that light up and tick as you get close.
 **Finished. Add spikes that swing back and forth.
 **Finished. Add a countdown on the ledge before every hazard.

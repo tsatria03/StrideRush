@@ -1,7 +1,9 @@
-/* Mines: jump-over obstacles that cost mine_life_cost (2). A mine plays its spawn clip when it appears. When you get
-within mine_arm_distance() it arms: light plays and its ticking loop starts. Stepping onto it while grounded plays
-explode, the mine's hit and the player's hit all at once, then costs lives; with none left the run ends with the
-player's death and the tile's fall. Jumped over, it goes quiet behind you. No ledges.
+/* Mines: jump-over obstacles that cost mine_life_cost (2). A mine plays its spawn clip when it appears. When you reach
+mine_arm_x(), a little before its countdown starts, it arms: light plays and its ticking loop starts, so light always
+comes before the first warning cue. Stepping onto it while grounded plays explode, the mine's hit and the player's hit
+all at once and stops its ticking, then costs lives; with none left the run ends with the player's death and the
+tile's fall. Jumped over, it keeps ticking and fades out behind you like a hazard's loop (dev, 2026-11-02), until it's
+dropped a spawn distance behind. No ledges, but a countdown on the normal floor before it, like a hazard's.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_mines() shrinks the array. */
 sound_pool minepool;
 class mine
@@ -9,21 +11,24 @@ class mine
 double x;
 string theme;
 bool armed = false;
-bool spent = false; // passed or set off: it stays silent from then on
+bool spent = false; // passed or set off: it can never arm or hit again (a passed one keeps ticking until dropped)
 int loopslot = -1;
+double countdown_start;
 }
 mine@[] mines(0);
 
-// How close a mine arms: mine_arm_time at the current speed, never under mine_arm_min_tiles.
-int mine_arm_distance()
+// Where a mine arms: mine_arm_lead_time before its countdown starts at the current speed, never under mine_arm_lead_min_tiles.
+double mine_arm_x(mine@ mn)
 {
-return int(max(mine_arm_min_tiles, ceil(double(mine_arm_time) / step_time)));
+return mn.countdown_start - int(max(mine_arm_lead_min_tiles, ceil(double(mine_arm_lead_time) / step_time)));
 }
-void spawn_mine(double mx, string theme)
+// countdown comes from the spawner, the same countdown_steps() a hazard's ledge uses.
+void spawn_mine(double mx, string theme, int countdown)
 {
 mine mn;
 mn.x = mx;
 mn.theme = theme;
+mn.countdown_start = mx - countdown;
 minepool.play_2d(get_pack_sound("objects/traps/mines/" + theme + "/*spawn*"), me_x, 0, mx, 0, false);
 for (uint i = 0; i < mines.length(); i++)
 {
@@ -42,7 +47,7 @@ for (uint i = 0; i < mines.length(); i++)
 {
 if (@mines[i] == null) continue;
 mine@ mn = mines[i];
-if (!mn.armed and !mn.spent and mn.x - me_x <= mine_arm_distance())
+if (!mn.armed and !mn.spent and me_x >= mine_arm_x(mn))
 {
 mn.armed = true;
 minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme + "/*light*"), me_x, 0, mn.x, 0, false);
@@ -50,9 +55,10 @@ mn.loopslot = minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme 
 }
 if (me_x == mn.x and !mn.spent)
 {
-silence_mine(mn);
+mn.spent = true;
 if (is_grounded())
 {
+silence_mine(mn); // set off: the ticking stops at once
 string explode_clip = get_pack_sound("objects/traps/mines/" + mn.theme + "/*explode*");
 string hit_clip = get_pack_sound("objects/traps/mines/" + mn.theme + "/*hit*");
 /* A fatal hit plays explode and the mine's hit through p (silence_run() would otherwise cut them off) and no player
@@ -71,11 +77,20 @@ p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 lose_lives(mine_life_cost);
 }
 }
-// Spent mines are silent; drop them once they're well behind.
+// Kept ticking until it's as far behind as obstacles appear ahead, so a jumped mine fades out behind you; then dropped.
 if (me_x > mn.x + spawn_distance()) remove_mine(i);
 }
 }
-// Stops a mine's ticking loop for good: it was jumped over (goes quiet behind you) or set off.
+// The countdown: one misc/trap/mines warn cue per step before each mine (see play_countdown()). Runs once per step.
+void mine_countdown()
+{
+for (uint i = 0; i < mines.length(); i++)
+{
+if (@mines[i] == null) continue;
+play_countdown(minepool, "mines", mines[i].x, mines[i].countdown_start);
+}
+}
+// Stops a mine's ticking loop for good: it was set off, or it's being dropped behind you or cleared with the run.
 void silence_mine(mine@ mn)
 {
 mn.spent = true;
