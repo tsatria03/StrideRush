@@ -27,9 +27,10 @@ void surface_check()
 {
 if (me_x >= surface_end_x) pick_surface();
 }
-// The tile under a position. Section 5 adds ledge ranges around hazards here.
+// The tile under a position: "ledge" just before and after a hazard, otherwise the current surface.
 string tile_at(double x)
 {
+if (on_ledge(x)) return "ledge";
 return current_surface;
 }
 // A oneshot footstep on every step, never thinned, at any speed. Silent in the air and while crouched.

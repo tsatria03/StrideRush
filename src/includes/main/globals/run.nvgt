@@ -10,20 +10,24 @@ sound_pool muspool, ambpool;
 int musslot = -1, ambslot = -1;
 int music_volume = music_start_volume, ambience_volume = ambience_start_volume;
 
-void reset_run()
+void reset_run(int starting_step_time = start_step_time)
 {
 me_x = 0;
-step_time = start_step_time;
+step_time = starting_step_time;
 lives = starting_lives;
 steptimer.restart();
 speeduptimer.restart();
 runtimer.restart();
+clear_run_objects();
 reset_surface();
 reset_player();
+reset_spawner();
+update_listeners();
 }
-void start_run()
+// starting_step_time is normally start_step_time; the testing speed menu (source runs only) can start faster.
+void start_run(int starting_step_time = start_step_time)
 {
-reset_run();
+reset_run(starting_step_time);
 start_run_audio();
 running = true;
 run_loop();
@@ -52,10 +56,11 @@ void run_loop()
 while (running)
 {
 wait(5);
-step_check();
-if (!running) break; // an obstacle hit on this step can end the run; don't run the rest of the frame
+// Jump and crouch first, so a jump pressed on the same frame as a step counts before that step's hazard check.
 jump_check();
 duck_check();
+step_check();
+if (!running) break; // a hazard hit on this step ended the run; skip the rest of the frame
 speedup_check();
 run_input();
 }
@@ -65,8 +70,13 @@ void step_check()
 if (steptimer.elapsed < step_time) return;
 steptimer.restart();
 me_x += 1;
+update_listeners();
+spawn_check();
+hazard_check(); // only on arriving at a tile: in the air at that moment means the hazard is cleared
+if (!running) return;
 surface_check(); // before the footstep, so a new surface is heard on its first step
 play_step();
+hazard_countdown();
 }
 void speedup_check()
 {

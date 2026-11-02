@@ -1,0 +1,92 @@
+/* Hazards: jump-over obstacles that end the run if you're on the ground at the moment you step onto their tile (their
+own fall clip is the death). Being in the air at that moment clears it; landing while still over it doesn't count. Each plays its theme's loop at its tile, fading in by distance, and marks a ledge range before and after it.
+Entity pattern: removal sets the slot to null (never remove_at) and spawning reuses the first null slot, so the array
+stays small in an endless run. Every loop over hazards skips null slots. */
+sound_pool hazardpool;
+class hazard
+{
+double x;
+string theme;
+int loopslot = -1;
+double ledge_start, ledge_end;
+}
+hazard@[] hazards(0);
+
+// The ledge before a hazard: one step per ledge_ms of the current step time, rounded up, at least 1.
+int ledge_before_tiles()
+{
+return int(max(1, ceil(double(step_time) / ledge_ms)));
+}
+// ledge_before is decided by the spawner when it sets the gap, so the floor between hazards is guaranteed.
+void spawn_hazard(double hx, string theme, int ledge_before)
+{
+hazard h;
+h.x = hx;
+h.theme = theme;
+h.ledge_start = hx - ledge_before;
+h.ledge_end = hx + ledge_after_tiles;
+h.loopslot = hazardpool.play_2d(get_pack_sound("objects/traps/hazards/" + theme + "/*loop*"), me_x, 0, hx, 0, true);
+for (uint i = 0; i < hazards.length(); i++)
+{
+if (@hazards[i] == null)
+{
+@hazards[i] = h;
+return;
+}
+}
+hazards.insert_last(h);
+}
+// Runs once per step, right after the move: stepping onto a hazard's tile while grounded ends the run.
+void hazard_check()
+{
+for (uint i = 0; i < hazards.length(); i++)
+{
+if (@hazards[i] == null) continue;
+if (me_x == hazards[i].x and is_grounded())
+{
+end_run_hazard(get_pack_sound("objects/traps/hazards/" + hazards[i].theme + "/*fall*"));
+return;
+}
+// Kept until it's as far behind as obstacles appear ahead, so its loop fades out behind you instead of cutting off.
+if (me_x > max(hazards[i].ledge_end, hazards[i].x + spawn_distance())) remove_hazard(i);
+}
+}
+/* The countdown: one cue per ledge step before a hazard, the LAST ones of hazcount1 to hazcount5, so the final ledge
+step always plays hazcount5 ("jump now"). Five ledge steps hear 1 to 5; three hear 3 to 5; one hears only 5. Each cue
+plays in 2d (never stationary) at the ledge tile you've just stepped onto, not at the hazard. Runs once per step. */
+void hazard_countdown()
+{
+for (uint i = 0; i < hazards.length(); i++)
+{
+if (@hazards[i] == null) continue;
+int steps_left = int(hazards[i].x - me_x);
+if (steps_left < 1 or steps_left > 5 or me_x < hazards[i].ledge_start) continue;
+hazardpool.play_2d(get_pack_sound("misc/game/hazcount" + (6 - steps_left) + "*"), me_x, 0, me_x, 0, false);
+}
+}
+void remove_hazard(uint i)
+{
+if (i >= hazards.length() or @hazards[i] == null) return;
+hazardpool.destroy_sound(hazards[i].loopslot);
+@hazards[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_hazards()
+{
+for (uint i = 0; i < hazards.length(); i++)
+{
+if (@hazards[i] == null) continue;
+hazardpool.destroy_sound(hazards[i].loopslot);
+}
+hazards.resize(0);
+}
+// True if x is on a ledge around any hazard (not the hazard tile itself); tile_at() uses this.
+bool on_ledge(double x)
+{
+for (uint i = 0; i < hazards.length(); i++)
+{
+if (@hazards[i] == null) continue;
+if (x != hazards[i].x and x >= hazards[i].ledge_start and x <= hazards[i].ledge_end) return true;
+}
+return false;
+}

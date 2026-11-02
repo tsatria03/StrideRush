@@ -126,7 +126,69 @@ Section 4: lives and the end of a run. BUILT 2026-11-02, on top of fd2cd49; chec
   - finish_run(): calls every destroy_all_<type>(), clears state, and sets running false. The loop exits, start_run() returns, and the main menu reopens. No results dialog.
 - Test: temporary debug only if needed. The real test comes with section 5.
 
-Section 5: spawner, hazards and ledges
+Section 5: spawner, hazards and ledges. BUILT 2026-11-02, on top of a92870a; all tests passed, with several changes made during testing (below).
+- As built:
+  - globals/hazard.nvgt (new): hazardpool, class hazard (x, theme, loopslot, ledge_start, ledge_end), spawn_hazard() (reuses the first null slot), hazard_check(), remove_hazard(), destroy_all_hazards() and on_ledge().
+  - globals/spawner.nvgt (new): next_spawn_x, reset_spawner(), spawn_distance(), next_gap(), spawn_check() and place_obstacle(), which picks a random hazard theme for now.
+  - decpool.nvgt: hazardpool added to all_pools; new update_listeners() moves every pool's listener to me_x.
+  - run.nvgt: reset_run() clears objects and resets the spawner and listeners. step_check() updates listeners and spawns before the surface and footstep. run_loop() calls hazard_check() every frame AFTER step, jump and duck, then stops the frame if the run ended.
+  - surface.nvgt: tile_at() returns "ledge" on a ledge range.
+  - endrun.nvgt: clear_run_objects() calls destroy_all_hazards().
+  - tuning.nvgt: spawn_ahead_time 3000, min_gap_time 2000, max_gap_time 5000, min_gap_tiles 6, first_obstacle_tiles 10, ledge_target_time 1000, ledge_min_tiles 2, ledge_after_tiles 2.
+- Behavior notes:
+  - BUG FIX during testing (dev agreed, 2026-11-02): hazard_check() first ran every frame, so landing on a hazard tile also killed you. With a 1000 ms jump and 500 ms steps, you had to jump during exactly the one step before the hazard, and a landing racing the next step could still kill you. Jumping on the first ledge step was always fatal, and the dev died on the 4th hazard after clearing 3.
+  - Now hazard_check() runs only inside step_check(), right after the move. You die only if you're grounded at the moment you step onto the hazard tile; landing while still over it is safe, and the next step carries you off.
+  - run_loop() now calls jump_check() and duck_check() BEFORE step_check(), so a jump pressed on the same frame as a step counts before that step's check.
+  - SECOND FIX during testing (dev agreed, 2026-11-02): ledges ran together into 4 or 5 ledge steps when hazards were close.
+    - Cause: the 6-tile minimum gap left only 1 floor tile at the start, and none once the ledge before widened with speed (3 tiles at 400 ms, 4 at 300 ms).
+    - Now there's always at least min_floor_time (1000 ms) of normal floor, never under min_floor_tiles (2), between one hazard's ledge after and the next one's ledge before.
+    - spawner.nvgt: next_gap(ledge_before) requires ledge_after_tiles + floor_tiles() + ledge_before + 1. The spawner decides next_ledge_before when it sets the gap and passes it to spawn_hazard(x, theme, ledge_before), so a later speed-up can't widen that ledge into the floor.
+    - hazard.nvgt: new ledge_before_tiles(). Gaps are now 7 to 10 tiles at the start, and 43 to 100 at 50 ms.
+    - Retest passed (2026-11-02).
+  - TESTING TOOL (dev request, 2026-11-02): a starting-speed menu after "start game".
+    - menus/menu.nvgt: choose_start_speed() offers start_step_time down to min_step_time in 50 ms steps (500 to 50), and Escape says "canceled" and returns to the main menu.
+    - It's shown only when running from source (SCRIPT_COMPILED false, the engine property SimpleFighter uses for its server menu). A compiled release always starts at start_step_time.
+    - run.nvgt: start_run() and reset_run() take an optional starting_step_time.
+    - Remove it, or keep it source-only, before release; the docks in Section 7 shouldn't mention it.
+  - THIRD CHANGE during testing (dev, 2026-11-02): ledges are a fixed 2 tiles before and after at every speed. The dev didn't like ledges growing with speed.
+    - tuning.nvgt: ledge_target_time and ledge_min_tiles removed, replaced by ledge_before_count = 2.
+    - ledge_before_tiles() returns ledge_before_count.
+    - The floor stretch between ledges still scales with speed (min_floor_time), so ledges never merge. Gaps at the start are unchanged at 7 to 10 tiles; at 50 ms they're 40 to 100.
+    - CORRECTED ROOT CAUSE of the first "died on the 4th hazard" bug (the dev spotted it, 2026-11-02): the widening ledge was probably the main cause.
+      - At 490 ms, after only 10 s, the 1-second ledge rounded up to 3 tiles. Jumping on the first ledge step then reached the hazard about 1.4 s later, after the 1 s jump had already landed: death, even under the arrival-only check.
+      - The every-frame landing check was a real but secondary problem.
+      - With a fixed 2-tile ledge and the arrival-only check, a jump on either ledge step always clears a hazard, because the 1 s jump covers at least 2 steps at any speed of 500 ms or faster.
+      - Lesson: a warning that lengthens with speed is only safe if the action it cues lengthens too.
+  - FOURTH CHANGE (dev, 2026-11-02): the ledge before is now one step per 100 ms of step time, rounded up (5 at 500 down to 1 at 100), to carry the countdown later. The speed cap is 100 ms, not 50.
+    - tuning.nvgt: min_step_time 100; ledge_before_count replaced by ledge_ms = 100.
+    - hazard.nvgt: ledge_before_tiles() = ceil(step_time / ledge_ms), at least 1.
+    - The testing speed menu now runs 500 to 100. Jump on the last 2 ledge steps at 500 and 400 ms; any step at 300 and below. See [[project_obstacles_plan]] for the countdown design.
+  - COUNTDOWN BUILT (dev added the sounds, 2026-11-02): sr/sounds/misc/game/hazcount1 to hazcount5.
+    - hazard.nvgt hazard_countdown() runs once per step, after the footstep, from step_check().
+    - On each ledge step before a hazard it plays hazcount(6 - steps_left), so the final ledge step is always hazcount5.
+    - Cues play in 2d through hazardpool (the dev asked for positioned, never stationary), as fire-and-forget oneshots.
+    - Position: first built at the hazard's tile, which sounded like the cue came from past the last ledge step. Changed at the dev's request (2026-11-02) to the ledge tile just stepped onto (me_x), so each cue sounds where you are on the ledge.
+    - This lifts the earlier "warning cues deferred" status for hazards.
+  - SPACING REWORK (dev asked that hazards be spread out given the 5-step ledge, 2026-11-02):
+    - Gaps are now built from a random stretch of normal floor, min_floor_time 1000 to max_floor_time 4000 ms (new) at the current speed and never under min_floor_tiles 2. gap = ledge_after_tiles + floor + ledge_before + 1, never under min_gap_tiles 6.
+    - min_gap_time, max_gap_time and first_obstacle_tiles were removed.
+    - Hazards now spawn spawn_ahead_time (3 s) before their LEDGE starts, not before the hazard, so the loop is always heard 3 s before the countdown begins.
+    - The first hazard sits at spawn_distance + ledge + minimum floor (13 tiles at 500 ms).
+    - Resulting gaps: 10 to 16 tiles at 500 ms (5 to 8 s), 14 to 44 tiles at 100 ms.
+    - Before this, gaps at 500 ms were 10 to 11 tiles, with the loop heard only about 0.5 s before the countdown.
+  - Countdown and spacing tests PASSED (2026-11-02): the 5 cues at 500 ms (the dev called it "perfect"), 3 cues at 300 and 1 at 100, and the spacing at 500 and 100.
+  - Remaining tests PASSED (2026-11-02): jumping clears a hazard and its loop fades behind; failing plays only the hazard's fall, then the main menu (which also confirms Section 4's hazard ending); pause freezes the hazard loop and countdown; a longer run where the countdown shrinks from 5 cues to 4 to 3. Test 5 (landing on a hazard ends the run) no longer applies.
+  - SECTION 5 COMPLETE (2026-11-02). The game is properly playable: hazards, ledges, countdown and death.
+  - Removal (changed during testing, dev, 2026-11-02): a hazard is removed once you're spawn_distance() tiles past it (about 3 s at the current speed), never before its ledge ends. Its loop now fades out behind you the way it faded in. First built as "removed right after the ledge", which cut the loop off abruptly about 3 tiles past.
+  - At the start (500 ms): the first hazard is at tile 10 and heard from tile 4. Gaps are 6 to 10 tiles. The ledge before is 2 tiles and after is 2.
+- Tests, one at a time:
+  1. a hazard loop approaches and fades in (PASSED)
+  2. ledge footsteps before and after (PASSED after the step-only hazard check fix; then the floor-between-ledges fix)
+  3. jumping clears it and the loop goes quiet behind
+  4. failing plays its fall, then the main menu
+  5. landing on a hazard ends the run
+  6. pause freezes the hazard loop
+  7. a longer run at higher speed
 - globals/hazard.nvgt (entity pattern):
   - hazardpool, a handle array, and class hazard (x, theme, loop handle).
   - spawn_hazard(x, theme): reuses the first null slot, or appends. Because no other object stores hazard indexes, reusing slots keeps the array bounded in an endless run without breaking the sentinel-null rule.

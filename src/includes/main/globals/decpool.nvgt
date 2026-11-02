@@ -5,13 +5,21 @@ sound_pool@[] all_pools(0);
 
 void initialize_sound_pools()
 {
-all_pools = {p, muspool, ambpool};
+all_pools = {p, muspool, ambpool, hazardpool};
 for (uint i = 0; i < all_pools.length(); i++)
 {
 @all_pools[i].mixer = mixer();
 all_pools[i].max_distance = 0;
 all_pools[i].pan_step = 2.5;
 all_pools[i].volume_step = 2.5;
+}
+}
+// Moves every pool's listener to the player, so positioned obstacle loops pan and fade by distance along the belt.
+void update_listeners()
+{
+for (uint i = 0; i < all_pools.length(); i++)
+{
+all_pools[i].update_listener_2d(me_x, 0);
 }
 }
 // Pauses only sounds that are playing, so resume_pools() can't wake one that had already finished.

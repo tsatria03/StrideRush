@@ -24,9 +24,10 @@ void silence_run()
 stop_run_audio();
 clear_run_objects();
 }
-// Every object type's destroy_all goes here (Sections 5 and 6 add hazards, spikes and mines).
+// Every object type's destroy_all goes here (Section 6 adds spikes and mines).
 void clear_run_objects()
 {
+destroy_all_hazards();
 }
 void finish_run()
 {
