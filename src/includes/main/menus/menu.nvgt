@@ -56,14 +56,15 @@ start_run(speed, run_lives, only_type, can_run_out == 1);
 while (restart_run_requested);
 }
 }
-/* TESTING ONLY: pick the starting step time, from start_step_time down to min_step_time in 50 ms steps. It only
-appears when running from source; a compiled release always starts at start_step_time. Returns -1 if escaped. */
+/* TESTING ONLY: pick the starting step time, from start_step_time down in 100 ms steps: 500, 400, 300, 200, 100. The
+50 ms in between (450, 350, 250, 150 and 50) were dropped for door testing (dev, 2026-11-03). It only appears when
+running from source; a compiled release always starts at start_step_time. Returns -1 if escaped. */
 int choose_start_speed()
 {
 if (SCRIPT_COMPILED) return start_step_time;
 setupmenu();
 m.intro_text = "Choose a starting speed for testing.";
-for (int t = start_step_time; t >= min_step_time; t -= 50)
+for (int t = start_step_time; t >= 100; t -= 100)
 {
 m.add_item(t + " ms", "" + t);
 }
