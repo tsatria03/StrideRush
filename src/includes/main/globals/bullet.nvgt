@@ -1,6 +1,6 @@
 /* Bullets (dev, 2026-11-03, for 1.1): the guns fire bullets that travel, instead of hitting at once like melee. A bullet
 starts at your tile and moves one tile every bullet_tile_time, playing its gun's loop at the bullet the whole way, the
-way SimpleFighter's bullets carry their loop. On each new tile it checks for a standing wall or fake door there; the
+way SimpleFighter's bullets carry their loop. On each new tile it checks for a standing wall, fake door or item there; the
 first it reaches takes the gun's damage, the gun's hit and shell play at it, and the target plays its own hurt or death. A
 bullet that has gone weapon_reach() tiles from where it was fired (counted when it was fired) just vanishes, so firing
 at something still out of reach wastes the round. Real doors and the other traps don't stop it.
@@ -76,6 +76,12 @@ else
 {
 door@ d = fake_door_at(b.x);
 if (@d != null) target_x = strike_door(d, b.damage);
+else
+{
+// An item in the bullet's path breaks, as in ToyMania (dev, 2026-11-03).
+ammopack@ a = ammopack_at(b.x);
+if (@a != null) target_x = strike_ammopack(a);
+}
 }
 if (target_x < 0) return false;
 bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*hit*"), me_x, 0, target_x, 0, false);

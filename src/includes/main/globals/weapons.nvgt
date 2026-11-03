@@ -5,7 +5,7 @@ All ten are available from the start of every run on 1 to 0, in this order, and 
 Space swings or fires; the machine gun keeps firing while Space is held. Melee hits at once; a gun fires a bullet that
 travels (bullet.nvgt). A gun with nothing loaded, or mid-reload,
 plays empty instead. R reloads, timed by the length of the gun's reload sound like SimpleFighter, and ping plays when
-it's done. X speaks the ammo. weapon_strike() is the target hook: walls are what you hit (dev, 2026-11-03, for 1.1).
+it's done. X speaks the ammo. weapon_strike() is the target hook: walls, fake doors and items (dev, 2026-11-03, for 1.1).
 Every weapon reaches the same weapon_reach_time ahead; ToyMania's per-weapon tile ranges were dropped, so weapons differ
 only by damage. */
 string[] weapon_names = {"bat", "boot", "club", "feat", "fist", "hammer", "knife", "laser", "machine_gun", "pistol"};
@@ -106,16 +106,22 @@ int weapon_reach()
 return int(max(1, ceil(double(weapon_reach_time) / step_time)));
 }
 /* The target hook. Damages the nearest target within weapon_reach() tiles ahead and returns its x, or -1 if there was
-nothing to hit. The targets are walls and fake doors; a new target type adds its own search here. */
+nothing to hit. The targets are walls, fake doors and items; a new target type adds its own search here. */
 double weapon_strike(int damage)
 {
 int reach = weapon_reach();
 wall@ w = wall_in_reach(reach);
 door@ d = fake_door_in_reach(reach);
-// Whichever standing target is nearer takes the hit: a wall, or a fake door (real doors can't be hit).
-if (@w != null and (@d == null or w.x <= d.x)) return strike_wall(w, damage);
-if (@d != null) return strike_door(d, damage);
-return -1;
+ammopack@ a = ammopack_in_reach(reach);
+// Whichever target is nearest takes the hit: a wall, a fake door (real doors can't be hit) or an item, which breaks.
+double best = -1;
+if (@w != null) best = w.x;
+if (@d != null and (best < 0 or d.x < best)) best = d.x;
+if (@a != null and (best < 0 or a.x < best)) best = a.x;
+if (best < 0) return -1;
+if (@w != null and w.x == best) return strike_wall(w, damage);
+if (@d != null and d.x == best) return strike_door(d, damage);
+return strike_ammopack(a);
 }
 // R: tops a gun up from its reserve any time it isn't full. The reload lasts as long as its reload sound.
 void start_reload()

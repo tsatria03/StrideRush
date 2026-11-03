@@ -1,6 +1,6 @@
 ---
 name: project_bullets_plan
-description: SETTLED, NOT BUILT (2026-11-03, for 1.1; sections: traveling bullets, weapons breaking items, docks) - traveling bullets for the guns, so ammo weapons stop hitting instantly like melee; speed, range, what they hit; Q&A log
+description: COMPLETE (2026-11-03, in 1.1, which it filled to 10 of 10) - traveling bullets for the guns, so ammo weapons stop hitting instantly like melee; speed, range, what they hit; Q&A log
 metadata:
   type: project
 ---
@@ -26,7 +26,12 @@ Section 1: traveling bullets for the guns.
   - CHANGED again (dev, 2026-11-03): ToyMania's single shared reserve meant a pack fed every gun; here it should only go to the gun you have EQUIPPED. use_ammopack() now adds the 5 to 10 to the current gun only, and says "You got N rounds of ammo." The count is trimmed to what fits under the 200 cap, so the number spoken is the number actually added. With a melee weapon out it says "This weapon doesn't take any ammo."; when that gun's reserve is full, "This weapon's reserve is already full." Both keep the pack.
   - tuning.nvgt bullet_tile_time 40; bulletpool in all_pools; destroy_all_bullets() in clear_run_objects().
 Section 2: weapons breaking items. Melee's weapon_strike() and bullets both consider unspent ammo packs (and future items) as targets, the nearest winning. A broken item plays its break sound and is lost.
-Section 3: docks in 1.1 (bullets travel and break items; melee breaks items). 1.1 is a minor version, capped at 10 entries (dev, 2026-11-03), and has 8, so these two entries FILL it. The next player-facing change opens 1.2 with a version bump.
+- BUILT 2026-11-03 on top of 509b237. SECTION 2 COMPLETE: all 3 tests passed (2026-11-03): shooting a pack, swinging at a pack (and picking one up still works), and the nearest target winning. As built: ammopack.nvgt has ammopack_at(x), ammopack_in_reach(reach) and strike_ammopack() (break_ammopack(), then return its x). weapons.nvgt weapon_strike() now picks the nearest of wall, fake door and pack, with a wall winning ties, then a door. bullet.nvgt bullet_hits() checks wall, then fake door, then pack on its tile. A broken pack also gets the weapon's hit (and, for bullets, the shell) at its spot. Keys will add their own _at and _in_reach pair when they exist.
+Section 3 WRITTEN (2026-11-03, before the dev's commit), so BULLETS ARE COMPLETE:
+- Changelog: two "Made it so" entries fill 1.1 to 10 of 10 (bullets plus the new starting reserve and cap; weapons breaking packs plus packs giving 5 to 10 to the gun you hold). 1.1 is FULL, so the next player-facing change opens 1.2 with build/version.txt going to 1.2.
+- Readme: the weapons section explains traveling bullets and wasted early shots, gives 50 loaded and 50 reserve up to 200, and says weapons hit the nearest thing including packs. The packs section says weapons break them and that a pack gives 5 to 10 to the gun you're holding.
+- Todo list: "Add bullets that fly ahead of you when you fire a gun." added to finished.
+Original Section 3 plan: docks in 1.1 (bullets travel and break items; melee breaks items). 1.1 is a minor version, capped at 10 entries (dev, 2026-11-03), and has 8, so these two entries FILL it. The next player-facing change opens 1.2 with a version bump.
 
 As built now ([[project_weapons_plan]], [[project_walls_plan]]): fire_weapon() calls weapon_strike(), which damages the nearest wall or fake door within weapon_reach() at once, for melee and guns alike.
 

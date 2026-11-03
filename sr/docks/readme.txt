@@ -30,14 +30,14 @@ You can crouch by holding down the crouch key. Your footsteps go quiet while you
 
 Weapons.
 
-You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, feat, fist, hammer, knife, laser, machine gun and pistol. Each run starts with the bat in your hands, and each weapon is stronger than the one before it. Press the space bar to swing a melee weapon or fire a gun. The machine gun keeps firing for as long as you hold the space bar.
-The machine gun and pistol use ammo. Each starts every run with 50 rounds loaded and 250 in reserve, and they keep their own ammo separately. Once a gun is empty you'll hear it click instead of firing. You can reload any time a gun isn't full, and you'll hear a ping when it's ready. When the reserve runs out, that gun is empty until you open an ammo pack.
-Your weapons are for breaking walls and fake doors, and they all reach the same distance ahead of you. Real doors can't be harmed. The stronger the weapon, the fewer hits a wall takes.
+You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, feat, fist, hammer, knife, laser, machine gun and pistol. Each run starts with the bat in your hands, and each weapon is stronger than the one before it. Press the space bar to swing a melee weapon or fire a gun. The machine gun keeps firing for as long as you hold the space bar. A melee weapon hits straight away, while a gun fires a bullet that you'll hear flying off ahead of you until it lands. A bullet only flies as far as your weapons reach, so a shot fired at something still too far away falls short and wastes the round.
+The machine gun and pistol use ammo. Each starts every run with 50 rounds loaded and 50 in reserve, and they keep their own ammo separately. A reserve can hold up to 200 rounds. Once a gun is empty you'll hear it click instead of firing. You can reload any time a gun isn't full, and you'll hear a ping when it's ready. When the reserve runs out, that gun is empty until you open an ammo pack.
+Your weapons are for breaking walls and fake doors, and they all reach the same distance ahead of you. Real doors can't be harmed. The stronger the weapon, the fewer hits a wall takes. Your weapons always hit the nearest thing ahead of you, and that includes ammo packs, which break if you hit them.
 
 Ammo packs and your inventory.
 
-Every so often an ammo pack turns up ahead of you instead of an obstacle, and you'll hear it waiting there. Press either hand key in the last few steps before you reach it to pick it up, and it goes into your inventory. Be careful: if you run onto a pack, or land on it from a jump, it breaks and is lost. A jump that carries you right over it just misses it.
-Packs stay in your inventory until you open them. Opening one adds 50 rounds to the reserve of both guns, up to the 250 they start with. If both reserves are already full, the pack stays in your inventory for later. Your inventory starts empty every run.
+Every so often an ammo pack turns up ahead of you instead of an obstacle, and you'll hear it waiting there. Press either hand key in the last few steps before you reach it to pick it up, and it goes into your inventory. Be careful: if you run onto a pack, or land on it from a jump, it breaks and is lost, and so does shooting or swinging at it. A jump that carries you right over it just misses it.
+Packs stay in your inventory until you open them. Opening one adds 5 to 10 rounds to the reserve of the gun you're holding, so draw the gun you want to fill first. If you're holding a melee weapon, or that gun's reserve is already full, the pack stays in your inventory for later. Your inventory starts empty every run.
 
 Keyboard commands
 

@@ -10,6 +10,7 @@
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add bullets that fly ahead of you when you fire a gun.
 **Finished. Add a way to break fake doors with your weapons.
 **Finished. Add doors that you open with your hands.
 **Finished. Add walls that you smash through with your weapons.

@@ -90,6 +90,34 @@ if (@ammopacks[i] == null) continue;
 if (!ammopacks[i].spent and me_x == ammopacks[i].x) break_ammopack(ammopacks[i]);
 }
 }
+/* Weapons break items too (dev, 2026-11-03): a melee swing breaks a pack that's the nearest thing in reach, and a
+bullet breaks one it reaches. These find it; break_ammopack() does the breaking. */
+ammopack@ ammopack_at(double x)
+{
+for (uint i = 0; i < ammopacks.length(); i++)
+{
+if (@ammopacks[i] != null and !ammopacks[i].spent and ammopacks[i].x == x) return ammopacks[i];
+}
+return null;
+}
+ammopack@ ammopack_in_reach(int reach)
+{
+ammopack@ target = null;
+for (uint i = 0; i < ammopacks.length(); i++)
+{
+if (@ammopacks[i] == null or ammopacks[i].spent) continue;
+double ahead = ammopacks[i].x - me_x;
+if (ahead < 1 or ahead > reach) continue;
+if (@target == null or ammopacks[i].x < target.x) @target = ammopacks[i];
+}
+return target;
+}
+// A weapon hit on a pack: it breaks (break plays) and is lost. Returns its x, so the weapon's hit plays there.
+double strike_ammopack(ammopack@ a)
+{
+break_ammopack(a);
+return a.x;
+}
 void break_ammopack(ammopack@ a)
 {
 a.spent = true;
