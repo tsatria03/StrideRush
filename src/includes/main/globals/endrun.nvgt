@@ -59,6 +59,7 @@ destroy_all_spikes();
 destroy_all_mines();
 destroy_all_forcefields();
 destroy_all_projectiles();
+destroy_all_ammopacks();
 }
 void finish_run()
 {

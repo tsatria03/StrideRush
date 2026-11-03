@@ -83,6 +83,10 @@ for (uint i = 0; i < obstacle_types.length(); i++)
 {
 m.add_item(obstacle_types[i].replace("_", " ", true), obstacle_types[i]); // "force_fields" reads as "force fields"
 }
+for (uint i = 0; i < item_types.length(); i++)
+{
+m.add_item(item_types[i].replace("_", " ", true), item_types[i]);
+}
 m.add_item("all", "all");
 int mres = m.run();
 if (mres < 0) return ""; // silent: escape just steps back to the speed menu

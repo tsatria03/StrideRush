@@ -14,7 +14,7 @@ Obstacles.
 Hazards, such as pits, chasms, fire, lava, water, quicksand and electricity, end your run straight away if you fall into one. Each hazard has a ledge leading up to it, and as you step along the ledge you'll hear a countdown, one cue per step, with the last cue on the step right before the hazard. At slower speeds the ledge is longer, so wait for the last few cues before you jump. Once you're fast enough, jumping on any ledge step will carry you over.
 Spikes swing back and forth with their own rhythm, which you'll hear as you approach them. Getting hit by spikes costs you 1 life.
 Mines make a sound when they appear, then light up and start ticking once you get close. Stepping onto a mine costs you 2 lives. Once you jump over a mine, you'll hear it keep ticking as it fades out behind you.
-Force fields hum ahead of you while they're on, and jumping or crouching won't get you past one. Press either hand key during a force field's countdown to switch it off. You'll hear the switch from the side of the hand you used, then the field's sound changes as it shuts off, and you can run straight through. At the fastest speeds, where the countdown is very short, you can still switch one off in the last half second before you reach it. If you reach a force field while it's still on, it costs you 1 life and throws you 5 steps forward past it.
+Force fields hum ahead of you while they're on, and jumping or crouching won't get you past one. Press either hand key during a force field's countdown to switch it off. You'll hear the switch, then the field's sound changes as it shuts off, and you can run straight through. At the fastest speeds, where the countdown is very short, you can still switch one off in the last half second before you reach it. If you reach a force field while it's still on, it costs you 1 life and throws you 5 steps forward past it.
 Projectiles, such as missiles, cars, boulders and firewalls, fly toward you at head height, twice as fast as you run, so you'll hear them rushing in. Hold the crouch key so you're crouched when one reaches you, and it flies over you and fades away behind. A crouch only lasts a second and a half, so at slower speeds wait for the last few countdown cues before you crouch. Jumping won't help, and if one hits you, it costs you 1 life.
 Spikes, mines, force fields and projectiles have a countdown too, just like hazards, timed the same way, but without a ledge. Each kind of obstacle has its own countdown sounds, so you can tell which one is coming from the countdown alone.
 
@@ -29,15 +29,23 @@ You can crouch by holding down the crouch key. Your footsteps go quiet while you
 Weapons.
 
 You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, feat, fist, hammer, knife, laser, machine gun and pistol. Each run starts with the bat in your hands, and each weapon is stronger than the one before it. Press the space bar to swing a melee weapon or fire a gun. The machine gun keeps firing for as long as you hold the space bar.
-The machine gun and pistol use ammo. Each starts every run with 50 rounds loaded and 250 in reserve, and they keep their own ammo separately. Once a gun is empty you'll hear it click instead of firing. You can reload any time a gun isn't full, and you'll hear a ping when it's ready. When the reserve runs out, that gun is empty for the rest of the run.
+The machine gun and pistol use ammo. Each starts every run with 50 rounds loaded and 250 in reserve, and they keep their own ammo separately. Once a gun is empty you'll hear it click instead of firing. You can reload any time a gun isn't full, and you'll hear a ping when it's ready. When the reserve runs out, that gun is empty until you open an ammo pack.
 There's nothing to hit with your weapons yet, but walls that you smash through are planned.
+
+Ammo packs and your inventory.
+
+Every so often an ammo pack turns up ahead of you instead of an obstacle, and you'll hear it waiting there. Press either hand key in the last few steps before you reach it to pick it up, and it goes into your inventory. Be careful: if you run onto a pack, or land on it from a jump, it breaks and is lost. A jump that carries you right over it just misses it.
+Packs stay in your inventory until you open them. Opening one adds 50 rounds to the reserve of both guns, up to the 250 they start with. If both reserves are already full, the pack stays in your inventory for later. Your inventory starts empty every run.
 
 Keyboard commands
 
 Up arrow or letter W: Jumps, if pressed.
 Down arrow or letter S: Crouches, to duck under projectiles, if held down.
-Tab or letter A: Uses your left hand, to switch off a force field, if pressed.
-Enter or letter D: Uses your right hand, to switch off a force field, if pressed.
+Tab or letter A: Uses your left hand, to switch off a force field or pick up an item, if pressed.
+Enter or letter D: Uses your right hand, to switch off a force field or pick up an item, if pressed.
+Letter I: Moves to the next item in your inventory, if pressed.
+Shift plus letter I: Moves to the previous item in your inventory, if pressed.
+Letter U: Uses the item you're on in your inventory, such as opening an ammo pack, if pressed.
 Numbers 1 through 0: Draws the bat, boot, club, feat, fist, hammer, knife, laser, machine gun or pistol, if pressed.
 Space: Swings or fires your weapon, if pressed. With the machine gun, it keeps firing, if held down.
 Letter R: Reloads your gun, if pressed.

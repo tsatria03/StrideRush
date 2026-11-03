@@ -1,6 +1,6 @@
 ---
 name: project_weapons_plan
-description: SETTLED for Section 1, NOT BUILT (2026-11-02; sections: weapon system, ammo packs after their own Q&A, docks) - the weapon system, based on ToyMania's (not SimpleFighter's); needed before walls; which weapons, how you get them, firing, ammo, reload and targets; Q&A log
+description: COMPLETE (2026-11-03; weapon system, ammo packs and inventory, docks) - the weapon system, based on ToyMania's (not SimpleFighter's); needed before walls; which weapons, how you get them, firing, ammo, reload and targets; Q&A log
 metadata:
   type: project
 ---
@@ -35,6 +35,16 @@ Section 2: ammo packs and the inventory. SETTLED 2026-11-02 (Q&A below):
 - New globals/inventory.nvgt: item counts, a cursor, I and Shift+I cycling with the panned inv sound, and U to use. The ammo pack's use refills both reserves by 50, capped at 250.
 - The spawner: packs as a separate, rarer spawn type (tunable chance) with their own folder, and in the testing spawn menu. hand_check() also checks packs, and player_land() checks for landing on one. Also all_pools, clear_run_objects(), and reset_run() clearing the inventory.
 - keyboard.ini: inventory_next=I, inventory_previous=SHIFT+I, item_use=U. Tuning: ammo_pack_refill 50, gun_max_reserve 250, ammo_pack_chance.
+- BUILT 2026-11-02 on top of 0834e0a (the dev called it "section1"); awaiting the dev's tests. As built:
+  - DOCKS WRITTEN (2026-11-03, before the dev's commit, at the dev's request). The 20th and last 1.0 changelog entry covers ammo packs, so 1.0 is FULL: the next player-facing change starts a "New in 1.1." block with a build/version.txt bump ([[feedback_changelog_rules]]). The readme has an "Ammo packs and your inventory" section, the hand keys now mention picking up items, and I, Shift+I and U are listed. On the todo list, ammo packs moved to finished. THE WEAPONS PLAN IS COMPLETE.
+  - SECTION 2 COMPLETE (2026-11-03): all 5 tests passed: pickup, running and crouching onto a pack, jumping over versus landing on one, opening packs (refused when full, refill capped at 250), and a mixed run with the centered switch, stacked packs, pause and a fresh inventory.
+  - CHANGED during testing (dev, 2026-11-03): misc/player/give now plays with get, and the pickup speaks only "ammo pack" instead of "You picked up an ammo pack." (the older wording above is superseded). Test 1, the pickup, passed.
+  - CHANGED before testing (dev, 2026-11-02): item get sounds play stationary, centered, not panned to the hand. pick_up_ammopack() no longer takes a pan.
+  - The new hand_window_start(x, countdown_start) in spawner.nvgt is shared by switch_window_start() and the pickup. hand_check() in forcefield.nvgt falls through to pick_up_ammopack(pan) when no field is in reach.
+  - spawner.nvgt: item_types = {"ammo_packs"}. choose_next_obstacle() makes about 1 in ammo_pack_chance (8) spawns a pack, or every spawn when spawn_only is "ammo_packs". place_obstacle() sends "ammo_packs" to spawn_ammopack() with no theme. The testing spawn menu lists the obstacles, then "ammo packs", then all.
+  - ammopack.nvgt: ammopack_check() in step_check() after projectile_check(); ammopack_landing() from player_land(); use_ammopack() for U. The get sound is panned through ammopackpool.
+  - inventory.nvgt: a dictionary named inventory, sorted keys, invpos corrected in give_item(). The inv pan is 0 when there's a single item (convert_to_pan would divide by zero). Shift+I is checked before I, since a plain I binding also matches with Shift held. use_item() routes ammo_pack to use_ammopack().
+  - reset_run() calls clear_inventory(), run_input() calls inventory_input(), and the pack pool and destroy_all_ammopacks() are registered.
 Section 3 WRITTEN for the weapon system (2026-11-02, on top of 07501f2). The dev asked for the docks before the ammo pack Q&A ("ready for docks"), so the docks were done ahead of Section 2:
   - Changelog: 1 weapons entry (19 of 20). The 20th stays reserved for ammo packs.
   - Readme: a Weapons section, and the keys 1 to 0, Space, R and X. It says there's nothing to hit yet and walls are planned.

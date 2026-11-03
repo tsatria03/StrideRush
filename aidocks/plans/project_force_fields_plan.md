@@ -36,7 +36,7 @@ Section 2: the hands and the switch.
   - forcefield.nvgt hand_check() runs every frame from run_loop(), after duck_check() and before step_check(), like the jump. So a press on the frame of the step onto the field still counts on the warn5 step.
   - Either hand targets the nearest active field in its countdown that hasn't had its try. The press plays through forcefieldpool, so it pauses with the game. On warn5's step, switch_off_forcefield() swaps the on loop for the off loop at the field's tile.
   - Further presses on a used field are ignored silently: it's no longer a target.
-  - Panning: a stationary play with start_pan of minus or plus hand_pan (60, tuning.nvgt). A 2d offset was rejected because the pools' volume_step of 2.5 dB per tile would make the press quieter the further it's panned. The pan is game-wide for hands, so doors can use hand_pan too.
+  - REVISED (dev, 2026-11-02): the press is no longer panned. It plays stationary and centered, and hand_pan is gone, because panning "sounds too far to the left and or right". Original note: a stationary play with start_pan of minus or plus hand_pan (60, tuning.nvgt). A 2d offset was rejected because the pools' volume_step of 2.5 dB per tile would make the press quieter the further it's panned. The pan is game-wide for hands, so doors can use hand_pan too.
 Section 3: docks. WRITTEN 2026-11-02 on top of 27cc2fd, so FORCE FIELDS ARE COMPLETE. The changelog has 2 new 1.0 entries (17 of 20), and the readme has a force field paragraph and the hand keys. On the todo list, force fields moved to finished. Changelog entries in 1.0 (it has room for 5 more), the readme (force fields, the hand keys and the knockback), and the todo list (move force fields to finished).
 
 Already recorded elsewhere:

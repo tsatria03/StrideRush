@@ -1,0 +1,84 @@
+/* The inventory (dev, 2026-11-02), adapted from ToyMania's: item counts with a cursor, I and Shift+I to cycle and U to
+use the focused item. There's no inventory menu. It starts empty every run.
+Fixed from ToyMania: the cursor is corrected whenever an item runs out, names are spoken with spaces, and each item's
+use goes to that item's own function instead of one long branch. */
+dictionary inventory;
+int invpos = 0;
+
+void clear_inventory()
+{
+inventory.delete_all();
+invpos = 0;
+}
+// Adds amount of an item (negative to remove); an item at 0 or below leaves the inventory.
+void give_item(string item, int amount)
+{
+int count = 0;
+if (inventory.exists(item)) inventory.get(item, count);
+count += amount;
+if (count <= 0) inventory.delete(item);
+else inventory.set(item, count);
+string[] keys = inventory_keys();
+if (invpos >= int(keys.length())) invpos = int(max(0, int(keys.length()) - 1));
+}
+int item_count(string item)
+{
+int count = 0;
+if (inventory.exists(item)) inventory.get(item, count);
+return count;
+}
+// The cursor indexes this alphabetically sorted list, so every lookup sorts the same way.
+string[] inventory_keys()
+{
+string[] keys = inventory.get_keys();
+keys.sort_ascending();
+return keys;
+}
+// "ammo_pack" is spoken "ammo pack".
+string item_display_name(string item)
+{
+return item.replace("_", " ", true);
+}
+// Runs every frame from run_input(): I, Shift+I and U.
+void inventory_input()
+{
+if (controls.action_triggered("inventory_previous")) cycle_inventory(-1);
+else if (controls.action_triggered("inventory_next")) cycle_inventory(1);
+if (controls.action_triggered("item_use")) use_item();
+}
+/* Moves the cursor, wrapping, with ToyMania's inv sound panned by position across the list, and speaks the item:
+"ammo pack. Item 1 of 2", or "ammo packs, 3. Item 1 of 2" when there's more than one. */
+void cycle_inventory(int dir)
+{
+string[] keys = inventory_keys();
+if (keys.length() == 0)
+{
+speak_buffer("Your inventory is empty.");
+return;
+}
+invpos += dir;
+if (invpos >= int(keys.length())) invpos = 0;
+else if (invpos < 0) invpos = int(keys.length()) - 1;
+double pan = keys.length() > 1 ? convert_to_pan(keys.length(), invpos, -25, 25) : 0;
+p.play_stationary_extended(get_pack_sound("misc/player/*inv*"), false, 0, pan, 0, 100, false);
+string item = keys[invpos];
+int count = item_count(item);
+string name = item_display_name(item);
+string position = "Item " + (invpos + 1) + " of " + keys.length() + ".";
+speak_buffer(count == 1 ? name + ". " + position : name + "s, " + count + ". " + position);
+}
+// U: uses the focused item through that item's own function, which removes it only if it was used.
+void use_item()
+{
+string[] keys = inventory_keys();
+if (keys.length() == 0)
+{
+speak_buffer("You don't have anything to use.");
+return;
+}
+string item = keys[invpos];
+if (item == "ammo_pack")
+{
+if (use_ammopack()) give_item(item, -1);
+}
+}

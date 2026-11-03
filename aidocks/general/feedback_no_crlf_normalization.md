@@ -9,4 +9,6 @@ metadata:
 
 **Why:** a blind normalizer pass flips endings on files you didn't mean to touch and makes huge noisy diffs. Once this is a repo, git add --renormalize is the dev's call.
 
-**How to apply:** after writing a new file, convert only that file to CRLF and confirm it. Related: [[feedback_memory_folder_layout]].
+Pitfall (2026-11-02): Git Bash's sed -i rewrites a file with LF endings even for a one-line substitution, which happened to the readme. An Edit-tool edit once left forcefield.nvgt with LF endings too. After any edit, especially sed, recheck the file. Reliable check: compare wc -l with the count of \r characters (tr -cd '\r' | wc -c). grep with $'\r$' and awk can't be trusted in Git Bash. Fix with sed -i 's/\r*$/\r/' on that one file.
+
+**How to apply:** after writing a new file, convert only that file to CRLF and confirm it. Prefer the Edit tool to sed for content changes. Related: [[feedback_memory_folder_layout]].

@@ -1,0 +1,141 @@
+/* Ammo packs (dev, 2026-11-02): the first item, and the model for later ones such as keys. A pack plays its spawn clip
+when it appears, then its loop at its tile. Either hand picks it up within the same window as the force field switch
+(hand_window_start()): get plays centered (stationary, not panned; dev, 2026-11-02) and the pack goes into the inventory, to be opened later with U.
+Arriving on its tile on the ground (standing or crouched), or landing on it from a jump, breaks it: break plays and
+it's lost. A clean jump that's still in the air across its tile misses it, and its loop fades out behind you.
+There are no countdown cues for packs (no misc/trap warn set); their loop is the guide.
+Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_ammopacks() shrinks the array. */
+sound_pool ammopackpool;
+const string ammopack_folder = "objects/interaction/items/common/ammo_pack/";
+class ammopack
+{
+double x;
+double countdown_start;
+bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
+int loopslot = -1;
+}
+ammopack@[] ammopacks(0);
+
+// True when ammo pack sounds exist, so the spawner can offer them.
+bool ammopacks_available()
+{
+return get_pack_sound(ammopack_folder + "*loop*") != "";
+}
+// countdown comes from the spawner like an obstacle's; it sets the pickup window and the spacing.
+void spawn_ammopack(double ax, int countdown)
+{
+ammopack a;
+a.x = ax;
+a.countdown_start = ax - countdown;
+ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*spawn*"), me_x, 0, ax, 0, false);
+a.loopslot = ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*loop*"), me_x, 0, ax, 0, true);
+for (uint i = 0; i < ammopacks.length(); i++)
+{
+if (@ammopacks[i] == null)
+{
+@ammopacks[i] = a;
+return;
+}
+}
+ammopacks.insert_last(a);
+}
+// Called from hand_check() when no force field took the press. Picks up the nearest pack in its window, if any.
+void pick_up_ammopack()
+{
+ammopack@ target = null;
+double target_dist = 0;
+for (uint i = 0; i < ammopacks.length(); i++)
+{
+if (@ammopacks[i] == null) continue;
+ammopack@ a = ammopacks[i];
+if (a.spent or me_x < hand_window_start(a.x, a.countdown_start) or a.x - me_x < 1) continue;
+if (@target == null or a.x - me_x < target_dist)
+{
+@target = a;
+target_dist = a.x - me_x;
+}
+}
+if (@target == null) return; // nothing in reach: the press does nothing
+target.spent = true;
+stop_ammopack(target);
+ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*get*"), false);
+// The player's give sound as it goes into the inventory, together with get, like ToyMania's item pickups (dev).
+p.play_stationary(get_pack_sound("misc/player/*give*"), false);
+give_item("ammo_pack", 1);
+speak_buffer(item_display_name("ammo_pack")); // just the item's name, like ToyMania's pickups (dev)
+}
+/* Runs once per step, right after the move. Arriving on a pack's tile on the ground breaks it; arriving in the air
+leaves it to ammopack_landing(), and once you're past its tile still unspent, it was jumped cleanly. */
+void ammopack_check()
+{
+for (uint i = 0; i < ammopacks.length(); i++)
+{
+if (@ammopacks[i] == null) continue;
+ammopack@ a = ammopacks[i];
+if (!a.spent)
+{
+if (me_x == a.x and is_grounded()) break_ammopack(a);
+else if (me_x > a.x) a.spent = true; // jumped clean over: its loop carries on and fades behind you
+}
+// Kept until it's as far behind as obstacles appear ahead, so a missed pack's loop fades out; then dropped.
+if (me_x > a.x + spawn_distance()) remove_ammopack(i);
+}
+}
+// Called from player_land(): landing on a pack's tile by mistake breaks it.
+void ammopack_landing()
+{
+for (uint i = 0; i < ammopacks.length(); i++)
+{
+if (@ammopacks[i] == null) continue;
+if (!ammopacks[i].spent and me_x == ammopacks[i].x) break_ammopack(ammopacks[i]);
+}
+}
+void break_ammopack(ammopack@ a)
+{
+a.spent = true;
+stop_ammopack(a);
+ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*break*"), me_x, 0, a.x, 0, false);
+}
+void stop_ammopack(ammopack@ a)
+{
+if (a.loopslot > -1) ammopackpool.destroy_sound(a.loopslot);
+a.loopslot = -1;
+}
+void remove_ammopack(uint i)
+{
+if (i >= ammopacks.length() or @ammopacks[i] == null) return;
+stop_ammopack(ammopacks[i]);
+@ammopacks[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_ammopacks()
+{
+for (uint i = 0; i < ammopacks.length(); i++)
+{
+if (@ammopacks[i] == null) continue;
+stop_ammopack(ammopacks[i]);
+}
+ammopacks.resize(0);
+}
+/* U on an ammo pack: refills both guns' reserves by ammo_pack_refill, never above gun_max_reserve. Refused, keeping the
+pack, when both are already full. Returns true if it was used. */
+bool use_ammopack()
+{
+bool room = false;
+for (int w = 0; w < int(weapon_names.length()); w++)
+{
+if (is_gun(w) and weapon_reserve[w] < gun_max_reserve) room = true;
+}
+if (!room)
+{
+speak_buffer("Your guns' reserves are already full.");
+return false;
+}
+for (int w = 0; w < int(weapon_names.length()); w++)
+{
+if (is_gun(w)) weapon_reserve[w] = int(min(gun_max_reserve, weapon_reserve[w] + ammo_pack_refill));
+}
+p.play_stationary(get_pack_sound(ammopack_folder + "*use*"), false);
+speak_buffer("Your guns' reserves have been refilled.");
+return true;
+}

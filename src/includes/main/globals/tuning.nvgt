@@ -67,10 +67,6 @@ const int projectile_speed_factor = 2;
 force field gets the same number of extra tiles, so the throw always lands on clear floor before the next countdown. */
 const int forcefield_knockback_tiles = 5;
 
-/* A hand interaction's sound (a switch press now, door openings later) is panned to the hand used, left hand negative
-and right hand positive, so you hear which hand did it (dev, 2026-11-02). On sound_pool's -100 to 100 pan scale. */
-const int hand_pan = 60;
-
 /* A force field can always be switched off within this long before it, at the current speed, even when its countdown is
 shorter (dev, 2026-11-02, so top speed doesn't need mashing). At 50 ms that's the last 10 steps, at 100 ms the last 5,
 at 200 ms the last 3; above 200 ms the countdown already lasts at least this long, so this changes nothing there. */
@@ -85,6 +81,12 @@ const int gun_start_reserve = 250;
 // The shortest gap between two shots or swings per Space press, and the machine gun's rate while Space is held.
 const int weapon_fire_gap = 50;
 const int machine_gun_fire_gap = 100;
+
+/* Ammo packs (dev, 2026-11-02). About one spawn in ammo_pack_chance is a pack instead of an obstacle. Opening one adds
+ammo_pack_refill to both guns' reserves, never above gun_max_reserve. */
+const int ammo_pack_chance = 8;
+const int ammo_pack_refill = 50;
+const int gun_max_reserve = 250;
 
 // Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. Home/End and Page Up/Down move by volume_change.
 const int min_volume = -50;

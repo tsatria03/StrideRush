@@ -7,7 +7,9 @@ string next_type = "";
 int next_countdown = 0;
 // Every obstacle type the spawner knows; a new type is added here. The testing spawn menu lists these too.
 string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles"};
-// "all", or one type from obstacle_types; set by start_run(). Only the source-only testing menu picks anything but all.
+// Items the spawner places too, at a lower chance (ammo_pack_chance); listed after the obstacles in the testing menu.
+string[] item_types = {"ammo_packs"};
+// "all", or one type from obstacle_types or item_types; set by start_run(). Only the source-only testing menu picks anything but all.
 string spawn_only = "all";
 
 // The first obstacle sits a full spawn distance, its countdown and a minimum stretch of floor into the run.
@@ -26,7 +28,11 @@ for (uint i = 0; i < obstacle_types.length(); i++)
 if (spawn_only != "all" and obstacle_types[i] != spawn_only) continue;
 if (get_pack_sound_folders("objects/traps/" + obstacle_types[i] + "/*").length() > 0) available.insert_last(obstacle_types[i]);
 }
-next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
+// About one spawn in ammo_pack_chance is an ammo pack instead, or every one when the testing menu picked packs only.
+bool packs_ok = ammopacks_available() and (spawn_only == "all" or spawn_only == "ammo_packs");
+if (spawn_only == "ammo_packs") next_type = packs_ok ? "ammo_packs" : "";
+else if (packs_ok and random(1, ammo_pack_chance) == 1) next_type = "ammo_packs";
+else next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
 }
 // The countdown before an obstacle: one step per countdown_ms of the current step time, rounded up, at least 1.
@@ -65,6 +71,11 @@ if (placed == "force_fields") next_spawn_x += forcefield_knockback_tiles;
 void place_obstacle(double x, string type, int countdown)
 {
 if (type == "") return;
+if (type == "ammo_packs")
+{
+spawn_ammopack(x, countdown); // one sound set, no themes
+return;
+}
 string[] themes = get_pack_sound_folders("objects/traps/" + type + "/*");
 if (themes.length() == 0) return;
 string theme = themes[random(0, themes.length() - 1)];
@@ -73,6 +84,14 @@ else if (type == "spikes") spawn_spike(x, theme, countdown);
 else if (type == "mines") spawn_mine(x, theme, countdown);
 else if (type == "force_fields") spawn_forcefield(x, theme, countdown);
 else if (type == "projectiles") spawn_projectile(x, theme, countdown);
+}
+/* Where a hand can first act on something at x whose countdown starts at countdown_start: the countdown start, or
+switch_min_time before it at the current speed, whichever is earlier, so at top speed, where the countdown is a single
+step, a hand still works for the last half second. Shared by the force field switch and item pickups (dev's items
+rule, 2026-11-02). */
+double hand_window_start(double x, double countdown_start)
+{
+return min(countdown_start, x - ceil(double(switch_min_time) / step_time));
 }
 /* One countdown cue for an obstacle of this type at ox, whose countdown starts at countdown_start: the LAST ones of
 misc/trap/<type>/warn1 to warn5, so the step before the obstacle always plays warn5 ("act now"). Five countdown steps

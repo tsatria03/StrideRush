@@ -1,7 +1,8 @@
 New in 1.0.
+Added ammo packs, which you pick up with either hand as you reach them and later open from your new inventory to refill both guns' reserves, but which break if you run or land on top of them.
 Added ten weapons on the number keys, from the bat up to the machine gun and pistol, which you swing or fire with the space bar, with separate ammo for each gun and reloading at any time.
 Added projectiles, including missiles, cars, boulders and firewalls, which fly toward you twice as fast as you run and cost 1 life unless you crouch under them.
-Added left and right hand keys, which you use to switch off force fields, with the switch sound coming from the side of the hand you used.
+Added left and right hand keys, either of which you can use to switch off force fields.
 Added force fields, which hit you even if you jump or crouch, cost 1 life, and throw you 5 steps forward unless you switch them off with either hand during their countdown.
 Added a warning countdown before spikes and mines, the same way hazards have one, with different sounds for each kind of obstacle so you can tell which one is coming.
 Added mines, which light up and start ticking as you get close, cost 2 lives if you step on one, and fade out behind you once you jump over them.

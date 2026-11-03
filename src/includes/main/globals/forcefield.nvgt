@@ -5,8 +5,8 @@ forward past it, landing with the landing sounds. On the last life there's no th
 then the tile's fall. A field counts down like the other obstacles, with its own warn cues and no ledges. Passed, it
 keeps its loop and fades out behind you until it's dropped a spawn distance behind.
 The switch: either hand turns a field off on any step of its countdown (dev, 2026-11-02), and always within the last
-switch_min_time before it, even where the countdown is shorter. The press plays panned to
-the hand used, and the field swaps its on loop for its off loop, so you pass it safely. With no field counting down, a
+switch_min_time before it, even where the countdown is shorter. The press plays centered
+(not panned to the hand; dev, 2026-11-02), and the field swaps its on loop for its off loop, so you pass it safely. With no field counting down, a
 hand press does nothing.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_forcefields() shrinks the array. */
 sound_pool forcefieldpool;
@@ -78,14 +78,11 @@ if (me_x > f.x + spawn_distance()) remove_forcefield(i);
 return false;
 }
 /* Runs every frame, before step_check(), so a press on the same frame as the step onto the field still counts on the
-warn5 step. Either hand works; the press is panned to the one used. It switches off the nearest active field that's
-counting down. */
+warn5 step. Either hand works the same, and every hand sound plays centered (dev, 2026-11-02: panning sounded too far
+to the side). It switches off the nearest active field that's counting down. */
 void hand_check()
 {
-int pan = 0;
-if (controls.action_triggered("hand_left")) pan = -hand_pan;
-else if (controls.action_triggered("hand_right")) pan = hand_pan;
-else return;
+if (!controls.action_triggered("hand_left") and !controls.action_triggered("hand_right")) return;
 forcefield@ target = null;
 int target_steps = 0;
 for (uint i = 0; i < forcefields.length(); i++)
@@ -101,16 +98,19 @@ if (@target == null or steps_left < target_steps)
 target_steps = steps_left;
 }
 }
-if (@target == null) return; // no field counting down: the press does nothing
-forcefieldpool.play_stationary_extended(get_pack_sound("objects/interaction/switches/switch/*press*"), false, 0, pan, 0, 100, false);
+// No field counting down: the same press can pick up an ammo pack instead, or does nothing.
+if (@target == null)
+{
+pick_up_ammopack();
+return;
+}
+forcefieldpool.play_stationary(get_pack_sound("objects/interaction/switches/switch/*press*"), false);
 switch_off_forcefield(target);
 }
-/* Where a field's switch can first be pressed: its countdown start, or switch_min_time before it at the current speed,
-whichever is earlier. So at top speed, where the countdown is a single step, the switch still works for the last half
-second. */
+// Where a field's switch can first be pressed: the shared hand window (hand_window_start() in spawner.nvgt).
 double switch_window_start(forcefield@ f)
 {
-return min(f.countdown_start, f.x - ceil(double(switch_min_time) / step_time));
+return hand_window_start(f.x, f.countdown_start);
 }
 // Turns a field off: its on loop stops and its off loop starts at the same tile, so you pass it on the off loop.
 void switch_off_forcefield(forcefield@ f)
