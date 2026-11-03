@@ -2,7 +2,7 @@
 runtime, so adding or removing a folder changes the pool with no code change. "ledge" is reserved for the edges
 around hazards and is never picked as a normal surface. */
 string current_surface = "";
-double surface_end_x = 0;
+int64 surface_end_time = 0; // on runtimer, which pauses with the game, so a pause doesn't use up a stretch
 
 void reset_surface()
 {
@@ -21,11 +21,11 @@ choices.insert_last(tiles[i]);
 }
 // With only one usable surface, keep it; with none at all, footsteps stay silent.
 if (choices.length() > 0) current_surface = choices[random(0, choices.length() - 1)];
-surface_end_x = me_x + random(surface_min_tiles, surface_max_tiles);
+surface_end_time = runtimer.elapsed + random(surface_min_time, surface_max_time);
 }
 void surface_check()
 {
-if (me_x >= surface_end_x) pick_surface();
+if (runtimer.elapsed >= surface_end_time) pick_surface(); // checked each step, so the change lands on a footstep
 }
 // The tile under a position: "ledge" just before and after a hazard, otherwise the current surface.
 string tile_at(double x)

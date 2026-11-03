@@ -8,9 +8,10 @@ const int speedup_period = 10000;
 const int speedup_amount = 10;
 const int min_step_time = 50; // the top speed cap (dev, 2026-11-02: was 50, then 100, now back to 50)
 
-// Surfaces: the ground switches to a new random platform after a random stretch between these lengths.
-const int surface_min_tiles = 50;
-const int surface_max_tiles = 200;
+/* Surfaces: the ground switches to a new random platform after a random stretch of running between these times, at any
+speed (dev, 2026-11-03, for 1.1; it used to be 50 to 200 tiles, which took 25 to 100 s at 500 ms). */
+const int surface_min_time = 10000;
+const int surface_max_time = 20000; // 10 to 20 s (dev, 2026-11-03; first 30 s)
 
 // Jumping: rise one height every jump_tick up to jump_height, then fall back the same way (about a second in the air).
 const int jump_height = 5;
@@ -18,8 +19,8 @@ const int jump_tick = 100;
 
 // Crouching: holding Down crouches, and it stands up on its own after duck_time even if Down is still held.
 const int duck_time = 1500;
-// After standing up, crouching is blocked for duck_cooldown, about as long as a jump lasts, so Down can't be spammed.
-const int duck_cooldown = 1000;
+// After standing up, crouching is blocked for duck_cooldown, so Down can't be spammed (dev, 2026-11-03, for 1.1; was 1000).
+const int duck_cooldown = 500;
 
 /* Obstacle placement. An obstacle appears spawn_ahead_time before its countdown starts, at the current speed, so you
 always hear it that long before its countdown begins. Spacing is built from a random stretch of normal floor between

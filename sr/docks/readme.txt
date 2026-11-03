@@ -3,7 +3,7 @@ In this audio game, you ride a belt that carries you forward one step at a time,
 
 How to play.
 
-Once a run starts, you never stop moving. The belt carries you to the right, and you'll hear a footstep with every step you take. The ground under your feet changes every so often, so listen for new footstep sounds as you go.
+Once a run starts, you never stop moving. The belt carries you to the right, and you'll hear a footstep with every step you take. The ground under your feet changes every 10 to 20 seconds, so listen for new footstep sounds as you go.
 You start at a speed of 500 milliseconds per step. Every 10 seconds you get a little faster, 10 milliseconds at a time, until you reach the top speed of 50 milliseconds per step.
 Obstacles are heard ahead of you, about 3 seconds before you reach them. Jump at the right moment to sail over most of them. If you're still on the ground when you step onto one, it will catch you. There are two exceptions: you crouch under projectiles, and you switch off force fields with one of your hands.
 A jump lasts about a second. You can't jump again until you land, and when you land you'll hear the ground you came down on.
@@ -24,7 +24,7 @@ You start each run with 1 life, so for now, any obstacle that catches you ends t
 
 Crouching.
 
-You can crouch by holding down the crouch key. Your footsteps go quiet while you're crouched, and you stand back up when you let go, or on your own after a second and a half. After standing up, you have to wait about a second before you can crouch again. Pressing the jump key while crouched jumps straight away. Crouching is how you get under projectiles.
+You can crouch by holding down the crouch key. Your footsteps go quiet while you're crouched, and you stand back up when you let go, or on your own after a second and a half. After standing up, you have to wait half a second before you can crouch again. Pressing the jump key while crouched jumps straight away. Crouching is how you get under projectiles.
 
 Weapons.
 

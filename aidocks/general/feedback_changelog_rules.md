@@ -15,4 +15,6 @@ A version block holds at most 20 entries (dev, 2026-11-02: with 14 entries, "1.0
 
 1.0 CLOSED (dev, 2026-11-03): tagged V1.00 at commit ca6f256 with all 20 entries. The next player-facing change opens a "New in 1.1." block on top, and build/version.txt goes from 1.0 to 1.1 at the same time ([[feedback_update_build_version_txt]]). Never add to a closed, tagged block.
 
+Wording (dev, 2026-11-03): an entry for something new starts "Added ...". An entry that changes how something already in the game behaves starts "Made it so ...", like the dev's rewrite of the first 1.1 entry ("Made it so every trap now plays its full five-step warning countdown at any speed, instead of ..."). ToyMania's changelog uses the same two openings.
+
 **How to apply:** describe the observable change in a sentence or two. Trust the changelog over the readme or todo list when they disagree. Keep lines short ([[feedback_dock_line_length_1024]]).
