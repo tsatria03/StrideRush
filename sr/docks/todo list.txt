@@ -5,7 +5,6 @@
 ****Unfinished. Add lanes that you can switch between.
 ****Unfinished. Add weapons, with ammo and reloading for the ones that take them.
 ****Unfinished. Add doors that you open with your hands.
-****Unfinished. Add force fields that you switch off with your hands.
 ****Unfinished. Add keys and other items to pick up along the way.
 ****Unfinished. Add a score, and a results screen at the end of each run.
 ****Unfinished. Add a settings menu.
@@ -15,6 +14,7 @@
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add force fields that you switch off with your hands.
 **Finished. Add a warning countdown before spikes and mines.
 **Finished. Add mines that light up and tick as you get close.
 **Finished. Add spikes that swing back and forth.

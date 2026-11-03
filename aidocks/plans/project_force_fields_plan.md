@@ -1,6 +1,6 @@
 ---
 name: project_force_fields_plan
-description: SETTLED, NOT BUILT (2026-11-02; 3 build sections) - force fields as the next obstacle type after the first build; how they're passed, warned, hit and placed; Q&A log
+description: COMPLETE (2026-11-02; all 3 sections built, tested and documented) - force fields as the next obstacle type after the first build; how they're passed, warned, hit and placed; Q&A log
 metadata:
   type: project
 ---
@@ -37,7 +37,7 @@ Section 2: the hands and the switch.
   - Either hand targets the nearest active field in its countdown that hasn't had its try. The press plays through forcefieldpool, so it pauses with the game. On warn5's step, switch_off_forcefield() swaps the on loop for the off loop at the field's tile.
   - Further presses on a used field are ignored silently: it's no longer a target.
   - Panning: a stationary play with start_pan of minus or plus hand_pan (60, tuning.nvgt). A 2d offset was rejected because the pools' volume_step of 2.5 dB per tile would make the press quieter the further it's panned. The pan is game-wide for hands, so doors can use hand_pan too.
-Section 3: docks. Changelog entries in 1.0 (it has room for 5 more), the readme (force fields, the hand keys and the knockback), and the todo list (move force fields to finished).
+Section 3: docks. WRITTEN 2026-11-02 on top of 27cc2fd, so FORCE FIELDS ARE COMPLETE. The changelog has 2 new 1.0 entries (17 of 20), and the readme has a force field paragraph and the hand keys. On the todo list, force fields moved to finished. Changelog entries in 1.0 (it has room for 5 more), the readme (force fields, the hand keys and the knockback), and the todo list (move force fields to finished).
 
 Already recorded elsewhere:
 - Obstacles plan ([[project_obstacles_plan]]): force fields were parked as a potential hand-interaction obstacle. The idea was a full-height field that stays on, switched off with an interact hand at a switch placed before it. Hitting it while on plays hit and costs lives, with the amount decided later. A plain on/off timing gate was rejected, because the belt controls speed, so arriving while it's on or off would be luck.
