@@ -36,7 +36,7 @@ return current_surface;
 // A oneshot footstep on every step, never thinned, at any speed. Silent in the air and while crouched.
 void play_step()
 {
-if (!is_grounded() or is_ducked()) return;
+if (!is_grounded() or is_ducked() or door_moving) return; // silent while a real door carries you through
 string tile = tile_at(me_x);
 if (tile == "") return;
 p.play_stationary(get_pack_sound("objects/construction/platforms/" + tile + "/*step*"), false);

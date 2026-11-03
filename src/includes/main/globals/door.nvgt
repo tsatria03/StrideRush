@@ -1,0 +1,155 @@
+/* Doors (dev, 2026-11-03, for 1.1): full-height, and not traps, so they have no countdown cues; you judge them by their
+loop and its pitch. Each door picks one of the four door sets, and every sound it makes plays at its pitch.
+- A REAL door (pitch 100) marks each new 50 ms speed section: the spawner forces one when the step time reaches a new
+  mark, 450 down to 50, and none come after that. Either hand opens it within hand_window_start(). Like ToyMania's
+  doors: open plays and the door's loop stops, then its move sound LOOPS while the door carries you through. While it
+  carries you (door_moving) there are no footsteps, and you can't jump, crouch, use a hand or use weapons. Once you're
+  past its tile, the move loop stops and close plays behind you, fading as you run on (dev, 2026-11-03).
+- A FAKE door (pitch 80, 90, 110 or 120) is in the random mix at every speed. Hands do nothing on it; it has to be
+  broken with weapons (doors Section 2).
+Arriving on a standing door's tile, at any height, is a CRASH: its hit, the player's hit and the life sound, no death
+sound, costing door_life_cost (3). On the last lives: its hit, the player's death, then the tile's fall. A missed real
+door's section still begins, since the door only marks it.
+Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_doors() shrinks the array. */
+sound_pool doorpool;
+const string door_folder = "objects/transitions/doors/";
+class door
+{
+double x;
+string theme;
+int pitch = 100;
+bool real = false;
+int hp = 0;
+double countdown_start;
+bool opened = false; // a real door opened by hand
+bool destroyed = false; // a fake door broken by weapons
+bool crashed = false; // run into while still standing
+bool closed = false; // a real door's close has played behind you
+int loopslot = -1;
+}
+door@[] doors(0);
+// True while an opened real door is carrying you through it: footsteps, jumping, crouching, hands and weapons are off.
+bool door_moving = false;
+int door_moveslot = -1;
+
+// True when door sounds exist, so the spawner can offer doors.
+bool doors_available()
+{
+return get_pack_sound_folders(door_folder + "*").length() > 0;
+}
+// Plays one of a door's clips (open, move, hit and so on) at sound_x, at the door's pitch.
+int play_door(door@ d, string clip, double sound_x, bool looping)
+{
+return doorpool.play_extended_2d(get_pack_sound(door_folder + d.theme + "/*" + clip + "*"), me_x, 0, sound_x, 0, 0, 0, 0, 0, looping, 0, 0, 0, d.pitch);
+}
+// countdown comes from the spawner: it sets the spacing and a real door's hand window, though doors play no cues.
+void spawn_door(double dx, string theme, bool real, int countdown)
+{
+door d;
+d.x = dx;
+d.theme = theme;
+d.real = real;
+d.pitch = real ? 100 : fake_door_pitches[random(0, fake_door_pitches.length() - 1)];
+d.hp = wall_spawn_hp(); // the same speed-scaled hp as walls, for when weapons can break fake doors
+d.countdown_start = dx - countdown;
+d.loopslot = play_door(d, "loop", dx, true);
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] == null)
+{
+@doors[i] = d;
+return;
+}
+}
+doors.insert_last(d);
+}
+// A door still blocks the way until it's opened, destroyed or crashed through.
+bool door_standing(door@ d)
+{
+return !d.opened and !d.destroyed and !d.crashed;
+}
+/* Called from hand_check() when no force field took the press. Opens the nearest standing real door in its hand
+window. Returns true if one opened, so the press goes no further. */
+bool open_door()
+{
+door@ target = null;
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] == null) continue;
+door@ d = doors[i];
+if (!d.real or !door_standing(d) or me_x < hand_window_start(d.x, d.countdown_start) or d.x - me_x < 1) continue;
+if (@target == null or d.x < target.x) @target = d;
+}
+if (@target == null) return false;
+target.opened = true;
+stop_door(target);
+cancel_movement(); // any jump or crouch ends silently: the door carries you from here
+doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/*open*"), false, 0, 0, 0, target.pitch, false); // stationary (dev)
+door_moveslot = doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/*move*"), true, 0, 0, 0, target.pitch, false);
+door_moving = true;
+return true;
+}
+// The door has carried you through: the move loop stops and close plays at the door, behind you.
+void finish_door_move(door@ d)
+{
+d.closed = true;
+door_moving = false;
+if (door_moveslot > -1) doorpool.destroy_sound(door_moveslot);
+door_moveslot = -1;
+play_door(d, "close", d.x, false);
+}
+/* Runs once per step, right after the move. A standing door on your tile is a crash. An opened real door that's
+carrying you finishes once you're past its tile. */
+void door_check()
+{
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] == null) continue;
+door@ d = doors[i];
+if (me_x == d.x)
+{
+if (door_standing(d))
+{
+d.crashed = true;
+stop_door(d);
+// A fatal crash plays the door's hit through p, at its pitch, and no player hit; end_run_hit() plays the death.
+if (is_fatal(door_life_cost))
+{
+p.play_stationary_extended(get_pack_sound(door_folder + d.theme + "/*hit*"), false, 0, 0, 0, d.pitch, false);
+lose_lives(door_life_cost);
+end_run_hit();
+return;
+}
+play_door(d, "hit", d.x, false);
+p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+lose_lives(door_life_cost);
+}
+}
+else if (d.opened and !d.closed and me_x > d.x) finish_door_move(d); // close is behind you, so it fades as you run on
+if (me_x > d.x + spawn_distance()) remove_door(i);
+}
+}
+void stop_door(door@ d)
+{
+if (d.loopslot > -1) doorpool.destroy_sound(d.loopslot);
+d.loopslot = -1;
+}
+void remove_door(uint i)
+{
+if (i >= doors.length() or @doors[i] == null) return;
+stop_door(doors[i]);
+@doors[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_doors()
+{
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] == null) continue;
+stop_door(doors[i]);
+}
+doors.resize(0);
+door_moving = false;
+if (door_moveslot > -1) doorpool.destroy_sound(door_moveslot);
+door_moveslot = -1;
+}

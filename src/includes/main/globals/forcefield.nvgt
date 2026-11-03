@@ -82,6 +82,7 @@ warn5 step. Either hand works the same, and every hand sound plays centered (dev
 to the side). It switches off the nearest active field that's counting down. */
 void hand_check()
 {
+if (door_moving) return; // no hands while a door carries you
 if (!controls.action_triggered("hand_left") and !controls.action_triggered("hand_right")) return;
 forcefield@ target = null;
 int target_steps = 0;
@@ -98,10 +99,10 @@ if (@target == null or steps_left < target_steps)
 target_steps = steps_left;
 }
 }
-// No field counting down: the same press can pick up an ammo pack instead, or does nothing.
+// No field counting down: the same press can open a real door, or else pick up an ammo pack, or does nothing.
 if (@target == null)
 {
-pick_up_ammopack();
+if (!open_door()) pick_up_ammopack();
 return;
 }
 forcefieldpool.play_stationary(get_pack_sound("objects/interaction/switches/switch/*press*"), false);

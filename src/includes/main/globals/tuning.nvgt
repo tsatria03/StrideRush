@@ -60,6 +60,12 @@ const int mine_life_cost = 2;
 const int forcefield_life_cost = 1;
 const int projectile_life_cost = 1; // for now (dev, 2026-11-02); may go up later
 const int wall_life_cost = 1; // crashing into a wall you didn't destroy (dev, 2026-11-03)
+const int door_life_cost = 3; // crashing into any door, real or fake (dev, 2026-11-03)
+
+/* Doors (dev, 2026-11-03). A real door marks each new door_section_ms of speed (450, 400 ... 50) and plays at pitch
+100. A fake door plays at one of these pitches, never near 100, so it always sounds off. */
+const int door_section_ms = 50;
+int[] fake_door_pitches = {80, 90, 110, 120};
 /* Wall hp scales with speed (dev, 2026-11-03): its center runs from wall_min_hp at start_step_time (500 ms) up to
 wall_max_hp at min_step_time (50 ms), and each wall rolls a random hp within wall_hp_spread percent either side of
 that center, never below wall_min_hp or above wall_max_hp. So about 20 to 24 at the start, 720 to 1080 at 300 ms,
