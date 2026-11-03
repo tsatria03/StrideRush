@@ -13,6 +13,7 @@ Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFight
 - Left or Q: lane switch left ("turning"). Lanes are a later expansion, so these keys are reserved now (FINAL, dev, 2026-11-02).
 - Right or E: lane switch right (reserved, as above).
 - How hands work (dev, 2026-11-02): either hand opens doors and turns off force fields. The interaction's sound (switch press, door opening) plays in 2d, panned to the hand used, so you hear which hand did it ([[project_force_fields_plan]]).
+- Items rule (dev, 2026-11-02, from ammo packs; applies to future items such as the keys too): an item is picked up with either hand, its pickup sound panned to that hand. The pickup window is the same as the force field switch: any step of the usual countdown before it, and always at least the last switch_min_time. Running right onto an item, or landing on it from a jump, breaks it, and it's lost. A clean jump over it just misses it ([[project_weapons_plan]]).
 - Tab or A: left interact hand, for doors and similar objects (FINAL, dev, 2026-11-02).
 - Enter or D: right interact hand, for doors and similar objects (FINAL, dev, 2026-11-02).
 - Space: shoot with an ammo weapon, or swing a melee weapon (ToyMania-style). Space only; no left or right Control (settled 2026-11-01).
