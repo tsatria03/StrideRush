@@ -11,7 +11,7 @@ sr/docks/changelog.txt is the source of truth for what shipped. It is a record, 
 
 Newest on top applies inside a block too, not just between blocks (dev, 2026-11-02): the latest entry is the first line under the header, and the oldest is the last line of the block.
 
-A version block holds at most 20 entries (dev, 2026-11-02: with 14 entries, "1.0 has room for 6 more entries"). When a block is full, the next entry starts a new block on top with the next version number, paired with a build/version.txt bump. Blocks have no intro or summary line: the dev removed "The first release of Stride Rush..." from 1.0, so every line under the header is an entry.
+REVISED (dev, 2026-11-03): MAJOR versions (x.0, such as 1.0) hold up to 20 entries, and MINOR versions (1.1, 1.2 and so on) hold up to 10. 1.1 had 8 of 10 then, so 2 were left. The original rule follows. A version block holds at most 20 entries (dev, 2026-11-02: with 14 entries, "1.0 has room for 6 more entries"). When a block is full, the next entry starts a new block on top with the next version number, paired with a build/version.txt bump. Blocks have no intro or summary line: the dev removed "The first release of Stride Rush..." from 1.0, so every line under the header is an entry.
 
 1.0 CLOSED (dev, 2026-11-03): tagged V1.00 at commit ca6f256 with all 20 entries. The next player-facing change opens a "New in 1.1." block on top, and build/version.txt goes from 1.0 to 1.1 at the same time ([[feedback_update_build_version_txt]]). Never add to a closed, tagged block.
 

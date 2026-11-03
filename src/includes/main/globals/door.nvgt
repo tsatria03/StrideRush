@@ -90,6 +90,15 @@ door_moveslot = doorpool.play_stationary_extended(get_pack_sound(door_folder + t
 door_moving = true;
 return true;
 }
+// The standing FAKE door exactly at x, or null. A bullet checks the tile it has just moved onto; real doors let it through.
+door@ fake_door_at(double x)
+{
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] != null and !doors[i].real and doors[i].x == x and door_standing(doors[i])) return doors[i];
+}
+return null;
+}
 // The nearest standing FAKE door from 1 to reach tiles ahead, or null. Real doors are never weapon targets.
 door@ fake_door_in_reach(int reach)
 {

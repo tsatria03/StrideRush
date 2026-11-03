@@ -60,7 +60,7 @@ No test suite or linter. **The dev runs and builds the game, never Claude**: don
 - **`dummy.load("dummy")` must run before `sound_global_hrtf` is set.** It looks like dead code; it isn't ([[project_nvgt_hrtf_dummy_sound]]).
 - **Offline only.** No networking systems; the future updater's HTTP download is the one exception ([[project_tech_decisions]]).
 - **Keys are never rebindable during a run.** Mid-run, F1 views bindings and F2 opens settings with only Game, Menu, and Speech tabs ([[project_controls_plan]]).
-- **Docks are live.** Player-facing changes get an `sr/docks/changelog.txt` entry. Newest goes on top, inside a block too; a block holds at most 20 entries with no intro line, and a new block pairs with a `build/version.txt` bump ([[feedback_changelog_rules]]). Finished `todo list.txt` items move to its finished section, newest first. The todo list holds only player-facing entries ([[feedback_docks_later]]). Dock lines stay at or under 1024 characters ([[feedback_dock_line_length_1024]]).
+- **Docks are live.** Player-facing changes get an `sr/docks/changelog.txt` entry. Newest goes on top, inside a block too; a block holds at most 20 entries for a major version (x.0) and 10 for a minor one (1.1, 1.2), with no intro line, and a new block pairs with a `build/version.txt` bump ([[feedback_changelog_rules]]). Finished `todo list.txt` items move to its finished section, newest first. The todo list holds only player-facing entries ([[feedback_docks_later]]). Dock lines stay at or under 1024 characters ([[feedback_dock_line_length_1024]]).
 
 ## Working style (triggers)
 

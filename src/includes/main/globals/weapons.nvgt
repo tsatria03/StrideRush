@@ -2,7 +2,8 @@
 disagreeing damage tables, separate ammo per gun, reloading any time a gun isn't full, and one generic target hook
 instead of a copy of the firing code per enemy type.
 All ten are available from the start of every run on 1 to 0, in this order, and a run starts with the bat drawn.
-Space swings or fires; the machine gun keeps firing while Space is held. A gun with nothing loaded, or mid-reload,
+Space swings or fires; the machine gun keeps firing while Space is held. Melee hits at once; a gun fires a bullet that
+travels (bullet.nvgt). A gun with nothing loaded, or mid-reload,
 plays empty instead. R reloads, timed by the length of the gun's reload sound like SimpleFighter, and ping plays when
 it's done. X speaks the ammo. weapon_strike() is the target hook: walls are what you hit (dev, 2026-11-03, for 1.1).
 Every weapon reaches the same weapon_reach_time ahead; ToyMania's per-weapon tile ranges were dropped, so weapons differ
@@ -86,13 +87,18 @@ p.play_stationary(get_pack_sound(weapon_folder(w) + "*empty*"), false);
 return;
 }
 weapon_loaded[w]--;
+/* A gun fires a bullet that travels (dev, 2026-11-03; bullet.nvgt): fire plays at you, and the bullet carries the
+damage to whatever it reaches, playing the gun's hit and shell there (the dev: shell plays on hitting the object). */
+p.play_stationary(get_pack_sound(weapon_folder(w) + "*fire*"), false);
+spawn_bullet(w, weapon_damage[w] * weapon_damage_multiplier);
+return;
 }
+// A melee weapon hits at once: the nearest target within reach.
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*fire*"), false);
 double target_x = weapon_strike(weapon_damage[w] * weapon_damage_multiplier);
 if (target_x < 0) return;
-// A hit: the weapon's hit at the target, and a gun's shell there too (the target plays its own hurt or death).
+// A hit: the weapon's hit at the target (the target plays its own hurt or death).
 p.play_2d(get_pack_sound(weapon_folder(w) + "*hit*"), me_x, 0, target_x, 0, false);
-if (is_gun(w)) p.play_2d(get_pack_sound(weapon_folder(w) + "*shell*"), me_x, 0, target_x, 0, false);
 }
 // How far ahead a weapon reaches: weapon_reach_time at the current speed, in tiles, at least 1.
 int weapon_reach()

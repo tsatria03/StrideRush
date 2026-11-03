@@ -1,0 +1,100 @@
+/* Bullets (dev, 2026-11-03, for 1.1): the guns fire bullets that travel, instead of hitting at once like melee. A bullet
+starts at your tile and moves one tile every bullet_tile_time, playing its gun's loop at the bullet the whole way, the
+way SimpleFighter's bullets carry their loop. On each new tile it checks for a standing wall or fake door there; the
+first it reaches takes the gun's damage, the gun's hit and shell play at it, and the target plays its own hurt or death. A
+bullet that has gone weapon_reach() tiles from where it was fired (counted when it was fired) just vanishes, so firing
+at something still out of reach wastes the round. Real doors and the other traps don't stop it.
+Moves are timed off runtimer, which pauses with the game, so a pause freezes bullets in the air.
+Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_bullets() shrinks the array.
+ToyMania's bullet.nvgt is the model for movement (there only enemy cars fire them). */
+sound_pool bulletpool;
+class bullet
+{
+double x;
+double start_x;
+int range;
+int damage;
+int weapon; // index into weapon_names, for its loop and hit sounds
+int64 next_move;
+int loopslot = -1;
+}
+bullet@[] bullets(0);
+
+void spawn_bullet(int w, int damage)
+{
+bullet b;
+b.x = me_x;
+b.start_x = me_x;
+b.range = weapon_reach();
+b.damage = damage;
+b.weapon = w;
+b.next_move = runtimer.elapsed + bullet_tile_time;
+b.loopslot = bulletpool.play_2d(get_pack_sound(weapon_folder(w) + "*loop*"), me_x, 0, b.x, 0, true);
+for (uint i = 0; i < bullets.length(); i++)
+{
+if (@bullets[i] == null)
+{
+@bullets[i] = b;
+return;
+}
+}
+bullets.insert_last(b);
+}
+/* Runs every frame: moves each bullet a tile per bullet_tile_time (catching up if a frame was slow), checks the new
+tile for a target, and drops it at the end of its range. */
+void bullet_flight()
+{
+for (uint i = 0; i < bullets.length(); i++)
+{
+if (@bullets[i] == null) continue;
+bullet@ b = bullets[i];
+while (@bullets[i] != null and runtimer.elapsed >= b.next_move)
+{
+b.next_move += bullet_tile_time;
+b.x += 1;
+if (b.loopslot > -1) bulletpool.update_sound_2d(b.loopslot, int(b.x), 0);
+if (bullet_hits(b))
+{
+remove_bullet(i);
+break;
+}
+if (b.x - b.start_x >= b.range)
+{
+remove_bullet(i);
+break;
+}
+}
+}
+}
+// The first standing wall or fake door on the bullet's tile takes the hit. Returns true if it hit something.
+bool bullet_hits(bullet@ b)
+{
+double target_x = -1;
+wall@ w = wall_at(b.x);
+if (@w != null) target_x = strike_wall(w, b.damage);
+else
+{
+door@ d = fake_door_at(b.x);
+if (@d != null) target_x = strike_door(d, b.damage);
+}
+if (target_x < 0) return false;
+bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*hit*"), me_x, 0, target_x, 0, false);
+bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*shell*"), me_x, 0, target_x, 0, false); // at the target (dev)
+return true;
+}
+void remove_bullet(uint i)
+{
+if (i >= bullets.length() or @bullets[i] == null) return;
+if (bullets[i].loopslot > -1) bulletpool.destroy_sound(bullets[i].loopslot);
+@bullets[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_bullets()
+{
+for (uint i = 0; i < bullets.length(); i++)
+{
+if (@bullets[i] == null) continue;
+if (bullets[i].loopslot > -1) bulletpool.destroy_sound(bullets[i].loopslot);
+}
+bullets.resize(0);
+}

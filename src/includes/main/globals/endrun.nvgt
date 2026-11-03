@@ -62,6 +62,7 @@ destroy_all_projectiles();
 destroy_all_ammopacks();
 destroy_all_walls();
 destroy_all_doors();
+destroy_all_bullets();
 }
 void finish_run()
 {

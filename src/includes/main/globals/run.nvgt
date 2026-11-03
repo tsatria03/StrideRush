@@ -69,6 +69,7 @@ step_check();
 if (!running) break; // an obstacle hit on this step ended the run; skip the rest of the frame
 spike_swing();
 projectile_flight(); // every frame, so a flying projectile moves smoothly between steps
+bullet_flight(); // every frame: bullets move on their own 30 ms timing, not the step's
 speedup_check();
 run_input();
 }

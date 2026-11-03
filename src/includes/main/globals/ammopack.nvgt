@@ -117,25 +117,25 @@ stop_ammopack(ammopacks[i]);
 }
 ammopacks.resize(0);
 }
-/* U on an ammo pack: refills both guns' reserves by ammo_pack_refill, never above gun_max_reserve. Refused, keeping the
-pack, when both are already full. Returns true if it was used. */
+/* U on an ammo pack: adds a random ammo_pack_min to ammo_pack_max rounds (like ToyMania's random 5 to 10) to the
+reserve of the gun you're HOLDING only (dev, 2026-11-03), never above gun_max_reserve, and says how many. Refused,
+keeping the pack, with a melee weapon out or when that gun's reserve is already full. Returns true if it was used. */
 bool use_ammopack()
 {
-bool room = false;
-for (int w = 0; w < int(weapon_names.length()); w++)
+int w = current_weapon;
+if (!is_gun(w))
 {
-if (is_gun(w) and weapon_reserve[w] < gun_max_reserve) room = true;
-}
-if (!room)
-{
-speak_buffer("Your guns' reserves are already full.");
+speak_buffer("This weapon doesn't take any ammo.");
 return false;
 }
-for (int w = 0; w < int(weapon_names.length()); w++)
+if (weapon_reserve[w] >= gun_max_reserve)
 {
-if (is_gun(w)) weapon_reserve[w] = int(min(gun_max_reserve, weapon_reserve[w] + ammo_pack_refill));
+speak_buffer("This weapon's reserve is already full.");
+return false;
 }
+int rounds = int(min(random(ammo_pack_min, ammo_pack_max), gun_max_reserve - weapon_reserve[w]));
+weapon_reserve[w] += rounds;
 p.play_stationary(get_pack_sound(ammopack_folder + "*use*"), false);
-speak_buffer("Your guns' reserves have been refilled.");
+speak_buffer("You got " + rounds + " rounds of ammo.");
 return true;
 }

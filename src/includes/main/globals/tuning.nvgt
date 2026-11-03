@@ -90,20 +90,24 @@ const int switch_min_time = 500;
 /* Weapons (dev, 2026-11-02). Every hit's damage is the weapon's base damage (weapons.nvgt) times this, for all ten
 weapons at once: 4 makes the bat 12 and the pistol 120 (dev, 2026-11-03, while testing walls; it was 2). */
 const int weapon_damage_multiplier = 4;
-// Each gun starts every run with this much loaded and in reserve (ToyMania's ammo); nothing refills it yet.
+// Each gun starts every run with this much loaded and in reserve; ammo packs refill the reserve.
 const int gun_start_loaded = 50;
-const int gun_start_reserve = 250;
+const int gun_start_reserve = 50; // was ToyMania's 250; lowered so ammo packs matter (dev, 2026-11-03)
 // The shortest gap between two shots or swings per Space press, and the machine gun's rate while Space is held.
 const int weapon_fire_gap = 50;
 const int machine_gun_fire_gap = 100;
 // Every weapon reaches this far ahead, turned into tiles at the current speed (dev, 2026-11-03).
 const int weapon_reach_time = 2000;
+// A gun's bullet moves one tile every this many ms, at any speed (dev, 2026-11-03); it travels weapon_reach() tiles.
+const int bullet_tile_time = 40; // first 30, tried at 50, settled on 40 (dev, 2026-11-03), so bullets stay ahead of you even at 50 ms steps
 
 /* Ammo packs (dev, 2026-11-02). About one spawn in ammo_pack_chance is a pack instead of an obstacle. Opening one adds
-ammo_pack_refill to both guns' reserves, never above gun_max_reserve. */
+a random ammo_pack_min to ammo_pack_max rounds to the reserve of the gun you're holding (dev, 2026-11-03; it was a
+flat 50 to both guns), never above gun_max_reserve. */
 const int ammo_pack_chance = 8;
-const int ammo_pack_refill = 50;
-const int gun_max_reserve = 250;
+const int ammo_pack_min = 5;
+const int ammo_pack_max = 10;
+const int gun_max_reserve = 200; // was 250 (dev, 2026-11-03); a reload still loads at most gun_start_loaded (50)
 
 // Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. Home/End and Page Up/Down move by volume_change.
 const int min_volume = -50;

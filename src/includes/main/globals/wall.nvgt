@@ -85,6 +85,15 @@ lose_lives(wall_life_cost);
 if (me_x > w.x + spawn_distance()) remove_wall(i);
 }
 }
+// The standing wall exactly at x, or null. A bullet checks the tile it has just moved onto.
+wall@ wall_at(double x)
+{
+for (uint i = 0; i < walls.length(); i++)
+{
+if (@walls[i] != null and walls[i].x == x and wall_standing(walls[i])) return walls[i];
+}
+return null;
+}
 // The nearest standing wall from 1 to reach tiles ahead, or null. weapon_strike() compares it with the nearest fake door.
 wall@ wall_in_reach(int reach)
 {
