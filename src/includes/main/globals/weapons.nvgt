@@ -4,11 +4,12 @@ instead of a copy of the firing code per enemy type.
 All ten are available from the start of every run on 1 to 0, in this order, and a run starts with the bat drawn.
 Space swings or fires; the machine gun keeps firing while Space is held. A gun with nothing loaded, or mid-reload,
 plays empty instead. R reloads, timed by the length of the gun's reload sound like SimpleFighter, and ping plays when
-it's done. X speaks the ammo. Nothing can be hit yet: weapon_strike() is where walls will plug in. */
+it's done. X speaks the ammo. weapon_strike() is the target hook: walls are what you hit (dev, 2026-11-03, for 1.1).
+Every weapon reaches the same weapon_reach_time ahead; ToyMania's per-weapon tile ranges were dropped, so weapons differ
+only by damage. */
 string[] weapon_names = {"bat", "boot", "club", "feat", "fist", "hammer", "knife", "laser", "machine_gun", "pistol"};
-// Base damage and horizontal range in tiles ahead, from ToyMania's draw_weapon(); damage is times weapon_damage_multiplier.
+// Base damage from ToyMania's draw_weapon(); every hit is this times weapon_damage_multiplier.
 int[] weapon_damage = {3, 6, 9, 12, 15, 18, 21, 24, 27, 30};
-int[] weapon_range = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 // Ammo for each weapon; only the guns use it.
 int[] weapon_loaded(10);
 int[] weapon_reserve(10);
@@ -86,17 +87,22 @@ return;
 weapon_loaded[w]--;
 }
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*fire*"), false);
-double target_x = weapon_strike(weapon_range[w], weapon_damage[w] * weapon_damage_multiplier);
+double target_x = weapon_strike(weapon_damage[w] * weapon_damage_multiplier);
 if (target_x < 0) return;
-// A hit: the weapon's hit at the target, and a gun's shell there too.
+// A hit: the weapon's hit at the target, and a gun's shell there too (the target plays its own hurt or death).
 p.play_2d(get_pack_sound(weapon_folder(w) + "*hit*"), me_x, 0, target_x, 0, false);
 if (is_gun(w)) p.play_2d(get_pack_sound(weapon_folder(w) + "*shell*"), me_x, 0, target_x, 0, false);
 }
-/* The target hook. Damages the nearest target within range tiles ahead and returns its x, or -1 if there was nothing
-to hit. Walls will fill this in (their hurt and death sounds play there); until then nothing can be hit. */
-double weapon_strike(int range, int damage)
+// How far ahead a weapon reaches: weapon_reach_time at the current speed, in tiles, at least 1.
+int weapon_reach()
 {
-return -1;
+return int(max(1, ceil(double(weapon_reach_time) / step_time)));
+}
+/* The target hook. Damages the nearest target within weapon_reach() tiles ahead and returns its x, or -1 if there was
+nothing to hit. Walls are the only target so far; a new target type adds its own search here. */
+double weapon_strike(int damage)
+{
+return strike_wall(weapon_reach(), damage);
 }
 // R: tops a gun up from its reserve any time it isn't full. The reload lasts as long as its reload sound.
 void start_reload()

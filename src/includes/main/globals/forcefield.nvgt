@@ -124,7 +124,8 @@ void forcefield_countdown()
 {
 for (uint i = 0; i < forcefields.length(); i++)
 {
-if (@forcefields[i] == null) continue;
+// A switched-off field's countdown stops (dev, 2026-11-03): it's no danger any more.
+if (@forcefields[i] == null or !forcefields[i].active) continue;
 play_countdown(forcefieldpool, "force_fields", forcefields[i].x, forcefields[i].countdown_start);
 }
 }

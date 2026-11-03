@@ -60,9 +60,13 @@ const int mine_life_cost = 2;
 const int forcefield_life_cost = 1;
 const int projectile_life_cost = 1; // for now (dev, 2026-11-02); may go up later
 const int wall_life_cost = 1; // crashing into a wall you didn't destroy (dev, 2026-11-03)
-// Each wall spawns with a random hp between these (dev, 2026-11-03).
-const int wall_min_hp = 100;
-const int wall_max_hp = 500;
+/* Wall hp scales with speed (dev, 2026-11-03): its center runs from wall_min_hp at start_step_time (500 ms) up to
+wall_max_hp at min_step_time (50 ms), and each wall rolls a random hp within wall_hp_spread percent either side of
+that center, never below wall_min_hp or above wall_max_hp. So about 20 to 24 at the start, 720 to 1080 at 300 ms,
+and 1600 to 2000 at top speed. (It was a flat random 100 to 500; the low end was then 200, lowered to 20 by the dev.) */
+const int wall_min_hp = 20;
+const int wall_max_hp = 2000;
+const int wall_hp_spread = 20;
 
 /* A projectile closes in this many times as fast as a still obstacle seems to, scaled with the belt's speed (dev,
 2026-11-02): at 2 it starts as far beyond its meeting tile as you are before it, and flies at your own speed. */
@@ -78,14 +82,16 @@ at 200 ms the last 3; above 200 ms the countdown already lasts at least this lon
 const int switch_min_time = 500;
 
 /* Weapons (dev, 2026-11-02). Every hit's damage is the weapon's base damage (weapons.nvgt) times this, for all ten
-weapons at once: 2 makes the bat 6 and the pistol 60. */
-const int weapon_damage_multiplier = 2;
+weapons at once: 4 makes the bat 12 and the pistol 120 (dev, 2026-11-03, while testing walls; it was 2). */
+const int weapon_damage_multiplier = 4;
 // Each gun starts every run with this much loaded and in reserve (ToyMania's ammo); nothing refills it yet.
 const int gun_start_loaded = 50;
 const int gun_start_reserve = 250;
 // The shortest gap between two shots or swings per Space press, and the machine gun's rate while Space is held.
 const int weapon_fire_gap = 50;
 const int machine_gun_fire_gap = 100;
+// Every weapon reaches this far ahead, turned into tiles at the current speed (dev, 2026-11-03).
+const int weapon_reach_time = 2000;
 
 /* Ammo packs (dev, 2026-11-02). About one spawn in ammo_pack_chance is a pack instead of an obstacle. Opening one adds
 ammo_pack_refill to both guns' reserves, never above gun_max_reserve. */
