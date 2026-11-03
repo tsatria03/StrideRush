@@ -1,4 +1,4 @@
-/* Places obstacles ahead of the player as the run goes. The type (hazards, spikes, mines, force fields or projectiles) and its theme are random,
+/* Places obstacles ahead of the player as the run goes. The type (hazards, spikes, mines, force fields, projectiles or walls) and its theme are random,
 from whatever folders exist at runtime. The next obstacle's type and countdown length are decided together with the
 gap to it, so the floor before its countdown is always there however the speed changes. Every type counts down; only
 hazards turn their countdown steps into ledge tiles. */
@@ -6,7 +6,7 @@ double next_spawn_x = 0;
 string next_type = "";
 int next_countdown = 0;
 // Every obstacle type the spawner knows; a new type is added here. The testing spawn menu lists these too.
-string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles"};
+string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles", "walls"};
 // Items the spawner places too, at a lower chance (ammo_pack_chance); listed after the obstacles in the testing menu.
 string[] item_types = {"ammo_packs"};
 // "all", or one type from obstacle_types or item_types; set by start_run(). Only the source-only testing menu picks anything but all.
@@ -84,6 +84,7 @@ else if (type == "spikes") spawn_spike(x, theme, countdown);
 else if (type == "mines") spawn_mine(x, theme, countdown);
 else if (type == "force_fields") spawn_forcefield(x, theme, countdown);
 else if (type == "projectiles") spawn_projectile(x, theme, countdown);
+else if (type == "walls") spawn_wall(x, theme, countdown);
 }
 /* Where a hand can first act on something at x whose countdown starts at countdown_start: the countdown start, or
 switch_min_time before it at the current speed, whichever is earlier, so at top speed, where the countdown is a single
@@ -101,5 +102,21 @@ void play_countdown(sound_pool@ pool, string type, double ox, double countdown_s
 {
 int steps_left = int(ox - me_x);
 if (steps_left < 1 or steps_left > 5 or me_x < countdown_start) return;
-pool.play_2d(get_pack_sound("misc/trap/" + type + "/warn" + (6 - steps_left) + "*"), me_x, 0, me_x, 0, false);
+int note = 6 - steps_left;
+string folder = "misc/trap/" + type + "/";
+/* A layered set (dev, 2026-11-03) stacks octaves as warn<group>-<note>, such as the walls' warn1-3 (low) with warn2-3
+(high): every group's note for this step plays at once, for as many groups as exist. A plain set has warn<note>. */
+if (get_pack_sound(folder + "warn1-1*") != "")
+{
+int g = 1;
+string layer = get_pack_sound(folder + "warn" + g + "-" + note + "*");
+while (layer != "")
+{
+pool.play_2d(layer, me_x, 0, me_x, 0, false);
+g++;
+layer = get_pack_sound(folder + "warn" + g + "-" + note + "*");
+}
+return;
+}
+pool.play_2d(get_pack_sound(folder + "warn" + note + "*"), me_x, 0, me_x, 0, false);
 }

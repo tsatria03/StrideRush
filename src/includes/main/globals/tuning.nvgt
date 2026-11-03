@@ -59,6 +59,10 @@ const int spike_life_cost = 1;
 const int mine_life_cost = 2;
 const int forcefield_life_cost = 1;
 const int projectile_life_cost = 1; // for now (dev, 2026-11-02); may go up later
+const int wall_life_cost = 1; // crashing into a wall you didn't destroy (dev, 2026-11-03)
+// Each wall spawns with a random hp between these (dev, 2026-11-03).
+const int wall_min_hp = 100;
+const int wall_max_hp = 500;
 
 /* A projectile closes in this many times as fast as a still obstacle seems to, scaled with the belt's speed (dev,
 2026-11-02): at 2 it starts as far beyond its meeting tile as you are before it, and flies at your own speed. */

@@ -14,6 +14,10 @@ Section 1: walls and the layered countdown. Weapons can't hurt walls yet, so eve
   - Spawn plays the loop at the wall's tile, with random hp from wall_min_hp to wall_max_hp.
   - Contact on arrival hits at any height. A survivable crash plays hit, misc/player/hit, life and death (shatter), costs wall_life_cost and is marked crashed. A fatal one plays hit through p, then end_run_hit().
 - Wiring, per the new-obstacle checklist: obstacle_types ("walls"), place_obstacle(), all_pools, clear_run_objects(), and the check and countdown calls. Tuning: wall_life_cost 1, wall_min_hp 100, wall_max_hp 500.
+- BUILT 2026-11-03 on top of 031345e. SECTION 1 COMPLETE: all 5 tests passed (2026-11-03): the approach with layered cues, a crash, jumping or crouching still crashing, the last life, and other traps unchanged in a 50 ms mix with pause. As built:
+  - play_countdown() checks for warn1-1 in the trap's folder. If it's there, it plays warn1-<note>, warn2-<note> and so on until a group is missing. Otherwise it plays warn<note> as before. It uses a while loop rather than an empty for-condition.
+  - wall.nvgt: wall_standing() (not destroyed or crashed); wall_check() in step_check() after projectile_check(), with a stop when the run has ended; wall_countdown() after projectile_countdown(). A survivable crash plays hit and death through wallpool at the wall, plus the player hit and the life sound. hp is rolled at spawn but unused until Section 2.
+  - "walls" is in obstacle_types, so the testing spawn menu shows "walls" between projectiles and ammo packs.
 Section 2: weapon hits.
 - weapons.nvgt weapon_strike(): the nearest standing wall ahead within weapon_reach_time (2000 ms, in tiles at the current speed) takes the damage. It returns the wall's x, so the weapon's hit (and shell) plays there. wall.nvgt then plays hurt, and at 0 hp death, stopping the loop and marking it destroyed.
 - The unused weapon_range table is removed.
