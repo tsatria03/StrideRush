@@ -1,7 +1,6 @@
 ####These are the things that need to be finished for future versions of the game.
 
 ****Unfinished. Add lanes that you can switch between.
-****Unfinished. Add walls that you smash through with your weapons.
 ****Unfinished. Add doors that you open with your hands.
 ****Unfinished. Add keys and other items to pick up along the way.
 ****Unfinished. Add a score, and a results screen at the end of each run.
@@ -12,6 +11,7 @@
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add walls that you smash through with your weapons.
 **Finished. Add ammo packs that refill your guns.
 **Finished. Add weapons, with ammo and reloading for the ones that take them.
 **Finished. Add warning cues for more kinds of obstacles.

@@ -1,6 +1,6 @@
 ---
 name: project_walls_plan
-description: SETTLED, NOT BUILT (2026-11-03, for 1.1; 3 sections: walls and the layered countdown, weapon hits, docks) - walls as a full-height obstacle from sounds/objects/traps/walls; how they're passed (weapons), warned, hit and placed; Q&A log
+description: COMPLETE (2026-11-03, in 1.1; walls and the layered countdown, weapon hits, docks) - walls as a full-height obstacle from sounds/objects/traps/walls; how they're passed (weapons), warned, hit and placed; Q&A log
 metadata:
   type: project
 ---
@@ -35,7 +35,10 @@ Section 2: weapon hits.
   - Q: At a given speed, is a wall's hp exact, or a random spread around that speed's value? (Asked 2026-11-03; Claude recommended a random spread of about 20 percent either way, always within 200 to 2000.) A: random ranges, not a flat amount (dev, 2026-11-03).
   - BUILT 2026-11-03: tuning.nvgt wall_min_hp 200, wall_max_hp 2000, wall_hp_spread 20. wall.nvgt wall_spawn_hp(): the center rises linearly from wall_min_hp at start_step_time to wall_max_hp at min_step_time, then hp is random within plus or minus 20 percent, clamped to 200 to 2000. That gives about 200 to 240 at 500 ms, 800 to 1200 at 300 ms, and 1600 to 2000 at 50 ms. The flat 100 to 500 is gone. Awaiting a test.
   - Multiplier discussion (2026-11-03): Claude recommended keeping weapon_damage_multiplier at 4. At 3 or below, top-speed walls outlast the 2 s reach. At 4 the held machine gun breaks a 2000 hp wall in about 1.9 s, and the laser needs 21 swings, about 10 presses a second. The bat can't break a top-speed wall at all (40 swings of 12). The dev accepted it: "definitely possible with most of the weapons, but you need extremely good reflexes." If walls feel easy later, raise the hp cap rather than lower the multiplier.
-  - CHANGED before testing (dev, 2026-11-03): "make the lower end of the health to 20, not 200." wall_min_hp is now 20. That gives about 20 to 24 at 500 ms (2 bat swings, 1 shot from anything else), 720 to 1080 at 300 ms, and still 1600 to 2000 at 50 ms. The wall hp test passed (2026-11-03; the dev called it "test 4"). Walls Sections 1 and 2 are COMPLETE; Section 3 (docks) is next.
+  - CHANGED before testing (dev, 2026-11-03): "make the lower end of the health to 20, not 200." wall_min_hp is now 20. That gives about 20 to 24 at 500 ms (2 bat swings, 1 shot from anything else), 720 to 1080 at 300 ms, and still 1600 to 2000 at 50 ms. The wall hp test passed (2026-11-03; the dev called it "test 4"). Walls Sections 1 and 2 are COMPLETE. Section 3 (docks) was WRITTEN 2026-11-03 on top of 09c2980, so WALLS ARE COMPLETE:
+    - Changelog: three new 1.1 entries, newest first: walls ("Added walls ..."), the force field countdown stopping ("Made it so ..."), and the new surfaces ("Added over a hundred new ground surfaces ..."). 1.1 has 6 of 20.
+    - Readme: the opening line adds "smash through", the exceptions line says three, a walls paragraph after projectiles, walls added to the countdown and lives lines, and the weapons line no longer says there's nothing to hit.
+    - Todo list: walls moved to finished.
   - With a 5-step countdown, at 500 ms the reach (4 tiles) starts on warn2. Faster than 400 ms it covers the whole countdown and more.
 Section 3: docks in 1.1. Changelog "Added walls ..." (plus the new surfaces entry, if the dev still wants it), the readme (walls, and weapons now having something to hit), and the todo list (walls to finished).
 

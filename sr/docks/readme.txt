@@ -1,11 +1,11 @@
 Welcome to Stride Rush!
-In this audio game, you ride a belt that carries you forward one step at a time, and you have to jump over, duck under or switch off everything that gets in your way.
+In this audio game, you ride a belt that carries you forward one step at a time, and you have to jump over, duck under, switch off or smash through everything that gets in your way.
 
 How to play.
 
 Once a run starts, you never stop moving. The belt carries you to the right, and you'll hear a footstep with every step you take. The ground under your feet changes every 10 to 20 seconds, so listen for new footstep sounds as you go.
 You start at a speed of 500 milliseconds per step. Every 10 seconds you get a little faster, 10 milliseconds at a time, until you reach the top speed of 50 milliseconds per step.
-Obstacles are heard ahead of you, about 3 seconds before you reach them. Jump at the right moment to sail over most of them. If you're still on the ground when you step onto one, it will catch you. There are two exceptions: you crouch under projectiles, and you switch off force fields with one of your hands.
+Obstacles are heard ahead of you, about 3 seconds before you reach them. Jump at the right moment to sail over most of them. If you're still on the ground when you step onto one, it will catch you. There are three exceptions: you crouch under projectiles, you switch off force fields with one of your hands, and you break walls with your weapons.
 A jump lasts about a second. You can't jump again until you land, and when you land you'll hear the ground you came down on.
 Runs are endless. The goal is to get as far as you can before something stops you.
 
@@ -16,11 +16,12 @@ Spikes swing back and forth with their own rhythm, which you'll hear as you appr
 Mines make a sound when they appear, then light up and start ticking once you get close. Stepping onto a mine costs you 2 lives. Once you jump over a mine, you'll hear it keep ticking as it fades out behind you.
 Force fields hum ahead of you while they're on, and jumping or crouching won't get you past one. Press either hand key during a force field's countdown to switch it off. You'll hear the switch, then the field's sound changes as it shuts off, and you can run straight through. At the fastest speeds, where the countdown is very short, you can still switch one off in the last half second before you reach it. If you reach a force field while it's still on, it costs you 1 life and throws you 5 steps forward past it.
 Projectiles, such as missiles, cars, boulders and firewalls, fly toward you at head height, twice as fast as you run, so you'll hear them rushing in. Hold the crouch key so you're crouched when one reaches you, and it flies over you and fades away behind. A crouch only lasts a second and a half, so at slower speeds wait for the last few countdown cues before you crouch. Jumping won't help, and if one hits you, it costs you 1 life.
-Spikes, mines, force fields and projectiles have the same five-cue countdown as hazards, at every speed, but without a ledge. Each kind of obstacle has its own countdown sounds, so you can tell which one is coming from the countdown alone.
+Walls are glass windows standing in your way, and you'll hear them ahead of you as you get closer. Jumping or crouching won't get you past one, so swing or fire your weapon at it as it comes. Your weapons reach about 2 seconds ahead of you, so start early. Each hit cracks it a little more, and once it shatters you can run straight through. Walls get tougher the faster you run: early walls break with a couple of swings, while the fastest ones take a strong weapon and quick hands. If you crash into a wall that's still standing, it costs you 1 life.
+Spikes, mines, force fields, projectiles and walls have the same five-cue countdown as hazards, at every speed, but without a ledge. A wall's countdown plays two notes at once, and once a wall is broken or a force field switched off, its countdown stops. Each kind of obstacle has its own countdown sounds, so you can tell which one is coming from the countdown alone.
 
 Lives.
 
-You start each run with 1 life, so for now, any obstacle that catches you ends the run. Spikes, mines, force fields and projectiles cost lives, and if you have lives to spare you'll hear a sound and keep running. When your last life is gone, the run ends and you return to the main menu.
+You start each run with 1 life, so for now, any obstacle that catches you ends the run. Spikes, mines, force fields, projectiles and walls cost lives, and if you have lives to spare you'll hear a sound and keep running. When your last life is gone, the run ends and you return to the main menu.
 
 Crouching.
 
@@ -30,7 +31,7 @@ Weapons.
 
 You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, feat, fist, hammer, knife, laser, machine gun and pistol. Each run starts with the bat in your hands, and each weapon is stronger than the one before it. Press the space bar to swing a melee weapon or fire a gun. The machine gun keeps firing for as long as you hold the space bar.
 The machine gun and pistol use ammo. Each starts every run with 50 rounds loaded and 250 in reserve, and they keep their own ammo separately. Once a gun is empty you'll hear it click instead of firing. You can reload any time a gun isn't full, and you'll hear a ping when it's ready. When the reserve runs out, that gun is empty until you open an ammo pack.
-There's nothing to hit with your weapons yet, but walls that you smash through are planned.
+Your weapons are for breaking walls, and they all reach the same distance ahead of you. The stronger the weapon, the fewer hits a wall takes.
 
 Ammo packs and your inventory.
 

@@ -1,4 +1,7 @@
 New in 1.1.
+Added walls, which you have to break with your weapons before you reach them, which get tougher the faster you run, and which cost 1 life if you crash into one.
+Made it so a force field's countdown now stops as soon as you switch it off.
+Added over a hundred new ground surfaces to run on, such as dirt, grass, gravel, leaves, sand and stone.
 Made it so you can now crouch again half a second after standing up, instead of a full second.
 Made it so the ground now changes to a new surface every 10 to 20 seconds at any speed, instead of after a set distance, which made it change very rarely at the start of a run.
 Made it so every trap now plays its full five-step warning countdown at any speed, instead of the countdown getting shorter as you speed up.
