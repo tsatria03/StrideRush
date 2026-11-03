@@ -1,6 +1,6 @@
 New in 1.1.
-Made it so you can NOW crouch again half a second after standing up, instead of a full second.
-Made it so the ground NOW changes to a new surface every 10 to 20 seconds at any speed, instead of after a set distance, which made it change very rarely at the start of a run.
+Made it so you can now crouch again half a second after standing up, instead of a full second.
+Made it so the ground now changes to a new surface every 10 to 20 seconds at any speed, instead of after a set distance, which made it change very rarely at the start of a run.
 Made it so every trap now plays its full five-step warning countdown at any speed, instead of the countdown getting shorter as you speed up.
 New in 1.0.
 Added ammo packs, which you pick up with either hand as you reach them and later open from your new inventory to refill both guns' reserves, but which break if you run or land on top of them.
