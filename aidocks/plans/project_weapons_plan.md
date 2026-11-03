@@ -29,7 +29,12 @@ Section 1: the weapon system.
   - reload_length comes from p.get_sound_length() of the reload slot, in ms. The refusals: "This weapon is still reloading.", "This weapon doesn't take any ammo.", "This weapon is already fully loaded.", and "This weapon has no more reserved ammo to reload." (that last one also plays empty).
   - keyboard.ini gains fire_held=SPACE:down. pause.nvgt pauses and resumes firetimer and reloadtimer. tuning.nvgt gains weapon_damage_multiplier 2, gun_start_loaded 50, gun_start_reserve 250, weapon_fire_gap 50 and machine_gun_fire_gap 100.
 Section 2: ammo packs, after their own Q&A (where they appear, how much they refill, and what get, use and break are for).
-Section 3: docks. The changelog's last 2 entries in 1.0 go to weapons (dev, 2026-11-02: "We can fill in the last 2 entries with the weapon sections"), one for the weapon system and one for ammo packs, filling 1.0 to 20. No 1.1 block yet. Also the readme (the weapon keys) and the todo list.
+Section 3 WRITTEN for the weapon system (2026-11-02, on top of 07501f2). The dev asked for the docks before the ammo pack Q&A ("ready for docks"), so the docks were done ahead of Section 2:
+  - Changelog: 1 weapons entry (19 of 20). The 20th stays reserved for ammo packs.
+  - Readme: a Weapons section, and the keys 1 to 0, Space, R and X. It says there's nothing to hit yet and walls are planned.
+  - Todo list: weapons moved to finished; "walls that you smash through" and "ammo packs that refill your guns" added as unfinished.
+  - Section 2 (ammo packs) is still open. Its first question, how you collect a pack, was asked but not answered.
+Original Section 3 plan: The changelog's last 2 entries in 1.0 go to weapons (dev, 2026-11-02: "We can fill in the last 2 entries with the weapon sections"), one for the weapon system and one for ammo packs, filling 1.0 to 20. No 1.1 block yet. Also the readme (the weapon keys) and the todo list.
 
 Base (dev, 2026-11-02): ToyMania's weapon system, not SimpleFighter's. The dev wasn't sure SimpleFighter's would fit, since it parses its weapons from data files.
 

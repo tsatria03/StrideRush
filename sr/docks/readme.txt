@@ -26,12 +26,22 @@ Crouching.
 
 You can crouch by holding down the crouch key. Your footsteps go quiet while you're crouched, and you stand back up when you let go, or on your own after a second and a half. After standing up, you have to wait about a second before you can crouch again. Pressing the jump key while crouched jumps straight away. Crouching is how you get under projectiles.
 
+Weapons.
+
+You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, feat, fist, hammer, knife, laser, machine gun and pistol. Each run starts with the bat in your hands, and each weapon is stronger than the one before it. Press the space bar to swing a melee weapon or fire a gun. The machine gun keeps firing for as long as you hold the space bar.
+The machine gun and pistol use ammo. Each starts every run with 50 rounds loaded and 250 in reserve, and they keep their own ammo separately. Once a gun is empty you'll hear it click instead of firing. You can reload any time a gun isn't full, and you'll hear a ping when it's ready. When the reserve runs out, that gun is empty for the rest of the run.
+There's nothing to hit with your weapons yet, but walls that you smash through are planned.
+
 Keyboard commands
 
 Up arrow or letter W: Jumps, if pressed.
 Down arrow or letter S: Crouches, to duck under projectiles, if held down.
 Tab or letter A: Uses your left hand, to switch off a force field, if pressed.
 Enter or letter D: Uses your right hand, to switch off a force field, if pressed.
+Numbers 1 through 0: Draws the bat, boot, club, feat, fist, hammer, knife, laser, machine gun or pistol, if pressed.
+Space: Swings or fires your weapon, if pressed. With the machine gun, it keeps firing, if held down.
+Letter R: Reloads your gun, if pressed.
+Letter X: Announces how much ammo your gun has loaded and in reserve, if pressed.
 Letter L: Announces how many lives you have, if pressed.
 Letter Z: Announces how far you've run, in tiles, if pressed.
 Letter C: Announces your current speed, in milliseconds per step, if pressed.
