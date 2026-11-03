@@ -1,11 +1,11 @@
 Welcome to Stride Rush!
-In this audio game, you ride a belt that carries you forward one step at a time, and you have to jump over, duck under, switch off or smash through everything that gets in your way.
+In this audio game, you ride a belt that carries you forward one step at a time, and you have to jump over, duck under, switch off, open or smash through everything that gets in your way.
 
 How to play.
 
 Once a run starts, you never stop moving. The belt carries you to the right, and you'll hear a footstep with every step you take. The ground under your feet changes every 10 to 20 seconds, so listen for new footstep sounds as you go.
 You start at a speed of 500 milliseconds per step. Every 10 seconds you get a little faster, 10 milliseconds at a time, until you reach the top speed of 50 milliseconds per step.
-Obstacles are heard ahead of you, about 3 seconds before you reach them. Jump at the right moment to sail over most of them. If you're still on the ground when you step onto one, it will catch you. There are three exceptions: you crouch under projectiles, you switch off force fields with one of your hands, and you break walls with your weapons.
+Obstacles are heard ahead of you, about 3 seconds before you reach them. Jump at the right moment to sail over most of them. If you're still on the ground when you step onto one, it will catch you. There are four exceptions: you crouch under projectiles, you switch off force fields with one of your hands, you break walls with your weapons, and you open doors with your hands.
 A jump lasts about a second. You can't jump again until you land, and when you land you'll hear the ground you came down on.
 Runs are endless. The goal is to get as far as you can before something stops you.
 
@@ -17,11 +17,12 @@ Mines make a sound when they appear, then light up and start ticking once you ge
 Force fields hum ahead of you while they're on, and jumping or crouching won't get you past one. Press either hand key during a force field's countdown to switch it off. You'll hear the switch, then the field's sound changes as it shuts off, and you can run straight through. At the fastest speeds, where the countdown is very short, you can still switch one off in the last half second before you reach it. If you reach a force field while it's still on, it costs you 1 life and throws you 5 steps forward past it.
 Projectiles, such as missiles, cars, boulders and firewalls, fly toward you at head height, twice as fast as you run, so you'll hear them rushing in. Hold the crouch key so you're crouched when one reaches you, and it flies over you and fades away behind. A crouch only lasts a second and a half, so at slower speeds wait for the last few countdown cues before you crouch. Jumping won't help, and if one hits you, it costs you 1 life.
 Walls are glass windows standing in your way, and you'll hear them ahead of you as you get closer. Jumping or crouching won't get you past one, so swing or fire your weapon at it as it comes. Your weapons reach about 2 seconds ahead of you, so start early. Each hit cracks it a little more, and once it shatters you can run straight through. Walls get tougher the faster you run: early walls break with a couple of swings, while the fastest ones take a strong weapon and quick hands. If you crash into a wall that's still standing, it costs you 1 life.
+Doors mark your progress. Each time you get another 50 milliseconds faster, a real door comes up ahead of you. Press either hand key in the last few steps before it to open it, and the door carries you through into the next stretch. While it moves you, your footsteps go quiet and you can't jump, crouch or use your weapons, until it closes behind you. Once you reach the top speed, there are no more real doors. Watch out for fake doors, though, which can turn up at any time. They sound slightly higher or lower than a real door, and they won't open, so break them with your weapons the same way as walls, and just as tough at your speed. Doors have no countdown, so listen for them as they come. Crashing into any door, real or fake, costs you 3 lives.
 Spikes, mines, force fields, projectiles and walls have the same five-cue countdown as hazards, at every speed, but without a ledge. A wall's countdown plays two notes at once, and once a wall is broken or a force field switched off, its countdown stops. Each kind of obstacle has its own countdown sounds, so you can tell which one is coming from the countdown alone.
 
 Lives.
 
-You start each run with 1 life, so for now, any obstacle that catches you ends the run. Spikes, mines, force fields, projectiles and walls cost lives, and if you have lives to spare you'll hear a sound and keep running. When your last life is gone, the run ends and you return to the main menu.
+You start each run with 1 life, so for now, any obstacle that catches you ends the run. Spikes, mines, force fields, projectiles, walls and doors cost lives, and if you have lives to spare you'll hear a sound and keep running. When your last life is gone, the run ends and you return to the main menu.
 
 Crouching.
 
@@ -31,7 +32,7 @@ Weapons.
 
 You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, feat, fist, hammer, knife, laser, machine gun and pistol. Each run starts with the bat in your hands, and each weapon is stronger than the one before it. Press the space bar to swing a melee weapon or fire a gun. The machine gun keeps firing for as long as you hold the space bar.
 The machine gun and pistol use ammo. Each starts every run with 50 rounds loaded and 250 in reserve, and they keep their own ammo separately. Once a gun is empty you'll hear it click instead of firing. You can reload any time a gun isn't full, and you'll hear a ping when it's ready. When the reserve runs out, that gun is empty until you open an ammo pack.
-Your weapons are for breaking walls, and they all reach the same distance ahead of you. The stronger the weapon, the fewer hits a wall takes.
+Your weapons are for breaking walls and fake doors, and they all reach the same distance ahead of you. Real doors can't be harmed. The stronger the weapon, the fewer hits a wall takes.
 
 Ammo packs and your inventory.
 
@@ -42,8 +43,8 @@ Keyboard commands
 
 Up arrow or letter W: Jumps, if pressed.
 Down arrow or letter S: Crouches, to duck under projectiles, if held down.
-Tab or letter A: Uses your left hand, to switch off a force field or pick up an item, if pressed.
-Enter or letter D: Uses your right hand, to switch off a force field or pick up an item, if pressed.
+Tab or letter A: Uses your left hand, to switch off a force field, open a door or pick up an item, if pressed.
+Enter or letter D: Uses your right hand, to switch off a force field, open a door or pick up an item, if pressed.
 Letter I: Moves to the next item in your inventory, if pressed.
 Shift plus letter I: Moves to the previous item in your inventory, if pressed.
 Letter U: Uses the item you're on in your inventory, such as opening an ammo pack, if pressed.

@@ -100,10 +100,16 @@ int weapon_reach()
 return int(max(1, ceil(double(weapon_reach_time) / step_time)));
 }
 /* The target hook. Damages the nearest target within weapon_reach() tiles ahead and returns its x, or -1 if there was
-nothing to hit. Walls are the only target so far; a new target type adds its own search here. */
+nothing to hit. The targets are walls and fake doors; a new target type adds its own search here. */
 double weapon_strike(int damage)
 {
-return strike_wall(weapon_reach(), damage);
+int reach = weapon_reach();
+wall@ w = wall_in_reach(reach);
+door@ d = fake_door_in_reach(reach);
+// Whichever standing target is nearer takes the hit: a wall, or a fake door (real doors can't be hit).
+if (@w != null and (@d == null or w.x <= d.x)) return strike_wall(w, damage);
+if (@d != null) return strike_door(d, damage);
+return -1;
 }
 // R: tops a gun up from its reserve any time it isn't full. The reload lasts as long as its reload sound.
 void start_reload()

@@ -1,6 +1,6 @@
 ---
 name: project_doors_plan
-description: SETTLED, NOT BUILT (2026-11-03, for 1.1; sections: doors without weapon hits, fake doors broken by weapons, docks) - doors, real and fake; what real doors do, how fake doors are broken, warnings, and how keys will tie in; Q&A log
+description: COMPLETE (2026-11-03, in 1.1; doors, fake doors broken by weapons, docks) - doors, real and fake; what real doors do, how fake doors are broken, warnings, and how keys will tie in; Q&A log
 metadata:
   type: project
 ---
@@ -31,7 +31,17 @@ Section 1: real and fake doors, without weapon hits. Fake doors can't be broken 
     - While door_moving: play_step() is silent, jump_check() won't start a jump, can_duck() is false, hand_check() returns at once, and weapon_input() returns after reload_check(), so a reload already running still finishes. Pause still works, unlike ToyMania. destroy_all_doors() clears door_moving and the move loop.
   - The dev noticed that the "real doors" testing choice spawns a real door within seconds, which is as built (every spawn). ADDED (dev, 2026-11-03): a second choice, "real doors, spread" (spawn_only "real_doors_spread"). It spawns ONLY the real doors at the 50 ms marks, with the slots in between left empty, so both kinds can be tested. The menu order is now ... fake doors, real doors, real doors spread, ammo packs, all.
   - CHANGED (dev, 2026-11-03): "in the fake doors menu, remove the real doors from being spawned. It should strictly spawn fake doors." The section-mark real doors now come only when spawn_only is "all". Every single-type testing run (fake doors, walls, spikes and so on) spawns strictly that type, which also replaces the earlier "real doors in every run" note above.
-Section 2: fake doors broken by weapons. weapon_strike() checks the nearest standing fake door ahead alongside walls, whichever is nearer. Hurt per hit, death at 0 hp, with hp from wall_spawn_hp().
+- DOCKS WRITTEN for Section 1 (2026-11-03, on top of e9eabfb). The dev asked for the docks before Section 2, as with weapons and ammo packs.
+  - Changelog: two 1.1 entries, "Added real doors ..." and "Added fake doors ...", so 1.1 has 8 of 20.
+  - Readme: "open" in the opening line; four exceptions; a doors paragraph before the countdown line, which says fake doors can't be passed yet and breaking them is planned, and that doors have no countdown; doors in the lives line; and the hand keys say "open a door".
+  - Todo list: doors moved to finished, and "Add a way to break fake doors with your weapons." added as unfinished.
+- The dev realized the docks came before Section 2 ("I forgot we were supposed to do weapons before the docks") and asked to build Section 2, then update the docks again.
+Section 2: fake doors broken by weapons.
+- BUILT 2026-11-03 on top of e9eabfb. SECTION 2 COMPLETE: all 3 tests passed (2026-11-03): breaking a fake door, weapons not touching real doors, and walls plus fake doors in a mixed run. DOORS ARE COMPLETE. The dev noticed something odd about ammo weapons during testing and will describe it next. As built:
+  - wall.nvgt: strike_wall() split into wall_in_reach(reach) and strike_wall(wall@, damage).
+  - door.nvgt: fake_door_in_reach(reach) (skips real doors) and strike_door(door@, damage), which plays hurt, or death at 0 hp, at the door's pitch, stopping its loop and marking it destroyed.
+  - weapons.nvgt weapon_strike(): finds both and hits whichever is nearer, with a wall winning a tie.
+  - Docks updated straight after: the fake doors changelog entry adds "have to be broken with your weapons", the readme's fake door lines and weapons line now say weapons break fake doors (real doors can't be harmed), and the todo entry for breaking fake doors moved to finished. 1.1 is still 8 of 20. weapon_strike() checks the nearest standing fake door ahead alongside walls, whichever is nearer. Hurt per hit, death at 0 hp, with hp from wall_spawn_hp().
 Section 3: docks in 1.1 (changelog, readme, and doors moved to finished on the todo list).
 
 Already decided (parked in [[project_obstacles_plan]], 2026-11-01 and 2026-11-02):

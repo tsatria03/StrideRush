@@ -1,12 +1,13 @@
 /* Doors (dev, 2026-11-03, for 1.1): full-height, and not traps, so they have no countdown cues; you judge them by their
-loop and its pitch. Each door picks one of the four door sets, and every sound it makes plays at its pitch.
+loop and its pitch. Each door picks one of the four door sets, and every sound it makes plays at its pitch. Weapons
+break FAKE doors only (strike_door(), through weapon_strike()): hurt on each hit, death at 0 hp.
 - A REAL door (pitch 100) marks each new 50 ms speed section: the spawner forces one when the step time reaches a new
   mark, 450 down to 50, and none come after that. Either hand opens it within hand_window_start(). Like ToyMania's
   doors: open plays and the door's loop stops, then its move sound LOOPS while the door carries you through. While it
   carries you (door_moving) there are no footsteps, and you can't jump, crouch, use a hand or use weapons. Once you're
   past its tile, the move loop stops and close plays behind you, fading as you run on (dev, 2026-11-03).
 - A FAKE door (pitch 80, 90, 110 or 120) is in the random mix at every speed. Hands do nothing on it; it has to be
-  broken with weapons (doors Section 2).
+  broken with weapons, with the walls' speed-scaled hp.
 Arriving on a standing door's tile, at any height, is a CRASH: its hit, the player's hit and the life sound, no death
 sound, costing door_life_cost (3). On the last lives: its hit, the player's death, then the tile's fall. A missed real
 door's section still begins, since the door only marks it.
@@ -88,6 +89,33 @@ doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/
 door_moveslot = doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/*move*"), true, 0, 0, 0, target.pitch, false);
 door_moving = true;
 return true;
+}
+// The nearest standing FAKE door from 1 to reach tiles ahead, or null. Real doors are never weapon targets.
+door@ fake_door_in_reach(int reach)
+{
+door@ target = null;
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] == null or doors[i].real or !door_standing(doors[i])) continue;
+double ahead = doors[i].x - me_x;
+if (ahead < 1 or ahead > reach) continue;
+if (@target == null or doors[i].x < target.x) @target = doors[i];
+}
+return target;
+}
+/* A weapon hit on a fake door: its hurt plays at the door, at its pitch, or its death at 0 hp, which stops its loop
+and marks it destroyed so you run through. Returns its x, so the weapon's own hit plays there. */
+double strike_door(door@ target, int damage)
+{
+target.hp -= damage;
+if (target.hp <= 0)
+{
+target.destroyed = true;
+stop_door(target);
+play_door(target, "death", target.x, false);
+}
+else play_door(target, "hurt", target.x, false);
+return target.x;
 }
 // The door has carried you through: the move loop stops and close plays at the door, behind you.
 void finish_door_move(door@ d)

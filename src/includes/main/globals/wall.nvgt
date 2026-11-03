@@ -85,9 +85,8 @@ lose_lives(wall_life_cost);
 if (me_x > w.x + spawn_distance()) remove_wall(i);
 }
 }
-/* A weapon hit: damages the nearest standing wall from 1 to reach tiles ahead and returns its x, or -1 if none is in
-reach. Its hurt plays at the wall, or its death at 0 hp, which stops its loop and marks it destroyed. */
-double strike_wall(int reach, int damage)
+// The nearest standing wall from 1 to reach tiles ahead, or null. weapon_strike() compares it with the nearest fake door.
+wall@ wall_in_reach(int reach)
 {
 wall@ target = null;
 for (uint i = 0; i < walls.length(); i++)
@@ -97,7 +96,12 @@ double ahead = walls[i].x - me_x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or walls[i].x < target.x) @target = walls[i];
 }
-if (@target == null) return -1;
+return target;
+}
+/* A weapon hit on a wall: its hurt plays at the wall, or its death at 0 hp, which stops its loop and marks it
+destroyed. Returns its x, so the weapon's own hit plays there. */
+double strike_wall(wall@ target, int damage)
+{
 target.hp -= damage;
 if (target.hp <= 0)
 {
