@@ -2,11 +2,17 @@
 blocking with dlgplay (Enter skips), then stop the run so start_run() returns and the main menu reopens. There's no
 results dialog in the basic build. */
 
+/* Set when a run should start straight over with the same choices instead of returning to the main menu. Only the
+source-only testing "end the run when out of lives?" No answer sets it (dev, 2026-11-02): a hazard still kills, but
+the run restarts, since hazards are the one thing that answer can't stop. mainmenu() reads and clears it. */
+bool restart_run_requested = false;
+
 // A hazard: its own fall clip is the whole death; no player death sound and no tile fall.
 void end_run_hazard(string fall_clip)
 {
 silence_run();
 if (fall_clip != "") dlgplay(fall_clip);
+if (!lives_can_end) restart_run_requested = true;
 finish_run();
 }
 /* A spike or mine on the last life. The caller plays the object's sounds (spike hit, or mine explode and hit) through p

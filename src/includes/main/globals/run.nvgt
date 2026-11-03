@@ -24,11 +24,12 @@ reset_player();
 reset_spawner();
 update_listeners();
 }
-/* Normally start_step_time, starting_lives and every obstacle type; the source-only testing menus can start faster, with
-more lives, or with only one obstacle type. */
-void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives, string only_type = "all")
+/* Normally start_step_time, starting_lives, every obstacle type, and a run that ends when lives run out; the source-only
+testing menus can start faster, with more lives, with only one obstacle type, or with lives that never run out. */
+void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives, string only_type = "all", bool can_run_out = true)
 {
 spawn_only = only_type; // before reset_run(), whose reset_spawner() picks the first obstacle
+lives_can_end = can_run_out;
 reset_run(starting_step_time, starting_life_count);
 start_run_audio();
 running = true;
@@ -61,6 +62,7 @@ wait(5);
 // Jump and crouch first, so a jump pressed on the same frame as a step counts before that step's hazard check.
 jump_check();
 duck_check();
+hand_check(); // also before step_check(), so a switch press on the step's frame counts on the warn5 step
 step_check();
 if (!running) break; // an obstacle hit on this step ended the run; skip the rest of the frame
 spike_swing();

@@ -15,13 +15,13 @@ exit();
 }
 if(main=="start")
 {
-/* The testing menus, in the dev's order: lives, speed, then spawn. Escape steps back one menu (spawn to speed to lives),
-silently, and escaping the lives menu silently returns to the main menu: they're all nested menus, so nothing says
-"canceled". A compiled release skips all three. */
-int run_lives = 0, speed = 0;
+/* The testing menus, in the dev's order: lives, speed, spawn, then whether lives can run out. Escape steps back one
+menu silently, and escaping the lives menu silently returns to the main menu: they're all nested menus, so nothing
+says "canceled". A compiled release skips all four. */
+int run_lives = 0, speed = 0, can_run_out = 1;
 string only_type = "";
 int stage = 0;
-while (stage < 3)
+while (stage < 4)
 {
 if (stage == 0)
 {
@@ -34,14 +34,26 @@ else if (stage == 1)
 speed = choose_start_speed();
 stage = speed < 0 ? 0 : 2;
 }
-else
+else if (stage == 2)
 {
 only_type = choose_spawn_types();
 stage = only_type == "" ? 1 : 3;
 }
+else
+{
+can_run_out = choose_lives_can_end();
+stage = can_run_out < 0 ? 2 : 4;
+}
 }
 m.fade_music();
-start_run(speed, run_lives, only_type); // returns when the run ends, and main()'s loop reopens this menu
+/* Returns when the run ends, and main()'s loop reopens this menu. With the testing No answer, a hazard death starts
+the run over with the same choices instead; quitting from the pause menu still returns here. */
+do
+{
+restart_run_requested = false;
+start_run(speed, run_lives, only_type, can_run_out == 1);
+}
+while (restart_run_requested);
 }
 }
 /* TESTING ONLY: pick the starting step time, from start_step_time down to min_step_time in 50 ms steps. It only
@@ -75,6 +87,20 @@ m.add_item("all", "all");
 int mres = m.run();
 if (mres < 0) return ""; // silent: escape just steps back to the speed menu
 return m.selected_item_id;
+}
+/* TESTING ONLY: whether running out of lives ends the run. No means spikes, mines and force fields can never end it and
+lives stop at 1; hazards still end it. It only appears when running from source; a compiled release always answers
+Yes. Returns 1 for Yes, 0 for No, or -1 if escaped. */
+int choose_lives_can_end()
+{
+if (SCRIPT_COMPILED) return 1;
+setupmenu();
+m.intro_text = "Do you want the run to end when you run out of lives?";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int mres = m.run();
+if (mres < 0) return -1; // silent: escape just steps back to the spawn menu
+return m.selected_item_id == "yes" ? 1 : 0;
 }
 /* TESTING ONLY: pick the starting lives, listed from max_test_lives down to 1 (dev's order). It only appears when
 running from source; a compiled release always starts with starting_lives. Returns -1 if escaped. */

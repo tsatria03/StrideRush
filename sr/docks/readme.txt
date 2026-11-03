@@ -4,7 +4,7 @@ In this audio game, you ride a belt that carries you forward one step at a time,
 How to play.
 
 Once a run starts, you never stop moving. The belt carries you to the right, and you'll hear a footstep with every step you take. The ground under your feet changes every so often, so listen for new footstep sounds as you go.
-You start at a speed of 500 milliseconds per step. Every 10 seconds you get a little faster, 10 milliseconds at a time, until you reach the top speed of 100 milliseconds per step.
+You start at a speed of 500 milliseconds per step. Every 10 seconds you get a little faster, 10 milliseconds at a time, until you reach the top speed of 50 milliseconds per step.
 Obstacles are heard ahead of you, about 3 seconds before you reach them. Jump at the right moment to sail over them. If you're still on the ground when you step onto one, it will catch you.
 A jump lasts about a second. You can't jump again until you land, and when you land you'll hear the ground you came down on.
 Runs are endless. The goal is to get as far as you can before something stops you.

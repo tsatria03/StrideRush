@@ -13,4 +13,4 @@ Added speech buffers, so you can review, copy and export everything the game has
 Added a pause menu, where you can resume the game or quit back to the main menu.
 Added keys to change the music and ambience volume during a run.
 Added keys to hear your lives, distance, speed and running time.
-Added endless runs that start at 500 milliseconds per step and speed up by 10 milliseconds every 10 seconds, up to a top speed of 100 milliseconds per step.
+Added endless runs that start at 500 milliseconds per step and speed up by 10 milliseconds every 10 seconds, up to a top speed of 50 milliseconds per step.

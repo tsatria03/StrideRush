@@ -6,7 +6,7 @@ mines and life costs). */
 const int start_step_time = 500;
 const int speedup_period = 10000;
 const int speedup_amount = 10;
-const int min_step_time = 100; // the top speed cap (dev, 2026-11-02; was 50)
+const int min_step_time = 50; // the top speed cap (dev, 2026-11-02: was 50, then 100, now back to 50)
 
 // Surfaces: the ground switches to a new random platform after a random stretch between these lengths.
 const int surface_min_tiles = 50;
@@ -29,7 +29,7 @@ const int spawn_ahead_time = 3000;
 const int min_gap_tiles = 6;
 
 /* The warning countdown before every obstacle (dev, 2026-11-02): one step per countdown_ms of step time, rounded up: 5
-at 500 ms, 4 at 400, 3 at 300, 2 at 200, 1 at 100, one cue per step, so at slow speeds you jump on its last steps. A
+at 500 ms, 4 at 400, 3 at 300, 2 at 200, 1 at 100 and faster, one cue per step, so at slow speeds you jump on its last steps. A
 hazard's ledge before covers exactly its countdown; spikes and mines count down on normal floor. A hazard's ledge
 after is a fixed ledge_after_tiles. */
 const int countdown_ms = 100;
@@ -45,7 +45,7 @@ const int spike_swing_max = 1000;
 
 /* A mine arms (light, then its ticking loop) mine_arm_lead_time before its countdown starts, at the current speed, never
 under mine_arm_lead_min_tiles, so light always comes first and the countdown follows (dev, 2026-11-02): 1 tile ahead of
-the countdown at 500 ms, 5 at 100 ms, giving light the same half second to finish at any speed. */
+the countdown at 500 ms, 5 at 100 ms, 10 at 50 ms, giving light the same half second to finish at any speed. */
 const int mine_arm_lead_time = 500;
 const int mine_arm_lead_min_tiles = 1;
 
@@ -61,6 +61,15 @@ const int forcefield_life_cost = 1;
 /* Running into an active force field throws you this many tiles forward past it (dev, 2026-11-02). The gap after every
 force field gets the same number of extra tiles, so the throw always lands on clear floor before the next countdown. */
 const int forcefield_knockback_tiles = 5;
+
+/* A hand interaction's sound (a switch press now, door openings later) is panned to the hand used, left hand negative
+and right hand positive, so you hear which hand did it (dev, 2026-11-02). On sound_pool's -100 to 100 pan scale. */
+const int hand_pan = 60;
+
+/* A force field can always be switched off within this long before it, at the current speed, even when its countdown is
+shorter (dev, 2026-11-02, so top speed doesn't need mashing). At 50 ms that's the last 10 steps, at 100 ms the last 5,
+at 200 ms the last 3; above 200 ms the countdown already lasts at least this long, so this changes nothing there. */
+const int switch_min_time = 500;
 
 // Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. Home/End and Page Up/Down move by volume_change.
 const int min_volume = -50;

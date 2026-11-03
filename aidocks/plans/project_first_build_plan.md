@@ -234,6 +234,11 @@ Section 6: spikes and mines. BUILT 2026-11-02, on top of 4d47f6c; SECTION 6 COMP
   - run.nvgt: start_run() and reset_run() take an optional starting_life_count.
   - This makes spike and mine hits with lives left testable: the hit, then the life sound, and the run continues.
 - THIRD TESTING MENU (dev request, 2026-11-02, after the first build): a spawn menu between the speed and lives menus. The start order was speed, spawn, then lives; the dev then reordered it (same day) to lives, speed, then spawn. Escape steps back one menu (dev, same day): spawn to speed to lives, and escaping lives returns to the main menu. All three escapes are silent, including lives back to the main menu, since they're nested menus (dev, same day). It's a small stage loop in mainmenu().
+- FOURTH TESTING MENU (dev request, 2026-11-02, to help test force fields): after spawn, "Do you want the run to end when you run out of lives?" with Yes and No.
+  - No sets lives.nvgt's lives_can_end false. is_fatal() then never returns true for spikes, mines or force fields, and lose_lives() stops lives at 1. Hit sounds, the life sound and the throw all still play. Hazards (ends_run) still end the run.
+  - It's source-only via SCRIPT_COMPILED, so a release is always Yes. Escape steps back to spawn silently.
+  - start_run() takes an optional can_run_out (default true). Order: lives, speed, spawn, then this one.
+  - Hazard deaths with No (dev, 2026-11-02): the run starts over with the same choices instead of returning to the main menu, since hazards still kill. end_run_hazard() sets restart_run_requested after the fall clip, and mainmenu() loops start_run() while it's set. Quitting from the pause menu still goes back to the main menu.
   - menus/menu.nvgt choose_spawn_types() lists each type in spawner.nvgt's obstacle_types, then "all", in the dev's order: hazards, spikes, mines, all. Future types like force fields appear in it automatically once they're added to obstacle_types.
   - It's source-only via SCRIPT_COMPILED; a release always spawns all. Escape says "canceled" and returns to the main menu.
   - start_run() takes an optional only_type (default "all") and sets spawner.nvgt's spawn_only before reset_run(). choose_next_obstacle() then skips every other type.

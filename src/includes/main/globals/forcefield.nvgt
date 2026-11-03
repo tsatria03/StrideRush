@@ -4,7 +4,10 @@ at any height, costs forcefield_life_cost (1), cancels any jump or crouch, and t
 forward past it, landing with the landing sounds. On the last life there's no throw: its hit, the player's death,
 then the tile's fall. A field counts down like the other obstacles, with its own warn cues and no ledges. Passed, it
 keeps its loop and fades out behind you until it's dropped a spawn distance behind.
-The hands and the switch that turn a field off come in force fields Section 2; until then every field stays on.
+The switch: either hand turns a field off on any step of its countdown (dev, 2026-11-02), and always within the last
+switch_min_time before it, even where the countdown is shorter. The press plays panned to
+the hand used, and the field swaps its on loop for its off loop, so you pass it safely. With no field counting down, a
+hand press does nothing.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_forcefields() shrinks the array. */
 sound_pool forcefieldpool;
 class forcefield
@@ -73,6 +76,48 @@ return true;
 if (me_x > f.x + spawn_distance()) remove_forcefield(i);
 }
 return false;
+}
+/* Runs every frame, before step_check(), so a press on the same frame as the step onto the field still counts on the
+warn5 step. Either hand works; the press is panned to the one used. It switches off the nearest active field that's
+counting down. */
+void hand_check()
+{
+int pan = 0;
+if (controls.action_triggered("hand_left")) pan = -hand_pan;
+else if (controls.action_triggered("hand_right")) pan = hand_pan;
+else return;
+forcefield@ target = null;
+int target_steps = 0;
+for (uint i = 0; i < forcefields.length(); i++)
+{
+if (@forcefields[i] == null) continue;
+forcefield@ f = forcefields[i];
+if (!f.active or f.spent or me_x < switch_window_start(f)) continue;
+int steps_left = int(f.x - me_x);
+if (steps_left < 1) continue;
+if (@target == null or steps_left < target_steps)
+{
+@target = f;
+target_steps = steps_left;
+}
+}
+if (@target == null) return; // no field counting down: the press does nothing
+forcefieldpool.play_stationary_extended(get_pack_sound("objects/interaction/switches/switch/*press*"), false, 0, pan, 0, 100, false);
+switch_off_forcefield(target);
+}
+/* Where a field's switch can first be pressed: its countdown start, or switch_min_time before it at the current speed,
+whichever is earlier. So at top speed, where the countdown is a single step, the switch still works for the last half
+second. */
+double switch_window_start(forcefield@ f)
+{
+return min(f.countdown_start, f.x - ceil(double(switch_min_time) / step_time));
+}
+// Turns a field off: its on loop stops and its off loop starts at the same tile, so you pass it on the off loop.
+void switch_off_forcefield(forcefield@ f)
+{
+f.active = false;
+forcefieldpool.destroy_sound(f.loopslot);
+f.loopslot = forcefieldpool.play_2d(get_pack_sound("objects/traps/force_fields/" + f.theme + "/*off*"), me_x, 0, f.x, 0, true);
 }
 // The countdown: one misc/trap/force_fields warn cue per step before each field (see play_countdown()). Runs once per step.
 void forcefield_countdown()

@@ -1,9 +1,15 @@
 /* Losing lives. Returns true if the run carries on (with the life sound), or false when the cost ends the run, in which
 case the caller plays its own ending (end_run_hazard or end_run_hit). With 1 starting life, any hit ends the run. */
+/* False only from the source-only testing menu (dev, 2026-11-02): spikes, mines and force fields can then never end
+the run, and lives stop going down at 1. Hazards (ends_run) still end it. Set by start_run(). */
+bool lives_can_end = true;
+
 // True if paying this cost would end the run. Callers check it first so a fatal hit plays the death, not the player hit.
 bool is_fatal(int cost)
 {
-return cost == ends_run or lives - cost <= 0;
+if (cost == ends_run) return true;
+if (!lives_can_end) return false;
+return lives - cost <= 0;
 }
 bool lose_lives(int cost)
 {
@@ -12,7 +18,7 @@ if (is_fatal(cost))
 lives = 0;
 return false;
 }
-lives -= cost;
+lives = int(max(1, lives - cost)); // only ever clamps when lives_can_end is false
 p.play_stationary(get_pack_sound("misc/player/*life*"), false);
 return true;
 }

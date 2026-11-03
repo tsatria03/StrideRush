@@ -8,7 +8,7 @@ This file is a **lean dispatcher**. It carries the orientation you need before y
 
 **Stride Rush** (v1.0, early development) is an audio-only 2d side-scrolling runner written in **NVGT** (Non-Visual Game Toolkit, an AngelScript-based engine). There is no visual rendering: output is screen-reader speech plus HRTF spatial audio through NVGT's sound_pool. The player rides a one-way belt to the right; a step timer moves them and plays a oneshot footstep each tick, the tick speeds up over time, and they must jump or duck on cue past obstacles or die. It is **offline, single player**, built to be a simple core that users can easily expand in code. See **[[project_runner_overview]]** and **[[project_game_design]]**.
 
-Current state: **the first build is complete and v1.0 is playable** ([[project_first_build_plan]]; game in 69dedf8, docks in 0f0ccff). It has an endless run on a step timer (500 ms down to 100 ms) with footsteps on random platform surfaces, jump and a silent crouch, and hazards with ledges. Every obstacle has its own warning countdown. Spikes and mines cost lives, and deaths sound different by obstacle. There's a pause menu, readouts, volume keys and the speech buffer. Lanes, hands, weapons, doors, force fields, duck-under obstacles, scoring, settings (F1/F2) and the updater are still to come. New gameplay is designed through discussed plans first ([[feedback_plans_record_qna]]).
+Current state: **the first build is complete and v1.0 is playable** ([[project_first_build_plan]]; game in 69dedf8, docks in 0f0ccff). It has an endless run on a step timer (500 ms down to 50 ms) with footsteps on random platform surfaces, jump and a silent crouch, and hazards with ledges. Every obstacle has its own warning countdown. Spikes and mines cost lives, and deaths sound different by obstacle. There's a pause menu, readouts, volume keys and the speech buffer. Lanes, hands, weapons, doors, force fields, duck-under obstacles, scoring, settings (F1/F2) and the updater are still to come. New gameplay is designed through discussed plans first ([[feedback_plans_record_qna]]).
 
 Gameplay code lives in `src/includes/main/globals/`:
 - `tuning.nvgt`: every tunable number.
@@ -19,7 +19,7 @@ Gameplay code lives in `src/includes/main/globals/`:
 - `lives.nvgt` and `endrun.nvgt`: lives and how a run ends.
 - `decpool.nvgt`: the pool registry.
 
-A new obstacle type touches its own file, `spawner.nvgt` (`obstacle_types` and `place_obstacle()`), `clear_run_objects()` in `endrun.nvgt`, `all_pools`, and check and countdown calls in `step_check()` (its warning cues live in `sounds/misc/trap/<type>/warn1-5`) ([[project_entity_pattern]]). The lives, speed and spawn menus in `menus/menu.nvgt` (shown in that order) are testing only (`SCRIPT_COMPILED` hides them in releases); keep them out of the docks.
+A new obstacle type touches its own file, `spawner.nvgt` (`obstacle_types` and `place_obstacle()`), `clear_run_objects()` in `endrun.nvgt`, `all_pools`, and check and countdown calls in `step_check()` (its warning cues live in `sounds/misc/trap/<type>/warn1-5`) ([[project_entity_pattern]]). The lives, speed, spawn and "end the run when out of lives?" menus in `menus/menu.nvgt` (shown in that order) are testing only (`SCRIPT_COMPILED` hides them in releases); keep them out of the docks.
 
 ## Layout: code and assets are split
 
