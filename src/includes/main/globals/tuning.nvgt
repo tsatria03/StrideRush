@@ -57,6 +57,11 @@ const int hazard_life_cost = ends_run;
 const int spike_life_cost = 1;
 const int mine_life_cost = 2;
 const int forcefield_life_cost = 1;
+const int projectile_life_cost = 1; // for now (dev, 2026-11-02); may go up later
+
+/* A projectile closes in this many times as fast as a still obstacle seems to, scaled with the belt's speed (dev,
+2026-11-02): at 2 it starts as far beyond its meeting tile as you are before it, and flies at your own speed. */
+const int projectile_speed_factor = 2;
 
 /* Running into an active force field throws you this many tiles forward past it (dev, 2026-11-02). The gap after every
 force field gets the same number of extra tiles, so the throw always lands on clear floor before the next countdown. */

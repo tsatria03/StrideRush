@@ -15,6 +15,11 @@ Section 1: the projectile obstacle.
   - Contact on the step you arrive at meet_x: crouched is safe; otherwise a survivable hit plays its hit, misc/player/hit and the life sound and stops its loop, and a fatal hit plays its hit through p, then end_run_hit().
 - tuning.nvgt: projectile_life_cost 1 and projectile_speed_factor 2.
 - Wiring, per the new-obstacle checklist: obstacle_types and place_obstacle() in spawner.nvgt, all_pools, clear_run_objects(), the check and countdown calls in step_check(), and the flight update in run_loop(). The testing spawn menu picks the type up automatically.
+- BUILT 2026-11-02 on top of ff7e9bd. SECTION 1 COMPLETE: all 6 tests passed (2026-11-02): the flight in, ducking under, a standing hit, a jump still hit, the last life, and top speed with a mix and pause. As built:
+  - globals/projectile.nvgt is new. projectile_x() works out the position from me_x plus the step timer's fraction, so the flight pauses with steptimer.
+  - projectile_flight() runs every frame from run_loop(), after spike_swing(). sound_pool's update_sound_2d() takes ints and would round the flight to whole tiles, so the item's float x is set directly and item.update() is called with the pool's last listener values. Those sound_pool members are public in deps/sound_pool.nvgt.
+  - projectile_check() runs in step_check() after the force field check. The survivable hit plays in projectilepool at meet_x (your tile); a fatal one plays through p.
+  - The spawner, all_pools, clear_run_objects() and the countdown call are all wired, and tuning.nvgt has projectile_life_cost 1 and projectile_speed_factor 2.
 Section 2: docks. Changelog entries in 1.0 (it has room for 3 more), the readme (projectiles and the crouch now having a use), and the todo list (crouch-under obstacles to finished).
 
 Sounds (rescanned 2026-11-02):

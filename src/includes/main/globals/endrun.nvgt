@@ -58,6 +58,7 @@ destroy_all_hazards();
 destroy_all_spikes();
 destroy_all_mines();
 destroy_all_forcefields();
+destroy_all_projectiles();
 }
 void finish_run()
 {
