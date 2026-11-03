@@ -1,6 +1,6 @@
 ---
 name: project_projectiles_plan
-description: SETTLED, NOT BUILT (2026-11-02; 2 build sections: the obstacle, then docks) - projectiles, moving obstacles from sounds/objects/kombat/projectiles; how they're avoided, how they move, warned, hit and placed; Q&A log
+description: COMPLETE (2026-11-02; built, tested and documented) - projectiles, moving obstacles from sounds/objects/kombat/projectiles; how they're avoided, how they move, warned, hit and placed; Q&A log
 metadata:
   type: project
 ---
@@ -20,7 +20,8 @@ Section 1: the projectile obstacle.
   - projectile_flight() runs every frame from run_loop(), after spike_swing(). sound_pool's update_sound_2d() takes ints and would round the flight to whole tiles, so the item's float x is set directly and item.update() is called with the pool's last listener values. Those sound_pool members are public in deps/sound_pool.nvgt.
   - projectile_check() runs in step_check() after the force field check. The survivable hit plays in projectilepool at meet_x (your tile); a fatal one plays through p.
   - The spawner, all_pools, clear_run_objects() and the countdown call are all wired, and tuning.nvgt has projectile_life_cost 1 and projectile_speed_factor 2.
-Section 2: docks. Changelog entries in 1.0 (it has room for 3 more), the readme (projectiles and the crouch now having a use), and the todo list (crouch-under obstacles to finished).
+Section 2: docks. WRITTEN 2026-11-02 on top of 02b2a6a, so PROJECTILES ARE COMPLETE. The changelog has 1 new 1.0 entry (18 of 20). The readme has a projectile paragraph, and the crouching section and Down key now say crouching gets you under projectiles. On the todo list, crouch-under obstacles and warning cues for more obstacles moved to finished.
+Original Section 2 plan: Changelog entries in 1.0 (it has room for 3 more), the readme (projectiles and the crouch now having a use), and the todo list (crouch-under obstacles to finished).
 
 Sounds (rescanned 2026-11-02):
 - objects/traps/projectiles (moved there from objects/kombat by the dev, 2026-11-02): eight themes, each with a loop and a hit, numbered variants picked by wildcard.
