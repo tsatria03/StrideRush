@@ -9,6 +9,8 @@ runtimer.pause();
 jumptimer.pause();
 ducktimer.pause();
 duckcooldowntimer.pause();
+firetimer.pause();
+reloadtimer.pause();
 pause_pools();
 }
 void resume_game()
@@ -20,6 +22,8 @@ runtimer.resume();
 jumptimer.resume();
 ducktimer.resume();
 duckcooldowntimer.resume();
+firetimer.resume();
+reloadtimer.resume();
 }
 void pause_menu()
 {

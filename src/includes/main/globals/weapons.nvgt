@@ -1,0 +1,152 @@
+/* The weapons (dev, 2026-11-02), adapted from ToyMania's weapon system with its bugs fixed: one table instead of two
+disagreeing damage tables, separate ammo per gun, reloading any time a gun isn't full, and one generic target hook
+instead of a copy of the firing code per enemy type.
+All ten are available from the start of every run on 1 to 0, in this order, and a run starts with the bat drawn.
+Space swings or fires; the machine gun keeps firing while Space is held. A gun with nothing loaded, or mid-reload,
+plays empty instead. R reloads, timed by the length of the gun's reload sound like SimpleFighter, and ping plays when
+it's done. X speaks the ammo. Nothing can be hit yet: weapon_strike() is where walls will plug in. */
+string[] weapon_names = {"bat", "boot", "club", "feat", "fist", "hammer", "knife", "laser", "machine_gun", "pistol"};
+// Base damage and horizontal range in tiles ahead, from ToyMania's draw_weapon(); damage is times weapon_damage_multiplier.
+int[] weapon_damage = {3, 6, 9, 12, 15, 18, 21, 24, 27, 30};
+int[] weapon_range = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+// Ammo for each weapon; only the guns use it.
+int[] weapon_loaded(10);
+int[] weapon_reserve(10);
+
+int current_weapon = -1;
+bool reloading = false;
+int reload_length = 0;
+timer firetimer, reloadtimer;
+
+// The guns are the artillery: the last two in the table.
+bool is_gun(int w)
+{
+return weapon_names[w] == "machine_gun" or weapon_names[w] == "pistol";
+}
+string weapon_folder(int w)
+{
+return "equipments/weapons/" + (is_gun(w) ? "artillery" : "melee") + "/" + weapon_names[w] + "/";
+}
+// "machine_gun" is spoken as "machine gun".
+string weapon_display_name(int w)
+{
+return weapon_names[w].replace("_", " ", true);
+}
+/* Every run starts fresh: the guns full, nothing reloading, and the bat drawn the normal way, with its draw sound and
+"bat equipped." (dev, 2026-11-02). current_weapon is cleared first so draw_weapon() doesn't skip it as already held. */
+void reset_weapons()
+{
+for (int w = 0; w < int(weapon_names.length()); w++)
+{
+weapon_loaded[w] = is_gun(w) ? gun_start_loaded : 0;
+weapon_reserve[w] = is_gun(w) ? gun_start_reserve : 0;
+}
+reloading = false;
+firetimer.restart();
+reloadtimer.restart();
+current_weapon = -1;
+draw_weapon(0);
+}
+// Runs every frame from run_input(): the reload finishing, the number keys, Space, R and X.
+void weapon_input()
+{
+reload_check();
+for (int k = 1; k <= 10; k++)
+{
+if (controls.action_triggered("weapon_" + k)) draw_weapon(k - 1);
+}
+if (weapon_names[current_weapon] == "machine_gun")
+{
+if (controls.action_triggered("fire_held") and firetimer.elapsed >= machine_gun_fire_gap) fire_weapon();
+}
+else if (controls.action_triggered("fire") and firetimer.elapsed >= weapon_fire_gap) fire_weapon();
+if (controls.action_triggered("reload")) start_reload();
+if (controls.action_triggered("ammo_check")) speak_ammo();
+}
+// Drawing the weapon already held does nothing; drawing another cancels any reload.
+void draw_weapon(int w)
+{
+if (w == current_weapon) return;
+current_weapon = w;
+reloading = false;
+p.play_stationary(get_pack_sound(weapon_folder(w) + "*draw*"), false);
+speak_buffer(weapon_display_name(w) + " equipped.");
+}
+void fire_weapon()
+{
+firetimer.restart();
+int w = current_weapon;
+if (is_gun(w))
+{
+if (reloading or weapon_loaded[w] <= 0)
+{
+p.play_stationary(get_pack_sound(weapon_folder(w) + "*empty*"), false);
+return;
+}
+weapon_loaded[w]--;
+}
+p.play_stationary(get_pack_sound(weapon_folder(w) + "*fire*"), false);
+double target_x = weapon_strike(weapon_range[w], weapon_damage[w] * weapon_damage_multiplier);
+if (target_x < 0) return;
+// A hit: the weapon's hit at the target, and a gun's shell there too.
+p.play_2d(get_pack_sound(weapon_folder(w) + "*hit*"), me_x, 0, target_x, 0, false);
+if (is_gun(w)) p.play_2d(get_pack_sound(weapon_folder(w) + "*shell*"), me_x, 0, target_x, 0, false);
+}
+/* The target hook. Damages the nearest target within range tiles ahead and returns its x, or -1 if there was nothing
+to hit. Walls will fill this in (their hurt and death sounds play there); until then nothing can be hit. */
+double weapon_strike(int range, int damage)
+{
+return -1;
+}
+// R: tops a gun up from its reserve any time it isn't full. The reload lasts as long as its reload sound.
+void start_reload()
+{
+int w = current_weapon;
+if (reloading)
+{
+speak_buffer("This weapon is still reloading.");
+return;
+}
+if (!is_gun(w))
+{
+speak_buffer("This weapon doesn't take any ammo.");
+return;
+}
+if (weapon_loaded[w] >= gun_start_loaded)
+{
+speak_buffer("This weapon is already fully loaded.");
+return;
+}
+if (weapon_reserve[w] <= 0)
+{
+p.play_stationary(get_pack_sound(weapon_folder(w) + "*empty*"), false);
+speak_buffer("This weapon has no more reserved ammo to reload.");
+return;
+}
+int slot = p.play_stationary(get_pack_sound(weapon_folder(w) + "*reload*"), false);
+reload_length = int(p.get_sound_length(slot));
+reloading = true;
+reloadtimer.restart();
+}
+// Once the reload sound has had its full length, the ammo goes in and ping plays.
+void reload_check()
+{
+if (!reloading or reloadtimer.elapsed < reload_length) return;
+reloading = false;
+int w = current_weapon;
+int amount = int(min(gun_start_loaded - weapon_loaded[w], weapon_reserve[w]));
+weapon_loaded[w] += amount;
+weapon_reserve[w] -= amount;
+p.play_stationary(get_pack_sound(weapon_folder(w) + "*ping*"), false);
+}
+// X: one sentence about the current weapon's ammo.
+void speak_ammo()
+{
+int w = current_weapon;
+if (!is_gun(w))
+{
+speak_buffer("This weapon doesn't take any ammo.");
+return;
+}
+speak_buffer("You have " + weapon_loaded[w] + " out of " + gun_start_loaded + " rounds loaded, and " + weapon_reserve[w] + " rounds in reserve.");
+}

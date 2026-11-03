@@ -21,6 +21,7 @@ runtimer.restart();
 clear_run_objects();
 reset_surface();
 reset_player();
+reset_weapons();
 reset_spawner();
 update_listeners();
 }
@@ -122,6 +123,7 @@ if (controls.action_triggered("info_lives")) speak_buffer(lives == 1 ? "You have
 if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase());
 if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + step_time + " ms."); // the step interval itself, which shrinks as you speed up
 if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".");
+weapon_input();
 if (controls.action_triggered("music_up")) change_music_volume(volume_change);
 if (controls.action_triggered("music_down")) change_music_volume(-volume_change);
 if (controls.action_triggered("ambience_up")) change_ambience_volume(volume_change);

@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-01. PARTLY BUILT in the first build (2026-11-02): every binding is in keyboard.ini. The keys with code behind them are jump, crouch (held, with a 1.5 s auto-stand and a 1 s cooldown), the L, Z, C and T readouts, the volume keys, pause, Alt+F4 and the buffer keys. Lanes, hands, weapons, F (score), F1 and F2 are bound but unread until their features are built. Two things are deferred: the item keys go to the items plan (the brackets are taken by the buffer), and the jump/duck overlap rules go to the movement plan ([[feedback_plans_record_qna]]).
+Status: SETTLED 2026-11-01. PARTLY BUILT in the first build (2026-11-02): every binding is in keyboard.ini. The keys with code behind them are jump, crouch (held, with a 1.5 s auto-stand and a 1 s cooldown), the L, Z, C and T readouts, the volume keys, pause, Alt+F4 and the buffer keys. Lanes, hands, weapons, F (score), F1 and F2 are bound but unread until their features are built. UPDATE 2026-11-02: the hands now work (force fields), and so do the weapon keys (1 to 0, Space, X, R), with a new fire_held = SPACE:down for the machine gun ([[project_weapons_plan]]). Two things are deferred: the item keys go to the items plan (the brackets are taken by the buffer), and the jump/duck overlap rules go to the movement plan ([[feedback_plans_record_qna]]).
 
 Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFighter's key_config class (deps/key_config.nvgt, already in Stride Rush) and a keyboard.ini, like SimpleFighter's data/main/config/keyboard.ini ([[reference_simplefighter_architecture]]):
 - Up or W: jump.

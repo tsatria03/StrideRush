@@ -76,6 +76,16 @@ shorter (dev, 2026-11-02, so top speed doesn't need mashing). At 50 ms that's th
 at 200 ms the last 3; above 200 ms the countdown already lasts at least this long, so this changes nothing there. */
 const int switch_min_time = 500;
 
+/* Weapons (dev, 2026-11-02). Every hit's damage is the weapon's base damage (weapons.nvgt) times this, for all ten
+weapons at once: 2 makes the bat 6 and the pistol 60. */
+const int weapon_damage_multiplier = 2;
+// Each gun starts every run with this much loaded and in reserve (ToyMania's ammo); nothing refills it yet.
+const int gun_start_loaded = 50;
+const int gun_start_reserve = 250;
+// The shortest gap between two shots or swings per Space press, and the machine gun's rate while Space is held.
+const int weapon_fire_gap = 50;
+const int machine_gun_fire_gap = 100;
+
 // Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. Home/End and Page Up/Down move by volume_change.
 const int min_volume = -50;
 const int volume_change = 1; // 1 per press, like ToyMania (dev, 2026-11-02)

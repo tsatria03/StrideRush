@@ -21,6 +21,13 @@ Section 1: the weapon system.
   - reset_weapons() runs from reset_run(): the bat drawn, guns full.
 - keyboard.ini: a new fire_held = SPACE:down.
 - run.nvgt run_input() calls the weapon input. pause.nvgt pauses and resumes the weapon timers.
+- BUILT 2026-11-02 on top of 0493547. SECTION 1 COMPLETE: all 5 tests passed (2026-11-02): drawing, melee, the pistol's ammo and reload, the machine gun running dry plus reload refusals and cancel, and separate ammo with pause and a fresh run. As built:
+  - globals/weapons.nvgt uses parallel arrays (weapon_names, weapon_damage, weapon_range, weapon_loaded, weapon_reserve) indexed 0 to 9. is_gun() marks machine_gun and pistol.
+  - weapon_input() runs every frame from run_input(): reload_check(), then the number keys, fire or fire_held, R and X.
+  - The run-start bat was first drawn quietly. CHANGED (dev, 2026-11-02): reset_weapons() (called from reset_run()) now draws it the normal way, with the draw sound and "bat equipped.", at the start of every run. Pressing 1 while holding it does nothing, as agreed.
+  - weapon_strike(range, damage) returns -1 for now. On a hit it will return the target's x, and fire_weapon() then plays the weapon's hit there, plus shell for guns, through p.
+  - reload_length comes from p.get_sound_length() of the reload slot, in ms. The refusals: "This weapon is still reloading.", "This weapon doesn't take any ammo.", "This weapon is already fully loaded.", and "This weapon has no more reserved ammo to reload." (that last one also plays empty).
+  - keyboard.ini gains fire_held=SPACE:down. pause.nvgt pauses and resumes firetimer and reloadtimer. tuning.nvgt gains weapon_damage_multiplier 2, gun_start_loaded 50, gun_start_reserve 250, weapon_fire_gap 50 and machine_gun_fire_gap 100.
 Section 2: ammo packs, after their own Q&A (where they appear, how much they refill, and what get, use and break are for).
 Section 3: docks. The changelog's last 2 entries in 1.0 go to weapons (dev, 2026-11-02: "We can fill in the last 2 entries with the weapon sections"), one for the weapon system and one for ammo packs, filling 1.0 to 20. No 1.1 block yet. Also the readme (the weapon keys) and the todo list.
 
