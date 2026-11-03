@@ -27,12 +27,13 @@ Current tree (rescanned 2026-11-01 after the dev's second reorganization; 300 fi
   - "ledge" is for hazards (dev, 2026-11-01): the ground turns to ledge just before and after a hazard, like SimpleFighter's hazard auto-ledges. It is NOT a normal surface, so the random surface picker must exclude it ([[project_obstacles_plan]]).
   - walls/walldirt: bump, death, hurt1-3. That's the first full-height obstacle sound and the first thing for weapons to hit (hurt on each hit, death when smashed, bump on running into it).
 - objects/interaction/items/other/<color>_key: black, green, orange, pink, purple, red and yellow keys (ToyMania keys). Clips: spawn, loop1-4, get, use, break; yellow has spawn1-2, use1-2 and a single loop. Items now sit under interaction with an "other" grouping level (the earlier equipments/items folder is gone).
-- objects/kombat/projectiles: empty.
+- objects/kombat/projectiles: GONE (dev, 2026-11-02). The projectiles first went here, then the dev moved them to objects/traps/projectiles (below) and the kombat folder no longer exists.
+- objects/traps/projectiles (dev, 2026-11-02): boulder (loop, hit1-3; first named "bolder", fixed by the dev), car (loop1-6, hit), car2 (loop1-5, hit1-5), firewall, missile, missile2, missile3, missile4 (loop, hit). Under traps like every other obstacle, so the spawner's objects/traps/<type> path works unchanged.
 - objects/transitions/doors/door, door2, door3, door4: open, close, move, loop, grant, deny, jam1-2, hurt, death.
 - objects/transitions/teleporters/tp: loop, move.
 - objects/interaction/switches/switch: press (added 2026-11-01, for the future hand-operated force field). Moved there from transitions by the dev the same day, matching SimpleFighter's builder, which files switches under interaction.
 - objects/traps/force_fields/electric, electric2: on, off, hit. on and off are both LOOPS, a distinct one for each state: on while the field is active, off while it's inactive (dev, 2026-11-02). Don't assume a clip is a oneshot just because it isn't named loop. Renamed from "force fields" by the dev on 2026-11-01, so no folder name has a space.
-- objects/traps/hazards: chasm, chasm2, electricity, electricity2, electricity4, fire, lava, pit, quicksand, water, water2. Each has loop and fall.
+- objects/traps/hazards: chasm, chasm2, electricity, electricity2, electricity3, electricity4, fire, lava, pit, quicksand, water, water2. Each has loop and fall. electricity3 was added 2026-11-02; a briefly misspelled "electrisity4" was fixed by the dev the same day.
 - objects/traps/mines/mine, mine2, mine3: spawn, light, loop, hit, explode.
 - objects/traps/spikes/electric_ray, large_spike: loop and hit only. The dev trimmed these for Stride Rush on 2026-11-01, removing hurt (.wav) and death1-2, so spikes have no clips for being smashed.
   - Meaning (dev, 2026-11-02): loop.ogg is ONE SWING, played once per swing on the spike's random rhythm (500 to 1000 ms), not looped continuously. hit.ogg is the spike hitting you.
