@@ -28,11 +28,11 @@ min_gap_tiles. */
 const int spawn_ahead_time = 3000;
 const int min_gap_tiles = 6;
 
-/* The warning countdown before every obstacle (dev, 2026-11-02): one step per countdown_ms of step time, rounded up: 5
-at 500 ms, 4 at 400, 3 at 300, 2 at 200, 1 at 100 and faster, one cue per step, so at slow speeds you jump on its last steps. A
-hazard's ledge before covers exactly its countdown; spikes and mines count down on normal floor. A hazard's ledge
-after is a fixed ledge_after_tiles. */
-const int countdown_ms = 100;
+/* The warning countdown before every trap: always countdown_length steps, warn1 to warn5, one cue per step, at any
+speed (dev, 2026-11-03, for 1.1; it used to shrink with speed, 5 at 500 ms down to 1 at 100 ms). A jump lasts about
+1 s, so at slow speeds you still jump on the last cues. A hazard's ledge before covers exactly the countdown; the
+other traps count down on normal floor. A hazard's ledge after is a fixed ledge_after_tiles. */
+const int countdown_length = 5;
 const int ledge_after_tiles = 2;
 // Normal floor between one obstacle and the next one's countdown: a random min_floor_time to max_floor_time at the current speed, never under min_floor_tiles.
 const int min_floor_time = 1000;

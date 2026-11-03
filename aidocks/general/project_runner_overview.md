@@ -16,7 +16,7 @@ Status as of 2026-11-02: a git repo on branch main with remote origin https://gi
 - Lives, and death sounds by obstacle type.
 - A pause menu, readouts, volume keys and the speech buffer.
 - sr/docks/ holds the readme, the changelog ("New in 1.0.") and the todo list.
-Next features come from the todo list and the parked parts of the plans. The build tools in build/ are adapted ([[project_build_pipeline]]).
+Since then (2026-11-02 and 3): force fields, projectiles, ten weapons, ammo packs and an inventory were added. 1.0 was CLOSED and tagged V1.00 at ca6f256 on 2026-11-03. Work now goes toward 1.1. Next features come from the todo list and the parked parts of the plans. The build tools in build/ are adapted ([[project_build_pipeline]]).
 
 Engine: the legacy fork at C:\nvgt, source at misc/Legacy-NVGT. The user/ folder is gitignored and mostly not yet discussed. Only read inside it where the dev points; so far that's user/CaveDefender-main for the buffer system ([[reference_cavedefender_buffer]]).
 

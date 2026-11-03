@@ -35,10 +35,10 @@ else if (packs_ok and random(1, ammo_pack_chance) == 1) next_type = "ammo_packs"
 else next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
 }
-// The countdown before an obstacle: one step per countdown_ms of the current step time, rounded up, at least 1.
+// The countdown before an obstacle (and an item's spacing and pickup window): countdown_length steps at any speed.
 int countdown_steps()
 {
-return int(max(1, ceil(double(step_time) / countdown_ms)));
+return countdown_length;
 }
 // spawn_ahead_time at the current speed, in tiles.
 int spawn_distance()

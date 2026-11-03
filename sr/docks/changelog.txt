@@ -1,3 +1,5 @@
+New in 1.1.
+Made it so every trap now plays its full five-step warning countdown at any speed, instead of the countdown getting shorter as you speed up.
 New in 1.0.
 Added ammo packs, which you pick up with either hand as you reach them and later open from your new inventory to refill both guns' reserves, but which break if you run or land on top of them.
 Added ten weapons on the number keys, from the bat up to the machine gun and pistol, which you swing or fire with the space bar, with separate ammo for each gun and reloading at any time.

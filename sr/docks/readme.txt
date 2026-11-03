@@ -11,12 +11,12 @@ Runs are endless. The goal is to get as far as you can before something stops yo
 
 Obstacles.
 
-Hazards, such as pits, chasms, fire, lava, water, quicksand and electricity, end your run straight away if you fall into one. Each hazard has a ledge leading up to it, and as you step along the ledge you'll hear a countdown, one cue per step, with the last cue on the step right before the hazard. At slower speeds the ledge is longer, so wait for the last few cues before you jump. Once you're fast enough, jumping on any ledge step will carry you over.
+Hazards, such as pits, chasms, fire, lava, water, quicksand and electricity, end your run straight away if you fall into one. Each hazard has a five-step ledge leading up to it, and as you step along the ledge you'll hear a five-cue countdown, one cue per step, with the last cue on the step right before the hazard. At slower speeds, wait for the last few cues before you jump. Once you're fast enough, jumping on any ledge step will carry you over.
 Spikes swing back and forth with their own rhythm, which you'll hear as you approach them. Getting hit by spikes costs you 1 life.
 Mines make a sound when they appear, then light up and start ticking once you get close. Stepping onto a mine costs you 2 lives. Once you jump over a mine, you'll hear it keep ticking as it fades out behind you.
 Force fields hum ahead of you while they're on, and jumping or crouching won't get you past one. Press either hand key during a force field's countdown to switch it off. You'll hear the switch, then the field's sound changes as it shuts off, and you can run straight through. At the fastest speeds, where the countdown is very short, you can still switch one off in the last half second before you reach it. If you reach a force field while it's still on, it costs you 1 life and throws you 5 steps forward past it.
 Projectiles, such as missiles, cars, boulders and firewalls, fly toward you at head height, twice as fast as you run, so you'll hear them rushing in. Hold the crouch key so you're crouched when one reaches you, and it flies over you and fades away behind. A crouch only lasts a second and a half, so at slower speeds wait for the last few countdown cues before you crouch. Jumping won't help, and if one hits you, it costs you 1 life.
-Spikes, mines, force fields and projectiles have a countdown too, just like hazards, timed the same way, but without a ledge. Each kind of obstacle has its own countdown sounds, so you can tell which one is coming from the countdown alone.
+Spikes, mines, force fields and projectiles have the same five-cue countdown as hazards, at every speed, but without a ledge. Each kind of obstacle has its own countdown sounds, so you can tell which one is coming from the countdown alone.
 
 Lives.
 
