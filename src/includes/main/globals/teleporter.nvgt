@@ -2,7 +2,7 @@
 it works like an ammo pack: its spawn clip, then its loop at its tile; either hand picks it up within
 hand_window_start() (get and the player's give, centered) and it goes into the inventory as "player_teleporter".
 Arriving on its tile on the ground, landing on it, or a weapon hit breaks it (break) and it's lost; a clean jump over
-it misses it. U uses it (the teleport itself comes in Section 2).
+it misses it. U uses it (use_teleporter()).
 Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_teleporters() shrinks the array. */
 sound_pool teleporterpool;
 const string teleporter_folder = "equipments/items/common/player_teleporter/";
@@ -126,6 +126,71 @@ void remove_teleporter(uint i)
 if (i >= teleporters.length() or @teleporters[i] == null) return;
 stop_teleporter(teleporters[i]);
 @teleporters[i] = null;
+}
+/* True if a standing obstacle sits exactly on tile x, so a teleport can't land there (dev, 2026-11-03: "It can never
+land you exactly on the obstacle, like on top of a hazard."). Things already dealt with (a passed mine, a broken or
+crashed wall, an opened or crashed door, a reached force field) don't count; a projectile counts at its meeting tile. */
+bool obstacle_on_tile(double x)
+{
+for (uint i = 0; i < hazards.length(); i++)
+{
+if (@hazards[i] != null and hazards[i].x == x) return true;
+}
+for (uint i = 0; i < spikes.length(); i++)
+{
+if (@spikes[i] != null and spikes[i].x == x) return true;
+}
+for (uint i = 0; i < mines.length(); i++)
+{
+if (@mines[i] != null and !mines[i].spent and mines[i].x == x) return true;
+}
+for (uint i = 0; i < forcefields.length(); i++)
+{
+if (@forcefields[i] != null and !forcefields[i].spent and forcefields[i].x == x) return true;
+}
+for (uint i = 0; i < projectiles.length(); i++)
+{
+if (@projectiles[i] != null and !projectiles[i].spent and projectiles[i].meet_x == x) return true;
+}
+if (@wall_at(x) != null) return true;
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] != null and doors[i].x == x and door_standing(doors[i])) return true;
+}
+return false;
+}
+/* U on a teleporter (dev, 2026-11-03): moves you a random teleport_min_time to teleport_max_time of belt, in tiles at the
+current speed, forward or back half and half, never before tile 0. It's risky by design, so it can drop you right in
+front of danger, but a tile holding an obstacle moves on a step the same way until it's clear. Going back, anything
+still waiting behind you counts again. Always used, so returns true. */
+bool use_teleporter()
+{
+int steps = int(max(1, round(double(random(teleport_min_time, teleport_max_time)) / step_time, 0)));
+int dir = random(0, 1) == 0 ? -1 : 1;
+// Never back past the start of the run; with no room behind you at all, it goes forward instead.
+if (dir < 0 and me_x < 1) dir = 1;
+else if (dir < 0 and me_x - steps < 0) steps = int(me_x);
+double target = me_x + dir * steps;
+while (obstacle_on_tile(target))
+{
+target += dir;
+if (target < 0)
+{
+// Backed into the start with no clear tile: go forward from where you are instead.
+dir = 1;
+target = me_x + 1;
+}
+}
+int moved = int(abs(target - me_x));
+p.play_stationary(get_pack_sound(teleporter_folder + "*use*"), false);
+cancel_movement();
+me_x = target;
+update_listeners();
+if (dir > 0) spawner_catch_up(); // so what comes next still arrives with its full warning
+play_landing();
+string where = dir > 0 ? "forward" : "back";
+speak_buffer(moved == 1 ? "You were moved " + where + " 1 step." : "You were moved " + where + " " + moved + " steps.");
+return true;
 }
 // The only place allowed to shrink the array.
 void destroy_all_teleporters()
