@@ -19,3 +19,4 @@ REVISED (dev, 2026-11-03): MAJOR versions (x.0, such as 1.0) hold up to 20 entri
 Wording (dev, 2026-11-03): an entry for something new starts "Added ...". An entry that changes how something already in the game behaves starts "Made it so ...", like the dev's rewrite of the first 1.1 entry ("Made it so every trap now plays its full five-step warning countdown at any speed, instead of ..."). ToyMania's changelog uses the same two openings. The dev also adds "now" after "Made it so ..." ("Made it so you can now crouch again ...", "Made it so the ground now changes ..."), so write it that way.
 
 **How to apply:** describe the observable change in a sentence or two. Trust the changelog over the readme or todo list when they disagree. Keep lines short ([[feedback_dock_line_length_1024]]).
+1.2 OPENED (2026-11-03) by keys ([[project_keys_plan]]): "New in 1.2." holds 3 of 10 entries, and build/version.txt is 1.2.

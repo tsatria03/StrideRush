@@ -1,11 +1,11 @@
 ---
 name: project_keys_plan
-description: SETTLED (2026-11-03, for 1.2), not built - keys that unlock real doors; ToyMania's key and door system summarized as the reference; Q&A log
+description: COMPLETE (2026-11-03, the first 1.2 feature; changelog 1.2 at 3 of 10) - keys that unlock real doors; ToyMania's key and door system summarized as the reference; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-03 (not built; sections below), started 2026-11-03 on top of abcb495, the first feature of 1.2. Doors came first ([[project_doors_plan]]): "Keys are things doors will use to unlock them." No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). The first 1.2 change opens "New in 1.2." and bumps build/version.txt to 1.2 ([[feedback_changelog_rules]]).
+Status: COMPLETE 2026-11-03 (all three sections built, tested and documented), started 2026-11-03 on top of abcb495, the first feature of 1.2. Doors came first ([[project_doors_plan]]): "Keys are things doors will use to unlock them." No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). The first 1.2 change opens "New in 1.2." and bumps build/version.txt to 1.2 ([[feedback_changelog_rules]]).
 
 Sounds on hand (rescanned 2026-11-03):
 - Keys, in objects/interaction/items/other/<color>_key: black, green, orange, pink, purple and red each have spawn, loop1 to loop4, get, use and break. yellow_key has one loop, spawn1 and spawn2, use1 and use2, get and break.
@@ -60,3 +60,4 @@ Section 3: docks. Open "New in 1.2." with a version bump to 1.2, readme sections
   - Test 4a (U with no door in reach says "There is no door nearby." and keeps the key) passed (2026-11-03).
   - Test 4b (a second U on an unlocked door says "This door is already unlocked." and keeps the key) passed (2026-11-03).
   - Test 4c (U at a fake door plays its jam and "This door is jammed." and keeps the key) passed (2026-11-03). SECTION 2 COMPLETE.
+- SECTION 3 WRITTEN (2026-11-03, on top of 682ddaf), so KEYS ARE COMPLETE. Changelog: "New in 1.2." opened on top with 3 entries (newest first: fake doors jam; real doors locked and U unlocks from 2 s; keys added), 3 of 10. build/version.txt bumped from 1.1 to 1.2. Readme: the doors paragraph covers locking, U, deny and keys, and was split in two (the fake door half on its own line) to stay under 1024 characters; fake doors jam for hands and keys; "Ammo packs and your inventory." is now "Items and your inventory." with a keys paragraph; weapons break keys; the U line mentions keys. Todo list: "Add keys that unlock real doors." finished, and the unfinished item is now "Add other items to pick up along the way."

@@ -1,3 +1,7 @@
+New in 1.2.
+Made it so a fake door now sounds jammed when you try to open it with your hands, or use a key on it, so you can tell it won't open.
+Made it so real doors are now locked, so you press U with a key from your inventory to unlock one from up to 2 seconds away, then open it with either hand.
+Added keys, which turn up once before each real door in a choice of colors, and which you pick up with either hand, but which break if you run onto them, land on them or hit them with a weapon.
 New in 1.1.
 Made it so your weapons now break ammo packs, so a shot or swing at a pack in your way destroys it, and an ammo pack now gives 5 to 10 rounds to the gun you're holding, instead of 50 to both.
 Made it so guns now fire bullets that fly ahead of you with their own sound, so a shot only lands if its target is within reach, and each gun now starts with 50 rounds in reserve, up to 200.
