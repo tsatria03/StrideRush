@@ -1,6 +1,6 @@
 ---
 name: project_controls_plan
-description: SETTLED, PARTLY BUILT (jump, crouch, L/Z/C/T readouts, volume, pause, Alt+F4 and buffer keys work; lanes, hands, weapons, F score, F1 and F2 not yet) - Stride Rush in-game key layout (dev-set 2026-11-01), rebindable via SimpleFighter's key_config; item keys and jump/duck overlap deferred to later plans; includes a Q&A log
+description: SETTLED, PARTLY BUILT (jump, crouch, L/Z/C/T readouts, volume, pause, Alt+F4, buffer keys, hands, weapons, X ammo, R reload and the I, Shift+I and U inventory keys work; lanes, F score, F1 and F2 not yet) - Stride Rush in-game key layout (dev-set 2026-11-01), rebindable via SimpleFighter's key_config; item keys and jump/duck overlap deferred to later plans; includes a Q&A log
 metadata:
   type: project
 ---

@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-03, for 1.1 (started 2026-11-02 on top of d956876; parked for weapons, which are now built). The dev chose walls ahead of doors ("Not yet. Let's talk about walls first"). Not built: build one section per go-ahead ([[feedback_describe_dont_show_code]]).
+Status: SETTLED 2026-11-03, for 1.1 (started 2026-11-02 on top of d956876; parked for weapons, which are now built). The dev chose walls ahead of doors ("Not yet. Let's talk about walls first"). COMPLETE: every section was built, tested and documented.
 
 Build sections:
 Section 1: walls and the layered countdown. Weapons can't hurt walls yet, so every wall gets crashed into, which tests everything except weapon hits.

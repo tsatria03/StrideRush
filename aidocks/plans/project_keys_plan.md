@@ -1,0 +1,48 @@
+---
+name: project_keys_plan
+description: SETTLED (2026-11-03, for 1.2), not built - keys that unlock real doors; ToyMania's key and door system summarized as the reference; Q&A log
+metadata:
+  type: project
+---
+
+Status: SETTLED 2026-11-03 (not built; sections below), started 2026-11-03 on top of abcb495, the first feature of 1.2. Doors came first ([[project_doors_plan]]): "Keys are things doors will use to unlock them." No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). The first 1.2 change opens "New in 1.2." and bumps build/version.txt to 1.2 ([[feedback_changelog_rules]]).
+
+Sounds on hand (rescanned 2026-11-03):
+- Keys, in objects/interaction/items/other/<color>_key: black, green, orange, pink, purple and red each have spawn, loop1 to loop4, get, use and break. yellow_key has one loop, spawn1 and spawn2, use1 and use2, get and break.
+- Doors, in objects/transitions/doors/door to door4: grant, deny, jam1 and jam2 are not used yet.
+
+ToyMania reference (read only; globals/key.nvgt, door.nvgt, game.nvgt), read 2026-11-03 at the dev's request:
+- Spawning: a timer spawns a key every 250 ms while there are fewer than keynum, at a random spot, picking a random category (common or other) and a random key folder in it. Spawning only runs on the boss level (keyspawn), and stops once you've collected enough for the door.
+- A key plays spawn once and its loop at its spot. With autobreak on, it breaks by itself after a random 2.5 to 5 s (divided by the difficulty), playing break.
+- Pickup is automatic: walk within 2 tiles and it plays get (stationary), plus misc/player/give, says the key's name, and gives one of that key to the inventory (normal mode only). collected_keys counts every pickup in both modes.
+- Colors don't matter: every key is the same, just a different sound. The color is only the item's name in the inventory.
+- A door is spawned with required_keys, a random 20 to 40 (normal) or 10 to 20 (boss level). Enter within 2 tiles opens it:
+  - If a guard, car or boss is within 2 tiles, it plays jam and says the door is jammed.
+  - If collected_keys plus keys in the inventory is under required_keys, it plays deny and says you need more keys.
+  - Otherwise it takes ONE key out of the inventory and plays that key's use sound. In endless mode, with nothing in the inventory but enough collected, it plays grant instead. If you have enough collected but none left in the inventory, it plays deny.
+  - Then it clears the keys, waits 500 ms, plays open and the move loop, carries you to the door's end, plays close, and ends the level with a results dialog.
+- Pitfalls: the count needs 20 to 40 keys but only one is used up; the locked message says "you need N more" using the total required, not the missing number; the folder scan runs on every Enter press; remove_at() followed by return handles one key per frame; wait() blocks the game loop.
+
+Q&A log:
+- Q: Should a real door need a key to open? (Asked 2026-11-03; Claude recommended yes: a real door is locked, and opening it by hand uses up one key from your inventory, playing that key's use and the door's grant before it opens. With no key, you hear deny and crash into it for its 3 lives.)
+- Dev (2026-11-03): "the key color does not matter for any of the door folders. It will open it no matter what." So, as in ToyMania, every key color is the same key with its own sounds, and any key opens any of door to door4. The color is only its name in the inventory. The question above is still open on what happens without a key (Claude recommended deny, then a crash for the door's 3 lives).
+- A: yes (dev, 2026-11-03): "real doors will use keys to unlock/open it." Opening a real door by hand uses up one key of any color, playing its use sound and the door's grant, then it opens as now. With no key it plays deny, and reaching it still locked is a crash for 3 lives. SETTLED.
+- The dev doesn't know where jam fits ("I have know idea how or where it could be used"). Q: Should a hand press on a FAKE door play jam and say it's jammed, so fake doors finally answer a hand, while weapons still break them? (Asked 2026-11-03; Claude recommended yes.)
+- A: yes (dev, 2026-11-03): "that's a perfect idea for fake doors. A jammed door can't be opened anyway." A hand press in a fake door's window plays jam1 or jam2 at the door's pitch and says "This door is jammed." It costs nothing; weapons still break it and a crash still costs 3 lives. SETTLED.
+- Q: How do keys appear? (Asked 2026-11-03; Claude recommended: keys work like ammo packs, an item on the belt with spawn and its loop, picked up by hand into the inventory, breaking if you land on them, broken by weapons; one key is guaranteed somewhere in each 50 ms section before its real door, at a random spot, with no extras.)
+- A: yes, one key guaranteed per section before its real door, working like ammo packs (dev, 2026-11-03). SETTLED.
+- The dev added (2026-11-03): "you need to press U to use the key to unlock the door, then use your hand to open the door. So a 2 part job." So the key is NOT used up by the hand press. With a key selected in the inventory, U unlocks the real door ahead (the key's use, then the door's grant), and then a hand press opens it as now. A hand press on a still-locked real door plays deny. This replaces the earlier "the hand press uses up the key" wording above.
+- Q: When can U unlock the door? (Asked 2026-11-03; Claude recommended any time the real door is within weapon reach, 2 s ahead, so the unlock comes early and the hand window stays for opening; U with no real door in reach says "There is no door nearby." and keeps the key.)
+- A: yes (dev, 2026-11-03). U unlocks any time a real door is within weapon_reach() (2 s ahead); with none in reach it says "There is no door nearby." and keeps the key. An unlocked door stays unlocked until opened or crashed into. SETTLED.
+- Q: Are Claude's proposed defaults for the rest OK (asked 2026-11-03)? 1. The section's key spawns at a random spot in the first half of the stretch before its real door, never on another obstacle, so there's time to pick it up and unlock. 2. Each key picks one of its loops at random (yellow has one), and its spawn sound at random where there are two. 3. Keys stack in the inventory by color, like "red key"; a key you didn't use carries on to later doors. 4. Unlock speech: "The door is unlocked."; a hand on a locked door plays deny and says "This door is locked." 5. Weapons and bullets break keys when they're the nearest target, as with packs. 6. The testing spawn menu gives keys wherever real doors spawn (all, real doors, real doors spread), plus a "keys" choice of its own. 7. A real door unlocked but not opened still crashes for 3 lives. 8. U with a key selected and an unlocked door ahead says "This door is already unlocked." and keeps the key.
+- A: all 8 agreed (dev, 2026-11-03: "yes, agreed."). THE PLAN IS SETTLED.
+
+Build sections (written 2026-11-03; build one per go-ahead, [[feedback_describe_dont_show_code]]):
+Section 1: keys on the belt and in the inventory.
+- New globals/key.nvgt (keypool, same entity pattern as ammopack.nvgt): spawn_key() plays spawn and a random loop at its tile; pickup by either hand in the hand window (get and misc/player/give, stationary, says e.g. "red key"), giving "red_key" to the inventory; arriving on it on the ground or landing on it breaks it; key_at(), key_in_reach() and strike_key() so bullet_hits() and weapon_strike() treat keys as targets like packs.
+- spawner.nvgt: "keys" joins item_types; one key is due per section, spawning in the first half of the stretch before the next real door mark; testing spawn choices give keys before each real door (all, real doors, real doors spread) and a "keys" choice spawns only keys.
+- Wiring: all_pools, clear_run_objects(), hand_check() (after packs), menus/menu.nvgt spawn choices.
+Section 2: locks, U and jam.
+- door.nvgt: real doors start locked. use_key() from use_item() unlocks the nearest locked real door within weapon_reach() (the key's use, then the door's grant, stationary, "The door is unlocked."), or says "There is no door nearby." or "This door is already unlocked." and keeps the key.
+- open_door(): a hand on a locked real door plays deny ("This door is locked."); on a fake door in its window it plays jam1 or jam2 at the door's pitch ("This door is jammed.").
+Section 3: docks. Open "New in 1.2." with a version bump to 1.2, readme sections for keys and locked doors, and the todo list.

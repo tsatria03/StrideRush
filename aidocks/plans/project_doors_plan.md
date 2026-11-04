@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-03 (started on top of d43cbc2, after walls were finished). The dev wants doors before keys: "Keys are things doors will use to unlock them, but we should talk about doors first." Not built: build one section per go-ahead ([[feedback_describe_dont_show_code]]).
+Status: SETTLED 2026-11-03 (started on top of d43cbc2, after walls were finished). The dev wants doors before keys: "Keys are things doors will use to unlock them, but we should talk about doors first." COMPLETE: every section was built, tested and documented.
 
 Build sections:
 Section 1: real and fake doors, without weapon hits. Fake doors can't be broken yet, so every one gets crashed into.

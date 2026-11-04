@@ -1,11 +1,11 @@
 ---
 name: project_1_1_plan
-description: IN DISCUSSION (started 2026-11-03) - the dev's suggestions for version 1.1, taken one at a time before walls; Q&A log
+description: COMPLETE - version 1.1 closed and tagged V1.10 at abcb495 (2026-11-03); the dev's 1.1 suggestions (surface timing, five-step countdowns, crouch cooldown) are all built; Q&A log
 metadata:
   type: project
 ---
 
-Status: IN DISCUSSION, started 2026-11-03, after 1.0 was closed and tagged V1.00 at ca6f256. The dev has suggestions for 1.1 to go through before walls ([[project_walls_plan]]). No code until a suggestion is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). The first 1.1 change opens the "New in 1.1." changelog block and bumps build/version.txt to 1.1 ([[feedback_changelog_rules]]).
+Status: COMPLETE. All three suggestions were built, tested and documented, and 1.1 was closed and tagged V1.10 at abcb495 (2026-11-03). Originally started 2026-11-03, after 1.0 was closed and tagged V1.00 at ca6f256. The dev has suggestions for 1.1 to go through before walls ([[project_walls_plan]]). No code until a suggestion is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). The first 1.1 change opens the "New in 1.1." changelog block and bumps build/version.txt to 1.1 ([[feedback_changelog_rules]]).
 
 Suggestion 1: how often the ground surface changes.
 - Dev (2026-11-03): "When does the tile folder change again? I feel like it doesn't change very often."

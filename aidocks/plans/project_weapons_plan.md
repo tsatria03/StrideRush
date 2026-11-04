@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Status: SETTLED for Section 1 on 2026-11-02 (started on top of d956876). It comes before walls, which need something to smash them with ([[project_walls_plan]]). Not built: build one section per go-ahead ([[feedback_describe_dont_show_code]]). The ammo pack details (Section 2) get their own questions before that section is built.
+Status: SETTLED for Section 1 on 2026-11-02 (started on top of d956876). It comes before walls, which need something to smash them with ([[project_walls_plan]]). COMPLETE: every section was built, tested and documented. The ammo pack details (Section 2) get their own questions before that section is built.
 
 Build sections:
 Section 1: the weapon system.

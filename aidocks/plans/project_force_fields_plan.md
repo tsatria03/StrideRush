@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-02 (started on top of a785be4; settled on top of 62a3ad0). The dev chose force fields as the next feature because "they are sort of like hazards". Not built: build one section per go-ahead ([[feedback_describe_dont_show_code]]).
+Status: SETTLED 2026-11-02 (started on top of a785be4; settled on top of 62a3ad0). The dev chose force fields as the next feature because "they are sort of like hazards". COMPLETE: every section was built, tested and documented.
 
 UPDATE (dev, 2026-11-03, for 1.1, found while testing walls): a switched-off force field's countdown now stops. forcefield_countdown() skips fields that aren't active, the same fix as destroyed walls ([[project_walls_plan]]).
 

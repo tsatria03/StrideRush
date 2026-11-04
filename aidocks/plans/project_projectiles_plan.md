@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-02 (started on top of 0bf44b5, right after force fields were finished). The dev raised it after adding projectile sounds. Not built: build one section per go-ahead ([[feedback_describe_dont_show_code]]).
+Status: SETTLED 2026-11-02 (started on top of 0bf44b5, right after force fields were finished). The dev raised it after adding projectile sounds. COMPLETE: every section was built, tested and documented.
 
 Build sections:
 Section 1: the projectile obstacle.

@@ -1,6 +1,6 @@
 ---
 name: project_first_build_plan
-description: PLANNED AND SETTLED (all 7 open questions answered), NOT BUILT - build plan for the first playable runner, in 7 sections (tuning and run loop, surfaces and footsteps, jump and duck, lives and end of run, hazards with spawner and ledges, spikes and mines, then player docs); files, functions, and open questions; built one section per go-ahead
+description: COMPLETE 2026-11-02 (game 69dedf8, docks 0f0ccff) - build plan for the first playable runner, in 7 sections (tuning and run loop, surfaces and footsteps, jump and duck, lives and end of run, hazards with spawner and ledges, spikes and mines, then player docs); files, functions, and open questions; built one section per go-ahead
 metadata:
   type: project
 ---

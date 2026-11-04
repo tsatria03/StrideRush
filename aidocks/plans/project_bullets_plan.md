@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-03 (started on top of 45573ec, after doors were finished). The dev: "ammo based weapons act exactly like melee weapons. I mean the bullets do not actually travel." Its own feature (dev). Not built: build one section per go-ahead ([[feedback_describe_dont_show_code]]).
+Status: SETTLED 2026-11-03 (started on top of 45573ec, after doors were finished). The dev: "ammo based weapons act exactly like melee weapons. I mean the bullets do not actually travel." Its own feature (dev). COMPLETE: every section was built, tested and documented.
 
 Build sections:
 Section 1: traveling bullets for the guns.
