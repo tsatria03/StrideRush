@@ -1,4 +1,4 @@
-/* The ground under the belt. Surfaces are whatever folders exist in sounds/objects/construction/platforms, found at
+/* The ground under the belt. Surfaces are whatever folders exist in sounds/objects/platforms, found at
 runtime, so adding or removing a folder changes the pool with no code change. "ledge" is reserved for the edges
 around hazards and is never picked as a normal surface. */
 string current_surface = "";
@@ -12,7 +12,7 @@ pick_surface();
 // Picks a random surface other than ledge and other than the current one, so the change is always audible.
 void pick_surface()
 {
-string[] tiles = get_pack_sound_folders("objects/construction/platforms/*");
+string[] tiles = get_pack_sound_folders("objects/platforms/*");
 string[] choices;
 for (uint i = 0; i < tiles.length(); i++)
 {
@@ -39,5 +39,5 @@ void play_step()
 if (!is_grounded() or is_ducked() or door_moving) return; // silent while a real door carries you through
 string tile = tile_at(me_x);
 if (tile == "") return;
-p.play_stationary(get_pack_sound("objects/construction/platforms/" + tile + "/*step*"), false);
+p.play_stationary(get_pack_sound("objects/platforms/" + tile + "/*step*"), false);
 }

@@ -109,6 +109,17 @@ const int ammo_pack_min = 5;
 const int ammo_pack_max = 10;
 const int gun_max_reserve = 200; // was 250 (dev, 2026-11-03); a reload still loads at most gun_start_loaded (50)
 
+/* Shields (dev, 2026-11-03). About one spawn in shield_chance is a steel shield. A worn one starts at shield_hp and
+takes each blow's shield damage instead of your lives; hazards ignore it. */
+const int shield_chance = 16; // first proposed as 20 (dev chose 16)
+const int shield_hp = 200; // first proposed as 100 (dev: "A shield is supposed to be more stronger than you")
+const int spike_shield_damage = 20;
+const int mine_shield_damage = 40;
+const int forcefield_shield_damage = 20; // the throw still happens
+const int projectile_shield_damage = 20;
+const int wall_shield_damage = 20;
+const int door_shield_damage = 60;
+
 // Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. Home/End and Page Up/Down move by volume_change.
 const int min_volume = -50;
 const int volume_change = 1; // 1 per press, like ToyMania (dev, 2026-11-02)

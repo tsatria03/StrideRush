@@ -85,6 +85,11 @@ else
 {
 doorkey@ k = key_at(b.x);
 if (@k != null) target_x = strike_key(k);
+else
+{
+shield@ s = shield_at(b.x);
+if (@s != null) target_x = strike_shield(s);
+}
 }
 }
 }

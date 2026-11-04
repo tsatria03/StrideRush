@@ -14,7 +14,7 @@ sound, costing door_life_cost (3). On the last lives: its hit, the player's deat
 door's section still begins, since the door only marks it.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_doors() shrinks the array. */
 sound_pool doorpool;
-const string door_folder = "objects/transitions/doors/";
+const string door_folder = "objects/interaction/doors/";
 class door
 {
 double x;

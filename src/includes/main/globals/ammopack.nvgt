@@ -6,7 +6,7 @@ it's lost. A clean jump that's still in the air across its tile misses it, and i
 There are no countdown cues for packs (no misc/trap warn set); their loop is the guide.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_ammopacks() shrinks the array. */
 sound_pool ammopackpool;
-const string ammopack_folder = "objects/interaction/items/common/ammo_pack/";
+const string ammopack_folder = "equipments/items/common/ammo_pack/";
 class ammopack
 {
 double x;

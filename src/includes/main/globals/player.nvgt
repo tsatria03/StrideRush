@@ -64,7 +64,8 @@ me_y = 0;
 jump_state = 0;
 play_landing();
 ammopack_landing(); // landing on an ammo pack by mistake breaks it
-key_landing(); // and so does landing on a key
+key_landing(); // and so does landing on a key or a shield
+shield_landing();
 if (controls.action_triggered("duck_held") and can_duck()) start_duck();
 }
 // The player's own land sound together with the land clip of the tile under them.
@@ -72,7 +73,7 @@ void play_landing()
 {
 p.play_stationary(get_pack_sound("misc/player/*land*"), false);
 string tile = tile_at(me_x);
-if (tile != "") p.play_stationary(get_pack_sound("objects/construction/platforms/" + tile + "/*land*"), false);
+if (tile != "") p.play_stationary(get_pack_sound("objects/platforms/" + tile + "/*land*"), false);
 }
 /* Thrown by a force field: any jump or crouch ends silently (no unduck sound) and the player is put on the ground.
 The caller moves me_x, then play_landing() runs once the new tile is known. A crouch cut short still starts the

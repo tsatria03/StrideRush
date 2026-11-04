@@ -99,10 +99,10 @@ if (@target == null or steps_left < target_steps)
 target_steps = steps_left;
 }
 }
-// No field counting down: the same press can open a real door, or else pick up an ammo pack or a key, or does nothing.
+// No field counting down: the same press can act on a door, or else pick up an ammo pack, a key or a shield, or does nothing.
 if (@target == null)
 {
-if (!open_door() and !pick_up_ammopack()) pick_up_key();
+if (!open_door() and !pick_up_ammopack() and !pick_up_key()) pick_up_shield();
 return;
 }
 forcefieldpool.play_stationary(get_pack_sound("objects/interaction/switches/switch/*press*"), false);

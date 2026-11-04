@@ -1,6 +1,6 @@
 ---
 name: project_sound_layout
-description: sr/sounds/ layout - no top-level packs (sounds/ is the root), no menu or dialog themes (flat ui/menu, ui/dialog, ui/buffer, ui/other); objects/ grouped by SimpleFighter builder categories (audio, construction, interaction, kombat, transitions, traps) with one theme folder per type; wildcard lookup picks a random numbered variant
+description: sr/sounds/ layout - no top-level packs (sounds/ is the root), no menu or dialog themes (flat ui/menu, ui/dialog, ui/buffer, ui/other); objects/ grouped by SimpleFighter builder categories (audio, interaction, platforms, traps since the 2026-11-03 reorg; items and weapons under equipments) with one theme folder per type; wildcard lookup picks a random numbered variant
 metadata:
   type: project
 ---
@@ -68,3 +68,5 @@ Naming rule: multi-word folder names use underscores, never spaces (as in force_
 Pitfall: keep every folder and every path in code lowercase. ToyMania's misc/PLAYER folder versus its code's misc/player only works on Windows. Stride Rush's player folder is lowercase.
 
 **How to apply:** get_pack_sound builds "sounds/" + path. There are no sound selectors at all now: no whole-tree soundpack, and no menu or dialog themes. Lookup code is SimpleFighter's glob functions ([[project_tech_decisions]]). Related: [[project_audio_model]], [[reference_toymania_readonly]].
+
+REORGANIZED by the dev (2026-11-03, during shields; this overrides the paths above): items moved from objects/interaction/items to equipments/items (common: ammo_pack, life_potion, player_teleporter, steel_shield; other: the 7 keys). Doors moved from objects/transitions/doors to objects/interaction/doors, beside switches/switch; objects/transitions is gone (teleporters/tp was removed earlier). Surfaces moved from objects/construction/platforms to objects/platforms (127 folders, ledge included); objects/construction is gone. equipments/shields/steel was replaced by equipments/items/common/steel_shield: spawn, loop1-2, get, break, use, hit, death. life_potion and player_teleporter: spawn, loop, get, break1-6, use. objects/ now holds audio, interaction (doors, switches), platforms and traps. Code paths updated the same day (ammopack, key, shield, door, surface, player, endrun).

@@ -17,8 +17,8 @@ int next_key_door = 0;
 int next_key_mark = 0;
 // Testing only: "real doors" alternates a key and a door, so every door has its key.
 bool key_before_door = true;
-// Items the spawner places too: ammo packs at a lower chance (ammo_pack_chance), keys before each real door; listed after the obstacles in the testing menu.
-string[] item_types = {"ammo_packs", "keys"};
+// Items the spawner places too: ammo packs and shields at lower chances (ammo_pack_chance, shield_chance), keys before each real door; listed after the obstacles in the testing menu.
+string[] item_types = {"ammo_packs", "keys", "steel_shields"};
 // "all", or one type from obstacle_types or item_types; set by start_run(). Only the source-only testing menu picks anything but all.
 string spawn_only = "all";
 
@@ -86,7 +86,11 @@ if (get_pack_sound_folders(type_folder(obstacle_types[i]) + "*").length() > 0) a
 }
 // About one spawn in ammo_pack_chance is an ammo pack instead, or every one when the testing menu picked packs only.
 bool packs_ok = ammopacks_available() and (spawn_only == "all" or spawn_only == "ammo_packs");
+// About one in shield_chance is a steel shield, rolled first, or every one when the testing menu picked shields only.
+bool shields_ok = shields_available() and (spawn_only == "all" or spawn_only == "steel_shields");
 if (spawn_only == "ammo_packs") next_type = packs_ok ? "ammo_packs" : "";
+else if (spawn_only == "steel_shields") next_type = shields_ok ? "steel_shields" : "";
+else if (shields_ok and random(1, shield_chance) == 1) next_type = "steel_shields";
 else if (packs_ok and random(1, ammo_pack_chance) == 1) next_type = "ammo_packs";
 else next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
@@ -101,7 +105,7 @@ bool key_due()
 {
 return keys_available() and next_key_door >= min_step_time and step_time <= next_key_mark;
 }
-// Where a type's theme folders live: doors under objects/transitions (they aren't traps), everything else under objects/traps.
+// Where a type's theme folders live: doors under objects/interaction (they aren't traps), everything else under objects/traps.
 string type_folder(string type)
 {
 if (type == "fake_doors" or type == "real_doors") return door_folder;
@@ -151,6 +155,11 @@ return;
 if (type == "keys")
 {
 spawn_key(x, countdown); // its color is picked in spawn_key()
+return;
+}
+if (type == "steel_shields")
+{
+spawn_shield(x, countdown); // one sound set, no themes
 return;
 }
 string[] themes = get_pack_sound_folders(type_folder(type) + "*");

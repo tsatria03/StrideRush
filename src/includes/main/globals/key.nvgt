@@ -7,7 +7,7 @@ The color doesn't matter (dev): any key opens any real door. Each color is a fol
 just a new folder. One key is due before each real door; the spawner decides when (key_due()).
 Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_keys() shrinks the array. */
 sound_pool keypool;
-const string key_folder = "objects/interaction/items/other/";
+const string key_folder = "equipments/items/other/";
 class doorkey
 {
 double x;

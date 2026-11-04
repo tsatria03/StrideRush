@@ -85,6 +85,10 @@ else if (is_key_item(item))
 {
 if (use_key(item)) give_item(item, -1);
 }
+else if (item == "steel_shield")
+{
+if (use_shield()) give_item(item, -1);
+}
 }
 // Keys are stored under their color folder's name, such as "red_key", so any item ending in "_key" is a key.
 bool is_key_item(string item)
