@@ -23,6 +23,12 @@ BUNDLE       = os.path.join(SRC_DIR, NVGT_OUT)  # nvgt -c (run from src) produce
 VERSION_NVGT = os.path.join(SRC_DIR, "includes", "version.nvgt")  # generated mirror of version.txt (the source of truth)
 ASSET_FOLDERS = ["data", "docks", "lib", "sounds"]  # sounds are bundled: there is no first-run sound downloader
 
+# The Windows installer, ported from ToyMania (build/installer.iss, compiled with iscc in the package stage).
+INSTALLER_ISS = _cfg["installer"]["iss"]
+APP_ID       = _cfg["installer"]["app_id"]
+APP_URL      = _cfg["installer"]["app_url"]
+EXE_NAME     = _cfg["installer"]["exe_name"]
+
 SITE_HTML    = _cfg["site"]["html"]
 SITE_REPO    = _cfg["site"]["repo"]
 SITE_PATH    = _cfg["site"]["path"]
@@ -30,12 +36,15 @@ SITE_PATH    = _cfg["site"]["path"]
 NVGT    = _tools["tools"]["nvgt"]  # shared across all the legacy-engine games; set to the legacy build in ~/.game_tools/tools.ini
 SEVENZIP = _tools["tools"]["sevenzip"]
 GH      = _tools["tools"]["gh"]
+ISCC    = _tools["tools"]["iscc"]
 
-WIN_SOURCE   = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_password_is_{PASSWORD}", NVGT_OUT)
+# ToyMania's naming: the 7z is the portable copy, beside the installer.
+WIN_SOURCE   = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_windows_portable_password_is_{PASSWORD}", NVGT_OUT)
 ARCHIVE_DIR  = os.path.join(REPO_DIR, "releases", "archives")
-ARCHIVE_NAME = f"{GAME}_password_is_{PASSWORD}.7z"
+ARCHIVE_NAME = f"{GAME}_windows_portable_password_is_{PASSWORD}.7z"
 ARCHIVE      = os.path.join(ARCHIVE_DIR, ARCHIVE_NAME)
-RELEASE_DIR  = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_password_is_{PASSWORD}")
+INSTALLER    = os.path.join(ARCHIVE_DIR, f"{GAME}_windows_installer_password_is_{PASSWORD}.exe")
+RELEASE_DIR  = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_windows_portable_password_is_{PASSWORD}")
 
 SKIP = 0
 DO = 1
@@ -436,7 +445,7 @@ def run_release(skip_compile, skip_package, skip_release, skip_website, skip_emp
         if not os.path.exists(WIN_SOURCE):
             print("ERROR: compiled game folder not found in release directory. Please compile the full project first.")
             return
-        print("Building Windows 7z archive...")
+        print("Building Windows portable 7z archive...")
         if os.path.exists(ARCHIVE):
             os.remove(ARCHIVE)
         os.makedirs(ARCHIVE_DIR, exist_ok=True)
@@ -444,6 +453,20 @@ def run_release(skip_compile, skip_package, skip_release, skip_website, skip_emp
             print("ERROR: 7z archive build failed.")
             return
         print("Archive built successfully.\n")
+        print("Building Windows installer...")
+        if os.path.exists(INSTALLER):
+            os.remove(INSTALLER)
+        if not run_cmd([ISCC, "/Q",
+                        f"/DMyAppId={APP_ID}",
+                        f"/DMyAppName={GAME}",
+                        f"/DMyAppURL={APP_URL}",
+                        f"/DMyAppExeName={EXE_NAME}",
+                        f"/DMyAppPassword={PASSWORD}",
+                        f"/DMySourcePath={WIN_SOURCE}",
+                        os.path.join(SCRIPT_DIR, INSTALLER_ISS)]):
+            print("ERROR: Installer build failed.")
+            return
+        print("Installer built successfully.\n")
     elif skip_package == SKIP:
         print("Skipping packaging.\n")
 
@@ -463,6 +486,8 @@ def run_release(skip_compile, skip_package, skip_release, skip_website, skip_emp
     assets = []
     if os.path.exists(ARCHIVE):
         assets.append(ARCHIVE)
+    if os.path.exists(INSTALLER):
+        assets.append(INSTALLER)
 
     if not assets:
         print("WARNING: No assets found.\n")
