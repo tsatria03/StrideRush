@@ -1,0 +1,156 @@
+/* Health potions (dev, 2026-11-04, for 1.4, with the old life potion sounds): an item that heals a random 5 to 10
+percent of your health, small on purpose so you collect a few (dev: "I don't want those to be too strong"). ToyMania's
+range. On the belt it works exactly like a life capsule: its spawn clip, then its loop at its tile; either hand picks it up within hand_window_start() (get and the player's
+give, centered) and it goes into the inventory as "health_potion". Arriving on its tile on the ground, landing on it, or
+a weapon hit breaks it (break) and it's lost; a clean jump over it misses it. U uses it (use_potion()).
+Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_potions() shrinks the array. */
+sound_pool potionpool;
+const string potion_folder = "equipments/items/common/health_potion/";
+class healthpotion
+{
+double x;
+double countdown_start;
+bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
+int loopslot = -1;
+}
+healthpotion@[] potions(0);
+
+// True when health potion sounds exist, so the spawner can offer them.
+bool potions_available()
+{
+return get_pack_sound(potion_folder + "*loop*") != "";
+}
+// countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.
+void spawn_potion(double px, int countdown)
+{
+healthpotion pot;
+pot.x = px;
+pot.countdown_start = px - countdown;
+potionpool.play_2d(get_pack_sound(potion_folder + "*spawn*"), me_x, 0, px, 0, false);
+pot.loopslot = potionpool.play_2d(get_pack_sound(potion_folder + "*loop*"), me_x, 0, px, 0, true);
+for (uint i = 0; i < potions.length(); i++)
+{
+if (@potions[i] == null)
+{
+@potions[i] = pot;
+return;
+}
+}
+potions.insert_last(pot);
+}
+// Called from hand_check() when nothing else took the press. Picks up the nearest potion in its window. True if one was.
+bool pick_up_potion()
+{
+healthpotion@ target = null;
+for (uint i = 0; i < potions.length(); i++)
+{
+if (@potions[i] == null) continue;
+healthpotion@ pot = potions[i];
+if (pot.spent or me_x < hand_window_start(pot.x, pot.countdown_start) or pot.x - me_x < 1) continue;
+if (@target == null or pot.x < target.x) @target = pot;
+}
+if (@target == null) return false;
+target.spent = true;
+stop_potion(target);
+potionpool.play_stationary(get_pack_sound(potion_folder + "*get*"), false);
+p.play_stationary(get_pack_sound("misc/player/*give*"), false);
+give_item("health_potion", 1);
+speak_buffer(item_display_name("health_potion"));
+return true;
+}
+/* Runs once per step, right after the move. Arriving on a potion's tile on the ground breaks it; once you're past its
+tile still unspent, it was jumped cleanly. */
+void potion_check()
+{
+for (uint i = 0; i < potions.length(); i++)
+{
+if (@potions[i] == null) continue;
+healthpotion@ pot = potions[i];
+if (!pot.spent)
+{
+if (me_x == pot.x and is_grounded()) break_potion(pot);
+else if (me_x > pot.x) pot.spent = true; // jumped clean over: its loop carries on and fades behind you
+}
+if (me_x > pot.x + spawn_distance()) remove_potion(i);
+}
+}
+// Called from player_land(): landing on a potion's tile by mistake breaks it.
+void potion_landing()
+{
+for (uint i = 0; i < potions.length(); i++)
+{
+if (@potions[i] == null) continue;
+if (!potions[i].spent and me_x == potions[i].x) break_potion(potions[i]);
+}
+}
+// Weapons break potions like packs: a bullet on its tile, or a swing when it's the nearest target.
+healthpotion@ potion_at(double x)
+{
+for (uint i = 0; i < potions.length(); i++)
+{
+if (@potions[i] != null and !potions[i].spent and potions[i].x == x) return potions[i];
+}
+return null;
+}
+healthpotion@ potion_in_reach(int reach)
+{
+healthpotion@ target = null;
+for (uint i = 0; i < potions.length(); i++)
+{
+if (@potions[i] == null or potions[i].spent) continue;
+double ahead = potions[i].x - me_x;
+if (ahead < 1 or ahead > reach) continue;
+if (@target == null or potions[i].x < target.x) @target = potions[i];
+}
+return target;
+}
+// A weapon hit on a potion: it breaks and is lost. Returns its x, so the weapon's hit plays there.
+double strike_potion(healthpotion@ pot)
+{
+break_potion(pot);
+return pot.x;
+}
+void break_potion(healthpotion@ pot)
+{
+pot.spent = true;
+stop_potion(pot);
+potionpool.play_2d(get_pack_sound(potion_folder + "*break*"), me_x, 0, pot.x, 0, false);
+}
+void stop_potion(healthpotion@ pot)
+{
+if (pot.loopslot > -1) potionpool.destroy_sound(pot.loopslot);
+pot.loopslot = -1;
+}
+void remove_potion(uint i)
+{
+if (i >= potions.length() or @potions[i] == null) return;
+stop_potion(potions[i]);
+@potions[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_potions()
+{
+for (uint i = 0; i < potions.length(); i++)
+{
+if (@potions[i] == null) continue;
+stop_potion(potions[i]);
+}
+potions.resize(0);
+}
+/* U on a health potion, ToyMania's way: refused at full health, keeping the potion; otherwise it heals a random
+health_potion_min_percent to health_potion_max_percent of player_hp, never past full, with its use sound and the
+player's heal together. True if it was used. */
+bool use_potion()
+{
+if (player_health >= player_hp)
+{
+speak_buffer("You don't need to use this.");
+return false;
+}
+int heal = player_hp * random(health_potion_min_percent, health_potion_max_percent) / 100;
+player_health = int(min(player_hp, player_health + heal)); // the game's min() works in doubles
+p.play_stationary(get_pack_sound(potion_folder + "*use*"), false);
+p.play_stationary(get_pack_sound("misc/player/*heal*"), false);
+speak_buffer("Healed to " + int(round(100.0 * player_health / player_hp, 0)) + " percent health.");
+return true;
+}

@@ -94,6 +94,10 @@ else if (item == "life_capsule")
 {
 if (use_capsule()) give_item(item, -1);
 }
+else if (item == "health_potion")
+{
+if (use_potion()) give_item(item, -1); // refused at full health, so the potion is kept
+}
 else if (item == "player_teleporter")
 {
 if (use_teleporter()) give_item(item, -1);

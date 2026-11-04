@@ -142,6 +142,11 @@ const int powerup_ground_sound_time = 300;
 const int powerup_flight_sound_time = 400;
 const int life_capsule_chance = 20;
 const int teleporter_chance = 16;
+/* Health potions (dev, 2026-11-04). About one spawn in health_potion_chance is a health potion, which heals a random
+health_potion_min_percent to health_potion_max_percent of player_hp (10 to 20 of 200), never past full. */
+const int health_potion_chance = 10;
+const int health_potion_min_percent = 5;
+const int health_potion_max_percent = 10;
 const int teleport_min_time = 2000;
 const int teleport_max_time = 5000;
 

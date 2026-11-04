@@ -18,7 +18,7 @@ int next_key_mark = 0;
 // Debug option only: "real doors" alternates a key and a door, so every door has its key.
 bool key_before_door = true;
 // Items the spawner places too: ammo packs, shields, capsules, teleporters and powerups at lower chances (their _chance values), keys before each real door; listed after the obstacles in the spawn debug option.
-string[] item_types = {"ammo_packs", "keys", "steel_shields", "life_capsules", "player_teleporters", "powerups"};
+string[] item_types = {"ammo_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters", "powerups"};
 // "all", or one type from obstacle_types or item_types; set by start_run(). Only the source-only debug options pick anything but all.
 string spawn_only = "all";
 
@@ -90,14 +90,17 @@ bool packs_ok = ammopacks_available() and (spawn_only == "all" or spawn_only == 
 bool shields_ok = shields_available() and (spawn_only == "all" or spawn_only == "steel_shields");
 // Capsules and teleporters the same way, rolled before the shield.
 bool capsules_ok = capsules_available() and (spawn_only == "all" or spawn_only == "life_capsules");
+bool potions_ok = potions_available() and (spawn_only == "all" or spawn_only == "health_potions");
 bool teleporters_ok = teleporters_available() and (spawn_only == "all" or spawn_only == "player_teleporters");
 bool powerups_ok = powerups_available() and (spawn_only == "all" or spawn_only == "powerups");
 if (spawn_only == "ammo_packs") next_type = packs_ok ? "ammo_packs" : "";
 else if (spawn_only == "steel_shields") next_type = shields_ok ? "steel_shields" : "";
 else if (spawn_only == "life_capsules") next_type = capsules_ok ? "life_capsules" : "";
+else if (spawn_only == "health_potions") next_type = potions_ok ? "health_potions" : "";
 else if (spawn_only == "player_teleporters") next_type = teleporters_ok ? "player_teleporters" : "";
 else if (spawn_only == "powerups") next_type = powerups_ok ? "powerups" : "";
 else if (capsules_ok and random(1, life_capsule_chance) == 1) next_type = "life_capsules";
+else if (potions_ok and random(1, health_potion_chance) == 1) next_type = "health_potions";
 else if (teleporters_ok and random(1, teleporter_chance) == 1) next_type = "player_teleporters";
 else if (powerups_ok and random(1, powerup_chance) == 1) next_type = "powerups";
 else if (shields_ok and random(1, shield_chance) == 1) next_type = "steel_shields";
@@ -181,6 +184,11 @@ return;
 if (type == "life_capsules")
 {
 spawn_capsule(x, countdown);
+return;
+}
+if (type == "health_potions")
+{
+spawn_potion(x, countdown);
 return;
 }
 if (type == "player_teleporters")

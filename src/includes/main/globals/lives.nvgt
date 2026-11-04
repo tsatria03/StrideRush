@@ -13,10 +13,11 @@ const int blow_hurt = 1; // it came off your health: the obstacle's hit and the 
 const int blow_life_lost = 2; // your health ran out and a life went (the life sound already played): the obstacle's hit and the player's hit
 const int blow_fatal = 3; // your health ran out on your last life: the caller plays its fatal ending
 
-// Called from reset_run(): every run starts at full health.
+/* Called from reset_run(): every run starts at full health, except the "health potions" debug run, which starts at half
+so there's something to heal (dev, 2026-11-04). spawn_only is set before reset_run(). */
 void reset_health()
 {
-player_health = player_hp;
+player_health = spawn_only == "health_potions" ? player_hp / 2 : player_hp;
 }
 /* One blow of damage from anything but a hazard. On blow_fatal, lives is 0 and the caller plays the obstacle's hit
 through p and calls end_run_hit(), as a fatal hit always has. */

@@ -66,6 +66,7 @@ destroy_all_ammopacks();
 destroy_all_keys();
 destroy_all_shields();
 destroy_all_capsules();
+destroy_all_potions();
 destroy_all_teleporters();
 destroy_all_powerups();
 destroy_all_walls();

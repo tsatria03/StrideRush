@@ -77,6 +77,8 @@ shield@ s = shield_at(x);
 if (@s != null) return strike_shield(s);
 lifecapsule@ lc = capsule_at(x);
 if (@lc != null) return strike_capsule(lc);
+healthpotion@ pot = potion_at(x);
+if (@pot != null) return strike_potion(pot);
 teleporter@ t = teleporter_at(x);
 if (@t != null) return strike_teleporter(t);
 return -1;
