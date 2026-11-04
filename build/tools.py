@@ -352,6 +352,11 @@ def do_website_update(version, tag, skip_website):
     if version_txt_updated:
         add_targets.append(version_txt_relpath)
     run_cmd(["git", "add"] + add_targets, cwd=SITE_REPO)
+    # Nothing staged means the page already showed this version (say, committed by hand), and git commit would fail
+    # with nothing to commit; the check above only catches an earlier commit with this exact message.
+    if run_cmd(["git", "diff", "--cached", "--quiet", "--"] + add_targets, cwd=SITE_REPO):
+        print("Website already up to date. Nothing to commit.\n")
+        return
     if not run_cmd(["git", "commit", "-m", f"Updated {GAME} to version {version}."], cwd=SITE_REPO):
         print("ERROR: Failed to commit website changes.")
         return

@@ -1,9 +1,5 @@
 .claude
 
-*.mp3
-*.ogg
-*.wav
-
 New File*.txt
 
 # Python bytecode cache
