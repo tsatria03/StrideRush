@@ -9,4 +9,4 @@ End every turn that edited files with a "Files changed:" list, one repo-relative
 
 **Why:** the dev reviews by screen reader and uses the list to know what to re-read, commit and relaunch. Silent edits are easy to miss.
 
-**How to apply:** .nvgt edits need a relaunch; sr/data or sr/docks edits usually don't. Related: [[feedback_dont_run_or_build_the_game]].
+**How to apply:** .nvgt edits need a relaunch; sdr/data or sdr/docks edits usually don't. Related: [[feedback_dont_run_or_build_the_game]].

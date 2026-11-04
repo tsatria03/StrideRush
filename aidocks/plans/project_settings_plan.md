@@ -47,7 +47,7 @@ Q&A log:
 - GO-AHEAD (dev, 2026-11-04: "ready for section1."). SECTION 1 BUILT 2026-11-04 on top of e0fe289; awaiting tests. As built:
   - dec.nvgt: APPDATA_DIR; savedata st(APPDATA_DIR + "preffs/settings.srf", the dev's own key, given 2026-11-04, replacing Claude's generated one); fademode 0, ask_quit_on_escape true, soundcard "Default".
   - savefuncts.nvgt: readpreffs() (an exists check per value: menumusvolume, music_volume, ambience_volume, menuwrap, first_letter, side_scrolling, speak_menu_position, fademode, ask_quit_on_escape, tts_config through tts_load_config(), soundcard matched by name to sound_output_device) and writepreffs() (all of them, tts_dump_config(tts, true), then save). Buffer mutes still call writepreffs() but aren't saved.
-  - sr.nvgt main(): creates APPDATA_DIR/preffs if missing and calls readpreffs() first, before dummy.load, so the device is set before any sound.
+  - sdr.nvgt main(): creates APPDATA_DIR/preffs if missing and calls readpreffs() first, before dummy.load, so the device is set before any sound.
   - run.nvgt: change_music_volume() and change_ambience_volume() call writepreffs(); form_menu already did for the menu music volume.
   - globals/fadepool.nvgt (new): SimpleFighter's fade_multi_pool(), fade_pitch_pool() and fade_volume_pool(), unchanged apart from comments (pitch 20 is above the engine's 0.05 floor, so the dev's removal of the pitch limits doesn't matter).
   - pause_menu.nvgt: new leave_run(restart) runs fade_multi_pool(fademode), then sets restart_run_requested and stops the run; leave_paused_run() now resumes then calls it; quit_run_prompt() calls leave_run(false) straight away when ask_quit_on_escape is false.

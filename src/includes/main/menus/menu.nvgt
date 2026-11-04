@@ -143,13 +143,14 @@ if (run_died and !restart_run_requested and ask_play_again()) restart_run_reques
 while (restart_run_requested);
 }
 /* Restart game, after SimpleFighter's restart(): starts a fresh copy of the game and closes this one. Compiled, it runs
-StrideRush.exe; from source, the pinned engine's nvgtw.exe on ../src/sr.nvgt, which resolves because the launcher set
-the cwd to sr/. A source restart skips sr/sr.py, so it doesn't sync build/version.txt or write errors.txt. */
+sdr.exe, the name nvgt -c gives sdr.nvgt's build (SimpleFighter's is sf.exe); from source, the pinned engine's nvgtw.exe on
+../src/sdr.nvgt, which resolves because the launcher set the cwd to sdr/. A source restart skips sdr/sdr.py, so it doesn't
+sync build/version.txt or write errors.txt. */
 void restart_game()
 {
 speak("restarting");
 m.fade_music();
-bool started = SCRIPT_COMPILED ? run("StrideRush.exe", "", false, false) : run("C:\\nvgt\\nvgtw.exe", "../src/sr.nvgt", false, false);
+bool started = SCRIPT_COMPILED ? run("sdr.exe", "", false, false) : run("C:\\nvgt\\nvgtw.exe", "../src/sdr.nvgt", false, false);
 if (!started)
 {
 alert("Error", "Unable to restart Stride Rush.");

@@ -11,6 +11,6 @@ These look like engine built-ins but aren't. The dev's games define them in thei
 
 Real built-ins seen while porting (no definition needed): round, random, parse_int, string_split and string_to_number (bgt_compat), file_exists, natural_number_sort, clipboard_copy_text, DIRECTORY_APPDATA, DATE_*.
 
-**Why:** the first launch after porting CaveDefender's buffer failed with "No matching symbol 'max'" and "No matching symbol 'vd'" (sr/errors.txt, 2026-11-01). A dependency scan had listed max, but Claude wrongly waved it off as a built-in, and assumed vd lived in virtual_dialogs.nvgt from a grep hit that was really SimpleFighter's dec.nvgt.
+**Why:** the first launch after porting CaveDefender's buffer failed with "No matching symbol 'max'" and "No matching symbol 'vd'" (sdr/errors.txt, 2026-11-01). A dependency scan had listed max, but Claude wrongly waved it off as a built-in, and assumed vd lived in virtual_dialogs.nvgt from a grep hit that was really SimpleFighter's dec.nvgt.
 
 **How to apply:** when porting code, any name a scan finds defined in a reference game's own src (not its deps) must be checked against Stride Rush's src, never assumed built in. Grep the reference repo to see whether it's a function or a global declaration, then check the legacy engine source if unsure. Related: [[project_engine_pinned_nvgt]], [[feedback_verify_code_while_fixing]].

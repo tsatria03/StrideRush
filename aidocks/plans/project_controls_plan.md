@@ -35,7 +35,7 @@ Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFight
 
 Later features named by these keys: ducking, weapons (number row plus fire, ammo check and reload), the two interact hands, lanes, a pause menu, and separate ambience and music volume.
 
-keyboard.ini WRITTEN 2026-11-01 at sr/data/config/keyboard.ini (CRLF, 46 bindings). It replaced the dev's copied SimpleFighter file entirely. Action names, by section:
+keyboard.ini WRITTEN 2026-11-01 at sdr/data/config/keyboard.ini (CRLF, 46 bindings). It replaced the dev's copied SimpleFighter file entirely. Action names, by section:
 - [movement]: jump, duck (press), duck_held (down), duck_release (release), lane_left, lane_right
 - [interaction]: hand_left, hand_right
 - [combat]: fire, ammo_check, reload, weapon_1 to weapon_10 (keys 1 to 0)

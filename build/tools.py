@@ -18,7 +18,7 @@ PASSWORD     = _cfg["game"]["password"]
 NVGT_FILE    = _cfg["game"]["nvgt_file"]
 NVGT_OUT     = os.path.splitext(NVGT_FILE)[0]
 SRC_DIR      = os.path.join(REPO_DIR, "src")    # the .nvgt source now lives here (post-reorg)
-ASSETS_DIR   = os.path.join(REPO_DIR, "sr")     # assets (data, docks, lib, sounds) live here
+ASSETS_DIR   = os.path.join(REPO_DIR, "sdr")    # assets (data, docks, lib, sounds) live here
 BUNDLE       = os.path.join(SRC_DIR, NVGT_OUT)  # nvgt -c (run from src) produces this bundle folder
 VERSION_NVGT = os.path.join(SRC_DIR, "includes", "version.nvgt")  # generated mirror of version.txt (the source of truth)
 ASSET_FOLDERS = ["data", "docks", "lib", "sounds"]  # sounds are bundled: there is no first-run sound downloader
@@ -408,7 +408,7 @@ def run_release(skip_compile, skip_package, skip_release, skip_website, skip_emp
             return
         print("Compilation successful.\n")
         print("Copying assets into the compiled bundle...")
-        # The assets live in sr/; copy them into the bundle so they sit cwd-relative beside the exe
+        # The assets live in sdr/; copy them into the bundle so they sit cwd-relative beside the exe
         # (lib merges with the runtime DLLs nvgt -c already placed there).
         for folder in ASSET_FOLDERS:
             asset_src = os.path.join(ASSETS_DIR, folder)

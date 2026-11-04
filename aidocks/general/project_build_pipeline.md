@@ -1,6 +1,6 @@
 ---
 name: project_build_pipeline
-description: build/ holds tools.py, tools.bat, tools.ini, site_updater.ps1 and version.txt, copied from SimpleFighter and adapted to Stride Rush on 2026-11-01 (password StrideSprinter, version 1.0, sounds bundled)
+description: build/ holds tools.py, tools.bat, tools.ini, site_updater.ps1 and version.txt, copied from SimpleFighter and adapted to Stride Rush on 2026-11-01 (password FluentSprinter since 2026-11-04, sounds bundled); readied for the first release 2026-11-04 (assets in sdr/, the exe is sdr.exe)
 metadata:
   type: project
 ---
@@ -14,15 +14,22 @@ The dev copied SimpleFighter's build tools into build/ on 2026-11-01.
 - Machine paths for nvgt, 7z, gh and iscc come from ~/.game_tools/tools.ini, which is shared by all the dev's legacy-engine games.
 
 Adapted to Stride Rush on 2026-11-01:
-- tools.ini: name StrideRush, archive password StrideSprinter, nvgt_file sr.nvgt, site paths under projects/games/StrideRush.
-- tools.py: ASSETS_DIR is "sr". ASSET_FOLDERS is data, docks, lib and sounds; sounds are bundled because there's no first-run sound downloader.
+- tools.ini: name StrideRush, archive password StrideSprinter, nvgt_file sdr.nvgt, site paths under projects/games/StrideRush.
+- tools.py: ASSETS_DIR was "sr" (now "sdr"). ASSET_FOLDERS is data, docks, lib and sounds; sounds are bundled because there's no first-run sound downloader.
 - site_updater.ps1: the regex now matches "StrideRush V".
 - version.txt starts at 1.0, so the first tag is V1.00.
 
 Not yet in place (as of 2026-11-01):
 - the site page misc/tsatria03.github.io/projects/games/StrideRush/index.html, so the website stage would fail until the dev creates it
-- src/sr.nvgt and the src/includes/version.nvgt mirror, so the compile stage has nothing to build
-- a launcher in sr/
+- src/sdr.nvgt and the src/includes/version.nvgt mirror, so the compile stage has nothing to build
+- a launcher in sdr/
+
+Readied for the first release (2026-11-04, after 1.3 closed; dev: "look at how the simple fighter's build tools look like, and try to adapt it here"):
+- Compared with SimpleFighter's build/ (read only): tools.py, tools.bat, tools.ini and site_updater.ps1 are SimpleFighter's with only the adaptations above, so nothing else needed porting. The one real difference stays: Stride Rush bundles its sounds (SimpleFighter downloads its 2.3 GB on first run).
+- The dev renamed the asset folder sr/ to sdr/; tools.py's ASSETS_DIR, .gitignore's /sdr/errors.txt, sdr.py's comments, CLAUDE.md and the memories followed. Then the dev renamed the scripts too: src/sr.nvgt to src/sdr.nvgt and sr/sr.py to sdr/sdr.py; tools.ini's nvgt_file (sdr.nvgt), sdr.py's SCRIPT path, restart_game() (sdr.exe, ../src/sdr.nvgt), .gitignore (/src/sdr/, /src/sdr.exe), CLAUDE.md and the memories followed. The compile bundle is src/sdr/ (named after sdr.nvgt) and stays ignored; the anchored /src/sdr/ rule doesn't touch the top-level sdr/ assets folder.
+- nvgt -c names the exe after the script, so the release is releases/windows/StrideRush_password_is_FluentSprinter/sdr/sdr.exe, like SimpleFighter's sf/sf.exe. restart_game() in menus/menu.nvgt ran "StrideRush.exe" when compiled, which would never exist; FIXED to run "sdr.exe", as SimpleFighter's restart("sf.exe").
+- The archive password is FluentSprinter (dev, 2026-11-04), replacing StrideSprinter in tools.ini; it names the release folder and the 7z (StrideRush_password_is_FluentSprinter.7z), and the future updater's extract step must use it. Sounds stay bundled (dev: "since the sounds folder is only 23mb, it can easily be bundled with the game").
+- Still to check by the dev: ~/.game_tools/tools.ini (nvgt, sevenzip, gh) and the site page; the V1.30 tag already exists, so a release run warns and offers to move it to HEAD.
 
 The release tag format is V<version>0 (for example V1.00), and the in-game updater depends on it.
 

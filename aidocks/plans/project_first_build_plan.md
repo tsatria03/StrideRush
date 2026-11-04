@@ -6,7 +6,7 @@ metadata:
 ---
 
 Status: COMPLETE (2026-11-02). All 7 sections are built, tested and committed; the game is in 69dedf8 and the docks in 0f0ccff.
-Written 2026-11-01 at the dev's request, on top of commit 44e4172. All 7 open questions were settled the same day, one at a time. No sections built yet. (Question 4's speak_buffer and the all/misc buffers were built early, at the dev's request.) Build one section per go-ahead, with no plan recap per section and no code in chat ([[feedback_describe_dont_show_code]]). Check the latest commit before each section ([[feedback_check_git_log_for_commits]]). Rescan sr/sounds before each section ([[feedback_sounds_before_features]]). Flag a commit point after each section.
+Written 2026-11-01 at the dev's request, on top of commit 44e4172. All 7 open questions were settled the same day, one at a time. No sections built yet. (Question 4's speak_buffer and the all/misc buffers were built early, at the dev's request.) Build one section per go-ahead, with no plan recap per section and no code in chat ([[feedback_describe_dont_show_code]]). Check the latest commit before each section ([[feedback_check_git_log_for_commits]]). Rescan sdr/sounds before each section ([[feedback_sounds_before_features]]). Flag a commit point after each section.
 
 Designs this plan implements: [[project_run_plan]], [[project_obstacles_plan]], [[project_end_of_run_plan]], [[project_controls_plan]]. Object files follow [[project_entity_pattern]]. Sounds follow [[project_sound_layout]].
 
@@ -164,7 +164,7 @@ Section 5: spawner, hazards and ledges. BUILT 2026-11-02, on top of a92870a; all
     - tuning.nvgt: min_step_time 100; ledge_before_count replaced by ledge_ms = 100.
     - hazard.nvgt: ledge_before_tiles() = ceil(step_time / ledge_ms), at least 1.
     - The testing speed menu now runs 500 to 100. Jump on the last 2 ledge steps at 500 and 400 ms; any step at 300 and below. See [[project_obstacles_plan]] for the countdown design.
-  - COUNTDOWN BUILT (dev added the sounds, 2026-11-02): sr/sounds/misc/game/hazcount1 to hazcount5.
+  - COUNTDOWN BUILT (dev added the sounds, 2026-11-02): sdr/sounds/misc/game/hazcount1 to hazcount5.
     - hazard.nvgt hazard_countdown() runs once per step, after the footstep, from step_check().
     - On each ledge step before a hazard it plays hazcount(6 - steps_left), so the final ledge step is always hazcount5.
     - Cues play in 2d through hazardpool (the dev asked for positioned, never stationary), as fire-and-forget oneshots.
@@ -262,9 +262,9 @@ Section 6: spikes and mines. BUILT 2026-11-02, on top of 4d47f6c; SECTION 6 COMP
 - Test: all three obstacle types mixed. With 1 life, any hit ends the run with the right sounds.
 
 Section 7: player docs (added by the dev, 2026-11-01). Done only after Section 6 is built and tested; no docs during Sections 1 to 6.
-- sr/docks/readme.txt: the first real readme, covering what the game is, the goal, the keys (jump, crouch, the L, Q, E and T readouts, pause, volume, buffer keys), the obstacle types and how each ends or costs lives, and the lives system.
-- sr/docks/changelog.txt: the first block, a "New in 1.0." header and player-facing entries for everything the first build ships ([[feedback_changelog_rules]]).
-- sr/docks/todo list.txt: player-facing entries only, such as warning cues, duck-under obstacles, lanes, weapons, doors, force fields, scoring, settings (F1 and F2), and levels ([[feedback_docks_later]]).
+- sdr/docks/readme.txt: the first real readme, covering what the game is, the goal, the keys (jump, crouch, the L, Q, E and T readouts, pause, volume, buffer keys), the obstacle types and how each ends or costs lives, and the lives system.
+- sdr/docks/changelog.txt: the first block, a "New in 1.0." header and player-facing entries for everything the first build ships ([[feedback_changelog_rules]]).
+- sdr/docks/todo list.txt: player-facing entries only, such as warning cues, duck-under obstacles, lanes, weapons, doors, force fields, scoring, settings (F1 and F2), and levels ([[feedback_docks_later]]).
 - credits.txt isn't in this section unless the dev asks.
 - All lines stay at or under 1024 characters ([[feedback_dock_line_length_1024]]). As of 2026-11-01 all four dock files are empty.
 - WRITTEN (dev's go-ahead, 2026-11-02, after Section 6 was committed in 69dedf8): readme.txt, changelog.txt ("New in 1.0.") and todo list.txt, in the dev's earlier readme style ("Keyboard commands", "Letter L: ..., if pressed."; todo "****Unfinished." and "##...finished" sections). build/version.txt stays 1.0. The source-only testing menus aren't mentioned. Music and ambience are described only through their volume keys, since sounds/objects/audio/musics and sources are empty for now. Awaiting the dev's review.
@@ -273,7 +273,7 @@ Open questions to settle before or while building, one at a time:
 1. SETTLED (dev, 2026-11-01): ducking is a crouch, not a slide. REVISED after playtesting (dev, 2026-11-02): footsteps do NOT play while crouched. Steps on a crouch felt wrong, and other similar runners go silent too. The duck sound marks the start, unduck the end, and the silence between them is the crouched state. A slide, with its own sliding sound, could come later if the dev finds the sound.
 2. SETTLED (dev agreed, 2026-11-01): Up while crouched cancels the crouch and jumps right away. The jump and rise sounds play; unduck is skipped. Down in mid-air is ignored; there's no fast-fall sound, and a still-held Down starts a crouch on landing anyway.
 3. SETTLED (dev agreed, 2026-11-01): obstacles spawn a fixed TIME ahead, about 3 seconds at the current speed (tunable), so the warning never shrinks as the run speeds up. Within that window the loop fades in by distance, using the pool settings already in decpool.nvgt: pan_step and volume_step 2.5 per tile, the dev's usual values, and max_distance 0, so no cutoff. Every obstacle pool must be registered in all_pools to get those settings. Reference: the friend's template placed a whole level's hazards at once and relied only on distance fading, which works for short fixed levels but not an endless run.
-4. SETTLED and BUILT (dev, 2026-11-01): the buffer categories are "all" and "misc". sr.nvgt calls create_buffer("misc") at startup, which creates "all" first. Readouts and other run speech go through speak_buffer(text) (default "misc") rather than bare speak(). More categories, such as achievements or events, come later, created in alphabetical order like CookieCraze.
+4. SETTLED and BUILT (dev, 2026-11-01): the buffer categories are "all" and "misc". sdr.nvgt calls create_buffer("misc") at startup, which creates "all" first. Readouts and other run speech go through speak_buffer(text) (default "misc") rather than bare speak(). More categories, such as achievements or events, come later, created in alphabetical order like CookieCraze.
    - Speech module: the base stays SimpleFighter's speech.nvgt, which is newer: it sends braille, has the text-processing hook and keeps voice pitch.
    - Added to it: speak_buffer(), written fresh from CookieCraze's idea for SimpleFighter's speak() settings, and a default-voice fix in tts_dump_config(). Unlike CookieCraze's version, the fix still saves rate, pitch, volume and the screen-reader setting when no voice is chosen.
    - buffer.nvgt's interrupt default flipped to true (CookieCraze-style), so misc lines interrupt each other. Set it false on a category to make it queue.

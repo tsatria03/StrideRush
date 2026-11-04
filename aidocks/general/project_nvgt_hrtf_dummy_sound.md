@@ -9,6 +9,6 @@ The legacy NVGT fork needs a throwaway sound loaded before HRTF is switched on. 
 - a global sound dummy; in globals/dec.nvgt
 - dummy.load("dummy"); as one of the first lines of main(), before sound_global_hrtf = hrtf;
 
-**Why:** it looks like dead code (it loads a file that doesn't exist and is never played), so it's easy to drop when porting. The dev caught it being dropped from Stride Rush's sr.nvgt on 2026-11-01.
+**Why:** it looks like dead code (it loads a file that doesn't exist and is never played), so it's easy to drop when porting. The dev caught it being dropped from Stride Rush's sdr.nvgt on 2026-11-01.
 
 **How to apply:** keep both lines, in that order. Related: [[project_audio_model]], [[project_engine_pinned_nvgt]].

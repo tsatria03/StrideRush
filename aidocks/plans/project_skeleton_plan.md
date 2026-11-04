@@ -1,6 +1,6 @@
 ---
 name: project_skeleton_plan
-description: COMPLETE (built, launch-tested and committed 2026-11-01 as d0e340f) - first step of Stride Rush, a bare launchable skeleton (sr.py launcher, src/sr.nvgt entry, glob includes, version mirror, shims for the SimpleFighter-copied deps, a form_menu main menu), in 4 sections
+description: COMPLETE (built, launch-tested and committed 2026-11-01 as d0e340f) - first step of Stride Rush, a bare launchable skeleton (sdr.py launcher, src/sdr.nvgt entry, glob includes, version mirror, shims for the SimpleFighter-copied deps, a form_menu main menu), in 4 sections
 metadata:
   type: project
 ---
@@ -10,24 +10,24 @@ Status: COMPLETE 2026-11-01. The dev launch-tested it (the main menu test passed
 Goal: the game launches, speaks a main menu and exits cleanly. No gameplay, settings, saves, keybinds or updater.
 
 Section 1: launcher (Python, not NVGT). BUILT 2026-11-01.
-- Built: sr/sr.py (CRLF) and the /sr/errors.txt line in .gitignore.
+- Built: sdr/sdr.py (CRLF) and the /sdr/errors.txt line in .gitignore.
 - One deliberate difference from sf.py: sync_version() reads version.nvgt with newline="". SimpleFighter's read translates CRLF to LF, so its "unchanged" check never matches and it rewrites the file every launch. Harmless, but the bug is still in SimpleFighter.
 
-- sr/sr.py, adapted from SimpleFighter's sf/sf.py.
-  - Runs C:\nvgt\nvgt.exe ../src/sr.nvgt with cwd sr/ under CREATE_NO_WINDOW.
-  - Watches 5 seconds for an early exit and writes compile errors to sr/errors.txt.
+- sdr/sdr.py, adapted from SimpleFighter's sf/sf.py.
+  - Runs C:\nvgt\nvgt.exe ../src/sdr.nvgt with cwd sdr/ under CREATE_NO_WINDOW.
+  - Watches 5 seconds for an early exit and writes compile errors to sdr/errors.txt.
   - sync_version() mirrors build/version.txt into src/includes/version.nvgt.
   - Renames needed: SimpleFighter to Stride Rush in messages, the temp-log prefix, and the script path.
-- .gitignore: add sr/errors.txt. Keep src/includes/version.nvgt tracked (decision 4).
+- .gitignore: add sdr/errors.txt. Keep src/includes/version.nvgt tracked (decision 4).
 
 Section 2: entry and include tree. BUILT 2026-11-01, on top of commit c0e0f69.
-- Built: src/sr.nvgt and src/includes/includes.nvgt (both CRLF). preglobals() is the engine hook the legacy engine calls before globals initialize (bool preglobals(), nvgt_angelscript.cpp); returning false stops the launch.
+- Built: src/sdr.nvgt and src/includes/includes.nvgt (both CRLF). preglobals() is the engine hook the legacy engine calls before globals initialize (bool preglobals(), nvgt_angelscript.cpp); returning false stops the launch.
 - Left out on purpose, compared with sf.nvgt:
   - #pragma plugin nvgt_curl: only the future updater needs it.
   - SimpleFighter's typedef line. (dummy.load("dummy") was dropped at first, then restored at the dev's correction; it's required for HRTF, see [[project_nvgt_hrtf_dummy_sound]].)
   - Every SimpleFighter-only startup step: packs, char/shield/weapon parsing, macros, saves, controls, update check, sound download.
 - Doesn't compile yet: main() uses dummy, hrtf, gamstence and initialize_sound_pools() (Section 3) and mainmenu() (Section 4). version.nvgt doesn't exist until the launcher's first run creates it. Commit it after that run (decision 4).
-- src/sr.nvgt. It holds:
+- src/sdr.nvgt. It holds:
   - preglobals(): a screen reader and sound system check, with alert() fatals.
   - main(), in this order: HRTF and pitch limits (no keyhook, see decision 2), initialize_sound_pools(), show_window("Stride Rush, version "+version), the single-instance block, then loop on mainmenu().
 - src/includes/includes.nvgt: version.nvgt plus glob includes of main/deps, main/functions, main/globals and main/menus. Leave main/parsers out until it has a file, since there are no map files ([[project_tech_decisions]]).
@@ -84,10 +84,10 @@ Original plan:
 - No sound files exist yet. get_pack_sound returns "" for missing clips, so the menu runs silently until sounds are added.
 
 Open decisions (ask one at a time when building):
-1. Sound root: SETTLED 2026-11-01, flat. No top-level sound packs; sr/sounds/ is the root. The folder is misc/player (lowercased by the dev).
+1. Sound root: SETTLED 2026-11-01, flat. No top-level sound packs; sdr/sounds/ is the root. The folder is misc/player (lowercased by the dev).
 2. Keyhook: SETTLED 2026-11-01, none. The dev doesn't want the JAWS keyhook in this game. Leaving keyhook.nvgt out of deps/ was deliberate. No install_keyhook() call, no kh keyhook global.
 3. Main menu Escape: SETTLED 2026-11-01. It exits the game right away, with no Yes/No confirm.
-4. Generated files: SETTLED 2026-11-01. Commit src/includes/version.nvgt, like SimpleFighter and ToyMania, so a fresh clone compiles without running the launcher first. Gitignore sr/errors.txt so a failed launch's report can't be swept in by tools.py's git add -A. The .gitignore line lands with Section 1.
+4. Generated files: SETTLED 2026-11-01. Commit src/includes/version.nvgt, like SimpleFighter and ToyMania, so a fresh clone compiles without running the launcher first. Gitignore sdr/errors.txt so a failed launch's report can't be swept in by tools.py's git add -A. The .gitignore line lands with Section 1.
 
 All open decisions are settled; the plan is ready to build on the dev's go-ahead.
 

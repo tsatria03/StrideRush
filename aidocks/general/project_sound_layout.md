@@ -1,11 +1,11 @@
 ---
 name: project_sound_layout
-description: sr/sounds/ layout - no top-level packs (sounds/ is the root), no menu or dialog themes (flat ui/menu, ui/dialog, ui/buffer, ui/other); objects/ grouped by SimpleFighter builder categories (audio, interaction, platforms, traps since the 2026-11-03 reorg; items and weapons under equipments) with one theme folder per type; wildcard lookup picks a random numbered variant
+description: sdr/sounds/ layout - no top-level packs (sounds/ is the root), no menu or dialog themes (flat ui/menu, ui/dialog, ui/buffer, ui/other); objects/ grouped by SimpleFighter builder categories (audio, interaction, platforms, traps since the 2026-11-03 reorg; items and weapons under equipments) with one theme folder per type; wildcard lookup picks a random numbered variant
 metadata:
   type: project
 ---
 
-No top-level sound packs: there will never be a sounds/<packname>/ level, so sr/sounds/ is the root and paths go straight to the category. Settled 2026-11-01. *.ogg and *.wav are gitignored, so this memory is the repo's only record of which clips exist; keep it in step with the folder.
+No top-level sound packs: there will never be a sounds/<packname>/ level, so sdr/sounds/ is the root and paths go straight to the category. Settled 2026-11-01. *.ogg and *.wav are gitignored, so this memory is the repo's only record of which clips exist; keep it in step with the folder.
 
 Current tree (rescanned 2026-11-01 after the dev's second reorganization; 300 files with the weapons, the switch, the construction examples, the new player clips, the shield and the flat ui folders added). objects/ is now grouped the way SimpleFighter's builder categories are; the rest keeps ToyMania's top level.
 - equipments/weapons (added 2026-11-01, 69 files; ToyMania's ten weapons). Weapons keep a category level, weapons/<category>/<weaponname>/.
@@ -16,7 +16,7 @@ Current tree (rescanned 2026-11-01 after the dev's second reorganization; 300 fi
 - misc/trap/walls (added by the dev, 2026-11-03): warn1-1 to warn1-5 and warn2-1 to warn2-5. Every trap's warn cues are five chromatic-scale notes. Walls LAYER two octaves: warn1-k is the lower octave (-12 semitones, from the force fields' notes) and warn2-k is the higher one (0 semitones, from the hazards' notes), and both play together on countdown step k. The naming rule for layered sets is warn<group>-<step>, and future traps may layer more octaves ([[project_walls_plan]]).
 - misc/trap/<type>/warn1 to warn5 (added by the dev, 2026-11-02): a distinct 5-step warning countdown per obstacle type, for force_fields, hazards, mines, projectiles and spikes. warn5 is the last, "act now" cue. Folder names match objects/traps/<type> (projectiles matches objects/kombat/projectiles), so code can build the path from the type name. This resolves the old "warning cues deferred until sounds exist" problem ([[project_run_plan]]).
   - hazard.nvgt's countdown was repointed from misc/game/hazcount to misc/trap/hazards/warn the same day (it had gone silent when hazcount was removed).
-  - Lesson: sr/sounds is gitignored (*.ogg), so a removed or renamed sound never shows in git status. Grep src for any old path whenever the dev reorganizes sounds.
+  - Lesson: sdr/sounds is gitignored (*.ogg), so a removed or renamed sound never shows in git status. Grep src for any old path whenever the dev reorganizes sounds.
 - misc/player: jump, rise, land, duck, unduck, life, death1-5, hit1-5, give, turn, and inv1 to inv6. rise, land, death and hit were added 2026-11-01. On 2026-11-03 the dev replaced the single death and hit with five variants each. The code's *death* and *hit* wildcards pick one at random, so no code change was needed.
   - Jump plays misc/player/jump and misc/player/rise together. Landing plays misc/player/land together with the platform tile's land clip (dev, 2026-11-01).
   - hit: plays when a force field, mine or spike hits the player, at the same moment as the obstacle's own clips (dev, 2026-11-01). It's Stride Rush's version of SimpleFighter's character hurt sound.

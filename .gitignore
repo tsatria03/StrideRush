@@ -14,13 +14,13 @@ lib/
 releases/
 user/
 
-# Launcher compile-error report: sr.py writes it only on a failed launch.
+# Launcher compile-error report: sdr.py writes it only on a failed launch.
 
-/sr/errors.txt
+/sdr/errors.txt
 
 # NVGT compile bundle: tools.py runs `nvgt -c` from src/, so the bundle lands at
-# src/sr/ before it's moved into releases/. Anchored to src/ so it does NOT match
-# the top-level sr/ assets folder.
+# src/sdr/ before it's moved into releases/. Anchored to src/ so it does NOT match
+# the top-level sdr/ assets folder.
 
-/src/sr/
-/src/sr.exe
+/src/sdr/
+/src/sdr.exe

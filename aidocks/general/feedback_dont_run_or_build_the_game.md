@@ -5,7 +5,7 @@ metadata:
   type: feedback
 ---
 
-Never launch or compile Stride Rush yourself: not the sr/ launcher, not build/tools.py, not nvgt -c. Make the edits, report them, and stop.
+Never launch or compile Stride Rush yourself: not the sdr/ launcher, not build/tools.py, not nvgt -c. Make the edits, report them, and stop.
 
 **Why:** the game runs from source, so the dev is the one who exercises it and catches compile and runtime errors. An AI-triggered launch or build is noise and can leave stray processes or artifacts. Same rule as SimpleFighter and ToyMania.
 

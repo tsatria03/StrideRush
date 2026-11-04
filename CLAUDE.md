@@ -23,19 +23,19 @@ A new obstacle type touches its own file, `spawner.nvgt` (`obstacle_types` and `
 
 ## Layout: code and assets are split
 
-- **`src/`**: code only. Entry `src/sr.nvgt`; `src/includes/includes.nvgt` glob-includes `main/deps`, `main/functions`, `main/globals`, `main/menus` (`main/parsers` is left out until it holds a file; there are no map files).
-- **`sr/`**: runtime assets plus the launcher. `sr/sr.py`, `sr/data/`, `sr/docks/`, `sr/sounds/`, `sr/lib/`.
+- **`src/`**: code only. Entry `src/sdr.nvgt`; `src/includes/includes.nvgt` glob-includes `main/deps`, `main/functions`, `main/globals`, `main/menus` (`main/parsers` is left out until it holds a file; there are no map files).
+- **`sdr/`**: runtime assets plus the launcher. `sdr/sdr.py`, `sdr/data/`, `sdr/docks/`, `sdr/sounds/`, `sdr/lib/`.
 - **`build/`**: release pipeline (`tools.py`, `tools.bat`, `tools.ini`, `site_updater.ps1`, `version.txt`). **`releases/`**: compiled output (gitignored).
 - **`aidocks/`**: this project's memory folder (committed).
 - **`user/`**: gitignored. Only read inside it where the dev points (so far `user/CaveDefender-main`, for the buffer system).
 
-**The cwd trick:** `sr/sr.py` runs `../src/sr.nvgt` with **cwd = `sr/`**, so every cwd-relative path in code (`sounds/...`, `data/...`, `docks/...`, `lib/...`) resolves under `sr/`, while `#include` paths resolve relative to the script under `src/`.
+**The cwd trick:** `sdr/sdr.py` runs `../src/sdr.nvgt` with **cwd = `sdr/`**, so every cwd-relative path in code (`sounds/...`, `data/...`, `docks/...`, `lib/...`) resolves under `sdr/`, while `#include` paths resolve relative to the script under `src/`.
 
 **Engine is pinned to the legacy fork at `C:\nvgt`** (BASS audio; source at `tsatria03/misc/Legacy-NVGT`). `C:\nvgt2` (stock miniaudio) is only for testing other people's games; never target it or treat upstream NVGT as authoritative. See **[[project_engine_pinned_nvgt]]**.
 
 ## Running
 
-No test suite or linter. **The dev runs and builds the game, never Claude**: don't launch `sr/sr.py`, don't run `build/tools.py`, don't run `nvgt -c` ([[feedback_dont_run_or_build_the_game]]). A failed launch writes compile errors to `sr/errors.txt` (gitignored). `build/version.txt` is the single version source of truth; the launcher and `tools.py` mirror it into `src/includes/version.nvgt`, which is committed but never hand-edited ([[feedback_update_build_version_txt]], [[project_build_pipeline]]).
+No test suite or linter. **The dev runs and builds the game, never Claude**: don't launch `sdr/sdr.py`, don't run `build/tools.py`, don't run `nvgt -c` ([[feedback_dont_run_or_build_the_game]]). A failed launch writes compile errors to `sdr/errors.txt` (gitignored). `build/version.txt` is the single version source of truth; the launcher and `tools.py` mirror it into `src/includes/version.nvgt`, which is committed but never hand-edited ([[feedback_update_build_version_txt]], [[project_build_pipeline]]).
 
 ## Memory dispatch: where the detail lives
 
@@ -56,11 +56,11 @@ No test suite or linter. **The dev runs and builds the game, never Claude**: don
 - **Reference repos are read only.** Never edit SimpleFighter, ToyMania, or CaveDefender; read them, then write the adapted code here.
 - **CRLF line endings are enforced** on `*.nvgt/.py/.txt/.bat/.ps1/.md/.ini`. Create new files with CRLF and preserve endings on edit; never run a tree-wide normalizer ([[feedback_no_crlf_normalization]]).
 - **No sound packs or themes.** `get_pack_sound(path)` looks in `sounds/` + path. Menu sounds are flat in `ui/menu/`, dialog sounds in `ui/dialog/`, buffer cues in `ui/buffer/`, and copy/export cues in `ui/other/`; there's no menu or dialog theme selector ([[project_sound_layout]]).
-- **Nothing gets built until its sounds exist.** Rescan `sr/sounds/` before a build section ([[feedback_sounds_before_features]]).
+- **Nothing gets built until its sounds exist.** Rescan `sdr/sounds/` before a build section ([[feedback_sounds_before_features]]).
 - **`dummy.load("dummy")` must run before `sound_global_hrtf` is set.** It looks like dead code; it isn't ([[project_nvgt_hrtf_dummy_sound]]).
 - **Offline only.** No networking systems; the future updater's HTTP download is the one exception ([[project_tech_decisions]]).
 - **Keys are never rebindable during a run.** Mid-run, F1 views bindings and F2 opens settings with only Game, Menu, and Speech tabs ([[project_controls_plan]]).
-- **Docks are live.** Player-facing changes get an `sr/docks/changelog.txt` entry. Newest goes on top, inside a block too; a block holds at most 20 entries for a major version (x.0) and 10 for a minor one (1.1, 1.2), with no intro line, and a new block pairs with a `build/version.txt` bump ([[feedback_changelog_rules]]). Finished `todo list.txt` items move to its finished section, newest first. The todo list holds only player-facing entries ([[feedback_docks_later]]). Dock lines stay at or under 1024 characters ([[feedback_dock_line_length_1024]]).
+- **Docks are live.** Player-facing changes get an `sdr/docks/changelog.txt` entry. Newest goes on top, inside a block too; a block holds at most 20 entries for a major version (x.0) and 10 for a minor one (1.1, 1.2), with no intro line, and a new block pairs with a `build/version.txt` bump ([[feedback_changelog_rules]]). Finished `todo list.txt` items move to its finished section, newest first. The todo list holds only player-facing entries ([[feedback_docks_later]]). Dock lines stay at or under 1024 characters ([[feedback_dock_line_length_1024]]).
 
 ## Working style (triggers)
 

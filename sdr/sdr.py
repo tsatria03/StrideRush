@@ -6,16 +6,16 @@ import tempfile
 import ctypes
 
 # Launch Stride Rush. The .nvgt source lives in src/, but the assets (lib, sounds,
-# data, docks) live here in sr/, so we run with cwd set to this folder: every
+# data, docks) live here in sdr/, so we run with cwd set to this folder: every
 # cwd-relative path in the game (lib/..., sounds/..., data/..., docks/...) then
-# resolves against sr/. We run the console build nvgt.exe (not the windowless nvgtw.exe)
+# resolves against sdr/. We run the console build nvgt.exe (not the windowless nvgtw.exe)
 # with CREATE_NO_WINDOW so no console window appears, yet NVGT's compile output still
 # reaches a log we can capture -- letting us surface compile errors to errors.txt
 # instead of NVGT's own popup. The game opens its own NVGT window.
 
 GAME = "Stride Rush"
 HERE = os.path.dirname(os.path.abspath(__file__))
-SCRIPT = os.path.normpath(os.path.join(HERE, "..", "src", "sr.nvgt"))
+SCRIPT = os.path.normpath(os.path.join(HERE, "..", "src", "sdr.nvgt"))
 VERSION_TXT = os.path.normpath(os.path.join(HERE, "..", "build", "version.txt"))
 VERSION_NVGT = os.path.normpath(os.path.join(HERE, "..", "src", "includes", "version.nvgt"))
 NVGT = r"C:\nvgt\nvgt.exe"
@@ -23,7 +23,7 @@ NVGT = r"C:\nvgt\nvgt.exe"
 # compile bails out within a second or two; a clean compile keeps running the game, so this is also the launch
 # delay on a successful start. Raise it if compilation ever takes longer than this on a slow machine.
 COMPILE_WAIT = 5
-# Where a compile-error report is written: the sr/ folder next to this launcher, so it's always in the same place.
+# Where a compile-error report is written: the sdr/ folder next to this launcher, so it's always in the same place.
 # Created only on a failed launch (a clean launch removes any stale copy first), so an absent or empty errors.txt
 # means "no errors". Gitignored, so a failed launch can't be swept into a commit.
 ERRORS_PATH = os.path.join(HERE, "errors.txt")
@@ -109,7 +109,7 @@ except subprocess.TimeoutExpired:
     sys.exit(0)
 
 # The process exited within the watch window. A non-zero code means it never got past compiling/startup, so
-# surface the captured output to errors.txt (in the sr/ folder) and tell the user.
+# surface the captured output to errors.txt (in the sdr/ folder) and tell the user.
 log_file.close()
 if code != 0:
     try:

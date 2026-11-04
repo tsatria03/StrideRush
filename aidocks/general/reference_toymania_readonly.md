@@ -5,7 +5,7 @@ metadata:
   type: reference
 ---
 
-The dev's ToyMania game at C:\Users\tonys\OneDrive\Documents\github\tsatria03\games\ToyMania (asset folder tm/, memory index aidocks/MEMORY.md). Stride Rush's sr/sounds/ layout follows ToyMania's, not SimpleFighter's. Later the dev will want ToyMania's session and lifetime scoring and possibly its difficulty modes; they'll say when.
+The dev's ToyMania game at C:\Users\tonys\OneDrive\Documents\github\tsatria03\games\ToyMania (asset folder tm/, memory index aidocks/MEMORY.md). Stride Rush's sdr/sounds/ layout follows ToyMania's, not SimpleFighter's. Later the dev will want ToyMania's session and lifetime scoring and possibly its difficulty modes; they'll say when.
 
 Treat it as read only like SimpleFighter: never edit it or save memories there. The dev gave it as reference on 2026-11-01.
 
