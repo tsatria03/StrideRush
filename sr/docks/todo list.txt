@@ -1,6 +1,5 @@
 ####These are the things that need to be finished for future versions of the game.
 
-****Unfinished. Add shields that can absorb door/wall/trap damage, excluding hazards.
 ****Unfinished. Add lanes that you can switch between.
 ****Unfinished. Add powerups to pick up along the way.
 ****Unfinished. Add a score, and a results screen at the end of each run.
@@ -11,6 +10,7 @@
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add shields that absorb damage from doors, walls and traps.
 **Finished. Add keys that unlock real doors.
 **Finished. Add bullets that fly ahead of you when you fire a gun.
 **Finished. Add a way to break fake doors with your weapons.

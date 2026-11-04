@@ -23,7 +23,7 @@ Spikes, mines, force fields, projectiles and walls have the same five-cue countd
 
 Lives.
 
-You start each run with 1 life, so for now, any obstacle that catches you ends the run. Spikes, mines, force fields, projectiles, walls and doors cost lives, and if you have lives to spare you'll hear a sound and keep running. When your last life is gone, the run ends and you return to the main menu.
+You start each run with 1 life, so for now, any obstacle that catches you ends the run. Spikes, mines, force fields, projectiles, walls and doors cost lives, and if you have lives to spare you'll hear a sound and keep running. When your last life is gone, the run ends and you return to the main menu. While you wear a steel shield, it takes those hits instead, so you keep your lives.
 
 Crouching.
 
@@ -33,13 +33,14 @@ Weapons.
 
 You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, feat, fist, hammer, knife, laser, machine gun and pistol. Each run starts with the bat in your hands, and each weapon is stronger than the one before it. Press the space bar to swing a melee weapon or fire a gun. The machine gun keeps firing for as long as you hold the space bar. A melee weapon hits straight away, while a gun fires a bullet that you'll hear flying off ahead of you until it lands. A bullet only flies as far as your weapons reach, so a shot fired at something still too far away falls short and wastes the round.
 The machine gun and pistol use ammo. Each starts every run with 50 rounds loaded and 50 in reserve, and they keep their own ammo separately. A reserve can hold up to 200 rounds. Once a gun is empty you'll hear it click instead of firing. You can reload any time a gun isn't full, and you'll hear a ping when it's ready. When the reserve runs out, that gun is empty until you open an ammo pack.
-Your weapons are for breaking walls and fake doors, and they all reach the same distance ahead of you. Real doors can't be harmed. The stronger the weapon, the fewer hits a wall takes. Your weapons always hit the nearest thing ahead of you, and that includes ammo packs and keys, which break if you hit them.
+Your weapons are for breaking walls and fake doors, and they all reach the same distance ahead of you. Real doors can't be harmed. The stronger the weapon, the fewer hits a wall takes. Your weapons always hit the nearest thing ahead of you, and that includes ammo packs, keys and shields lying ahead of you, which break if you hit them.
 
 Items and your inventory.
 
 Every so often an ammo pack turns up ahead of you instead of an obstacle, and you'll hear it waiting there. Press either hand key in the last few steps before you reach it to pick it up, and it goes into your inventory. Be careful: if you run onto a pack, or land on it from a jump, it breaks and is lost, and so does shooting or swinging at it. A jump that carries you right over it just misses it.
 Packs stay in your inventory until you open them. Opening one adds 5 to 10 rounds to the reserve of the gun you're holding, so draw the gun you want to fill first. If you're holding a melee weapon, or that gun's reserve is already full, the pack stays in your inventory for later. Your inventory starts empty every run.
 Keys turn up once in every stretch, somewhere before its real door, and you pick them up and lose them the same way as ammo packs. They come in several colors, but the color doesn't matter: any key unlocks any real door. Each key you use is gone, and a key you don't use stays in your inventory for a later door. If there's no door within reach, the door ahead is already unlocked, or it's a fake door, the key stays in your inventory.
+Steel shields turn up now and then, a little less often than ammo packs, and you pick them up and lose them the same way. Choose one in your inventory and press U to wear it like armor. You can only wear one at a time, so any others wait in your inventory until the one you're wearing breaks. A shield takes the damage from spikes, mines, force fields, projectiles, walls and doors in place of your lives. You'll hear the obstacle hit your shield instead of you, and a force field still throws you forward. A fresh shield takes about 10 hits from spikes, projectiles, force fields or walls, 5 mines or 4 door crashes, and the hit that wears it out is still fully blocked, so you'll hear it break and lose nothing. Shields can't save you from hazards. Press M to hear how strong your shield is.
 
 Keyboard commands
 
@@ -49,12 +50,13 @@ Tab or letter A: Uses your left hand, to switch off a force field, open a door o
 Enter or letter D: Uses your right hand, to switch off a force field, open a door or pick up an item, if pressed.
 Letter I: Moves to the next item in your inventory, if pressed.
 Shift plus letter I: Moves to the previous item in your inventory, if pressed.
-Letter U: Uses the item you're on in your inventory, such as opening an ammo pack or unlocking a door with a key, if pressed.
+Letter U: Uses the item you're on in your inventory, such as opening an ammo pack, unlocking a door with a key or putting on a shield, if pressed.
 Numbers 1 through 0: Draws the bat, boot, club, feat, fist, hammer, knife, laser, machine gun or pistol, if pressed.
 Space: Swings or fires your weapon, if pressed. With the machine gun, it keeps firing, if held down.
 Letter R: Reloads your gun, if pressed.
 Letter X: Announces how much ammo your gun has loaded and in reserve, if pressed.
-Letter L: Announces how many lives you have, if pressed.
+Letter H: Announces how many lives you have, if pressed.
+Letter M: Announces how strong the shield you're wearing is, as a percentage, if pressed.
 Letter Z: Announces how far you've run, in tiles, if pressed.
 Letter C: Announces your current speed, in milliseconds per step, if pressed.
 Letter T: Announces how long you've been running for, if pressed.

@@ -1,4 +1,6 @@
 New in 1.2.
+Made it so the lives key is now H instead of L, and the new M key tells you how strong your shield is.
+Added steel shields, which you pick up with either hand and wear with U, and which take the damage from spikes, mines, force fields, projectiles, walls and doors in place of your lives until they break.
 Made it so a fake door now sounds jammed when you try to open it with your hands, or use a key on it, so you can tell it won't open.
 Made it so real doors are now locked, so you press U with a key from your inventory to unlock one from up to 2 seconds away, then open it with either hand.
 Added keys, which turn up once before each real door in a choice of colors, and which you pick up with either hand, but which break if you run onto them, land on them or hit them with a weapon.

@@ -1,11 +1,11 @@
 ---
 name: project_shields_plan
-description: SETTLED, not built (2026-11-03, for 1.2) - steel shields worn like armor with U, absorbing door, wall and trap damage except hazards; Q&A log
+description: COMPLETE (2026-11-03, in 1.2; changelog 1.2 at 5 of 10) - steel shields worn like armor with U, absorbing door, wall and trap damage except hazards; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-03 (not built; sections below), started 2026-11-03 on top of 8ed3034, after keys ([[project_keys_plan]]). Top of the dev's todo list: "Add shields that can absorb door/wall/trap damage, excluding hazards." (force fields were first excluded, then included: "I forgot forcefields do not end you instantly"). No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]).
+Status: COMPLETE 2026-11-03 (all three sections built, tested and documented), started 2026-11-03 on top of 8ed3034, after keys ([[project_keys_plan]]). Top of the dev's todo list: "Add shields that can absorb door/wall/trap damage, excluding hazards." (force fields were first excluded, then included: "I forgot forcefields do not end you instantly"). No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]).
 
 Sounds (rescanned 2026-11-03, after the dev fixed them): objects/interaction/items/common/steel_shield has spawn, loop, get, break, use, hit and death. The old equipments/shields/steel (wear, hit, break, remove) is gone. Also new in common: life_potion and player_teleporter (spawn, loop, get, break1-6, use), likely the todo list's powerups. objects/transitions/teleporters was removed.
 
@@ -50,3 +50,4 @@ Section 3: docks in 1.2 (shields, the H and M keys), readme and todo list.
   - Test 3 (a shielded force field: hits layered, still thrown 5 forward, no life lost, 90 percent) passed (2026-11-03).
   - Test 4 (a shielded mine explodes with no life lost, 80 percent; a hazard still ends the run with a shield on) passed (2026-11-03). SECTION 2 COMPLETE.
   - Projectiles, not in a numbered test, were checked by the dev too ("The projectiles also work"), so all six shielded obstacles were heard working.
+- SECTION 3 WRITTEN (2026-11-03, on top of cd196d3), so SHIELDS ARE COMPLETE. Changelog: 2 entries on top of "New in 1.2." (newest first: lives on H and the M shield readout; steel shields added), 1.2 at 5 of 10. Readme: a steel shields paragraph at the end of "Items and your inventory." (spawn rate, U to wear, one at a time, what it covers, about 10 small hits, 5 mines or 4 door crashes, the finishing hit blocked, no help with hazards, M); the lives section adds that a shield keeps your lives; weapons break shields lying ahead; the U line adds putting on a shield; the key list has H for lives and a new M line. Todo list: "Add shields that absorb damage from doors, walls and traps." finished on top.
