@@ -26,6 +26,7 @@ reset_weapons();
 clear_inventory();
 reset_shield();
 reset_powerups();
+reset_lane();
 give_debug_shield(); // after clear_inventory(), so the debug shield isn't wiped
 reset_spawner();
 update_listeners();
@@ -168,6 +169,7 @@ if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + cur
 if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".");
 weapon_input();
 inventory_input();
+lane_input();
 if (controls.action_triggered("music_up")) change_music_volume(volume_change);
 if (controls.action_triggered("music_down")) change_music_volume(-volume_change);
 if (controls.action_triggered("ambience_up")) change_ambience_volume(volume_change);

@@ -147,6 +147,8 @@ health_potion_min_percent to health_potion_max_percent of player_hp (10 to 20 of
 const int health_potion_chance = 10;
 const int health_potion_min_percent = 5;
 const int health_potion_max_percent = 10;
+// Lanes (dev, 2026-11-04): how far to the side the next lane over is heard, as a pan (100 is fully to one side).
+const float lane_pan_amount = 50;
 const int teleport_min_time = 2000;
 const int teleport_max_time = 5000;
 
