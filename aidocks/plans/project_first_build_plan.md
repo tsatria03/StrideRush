@@ -15,7 +15,7 @@ Where files go: new files go in the existing glob-included folders (main/globals
 All input goes through controls.action_triggered() with the keyboard.ini action names. All tunable numbers live in one file.
 
 Section 1: tuning, run loop, pause, readouts and volume. BUILT 2026-11-01, on top of 4baed8b; all 11 tests passed 2026-11-02.
-- As built: globals/tuning.nvgt, globals/run.nvgt, menus/pause.nvgt (all new); globals/decpool.nvgt (pause_pools, resume_pools, and muspool and ambpool added to all_pools); menus/menu.nvgt (start game calls m.fade_music() then start_run()).
+- As built: globals/tuning.nvgt, globals/run.nvgt, menus/pause_menu.nvgt (named pause.nvgt until the dev renamed it, 2026-11-04) (all new); globals/decpool.nvgt (pause_pools, resume_pools, and muspool and ambpool added to all_pools); menus/menu.nvgt (start game calls m.fade_music() then start_run()).
 - Differences from the plan:
   - tuning.nvgt holds only Section 1's values. Each later section adds its own, so no number is invented before its design is used.
   - The volume step constant is named volume_change, to avoid confusion with sound_pool's own volume_step member.
@@ -49,7 +49,7 @@ Section 1: tuning, run loop, pause, readouts and volume. BUILT 2026-11-01, on to
 - Readouts (one sentence each, spoken through speak_buffer into "misc"): L lives, Z distance in tiles, C speed as the step time in ms, T run time. (Built with Q and E and steps per second; the keys moved to Z and C on 2026-11-02 when Q and E became the hands, and speed changed to ms.) F (score) waits for scoring (open question 6).
 - Volume: Home and End change the ambience pool's volume; Page Up and Page Down change music.
 - globals/decpool.nvgt: adds pause_pools() and resume_pools() (from SimpleFighter) and registers the new pools.
-- menus/pause.nvgt: pause_menu(), a form_menu loop with exactly "resume game" and "quit game". Quit game ends the run and returns to the main menu after a Yes/No confirm and reads the confirm menu's OWN result (the ToyMania bug). pause_game() and resume_game() pause and resume every timer and pool. Escape in the pause menu resumes.
+- menus/pause_menu.nvgt: pause_menu(), a form_menu loop with exactly "resume game" and "quit game". Quit game ends the run and returns to the main menu after a Yes/No confirm and reads the confirm menu's OWN result (the ToyMania bug). pause_game() and resume_game() pause and resume every timer and pool. Escape in the pause menu resumes.
 - menus/menu.nvgt: "start game" calls start_run() instead of the placeholder dialog.
 - F1 (view bindings) and F2 (settings) are both left OUT of this build (dev, 2026-11-01; open question 5). Their keyboard.ini actions (view_bindings, settings) stay in the file, unused for now.
 - Test: start a run, hear the readouts change, pause and resume, exit to the menu.
@@ -85,7 +85,7 @@ Section 3: jump and duck. BUILT 2026-11-02, on top of f824cef; all 7 tests passe
   - tuning.nvgt: jump_height 5, jump_tick 100, duck_time 1500.
   - run.nvgt: reset_run() calls reset_player(); run_loop() calls jump_check() and duck_check() after step_check().
   - surface.nvgt: play_step() is silent in the air. A crouch originally still stepped; it's silent too since the Section 4 revision.
-  - pause.nvgt: pause_game() and resume_game() also pause and resume jumptimer and ducktimer.
+  - pause_menu.nvgt: pause_game() and resume_game() also pause and resume jumptimer and ducktimer.
 - Sound lookups: the crouch uses "misc/player/duck*" and the stand-up "unduck*", because "*duck*" would also match unduck.ogg. Jump plays *jump* and *rise* together; landing plays misc/player *land* with the tile's *land*.
 - On landing, a Down still held starts a crouch (from open question 2).
 - Tests, one at a time:
@@ -117,7 +117,7 @@ Section 4: lives and the end of a run. BUILT 2026-11-02, on top of fd2cd49; chec
 - Also at the dev's request (2026-11-02): a crouch cooldown, so Down can't be spammed.
   - After standing up, or after a crouch is cancelled by a jump, crouching is blocked for duck_cooldown, 1000 ms in tuning.nvgt, about as long as a jump lasts.
   - player.nvgt: duckcooldowntimer and can_duck(), used by both the Down press and the held-Down-on-landing crouch. reset_player() forces the timer so a new run can crouch at once.
-  - pause.nvgt pauses and resumes the cooldown timer too.
+  - pause_menu.nvgt pauses and resumes the cooldown timer too.
 - Tests passed (2026-11-02): no footsteps while crouched, and the crouch cooldown blocks repeat presses for about a second.
 - globals/lives.nvgt:
   - lose_lives(cost): with lives left after the cost, play misc/player life and keep running. Otherwise end the run. A cost meaning "ends the run" always ends it.

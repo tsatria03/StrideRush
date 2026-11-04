@@ -46,7 +46,7 @@ As built (all CRLF):
 - Same follow-up section, buffer and controls (2026-11-01):
   - deps/buffer.nvgt adapted from the dev's verbatim CaveDefender copy ([[reference_cavedefender_buffer]]).
   - dec.nvgt gained key_config controls, sound_pool spool and file logfile.
-  - functions/controlfuncts.nvgt adds load_controls(), which reads data/config/keyboard.ini; main() exits if it fails, like SimpleFighter.
+  - functions/contfuncts.nvgt (named controlfuncts.nvgt until the dev renamed it, 2026-11-04) adds load_controls(), which reads data/config/keyboard.ini; main() exits if it fails, like SimpleFighter.
   - functions/extrafuncts.nvgt gained convert_to_pitch().
   - The dev's first launch failed: "No matching symbol" for max and vd in buffer.nvgt. Fixed by adding min and max to extrafuncts.nvgt and virtual_dialogs vd to dec.nvgt ([[project_nvgt_not_builtins]]). The dev's relaunch then passed (2026-11-01): it compiles, keyboard.ini loads, and the menu uses ui/menu sounds.
 - form_menu.nvgt already declares menuwrap, first_letter, side_scrolling, speak_menu_position, menumusvolume and menupool, so dec.nvgt doesn't.

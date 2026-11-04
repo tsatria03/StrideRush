@@ -47,7 +47,7 @@ keyboard.ini WRITTEN 2026-11-01 at sr/data/config/keyboard.ini (CRLF, 46 binding
 Notes:
 - The buffer keys are in keyboard.ini so key_config's consumed-key rule can work. A single-key binding (hand_right on C, or the bracket keys) is skipped in any frame where a held modifier combo on the same key fires (Shift+C copy). If the buffer read raw keys, as CaveDefender's buffercheck() does, Shift+C would also fire the right hand.
 - Caveat for coding: the consumed rule only protects single-key bindings. Alt+Shift+C (review) also satisfies Shift+C (copy), because copy's only modifier, Shift, is down. The buffer code must check review first, or skip copy while Alt is held, the way CaveDefender reads C once and branches on Alt.
-- Code should query actions with controls.action_triggered(name). It uses each binding's own trigger from the ini (press, :repeat, :down, :release), so the ini decides behavior. action_pressed and action_repeating override the ini's trigger. controls is loaded at startup by load_controls() (functions/controlfuncts.nvgt).
+- Code should query actions with controls.action_triggered(name). It uses each binding's own trigger from the ini (press, :repeat, :down, :release), so the ini decides behavior. action_pressed and action_repeating override the ini's trigger. controls is loaded at startup by load_controls() (functions/contfuncts.nvgt, renamed from controlfuncts.nvgt by the dev, 2026-11-04).
 - Letters and digits resolve through SDL key names (kc_name_to_code falls back to get_key_code), so 1 to 0 and the letter keys need no registration.
 
 Rule: status readouts go on letter keys, never function keys (dev, 2026-11-01). Function keys are for screens: F1 key bindings, F2 settings.

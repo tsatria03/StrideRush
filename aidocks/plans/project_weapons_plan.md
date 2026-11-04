@@ -20,14 +20,14 @@ Section 1: the weapon system.
   - A generic target hook for walls to fill in later: weapon_strike(range, damage) returns whether anything was hit, and is a no-op for now.
   - reset_weapons() runs from reset_run(): the bat drawn, guns full.
 - keyboard.ini: a new fire_held = SPACE:down.
-- run.nvgt run_input() calls the weapon input. pause.nvgt pauses and resumes the weapon timers.
+- run.nvgt run_input() calls the weapon input. pause_menu.nvgt pauses and resumes the weapon timers.
 - BUILT 2026-11-02 on top of 0493547. SECTION 1 COMPLETE: all 5 tests passed (2026-11-02): drawing, melee, the pistol's ammo and reload, the machine gun running dry plus reload refusals and cancel, and separate ammo with pause and a fresh run. As built:
   - (UPDATE 2026-11-03: weapon_range was removed by the walls plan in favor of one weapon_reach_time for every weapon; [[project_walls_plan]].) globals/weapons.nvgt uses parallel arrays (weapon_names, weapon_damage, weapon_range, weapon_loaded, weapon_reserve) indexed 0 to 9. is_gun() marks machine_gun and pistol.
   - weapon_input() runs every frame from run_input(): reload_check(), then the number keys, fire or fire_held, R and X.
   - The run-start bat was first drawn quietly. CHANGED (dev, 2026-11-02): reset_weapons() (called from reset_run()) now draws it the normal way, with the draw sound and "bat equipped.", at the start of every run. Pressing 1 while holding it does nothing, as agreed.
   - weapon_strike(range, damage) returns -1 for now. On a hit it will return the target's x, and fire_weapon() then plays the weapon's hit there, plus shell for guns, through p.
   - reload_length comes from p.get_sound_length() of the reload slot, in ms. The refusals: "This weapon is still reloading.", "This weapon doesn't take any ammo.", "This weapon is already fully loaded.", and "This weapon has no more reserved ammo to reload." (that last one also plays empty).
-  - keyboard.ini gains fire_held=SPACE:down. pause.nvgt pauses and resumes firetimer and reloadtimer. tuning.nvgt gains weapon_damage_multiplier 2, gun_start_loaded 50, gun_start_reserve 250, weapon_fire_gap 50 and machine_gun_fire_gap 100.
+  - keyboard.ini gains fire_held=SPACE:down. pause_menu.nvgt pauses and resumes firetimer and reloadtimer. tuning.nvgt gains weapon_damage_multiplier 2, gun_start_loaded 50, gun_start_reserve 250, weapon_fire_gap 50 and machine_gun_fire_gap 100.
 Section 2: ammo packs and the inventory. SETTLED 2026-11-02 (Q&A below):
 - New globals/ammopack.nvgt: ammopackpool and the pack entity (x, countdown_start, loopslot, spent).
   - Spawned with the spawn sound and its loop. Picked up by either hand within the switch window: get, panned, and "You picked up an ammo pack.", then into the inventory.
