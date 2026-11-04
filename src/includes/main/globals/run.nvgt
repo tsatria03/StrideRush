@@ -24,6 +24,7 @@ reset_player();
 reset_weapons();
 clear_inventory();
 reset_shield();
+give_testing_shield(); // after clear_inventory(), so the testing shield isn't wiped
 reset_spawner();
 update_listeners();
 }

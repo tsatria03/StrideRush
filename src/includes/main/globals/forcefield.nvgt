@@ -56,6 +56,15 @@ if (f.active)
 string hit_clip = get_pack_sound("objects/traps/force_fields/" + f.theme + "/*hit*");
 /* A fatal hit plays no player hit and no throw, since end_run_hit() plays the player's death and then the fall of
 the field's tile. */
+// A worn shield takes it, but the field still throws you past it (dev, 2026-11-03).
+if (shield_absorb(forcefield_shield_damage))
+{
+p.play_stationary(hit_clip, false);
+cancel_movement();
+me_x += forcefield_knockback_tiles;
+update_listeners();
+return true;
+}
 if (is_fatal(forcefield_life_cost))
 {
 p.play_stationary(hit_clip, false);
