@@ -118,13 +118,16 @@ stage = can_run_out < 0 ? 2 : 4;
 }
 }
 m.fade_music();
-/* Returns when the run ends, back to the game menu. With the debug No answer, a hazard death starts the run over with
-the same choices instead; quitting from the pause menu still returns here. */
+/* Returns when the run ends, back to the game menu. A run starts over with the same choices when restart run was picked,
+when the debug No answer turned a hazard death into a restart, or when you answer Yes to playing again after a death
+(dev, 2026-11-03, in releases too). Quitting from the pause menu or the Escape question just returns here. */
 do
 {
 restart_run_requested = false;
+run_died = false;
 // A single-type debug run starts with debug_lives (dev, 2026-11-03); "all" plays like the real game.
 start_run(speed, only_type == "all" ? starting_lives : debug_lives, only_type, can_run_out == 1);
+if (run_died and !restart_run_requested and ask_play_again()) restart_run_requested = true;
 }
 while (restart_run_requested);
 }
@@ -142,6 +145,22 @@ alert("Error", "Unable to restart Stride Rush.");
 return;
 }
 exit();
+}
+/* After a death that ends the run, ToyMania-style: Yes then No. Yes plays the same game again with the same choices; No
+returns to the game menu, and escape says "canceled" and does the same. True for Yes. */
+bool ask_play_again()
+{
+setupmenu();
+m.intro_text = "You have died. Would you like to replay the current run again?";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int mres = m.run();
+if (mres < 0)
+{
+speak("canceled");
+return false;
+}
+return m.selected_item_id == "yes";
 }
 /* Source only: whether to play in debug mode, Yes then No. Returns 1 for Yes, 0 for No, or -1 if escaped. A compiled
 release never asks and always answers No, so it plays the real game. */

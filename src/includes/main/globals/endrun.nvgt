@@ -6,6 +6,9 @@ results dialog in the basic build. */
 source-only debug option "end the run when out of lives?" No answer sets it (dev, 2026-11-02): a hazard still kills, but
 the run restarts, since hazards are the one thing that answer can't stop. play_game() reads and clears it. */
 bool restart_run_requested = false;
+/* Set when the run ended in a death (either ending below), not by quitting or restarting from the pause menu, so
+play_game() knows to ask whether to play again (dev, 2026-11-03). play_game() clears it before each run. */
+bool run_died = false;
 
 // A hazard: its own fall clip is the whole death; no player death sound and no tile fall.
 void end_run_hazard(string fall_clip)
@@ -68,8 +71,10 @@ destroy_all_walls();
 destroy_all_doors();
 destroy_all_bullets();
 }
+// Both deaths end here; quitting or restarting from the pause menu goes through leave_paused_run() instead.
 void finish_run()
 {
 p.destroy_all();
+run_died = true;
 running = false;
 }
