@@ -2,11 +2,12 @@
 loop and its pitch. Each door picks one of the four door sets, and every sound it makes plays at its pitch. Weapons
 break FAKE doors only (strike_door(), through weapon_strike()): hurt on each hit, death at 0 hp.
 - A REAL door (pitch 100) marks each new 50 ms speed section: the spawner forces one when the step time reaches a new
-  mark, 450 down to 50, and none come after that. Either hand opens it within hand_window_start(). Like ToyMania's
+  mark, 450 down to 50, and none come after that. It starts locked (1.2): U on a key unlocks it from within
+  weapon_reach() (use_key()), then either hand opens it within hand_window_start(); a hand on a locked one plays deny. Like ToyMania's
   doors: open plays and the door's loop stops, then its move sound LOOPS while the door carries you through. While it
   carries you (door_moving) there are no footsteps, and you can't jump, crouch, use a hand or use weapons. Once you're
   past its tile, the move loop stops and close plays behind you, fading as you run on (dev, 2026-11-03).
-- A FAKE door (pitch 80, 90, 110 or 120) is in the random mix at every speed. Hands do nothing on it; it has to be
+- A FAKE door (pitch 80, 90, 110 or 120) is in the random mix at every speed. A hand or a key on it only plays jam ("This door is jammed."); it has to be
   broken with weapons, with the walls' speed-scaled hp.
 Arriving on a standing door's tile, at any height, is a CRASH: its hit, the player's hit and the life sound, no death
 sound, costing door_life_cost (3). On the last lives: its hit, the player's death, then the tile's fall. A missed real
@@ -20,6 +21,7 @@ double x;
 string theme;
 int pitch = 100;
 bool real = false;
+bool locked = false; // a real door starts locked until a key unlocks it (U)
 int hp = 0;
 double countdown_start;
 bool opened = false; // a real door opened by hand
@@ -50,6 +52,7 @@ door d;
 d.x = dx;
 d.theme = theme;
 d.real = real;
+d.locked = real;
 d.pitch = real ? 100 : fake_door_pitches[random(0, fake_door_pitches.length() - 1)];
 d.hp = wall_spawn_hp(); // the same speed-scaled hp as walls, for when weapons can break fake doors
 d.countdown_start = dx - countdown;
@@ -69,8 +72,9 @@ bool door_standing(door@ d)
 {
 return !d.opened and !d.destroyed and !d.crashed;
 }
-/* Called from hand_check() when no force field took the press. Opens the nearest standing real door in its hand
-window. Returns true if one opened, so the press goes no further. */
+/* Called from hand_check() when no force field took the press. Acts on the nearest standing door in its hand window:
+an unlocked real door opens, a locked one plays deny, and a fake door plays jam (dev, 2026-11-03). Returns true if a
+door took the press, so it goes no further. */
 bool open_door()
 {
 door@ target = null;
@@ -78,10 +82,21 @@ for (uint i = 0; i < doors.length(); i++)
 {
 if (@doors[i] == null) continue;
 door@ d = doors[i];
-if (!d.real or !door_standing(d) or me_x < hand_window_start(d.x, d.countdown_start) or d.x - me_x < 1) continue;
+if (!door_standing(d) or me_x < hand_window_start(d.x, d.countdown_start) or d.x - me_x < 1) continue;
 if (@target == null or d.x < target.x) @target = d;
 }
 if (@target == null) return false;
+if (!target.real)
+{
+jam_door(target);
+return true;
+}
+if (target.locked)
+{
+doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/*deny*"), false, 0, 0, 0, target.pitch, false);
+speak_buffer("This door is locked.");
+return true;
+}
 target.opened = true;
 stop_door(target);
 cancel_movement(); // any jump or crouch ends silently: the door carries you from here
@@ -89,6 +104,50 @@ doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/
 door_moveslot = doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/*move*"), true, 0, 0, 0, target.pitch, false);
 door_moving = true;
 return true;
+}
+// A fake door can't be opened or unlocked: jam1 or jam2 plays centered, at its pitch, and nothing else happens.
+void jam_door(door@ d)
+{
+doorpool.play_stationary_extended(get_pack_sound(door_folder + d.theme + "/*jam*"), false, 0, 0, 0, d.pitch, false);
+speak_buffer("This door is jammed.");
+}
+/* U on a key (dev, 2026-11-03): the first half of opening a real door. Unlocks the nearest locked real door within
+weapon_reach(): the key's use and the door's grant play centered. Refused, keeping the key: a fake door in reach jams,
+an unlocked real door says so, and nothing in reach says there's no door. Returns true if the key was used. */
+bool use_key(string color)
+{
+int reach = weapon_reach();
+door@ locked_door = null;
+door@ open_door_ahead = null;
+door@ fake = null;
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] == null) continue;
+door@ d = doors[i];
+double ahead = d.x - me_x;
+if (!door_standing(d) or ahead < 1 or ahead > reach) continue;
+if (!d.real)
+{
+if (@fake == null or d.x < fake.x) @fake = d;
+}
+else if (d.locked)
+{
+if (@locked_door == null or d.x < locked_door.x) @locked_door = d;
+}
+else if (@open_door_ahead == null or d.x < open_door_ahead.x) @open_door_ahead = d;
+}
+if (@locked_door != null)
+{
+locked_door.locked = false;
+keypool.play_stationary(get_pack_sound(key_folder + color + "/*use*"), false);
+doorpool.play_stationary_extended(get_pack_sound(door_folder + locked_door.theme + "/*grant*"), false, 0, 0, 0, locked_door.pitch, false);
+speak_buffer("The door is unlocked.");
+return true;
+}
+if (@open_door_ahead != null) speak_buffer("This door is already unlocked.");
+else if (@fake != null) jam_door(fake);
+else speak_buffer("There is no door nearby.");
+return false;
 }
 // The standing FAKE door exactly at x, or null. A bullet checks the tile it has just moved onto; real doors let it through.
 door@ fake_door_at(double x)

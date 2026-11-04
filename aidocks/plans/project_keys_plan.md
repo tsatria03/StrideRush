@@ -53,3 +53,10 @@ Section 3: docks. Open "New in 1.2." with a version bump to 1.2, readme sections
   - Test 2 (breaking: arriving on it, landing on it, a clean jump misses it, guns and melee break it) passed (2026-11-03).
   - Test 3 (testing "real doors" alternates key and door) passed (2026-11-03).
   - Test 4 ("real doors, spread": one key in the first half of each section, before its door) passed (2026-11-03). SECTION 1 COMPLETE.
+- SECTION 2 BUILT 2026-11-03 on top of dcf2b0e; awaiting tests. As built: door.nvgt has a locked flag (real doors start locked). open_door() now takes the nearest standing door of EITHER kind in its hand window: a fake door calls jam_door() (jam1 or jam2, stationary at its pitch, "This door is jammed."), a locked real door plays deny stationary at its pitch ("This door is locked."), and an unlocked real door opens as before; each takes the press. use_key(color) unlocks the nearest locked real door within weapon_reach(), playing the key's use and the door's grant together (both stationary, grant at the door's pitch) and saying "The door is unlocked."; otherwise "This door is already unlocked.", the fake door's jam, or "There is no door nearby.", keeping the key. inventory.nvgt use_item() sends any item ending in "_key" (is_key_item()) to use_key(). A crash is unchanged, locked or not.
+  - Test 1 (pick up a key, U unlocks with use and grant, a hand opens and carries you through) passed (2026-11-03).
+  - Test 2 (a hand on a locked door plays deny and "This door is locked.", then U and a hand open it) passed (2026-11-03).
+  - Test 3 (a hand on a fake door plays jam at its pitch and "This door is jammed.") passed (2026-11-03).
+  - Test 4a (U with no door in reach says "There is no door nearby." and keeps the key) passed (2026-11-03).
+  - Test 4b (a second U on an unlocked door says "This door is already unlocked." and keeps the key) passed (2026-11-03).
+  - Test 4c (U at a fake door plays its jam and "This door is jammed." and keeps the key) passed (2026-11-03). SECTION 2 COMPLETE.
