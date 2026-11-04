@@ -120,6 +120,14 @@ const int projectile_shield_damage = 20;
 const int wall_shield_damage = 20;
 const int door_shield_damage = 60;
 
+/* Life potions and player teleporters (dev, 2026-11-03). About one spawn in life_potion_chance is a potion and one in
+teleporter_chance a teleporter. A teleport moves you a random teleport_min_time to teleport_max_time of belt (in tiles
+at the current speed), forward or back. */
+const int life_potion_chance = 20;
+const int teleporter_chance = 16;
+const int teleport_min_time = 2000;
+const int teleport_max_time = 5000;
+
 // Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. Home/End and Page Up/Down move by volume_change.
 const int min_volume = -50;
 const int volume_change = 1; // 1 per press, like ToyMania (dev, 2026-11-02)

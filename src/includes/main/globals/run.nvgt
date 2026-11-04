@@ -101,6 +101,8 @@ if (!running) return;
 ammopack_check();
 key_check();
 shield_check();
+potion_check();
+teleporter_check();
 surface_check(); // before the footstep, so a new surface is heard on its first step
 // A throw lands with the landing sounds instead of a footstep, on the tile it lands on.
 if (thrown) play_landing();

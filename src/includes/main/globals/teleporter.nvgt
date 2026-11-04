@@ -1,0 +1,139 @@
+/* Player teleporters (dev, 2026-11-03, for 1.2): a risky item that moves you a random way along the belt. On the belt
+it works like an ammo pack: its spawn clip, then its loop at its tile; either hand picks it up within
+hand_window_start() (get and the player's give, centered) and it goes into the inventory as "player_teleporter".
+Arriving on its tile on the ground, landing on it, or a weapon hit breaks it (break) and it's lost; a clean jump over
+it misses it. U uses it (the teleport itself comes in Section 2).
+Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_teleporters() shrinks the array. */
+sound_pool teleporterpool;
+const string teleporter_folder = "equipments/items/common/player_teleporter/";
+class teleporter
+{
+double x;
+double countdown_start;
+bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
+int loopslot = -1;
+}
+teleporter@[] teleporters(0);
+
+// True when teleporter sounds exist, so the spawner can offer them.
+bool teleporters_available()
+{
+return get_pack_sound(teleporter_folder + "*loop*") != "";
+}
+// countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.
+void spawn_teleporter(double tx, int countdown)
+{
+teleporter t;
+t.x = tx;
+t.countdown_start = tx - countdown;
+teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*spawn*"), me_x, 0, tx, 0, false);
+t.loopslot = teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*loop*"), me_x, 0, tx, 0, true);
+for (uint i = 0; i < teleporters.length(); i++)
+{
+if (@teleporters[i] == null)
+{
+@teleporters[i] = t;
+return;
+}
+}
+teleporters.insert_last(t);
+}
+// Called from hand_check() when nothing else took the press. Picks up the nearest teleporter in its window. True if one was.
+bool pick_up_teleporter()
+{
+teleporter@ target = null;
+for (uint i = 0; i < teleporters.length(); i++)
+{
+if (@teleporters[i] == null) continue;
+teleporter@ t = teleporters[i];
+if (t.spent or me_x < hand_window_start(t.x, t.countdown_start) or t.x - me_x < 1) continue;
+if (@target == null or t.x < target.x) @target = t;
+}
+if (@target == null) return false;
+target.spent = true;
+stop_teleporter(target);
+teleporterpool.play_stationary(get_pack_sound(teleporter_folder + "*get*"), false);
+p.play_stationary(get_pack_sound("misc/player/*give*"), false);
+give_item("player_teleporter", 1);
+speak_buffer(item_display_name("player_teleporter"));
+return true;
+}
+/* Runs once per step, right after the move. Arriving on a teleporter's tile on the ground breaks it; once you're past
+its tile still unspent, it was jumped cleanly. */
+void teleporter_check()
+{
+for (uint i = 0; i < teleporters.length(); i++)
+{
+if (@teleporters[i] == null) continue;
+teleporter@ t = teleporters[i];
+if (!t.spent)
+{
+if (me_x == t.x and is_grounded()) break_teleporter(t);
+else if (me_x > t.x) t.spent = true; // jumped clean over: its loop carries on and fades behind you
+}
+if (me_x > t.x + spawn_distance()) remove_teleporter(i);
+}
+}
+// Called from player_land(): landing on a teleporter's tile by mistake breaks it.
+void teleporter_landing()
+{
+for (uint i = 0; i < teleporters.length(); i++)
+{
+if (@teleporters[i] == null) continue;
+if (!teleporters[i].spent and me_x == teleporters[i].x) break_teleporter(teleporters[i]);
+}
+}
+// Weapons break teleporters like packs: a bullet on its tile, or a swing when it's the nearest target.
+teleporter@ teleporter_at(double x)
+{
+for (uint i = 0; i < teleporters.length(); i++)
+{
+if (@teleporters[i] != null and !teleporters[i].spent and teleporters[i].x == x) return teleporters[i];
+}
+return null;
+}
+teleporter@ teleporter_in_reach(int reach)
+{
+teleporter@ target = null;
+for (uint i = 0; i < teleporters.length(); i++)
+{
+if (@teleporters[i] == null or teleporters[i].spent) continue;
+double ahead = teleporters[i].x - me_x;
+if (ahead < 1 or ahead > reach) continue;
+if (@target == null or teleporters[i].x < target.x) @target = teleporters[i];
+}
+return target;
+}
+// A weapon hit on a teleporter: it breaks and is lost. Returns its x, so the weapon's hit plays there.
+double strike_teleporter(teleporter@ t)
+{
+break_teleporter(t);
+return t.x;
+}
+void break_teleporter(teleporter@ t)
+{
+t.spent = true;
+stop_teleporter(t);
+teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*break*"), me_x, 0, t.x, 0, false);
+}
+void stop_teleporter(teleporter@ t)
+{
+if (t.loopslot > -1) teleporterpool.destroy_sound(t.loopslot);
+t.loopslot = -1;
+}
+void remove_teleporter(uint i)
+{
+if (i >= teleporters.length() or @teleporters[i] == null) return;
+stop_teleporter(teleporters[i]);
+@teleporters[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_teleporters()
+{
+for (uint i = 0; i < teleporters.length(); i++)
+{
+if (@teleporters[i] == null) continue;
+stop_teleporter(teleporters[i]);
+}
+teleporters.resize(0);
+}

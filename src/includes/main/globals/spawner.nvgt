@@ -17,8 +17,8 @@ int next_key_door = 0;
 int next_key_mark = 0;
 // Testing only: "real doors" alternates a key and a door, so every door has its key.
 bool key_before_door = true;
-// Items the spawner places too: ammo packs and shields at lower chances (ammo_pack_chance, shield_chance), keys before each real door; listed after the obstacles in the testing menu.
-string[] item_types = {"ammo_packs", "keys", "steel_shields"};
+// Items the spawner places too: ammo packs, shields, potions and teleporters at lower chances (their _chance values), keys before each real door; listed after the obstacles in the testing menu.
+string[] item_types = {"ammo_packs", "keys", "steel_shields", "life_potions", "player_teleporters"};
 // "all", or one type from obstacle_types or item_types; set by start_run(). Only the source-only testing menu picks anything but all.
 string spawn_only = "all";
 
@@ -88,8 +88,15 @@ if (get_pack_sound_folders(type_folder(obstacle_types[i]) + "*").length() > 0) a
 bool packs_ok = ammopacks_available() and (spawn_only == "all" or spawn_only == "ammo_packs");
 // About one in shield_chance is a steel shield, rolled first, or every one when the testing menu picked shields only.
 bool shields_ok = shields_available() and (spawn_only == "all" or spawn_only == "steel_shields");
+// Potions and teleporters the same way, rolled before the shield.
+bool potions_ok = potions_available() and (spawn_only == "all" or spawn_only == "life_potions");
+bool teleporters_ok = teleporters_available() and (spawn_only == "all" or spawn_only == "player_teleporters");
 if (spawn_only == "ammo_packs") next_type = packs_ok ? "ammo_packs" : "";
 else if (spawn_only == "steel_shields") next_type = shields_ok ? "steel_shields" : "";
+else if (spawn_only == "life_potions") next_type = potions_ok ? "life_potions" : "";
+else if (spawn_only == "player_teleporters") next_type = teleporters_ok ? "player_teleporters" : "";
+else if (potions_ok and random(1, life_potion_chance) == 1) next_type = "life_potions";
+else if (teleporters_ok and random(1, teleporter_chance) == 1) next_type = "player_teleporters";
 else if (shields_ok and random(1, shield_chance) == 1) next_type = "steel_shields";
 else if (packs_ok and random(1, ammo_pack_chance) == 1) next_type = "ammo_packs";
 else next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
@@ -160,6 +167,16 @@ return;
 if (type == "steel_shields")
 {
 spawn_shield(x, countdown); // one sound set, no themes
+return;
+}
+if (type == "life_potions")
+{
+spawn_potion(x, countdown);
+return;
+}
+if (type == "player_teleporters")
+{
+spawn_teleporter(x, countdown);
 return;
 }
 string[] themes = get_pack_sound_folders(type_folder(type) + "*");

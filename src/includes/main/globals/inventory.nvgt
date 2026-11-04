@@ -39,9 +39,10 @@ string item_display_name(string item)
 {
 return item.replace("_", " ", true);
 }
-// Runs every frame from run_input(): I, Shift+I and U.
+// Runs every frame from run_input(): I, Shift+I and U. Silent while a door carries you, like hands and weapons (dev).
 void inventory_input()
 {
+if (door_moving) return;
 if (controls.action_triggered("inventory_previous")) cycle_inventory(-1);
 else if (controls.action_triggered("inventory_next")) cycle_inventory(1);
 if (controls.action_triggered("item_use")) use_item();
@@ -88,6 +89,10 @@ if (use_key(item)) give_item(item, -1);
 else if (item == "steel_shield")
 {
 if (use_shield()) give_item(item, -1);
+}
+else if (item == "life_potion")
+{
+if (use_potion()) give_item(item, -1);
 }
 }
 // Keys are stored under their color folder's name, such as "red_key", so any item ending in "_key" is a key.

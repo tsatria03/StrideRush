@@ -108,10 +108,10 @@ if (@target == null or steps_left < target_steps)
 target_steps = steps_left;
 }
 }
-// No field counting down: the same press can act on a door, or else pick up an ammo pack, a key or a shield, or does nothing.
+// No field counting down: the same press can act on a door, or else pick up an ammo pack, a key, a shield, a potion or a teleporter, or does nothing.
 if (@target == null)
 {
-if (!open_door() and !pick_up_ammopack() and !pick_up_key()) pick_up_shield();
+if (!open_door() and !pick_up_ammopack() and !pick_up_key() and !pick_up_shield() and !pick_up_potion()) pick_up_teleporter();
 return;
 }
 forcefieldpool.play_stationary(get_pack_sound("objects/interaction/switches/switch/*press*"), false);

@@ -66,6 +66,8 @@ play_landing();
 ammopack_landing(); // landing on an ammo pack by mistake breaks it
 key_landing(); // and so does landing on a key or a shield
 shield_landing();
+potion_landing();
+teleporter_landing();
 if (controls.action_triggered("duck_held") and can_duck()) start_duck();
 }
 // The player's own land sound together with the land clip of the tile under them.
