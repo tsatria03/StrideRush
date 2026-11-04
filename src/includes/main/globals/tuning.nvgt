@@ -127,7 +127,7 @@ time; Long Crouch and Stiff Knees scale duck_time; Quick Swings and Rapid Fire s
 Clumsy Swings and Sticky Trigger by powerup_fire_slower; Sturdy Shield and Tough Hide scale damage to your shield or
 health by powerup_damage_less, Brittle Shield and Soft Hide by powerup_damage_more. */
 const int powerup_chance = 10;
-const int powerup_time = 20000;
+const int powerup_time = 15000; // first 20000 (dev, 2026-11-04)
 const int powerup_speed_ms = 50; // first proposed as 100 (dev chose 50)
 const double moon_jump_factor = 1.5;
 const double short_hop_factor = 2.0 / 3.0;

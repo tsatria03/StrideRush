@@ -1,7 +1,6 @@
 ####These are the things that need to be finished for future versions of the game.
 
 ****Unfinished. Add lanes that you can switch between.
-****Unfinished. Add powerups to pick up along the way.
 ****Unfinished. Add a score, and a results screen at the end of each run.
 ****Unfinished. Add a settings menu.
 ****Unfinished. Add a screen that shows every key binding.
@@ -9,6 +8,7 @@
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add powerups to pick up along the way.
 **Finished. Add a documentation menu in the main menu.
 **Finished. Add player health.
 **Finished. Add life potions and player teleporters.
