@@ -52,14 +52,6 @@ next_type = keys_available() ? "keys" : "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
-/* Debug option only: "barriers" makes every spawn a barrier. Barriers aren't in obstacle_types, so they stay out of "all"
-and the real game until the lanes plan's axis question is settled (dev, 2026-11-04). */
-if (spawn_only == "barriers")
-{
-next_type = barriers_available() ? "barriers" : "";
-next_countdown = next_type == "" ? 0 : countdown_steps();
-return;
-}
 /* A new speed section has started: its real door comes next, ahead of anything else. Only in a normal run ("all"): a
 single-type debug run spawns strictly that type (dev, 2026-11-03), except "real doors, spread", which is the marks alone. */
 bool marks_on = spawn_only == "all" or spawn_only == "real_doors_spread";
@@ -215,7 +207,6 @@ else if (type == "mines") spawn_mine(x, theme, countdown);
 else if (type == "force_fields") spawn_forcefield(x, theme, countdown);
 else if (type == "projectiles") spawn_projectile(x, theme, countdown);
 else if (type == "walls") spawn_wall(x, theme, countdown);
-else if (type == "barriers") spawn_barrier(x, theme, countdown); // in the lane you're in now
 }
 /* Where a hand can first act on something at x whose countdown starts at countdown_start: the countdown start, or
 switch_min_time before it at the current speed, whichever is earlier, so at top speed, where the countdown is a single

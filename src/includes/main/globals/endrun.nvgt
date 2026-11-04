@@ -69,7 +69,6 @@ destroy_all_potions();
 destroy_all_teleporters();
 destroy_all_powerups();
 destroy_all_walls();
-destroy_all_barriers();
 destroy_all_doors();
 destroy_all_bullets();
 }

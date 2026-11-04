@@ -26,7 +26,6 @@ reset_weapons();
 clear_inventory();
 reset_shield();
 reset_powerups();
-reset_lane();
 give_debug_shield(); // after clear_inventory(), so the debug shield isn't wiped
 reset_spawner();
 update_listeners();
@@ -78,7 +77,6 @@ bullet_flight(); // every frame: bullets move on their own 30 ms timing, not the
 speedup_check();
 powerup_timers(); // every frame, so a timed powerup ends on time
 powerup_sounds(); // every frame: powerups on the belt replay their sound on a timer
-barrier_sounds(); // every frame: a barrier follows your lane and its distance
 run_input();
 }
 }
@@ -102,8 +100,6 @@ projectile_check();
 if (!running) return;
 wall_check();
 if (!running) return;
-barrier_check();
-if (!running) return;
 door_check();
 if (!running) return;
 ammopack_check();
@@ -122,7 +118,6 @@ mine_countdown();
 forcefield_countdown();
 projectile_countdown();
 wall_countdown();
-barrier_countdown();
 }
 void speedup_check()
 {
@@ -156,7 +151,6 @@ if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + cur
 if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".");
 weapon_input();
 inventory_input();
-lane_input();
 if (controls.action_triggered("music_up")) change_music_volume(volume_change);
 if (controls.action_triggered("music_down")) change_music_volume(-volume_change);
 if (controls.action_triggered("ambience_up")) change_ambience_volume(volume_change);
