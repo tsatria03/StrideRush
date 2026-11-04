@@ -52,9 +52,21 @@ The pairs are: Slow Motion and Rush Hour, which make the belt slower or faster; 
 
 Menus.
 
-The main menu has four options. The documentation menu lets you read the changelog, credits, readme and todo list, each in a window you can move through with the arrow keys and close when you're done. The game menu is where you start a run, by choosing play game. Restart game closes Stride Rush and opens it again, and exit game closes it. Pressing escape on the main menu also exits.
-During a run, press P for the pause menu, where you can resume, restart or quit the run. Restarting or quitting asks you first, since you'll lose the run you're on. Pressing escape during a run asks straight away whether you want to quit, and the run stops moving while you decide.
+The main menu has five options. The documentation menu lets you read the changelog, credits, readme and todo list, each in a window you can move through with the arrow keys and close when you're done. The game menu is where you start a run, by choosing play game. The settings menu is described below. Restart game closes Stride Rush and opens it again, and exit game closes it. Pressing escape on the main menu also exits.
+During a run, press P for the pause menu, where you can resume, restart or quit the run. Restarting or quitting asks you first, since you'll lose the run you're on. Pressing escape during a run asks straight away whether you want to quit, and the run stops moving while you decide. Whenever you leave a run this way, its sounds fade out.
 When a run ends in a death, you're asked whether you want to replay the current run. Yes starts a new one straight away, and no takes you back to the game menu.
+
+Settings.
+
+The settings menu is a window with a list of tabs at the top. Move through the tabs with the arrow keys, and tab through the options on each one. Nothing you tick takes effect until you choose save settings, and cancel or escape leaves everything as it was.
+General: reset settings puts every setting back to how it started, after asking you first. Your key bindings aren't touched.
+Game: choose whether escape asks before quitting a run. If you untick it, escape leaves the run straight away.
+Keyboard: view every key binding, or rebind your keys. In the rebind list, you can add another key to an action, change an action's key, or remove an action's keys, and each change is saved as soon as you make it.
+Menu: turn on wrapping, first letter navigation, position information and side scrolling in menus.
+Sound: choose between fading out by volume, which is ticked to start with, or by pitch when you leave a run, and pick which sound device the game plays through. Your device choice is saved straight away.
+Speech: set up your voice, either your screen reader or another voice with its own rate, pitch and volume, and preview how it sounds.
+During a run, F2 opens the settings with only the game, menu and speech tabs, and F1 shows your key bindings. The run is paused while either is open, and carries on when you close it.
+Your settings, including your music, ambience and menu music volumes, are remembered from one launch to the next.
 
 Keyboard commands
 
@@ -79,7 +91,9 @@ Page down: Lowers the in-game music volume by 1 decibel, if pressed/held down.
 Home: Raises the in-game ambience volume by 1 decibel, if pressed/held down.
 End: Lowers the in-game ambience volume by 1 decibel, if pressed/held down.
 Letter P: Brings up the pause menu, if pressed. The pause menu lets you resume, restart or quit the run. Pressing escape in the pause menu also resumes the run.
-Escape: Asks whether you want to quit the run, if pressed.
+Escape: Asks whether you want to quit the run, or quits it straight away if you've turned the question off in the settings menu, if pressed.
+F1: Shows every key binding, with the run paused until you close it, if pressed.
+F2: Opens the settings menu with its game, menu and speech tabs, with the run paused until you close it, if pressed.
 Alt plus F4: Exits the game right away during a run, if pressed.
 
 Speech buffer commands

@@ -1,4 +1,7 @@
 New in 1.3.
+Made it so your settings and volumes are now remembered between launches, leaving a run now fades its sounds out instead of cutting them off, and space now also closes a dlg message.
+Added a settings menu in the main menu, with general, game, keyboard, menu, sound and speech tabs, where you can rebind your keys, pick your sound device, set up and preview your voice, and choose whether escape asks before quitting a run, and F2 opens its game, menu and speech tabs during a run.
+Added a key bindings screen, which you open with F1 during a run or from the settings menu, and which lists every action and the keys it's on.
 Made it so melee weapons can now swing at most every fifth of a second, and the pistol fire every tenth of a second, so you can hear the weapon powerups change them.
 Added powerups, which you collect by running over them on the ground or jumping into them in the air, and which give you a good or bad effect for 15 seconds, such as moving faster or slower, jumping longer or shorter, or taking less or more damage.
 Made it so P is now the only key for the pause menu, and pressing escape during a run asks whether you want to quit it, with the run stopped while you decide.
