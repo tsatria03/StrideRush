@@ -92,4 +92,6 @@ Q&A log:
 - Q: (dev, 2026-11-02) Alt+F4? A: Quits the entire program, only within an actual run, with no confirm. It says "exiting" (the same word as the main menu's exit) and closes. keyboard.ini [screens]: exit_program=ALT+F4, read in run_input().
 - Q: Does the no-networking rule remove the updater? A: No. The updater stays, because it isn't part of the game mechanics (dev, 2026-11-01).
 
-CHANGED (dev, 2026-11-03, shields plan [[project_shields_plan]]): the lives readout moves from L to H, freeing L, and M becomes the shield readout ("Shield strength, x percent."), checked after Shift+M (buffer mute). To be built with shields.
+CHANGED (dev, 2026-11-03, shields plan [[project_shields_plan]]): the lives readout moves from L to H, freeing L, and M becomes the shield readout ("Shield strength, x percent."), checked after Shift+M (buffer mute). To be built with shields. BUILT with shields.
+
+CHANGED (dev, 2026-11-03, menus plan [[project_menus_plan]]): "P should be reserved for the pause menu", and Escape during a run asks "Are you sure you want to quit this run? ..." directly. keyboard.ini [screens]: pause=P (was ESCAPE,P) and a new quit_run=ESCAPE. BUILT.

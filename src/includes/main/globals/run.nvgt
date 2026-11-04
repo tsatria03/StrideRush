@@ -123,6 +123,12 @@ step_time = int(max(min_step_time, step_time - speedup_amount));
 }
 void run_input()
 {
+// P is the pause menu only, and Escape goes straight to the quit run question (dev, 2026-11-03).
+if (controls.action_triggered("quit_run"))
+{
+quit_run_prompt();
+return;
+}
 if (controls.action_triggered("pause"))
 {
 pause_menu();

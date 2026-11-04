@@ -1,7 +1,21 @@
-/* The pause menu: exactly "resume game" and "quit game". Pausing freezes the run's timers and every game pool; quit
-asks Yes/No and, on Yes, ends the run so start_run() returns to the main menu. The confirm reads its OWN menu result
+/* The pause menu (dev, 2026-11-03, for 1.3): "resume run", "restart run" and "quit run", all about the run, while the
+main menu's restart game and exit game are about the program. Pausing freezes the run's timers and every game pool.
+Restart run and quit run each ask Yes/No first; on Yes, restart starts the run straight over with the same choices
+(restart_run_requested, read by play_game()) and quit ends it so start_run() returns to the game menu. P opens this
+menu; Escape during a run asks the quit question directly (quit_run_prompt()). The confirm reads its OWN menu result
 (ToyMania's pause menu read the outer menu's result, so answering No still quit). */
 void pause_game()
+{
+pause_timers();
+pause_pools();
+}
+void resume_game()
+{
+resume_pools();
+resume_timers();
+}
+// The run's timers alone. The quit run question uses these on their own, so the run's sounds keep playing (dev).
+void pause_timers()
 {
 steptimer.pause();
 speeduptimer.pause();
@@ -11,11 +25,9 @@ ducktimer.pause();
 duckcooldowntimer.pause();
 firetimer.pause();
 reloadtimer.pause();
-pause_pools();
 }
-void resume_game()
+void resume_timers()
 {
-resume_pools();
 steptimer.resume();
 speeduptimer.resume();
 runtimer.resume();
@@ -33,28 +45,57 @@ while (true)
 {
 setupmenu();
 m.intro_text = "Pause menu.";
-m.add_item("resume game", "resume");
-m.add_item("quit game", "quit");
+m.add_item("resume run", "resume");
+m.add_item("restart run", "restart");
+m.add_item("quit run", "quit");
 int mres = m.run();
 string choice = mres < 0 ? "" : m.selected_item_id;
-// Escape resumes, the same as choosing resume game.
+// Escape resumes, the same as choosing resume run.
 if (mres < 0 or choice == "resume")
 {
 temp.play_stationary(get_pack_sound("misc/game/*resume*"), false);
 resume_game();
 return;
 }
-if (choice == "quit" and confirm_quit())
+if (choice == "restart" and confirm_leave_run("Are you sure you want to restart this run? You will lose all progress for this current session."))
 {
-running = false;
+leave_paused_run(true);
+return;
+}
+if (choice == "quit" and confirm_leave_run(quit_run_question))
+{
+leave_paused_run(false);
 return;
 }
 }
 }
-bool confirm_quit()
+const string quit_run_question = "Are you sure you want to quit this run? You will lose all progress for this current session.";
+/* Escape during a run (dev, 2026-11-03): the quit run question straight away. Only the timers stop while it's asked,
+so the run's sounds keep playing and there's no pause or resume cue (dev: "the timers should pause, but not the
+sounds"). Yes ends the run back to the game menu; No or escape says "canceled" and the run carries on. */
+void quit_run_prompt()
+{
+pause_timers();
+if (confirm_leave_run(quit_run_question))
+{
+leave_paused_run(false);
+return;
+}
+resume_timers();
+}
+/* Ends the run from the pause menu. The timers are unpaused first, silently, so nothing carries a paused timer into the
+next run; the run's sounds are cleared when start_run() returns anyway. With restart, play_game() starts it over. */
+void leave_paused_run(bool restart)
+{
+resume_game();
+restart_run_requested = restart;
+running = false;
+}
+// The Yes/No for restart run and quit run, with the dev's wording (dev, 2026-11-03). Anything but Yes says "canceled".
+bool confirm_leave_run(string question)
 {
 setupmenu();
-m.intro_text = "Do you want to quit to the main menu?";
+m.intro_text = question;
 m.add_item("Yes", "yes");
 m.add_item("No", "no");
 int confirmres = m.run();
