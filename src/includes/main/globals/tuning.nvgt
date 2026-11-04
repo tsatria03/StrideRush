@@ -142,6 +142,9 @@ const int powerup_ground_sound_time = 300;
 const int powerup_flight_sound_time = 400;
 // Lanes (dev, 2026-11-04): how far to the side the left and right lanes are heard, as a pan (100 is fully to one side).
 const float lane_pan_amount = 50;
+// A barrier in your lane does barrier_damage (dev: 80, the hardest blow); its loop drops a decibel per barrier_fade_ms of running away.
+const int barrier_damage = 80;
+const int barrier_fade_ms = 150;
 const int life_potion_chance = 20;
 const int teleporter_chance = 16;
 const int teleport_min_time = 2000;
