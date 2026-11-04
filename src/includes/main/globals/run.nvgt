@@ -25,6 +25,7 @@ reset_player();
 reset_weapons();
 clear_inventory();
 reset_shield();
+reset_powerups();
 give_debug_shield(); // after clear_inventory(), so the debug shield isn't wiped
 reset_spawner();
 update_listeners();
@@ -74,6 +75,8 @@ spike_swing();
 projectile_flight(); // every frame, so a flying projectile moves smoothly between steps
 bullet_flight(); // every frame: bullets move on their own 30 ms timing, not the step's
 speedup_check();
+powerup_timers(); // every frame, so a timed powerup ends on time
+powerup_sounds(); // every frame: powerups on the belt replay their sound on a timer
 run_input();
 }
 }
@@ -104,6 +107,7 @@ key_check();
 shield_check();
 potion_check();
 teleporter_check();
+powerup_check();
 surface_check(); // before the footstep, so a new surface is heard on its first step
 // A throw lands with the tile's landing sound instead of a footstep, without the player's own land sound (dev).
 if (thrown) play_landing(false);

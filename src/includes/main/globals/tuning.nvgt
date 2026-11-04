@@ -119,6 +119,15 @@ const int shield_hp = 200; // first proposed as 100 (dev: "A shield is supposed 
 /* Life potions and player teleporters (dev, 2026-11-03). About one spawn in life_potion_chance is a potion and one in
 teleporter_chance a teleporter. A teleport moves you a random teleport_min_time to teleport_max_time of belt (in tiles
 at the current speed), forward or back. */
+/* Powerups (dev, 2026-11-03). About one spawn in powerup_chance is a powerup; a timed one lasts powerup_time; Shield
+Boost gives a worn shield shield_boost_hp back (up to shield_hp) and Shield Crack takes shield_crack_hp. */
+const int powerup_chance = 10;
+const int powerup_time = 20000;
+// A powerup on the belt replays its sound this often, not looped (dev, 2026-11-04): ground ones every 300 ms, flight ones every 400 (the dev's final choice, after trying 500, 350, 250 and 500 for flight).
+const int powerup_ground_sound_time = 300;
+const int powerup_flight_sound_time = 400;
+const int shield_boost_hp = 50;
+const int shield_crack_hp = 50;
 const int life_potion_chance = 20;
 const int teleporter_chance = 16;
 const int teleport_min_time = 2000;

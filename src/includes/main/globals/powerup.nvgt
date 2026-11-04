@@ -1,0 +1,183 @@
+/* Powerups (dev, 2026-11-03, built 2026-11-04 for 1.3): passive pickups with a good or bad event, never in the inventory.
+Each is a ground one (misc/game/powerground at its tile, replayed on a timer) or a flight one (powerflight), half and half. Arriving
+on a ground one's tile on the ground collects it, and a jump skips it; arriving on a flight one's tile in the air
+collects it, and running under it misses it. Weapons and bullets pass through them. On contact powerget plays centered
+and the event is picked then, at random from what's possible right then (the shield ones only with a shield worn),
+and its name is spoken. A missed one keeps sounding and fades out behind you.
+Timed events last powerup_time on runtimer (so pausing freezes them), one per kind: a new one of the same kind, or its
+opposite, replaces it and restarts the time (dev: "I do not want the same type of powerup to stack up"). Different
+kinds run together. Section 1 only tracks them; their effects come in Section 2 (powerup_active()).
+Same entity pattern as the items: null-slot removal, reused slots, and only destroy_all_powerups() shrinks the array. */
+sound_pool poweruppool;
+const string powerup_folder = "misc/game/";
+/* Not looped (dev, 2026-11-04): like SimpleFighter's non-looping checkpoints and items, a powerup replays its sound as a
+one-shot every powerup_ground_sound_time or powerup_flight_sound_time, on runtimer so pausing stops it. soundslot is the latest one-shot. */
+class powerup
+{
+double x;
+bool flight = false; // in the air (collected by a jump) rather than on the belt
+bool spent = false; // collected, or passed without collecting
+bool collected = false; // collected: its sound stops; a missed one keeps sounding as it fades behind you
+double next_sound = 0; // when, on runtimer, its next one-shot plays
+int soundslot = -1;
+}
+powerup@[] powerups(0);
+
+// The kinds of timed powerup, one slot each.
+const int powerup_kind_speed = 0;
+const int powerup_kind_jumps = 1;
+const int powerup_kind_crouches = 2;
+const int powerup_kind_melee = 3;
+const int powerup_kind_guns = 4;
+const int powerup_kind_steps = 5;
+const int powerup_kinds = 6;
+const int powerup_one_off = -1;
+/* The dev's 13 (2026-11-03), with their friendly names, which are spoken as they are, and their kinds. The good ones come
+first in each pair. Shield Boost and Shield Crack act at once. */
+string[] powerup_names = {"Slow Motion", "Rush Hour", "Moon Jump", "Short Hop", "Long Crouch", "Stiff Knees", "Quick Swings", "Clumsy Swings", "Rapid Fire", "Sticky Trigger", "Muffled Steps", "Shield Boost", "Shield Crack"};
+int[] powerup_name_kinds = {powerup_kind_speed, powerup_kind_speed, powerup_kind_jumps, powerup_kind_jumps, powerup_kind_crouches, powerup_kind_crouches, powerup_kind_melee, powerup_kind_melee, powerup_kind_guns, powerup_kind_guns, powerup_kind_steps, powerup_one_off, powerup_one_off};
+// The running timed powerup of each kind ("" for none), and when it ends on runtimer.
+string[] active_powerups(powerup_kinds);
+double[] powerup_ends(powerup_kinds);
+
+// True when the powerup sounds exist, so the spawner can offer powerups.
+bool powerups_available()
+{
+return get_pack_sound(powerup_folder + "*powerground*") != "" and get_pack_sound(powerup_folder + "*powerflight*") != "";
+}
+// Called from reset_run(): every run starts with no powerup running.
+void reset_powerups()
+{
+for (int k = 0; k < powerup_kinds; k++)
+{
+active_powerups[k] = "";
+powerup_ends[k] = 0;
+}
+}
+// True while the named timed powerup is running. Section 2's effects ask this.
+bool powerup_active(string name)
+{
+for (int k = 0; k < powerup_kinds; k++)
+{
+if (active_powerups[k] == name) return true;
+}
+return false;
+}
+// countdown comes from the spawner like an item's; it only sets the spacing, since powerups need no hand.
+void spawn_powerup(double px, int countdown)
+{
+powerup pu;
+pu.x = px;
+pu.flight = random(0, 1) == 1;
+play_powerup_sound(pu); // the first one-shot at once, then on its kind's timer
+for (uint i = 0; i < powerups.length(); i++)
+{
+if (@powerups[i] == null)
+{
+@powerups[i] = pu;
+return;
+}
+}
+powerups.insert_last(pu);
+}
+// One one-shot of a powerup's sound at its tile, and when the next is due.
+void play_powerup_sound(powerup@ pu)
+{
+pu.soundslot = poweruppool.play_2d(get_pack_sound(powerup_folder + (pu.flight ? "*powerflight*" : "*powerground*")), me_x, 0, pu.x, 0, false);
+pu.next_sound = runtimer.elapsed + (pu.flight ? powerup_flight_sound_time : powerup_ground_sound_time);
+}
+// Runs every frame from run_loop(): each uncollected powerup replays its sound when its time comes round.
+void powerup_sounds()
+{
+for (uint i = 0; i < powerups.length(); i++)
+{
+if (@powerups[i] == null or powerups[i].collected) continue;
+if (runtimer.elapsed >= powerups[i].next_sound) play_powerup_sound(powerups[i]);
+}
+}
+/* Runs once per step, right after the move. Arriving on a powerup's tile the right way collects it: on the ground for a
+ground one, in the air for a flight one. Arriving the wrong way, or being past it, means it's missed. */
+void powerup_check()
+{
+for (uint i = 0; i < powerups.length(); i++)
+{
+if (@powerups[i] == null) continue;
+powerup@ pu = powerups[i];
+if (!pu.spent)
+{
+if (me_x == pu.x)
+{
+if (pu.flight != is_grounded()) collect_powerup(pu);
+else pu.spent = true; // jumped over a ground one, or ran under a flight one
+}
+else if (me_x > pu.x) pu.spent = true;
+}
+if (me_x > pu.x + spawn_distance()) remove_powerup(i);
+}
+}
+void collect_powerup(powerup@ pu)
+{
+pu.spent = true;
+pu.collected = true;
+stop_powerup(pu);
+p.play_stationary(get_pack_sound(powerup_folder + "*powerget*"), false);
+apply_powerup(pick_powerup_event());
+}
+// One of the 13 at random, leaving out the two shield ones with no shield worn.
+int pick_powerup_event()
+{
+int[] choices;
+for (uint i = 0; i < powerup_names.length(); i++)
+{
+if (!shield_worn and (powerup_names[i] == "Shield Boost" or powerup_names[i] == "Shield Crack")) continue;
+choices.insert_last(i);
+}
+return choices[random(0, choices.length() - 1)];
+}
+/* Speaks the name and starts it: a one-off acts now, a timed one takes its kind's slot (replacing whatever was there)
+for powerup_time. */
+void apply_powerup(int index)
+{
+string name = powerup_names[index];
+speak_buffer(name + ".");
+int kind = powerup_name_kinds[index];
+if (kind == powerup_one_off)
+{
+if (name == "Shield Boost") shield_hp_left = int(min(shield_hp, shield_hp_left + shield_boost_hp));
+else if (name == "Shield Crack") shield_absorb(shield_crack_hp); // its hit, or its death if that empties it
+return;
+}
+active_powerups[kind] = name;
+powerup_ends[kind] = runtimer.elapsed + powerup_time;
+}
+// Runs every frame from run_loop(): a timed powerup whose time is up ends, and says so.
+void powerup_timers()
+{
+for (int k = 0; k < powerup_kinds; k++)
+{
+if (active_powerups[k] == "" or runtimer.elapsed < powerup_ends[k]) continue;
+speak_buffer(active_powerups[k] + " wore off.");
+active_powerups[k] = "";
+}
+}
+void stop_powerup(powerup@ pu)
+{
+if (pu.soundslot > -1) poweruppool.destroy_sound(pu.soundslot);
+pu.soundslot = -1;
+}
+void remove_powerup(uint i)
+{
+if (i >= powerups.length() or @powerups[i] == null) return;
+stop_powerup(powerups[i]);
+@powerups[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_powerups()
+{
+for (uint i = 0; i < powerups.length(); i++)
+{
+if (@powerups[i] == null) continue;
+stop_powerup(powerups[i]);
+}
+powerups.resize(0);
+}
