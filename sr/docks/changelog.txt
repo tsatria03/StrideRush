@@ -1,3 +1,9 @@
+New in 1.3.
+Made it so P is now the only key for the pause menu, and pressing escape during a run asks whether you want to quit it, with the run stopped while you decide.
+Added a prompt after you die that asks whether you want to replay the current run.
+Made it so the pause menu now lets you resume, restart or quit the run, and asks you first before you restart or quit.
+Added a game menu, where you start a run, and a restart game option in the main menu that closes and reopens the game.
+Added a documentation menu in the main menu, where you can read the changelog, credits, readme and todo list.
 New in 1.2.
 Made it so the H key now tells you your health and lives, and you no longer hear your own landing when a force field throws you or a teleporter moves you.
 Added player health, so you now have 200 health that obstacles wear down instead of taking your lives straight away, and you only lose a life when your health runs out.

@@ -23,7 +23,7 @@ Spikes, mines, force fields, projectiles and walls have the same five-cue countd
 
 Health and lives.
 
-You start each run with 1 life and 200 health. Spikes, mines, force fields, projectiles, walls and doors each take some of your health when they catch you, and you'll hear yourself get hit. When your health runs out, you lose a life: if you have lives to spare, you'll hear a sound, your health fills back up to 200, and you keep running. If it was your last life, the run ends and you return to the main menu. Hazards are different: falling into one ends your run straight away, however much health or how many lives you have. A steel shield takes those hits before your health does, and life potions give you more lives. Press H to hear how much health you have left, and how many lives.
+You start each run with 1 life and 200 health. Spikes, mines, force fields, projectiles, walls and doors each take some of your health when they catch you, and you'll hear yourself get hit. When your health runs out, you lose a life: if you have lives to spare, you'll hear a sound, your health fills back up to 200, and you keep running. If it was your last life, the run ends and you're asked whether you want to replay it. Hazards are different: falling into one ends your run straight away, however much health or how many lives you have. A steel shield takes those hits before your health does, and life potions give you more lives. Press H to hear how much health you have left, and how many lives.
 
 Crouching.
 
@@ -43,6 +43,12 @@ Keys turn up once in every stretch, somewhere before its real door, and you pick
 Steel shields turn up now and then, a little less often than ammo packs, and you pick them up and lose them the same way. Choose one in your inventory and press U to wear it like armor. You can only wear one at a time, so any others wait in your inventory until the one you're wearing breaks. A shield takes the damage from spikes, mines, force fields, projectiles, walls and doors in place of your health. You'll hear the obstacle hit your shield instead of you, and a force field still throws you forward. A fresh shield takes about 10 hits from spikes, projectiles, force fields or walls, 5 mines or 4 door crashes, and the hit that wears it out is still fully blocked, so you'll hear it break and lose nothing. Shields can't save you from hazards. Press M to hear how strong your shield is.
 Life potions turn up only rarely, and you pick them up and lose them the same way as ammo packs. Drink one with U and you get 1 extra life, and there's no limit to how many lives you can build up.
 Player teleporters are a gamble. Pick one up the same way, then press U, and it throws you a random 2 to 5 seconds' worth of belt either forward or back. It never drops you right on top of an obstacle, but it can drop you just in front of one, so be ready to react the moment you land. If it sends you back, anything you passed that's still waiting there, such as a spike or a hazard, comes up again, while anything you already dealt with, such as a broken wall or an opened door, stays that way.
+
+Menus.
+
+The main menu has four options. The documentation menu lets you read the changelog, credits, readme and todo list, each in a window you can move through with the arrow keys and close when you're done. The game menu is where you start a run, by choosing play game. Restart game closes Stride Rush and opens it again, and exit game closes it. Pressing escape on the main menu also exits.
+During a run, press P for the pause menu, where you can resume, restart or quit the run. Restarting or quitting asks you first, since you'll lose the run you're on. Pressing escape during a run asks straight away whether you want to quit, and the run stops moving while you decide.
+When a run ends in a death, you're asked whether you want to replay the current run. Yes starts a new one straight away, and no takes you back to the game menu.
 
 Keyboard commands
 
@@ -66,7 +72,8 @@ Page up: Raises the in-game music volume by 1 decibel, if pressed/held down.
 Page down: Lowers the in-game music volume by 1 decibel, if pressed/held down.
 Home: Raises the in-game ambience volume by 1 decibel, if pressed/held down.
 End: Lowers the in-game ambience volume by 1 decibel, if pressed/held down.
-Escape or letter P: Brings up the pause menu, if pressed. The pause menu lets you resume the game, or quit back to the main menu. Pressing escape in the pause menu also resumes the game.
+Letter P: Brings up the pause menu, if pressed. The pause menu lets you resume, restart or quit the run. Pressing escape in the pause menu also resumes the run.
+Escape: Asks whether you want to quit the run, if pressed.
 Alt plus F4: Exits the game right away during a run, if pressed.
 
 Speech buffer commands

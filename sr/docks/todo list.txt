@@ -3,13 +3,13 @@
 ****Unfinished. Add lanes that you can switch between.
 ****Unfinished. Add powerups to pick up along the way.
 ****Unfinished. Add a score, and a results screen at the end of each run.
-****Unfinished. Add a documentation menu in the main menu.
 ****Unfinished. Add a settings menu.
 ****Unfinished. Add a screen that shows every key binding.
 ****Unfinished. Add an auto updater.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add a documentation menu in the main menu.
 **Finished. Add player health.
 **Finished. Add life potions and player teleporters.
 **Finished. Add shields that absorb damage from doors, walls and traps.
