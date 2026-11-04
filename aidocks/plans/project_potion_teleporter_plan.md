@@ -1,11 +1,11 @@
 ---
 name: project_potion_teleporter_plan
-description: SETTLED, not built (2026-11-03, for 1.2) - the life potion (U gives exactly 1 life) and the player teleporter (U moves you a random 2 to 5 s of belt forward or back, never onto an obstacle); no inventory keys while a door carries you; Q&A log
+description: COMPLETE (2026-11-03, in 1.2; changelog 1.2 at 8 of 10) - the life potion (U gives exactly 1 life) and the player teleporter (U moves you a random 2 to 5 s of belt forward or back, never onto an obstacle); no inventory keys while a door carries you; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-03 (not built; sections below), started 2026-11-03 on top of 01d5ed0. The dev parked powerups for these ([[project_powerups_plan]]): "I want to plan the last 2 interactive items, life potions and player teleporters." No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]).
+Status: COMPLETE 2026-11-03 (all three sections built, tested and documented), started 2026-11-03 on top of 01d5ed0. The dev parked powerups for these ([[project_powerups_plan]]): "I want to plan the last 2 interactive items, life potions and player teleporters." No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]).
 
 Sounds (rescanned 2026-11-03): equipments/items/common/life_potion and player_teleporter, each with spawn, loop, get, break1-6 and use. Both are ordinary hand-pickup inventory items like ammo packs, keys and shields: they spawn on the belt, either hand picks them up, running onto one, landing on it or a weapon hit breaks it, and U uses it. They are NOT powerups.
 
@@ -37,3 +37,4 @@ Section 3: docks in 1.2 and the todo list.
   - Test 1 (use and landing sounds, the steps spoken match Z, 4 to 10 at 500 ms, a mix of forward and back) passed (2026-11-03).
   - Test 2 (an "all" run with 5 lives: never hit on landing, passed things can come up again after going back) passed (2026-11-03). The testing lives menu tops out at max_test_lives 5, so tests should never ask for more.
   - Test 3 (a forward teleport at 100 ms: the next obstacle still arrives with its full warning) passed (2026-11-03). SECTION 2 COMPLETE.
+- SECTION 3 WRITTEN (2026-11-03, on top of 0448030), so THE POTION AND TELEPORTER ARE COMPLETE. Changelog: 3 entries on top of "New in 1.2." (newest first: no inventory while a door carries you; player teleporters; life potions), 1.2 at 8 of 10. Readme: life potion and teleporter paragraphs after the shields one in "Items and your inventory."; the doors paragraph adds the inventory to what's off while a door moves you; the weapons line now says any item lying ahead breaks; the U line adds drinking a potion and using a teleporter. Todo list: "Add life potions and player teleporters." finished on top.

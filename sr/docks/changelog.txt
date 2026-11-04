@@ -1,4 +1,7 @@
 New in 1.2.
+Made it so you can no longer use your inventory while a door is carrying you.
+Added player teleporters, which you pick up with either hand and use with U to be thrown a random 2 to 5 seconds forward or back along the belt, sometimes right in front of danger.
+Added life potions, which you pick up with either hand and drink with U for 1 extra life.
 Made it so the lives key is now H instead of L, and the new M key tells you how strong your shield is.
 Added steel shields, which you pick up with either hand and wear with U, and which take the damage from spikes, mines, force fields, projectiles, walls and doors in place of your lives until they break.
 Made it so a fake door now sounds jammed when you try to open it with your hands, or use a key on it, so you can tell it won't open.

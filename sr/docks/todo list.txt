@@ -10,6 +10,7 @@
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add life potions and player teleporters.
 **Finished. Add shields that absorb damage from doors, walls and traps.
 **Finished. Add keys that unlock real doors.
 **Finished. Add bullets that fly ahead of you when you fire a gun.
