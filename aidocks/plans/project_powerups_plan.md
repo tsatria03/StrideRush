@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-03 (not built; sections below). PARKED (dev, 2026-11-03: "I'm not ready for this plan. I want to plan the last 2 interactive items, life potions and player teleporters."), so the potion and teleporter come first. Started 2026-11-03 on top of 01d5ed0, after shields, as the next 1.2 feature.
+Status: SETTLED 2026-11-03 (not built; sections below). PARKED (dev, 2026-11-03: "I'm not ready for this plan. I want to plan the last 2 interactive items, life potions and player teleporters."), so the potion and teleporter come first. Still parked in 1.3 (dev, 2026-11-04: "I'm not ready for powerups yet"). If lanes are ever built, a powerup also sits in a random lane and is only collected there ([[project_lanes_plan]]). Started 2026-11-03 on top of 01d5ed0, after shields, as the next 1.2 feature.
 
 Sounds (added by the dev 2026-11-03, rescanned): misc/game/powerget, powerloop1 and powerloop2, one shared set for every powerup (no per-type folders). Presumably a powerup on the belt plays a powerloop at its tile and powerget when you run over it; the two loops are just random variety for every powerup (dev, 2026-11-03: "the loop sounds are randomized 1 and 2. It's for all powerups"), so a loop never hints whether the event is good or bad.
 
