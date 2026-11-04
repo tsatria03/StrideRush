@@ -1,0 +1,148 @@
+/* Life capsules (dev, 2026-11-03, for 1.2, as life potions; renamed to life capsules with new sounds on 2026-11-04,
+where the old potion sounds became health_potion for a later item): an item that gives exactly 1 life. On the belt it
+works like an ammo pack:
+its spawn clip, then its loop at its tile; either hand picks it up within hand_window_start() (get and the player's
+give, centered) and it goes into the inventory as "life_capsule". Arriving on its tile on the ground, landing on it, or
+a weapon hit breaks it (break) and it's lost; a clean jump over it misses it. U uses it (use_capsule()).
+Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_capsules() shrinks the array. */
+sound_pool capsulepool;
+const string capsule_folder = "equipments/items/common/life_capsule/";
+class lifecapsule
+{
+double x;
+double countdown_start;
+bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
+int loopslot = -1;
+}
+lifecapsule@[] capsules(0);
+
+// True when life capsule sounds exist, so the spawner can offer them.
+bool capsules_available()
+{
+return get_pack_sound(capsule_folder + "*loop*") != "";
+}
+// countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.
+void spawn_capsule(double px, int countdown)
+{
+lifecapsule lc;
+lc.x = px;
+lc.countdown_start = px - countdown;
+capsulepool.play_2d(get_pack_sound(capsule_folder + "*spawn*"), me_x, 0, px, 0, false);
+lc.loopslot = capsulepool.play_2d(get_pack_sound(capsule_folder + "*loop*"), me_x, 0, px, 0, true);
+for (uint i = 0; i < capsules.length(); i++)
+{
+if (@capsules[i] == null)
+{
+@capsules[i] = lc;
+return;
+}
+}
+capsules.insert_last(lc);
+}
+// Called from hand_check() when nothing else took the press. Picks up the nearest capsule in its window. True if one was.
+bool pick_up_capsule()
+{
+lifecapsule@ target = null;
+for (uint i = 0; i < capsules.length(); i++)
+{
+if (@capsules[i] == null) continue;
+lifecapsule@ lc = capsules[i];
+if (lc.spent or me_x < hand_window_start(lc.x, lc.countdown_start) or lc.x - me_x < 1) continue;
+if (@target == null or lc.x < target.x) @target = lc;
+}
+if (@target == null) return false;
+target.spent = true;
+stop_capsule(target);
+capsulepool.play_stationary(get_pack_sound(capsule_folder + "*get*"), false);
+p.play_stationary(get_pack_sound("misc/player/*give*"), false);
+give_item("life_capsule", 1);
+speak_buffer(item_display_name("life_capsule"));
+return true;
+}
+/* Runs once per step, right after the move. Arriving on a capsule's tile on the ground breaks it; once you're past its
+tile still unspent, it was jumped cleanly. */
+void capsule_check()
+{
+for (uint i = 0; i < capsules.length(); i++)
+{
+if (@capsules[i] == null) continue;
+lifecapsule@ lc = capsules[i];
+if (!lc.spent)
+{
+if (me_x == lc.x and is_grounded()) break_capsule(lc);
+else if (me_x > lc.x) lc.spent = true; // jumped clean over: its loop carries on and fades behind you
+}
+if (me_x > lc.x + spawn_distance()) remove_capsule(i);
+}
+}
+// Called from player_land(): landing on a capsule's tile by mistake breaks it.
+void capsule_landing()
+{
+for (uint i = 0; i < capsules.length(); i++)
+{
+if (@capsules[i] == null) continue;
+if (!capsules[i].spent and me_x == capsules[i].x) break_capsule(capsules[i]);
+}
+}
+// Weapons break capsules like packs: a bullet on its tile, or a swing when it's the nearest target.
+lifecapsule@ capsule_at(double x)
+{
+for (uint i = 0; i < capsules.length(); i++)
+{
+if (@capsules[i] != null and !capsules[i].spent and capsules[i].x == x) return capsules[i];
+}
+return null;
+}
+lifecapsule@ capsule_in_reach(int reach)
+{
+lifecapsule@ target = null;
+for (uint i = 0; i < capsules.length(); i++)
+{
+if (@capsules[i] == null or capsules[i].spent) continue;
+double ahead = capsules[i].x - me_x;
+if (ahead < 1 or ahead > reach) continue;
+if (@target == null or capsules[i].x < target.x) @target = capsules[i];
+}
+return target;
+}
+// A weapon hit on a capsule: it breaks and is lost. Returns its x, so the weapon's hit plays there.
+double strike_capsule(lifecapsule@ lc)
+{
+break_capsule(lc);
+return lc.x;
+}
+void break_capsule(lifecapsule@ lc)
+{
+lc.spent = true;
+stop_capsule(lc);
+capsulepool.play_2d(get_pack_sound(capsule_folder + "*break*"), me_x, 0, lc.x, 0, false);
+}
+void stop_capsule(lifecapsule@ lc)
+{
+if (lc.loopslot > -1) capsulepool.destroy_sound(lc.loopslot);
+lc.loopslot = -1;
+}
+void remove_capsule(uint i)
+{
+if (i >= capsules.length() or @capsules[i] == null) return;
+stop_capsule(capsules[i]);
+@capsules[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_capsules()
+{
+for (uint i = 0; i < capsules.length(); i++)
+{
+if (@capsules[i] == null) continue;
+stop_capsule(capsules[i]);
+}
+capsules.resize(0);
+}
+// U on a life capsule: exactly 1 more life, with no limit (dev: "no more no less"). Always used, so returns true.
+bool use_capsule()
+{
+lives += 1;
+p.play_stationary(get_pack_sound(capsule_folder + "*use*"), false); // its use sound only, not the life sound (dev)
+speak_buffer("You now have " + lives + " lives.");
+return true;
+}

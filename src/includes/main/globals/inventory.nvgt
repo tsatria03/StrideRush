@@ -90,9 +90,9 @@ else if (item == "steel_shield")
 {
 if (use_shield()) give_item(item, -1);
 }
-else if (item == "life_potion")
+else if (item == "life_capsule")
 {
-if (use_potion()) give_item(item, -1);
+if (use_capsule()) give_item(item, -1);
 }
 else if (item == "player_teleporter")
 {

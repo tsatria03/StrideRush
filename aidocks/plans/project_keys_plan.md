@@ -39,7 +39,7 @@ Q&A log:
 
 Build sections (written 2026-11-03; build one per go-ahead, [[feedback_describe_dont_show_code]]):
 Section 1: keys on the belt and in the inventory.
-- New globals/key.nvgt (keypool, same entity pattern as ammopack.nvgt): spawn_key() plays spawn and a random loop at its tile; pickup by either hand in the hand window (get and misc/player/give, stationary, says e.g. "red key"), giving "red_key" to the inventory; arriving on it on the ground or landing on it breaks it; key_at(), key_in_reach() and strike_key() so bullet_hits() and weapon_strike() treat keys as targets like packs.
+- New globals/key.nvgt (keypool, same entity pattern as ammo.nvgt): spawn_key() plays spawn and a random loop at its tile; pickup by either hand in the hand window (get and misc/player/give, stationary, says e.g. "red key"), giving "red_key" to the inventory; arriving on it on the ground or landing on it breaks it; key_at(), key_in_reach() and strike_key() so bullet_hits() and weapon_strike() treat keys as targets like packs.
 - spawner.nvgt: "keys" joins item_types; one key is due per section, spawning in the first half of the stretch before the next real door mark; testing spawn choices give keys before each real door (all, real doors, real doors spread) and a "keys" choice spawns only keys.
 - Wiring: all_pools, clear_run_objects(), hand_check() (after packs), menus/menu.nvgt spawn choices.
 Section 2: locks, U and jam.

@@ -105,7 +105,7 @@ if (!running) return;
 ammopack_check();
 key_check();
 shield_check();
-potion_check();
+capsule_check();
 teleporter_check();
 powerup_check();
 surface_check(); // before the footstep, so a new surface is heard on its first step

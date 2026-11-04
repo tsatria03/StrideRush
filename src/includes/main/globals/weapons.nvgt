@@ -116,7 +116,7 @@ door@ d = fake_door_in_reach(reach);
 ammopack@ a = ammopack_in_reach(reach);
 doorkey@ k = key_in_reach(reach);
 shield@ s = shield_in_reach(reach);
-lifepotion@ lp = potion_in_reach(reach);
+lifecapsule@ lc = capsule_in_reach(reach);
 teleporter@ t = teleporter_in_reach(reach);
 // Whichever target is nearest takes the hit: a wall, a fake door (real doors can't be hit) or an item, which breaks.
 double best = -1;
@@ -125,7 +125,7 @@ if (@d != null and (best < 0 or d.x < best)) best = d.x;
 if (@a != null and (best < 0 or a.x < best)) best = a.x;
 if (@k != null and (best < 0 or k.x < best)) best = k.x;
 if (@s != null and (best < 0 or s.x < best)) best = s.x;
-if (@lp != null and (best < 0 or lp.x < best)) best = lp.x;
+if (@lc != null and (best < 0 or lc.x < best)) best = lc.x;
 if (@t != null and (best < 0 or t.x < best)) best = t.x;
 if (best < 0) return -1;
 if (@w != null and w.x == best) return strike_wall(w, damage);
@@ -133,7 +133,7 @@ if (@d != null and d.x == best) return strike_door(d, damage);
 if (@a != null and a.x == best) return strike_ammopack(a);
 if (@k != null and k.x == best) return strike_key(k);
 if (@s != null and s.x == best) return strike_shield(s);
-if (@lp != null and lp.x == best) return strike_potion(lp);
+if (@lc != null and lc.x == best) return strike_capsule(lc);
 return strike_teleporter(t);
 }
 // R: tops a gun up from its reserve any time it isn't full. The reload lasts as long as its reload sound.

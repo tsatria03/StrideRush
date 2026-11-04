@@ -29,7 +29,7 @@ Section 1: the weapon system.
   - reload_length comes from p.get_sound_length() of the reload slot, in ms. The refusals: "This weapon is still reloading.", "This weapon doesn't take any ammo.", "This weapon is already fully loaded.", and "This weapon has no more reserved ammo to reload." (that last one also plays empty).
   - keyboard.ini gains fire_held=SPACE:down. pause_menu.nvgt pauses and resumes firetimer and reloadtimer. tuning.nvgt gains weapon_damage_multiplier 2, gun_start_loaded 50, gun_start_reserve 250, weapon_fire_gap 50 and machine_gun_fire_gap 100.
 Section 2: ammo packs and the inventory. SETTLED 2026-11-02 (Q&A below):
-- New globals/ammopack.nvgt: ammopackpool and the pack entity (x, countdown_start, loopslot, spent).
+- New globals/ammo.nvgt: ammopackpool and the pack entity (x, countdown_start, loopslot, spent).
   - Spawned with the spawn sound and its loop. Picked up by either hand within the switch window: get, panned, and "You picked up an ammo pack.", then into the inventory.
   - Arriving on its tile on the ground, or landing while on it, plays break and loses it. Missed by a clean jump, its loop fades behind you until it's dropped.
 - New globals/inventory.nvgt: item counts, a cursor, I and Shift+I cycling with the panned inv sound, and U to use. The ammo pack's use refills both reserves by 50, capped at 250.
@@ -42,7 +42,7 @@ Section 2: ammo packs and the inventory. SETTLED 2026-11-02 (Q&A below):
   - CHANGED before testing (dev, 2026-11-02): item get sounds play stationary, centered, not panned to the hand. pick_up_ammopack() no longer takes a pan.
   - The new hand_window_start(x, countdown_start) in spawner.nvgt is shared by switch_window_start() and the pickup. hand_check() in forcefield.nvgt falls through to pick_up_ammopack(pan) when no field is in reach.
   - spawner.nvgt: item_types = {"ammo_packs"}. choose_next_obstacle() makes about 1 in ammo_pack_chance (8) spawns a pack, or every spawn when spawn_only is "ammo_packs". place_obstacle() sends "ammo_packs" to spawn_ammopack() with no theme. The testing spawn menu lists the obstacles, then "ammo packs", then all.
-  - ammopack.nvgt: ammopack_check() in step_check() after projectile_check(); ammopack_landing() from player_land(); use_ammopack() for U. The get sound is panned through ammopackpool.
+  - ammo.nvgt: ammopack_check() in step_check() after projectile_check(); ammopack_landing() from player_land(); use_ammopack() for U. The get sound is panned through ammopackpool.
   - inventory.nvgt: a dictionary named inventory, sorted keys, invpos corrected in give_item(). The inv pan is 0 when there's a single item (convert_to_pan would divide by zero). Shift+I is checked before I, since a plain I binding also matches with Shift held. use_item() routes ammo_pack to use_ammopack().
   - reset_run() calls clear_inventory(), run_input() calls inventory_input(), and the pack pool and destroy_all_ammopacks() are registered.
 Section 3 WRITTEN for the weapon system (2026-11-02, on top of 07501f2). The dev asked for the docks before the ammo pack Q&A ("ready for docks"), so the docks were done ahead of Section 2:
