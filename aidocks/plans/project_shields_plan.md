@@ -1,0 +1,39 @@
+---
+name: project_shields_plan
+description: SETTLED, not built (2026-11-03, for 1.2) - steel shields worn like armor with U, absorbing door, wall and trap damage except hazards; Q&A log
+metadata:
+  type: project
+---
+
+Status: SETTLED 2026-11-03 (not built; sections below), started 2026-11-03 on top of 8ed3034, after keys ([[project_keys_plan]]). Top of the dev's todo list: "Add shields that can absorb door/wall/trap damage, excluding hazards." (force fields were first excluded, then included: "I forgot forcefields do not end you instantly"). No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]).
+
+Sounds (rescanned 2026-11-03, after the dev fixed them): objects/interaction/items/common/steel_shield has spawn, loop, get, break, use, hit and death. The old equipments/shields/steel (wear, hit, break, remove) is gone. Also new in common: life_potion and player_teleporter (spawn, loop, get, break1-6, use), likely the todo list's powerups. objects/transitions/teleporters was removed.
+
+Dev's outline (2026-11-03):
+- With a shield focused in the inventory, U wears it "like armor", not raised up or down (so no hold-to-block key).
+- Only one shield can be worn at a time.
+
+Q&A log:
+- Q (dev): what happens if you've collected several shields but already have one on? Claude recommended: the spares stay in the inventory, and U on one while wearing a shield says "You're already wearing a shield." and keeps it (like a full gun reserve refusing an ammo pack). Once the worn shield is destroyed (death), U puts the next one on.
+- A: the spares wait (dev, 2026-11-03: "I like your first option a lot better."). U on a spare while wearing a shield says "You're already wearing a shield." and keeps it; after the worn one's death, U puts the next one on. SETTLED.
+- Q: How much can a shield take? (Asked 2026-11-03; Claude recommended a strength counted in lives, 5 by default (shield_strength in tuning.nvgt): each blow takes the obstacle's life cost from the shield instead of you, with hit while it holds and death when it reaches 0; the blow that finishes it is absorbed in full, even if it was worth more than what was left.)
+- The dev (2026-11-03): "Do you mean shield hp? I know players have lives, but shields don't really." Reworded: a shield has its own hp. Q: Is shield_hp 100 OK, with each obstacle doing its own tunable shield damage (spikes, projectiles, force fields and walls 20, mines 40, doors 60, the same proportions as their life costs, so 5 small blows break it), hit while it holds, death at 0, and the finishing blow absorbed in full? (Asked 2026-11-03; Claude recommended yes.)
+- The dev (2026-11-03): "Bump it up to 200hp. And give me the new damages." shield_hp is 200. Claude proposed keeping the damages at 20 (spikes, projectiles, force fields, walls), 40 (mines) and 60 (doors), so a shield now lasts twice as long: 10 small blows, 5 mines, or 3 door crashes with 20 hp left (doubling the damages too would change nothing). Awaiting the dev's answer.
+- A: agreed (dev, 2026-11-03: "yes, perfect. A shield is supposed to be more stronger than you."). shield_hp 200; shield damage 20 for spikes, projectiles, force fields and walls, 40 for mines, 60 for doors, each tunable. SETTLED.
+- Q: Does a shielded force field hit still throw you 5 steps forward? (Asked 2026-11-03; Claude recommended yes: the shield takes the 20 instead of your life, but the throw stays, since it's how you get past a field that's still on.)
+- A: yes (dev, 2026-11-03: "yes, still throw you forward."). A shielded force field hit takes 20 from the shield and still throws you 5 steps forward. SETTLED.
+- Q: Are Claude's proposed defaults for the rest OK (asked 2026-11-03)? 1. Shields spawn like ammo packs but rarer, about 1 spawn in 20 (shield_chance 20 in tuning.nvgt), and the testing spawn menu gets a "steel shields" choice. 2. Pickup, breaking (arriving on it, landing on it, weapons) and the "steel shield" speech work like packs and keys; a broken one plays break. 3. U wears it: use plays centered and it says "You put on the steel shield."; with one on, "You're already wearing a shield." keeps it. 4. A blow on a worn shield plays the obstacle's own hit plus the shield's hit (centered), instead of the player's hit and the life sound; at 0 hp the shield's death plays and it says "Your shield broke." 5. L, the lives readout, adds the shield: "3 lives. Shield at 140 hp." 6. Every run starts with no shield worn, like the empty inventory. 7. Hazards ignore the shield and still end the run. 8. A projectile that hits a shield stops its loop like any survived hit.
+- The dev asked how often ammo packs spawn: ammo_pack_chance 8, 1 in 8 of the spawner's picks (real doors and keys aside), about every 50 s at 500 ms and every 25 s at 50 ms. Default 1 CHANGED (dev, 2026-11-03): "I want 1 in 16, not 1 in 20." shield_chance is 16, about every 100 s at 500 ms and every 50 s at 50 ms.
+- Default 5 CHANGED (dev, 2026-11-03): "Pressing the M key should say, shield strength, x percent. The H key should speak the life count." So M is a new shield readout ("Shield strength, 70 percent.", a percent of shield_hp), and H speaks the lives. Note: Shift+M is already buffer_mute, and a bare M binding also matches Shift+M (like I and Shift+I), so the M readout must check Shift+M first. Q: Does H REPLACE L for the lives (L freed up), or do both keys speak the lives? (Asked 2026-11-03; Claude recommended moving lives to H and freeing L for lanes or later readouts.)
+- A: move it (dev, 2026-11-03: "move the life key to H"). info_lives goes from L to H in keyboard.ini, and L is free. The readme's key list changes with the docks. SETTLED.
+- A: the remaining defaults agreed (dev, 2026-11-03: "Yes perfect."), adding: "the hit sound for that trap, including doors should play on top of the shield." So every shielded blow plays the obstacle's own hit (spikes, mines, force fields, projectiles, walls, and doors at their pitch) at the same moment as the shield's hit, layered. THE PLAN IS SETTLED.
+
+Build sections (written 2026-11-03; build one per go-ahead, [[feedback_describe_dont_show_code]]):
+Section 1: the shield item and readouts.
+- New globals/shield.nvgt (shieldpool, the ammo pack pattern): spawn and loop on the belt, hand pickup ("steel shield", get and give), breaking by arriving on it, landing on it or weapons (break); shield_at(), shield_in_reach(), strike_shield() for bullets and weapon_strike().
+- Worn state: shield_worn and shield_hp_left, reset each run. use_shield() from use_item(): use plays centered, "You put on the steel shield."; refused with "You're already wearing a shield.".
+- tuning.nvgt: shield_hp 200, shield_chance 16, and the per-obstacle shield damages (20, mines 40, doors 60). spawner.nvgt: "steel_shields" in item_types with its 1 in 16 roll; testing choice.
+- Readouts: info_lives moves to H in keyboard.ini; a new info_shield on M, checked after Shift+M, says "Shield strength, x percent." or "You're not wearing a shield.".
+- Wiring: all_pools, clear_run_objects(), hand_check() after keys, step_check(), player_land().
+Section 2: absorbing blows. One shared shield_absorb(damage) returns true when a worn shield took the blow: the shield's hit plays (or its death and "Your shield broke." at 0). Spikes, mines, force fields (the throw stays), projectiles, walls and doors call it before costing lives: on true, their own hit plays layered with the shield's and no lives, player hit or life sound. Hazards never call it.
+Section 3: docks in 1.2 (shields, the H and M keys), readme and todo list.

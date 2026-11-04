@@ -91,3 +91,5 @@ Q&A log:
 - Q: (dev, 2026-11-02) Final keyset decision? A: A and D are the left and right hands (with Tab and Enter). Q and E are for turning, meaning switching lanes when lanes arrive (with Left and Right). This supersedes Q and E as hands and A and D as lanes. keyboard.ini: hand_left=TAB,A, hand_right=RETURN,D, lane_left=LEFT,Q, lane_right=RIGHT,E. Readouts stay on Z (distance) and C (speed).
 - Q: (dev, 2026-11-02) Alt+F4? A: Quits the entire program, only within an actual run, with no confirm. It says "exiting" (the same word as the main menu's exit) and closes. keyboard.ini [screens]: exit_program=ALT+F4, read in run_input().
 - Q: Does the no-networking rule remove the updater? A: No. The updater stays, because it isn't part of the game mechanics (dev, 2026-11-01).
+
+CHANGED (dev, 2026-11-03, shields plan [[project_shields_plan]]): the lives readout moves from L to H, freeing L, and M becomes the shield readout ("Shield strength, x percent."), checked after Shift+M (buffer mute). To be built with shields.
