@@ -33,11 +33,12 @@ string tile_at(double x)
 if (on_ledge(x)) return "ledge";
 return current_surface;
 }
-// A oneshot footstep on every step, never thinned, at any speed. Silent in the air and while crouched.
+/* A oneshot footstep on every step, never thinned, at any speed. Silent in the air and while crouched. It's heard from
+your lane (dev, 2026-11-04: "your footsteps should pan with whichever lane you are in"). */
 void play_step()
 {
 if (!is_grounded() or is_ducked() or door_moving) return; // silent while a real door carries you through
 string tile = tile_at(me_x);
 if (tile == "") return;
-p.play_stationary(get_pack_sound("objects/platforms/" + tile + "/*step*"), false);
+p.play_stationary_extended(get_pack_sound("objects/platforms/" + tile + "/*step*"), false, 0, lane_pan(current_lane), 0, 100, false);
 }

@@ -140,6 +140,8 @@ const double powerup_damage_more = 2.0;
 // A powerup on the belt replays its sound this often, not looped (dev, 2026-11-04): ground ones every 300 ms, flight ones every 400 (the dev's final choice, after trying 500, 350, 250 and 500 for flight).
 const int powerup_ground_sound_time = 300;
 const int powerup_flight_sound_time = 400;
+// Lanes (dev, 2026-11-04): how far to the side the left and right lanes are heard, as a pan (100 is fully to one side).
+const float lane_pan_amount = 50;
 const int life_potion_chance = 20;
 const int teleporter_chance = 16;
 const int teleport_min_time = 2000;
