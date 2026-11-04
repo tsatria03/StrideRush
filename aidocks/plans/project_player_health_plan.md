@@ -1,11 +1,11 @@
 ---
 name: project_player_health_plan
-description: SETTLED, not built (2026-11-03, for 1.2) - player health: 200 hp taking the same damage as shields, a life lost when it reaches 0, death on the last life; replaces fixed life costs; Q&A log
+description: COMPLETE (2026-11-03, the last 1.2 feature; changelog 1.2 FULL at 10 of 10) - player health: 200 hp taking the same damage as shields, a life lost when it reaches 0, death on the last life; replaces fixed life costs; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-03 (not built; sections below), started 2026-11-03 on top of 5b10a87, after the life potion and teleporter ([[project_potion_teleporter_plan]]). No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). 1.2 holds 8 of 10 changelog entries ([[feedback_changelog_rules]]).
+Status: COMPLETE 2026-11-03 (both sections built, tested and documented), started 2026-11-03 on top of 5b10a87, after the life potion and teleporter ([[project_potion_teleporter_plan]]). No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). 1.2 holds 8 of 10 changelog entries ([[feedback_changelog_rules]]).
 
 As built now ([[project_shields_plan]], lives.nvgt): each obstacle costs a fixed number of lives (spikes, force fields, projectiles and walls 1, mines 2, doors 3), checked with is_fatal() and paid with lose_lives(); a worn shield takes shield damage instead (20, mines 40, doors 60) out of its 200 hp; hazards end the run; a run starts with 1 life; a life potion adds 1.
 
@@ -41,3 +41,4 @@ Section 2: docks in 1.2 (health and H), the readme's lives section, CLAUDE.md's 
   - Test 3 (a shielded mine: no player hit, health untouched, shield at 80 percent) passed (2026-11-03).
   - CHANGED during test 4 (dev, 2026-11-03: "when a forcefield hurls you forward, it should not play your character's land sound."): play_landing() takes with_player_sound (default true); step_check() passes false after a throw, so only the tile's land plays. Asked about teleports, the dev said "drop the character's land for teleporters too", so use_teleporter() passes false as well; only a jump's landing plays both. This changes the force fields plan's "both land sounds" ([[project_force_fields_plan]]).
   - Test 4 (an unshielded force field: hits, a throw with only the tile's land, 90 percent, 3 lives; a teleport landing with only the tile's land; an "all" run starts at 100 percent, 1 life) passed (2026-11-03). SECTION 1 COMPLETE.
+- SECTION 2 WRITTEN (2026-11-03, on top of b05eaf6), so PLAYER HEALTH IS COMPLETE. Changelog: 2 entries on top of "New in 1.2." (newest first: H reads health and lives plus no player land on throws and teleports; player health added), so 1.2 is FULL at 10 of 10 and the next player-facing change opens 1.3 with build/version.txt going to 1.3. Readme: each obstacle line now gives health taken (spikes, force fields, projectiles and walls 20, mines 40, doors 60) instead of lives; "Lives." became "Health and lives." (200 health, a life lost at 0 with health refilled, the last life ends the run, hazards end it outright, shields and potions, H); the shield paragraph says "in place of your health"; the H key line gives health and lives. Todo list: "Add player health." finished on top. CLAUDE.md: the current-state line describes health, 1.2 is full, and the testing menus are speed, spawn, then the run-ending question.

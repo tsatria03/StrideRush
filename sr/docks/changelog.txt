@@ -1,4 +1,6 @@
 New in 1.2.
+Made it so the H key now tells you your health and lives, and you no longer hear your own landing when a force field throws you or a teleporter moves you.
+Added player health, so you now have 200 health that obstacles wear down instead of taking your lives straight away, and you only lose a life when your health runs out.
 Made it so you can no longer use your inventory while a door is carrying you.
 Added player teleporters, which you pick up with either hand and use with U to be thrown a random 2 to 5 seconds forward or back along the belt, sometimes right in front of danger.
 Added life potions, which you pick up with either hand and drink with U for 1 extra life.
