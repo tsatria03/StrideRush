@@ -6,6 +6,7 @@
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add health potions that restore some of your health.
 **Finished. Add a settings menu.
 **Finished. Add a screen that shows every key binding.
 **Finished. Add powerups to pick up along the way.

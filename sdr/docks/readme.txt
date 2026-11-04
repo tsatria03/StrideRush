@@ -23,7 +23,7 @@ Spikes, mines, force fields, projectiles and walls have the same five-cue countd
 
 Health and lives.
 
-You start each run with 1 life and 200 health. Spikes, mines, force fields, projectiles, walls and doors each take some of your health when they catch you, and you'll hear yourself get hit. When your health runs out, you lose a life: if you have lives to spare, you'll hear a sound, your health fills back up to 200, and you keep running. If it was your last life, the run ends and you're asked whether you want to replay it. Hazards are different: falling into one ends your run straight away, however much health or how many lives you have. A steel shield takes those hits before your health does, and life capsules give you more lives. Press H to hear how much health you have left, and how many lives.
+You start each run with 1 life and 200 health. Spikes, mines, force fields, projectiles, walls and doors each take some of your health when they catch you, and you'll hear yourself get hit. When your health runs out, you lose a life: if you have lives to spare, you'll hear a sound, your health fills back up to 200, and you keep running. If it was your last life, the run ends and you're asked whether you want to replay it. Hazards are different: falling into one ends your run straight away, however much health or how many lives you have. A steel shield takes those hits before your health does, health potions heal you a little, and life capsules give you more lives. Press H to hear how much health you have left, and how many lives.
 
 Crouching.
 
@@ -42,6 +42,7 @@ Packs stay in your inventory until you open them. Opening one adds 5 to 10 round
 Keys turn up once in every stretch, somewhere before its real door, and you pick them up and lose them the same way as ammo packs. They come in several colors, but the color doesn't matter: any key unlocks any real door. Each key you use is gone, and a key you don't use stays in your inventory for a later door. If there's no door within reach, the door ahead is already unlocked, or it's a fake door, the key stays in your inventory.
 Steel shields turn up now and then, a little less often than ammo packs, and you pick them up and lose them the same way. Choose one in your inventory and press U to wear it like armor. You can only wear one at a time, so any others wait in your inventory until the one you're wearing breaks. A shield takes the damage from spikes, mines, force fields, projectiles, walls and doors in place of your health. You'll hear the obstacle hit your shield instead of you, and a force field still throws you forward. A fresh shield takes about 10 hits from spikes, projectiles, force fields or walls, 5 mines or 4 door crashes, and the hit that wears it out is still fully blocked, so you'll hear it break and lose nothing. Shields can't save you from hazards. Press M to hear how strong your shield is.
 Life capsules turn up only rarely, and you pick them up and lose them the same way as ammo packs. Use one with U and you get 1 extra life, and there's no limit to how many lives you can build up.
+Health potions turn up more often than life capsules, and you pick them up and lose them the same way. Use one with U to heal 5 to 10 percent of your health, never past full. If your health is already full, it tells you so and keeps the potion for later, so collecting a few is worth it.
 Player teleporters are a gamble. Pick one up the same way, then press U, and it throws you a random 2 to 5 seconds' worth of belt either forward or back. It never drops you right on top of an obstacle, but it can drop you just in front of one, so be ready to react the moment you land. If it sends you back, anything you passed that's still waiting there, such as a spike or a hazard, comes up again, while anything you already dealt with, such as a broken wall or an opened door, stays that way.
 
 Powerups.
@@ -76,7 +77,7 @@ Tab or letter A: Uses your left hand, to switch off a force field, open a door o
 Enter or letter D: Uses your right hand, to switch off a force field, open a door or pick up an item, if pressed.
 Letter I: Moves to the next item in your inventory, if pressed.
 Shift plus letter I: Moves to the previous item in your inventory, if pressed.
-Letter U: Uses the item you're on in your inventory, such as opening an ammo pack, unlocking a door with a key, putting on a shield, using a life capsule or a teleporter, if pressed.
+Letter U: Uses the item you're on in your inventory, such as opening an ammo pack, unlocking a door with a key, putting on a shield, using a life capsule, a health potion or a teleporter, if pressed.
 Numbers 1 through 0: Draws the bat, boot, club, feat, fist, hammer, knife, laser, machine gun or pistol, if pressed.
 Space: Swings or fires your weapon, if pressed. With the machine gun, it keeps firing, if held down.
 Letter R: Reloads your gun, if pressed.

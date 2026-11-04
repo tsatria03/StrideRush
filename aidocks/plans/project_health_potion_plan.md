@@ -1,11 +1,11 @@
 ---
 name: project_health_potion_plan
-description: SETTLED, not built (2026-11-04, 1.4) - health potions, a new inventory item that restores some of your health, using the health_potion sounds left over from the life potion; ToyMania's heals a random 5 to 10 percent of max HP; Q&A log
+description: COMPLETE (2026-11-04, 1.4) - health potions, a new inventory item that restores some of your health, using the health_potion sounds left over from the life potion; ToyMania's heals a random 5 to 10 percent of max HP; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED, not built, started 2026-11-04 on top of 09e3573 (V1.30), in 1.4 (1 of 10 changelog entries used). No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). The dev: "we need to implement health potions. Look at how much it healed in toy mania."
+Status: COMPLETE 2026-11-04 (built, 4 tests passed, docks written), started 2026-11-04 on top of 09e3573 (V1.30), in 1.4 (1 of 10 changelog entries used). No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). The dev: "we need to implement health potions. Look at how much it healed in toy mania."
 
 What exists already:
 - Sounds: equipments/items/common/health_potion has spawn, loop, get, break1-6 and use (the old life potion set, kept when the life potion became the life capsule, [[project_potion_teleporter_plan]]). There's no misc/player heal sound.
@@ -34,3 +34,4 @@ Section 2: docks (1.4 changelog entry, readme). ADDED (dev, 2026-11-04: "The hea
   - Test 3 (running onto one breaks it; a clean jump misses it, its loop fading behind; a gun breaks it) passed (2026-11-04).
   - The dev asked whether items can have several get sounds (they'd added get1 and get2 to the life capsule). Claude: yes, every item looks up "*get*" (and loop, break) by wildcard and get_pack_sound() picks a matching file at random, so variations need no code change.
   - Test 4 (the real game: potions turn up among the items, more often than capsules; after a hit or two, one heals 5 to 10 percent) passed (dev, 2026-11-04: "I believe it passed."). SECTION 1 COMPLETE.
+- SECTION 2 WRITTEN (2026-11-04, on top of 7918525), so HEALTH POTIONS ARE COMPLETE. Changelog: "Added health potions, ..." on top of "New in 1.4.", so 1.4 holds 2 of 10. Readme: the health and lives paragraph adds "health potions heal you a little"; a health potion paragraph after the life capsule one in "Items and your inventory." (more common than capsules, same pickup and loss, U heals 5 to 10 percent never past full, refused and kept at full health); the U key line lists a health potion. Todo list: "Add health potions that restore some of your health." finished on top.
