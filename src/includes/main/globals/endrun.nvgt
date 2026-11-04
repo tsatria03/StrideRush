@@ -60,6 +60,7 @@ destroy_all_mines();
 destroy_all_forcefields();
 destroy_all_projectiles();
 destroy_all_ammopacks();
+destroy_all_keys();
 destroy_all_walls();
 destroy_all_doors();
 destroy_all_bullets();

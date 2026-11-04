@@ -11,8 +11,14 @@ string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projec
 then door_section_ms lower each time one is placed, until it passes min_step_time. Real doors come at these marks in
 every normal run; a testing run limited to one type gets none (the "real doors" testing choice spawns only them). */
 int next_door_mark = 0;
-// Items the spawner places too, at a lower chance (ammo_pack_chance); listed after the obstacles in the testing menu.
-string[] item_types = {"ammo_packs"};
+/* One key before each real door (dev, 2026-11-03). next_key_door is the door mark the next key belongs to, and the key
+comes once step_time reaches next_key_mark, a random point in the first half of the stretch before that door. */
+int next_key_door = 0;
+int next_key_mark = 0;
+// Testing only: "real doors" alternates a key and a door, so every door has its key.
+bool key_before_door = true;
+// Items the spawner places too: ammo packs at a lower chance (ammo_pack_chance), keys before each real door; listed after the obstacles in the testing menu.
+string[] item_types = {"ammo_packs", "keys"};
 // "all", or one type from obstacle_types or item_types; set by start_run(). Only the source-only testing menu picks anything but all.
 string spawn_only = "all";
 
@@ -20,6 +26,9 @@ string spawn_only = "all";
 void reset_spawner()
 {
 next_door_mark = ((step_time - 1) / door_section_ms) * door_section_ms; // 500 gives 450, 400 gives 350
+next_key_door = next_door_mark;
+set_key_mark();
+key_before_door = true;
 choose_next_obstacle();
 next_spawn_x = spawn_distance() + next_countdown + floor_tiles(min_floor_time);
 }
@@ -27,16 +36,34 @@ next_spawn_x = spawn_distance() + next_countdown + floor_tiles(min_floor_time);
 "all"), and its countdown length. */
 void choose_next_obstacle()
 {
-// Testing only: "real doors" in the spawn menu makes every spawn a real door, so opening one needn't wait for a mark.
+// Testing only: "real doors" in the spawn menu makes the spawns a key, then a real door, in turn, so opening one needn't wait for a mark.
 if (spawn_only == "real_doors")
 {
-next_type = doors_available() ? "real_doors" : "";
+if (key_before_door and keys_available()) next_type = "keys";
+else next_type = doors_available() ? "real_doors" : "";
+key_before_door = next_type != "keys";
 next_countdown = countdown_steps();
+return;
+}
+// Testing only: "keys" makes every spawn a key.
+if (spawn_only == "keys")
+{
+next_type = keys_available() ? "keys" : "";
+next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
 /* A new speed section has started: its real door comes next, ahead of anything else. Only in a normal run ("all"): a
 single-type testing run spawns strictly that type (dev, 2026-11-03), except "real doors, spread", which is the marks alone. */
 bool marks_on = spawn_only == "all" or spawn_only == "real_doors_spread";
+// The key for the next real door comes first, so it's always on the belt before its door.
+if (marks_on and key_due())
+{
+next_type = "keys";
+next_key_door -= door_section_ms;
+set_key_mark();
+next_countdown = countdown_steps();
+return;
+}
 if (marks_on and next_door_mark >= min_step_time and step_time <= next_door_mark and doors_available())
 {
 next_type = "real_doors";
@@ -63,6 +90,16 @@ if (spawn_only == "ammo_packs") next_type = packs_ok ? "ammo_packs" : "";
 else if (packs_ok and random(1, ammo_pack_chance) == 1) next_type = "ammo_packs";
 else next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
+}
+// A random point in the first half of the stretch before next_key_door: 50 ms sections give 475 to 500 before the 450 door.
+void set_key_mark()
+{
+next_key_mark = next_key_door + door_section_ms / 2 + random(0, door_section_ms / 2);
+}
+// True when the next real door's key should be placed: its door is still to come and the speed has reached its mark.
+bool key_due()
+{
+return keys_available() and next_key_door >= min_step_time and step_time <= next_key_mark;
 }
 // Where a type's theme folders live: doors under objects/transitions (they aren't traps), everything else under objects/traps.
 string type_folder(string type)
@@ -109,6 +146,11 @@ if (type == "") return;
 if (type == "ammo_packs")
 {
 spawn_ammopack(x, countdown); // one sound set, no themes
+return;
+}
+if (type == "keys")
+{
+spawn_key(x, countdown); // its color is picked in spawn_key()
 return;
 }
 string[] themes = get_pack_sound_folders(type_folder(type) + "*");

@@ -81,6 +81,11 @@ else
 // An item in the bullet's path breaks, as in ToyMania (dev, 2026-11-03).
 ammopack@ a = ammopack_at(b.x);
 if (@a != null) target_x = strike_ammopack(a);
+else
+{
+doorkey@ k = key_at(b.x);
+if (@k != null) target_x = strike_key(k);
+}
 }
 }
 if (target_x < 0) return false;

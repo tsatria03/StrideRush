@@ -39,8 +39,8 @@ return;
 }
 ammopacks.insert_last(a);
 }
-// Called from hand_check() when no force field took the press. Picks up the nearest pack in its window, if any.
-void pick_up_ammopack()
+// Called from hand_check() when no force field or door took the press. Picks up the nearest pack in its window. True if one was.
+bool pick_up_ammopack()
 {
 ammopack@ target = null;
 double target_dist = 0;
@@ -55,7 +55,7 @@ if (@target == null or a.x - me_x < target_dist)
 target_dist = a.x - me_x;
 }
 }
-if (@target == null) return; // nothing in reach: the press does nothing
+if (@target == null) return false; // nothing in reach: the press can still pick up a key
 target.spent = true;
 stop_ammopack(target);
 ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*get*"), false);
@@ -63,6 +63,7 @@ ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*get*"), false);
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item("ammo_pack", 1);
 speak_buffer(item_display_name("ammo_pack")); // just the item's name, like ToyMania's pickups (dev)
+return true;
 }
 /* Runs once per step, right after the move. Arriving on a pack's tile on the ground breaks it; arriving in the air
 leaves it to ammopack_landing(), and once you're past its tile still unspent, it was jumped cleanly. */
