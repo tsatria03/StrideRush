@@ -18,3 +18,5 @@ Never put a test step in a build summary (dev, 2026-11-02). End the summary by a
 - Record results in the build plan as the section's test outcome. Related: [[feedback_ask_one_question_at_a_time]], [[project_first_build_plan]].
 
 Keep each test small (dev, 2026-11-03: "please split this test into parts. This seems like a lot"): one scenario per test, a few steps at most. A test that checks several behaviors (such as each of U's refusals) is split into parts like 4a, 4b, 4c, each asked "Did it pass?" on its own.
+
+No test steps for sections that aren't gameplay (dev, 2026-11-03, for the menus plan's Section 1: "I do not want testing steps. It's not game play related."). Menus, docs and similar sections end with the build summary and the relaunch note; the dev checks them on their own. Gameplay sections still get the one-at-a-time test steps. Related: [[project_menus_plan]].

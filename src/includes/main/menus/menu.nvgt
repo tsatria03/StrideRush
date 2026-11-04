@@ -1,7 +1,11 @@
+/* The main menu (dev, 2026-11-03, for 1.3, SimpleFighter's layout): documentation menu, game menu, restart game and exit
+game. main()'s loop reopens it whenever a submenu returns. */
 void mainmenu()
 {
 setupmenu(true);
-m.add_item("start game", "start");
+m.add_item("documentation menu", "docks");
+m.add_item("game menu", "game");
+m.add_item("restart game", "rx");
 m.add_item("exit game", "ex");
 m.intro_text="Main menu. Choose an option with your arrow keys, then press enter to activate one.";
 int mres=m.run();
@@ -13,12 +17,77 @@ speak("exiting");
 m.fade_music();
 exit();
 }
-if(main=="start")
+if(main=="docks") docksmenu();
+else if(main=="game") gamemenu();
+else if(main=="rx") restart_game();
+}
+/* The documentation menu, after SimpleFighter's: a loop, so closing a document comes back here and escape or back
+returns to the main menu silently (a nested menu), with nothing stacking up the way ToyMania's menus call each other. */
+void docksmenu()
 {
-/* The testing menus, in the dev's order: speed, spawn, then whether lives can run out. Escape steps back one menu
-silently, and escaping the speed menu silently returns to the main menu: they're all nested menus, so nothing says
+while(true)
+{
+setupmenu(true);
+m.add_item("changelog", "changelog.txt");
+m.add_item("credits", "credits.txt");
+m.add_item("readme", "readme.txt");
+m.add_item("todo list", "todo list.txt");
+m.add_item("back", "back");
+m.intro_text="Documentation menu.";
+int mres=m.run();
+if(mres<0 or m.selected_item_id=="back") return;
+string filename=m.selected_item_id;
+m.fade_music();
+dockread("docks/"+filename);
+}
+}
+/* Shows one document in an audio form window: the whole file in a read-only box you can arrow through, and a close
+button that escape also presses. A missing file shows an alert instead. Either way it returns to docksmenu(). */
+void dockread(const string&in filename)
+{
+string shortname=string_replace(filename, "docks/", "", true);
+if(!file_exists(filename))
+{
+alert("Error", "Could not find "+shortname+".");
+return;
+}
+file dockfile;
+dockfile.open(filename, "rb");
+string docktext=dockfile.read();
+dockfile.close();
+audio_form docform;
+docform.create_window("Viewing "+shortname, false, false, false);
+int dockbox=docform.create_input_box(shortname, docktext, read_only:true, multiline:true);
+int dockclose=docform.create_button("&close", false, true);
+docform.focus(dockbox);
+while(true)
+{
+wait(5);
+docform.monitor();
+if(docform.is_pressed(dockclose)) return;
+}
+}
+/* The game menu: play game and back. Play game runs the debug options and then the run; when the run ends you're back
+here, so you can play again straight away. Escape or back returns to the main menu silently. */
+void gamemenu()
+{
+while(true)
+{
+setupmenu(true);
+m.add_item("play game", "play");
+m.add_item("back", "back");
+m.intro_text="Game menu.";
+int mres=m.run();
+if(mres<0 or m.selected_item_id=="back") return;
+play_game();
+}
+}
+/* Play game: the debug options, in the dev's order: speed, spawn, then whether lives can run out. Escape steps back one
+menu silently, and escaping the speed menu silently returns to the game menu: they're all nested menus, so nothing says
 "canceled". A compiled release skips all three. The lives menu was removed with player health (dev, 2026-11-03):
 "all" starts with starting_lives, and any single-type choice with testing_lives. */
+void play_game()
+{
 int speed = 0, can_run_out = 1;
 string only_type = "";
 int stage = 0;
@@ -42,16 +111,30 @@ stage = can_run_out < 0 ? 1 : 3;
 }
 }
 m.fade_music();
-/* Returns when the run ends, and main()'s loop reopens this menu. With the testing No answer, a hazard death starts
-the run over with the same choices instead; quitting from the pause menu still returns here. */
+/* Returns when the run ends, back to the game menu. With the debug No answer, a hazard death starts the run over with
+the same choices instead; quitting from the pause menu still returns here. */
 do
 {
 restart_run_requested = false;
-// A single-type testing run starts with testing_lives (dev, 2026-11-03); "all" plays like the real game.
+// A single-type debug run starts with testing_lives (dev, 2026-11-03); "all" plays like the real game.
 start_run(speed, only_type == "all" ? starting_lives : testing_lives, only_type, can_run_out == 1);
 }
 while (restart_run_requested);
 }
+/* Restart game, after SimpleFighter's restart(): starts a fresh copy of the game and closes this one. Compiled, it runs
+StrideRush.exe; from source, the pinned engine's nvgtw.exe on ../src/sr.nvgt, which resolves because the launcher set
+the cwd to sr/. A source restart skips sr/sr.py, so it doesn't sync build/version.txt or write errors.txt. */
+void restart_game()
+{
+speak("restarting");
+m.fade_music();
+bool started = SCRIPT_COMPILED ? run("StrideRush.exe", "", false, false) : run("C:\\nvgt\\nvgtw.exe", "../src/sr.nvgt", false, false);
+if (!started)
+{
+alert("Error", "Unable to restart Stride Rush.");
+return;
+}
+exit();
 }
 /* TESTING ONLY: pick the starting step time, from start_step_time down in 100 ms steps: 500, 400, 300, 200, 100. The
 50 ms in between (450, 350, 250, 150 and 50) were dropped for door testing (dev, 2026-11-03). It only appears when
@@ -66,7 +149,7 @@ for (int t = start_step_time; t >= 100; t -= 100)
 m.add_item(t + " ms", "" + t);
 }
 int mres = m.run();
-if (mres < 0) return -1; // silent: escape just steps back to the main menu
+if (mres < 0) return -1; // silent: escape just steps back to the game menu
 return int(parse_int(m.selected_item_id));
 }
 /* TESTING ONLY: pick which obstacles spawn: one type from obstacle_types (hazards, spikes, mines, and any added later),

@@ -1,10 +1,10 @@
 /* The two ways a run ends. Both silence the run first (music, ambience and every obstacle), play their death sounds
-blocking with dlgplay (Enter skips), then stop the run so start_run() returns and the main menu reopens. There's no
+blocking with dlgplay (Enter skips), then stop the run so start_run() returns and the game menu reopens. There's no
 results dialog in the basic build. */
 
-/* Set when a run should start straight over with the same choices instead of returning to the main menu. Only the
-source-only testing "end the run when out of lives?" No answer sets it (dev, 2026-11-02): a hazard still kills, but
-the run restarts, since hazards are the one thing that answer can't stop. mainmenu() reads and clears it. */
+/* Set when a run should start straight over with the same choices instead of returning to the game menu. Only the
+source-only debug option "end the run when out of lives?" No answer sets it (dev, 2026-11-02): a hazard still kills, but
+the run restarts, since hazards are the one thing that answer can't stop. play_game() reads and clears it. */
 bool restart_run_requested = false;
 
 // A hazard: its own fall clip is the whole death; no player death sound and no tile fall.
