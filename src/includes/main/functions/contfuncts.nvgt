@@ -1,7 +1,9 @@
+// Where the key bindings live, read at startup and written back by the rebind screen.
+const string keyboard_ini_path = "data/config/keyboard.ini";
 // Loads the key bindings into controls at startup. A missing or broken keyboard.ini stops the game, like SimpleFighter.
 bool load_controls()
 {
-string kpath = "data/config/keyboard.ini";
+string kpath = keyboard_ini_path;
 if (!file_exists(kpath))
 {
 alert("Error", "Missing keyboard.ini at " + kpath + ".");
@@ -13,4 +15,26 @@ alert("Error", "Failed to load " + kpath + ". Please reinstall the game.");
 return false;
 }
 return true;
+}
+// Every action in keyboard.ini, in the file's order, for the rebind list (SimpleFighter's keyboard_actions_in_order()).
+string[]@ keyboard_actions_in_order()
+{
+string[] result;
+file f;
+if (!f.open(keyboard_ini_path, "rb")) return result;
+string content = f.read();
+f.close();
+content = string_replace(content, "\r\n", "\n", true);
+string[] lines = content.split("\n", true);
+for (uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i].trim_whitespace();
+if (line.length() == 0) continue;
+if (line.substr(0, 1) == ";" || line.substr(0, 1) == "#" || line.substr(0, 1) == "[") continue;
+int eq = line.find_first("=");
+if (eq < 0) continue;
+string act = line.substr(0, eq).trim_whitespace();
+if (act != "" && controls.has_action(act)) result.insert_last(act);
+}
+return result;
 }

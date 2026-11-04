@@ -1,0 +1,192 @@
+/* The settings menu (dev, 2026-11-04, for 1.3), after SimpleFighter's settingsmenu(): one audio form window with a
+Category tab panel, and save settings and cancel buttons. From the main menu it has General, Game, Keyboard, Menu,
+Sound and Speech; F2 during a run shows only Game, Menu and Speech (ingame), so keys can't be rebound mid-run.
+
+The checkboxes only take effect on save settings; cancel or escape says "canceled" and drops them. The buttons that
+open something of their own (reset, the sound device, the voice, the key screens) act and save at once. Opening one
+rebuilds the window afterwards, so the unsaved ticks are carried in locals across the rebuild. */
+void settingsmenu(bool ingame = false)
+{
+bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1;
+int tab_shown = 0; // opens on the first tab: General from the main menu (dev, 2026-11-04), Game from F2
+while (true)
+{
+audio_form setform;
+setform.create_window("Settings", false);
+int tabs = setform.create_tab_panel("Category");
+if (!ingame) setform.add_list_item(tabs, "General");
+setform.add_list_item(tabs, "Game");
+if (!ingame) setform.add_list_item(tabs, "Keyboard");
+setform.add_list_item(tabs, "Menu");
+if (!ingame) setform.add_list_item(tabs, "Sound");
+setform.add_list_item(tabs, "Speech");
+int tab_general = ingame ? -1 : 0;
+int tab_game = ingame ? 0 : 1;
+int tab_keyboard = ingame ? -1 : 2;
+int tab_menu = ingame ? 1 : 3;
+int tab_sound = ingame ? -1 : 4;
+int tab_speech = ingame ? 2 : 5;
+int reset_btn = -1, view_btn = -1, rebind_btn = -1, fade_box = -1, device_btn = -1;
+if (!ingame)
+{
+reset_btn = setform.create_button("&Reset settings");
+setform.assign_to_tab(reset_btn, tabs, tab_general);
+}
+int ask_box = setform.create_checkbox("Ask to quit the run when pressing escape", new_ask);
+setform.assign_to_tab(ask_box, tabs, tab_game);
+if (!ingame)
+{
+view_btn = setform.create_button("&View current keyboard bindings");
+setform.assign_to_tab(view_btn, tabs, tab_keyboard);
+rebind_btn = setform.create_button("Re&bind keyboard controls");
+setform.assign_to_tab(rebind_btn, tabs, tab_keyboard);
+}
+int wrap_box = setform.create_checkbox("Enable wrapping in menus", new_wrap);
+setform.assign_to_tab(wrap_box, tabs, tab_menu);
+int letter_box = setform.create_checkbox("Enable first letter navigation in menus", new_letter);
+setform.assign_to_tab(letter_box, tabs, tab_menu);
+int position_box = setform.create_checkbox("Enable position information in menus", new_position);
+setform.assign_to_tab(position_box, tabs, tab_menu);
+int scroll_box = setform.create_checkbox("Enable side scrolling in menus", new_scroll);
+setform.assign_to_tab(scroll_box, tabs, tab_menu);
+if (!ingame)
+{
+fade_box = setform.create_checkbox("Enable global volume fading", new_fade);
+setform.assign_to_tab(fade_box, tabs, tab_sound);
+device_btn = setform.create_button("Select sound &device. Currently set to " + soundcard);
+setform.assign_to_tab(device_btn, tabs, tab_sound);
+}
+int voice_btn = setform.create_button("&Configure voice");
+setform.assign_to_tab(voice_btn, tabs, tab_speech);
+int preview_btn = setform.create_button("&Preview voice"); // SimpleFighter's (dev, 2026-11-04)
+setform.assign_to_tab(preview_btn, tabs, tab_speech);
+int save_btn = setform.create_button("&Save settings", true);
+int cancel_btn = setform.create_button("&Cancel", false, true);
+setform.set_list_position(tabs, tab_shown);
+setform.focus(tabs);
+while (true)
+{
+wait(5);
+setform.monitor();
+// Keep the unsaved ticks and the open tab, so a rebuild after a sub-screen shows them as they were.
+new_ask = setform.is_checked(ask_box);
+new_wrap = setform.is_checked(wrap_box);
+new_letter = setform.is_checked(letter_box);
+new_position = setform.is_checked(position_box);
+new_scroll = setform.is_checked(scroll_box);
+if (fade_box != -1) new_fade = setform.is_checked(fade_box);
+int tab_now = setform.get_list_position(tabs);
+if (tab_now >= 0) tab_shown = tab_now;
+if (setform.is_pressed(cancel_btn))
+{
+speak("canceled");
+return;
+}
+if (setform.is_pressed(save_btn))
+{
+ask_quit_on_escape = new_ask;
+menuwrap = new_wrap;
+first_letter = new_letter;
+speak_menu_position = new_position;
+side_scrolling = new_scroll;
+if (!ingame) fademode = new_fade ? 1 : 0;
+writepreffs();
+speak("Settings saved.");
+return;
+}
+if (reset_btn != -1 && setform.is_pressed(reset_btn))
+{
+if (confirm_reset_settings())
+{
+reset_settings();
+new_ask = ask_quit_on_escape;
+new_wrap = menuwrap;
+new_letter = first_letter;
+new_position = speak_menu_position;
+new_scroll = side_scrolling;
+new_fade = fademode == 1;
+}
+break;
+}
+if (view_btn != -1 && setform.is_pressed(view_btn))
+{
+view_keyboard_bindings();
+break;
+}
+if (rebind_btn != -1 && setform.is_pressed(rebind_btn))
+{
+rebind_keyboard_action();
+break;
+}
+if (device_btn != -1 && setform.is_pressed(device_btn))
+{
+choose_sound_device();
+break;
+}
+if (setform.is_pressed(preview_btn))
+{
+dlgmessage_return("This is your current voice configuration."); // a dialog, so the form doesn't talk over it (dev, 2026-11-04)
+break;
+}
+if (setform.is_pressed(voice_btn))
+{
+tts_config(tts, true);
+writepreffs(); // the voice window has its own OK and cancel, so whatever it kept is saved now
+break;
+}
+}
+}
+}
+// Yes then No; anything but Yes says "canceled".
+bool confirm_reset_settings()
+{
+setupmenu();
+m.intro_text = "Are you sure you want to reset all settings to their defaults?";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int mres = m.run();
+if (mres >= 0 and m.selected_item_id == "yes") return true;
+speak("canceled");
+return false;
+}
+/* Puts every setting back to its default and saves (dev, 2026-11-04). Key bindings are left alone: they live in
+keyboard.ini, not settings.srf. */
+void reset_settings()
+{
+menumusvolume = 0;
+music_volume = music_start_volume;
+ambience_volume = ambience_start_volume;
+menuwrap = false;
+first_letter = false;
+side_scrolling = false;
+speak_menu_position = false;
+fademode = 1;
+ask_quit_on_escape = true;
+use_sr = true;
+tts.set_rate(0);
+tts.set_pitch(0);
+tts.set_volume(100);
+soundcard = "Default";
+sound_output_device = 1;
+writepreffs();
+dlg("Settings reset.");
+}
+/* SimpleFighter's device chooser: every output device but the first entry, which isn't a real device. The choice takes
+effect and is saved at once; escape steps back to the settings silently (a nested menu). */
+void choose_sound_device()
+{
+string[]@ devices = get_sound_output_devices();
+devices.remove_at(0);
+setupmenu();
+for (uint i = 0; i < devices.length(); i++)
+{
+m.add_item(devices[i], devices[i]);
+}
+m.intro_text = "Choose a sound device you'd like to use in the game.";
+int mres = m.run();
+if (mres < 0 or mres >= int(devices.length())) return;
+soundcard = devices[mres];
+sound_output_device = mres + 1;
+writepreffs();
+dlg("Sound device set to " + soundcard + ".");
+}

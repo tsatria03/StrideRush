@@ -1,0 +1,161 @@
+/* The key bindings screens (dev, 2026-11-04, for 1.3), ported from SimpleFighter's menus/menu.nvgt. F1 during a run and
+the settings menu's Keyboard tab both open the read-only view; rebinding is only reachable from the settings menu
+outside a run, since keys are never rebound mid-run. */
+
+/* A read-only window of keyboard.ini as it is now: section headers and comments kept, and each action line rewritten
+from the live bindings as "action = keys", with "(unbound)" for an action that has none. Close or escape returns. */
+void view_keyboard_bindings()
+{
+string body = "";
+file f;
+if (f.open(keyboard_ini_path, "rb"))
+{
+string content = f.read();
+f.close();
+content = string_replace(content, "\r\n", "\n", true);
+string[] lines = content.split("\n", true);
+for (uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+string trimmed = line.trim_whitespace();
+if (trimmed.length() == 0 || trimmed.substr(0, 1) == ";" || trimmed.substr(0, 1) == "#" || trimmed.substr(0, 1) == "[")
+{
+body += line + "\r\n";
+continue;
+}
+int eq = trimmed.find_first("=");
+string act = eq < 0 ? "" : trimmed.substr(0, eq).trim_whitespace();
+if (act != "" && controls.has_action(act))
+{
+string s = controls.get_keyboard_action_string(act);
+body += act + " = " + (s == "" ? "(unbound)" : s) + "\r\n";
+}
+else body += line + "\r\n";
+}
+}
+else body = "Could not read " + keyboard_ini_path + ".";
+audio_form bindform;
+bindform.create_window("Current keyboard bindings", false, false, false);
+int view = bindform.create_input_box("Bindings", body, read_only:true, multiline:true);
+int close_btn = bindform.create_button("&close", false, true);
+bindform.focus(view);
+while (true)
+{
+wait(5);
+bindform.monitor();
+if (bindform.is_pressed(close_btn)) return;
+}
+}
+/* The rebind list: every action with its keys, and add, edit and remove buttons. Each change is written straight to
+keyboard.ini, keeping its sections and comments. Close or escape returns to the settings menu silently. The list is
+rebuilt after each change so it always shows the new keys. */
+void rebind_keyboard_action()
+{
+while (true)
+{
+string[]@ actions = keyboard_actions_in_order();
+if (actions.length() == 0)
+{
+dlg("There are no actions to rebind.");
+return;
+}
+audio_form rebindform;
+rebindform.create_window("Rebind keyboard controls", false);
+int list = rebindform.create_list("Current bindings");
+for (uint i = 0; i < actions.length(); i++)
+{
+string s = controls.get_keyboard_action_string(actions[i]);
+rebindform.add_list_item(list, actions[i] + ": " + (s == "" ? "(unbound)" : s), actions[i]);
+}
+int add_btn = rebindform.create_button("&Add binding");
+int edit_btn = rebindform.create_button("&Edit binding");
+int remove_btn = rebindform.create_button("&Remove binding");
+int close_btn = rebindform.create_button("&Close", false, true);
+rebindform.focus(list);
+while (true)
+{
+wait(5);
+rebindform.monitor();
+if (rebindform.is_pressed(close_btn)) return;
+if (rebindform.is_pressed(add_btn))
+{
+rebind_add_binding(rebindform);
+break;
+}
+int pos = rebindform.get_list_position(list);
+if (rebindform.is_pressed(edit_btn) && pos >= 0 && pos < int(actions.length()))
+{
+rebind_edit_binding(rebindform, actions[pos]);
+break;
+}
+if (rebindform.is_pressed(remove_btn) && pos >= 0 && pos < int(actions.length()))
+{
+rebind_remove_binding(actions[pos]);
+break;
+}
+}
+}
+}
+// Adds one more key to an action, keeping its others.
+void rebind_add_binding(audio_form@ rebindform)
+{
+string[]@ actions = keyboard_actions_in_order();
+setupmenu();
+for (uint i = 0; i < actions.length(); i++)
+{
+m.add_item(actions[i], actions[i]);
+}
+m.intro_text = "Choose an action to add a binding to.";
+int mres = m.run();
+if (mres < 0)
+{
+speak("canceled");
+return;
+}
+string action = m.selected_item_id;
+string combo = kc_capture_combo(rebindform, "Press the key combo to bind to " + action + ", or escape to cancel.");
+if (combo == "")
+{
+speak("canceled");
+return;
+}
+kc_trigger trig = kc_choose_trigger();
+controls.bind_key(action, combo, trig);
+save_bindings("Added " + combo + " to " + action + ".");
+}
+// Replaces all of an action's keys with one new combo.
+void rebind_edit_binding(audio_form@ rebindform, const string&in action)
+{
+string combo = kc_capture_combo(rebindform, "Press the new key combo for " + action + ", or escape to cancel.");
+if (combo == "")
+{
+speak("canceled");
+return;
+}
+kc_trigger trig = kc_choose_trigger();
+controls.clear_keyboard_action(action);
+controls.bind_key(action, combo, trig);
+save_bindings(action + " is now bound to " + combo + ".");
+}
+// Clears every key from an action, after a Yes then No question.
+void rebind_remove_binding(const string&in action)
+{
+setupmenu();
+m.intro_text = "Do you want to remove all bindings for " + action + "?";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id != "yes")
+{
+speak("canceled");
+return;
+}
+controls.clear_keyboard_action(action);
+save_bindings(action + " bindings cleared.");
+}
+// Writes the bindings back to keyboard.ini and confirms, or says the change only lasts for this session.
+void save_bindings(const string&in done_message)
+{
+if (!kc_save_preserving(controls, keyboard_ini_path)) dlg("The change works for now, but it could not be saved to keyboard.ini.");
+else dlg(done_message);
+}

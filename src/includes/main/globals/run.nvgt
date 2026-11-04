@@ -138,6 +138,22 @@ if (controls.action_triggered("pause"))
 pause_menu();
 return;
 }
+/* F1 views the key bindings and F2 opens the settings with only the Game, Menu and Speech tabs (dev, 2026-11-01 and
+2026-11-04). Each pauses the run like the pause menu and resumes it silently when closed. */
+if (controls.action_triggered("view_bindings"))
+{
+pause_game();
+view_keyboard_bindings();
+resume_game();
+return;
+}
+if (controls.action_triggered("settings"))
+{
+pause_game();
+settingsmenu(true);
+resume_game();
+return;
+}
 // Alt+F4 closes the whole program, from inside a run only, with no confirm.
 if (controls.action_triggered("exit_program"))
 {
