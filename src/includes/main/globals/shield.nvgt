@@ -174,11 +174,12 @@ player hit, life sound or life loss. The blow that empties it is absorbed in ful
 bool shield_absorb(int damage)
 {
 if (!shield_worn) return false;
-shield_hp_left -= damage;
+shield_hp_left -= powerup_damage(damage, "Sturdy Shield", "Brittle Shield"); // halved or doubled by the shield powerups
 if (shield_hp_left <= 0)
 {
 shield_worn = false;
 shield_hp_left = 0;
+end_shield_powerup(); // a Sturdy or Brittle Shield ends with it
 p.play_stationary(get_pack_sound(shield_folder + "*death*"), false); // the sound alone, no speech (dev, 2026-11-03)
 }
 else p.play_stationary(get_pack_sound(shield_folder + "*hit*"), false);

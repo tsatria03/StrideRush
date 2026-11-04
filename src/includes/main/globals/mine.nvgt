@@ -20,7 +20,7 @@ mine@[] mines(0);
 // Where a mine arms: mine_arm_lead_time before its countdown starts at the current speed, never under mine_arm_lead_min_tiles.
 double mine_arm_x(mine@ mn)
 {
-return mn.countdown_start - int(max(mine_arm_lead_min_tiles, ceil(double(mine_arm_lead_time) / step_time)));
+return mn.countdown_start - int(max(mine_arm_lead_min_tiles, ceil(double(mine_arm_lead_time) / current_step_time())));
 }
 // countdown comes from the spawner, the same countdown_steps() a hazard's ledge uses.
 void spawn_mine(double mx, string theme, int countdown)

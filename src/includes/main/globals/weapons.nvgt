@@ -60,9 +60,10 @@ if (controls.action_triggered("weapon_" + k)) draw_weapon(k - 1);
 }
 if (weapon_names[current_weapon] == "machine_gun")
 {
-if (controls.action_triggered("fire_held") and firetimer.elapsed >= machine_gun_fire_gap) fire_weapon();
+if (controls.action_triggered("fire_held") and firetimer.elapsed >= current_fire_gap(machine_gun_fire_gap)) fire_weapon();
 }
-else if (controls.action_triggered("fire") and firetimer.elapsed >= weapon_fire_gap) fire_weapon();
+// The fire gaps go through current_fire_gap(), so the weapon powerups can speed them up or slow them down.
+else if (controls.action_triggered("fire") and firetimer.elapsed >= current_fire_gap(is_gun(current_weapon) ? pistol_fire_gap : melee_fire_gap)) fire_weapon();
 if (controls.action_triggered("reload")) start_reload();
 if (controls.action_triggered("ammo_check")) speak_ammo();
 }
@@ -103,7 +104,7 @@ p.play_2d(get_pack_sound(weapon_folder(w) + "*hit*"), me_x, 0, target_x, 0, fals
 // How far ahead a weapon reaches: weapon_reach_time at the current speed, in tiles, at least 1.
 int weapon_reach()
 {
-return int(max(1, ceil(double(weapon_reach_time) / step_time)));
+return int(max(1, ceil(double(weapon_reach_time) / current_step_time())));
 }
 /* The target hook. Damages the nearest target within weapon_reach() tiles ahead and returns its x, or -1 if there was
 nothing to hit. The targets are walls, fake doors and items; a new target type adds its own search here. */

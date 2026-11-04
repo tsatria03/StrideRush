@@ -82,7 +82,7 @@ run_input();
 }
 void step_check()
 {
-if (steptimer.elapsed < step_time) return;
+if (steptimer.elapsed < current_step_time()) return; // Slow Motion and Rush Hour shift the normal step_time
 steptimer.restart();
 me_x += 1;
 update_listeners();
@@ -147,7 +147,7 @@ exit();
 if (controls.action_triggered("info_lives")) speak_health(); // H: health percent and lives
 if (controls.action_triggered("info_shield")) speak_shield_strength(); // key_config keeps a plain M quiet during Shift+M (buffer mute)
 if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase());
-if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + step_time + " ms."); // the step interval itself, which shrinks as you speed up
+if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + current_step_time() + " ms."); // the step interval itself, which shrinks as you speed up
 if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".");
 weapon_input();
 inventory_input();

@@ -165,7 +165,7 @@ front of danger, but a tile holding an obstacle moves on a step the same way unt
 still waiting behind you counts again. Always used, so returns true. */
 bool use_teleporter()
 {
-int steps = int(max(1, round(double(random(teleport_min_time, teleport_max_time)) / step_time, 0)));
+int steps = int(max(1, round(double(random(teleport_min_time, teleport_max_time)) / current_step_time(), 0)));
 int dir = random(0, 1) == 0 ? -1 : 1;
 // Never back past the start of the run; with no room behind you at all, it goes forward instead.
 if (dir < 0 and me_x < 1) dir = 1;

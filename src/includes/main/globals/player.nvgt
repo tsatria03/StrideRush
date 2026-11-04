@@ -32,7 +32,7 @@ return ducked;
 void jump_check()
 {
 if (controls.action_triggered("jump") and is_grounded() and !door_moving) start_jump(); // no jumping while a door carries you
-if (jump_state == 0 or jumptimer.elapsed < jump_tick) return;
+if (jump_state == 0 or jumptimer.elapsed < current_jump_tick()) return; // Moon Jump and Short Hop change this
 jumptimer.restart();
 if (jump_state == 1)
 {
@@ -93,7 +93,7 @@ duckcooldowntimer.restart();
 }
 void duck_check()
 {
-if (ducked and (controls.action_triggered("duck_release") or ducktimer.elapsed >= duck_time))
+if (ducked and (controls.action_triggered("duck_release") or ducktimer.elapsed >= current_duck_time())) // Long Crouch and Stiff Knees change this
 {
 stop_duck();
 return;

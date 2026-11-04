@@ -95,8 +95,10 @@ const int weapon_damage_multiplier = 4;
 // Each gun starts every run with this much loaded and in reserve; ammo packs refill the reserve.
 const int gun_start_loaded = 50;
 const int gun_start_reserve = 50; // was ToyMania's 250; lowered so ammo packs matter (dev, 2026-11-03)
-// The shortest gap between two shots or swings per Space press, and the machine gun's rate while Space is held.
-const int weapon_fire_gap = 50;
+/* The shortest gap between two swings (melee) or two pistol shots per Space press, and the machine gun's rate while Space
+is held. Both press gaps were one shared 50 ms, too short for the weapon powerups to be heard (dev, 2026-11-04). */
+const int melee_fire_gap = 200;
+const int pistol_fire_gap = 100;
 const int machine_gun_fire_gap = 100;
 // Every weapon reaches this far ahead, turned into tiles at the current speed (dev, 2026-11-03).
 const int weapon_reach_time = 2000;
@@ -119,15 +121,25 @@ const int shield_hp = 200; // first proposed as 100 (dev: "A shield is supposed 
 /* Life potions and player teleporters (dev, 2026-11-03). About one spawn in life_potion_chance is a potion and one in
 teleporter_chance a teleporter. A teleport moves you a random teleport_min_time to teleport_max_time of belt (in tiles
 at the current speed), forward or back. */
-/* Powerups (dev, 2026-11-03). About one spawn in powerup_chance is a powerup; a timed one lasts powerup_time; Shield
-Boost gives a worn shield shield_boost_hp back (up to shield_hp) and Shield Crack takes shield_crack_hp. */
+/* Powerups (dev, 2026-11-03 and 4). About one spawn in powerup_chance is a powerup, and each lasts powerup_time. Their
+effects: Slow Motion and Rush Hour shift the step by powerup_speed_ms; Moon Jump and Short Hop scale each jump height's
+time; Long Crouch and Stiff Knees scale duck_time; Quick Swings and Rapid Fire scale a fire gap by powerup_fire_faster,
+Clumsy Swings and Sticky Trigger by powerup_fire_slower; Sturdy Shield and Tough Hide scale damage to your shield or
+health by powerup_damage_less, Brittle Shield and Soft Hide by powerup_damage_more. */
 const int powerup_chance = 10;
 const int powerup_time = 20000;
+const int powerup_speed_ms = 50; // first proposed as 100 (dev chose 50)
+const double moon_jump_factor = 1.5;
+const double short_hop_factor = 2.0 / 3.0;
+const double long_crouch_factor = 2.0;
+const double stiff_knees_factor = 0.5;
+const double powerup_fire_faster = 0.5;
+const double powerup_fire_slower = 2.0;
+const double powerup_damage_less = 0.5;
+const double powerup_damage_more = 2.0;
 // A powerup on the belt replays its sound this often, not looped (dev, 2026-11-04): ground ones every 300 ms, flight ones every 400 (the dev's final choice, after trying 500, 350, 250 and 500 for flight).
 const int powerup_ground_sound_time = 300;
 const int powerup_flight_sound_time = 400;
-const int shield_boost_hp = 50;
-const int shield_crack_hp = 50;
 const int life_potion_chance = 20;
 const int teleporter_chance = 16;
 const int teleport_min_time = 2000;

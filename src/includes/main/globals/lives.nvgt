@@ -23,7 +23,7 @@ through p and calls end_run_hit(), as a fatal hit always has. */
 int take_damage(int damage)
 {
 if (shield_absorb(damage)) return blow_shielded;
-player_health -= damage;
+player_health -= powerup_damage(damage, "Tough Hide", "Soft Hide"); // halved or doubled by the health powerups
 if (player_health > 0) return blow_hurt;
 if (lives_can_end and lives <= 1)
 {

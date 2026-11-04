@@ -39,7 +39,7 @@ current step they are), so the flight is smooth too, and it passes meet_x exactl
 meet_x the distance goes negative and it carries on behind the player. */
 double projectile_x(projectile@ pr)
 {
-double player_pos = me_x + min(1, double(steptimer.elapsed) / step_time);
+double player_pos = me_x + min(1, double(steptimer.elapsed) / current_step_time());
 return pr.meet_x + (projectile_speed_factor - 1) * (pr.meet_x - player_pos);
 }
 /* Runs every frame: moves each flying loop to its current position. sound_pool's update_sound_2d() rounds to whole

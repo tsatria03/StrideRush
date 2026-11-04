@@ -2,11 +2,11 @@
 Each is a ground one (misc/game/powerground at its tile, replayed on a timer) or a flight one (powerflight), half and half. Arriving
 on a ground one's tile on the ground collects it, and a jump skips it; arriving on a flight one's tile in the air
 collects it, and running under it misses it. Weapons and bullets pass through them. On contact powerget plays centered
-and the event is picked then, at random from what's possible right then (the shield ones only with a shield worn),
+and the event is picked then, at random from what's possible right then (the shield pair only with a shield worn),
 and its name is spoken. A missed one keeps sounding and fades out behind you.
-Timed events last powerup_time on runtimer (so pausing freezes them), one per kind: a new one of the same kind, or its
+Every event lasts powerup_time on runtimer (so pausing freezes it), one per kind: a new one of the same kind, or its
 opposite, replaces it and restarts the time (dev: "I do not want the same type of powerup to stack up"). Different
-kinds run together. Section 1 only tracks them; their effects come in Section 2 (powerup_active()).
+kinds run together. Their effects come through the current_ helpers and powerup_damage() below.
 Same entity pattern as the items: null-slot removal, reused slots, and only destroy_all_powerups() shrinks the array. */
 sound_pool poweruppool;
 const string powerup_folder = "misc/game/";
@@ -29,13 +29,14 @@ const int powerup_kind_jumps = 1;
 const int powerup_kind_crouches = 2;
 const int powerup_kind_melee = 3;
 const int powerup_kind_guns = 4;
-const int powerup_kind_steps = 5;
-const int powerup_kinds = 6;
-const int powerup_one_off = -1;
-/* The dev's 13 (2026-11-03), with their friendly names, which are spoken as they are, and their kinds. The good ones come
-first in each pair. Shield Boost and Shield Crack act at once. */
-string[] powerup_names = {"Slow Motion", "Rush Hour", "Moon Jump", "Short Hop", "Long Crouch", "Stiff Knees", "Quick Swings", "Clumsy Swings", "Rapid Fire", "Sticky Trigger", "Muffled Steps", "Shield Boost", "Shield Crack"};
-int[] powerup_name_kinds = {powerup_kind_speed, powerup_kind_speed, powerup_kind_jumps, powerup_kind_jumps, powerup_kind_crouches, powerup_kind_crouches, powerup_kind_melee, powerup_kind_melee, powerup_kind_guns, powerup_kind_guns, powerup_kind_steps, powerup_one_off, powerup_one_off};
+const int powerup_kind_shield = 5;
+const int powerup_kind_health = 6;
+const int powerup_kinds = 7;
+/* The 14, in 7 pairs with the good one first, by their friendly names, which are spoken as they are (dev, 2026-11-04:
+the shield pair was Shield Boost and Shield Crack, made timed and renamed; Tough Hide and Soft Hide added; Muffled
+Steps dropped). All of them last powerup_time. */
+string[] powerup_names = {"Slow Motion", "Rush Hour", "Moon Jump", "Short Hop", "Long Crouch", "Stiff Knees", "Quick Swings", "Clumsy Swings", "Rapid Fire", "Sticky Trigger", "Sturdy Shield", "Brittle Shield", "Tough Hide", "Soft Hide"};
+int[] powerup_name_kinds = {powerup_kind_speed, powerup_kind_speed, powerup_kind_jumps, powerup_kind_jumps, powerup_kind_crouches, powerup_kind_crouches, powerup_kind_melee, powerup_kind_melee, powerup_kind_guns, powerup_kind_guns, powerup_kind_shield, powerup_kind_shield, powerup_kind_health, powerup_kind_health};
 // The running timed powerup of each kind ("" for none), and when it ends on runtimer.
 string[] active_powerups(powerup_kinds);
 double[] powerup_ends(powerup_kinds);
@@ -54,7 +55,7 @@ active_powerups[k] = "";
 powerup_ends[k] = 0;
 }
 }
-// True while the named timed powerup is running. Section 2's effects ask this.
+// True while the named timed powerup is running.
 bool powerup_active(string name)
 {
 for (int k = 0; k < powerup_kinds; k++)
@@ -62,6 +63,53 @@ for (int k = 0; k < powerup_kinds; k++)
 if (active_powerups[k] == name) return true;
 }
 return false;
+}
+/* The effects (dev, 2026-11-03 and 4). Each helper turns a normal value into the one the running powerups give.
+The step interval you actually run at: Slow Motion and Rush Hour shift the normal speed (step_time, which keeps speeding
+up underneath and still sets the door marks) by powerup_speed_ms, never slower than start_step_time or faster than
+min_step_time. */
+int current_step_time()
+{
+int t = step_time;
+if (powerup_active("Slow Motion")) t += powerup_speed_ms;
+else if (powerup_active("Rush Hour")) t -= powerup_speed_ms;
+return int(max(min_step_time, min(start_step_time, t)));
+}
+// A jump's time per height: Moon Jump makes jumps longer, Short Hop shorter.
+double current_jump_tick()
+{
+if (powerup_active("Moon Jump")) return jump_tick * moon_jump_factor;
+if (powerup_active("Short Hop")) return jump_tick * short_hop_factor;
+return jump_tick;
+}
+// How long a crouch lasts: Long Crouch makes it longer, Stiff Knees shorter.
+double current_duck_time()
+{
+if (powerup_active("Long Crouch")) return duck_time * long_crouch_factor;
+if (powerup_active("Stiff Knees")) return duck_time * stiff_knees_factor;
+return duck_time;
+}
+// The gap between swings or shots: Quick Swings and Clumsy Swings for melee, Rapid Fire and Sticky Trigger for guns.
+double current_fire_gap(int gap)
+{
+string faster = is_gun(current_weapon) ? "Rapid Fire" : "Quick Swings";
+string slower = is_gun(current_weapon) ? "Sticky Trigger" : "Clumsy Swings";
+if (powerup_active(faster)) return gap * powerup_fire_faster;
+if (powerup_active(slower)) return gap * powerup_fire_slower;
+return gap;
+}
+// Damage to a worn shield (Sturdy Shield, Brittle Shield) or to your health (Tough Hide, Soft Hide), at least 1.
+int powerup_damage(int damage, string tougher, string weaker)
+{
+double d = damage;
+if (powerup_active(tougher)) d *= powerup_damage_less;
+else if (powerup_active(weaker)) d *= powerup_damage_more;
+return int(max(1, round(d, 0)));
+}
+// A shield that breaks takes its shield powerup with it, quietly (you've just heard it break).
+void end_shield_powerup()
+{
+active_powerups[powerup_kind_shield] = "";
 }
 // countdown comes from the spawner like an item's; it only sets the spacing, since powerups need no hand.
 void spawn_powerup(double px, int countdown)
@@ -123,30 +171,23 @@ stop_powerup(pu);
 p.play_stationary(get_pack_sound(powerup_folder + "*powerget*"), false);
 apply_powerup(pick_powerup_event());
 }
-// One of the 13 at random, leaving out the two shield ones with no shield worn.
+// One of the 14 at random, leaving out the shield pair with no shield worn.
 int pick_powerup_event()
 {
 int[] choices;
 for (uint i = 0; i < powerup_names.length(); i++)
 {
-if (!shield_worn and (powerup_names[i] == "Shield Boost" or powerup_names[i] == "Shield Crack")) continue;
+if (!shield_worn and powerup_name_kinds[i] == powerup_kind_shield) continue;
 choices.insert_last(i);
 }
 return choices[random(0, choices.length() - 1)];
 }
-/* Speaks the name and starts it: a one-off acts now, a timed one takes its kind's slot (replacing whatever was there)
-for powerup_time. */
+// Speaks the name and starts it in its kind's slot, replacing whatever was there, for powerup_time.
 void apply_powerup(int index)
 {
 string name = powerup_names[index];
 speak_buffer(name + ".");
 int kind = powerup_name_kinds[index];
-if (kind == powerup_one_off)
-{
-if (name == "Shield Boost") shield_hp_left = int(min(shield_hp, shield_hp_left + shield_boost_hp));
-else if (name == "Shield Crack") shield_absorb(shield_crack_hp); // its hit, or its death if that empties it
-return;
-}
 active_powerups[kind] = name;
 powerup_ends[kind] = runtimer.elapsed + powerup_time;
 }

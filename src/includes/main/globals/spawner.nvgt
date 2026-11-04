@@ -129,12 +129,12 @@ return countdown_length;
 // spawn_ahead_time at the current speed, in tiles.
 int spawn_distance()
 {
-return int(ceil(double(spawn_ahead_time) / step_time));
+return int(ceil(double(spawn_ahead_time) / current_step_time()));
 }
 // A length of floor as time at the current speed, never under min_floor_tiles.
 int floor_tiles(int ms)
 {
-return int(max(min_floor_tiles, ceil(double(ms) / step_time)));
+return int(max(min_floor_tiles, ceil(double(ms) / current_step_time())));
 }
 /* The gap from one obstacle to the next: room for a hazard's ledge after (kept for every type, to be safe), a random
 stretch of normal floor (min_floor_time to max_floor_time), the next one's countdown, and its tile. */
@@ -214,7 +214,7 @@ step, a hand still works for the last half second. Shared by the force field swi
 rule, 2026-11-02). */
 double hand_window_start(double x, double countdown_start)
 {
-return min(countdown_start, x - ceil(double(switch_min_time) / step_time));
+return min(countdown_start, x - ceil(double(switch_min_time) / current_step_time()));
 }
 /* One countdown cue for an obstacle of this type at ox, whose countdown starts at countdown_start: the LAST ones of
 misc/trap/<type>/warn1 to warn5, so the step before the obstacle always plays warn5 ("act now"). Five countdown steps
