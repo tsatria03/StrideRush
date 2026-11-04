@@ -1,6 +1,6 @@
 /* Force fields: full-height obstacles (dev, 2026-11-02). A field plays its theme's on loop at its tile while active
 and its off loop while inactive. Jumping or crouching doesn't get you past one: stepping onto an active field hits you
-at any height, costs forcefield_life_cost (1), cancels any jump or crouch, and throws you forcefield_knockback_tiles
+at any height, does forcefield_damage (20) through take_damage(), cancels any jump or crouch, and throws you forcefield_knockback_tiles
 forward past it, landing with the landing sounds. On the last life there's no throw: its hit, the player's death,
 then the tile's fall. A field counts down like the other obstacles, with its own warn cues and no ledges. Passed, it
 keeps its loop and fades out behind you until it's dropped a spawn distance behind.
@@ -56,25 +56,16 @@ if (f.active)
 string hit_clip = get_pack_sound("objects/traps/force_fields/" + f.theme + "/*hit*");
 /* A fatal hit plays no player hit and no throw, since end_run_hit() plays the player's death and then the fall of
 the field's tile. */
-// A worn shield takes it, but the field still throws you past it (dev, 2026-11-03).
-if (shield_absorb(forcefield_shield_damage))
+int blow = take_damage(forcefield_damage); // a worn shield, else your health
+if (blow == blow_fatal)
 {
 p.play_stationary(hit_clip, false);
-cancel_movement();
-me_x += forcefield_knockback_tiles;
-update_listeners();
-return true;
-}
-if (is_fatal(forcefield_life_cost))
-{
-p.play_stationary(hit_clip, false);
-lose_lives(forcefield_life_cost);
 end_run_hit();
 return false;
 }
+// Shielded or not, the field still throws you past it (dev, 2026-11-03).
 p.play_stationary(hit_clip, false);
-p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
-lose_lives(forcefield_life_cost);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 cancel_movement();
 me_x += forcefield_knockback_tiles;
 update_listeners();

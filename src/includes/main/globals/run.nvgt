@@ -15,6 +15,7 @@ void reset_run(int starting_step_time = start_step_time, int starting_life_count
 me_x = 0;
 step_time = starting_step_time;
 lives = starting_life_count;
+reset_health();
 steptimer.restart();
 speeduptimer.restart();
 runtimer.restart();
@@ -104,8 +105,8 @@ shield_check();
 potion_check();
 teleporter_check();
 surface_check(); // before the footstep, so a new surface is heard on its first step
-// A throw lands with the landing sounds instead of a footstep, on the tile it lands on.
-if (thrown) play_landing();
+// A throw lands with the tile's landing sound instead of a footstep, without the player's own land sound (dev).
+if (thrown) play_landing(false);
 else play_step();
 hazard_countdown();
 spike_countdown();
@@ -133,7 +134,7 @@ if (controls.action_triggered("exit_program"))
 speak("exiting");
 exit();
 }
-if (controls.action_triggered("info_lives")) speak_buffer(lives == 1 ? "You have 1 life." : "You have " + lives + " lives.");
+if (controls.action_triggered("info_lives")) speak_health(); // H: health percent and lives
 if (controls.action_triggered("info_shield")) speak_shield_strength(); // key_config keeps a plain M quiet during Shift+M (buffer mute)
 if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase());
 if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + step_time + " ms."); // the step interval itself, which shrinks as you speed up

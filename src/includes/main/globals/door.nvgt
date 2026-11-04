@@ -10,7 +10,7 @@ break FAKE doors only (strike_door(), through weapon_strike()): hurt on each hit
 - A FAKE door (pitch 80, 90, 110 or 120) is in the random mix at every speed. A hand or a key on it only plays jam ("This door is jammed."); it has to be
   broken with weapons, with the walls' speed-scaled hp.
 Arriving on a standing door's tile, at any height, is a CRASH: its hit, the player's hit and the life sound, no death
-sound, costing door_life_cost (3). On the last lives: its hit, the player's death, then the tile's fall. A missed real
+sound, doing door_damage (60) through take_damage(). On the last lives: its hit, the player's death, then the tile's fall. A missed real
 door's section still begins, since the door only marks it.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_doors() shrinks the array. */
 sound_pool doorpool;
@@ -209,20 +209,15 @@ if (door_standing(d))
 d.crashed = true;
 stop_door(d);
 // A fatal crash plays the door's hit through p, at its pitch, and no player hit; end_run_hit() plays the death.
-if (shield_absorb(door_shield_damage)) play_door(d, "hit", d.x, false); // a worn shield takes it, at the door's pitch
-else if (is_fatal(door_life_cost))
+int blow = take_damage(door_damage); // a worn shield, else your health
+if (blow == blow_fatal)
 {
 p.play_stationary_extended(get_pack_sound(door_folder + d.theme + "/*hit*"), false, 0, 0, 0, d.pitch, false);
-lose_lives(door_life_cost);
 end_run_hit();
 return;
 }
-else
-{
-play_door(d, "hit", d.x, false);
-p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
-lose_lives(door_life_cost);
-}
+play_door(d, "hit", d.x, false); // at the door's pitch
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
 }
 else if (d.opened and !d.closed and me_x > d.x) finish_door_move(d); // close is behind you, so it fades as you run on

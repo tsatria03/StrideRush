@@ -187,7 +187,7 @@ cancel_movement();
 me_x = target;
 update_listeners();
 if (dir > 0) spawner_catch_up(); // so what comes next still arrives with its full warning
-play_landing();
+play_landing(false); // the tile's landing only, like a force field's throw (dev, 2026-11-03)
 string where = dir > 0 ? "forward" : "back";
 speak_buffer(moved == 1 ? "You were moved " + where + " 1 step." : "You were moved " + where + " " + moved + " steps.");
 return true;

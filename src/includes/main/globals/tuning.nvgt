@@ -50,17 +50,19 @@ the countdown at 500 ms, 5 at 100 ms, 10 at 50 ms, giving light the same half se
 const int mine_arm_lead_time = 500;
 const int mine_arm_lead_min_tiles = 1;
 
-// Lives at the start of every run, and what each obstacle costs. ends_run means the run ends however many lives are left.
+/* Lives and health (dev, 2026-11-03). Every run starts with starting_lives and player_hp health. Each blow (anything but
+a hazard, which ends the run) does its obstacle's damage, to a worn shield first, otherwise to your health; at 0 health
+you lose a life and start the next at full health, or the run ends on your last life. Extra damage past 0 is dropped.
+These damages replaced the fixed life costs (spikes 1, mines 2, doors 3) and the shield-only damages. */
 const int starting_lives = 1;
-const int max_test_lives = 5; // the most the source-only testing lives menu offers
-const int ends_run = -1;
-const int hazard_life_cost = ends_run;
-const int spike_life_cost = 1;
-const int mine_life_cost = 2;
-const int forcefield_life_cost = 1;
-const int projectile_life_cost = 1; // for now (dev, 2026-11-02); may go up later
-const int wall_life_cost = 1; // crashing into a wall you didn't destroy (dev, 2026-11-03)
-const int door_life_cost = 3; // crashing into any door, real or fake (dev, 2026-11-03)
+const int testing_lives = 3; // source-only testing runs of a single type start with these; "all" uses starting_lives
+const int player_hp = 200;
+const int spike_damage = 20;
+const int mine_damage = 40;
+const int forcefield_damage = 20; // the throw still happens
+const int projectile_damage = 20;
+const int wall_damage = 20; // crashing into a wall you didn't destroy
+const int door_damage = 60; // crashing into any door, real or fake
 
 /* Doors (dev, 2026-11-03). A real door marks each new door_section_ms of speed (450, 400 ... 50) and plays at pitch
 100. A fake door plays at one of these pitches, never near 100, so it always sounds off. */
@@ -110,15 +112,9 @@ const int ammo_pack_max = 10;
 const int gun_max_reserve = 200; // was 250 (dev, 2026-11-03); a reload still loads at most gun_start_loaded (50)
 
 /* Shields (dev, 2026-11-03). About one spawn in shield_chance is a steel shield. A worn one starts at shield_hp and
-takes each blow's shield damage instead of your lives; hazards ignore it. */
+takes each blow's damage (the <type>_damage values above) instead of your health; hazards ignore it. */
 const int shield_chance = 16; // first proposed as 20 (dev chose 16)
 const int shield_hp = 200; // first proposed as 100 (dev: "A shield is supposed to be more stronger than you")
-const int spike_shield_damage = 20;
-const int mine_shield_damage = 40;
-const int forcefield_shield_damage = 20; // the throw still happens
-const int projectile_shield_damage = 20;
-const int wall_shield_damage = 20;
-const int door_shield_damage = 60;
 
 /* Life potions and player teleporters (dev, 2026-11-03). About one spawn in life_potion_chance is a potion and one in
 teleporter_chance a teleporter. A teleport moves you a random teleport_min_time to teleport_max_time of belt (in tiles

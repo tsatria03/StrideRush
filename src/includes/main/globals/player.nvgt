@@ -70,10 +70,11 @@ potion_landing();
 teleporter_landing();
 if (controls.action_triggered("duck_held") and can_duck()) start_duck();
 }
-// The player's own land sound together with the land clip of the tile under them.
-void play_landing()
+/* The player's own land sound together with the land clip of the tile under them. A force field's throw and a teleport
+pass false, so only the tile is heard (dev, 2026-11-03: it "should not play your character's land sound"). */
+void play_landing(bool with_player_sound = true)
 {
-p.play_stationary(get_pack_sound("misc/player/*land*"), false);
+if (with_player_sound) p.play_stationary(get_pack_sound("misc/player/*land*"), false);
 string tile = tile_at(me_x);
 if (tile != "") p.play_stationary(get_pack_sound("objects/platforms/" + tile + "/*land*"), false);
 }

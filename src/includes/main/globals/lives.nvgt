@@ -1,24 +1,45 @@
-/* Losing lives. Returns true if the run carries on (with the life sound), or false when the cost ends the run, in which
-case the caller plays its own ending (end_run_hazard or end_run_hit). With 1 starting life, any hit ends the run. */
-/* False only from the source-only testing menu (dev, 2026-11-02): spikes, mines and force fields can then never end
-the run, and lives stop going down at 1. Hazards (ends_run) still end it. Set by start_run(). */
+/* Health and lives (dev, 2026-11-03, for 1.2). You have player_health, out of player_hp, as well as lives. Every blow
+but a hazard goes through take_damage(): a worn shield takes it first; otherwise it comes off your health, and at 0 you
+lose a life and start the next one at full health, or the run ends on your last life. Damage past 0 is dropped (dev:
+"It should not carry into the next life"). Hazards end the run outright and never come through here. */
+/* False only from the source-only testing menu (dev, 2026-11-02): blows can then never end the run, and lives stop
+going down at 1 (0 health on the last life just refills it). Hazards still end it. Set by start_run(). */
 bool lives_can_end = true;
+int player_health = player_hp;
 
-// True if paying this cost would end the run. Callers check it first so a fatal hit plays the death, not the player hit.
-bool is_fatal(int cost)
+// What a blow did, so the caller plays the right sounds.
+const int blow_shielded = 0; // a worn shield took it: only the obstacle's hit (the shield's own hit or death already played)
+const int blow_hurt = 1; // it came off your health: the obstacle's hit and the player's hit
+const int blow_life_lost = 2; // your health ran out and a life went (the life sound already played): the obstacle's hit and the player's hit
+const int blow_fatal = 3; // your health ran out on your last life: the caller plays its fatal ending
+
+// Called from reset_run(): every run starts at full health.
+void reset_health()
 {
-if (cost == ends_run) return true;
-if (!lives_can_end) return false;
-return lives - cost <= 0;
+player_health = player_hp;
 }
-bool lose_lives(int cost)
+/* One blow of damage from anything but a hazard. On blow_fatal, lives is 0 and the caller plays the obstacle's hit
+through p and calls end_run_hit(), as a fatal hit always has. */
+int take_damage(int damage)
 {
-if (is_fatal(cost))
+if (shield_absorb(damage)) return blow_shielded;
+player_health -= damage;
+if (player_health > 0) return blow_hurt;
+if (lives_can_end and lives <= 1)
 {
+player_health = 0;
 lives = 0;
-return false;
+return blow_fatal;
 }
-lives = int(max(1, lives - cost)); // only ever clamps when lives_can_end is false
+// A life goes whenever there's one to spare; testing with lives that can't end stops at 1 instead of dying.
+if (lives > 1) lives -= 1;
+player_health = player_hp; // the next life starts at full health
 p.play_stationary(get_pack_sound("misc/player/*life*"), false);
-return true;
+return blow_life_lost;
+}
+// H: "70 percent health remaining, 2 lives." in SimpleFighter's percent format (dev, 2026-11-03).
+void speak_health()
+{
+int percent = int(round(100.0 * player_health / player_hp, 0));
+speak_buffer(percent + " percent health remaining, " + (lives == 1 ? "1 life." : lives + " lives."));
 }
