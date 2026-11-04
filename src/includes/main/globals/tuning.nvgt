@@ -55,7 +55,7 @@ a hazard, which ends the run) does its obstacle's damage, to a worn shield first
 you lose a life and start the next at full health, or the run ends on your last life. Extra damage past 0 is dropped.
 These damages replaced the fixed life costs (spikes 1, mines 2, doors 3) and the shield-only damages. */
 const int starting_lives = 1;
-const int testing_lives = 3; // source-only testing runs of a single type start with these; "all" uses starting_lives
+const int debug_lives = 3; // source-only debug runs of a single type start with these; "all" uses starting_lives
 const int player_hp = 200;
 const int spike_damage = 20;
 const int mine_damage = 40;

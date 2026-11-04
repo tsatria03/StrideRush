@@ -5,21 +5,21 @@ hazards turn their countdown steps into ledge tiles. */
 double next_spawn_x = 0;
 string next_type = "";
 int next_countdown = 0;
-// Every obstacle type the spawner knows; a new type is added here. The testing spawn menu lists these too.
+// Every obstacle type the spawner knows; a new type is added here. The spawn debug option lists these too.
 string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles", "walls", "fake_doors"};
 /* The next 50 ms speed mark that gets a real door (dev, 2026-11-03): the first mark below the run's starting speed,
 then door_section_ms lower each time one is placed, until it passes min_step_time. Real doors come at these marks in
-every normal run; a testing run limited to one type gets none (the "real doors" testing choice spawns only them). */
+every normal run; a debug run limited to one type gets none (the "real doors" debug choice spawns only them). */
 int next_door_mark = 0;
 /* One key before each real door (dev, 2026-11-03). next_key_door is the door mark the next key belongs to, and the key
 comes once step_time reaches next_key_mark, a random point in the first half of the stretch before that door. */
 int next_key_door = 0;
 int next_key_mark = 0;
-// Testing only: "real doors" alternates a key and a door, so every door has its key.
+// Debug option only: "real doors" alternates a key and a door, so every door has its key.
 bool key_before_door = true;
-// Items the spawner places too: ammo packs, shields, potions and teleporters at lower chances (their _chance values), keys before each real door; listed after the obstacles in the testing menu.
+// Items the spawner places too: ammo packs, shields, potions and teleporters at lower chances (their _chance values), keys before each real door; listed after the obstacles in the spawn debug option.
 string[] item_types = {"ammo_packs", "keys", "steel_shields", "life_potions", "player_teleporters"};
-// "all", or one type from obstacle_types or item_types; set by start_run(). Only the source-only testing menu picks anything but all.
+// "all", or one type from obstacle_types or item_types; set by start_run(). Only the source-only debug options pick anything but all.
 string spawn_only = "all";
 
 // The first obstacle sits a full spawn distance, its countdown and a minimum stretch of floor into the run.
@@ -36,7 +36,7 @@ next_spawn_x = spawn_distance() + next_countdown + floor_tiles(min_floor_time);
 "all"), and its countdown length. */
 void choose_next_obstacle()
 {
-// Testing only: "real doors" in the spawn menu makes the spawns a key, then a real door, in turn, so opening one needn't wait for a mark.
+// Debug option only: "real doors" in the spawn menu makes the spawns a key, then a real door, in turn, so opening one needn't wait for a mark.
 if (spawn_only == "real_doors")
 {
 if (key_before_door and keys_available()) next_type = "keys";
@@ -45,7 +45,7 @@ key_before_door = next_type != "keys";
 next_countdown = countdown_steps();
 return;
 }
-// Testing only: "keys" makes every spawn a key.
+// Debug option only: "keys" makes every spawn a key.
 if (spawn_only == "keys")
 {
 next_type = keys_available() ? "keys" : "";
@@ -53,7 +53,7 @@ next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
 /* A new speed section has started: its real door comes next, ahead of anything else. Only in a normal run ("all"): a
-single-type testing run spawns strictly that type (dev, 2026-11-03), except "real doors, spread", which is the marks alone. */
+single-type debug run spawns strictly that type (dev, 2026-11-03), except "real doors, spread", which is the marks alone. */
 bool marks_on = spawn_only == "all" or spawn_only == "real_doors_spread";
 // The key for the next real door comes first, so it's always on the belt before its door.
 if (marks_on and key_due())
@@ -71,7 +71,7 @@ next_door_mark -= door_section_ms;
 next_countdown = countdown_steps();
 return;
 }
-// Testing only: "real doors, spread" spawns nothing but the real doors at the marks, so the slots in between stay empty.
+// Debug option only: "real doors, spread" spawns nothing but the real doors at the marks, so the slots in between stay empty.
 if (spawn_only == "real_doors_spread")
 {
 next_type = "";
@@ -84,9 +84,9 @@ for (uint i = 0; i < obstacle_types.length(); i++)
 if (spawn_only != "all" and obstacle_types[i] != spawn_only) continue;
 if (get_pack_sound_folders(type_folder(obstacle_types[i]) + "*").length() > 0) available.insert_last(obstacle_types[i]);
 }
-// About one spawn in ammo_pack_chance is an ammo pack instead, or every one when the testing menu picked packs only.
+// About one spawn in ammo_pack_chance is an ammo pack instead, or every one when the debug options picked packs only.
 bool packs_ok = ammopacks_available() and (spawn_only == "all" or spawn_only == "ammo_packs");
-// About one in shield_chance is a steel shield, rolled first, or every one when the testing menu picked shields only.
+// About one in shield_chance is a steel shield, rolled first, or every one when the debug options picked shields only.
 bool shields_ok = shields_available() and (spawn_only == "all" or spawn_only == "steel_shields");
 // Potions and teleporters the same way, rolled before the shield.
 bool potions_ok = potions_available() and (spawn_only == "all" or spawn_only == "life_potions");

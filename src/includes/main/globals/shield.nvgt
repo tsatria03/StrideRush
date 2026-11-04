@@ -30,9 +30,9 @@ void reset_shield()
 shield_worn = false;
 shield_hp_left = 0;
 }
-/* Testing only (dev, 2026-11-03): a single-type testing run of something a shield protects from starts with one steel
+/* Debug options only (dev, 2026-11-03): a single-type debug run of something a shield protects from starts with one steel
 shield in the inventory, to be worn with U, since shields never spawn in those runs. Called from reset_run(). */
-void give_testing_shield()
+void give_debug_shield()
 {
 string[] shielded_types = {"spikes", "mines", "force_fields", "projectiles", "walls", "fake_doors", "real_doors", "real_doors_spread"}; // never "all", which plays like the real game (dev)
 if (shielded_types.find(spawn_only) >= 0) give_item("steel_shield", 1);

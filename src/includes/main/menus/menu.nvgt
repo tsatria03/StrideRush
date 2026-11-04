@@ -82,32 +82,39 @@ if(mres<0 or m.selected_item_id=="back") return;
 play_game();
 }
 }
-/* Play game: the debug options, in the dev's order: speed, spawn, then whether lives can run out. Escape steps back one
-menu silently, and escaping the speed menu silently returns to the game menu: they're all nested menus, so nothing says
-"canceled". A compiled release skips all three. The lives menu was removed with player health (dev, 2026-11-03):
-"all" starts with starting_lives, and any single-type choice with testing_lives. */
+/* Play game. From source it first asks whether to play in debug mode (dev, 2026-11-03): No plays the real game (start
+speed, everything spawning, starting_lives, and the run ends when lives run out), Yes goes on to the debug options, in
+the dev's order: speed, spawn, then whether lives can run out. Escape steps back one menu silently: from the question to
+the game menu, and from the speed menu back to the question. They're all nested menus, so nothing says "canceled". A
+compiled release skips the question and the debug options and always plays the real game. The lives menu was removed
+with player health: "all" starts with starting_lives, and any single-type choice with debug_lives. */
 void play_game()
 {
-int speed = 0, can_run_out = 1;
-string only_type = "";
+int speed = start_step_time, can_run_out = 1;
+string only_type = "all";
 int stage = 0;
-while (stage < 3)
+while (stage < 4)
 {
 if (stage == 0)
 {
-speed = choose_start_speed();
-if (speed < 0) return;
-stage = 1;
+int debug_choice = choose_debug_mode();
+if (debug_choice < 0) return;
+stage = debug_choice == 1 ? 1 : 4; // No: the real game, with the defaults above
 }
 else if (stage == 1)
 {
+speed = choose_start_speed();
+stage = speed < 0 ? 0 : 2;
+}
+else if (stage == 2)
+{
 only_type = choose_spawn_types();
-stage = only_type == "" ? 0 : 2;
+stage = only_type == "" ? 1 : 3;
 }
 else
 {
 can_run_out = choose_lives_can_end();
-stage = can_run_out < 0 ? 1 : 3;
+stage = can_run_out < 0 ? 2 : 4;
 }
 }
 m.fade_music();
@@ -116,8 +123,8 @@ the same choices instead; quitting from the pause menu still returns here. */
 do
 {
 restart_run_requested = false;
-// A single-type debug run starts with testing_lives (dev, 2026-11-03); "all" plays like the real game.
-start_run(speed, only_type == "all" ? starting_lives : testing_lives, only_type, can_run_out == 1);
+// A single-type debug run starts with debug_lives (dev, 2026-11-03); "all" plays like the real game.
+start_run(speed, only_type == "all" ? starting_lives : debug_lives, only_type, can_run_out == 1);
 }
 while (restart_run_requested);
 }
@@ -136,37 +143,50 @@ return;
 }
 exit();
 }
-/* TESTING ONLY: pick the starting step time, from start_step_time down in 100 ms steps: 500, 400, 300, 200, 100. The
+/* Source only: whether to play in debug mode, Yes then No. Returns 1 for Yes, 0 for No, or -1 if escaped. A compiled
+release never asks and always answers No, so it plays the real game. */
+int choose_debug_mode()
+{
+if (SCRIPT_COMPILED) return 0;
+setupmenu();
+m.intro_text = "Do you want to play in debug mode?";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int mres = m.run();
+if (mres < 0) return -1; // silent: escape just steps back to the game menu
+return m.selected_item_id == "yes" ? 1 : 0;
+}
+/* DEBUG OPTION: pick the starting step time, from start_step_time down in 100 ms steps: 500, 400, 300, 200, 100. The
 50 ms in between (450, 350, 250, 150 and 50) were dropped for door testing (dev, 2026-11-03). It only appears when
 running from source; a compiled release always starts at start_step_time. Returns -1 if escaped. */
 int choose_start_speed()
 {
 if (SCRIPT_COMPILED) return start_step_time;
 setupmenu();
-m.intro_text = "Choose a starting speed for testing.";
+m.intro_text = "Choose a starting speed for debugging.";
 for (int t = start_step_time; t >= 100; t -= 100)
 {
 m.add_item(t + " ms", "" + t);
 }
 int mres = m.run();
-if (mres < 0) return -1; // silent: escape just steps back to the game menu
+if (mres < 0) return -1; // silent: escape just steps back to the debug mode question
 return int(parse_int(m.selected_item_id));
 }
-/* TESTING ONLY: pick which obstacles spawn: one type from obstacle_types (hazards, spikes, mines, and any added later),
+/* DEBUG OPTION: pick which obstacles spawn: one type from obstacle_types (hazards, spikes, mines, and any added later),
 or all, listed in that order (dev's order). It only appears when running from source; a compiled release always
 spawns all. Returns the type, "all", or "" if escaped. */
 string choose_spawn_types()
 {
 if (SCRIPT_COMPILED) return "all";
 setupmenu();
-m.intro_text = "Choose which obstacles spawn for testing.";
+m.intro_text = "Choose which obstacles spawn for debugging.";
 for (uint i = 0; i < obstacle_types.length(); i++)
 {
 m.add_item(obstacle_types[i].replace("_", " ", true), obstacle_types[i]); // "force_fields" reads as "force fields"
 }
-// Real doors aren't in the random mix (they mark speed sections), but for testing they can be the only thing that spawns.
+// Real doors aren't in the random mix (they mark speed sections), but as a debug option they can be the only thing that spawns.
 m.add_item("real doors", "real_doors");
-// Testing: only the real doors at the 50 ms speed marks, with nothing in between (dev, 2026-11-03).
+// Debug option: only the real doors at the 50 ms speed marks, with nothing in between (dev, 2026-11-03).
 m.add_item("real doors, spread", "real_doors_spread");
 for (uint i = 0; i < item_types.length(); i++)
 {
@@ -177,7 +197,7 @@ int mres = m.run();
 if (mres < 0) return ""; // silent: escape just steps back to the speed menu
 return m.selected_item_id;
 }
-/* TESTING ONLY: whether running out of lives ends the run. No means blows can never end it: lives stop at 1 and 0
+/* DEBUG OPTION: whether running out of lives ends the run. No means blows can never end it: lives stop at 1 and 0
 health just refills; hazards still end it. It only appears when running from source; a compiled release always answers
 Yes. Returns 1 for Yes, 0 for No, or -1 if escaped. */
 int choose_lives_can_end()

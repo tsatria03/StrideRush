@@ -2,7 +2,7 @@
 but a hazard goes through take_damage(): a worn shield takes it first; otherwise it comes off your health, and at 0 you
 lose a life and start the next one at full health, or the run ends on your last life. Damage past 0 is dropped (dev:
 "It should not carry into the next life"). Hazards end the run outright and never come through here. */
-/* False only from the source-only testing menu (dev, 2026-11-02): blows can then never end the run, and lives stop
+/* False only from the source-only debug options (dev, 2026-11-02): blows can then never end the run, and lives stop
 going down at 1 (0 health on the last life just refills it). Hazards still end it. Set by start_run(). */
 bool lives_can_end = true;
 int player_health = player_hp;
@@ -31,7 +31,7 @@ player_health = 0;
 lives = 0;
 return blow_fatal;
 }
-// A life goes whenever there's one to spare; testing with lives that can't end stops at 1 instead of dying.
+// A life goes whenever there's one to spare; a debug run with lives that can't end stops at 1 instead of dying.
 if (lives > 1) lives -= 1;
 player_health = player_hp; // the next life starts at full health
 p.play_stationary(get_pack_sound("misc/player/*life*"), false);

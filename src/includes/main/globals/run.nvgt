@@ -25,12 +25,12 @@ reset_player();
 reset_weapons();
 clear_inventory();
 reset_shield();
-give_testing_shield(); // after clear_inventory(), so the testing shield isn't wiped
+give_debug_shield(); // after clear_inventory(), so the debug shield isn't wiped
 reset_spawner();
 update_listeners();
 }
 /* Normally start_step_time, starting_lives, every obstacle type, and a run that ends when lives run out; the source-only
-testing menus can start faster, with more lives, with only one obstacle type, or with lives that never run out. */
+debug options can start faster, with more lives, with only one obstacle type, or with lives that never run out. */
 void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives, string only_type = "all", bool can_run_out = true)
 {
 spawn_only = only_type; // before reset_run(), whose reset_spawner() picks the first obstacle
