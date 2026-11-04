@@ -1,2 +1,2 @@
 # StrideRush
-A fully customizeable runner for all.
+An endless audio runner filled with increasingly challenging obstacles, weapons and items.
