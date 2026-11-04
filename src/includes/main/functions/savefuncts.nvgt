@@ -1,5 +1,81 @@
-/* form_menu calls writepreffs() when the menu music volume changes. There are no saved preferences yet, so this does nothing for now.
-Replace it with the real save when preferences are added. */
+/* Loads the settings from settings.srf at startup, CookieCraze-style: each value is read only if the file holds it, so a
+setting added in a later version keeps its default for players whose file is older (dev, 2026-11-04). A missing file
+loads as empty, leaving every default. */
+void readpreffs()
+{
+st.load();
+if(st.d.exists("menumusvolume"))
+{
+menumusvolume=st.read_int("menumusvolume");
+}
+if(st.d.exists("music_volume"))
+{
+music_volume=st.read_int("music_volume");
+}
+if(st.d.exists("ambience_volume"))
+{
+ambience_volume=st.read_int("ambience_volume");
+}
+if(st.d.exists("menuwrap"))
+{
+menuwrap=st.read_bool("menuwrap");
+}
+if(st.d.exists("first_letter"))
+{
+first_letter=st.read_bool("first_letter");
+}
+if(st.d.exists("side_scrolling"))
+{
+side_scrolling=st.read_bool("side_scrolling");
+}
+if(st.d.exists("speak_menu_position"))
+{
+speak_menu_position=st.read_bool("speak_menu_position");
+}
+if(st.d.exists("fademode"))
+{
+fademode=st.read_int("fademode");
+}
+if(st.d.exists("ask_quit_on_escape"))
+{
+ask_quit_on_escape=st.read_bool("ask_quit_on_escape");
+}
+if(st.d.exists("tts_config"))
+{
+tts_load_config(st.read_string("tts_config"), tts);
+}
+/* The sound device is saved by name, since its place in the list can change as devices come and go (SimpleFighter's
+way). One that's no longer there leaves the default device. */
+if(st.d.exists("soundcard"))
+{
+soundcard=st.read_string("soundcard");
+string[]@ devices=get_sound_output_devices();
+devices.remove_at(0);
+for(uint i=0; i<devices.length(); i++)
+{
+if(devices[i]==soundcard)
+{
+sound_output_device=i+1;
+break;
+}
+}
+}
+}
+/* Writes every setting to settings.srf. Called whenever one changes: the menu music volume (form_menu) and the run
+volumes (Home, End, Page Up and Page Down). Muting a buffer calls it too; mutes aren't saved, so that just rewrites the
+same values. */
 void writepreffs()
 {
+st.add("menumusvolume",menumusvolume);
+st.add("music_volume",music_volume);
+st.add("ambience_volume",ambience_volume);
+st.add("menuwrap",menuwrap);
+st.add("first_letter",first_letter);
+st.add("side_scrolling",side_scrolling);
+st.add("speak_menu_position",speak_menu_position);
+st.add("fademode",fademode);
+st.add("ask_quit_on_escape",ask_quit_on_escape);
+st.add("tts_config",tts_dump_config(tts, true));
+st.add("soundcard",soundcard);
+st.save();
 }

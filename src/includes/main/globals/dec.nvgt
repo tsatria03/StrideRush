@@ -1,4 +1,13 @@
 bool hrtf=false;
+// Everything Stride Rush keeps on the player's machine goes under here (dev, 2026-11-04, CookieCraze's constant).
+const string APPDATA_DIR = DIRECTORY_APPDATA + "tsatria03/StrideRush/";
+/* The settings, all in one encrypted file (dev, 2026-11-04: "I still want settings.srf, not split"), read by
+readpreffs() and written by writepreffs() in savefuncts.nvgt. The menu options (menuwrap and the rest) live in
+form_menu, and the run volumes in run.nvgt. */
+savedata st(APPDATA_DIR + "preffs/settings.srf", "Ki4bG6X16S7VxcjHopWbaDrN9eNhvr4noO5Jl6DHceredubleqWvkVty3s6BLiz1YZwJGwnws4AkhGK1KZN0yj7t0jIREqVFZnCNRrv38zhVBsj0CwQM4akYncoJEResiAzTZeykM0ukesXOnrCZgVFmrC7m48iQlyd4KA0MGgSdDWqldG9zlA4DbExspzAWJ6UsNwQq8SOB1dh32XUfuSaiK1cDzToZvFNTIB4dQYC6PqaTgkzklsKTel40sbeXsD8");
+int fademode = 1; // how leaving a run fades every pool: 1 the volume fade (default, dev, 2026-11-04), 0 the pitch wind-down
+bool ask_quit_on_escape = true; // false: Escape leaves the run at once, without the quit run question
+string soundcard = "Default"; // the chosen sound device by name, matched to sound_output_device when the settings load
 form_menu m;
 virtual_dialogs vd; // the speech buffer's review boxes use vd.info_box
 instance gamstence("StrideRush");

@@ -72,9 +72,15 @@ return;
 const string quit_run_question = "Are you sure you want to quit this run? You will lose all progress for this current session.";
 /* Escape during a run (dev, 2026-11-03): the quit run question straight away. Only the timers stop while it's asked,
 so the run's sounds keep playing and there's no pause or resume cue (dev: "the timers should pause, but not the
-sounds"). Yes ends the run back to the game menu; No or escape says "canceled" and the run carries on. */
+sounds"). Yes ends the run back to the game menu; No or escape says "canceled" and the run carries on. With the Game
+tab's ask setting off (ask_quit_on_escape), Escape leaves at once without the question (dev, 2026-11-04). */
 void quit_run_prompt()
 {
+if (!ask_quit_on_escape)
+{
+leave_run(false);
+return;
+}
 pause_timers();
 if (confirm_leave_run(quit_run_question))
 {
@@ -84,10 +90,17 @@ return;
 resume_timers();
 }
 /* Ends the run from the pause menu. The timers are unpaused first, silently, so nothing carries a paused timer into the
-next run; the run's sounds are cleared when start_run() returns anyway. With restart, play_game() starts it over. */
+next run. With restart, play_game() starts it over. */
 void leave_paused_run(bool restart)
 {
 resume_game();
+leave_run(restart);
+}
+/* Every way of choosing to leave a run ends here: the run's sounds fade out the way fademode says (SimpleFighter's
+fade, dev, 2026-11-04), then the run stops. A death never comes through here, so it keeps its own ending sounds. */
+void leave_run(bool restart)
+{
+fade_multi_pool(fademode);
 restart_run_requested = restart;
 running = false;
 }

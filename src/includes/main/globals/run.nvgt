@@ -179,10 +179,12 @@ void change_music_volume(int delta)
 music_volume = int(max(min_volume, min(0, music_volume + delta)));
 if (musslot > -1) muspool.update_sound_start_values(musslot, 0, music_volume, 100);
 speak_buffer("track " + music_volume);
+writepreffs(); // remembered for the next launch (dev, 2026-11-04)
 }
 void change_ambience_volume(int delta)
 {
 ambience_volume = int(max(min_volume, min(0, ambience_volume + delta)));
 if (ambslot > -1) ambpool.update_sound_start_values(ambslot, 0, ambience_volume, 100);
 speak_buffer("source " + ambience_volume);
+writepreffs();
 }

@@ -69,7 +69,7 @@ speak(itemname, true);
 }
 string buffer_log_dir()
 {
-return DIRECTORY_APPDATA + "tsatria03/StrideRush/logs";
+return APPDATA_DIR + "logs";
 }
 bool export_current_buffer()
 {
