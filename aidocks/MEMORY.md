@@ -47,7 +47,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Don't run or build the game](general/feedback_dont_run_or_build_the_game.md) — never launch or compile; the dev verifies
 - [Verify code while fixing](general/feedback_verify_code_while_fixing.md) — locate by symbol, confirm the finding, flag adjacent bugs
 - [Check git log](general/feedback_check_git_log_for_commits.md) — always check the latest commit before each section; the dev commits between turns; never commit unless asked
-- [Stage commits before big changes](general/feedback_stage_commits_before_big_changes.md) — flag a commit break point before a risky stage
+- [Stage commits before big changes](general/feedback_stage_commits_before_big_changes.md) — flag a commit break point before a risky stage; before a big commit, say how many changes git shows and what they are
 - [CLAUDE.md length](general/feedback_claudemd_length.md) — lean dispatcher under 40,000 chars when one is written
 - [Commit messages from the changelog](general/feedback_commit_messages_from_changelog.md) — the dev uses a feature's changelog entry as its commit message; suggest it when flagging a commit point; don't rewrite old commits unless asked
 - [Changelog rules](general/feedback_changelog_rules.md) — player-facing prose, entries open "Added", "Made it so ... now" or "Fixed a bug where", newest on top (inside a block too), max 20 entries for a major version (x.0) and 10 for a minor one (1.1, 1.2), no intro line, bump build/version.txt per block; 1.0 closed (V1.00, ca6f256), 1.1 closed (V1.10, abcb495), the next change opens 1.2; new things start "Added", changes start "Made it so"
