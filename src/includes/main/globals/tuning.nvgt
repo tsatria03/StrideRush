@@ -75,11 +75,16 @@ const int door_section_ms = 50;
 int[] fake_door_pitches = {80, 90, 110, 120};
 /* Wall hp scales with speed (dev, 2026-11-03): its center runs from wall_min_hp at start_step_time (500 ms) up to
 wall_max_hp at min_step_time (50 ms), and each wall rolls a random hp within wall_hp_spread percent either side of
-that center, never below wall_min_hp or above wall_max_hp. So about 20 to 24 at the start, 720 to 1080 at 300 ms,
-and 1600 to 2000 at top speed. (It was a flat random 100 to 500; the low end was then 200, lowered to 20 by the dev.) */
-const int wall_min_hp = 20;
-const int wall_max_hp = 2000;
+that center, never below wall_min_hp or above wall_max_hp. So 50 to 60 at the start, about 200 to 300 at 300 ms, and
+400 to 500 at top speed. (It was a flat random 100 to 500, then 200 to 2000, then 20 to 2000; 50 to 500 since
+2026-11-05, when guns couldn't break the fastest walls in time.) */
+const int wall_min_hp = 50;
+const int wall_max_hp = 500;
 const int wall_hp_spread = 20;
+/* Fake doors scale the same way with their own, tougher range (dev, 2026-11-05: "Doors are meant to be much stronger than
+walls"; they shared the walls' hp until then): 100 to 120 at the start, about 400 to 600 at 300 ms, 800 to 1000 at top speed. */
+const int door_min_hp = 100;
+const int door_max_hp = 1000;
 
 /* A projectile closes in this many times as fast as a still obstacle seems to, scaled with the belt's speed (dev,
 2026-11-02): at 2 it starts as far beyond its meeting tile as you are before it, and flies at your own speed. */

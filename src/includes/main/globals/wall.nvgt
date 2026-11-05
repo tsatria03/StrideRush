@@ -27,7 +27,7 @@ void spawn_wall(double wx, string theme, int countdown)
 wall w;
 w.x = wx;
 w.theme = theme;
-w.hp = wall_spawn_hp();
+w.hp = wall_spawn_hp(wall_min_hp, wall_max_hp);
 w.countdown_start = wx - countdown;
 w.loopslot = wallpool.play_2d(get_pack_sound("objects/traps/walls/" + theme + "/*loop*"), 0, me.x, 0, wx, true);
 for (uint i = 0; i < walls.length(); i++)
@@ -40,15 +40,17 @@ return;
 }
 walls.insert_last(w);
 }
-/* A new wall's hp: a center that climbs from wall_min_hp at start_step_time to wall_max_hp at min_step_time as the run
-speeds up, then a random spread of wall_hp_spread percent either side, kept within wall_min_hp to wall_max_hp. */
-int wall_spawn_hp()
+/* A new wall's or fake door's hp: a center that climbs from min_hp at start_step_time to max_hp at min_step_time as the
+run speeds up, then a random spread of wall_hp_spread percent either side, kept within min_hp to max_hp. Walls pass
+wall_min_hp and wall_max_hp, doors door_min_hp and door_max_hp (dev, 2026-11-05: "Doors are meant to be much stronger
+than walls"). */
+int wall_spawn_hp(int min_hp, int max_hp)
 {
 double progress = double(start_step_time - step_time) / (start_step_time - min_step_time);
 progress = max(0, min(1, progress));
-double center = wall_min_hp + progress * (wall_max_hp - wall_min_hp);
-int low = int(max(wall_min_hp, center * (100 - wall_hp_spread) / 100));
-int high = int(min(wall_max_hp, center * (100 + wall_hp_spread) / 100));
+double center = min_hp + progress * (max_hp - min_hp);
+int low = int(max(min_hp, center * (100 - wall_hp_spread) / 100));
+int high = int(min(max_hp, center * (100 + wall_hp_spread) / 100));
 return random(low, high);
 }
 // A wall still blocks the way until it's destroyed or crashed through.
