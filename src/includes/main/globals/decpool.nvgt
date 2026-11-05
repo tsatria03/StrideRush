@@ -10,7 +10,7 @@ for (uint i = 0; i < all_pools.length(); i++)
 {
 @all_pools[i].mixer = mixer();
 all_pools[i].max_distance = 0;
-all_pools[i].pan_step = 2.5;
+all_pools[i].pan_step = lane_pan_step; // one lane across = the stationary pan of lane_pan_amount (barriers; belt-wide sounds sit at x 0)
 all_pools[i].volume_step = 2.5; // retuned from the speed every step (update_listeners())
 all_pools[i].behind_pitch_decrease = 5; // anything you've passed sounds a little lower (ToyMania's 5; dev, 2026-11-04)
 }

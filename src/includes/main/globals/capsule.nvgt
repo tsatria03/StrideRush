@@ -115,7 +115,7 @@ void break_capsule(lifecapsule@ lc)
 {
 lc.spent = true;
 stop_capsule(lc);
-capsulepool.play_2d(get_pack_sound(capsule_folder + "*break*"), 0, me.x, 0, lc.x, false);
+capsulepool.play_stationary(get_pack_sound(capsule_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
 }
 void stop_capsule(lifecapsule@ lc)
 {

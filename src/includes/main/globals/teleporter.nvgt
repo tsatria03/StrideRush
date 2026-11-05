@@ -114,7 +114,7 @@ void break_teleporter(teleporter@ t)
 {
 t.spent = true;
 stop_teleporter(t);
-teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*break*"), 0, me.x, 0, t.x, false);
+teleporterpool.play_stationary(get_pack_sound(teleporter_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
 }
 void stop_teleporter(teleporter@ t)
 {

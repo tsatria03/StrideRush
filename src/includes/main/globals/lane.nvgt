@@ -6,7 +6,8 @@ Sounds follow Section 1B's settled rules, so they won't need redoing when the be
 and landings stay centred, since you're the listener (dev: "all platform sounds should stay in the center"); turn
 plays from the lane you move into, across the belt (centred for the middle lane); and bump comes from beyond the edge
 you hit.
-lane_pan() gives a lane's side relative to yours, for things that sit in one lane (barriers, Section 2). */
+Things that sit in one lane (barriers) are placed across the forward belt by their lane relative to yours
+(barrier_side() in barrier.nvgt, with lane_pan_step). */
 const int lane_left = 0;
 const int lane_middle = 1;
 const int lane_right = 2;
@@ -17,11 +18,6 @@ int current_lane = lane_middle;
 void reset_lane()
 {
 current_lane = lane_middle;
-}
-// Where something in lane is heard from you: centred in your own lane, lane_pan_amount to the side per lane apart.
-float lane_pan(int lane)
-{
-return (lane - current_lane) * lane_pan_amount;
 }
 // Runs every frame from run_input(): L, then Left/Q and Right/E.
 void lane_input()

@@ -2,16 +2,16 @@
 the rebuilt lanes): the one trap that fills a single lane, avoided only by moving to another lane. Jumping, crouching,
 weapons and hands don't help. Each barrier is placed in the lane you're in when it appears, about 3 s ahead, and stays
 in that lane. Its theme is random among objects/traps/barriers.
-Sound: the belt still runs left to right until Section 3 turns it forward, so anything placed along it is heard to the
-right, which would hide its lane. So a barrier's loop plays stationary instead (Section 3 replaces this): panned by its lane relative to yours
-(your lane centred, one lane over to that side, two lanes over further), and louder as it nears, by how far away it
-is in time (barrier_fade_ms of running per decibel), much as it would sound with the belt turned forward.
+Sound: since Section 3 turned the belt forward (2026-11-05), a barrier's loop is placed like every belt sound, at its
+tile along the belt, but across it by its lane relative to yours (barrier_side()): your lane is straight ahead, one
+lane over is to that side, two lanes over further. It gets louder as it nears and falls behind you once passed,
+lower in pitch. (Before, while the belt still ran to the right, it played stationary with its own pan and fade.)
 Countdown: the misc/trap/barriers layered warn set, but only on steps where you're in its lane, so the cues stop once
 you've moved out and start again if you move back in.
-Arriving on its tile in its lane is a blow of barrier_damage (80) through take_damage(), with its hit; in another lane
-it passes and fades behind you.
-For now barriers spawn only under the "barriers" debug spawn choice, not in "all" or the real game, until Section 3
-turns the belt forward (dev, 2026-11-04).
+Arriving on its tile in its lane is a blow of barrier_damage (80) through take_damage(), with its hit, and its loop
+still passes through and fades behind you, like a spike's (dev, 2026-11-05); in another lane it just passes.
+Barriers are in obstacle_types, an equal pick in "all" and the real game, with the "multiple lanes" rule below; the
+three barrier debug choices still pick one rule each.
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_barriers() shrinks the array. */
 sound_pool barrierpool;
 const string barrier_folder = "objects/traps/barriers/";
@@ -61,7 +61,7 @@ b.x = bx;
 b.lane = lane;
 b.theme = theme;
 b.countdown_start = bx - countdown;
-b.loopslot = barrierpool.play_stationary_extended(get_pack_sound(barrier_folder + theme + "/*loop*"), true, 0, barrier_pan(b), barrier_volume(b), 100, false);
+b.loopslot = barrierpool.play_2d(get_pack_sound(barrier_folder + theme + "/*loop*"), 0, me.x, barrier_side(b), b.x, true);
 for (uint i = 0; i < barriers.length(); i++)
 {
 if (@barriers[i] == null)
@@ -72,24 +72,20 @@ return;
 }
 barriers.insert_last(b);
 }
-// Its side, relative to your lane: centred in your lane, lane_pan_amount per lane to its side (lane_pan() in lane.nvgt).
-float barrier_pan(barrier@ b)
+/* Its place across the belt, relative to you, in lanes: 0 in your lane (straight ahead), 1 or 2 to the right, -1 or -2
+to the left. barrierpool's pan_step (lane_pan_step) turns one lane into the pan of 50 the stationary version used. */
+int barrier_side(barrier@ b)
 {
-return lane_pan(b.lane);
+return b.lane - current_lane;
 }
-// Quieter the further it is, ahead or behind, counted in time at the current speed, never below min_volume.
-float barrier_volume(barrier@ b)
-{
-double away_ms = abs(b.x - me.x) * current_step_time();
-return float(max(min_volume, -away_ms / barrier_fade_ms));
-}
-// Runs every frame from run_loop(): each loop follows your lane and the distance, so a lane change is heard at once.
+/* Runs every frame from run_loop(): moves each loop across when you change lanes, so it's heard on its new side at
+once. Its distance along the belt follows the listener like any belt sound. */
 void barrier_sounds()
 {
 for (uint i = 0; i < barriers.length(); i++)
 {
 if (@barriers[i] == null or barriers[i].loopslot < 0) continue;
-barrierpool.update_sound_start_values(barriers[i].loopslot, barrier_pan(barriers[i]), barrier_volume(barriers[i]), 100);
+barrierpool.update_sound_2d(barriers[i].loopslot, barrier_side(barriers[i]), int(barriers[i].x));
 }
 }
 // Runs once per step, right after the move: arriving on its tile in its lane is a blow; in another lane it passes.
@@ -105,7 +101,7 @@ b.spent = true;
 if (b.lane == current_lane)
 {
 string hit_clip = get_pack_sound(barrier_folder + b.theme + "/*hit*");
-stop_barrier(b); // it hit you: the loop ends at once
+// Its loop carries on through you and fades behind, like a spike's (dev, 2026-11-05); a fatal hit silences the run anyway.
 int blow = take_damage(barrier_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {

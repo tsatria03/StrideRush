@@ -125,7 +125,7 @@ void break_key(doorkey@ k)
 {
 k.spent = true;
 stop_key(k);
-keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*break*"), 0, me.x, 0, k.x, false);
+keypool.play_stationary(get_pack_sound(key_sound_folder(k) + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
 }
 void stop_key(doorkey@ k)
 {

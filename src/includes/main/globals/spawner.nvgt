@@ -6,7 +6,7 @@ double next_spawn_x = 0;
 string next_type = "";
 int next_countdown = 0;
 // Every obstacle type the spawner knows; a new type is added here. The spawn debug option lists these too.
-string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles", "walls", "fake_doors", "animals"};
+string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles", "walls", "fake_doors", "animals", "barriers"};
 /* The next 50 ms speed mark that gets a real door (dev, 2026-11-03): the first mark below the run's starting speed,
 then door_section_ms lower each time one is placed, until it passes min_step_time. Real doors come at these marks in
 every normal run; a debug run limited to one type gets none (the "real doors" debug choice spawns only them). */
@@ -52,8 +52,6 @@ next_type = keys_available() ? "keys" : "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
-/* Debug option only: "barriers" makes every spawn a barrier. Barriers aren't in obstacle_types, so they stay out of "all"
-and the real game until the lanes plan's Section 3 turns the belt forward (dev, 2026-11-04). */
 // Debug options only: "animals, birds" and "animals, dogs" make every spawn an animal of that kind (spawn_animal() picks it).
 if (spawn_only == "animals_birds" or spawn_only == "animals_dogs")
 {
@@ -61,6 +59,8 @@ next_type = "animals";
 next_countdown = countdown_steps();
 return;
 }
+/* Debug options only: the three barrier choices make every spawn a barrier, with their own lane rule (spawn_barriers()).
+In "all" and the real game barriers are an ordinary pick from obstacle_types (dev, 2026-11-05). */
 if (spawn_only == "barriers" or spawn_only == "barriers_random" or spawn_only == "barriers_multiple")
 {
 next_type = barriers_available() ? "barriers" : "";

@@ -131,7 +131,7 @@ void break_shield(shield@ s)
 {
 s.spent = true;
 stop_shield(s);
-shieldpool.play_2d(get_pack_sound(shield_folder + "*break*"), 0, me.x, 0, s.x, false);
+shieldpool.play_stationary(get_pack_sound(shield_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
 }
 void stop_shield(shield@ s)
 {

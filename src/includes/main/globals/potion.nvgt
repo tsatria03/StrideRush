@@ -114,7 +114,7 @@ void break_potion(healthpotion@ pot)
 {
 pot.spent = true;
 stop_potion(pot);
-potionpool.play_2d(get_pack_sound(potion_folder + "*break*"), 0, me.x, 0, pot.x, false);
+potionpool.play_stationary(get_pack_sound(potion_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
 }
 void stop_potion(healthpotion@ pot)
 {
