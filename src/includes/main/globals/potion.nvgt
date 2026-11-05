@@ -144,7 +144,7 @@ bool use_potion()
 {
 if (player_health >= player_hp)
 {
-speak_buffer("You don't need to use this.");
+speak_buffer("You're already at maximum health."); // the dev's wording (2026-11-04)
 return false;
 }
 int heal = player_hp * random(health_potion_min_percent, health_potion_max_percent) / 100;

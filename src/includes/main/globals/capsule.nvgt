@@ -138,11 +138,20 @@ stop_capsule(capsules[i]);
 }
 capsules.resize(0);
 }
-// U on a life capsule: exactly 1 more life, with no limit (dev: "no more no less"). Always used, so returns true.
+/* U on a life capsule: a random life_capsule_min_lives to life_capsule_max_lives more lives (dev, 2026-11-04: "between 1
+to 2 lives"; it was exactly 1), never past max_lives (dev: "You can have unlimited life capsules, but limited lives"),
+so at 19 lives a roll of 2 gains 1. At the cap it's refused and kept for later, like a health potion at full health.
+True if it was used. */
 bool use_capsule()
 {
-lives += 1;
+if (lives >= max_lives)
+{
+speak_buffer("You're already at maximum lives.");
+return false;
+}
+int gained = int(min(random(life_capsule_min_lives, life_capsule_max_lives), max_lives - lives));
+lives += gained;
 p.play_stationary(get_pack_sound(capsule_folder + "*use*"), false); // its use sound only, not the life sound (dev)
-speak_buffer("You now have " + lives + " lives.");
+speak_buffer("Gained " + gained + (gained == 1 ? " life." : " lives.")); // the dev's wording (2026-11-04)
 return true;
 }
