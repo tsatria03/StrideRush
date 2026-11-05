@@ -1,0 +1,120 @@
+/* Birds (dev, 2026-11-04, for 1.4; the birds plan): a belt-wide trap that only a clap clears. A bird plays its spawn clip
+at its tile, then its loop (each of the 24 themes in objects/traps/birds has its own call), with the layered
+misc/trap/birds countdown. Clapping (both hands together, with nothing else for the hands to do) inside its hand window,
+the same window as a force field's switch, scares the nearest bird away: a random flight clip at its tile, and its loop
+stops. Reaching one you didn't scare is a blow of bird_damage (10) through take_damage(), with its hit; jumping and
+ducking don't help. Belt-wide on purpose, so turning can't dodge it and the clap stays its only answer (dev: "belt wide").
+Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_birds() shrinks the array. */
+sound_pool birdpool;
+const string bird_folder = "objects/traps/birds/";
+class bird
+{
+double x;
+string theme;
+double countdown_start;
+bool spent = false; // scared off or reached: nothing more can happen to it
+int loopslot = -1;
+}
+bird@[] birds(0);
+
+// countdown comes from the spawner like any trap's; it sets the countdown and the clap window.
+void spawn_bird(double bx, string theme, int countdown)
+{
+bird bd;
+bd.x = bx;
+bd.theme = theme;
+bd.countdown_start = bx - countdown;
+birdpool.play_2d(get_pack_sound(bird_folder + theme + "/*spawn*"), me_x, 0, bx, 0, false);
+bd.loopslot = birdpool.play_2d(get_pack_sound(bird_folder + theme + "/*loop*"), me_x, 0, bx, 0, true);
+for (uint i = 0; i < birds.length(); i++)
+{
+if (@birds[i] == null)
+{
+@birds[i] = bd;
+return;
+}
+}
+birds.insert_last(bd);
+}
+/* Called from a clap (empty_hand_sound() in forcefield.nvgt): scares away the nearest unspent bird whose hand window
+you're in. True if one flew off. */
+bool scare_bird()
+{
+bird@ target = null;
+for (uint i = 0; i < birds.length(); i++)
+{
+if (@birds[i] == null) continue;
+bird@ bd = birds[i];
+if (bd.spent or me_x < hand_window_start(bd.x, bd.countdown_start) or bd.x - me_x < 1) continue;
+if (@target == null or bd.x < target.x) @target = bd;
+}
+if (@target == null) return false;
+target.spent = true;
+stop_bird(target);
+birdpool.play_2d(get_pack_sound(bird_folder + target.theme + "/*flight*"), me_x, 0, target.x, 0, false);
+return true;
+}
+// Runs once per step, right after the move: reaching a bird you didn't scare is a blow, in the air or on the ground.
+void bird_check()
+{
+for (uint i = 0; i < birds.length(); i++)
+{
+if (@birds[i] == null) continue;
+bird@ bd = birds[i];
+if (me_x == bd.x and !bd.spent)
+{
+bd.spent = true;
+string hit_clip = get_pack_sound(bird_folder + bd.theme + "/*hit*");
+stop_bird(bd); // it flew into you: its call ends
+int blow = take_damage(bird_damage); // a worn shield, else your health
+if (blow == blow_fatal)
+{
+p.play_stationary(hit_clip, false);
+end_run_hit();
+return;
+}
+birdpool.play_2d(hit_clip, me_x, 0, bd.x, 0, false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+}
+if (me_x > bd.x + spawn_distance()) remove_bird(i);
+}
+}
+// The countdown: the layered misc/trap/birds cues before each bird still there (see play_countdown()). Runs once per step.
+void bird_countdown()
+{
+for (uint i = 0; i < birds.length(); i++)
+{
+if (@birds[i] == null or birds[i].spent) continue;
+play_countdown(birdpool, "birds", birds[i].x, birds[i].countdown_start);
+}
+}
+// The bird still on tile x, for a teleport's landing check, or null.
+bird@ bird_at(double x)
+{
+for (uint i = 0; i < birds.length(); i++)
+{
+if (@birds[i] != null and !birds[i].spent and birds[i].x == x) return birds[i];
+}
+return null;
+}
+void stop_bird(bird@ bd)
+{
+if (bd.loopslot > -1) birdpool.destroy_sound(bd.loopslot);
+bd.loopslot = -1;
+}
+void remove_bird(uint i)
+{
+if (i >= birds.length() or @birds[i] == null) return;
+stop_bird(birds[i]);
+@birds[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_birds()
+{
+for (uint i = 0; i < birds.length(); i++)
+{
+if (@birds[i] == null) continue;
+stop_bird(birds[i]);
+}
+birds.resize(0);
+}

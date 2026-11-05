@@ -113,7 +113,7 @@ switch_off_forcefield(target);
 }
 /* A hand press that grabbed, opened or switched nothing (dev, 2026-11-04): both hands together clap (misc/player
 clap1-3, centred); one hand alone plays woosh, the left hand (A or Tab) 50 to the left and the right (D or Enter) 50 to
-the right. Sounds only for now; the dev will say later what a clap does.
+the right. A clap also scares away the nearest bird in reach (bird.nvgt, the dev's use for claps, 2026-11-04).
 "Together" is the same frame, one pressed while the other is held, or the other hand within clap_window ms. A lone
 press's woosh waits that long first, so a clap never comes with a woosh in front of it (dev: "I don't like how it plays
 the clap and woosh at the same time"). */
@@ -127,6 +127,7 @@ if (both)
 {
 woosh_pending_side = 0; // the waiting woosh becomes this clap
 p.play_stationary(get_pack_sound("misc/player/*clap*"), false);
+scare_bird(); // a clap scares off the nearest bird in reach, if there is one (the birds plan)
 return;
 }
 if (woosh_pending_side == side) play_pending_woosh(); // the same hand twice: the first woosh plays now

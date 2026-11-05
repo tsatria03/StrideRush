@@ -104,6 +104,8 @@ wall_check();
 if (!running) return;
 barrier_check();
 if (!running) return;
+bird_check();
+if (!running) return;
 door_check();
 if (!running) return;
 ammopack_check();
@@ -124,6 +126,7 @@ forcefield_countdown();
 projectile_countdown();
 wall_countdown();
 barrier_countdown();
+bird_countdown();
 }
 void speedup_check()
 {

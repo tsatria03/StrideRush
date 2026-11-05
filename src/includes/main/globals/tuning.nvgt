@@ -154,6 +154,8 @@ const int barrier_damage = 80;
 const int barrier_fade_ms = 150;
 // How often, in percent, a barrier spawn is a pair in two different lanes instead of one (dev, 2026-11-04: "half the time").
 const int barrier_pair_percent = 50;
+// Birds (dev, 2026-11-04): an unscared bird that reaches you does bird_damage.
+const int bird_damage = 10;
 // Hands (dev, 2026-11-04): the second hand within this many ms of the first makes a clap instead of a woosh.
 const int clap_window = 100;
 const int teleport_min_time = 2000;
