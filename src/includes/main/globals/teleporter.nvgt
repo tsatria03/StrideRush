@@ -153,6 +153,7 @@ for (uint i = 0; i < projectiles.length(); i++)
 if (@projectiles[i] != null and !projectiles[i].spent and projectiles[i].meet_x == x) return true;
 }
 if (@wall_at(x) != null) return true;
+if (@barrier_in_my_lane_at(x) != null) return true; // only one in your lane blocks you
 for (uint i = 0; i < doors.length(); i++)
 {
 if (@doors[i] != null and doors[i].x == x and door_standing(doors[i])) return true;

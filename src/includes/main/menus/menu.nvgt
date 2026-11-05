@@ -219,6 +219,10 @@ m.add_item(obstacle_types[i].replace("_", " ", true), obstacle_types[i]); // "fo
 m.add_item("real doors", "real_doors");
 // Debug option: only the real doors at the 50 ms speed marks, with nothing in between (dev, 2026-11-03).
 m.add_item("real doors, spread", "real_doors_spread");
+// Debug option: only barriers, the lane trap, which stays out of the normal mix until the belt turns forward (dev, 2026-11-04).
+m.add_item("barriers", "barriers");
+m.add_item("barriers, random lanes", "barriers_random"); // each barrier in any of the three lanes, as in the real game later (dev, 2026-11-04)
+m.add_item("barriers, multiple lanes", "barriers_multiple"); // the real game's rule: sometimes two side by side, never in one lane (dev, 2026-11-04)
 for (uint i = 0; i < item_types.length(); i++)
 {
 m.add_item(item_types[i].replace("_", " ", true), item_types[i]);
