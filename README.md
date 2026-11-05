@@ -1,2 +1,2 @@
 # StrideRush
-An endless audio runner filled with increasingly challenging obstacles, weapons and items.
+An endless lain runner filled with increasingly challenging obstacles, items, and weapons.

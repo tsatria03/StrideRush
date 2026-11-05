@@ -1,6 +1,6 @@
 ---
 name: project_lanes_plan
-description: COMPLETE (2026-11-05, 1.4 FULL at 10 of 10; built and tested in 1.3, undone so 1.3 stayed a side-scroller, rebuilt in 1.4 as 1 lanes, 2 barriers, 3 the forward belt (formerly "1B"), 4 items in lanes, 5 docks) - three lanes on Left/Q and Right/E, barriers as the one-lane turn-only trap in random lanes with pairs, the belt turned forward with HRTF and behind pitch, the six inventory items in random lanes; phantom centre of same-sound pairs explained in the readme, pair staggering open; Q&A log
+description: COMPLETE (2026-11-05, 1.4 FULL at 10 of 10; built and tested in 1.3, undone so 1.3 stayed a side-scroller, rebuilt in 1.4 as 1 lanes, 2 barriers, 3 the forward belt (formerly "1B"), 4 items in lanes, 5 docks) - three lanes on Left/Q and Right/E, barriers as the one-lane turn-only trap in random lanes with pairs, the belt turned forward with HRTF and behind pitch, the six inventory items in random lanes; phantom centre of same-sound pairs explained in the readme; pair staggering and wall crash pass-through declined by the dev; Q&A log
 metadata:
   type: project
 ---
@@ -171,3 +171,4 @@ Section 5 (was Section 4): docks.
   - readme.txt: "dodge" in the intro; the belt carries you straight ahead; obstacles heard in front and falling behind lower; six exceptions (barriers dodged by lanes); a new "Lanes." section (keys, turn and bump, L, which things sit in a lane, the phantom tip); projectiles now just missiles (the other themes moved to barriers); a barriers paragraph; barriers in the countdown (three notes, only in its lane), health and shield lists (5 barriers); no lane switching during a door ride; weapons only hit items in your lane; items in lanes and side-by-side pairs; powerups from any lane; the Game tab's behind pitch and the Sound tab's HRTF; Left/Q, Right/E and L in the keyboard commands.
   - todo list.txt: "Add lanes that you can switch between." moved to the top of the finished section.
   - CLAUDE.md, [[project_game_design]] and [[feedback_changelog_rules]] updated. THE LANES PLAN IS COMPLETE; pair staggering stays an open idea.
+- CLOSED (dev, 2026-11-05, after tagging 1.4 as V1.40 at cb11eb8): "For the open suggestions, you can close them. I no longer need the pair staggering, and the wall crashing." Neither pair staggering nor letting a crashed wall's loop pass through will be built; don't offer them again unless the dev brings them up.
