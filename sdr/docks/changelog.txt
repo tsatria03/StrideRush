@@ -1,4 +1,5 @@
 New in 1.4.
+Made it so steel shields now take 400 damage before they break, twice as much as your own health.
 Made it so force fields now take 30 of your health, projectiles 40, walls 50, mines 60 and doors 70, so the harder obstacles hurt more.
 Made it so life capsules now give 1 or 2 lives, up to a limit of 20 lives, and stay in your inventory for later when you're already at the limit.
 Made it so doors now have a warning countdown like every trap, which stops once you open a real door or break a fake one.

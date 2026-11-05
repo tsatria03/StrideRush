@@ -119,7 +119,7 @@ const int gun_max_reserve = 200; // was 250 (dev, 2026-11-03); a reload still lo
 /* Shields (dev, 2026-11-03). About one spawn in shield_chance is a steel shield. A worn one starts at shield_hp and
 takes each blow's damage (the <type>_damage values above) instead of your health; hazards ignore it. */
 const int shield_chance = 16; // first proposed as 20 (dev chose 16)
-const int shield_hp = 200; // first proposed as 100 (dev: "A shield is supposed to be more stronger than you")
+const int shield_hp = 400; // first proposed as 100, then 200; 400 since 2026-11-04 (dev: "armor is twice as strong as you")
 
 /* Life capsules and player teleporters (dev, 2026-11-03). About one spawn in life_capsule_chance is a capsule and one in
 teleporter_chance a teleporter. A teleport moves you a random teleport_min_time to teleport_max_time of belt (in tiles
