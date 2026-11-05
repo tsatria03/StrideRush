@@ -26,8 +26,8 @@ void spawn_teleporter(double tx, int countdown)
 teleporter t;
 t.x = tx;
 t.countdown_start = tx - countdown;
-teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*spawn*"), me_x, 0, tx, 0, false);
-t.loopslot = teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*loop*"), me_x, 0, tx, 0, true);
+teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*spawn*"), me.x, 0, tx, 0, false);
+t.loopslot = teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*loop*"), me.x, 0, tx, 0, true);
 for (uint i = 0; i < teleporters.length(); i++)
 {
 if (@teleporters[i] == null)
@@ -46,7 +46,7 @@ for (uint i = 0; i < teleporters.length(); i++)
 {
 if (@teleporters[i] == null) continue;
 teleporter@ t = teleporters[i];
-if (t.spent or me_x < hand_window_start(t.x, t.countdown_start) or t.x - me_x < 1) continue;
+if (t.spent or me.x < hand_window_start(t.x, t.countdown_start) or t.x - me.x < 1) continue;
 if (@target == null or t.x < target.x) @target = t;
 }
 if (@target == null) return false;
@@ -68,10 +68,10 @@ if (@teleporters[i] == null) continue;
 teleporter@ t = teleporters[i];
 if (!t.spent)
 {
-if (me_x == t.x and is_grounded()) break_teleporter(t);
-else if (me_x > t.x) t.spent = true; // jumped clean over: its loop carries on and fades behind you
+if (me.x == t.x and is_grounded()) break_teleporter(t);
+else if (me.x > t.x) t.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
-if (me_x > t.x + spawn_distance()) remove_teleporter(i);
+if (me.x > t.x + spawn_distance()) remove_teleporter(i);
 }
 }
 // Called from player_land(): landing on a teleporter's tile by mistake breaks it.
@@ -80,7 +80,7 @@ void teleporter_landing()
 for (uint i = 0; i < teleporters.length(); i++)
 {
 if (@teleporters[i] == null) continue;
-if (!teleporters[i].spent and me_x == teleporters[i].x) break_teleporter(teleporters[i]);
+if (!teleporters[i].spent and me.x == teleporters[i].x) break_teleporter(teleporters[i]);
 }
 }
 // Weapons break teleporters like packs: a bullet on its tile, or a swing when it's the nearest target.
@@ -98,7 +98,7 @@ teleporter@ target = null;
 for (uint i = 0; i < teleporters.length(); i++)
 {
 if (@teleporters[i] == null or teleporters[i].spent) continue;
-double ahead = teleporters[i].x - me_x;
+double ahead = teleporters[i].x - me.x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or teleporters[i].x < target.x) @target = teleporters[i];
 }
@@ -114,7 +114,7 @@ void break_teleporter(teleporter@ t)
 {
 t.spent = true;
 stop_teleporter(t);
-teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*break*"), me_x, 0, t.x, 0, false);
+teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*break*"), me.x, 0, t.x, 0, false);
 }
 void stop_teleporter(teleporter@ t)
 {
@@ -170,9 +170,9 @@ bool use_teleporter()
 int steps = int(max(1, round(double(random(teleport_min_time, teleport_max_time)) / current_step_time(), 0)));
 int dir = random(0, 1) == 0 ? -1 : 1;
 // Never back past the start of the run; with no room behind you at all, it goes forward instead.
-if (dir < 0 and me_x < 1) dir = 1;
-else if (dir < 0 and me_x - steps < 0) steps = int(me_x);
-double target = me_x + dir * steps;
+if (dir < 0 and me.x < 1) dir = 1;
+else if (dir < 0 and me.x - steps < 0) steps = int(me.x);
+double target = me.x + dir * steps;
 while (obstacle_on_tile(target))
 {
 target += dir;
@@ -180,13 +180,13 @@ if (target < 0)
 {
 // Backed into the start with no clear tile: go forward from where you are instead.
 dir = 1;
-target = me_x + 1;
+target = me.x + 1;
 }
 }
-int moved = int(abs(target - me_x));
+int moved = int(abs(target - me.x));
 p.play_stationary(get_pack_sound(teleporter_folder + "*use*"), false);
 cancel_movement();
-me_x = target;
+me.x = target;
 update_listeners();
 if (dir > 0) spawner_catch_up(); // so what comes next still arrives with its full warning
 play_landing(false); // the tile's landing only, like a force field's throw (dev, 2026-11-03)

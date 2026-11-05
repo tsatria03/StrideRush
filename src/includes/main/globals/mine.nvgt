@@ -29,7 +29,7 @@ mine mn;
 mn.x = mx;
 mn.theme = theme;
 mn.countdown_start = mx - countdown;
-minepool.play_2d(get_pack_sound("objects/traps/mines/" + theme + "/*spawn*"), me_x, 0, mx, 0, false);
+minepool.play_2d(get_pack_sound("objects/traps/mines/" + theme + "/*spawn*"), me.x, 0, mx, 0, false);
 for (uint i = 0; i < mines.length(); i++)
 {
 if (@mines[i] == null)
@@ -47,13 +47,13 @@ for (uint i = 0; i < mines.length(); i++)
 {
 if (@mines[i] == null) continue;
 mine@ mn = mines[i];
-if (!mn.armed and !mn.spent and me_x >= mine_arm_x(mn))
+if (!mn.armed and !mn.spent and me.x >= mine_arm_x(mn))
 {
 mn.armed = true;
-minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme + "/*light*"), me_x, 0, mn.x, 0, false);
-mn.loopslot = minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme + "/*loop*"), me_x, 0, mn.x, 0, true);
+minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme + "/*light*"), me.x, 0, mn.x, 0, false);
+mn.loopslot = minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme + "/*loop*"), me.x, 0, mn.x, 0, true);
 }
-if (me_x == mn.x and !mn.spent)
+if (me.x == mn.x and !mn.spent)
 {
 mn.spent = true;
 if (is_grounded())
@@ -72,13 +72,13 @@ end_run_hit();
 return;
 }
 // The mine goes off either way; with a shield worn its hit is layered on the shield's.
-minepool.play_2d(explode_clip, me_x, 0, mn.x, 0, false);
-minepool.play_2d(hit_clip, me_x, 0, mn.x, 0, false);
+minepool.play_2d(explode_clip, me.x, 0, mn.x, 0, false);
+minepool.play_2d(hit_clip, me.x, 0, mn.x, 0, false);
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
 }
 // Kept ticking until it's as far behind as obstacles appear ahead, so a jumped mine fades out behind you; then dropped.
-if (me_x > mn.x + spawn_distance()) remove_mine(i);
+if (me.x > mn.x + spawn_distance()) remove_mine(i);
 }
 }
 // The countdown: one misc/trap/mines warn cue per step before each mine (see play_countdown()). Runs once per step.

@@ -44,7 +44,7 @@ return get_pack_sound_folders(door_folder + "*").length() > 0;
 // Plays one of a door's clips (open, move, hit and so on) at sound_x, at the door's pitch.
 int play_door(door@ d, string clip, double sound_x, bool looping)
 {
-return doorpool.play_extended_2d(get_pack_sound(door_folder + d.theme + "/*" + clip + "*"), me_x, 0, sound_x, 0, 0, 0, 0, 0, looping, 0, 0, 0, d.pitch);
+return doorpool.play_extended_2d(get_pack_sound(door_folder + d.theme + "/*" + clip + "*"), me.x, 0, sound_x, 0, 0, 0, 0, 0, looping, 0, 0, 0, d.pitch);
 }
 // countdown comes from the spawner: it sets the spacing, a real door's hand window and the door's countdown.
 void spawn_door(double dx, string theme, bool real, int countdown)
@@ -93,7 +93,7 @@ for (uint i = 0; i < doors.length(); i++)
 {
 if (@doors[i] == null) continue;
 door@ d = doors[i];
-if (!door_standing(d) or me_x < hand_window_start(d.x, d.countdown_start) or d.x - me_x < 1) continue;
+if (!door_standing(d) or me.x < hand_window_start(d.x, d.countdown_start) or d.x - me.x < 1) continue;
 if (@target == null or d.x < target.x) @target = d;
 }
 if (@target == null) return false;
@@ -135,7 +135,7 @@ for (uint i = 0; i < doors.length(); i++)
 {
 if (@doors[i] == null) continue;
 door@ d = doors[i];
-double ahead = d.x - me_x;
+double ahead = d.x - me.x;
 if (!door_standing(d) or ahead < 1 or ahead > reach) continue;
 if (!d.real)
 {
@@ -176,7 +176,7 @@ door@ target = null;
 for (uint i = 0; i < doors.length(); i++)
 {
 if (@doors[i] == null or doors[i].real or !door_standing(doors[i])) continue;
-double ahead = doors[i].x - me_x;
+double ahead = doors[i].x - me.x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or doors[i].x < target.x) @target = doors[i];
 }
@@ -213,7 +213,7 @@ for (uint i = 0; i < doors.length(); i++)
 {
 if (@doors[i] == null) continue;
 door@ d = doors[i];
-if (me_x == d.x)
+if (me.x == d.x)
 {
 if (door_standing(d))
 {
@@ -231,8 +231,8 @@ play_door(d, "hit", d.x, false); // at the door's pitch
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
 }
-else if (d.opened and !d.closed and me_x > d.x) finish_door_move(d); // close is behind you, so it fades as you run on
-if (me_x > d.x + spawn_distance()) remove_door(i);
+else if (d.opened and !d.closed and me.x > d.x) finish_door_move(d); // close is behind you, so it fades as you run on
+if (me.x > d.x + spawn_distance()) remove_door(i);
 }
 }
 void stop_door(door@ d)

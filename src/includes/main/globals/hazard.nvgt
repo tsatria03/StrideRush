@@ -21,7 +21,7 @@ h.x = hx;
 h.theme = theme;
 h.ledge_start = hx - countdown;
 h.ledge_end = hx + ledge_after_tiles;
-h.loopslot = hazardpool.play_2d(get_pack_sound("objects/traps/hazards/" + theme + "/*loop*"), me_x, 0, hx, 0, true);
+h.loopslot = hazardpool.play_2d(get_pack_sound("objects/traps/hazards/" + theme + "/*loop*"), me.x, 0, hx, 0, true);
 for (uint i = 0; i < hazards.length(); i++)
 {
 if (@hazards[i] == null)
@@ -38,13 +38,13 @@ void hazard_check()
 for (uint i = 0; i < hazards.length(); i++)
 {
 if (@hazards[i] == null) continue;
-if (me_x == hazards[i].x and is_grounded())
+if (me.x == hazards[i].x and is_grounded())
 {
 end_run_hazard(get_pack_sound("objects/traps/hazards/" + hazards[i].theme + "/*fall*"));
 return;
 }
 // Kept until it's as far behind as obstacles appear ahead, so its loop fades out behind you instead of cutting off.
-if (me_x > max(hazards[i].ledge_end, hazards[i].x + spawn_distance())) remove_hazard(i);
+if (me.x > max(hazards[i].ledge_end, hazards[i].x + spawn_distance())) remove_hazard(i);
 }
 }
 // The countdown: one misc/trap/hazards warn cue per ledge step (see play_countdown() in spawner.nvgt). Runs once per step.

@@ -43,7 +43,7 @@ for (uint i = 0; i < spikes.length(); i++)
 {
 if (@spikes[i] == null) continue;
 if (runtimer.elapsed < spikes[i].next_swing) continue;
-spikepool.play_2d(get_pack_sound("objects/traps/spikes/" + spikes[i].theme + "/*loop*"), me_x, 0, spikes[i].x, 0, false);
+spikepool.play_2d(get_pack_sound("objects/traps/spikes/" + spikes[i].theme + "/*loop*"), me.x, 0, spikes[i].x, 0, false);
 spikes[i].next_swing = runtimer.elapsed + spikes[i].swing_time;
 }
 }
@@ -53,7 +53,7 @@ void spike_check()
 for (uint i = 0; i < spikes.length(); i++)
 {
 if (@spikes[i] == null) continue;
-if (me_x == spikes[i].x and is_grounded())
+if (me.x == spikes[i].x and is_grounded())
 {
 string hit_clip = get_pack_sound("objects/traps/spikes/" + spikes[i].theme + "/*hit*");
 /* A fatal hit plays the spike's hit through p (silence_run() clears spikepool, which cut it off) and no player hit,
@@ -65,11 +65,11 @@ p.play_stationary(hit_clip, false);
 end_run_hit();
 return;
 }
-spikepool.play_2d(hit_clip, me_x, 0, spikes[i].x, 0, false);
+spikepool.play_2d(hit_clip, me.x, 0, spikes[i].x, 0, false);
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
 // Kept swinging until it's as far behind as obstacles appear ahead, so its swings fade out behind you.
-if (me_x > spikes[i].x + spawn_distance()) remove_spike(i);
+if (me.x > spikes[i].x + spawn_distance()) remove_spike(i);
 }
 }
 // The countdown: one misc/trap/spikes warn cue per step before each spike (see play_countdown()). Runs once per step.

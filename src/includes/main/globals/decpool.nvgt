@@ -19,7 +19,7 @@ void update_listeners()
 {
 for (uint i = 0; i < all_pools.length(); i++)
 {
-all_pools[i].update_listener_2d(me_x, 0);
+all_pools[i].update_listener_2d(me.x, 0);
 }
 }
 // Pauses only sounds that are playing, so resume_pools() can't wake one that had already finished.

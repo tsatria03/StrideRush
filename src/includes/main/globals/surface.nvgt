@@ -37,7 +37,7 @@ return current_surface;
 void play_step()
 {
 if (!is_grounded() or is_ducked() or door_moving) return; // silent while a real door carries you through
-string tile = tile_at(me_x);
+string tile = tile_at(me.x);
 if (tile == "") return;
 p.play_stationary(get_pack_sound("objects/platforms/" + tile + "/*step*"), false);
 }

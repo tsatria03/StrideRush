@@ -165,12 +165,12 @@ return int(max(min_gap_tiles, ledge_after_tiles + floor_len + countdown + 1));
 so it's placed on the next step a full spawn distance and countdown away, as if you'd run there. */
 void spawner_catch_up()
 {
-next_spawn_x = max(next_spawn_x, me_x + spawn_distance() + next_countdown + 1);
+next_spawn_x = max(next_spawn_x, me.x + spawn_distance() + next_countdown + 1);
 }
 // An obstacle appears spawn_distance() before its countdown starts, so its sound comes first.
 void spawn_check()
 {
-if (me_x + spawn_distance() + next_countdown < next_spawn_x) return;
+if (me.x + spawn_distance() + next_countdown < next_spawn_x) return;
 place_obstacle(next_spawn_x, next_type, next_countdown);
 string placed = next_type;
 choose_next_obstacle();
@@ -247,8 +247,8 @@ hear 1 to 5; three hear 3 to 5; one hears only 5. Each cue plays in 2d (never st
 stepped onto, not at the obstacle. Each type's countdown function calls this once per step for each of its obstacles. */
 void play_countdown(sound_pool@ pool, string type, double ox, double countdown_start)
 {
-int steps_left = int(ox - me_x);
-if (steps_left < 1 or steps_left > 5 or me_x < countdown_start) return;
+int steps_left = int(ox - me.x);
+if (steps_left < 1 or steps_left > 5 or me.x < countdown_start) return;
 int note = 6 - steps_left;
 string folder = "misc/trap/" + type + "/";
 /* A layered set (dev, 2026-11-03) stacks octaves as warn<group>-<note>, such as the walls' warn1-3 (low) with warn2-3
@@ -259,11 +259,11 @@ int g = 1;
 string layer = get_pack_sound(folder + "warn" + g + "-" + note + "*");
 while (layer != "")
 {
-pool.play_2d(layer, me_x, 0, me_x, 0, false);
+pool.play_2d(layer, me.x, 0, me.x, 0, false);
 g++;
 layer = get_pack_sound(folder + "warn" + g + "-" + note + "*");
 }
 return;
 }
-pool.play_2d(get_pack_sound(folder + "warn" + note + "*"), me_x, 0, me_x, 0, false);
+pool.play_2d(get_pack_sound(folder + "warn" + note + "*"), me.x, 0, me.x, 0, false);
 }

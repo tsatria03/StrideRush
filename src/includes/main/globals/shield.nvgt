@@ -43,8 +43,8 @@ void spawn_shield(double sx, int countdown)
 shield s;
 s.x = sx;
 s.countdown_start = sx - countdown;
-shieldpool.play_2d(get_pack_sound(shield_folder + "*spawn*"), me_x, 0, sx, 0, false);
-s.loopslot = shieldpool.play_2d(get_pack_sound(shield_folder + "*loop*"), me_x, 0, sx, 0, true);
+shieldpool.play_2d(get_pack_sound(shield_folder + "*spawn*"), me.x, 0, sx, 0, false);
+s.loopslot = shieldpool.play_2d(get_pack_sound(shield_folder + "*loop*"), me.x, 0, sx, 0, true);
 for (uint i = 0; i < shields.length(); i++)
 {
 if (@shields[i] == null)
@@ -63,7 +63,7 @@ for (uint i = 0; i < shields.length(); i++)
 {
 if (@shields[i] == null) continue;
 shield@ s = shields[i];
-if (s.spent or me_x < hand_window_start(s.x, s.countdown_start) or s.x - me_x < 1) continue;
+if (s.spent or me.x < hand_window_start(s.x, s.countdown_start) or s.x - me.x < 1) continue;
 if (@target == null or s.x < target.x) @target = s;
 }
 if (@target == null) return false;
@@ -85,10 +85,10 @@ if (@shields[i] == null) continue;
 shield@ s = shields[i];
 if (!s.spent)
 {
-if (me_x == s.x and is_grounded()) break_shield(s);
-else if (me_x > s.x) s.spent = true; // jumped clean over: its loop carries on and fades behind you
+if (me.x == s.x and is_grounded()) break_shield(s);
+else if (me.x > s.x) s.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
-if (me_x > s.x + spawn_distance()) remove_shield(i);
+if (me.x > s.x + spawn_distance()) remove_shield(i);
 }
 }
 // Called from player_land(): landing on a shield's tile by mistake breaks it.
@@ -97,7 +97,7 @@ void shield_landing()
 for (uint i = 0; i < shields.length(); i++)
 {
 if (@shields[i] == null) continue;
-if (!shields[i].spent and me_x == shields[i].x) break_shield(shields[i]);
+if (!shields[i].spent and me.x == shields[i].x) break_shield(shields[i]);
 }
 }
 // Weapons break shields on the belt like packs and keys: a bullet on its tile, or a swing when it's the nearest target.
@@ -115,7 +115,7 @@ shield@ target = null;
 for (uint i = 0; i < shields.length(); i++)
 {
 if (@shields[i] == null or shields[i].spent) continue;
-double ahead = shields[i].x - me_x;
+double ahead = shields[i].x - me.x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or shields[i].x < target.x) @target = shields[i];
 }
@@ -131,7 +131,7 @@ void break_shield(shield@ s)
 {
 s.spent = true;
 stop_shield(s);
-shieldpool.play_2d(get_pack_sound(shield_folder + "*break*"), me_x, 0, s.x, 0, false);
+shieldpool.play_2d(get_pack_sound(shield_folder + "*break*"), me.x, 0, s.x, 0, false);
 }
 void stop_shield(shield@ s)
 {

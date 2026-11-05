@@ -33,8 +33,8 @@ animal bd;
 bd.x = bx;
 bd.theme = kind + "/" + kinds_animals[random(0, kinds_animals.length() - 1)];
 bd.countdown_start = bx - countdown;
-animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*spawn*"), me_x, 0, bx, 0, false);
-bd.loopslot = animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*loop*"), me_x, 0, bx, 0, true);
+animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*spawn*"), me.x, 0, bx, 0, false);
+bd.loopslot = animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*loop*"), me.x, 0, bx, 0, true);
 for (uint i = 0; i < animals.length(); i++)
 {
 if (@animals[i] == null)
@@ -54,13 +54,13 @@ for (uint i = 0; i < animals.length(); i++)
 {
 if (@animals[i] == null) continue;
 animal@ bd = animals[i];
-if (bd.spent or me_x < hand_window_start(bd.x, bd.countdown_start) or bd.x - me_x < 1) continue;
+if (bd.spent or me.x < hand_window_start(bd.x, bd.countdown_start) or bd.x - me.x < 1) continue;
 if (@target == null or bd.x < target.x) @target = bd;
 }
 if (@target == null) return false;
 target.spent = true;
 stop_animal(target);
-animalpool.play_2d(get_pack_sound(animal_folder + target.theme + "/*scare*"), me_x, 0, target.x, 0, false);
+animalpool.play_2d(get_pack_sound(animal_folder + target.theme + "/*scare*"), me.x, 0, target.x, 0, false);
 return true;
 }
 // Runs once per step, right after the move: reaching an animal you didn't scare is a blow, in the air or on the ground.
@@ -70,7 +70,7 @@ for (uint i = 0; i < animals.length(); i++)
 {
 if (@animals[i] == null) continue;
 animal@ bd = animals[i];
-if (me_x == bd.x and !bd.spent)
+if (me.x == bd.x and !bd.spent)
 {
 bd.spent = true;
 string hit_clip = get_pack_sound(animal_folder + bd.theme + "/*hit*");
@@ -82,10 +82,10 @@ p.play_stationary(hit_clip, false);
 end_run_hit();
 return;
 }
-animalpool.play_2d(hit_clip, me_x, 0, bd.x, 0, false);
+animalpool.play_2d(hit_clip, me.x, 0, bd.x, 0, false);
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
-if (me_x > bd.x + spawn_distance()) remove_animal(i);
+if (me.x > bd.x + spawn_distance()) remove_animal(i);
 }
 }
 // The countdown: the layered misc/trap/animals cues before each animal still there (see play_countdown()). Runs once per step.

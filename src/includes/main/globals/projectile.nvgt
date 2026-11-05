@@ -23,7 +23,7 @@ projectile pr;
 pr.meet_x = mx;
 pr.theme = theme;
 pr.countdown_start = mx - countdown;
-pr.loopslot = projectilepool.play_2d(get_pack_sound("objects/traps/projectiles/" + theme + "/*loop*"), me_x, 0, projectile_x(pr), 0, true);
+pr.loopslot = projectilepool.play_2d(get_pack_sound("objects/traps/projectiles/" + theme + "/*loop*"), me.x, 0, projectile_x(pr), 0, true);
 for (uint i = 0; i < projectiles.length(); i++)
 {
 if (@projectiles[i] == null)
@@ -34,12 +34,12 @@ return;
 }
 projectiles.insert_last(pr);
 }
-/* Where a projectile is right now. The player's position runs smoothly between steps (me_x plus how far through the
+/* Where a projectile is right now. The player's position runs smoothly between steps (me.x plus how far through the
 current step they are), so the flight is smooth too, and it passes meet_x exactly as the player arrives there. Past
 meet_x the distance goes negative and it carries on behind the player. */
 double projectile_x(projectile@ pr)
 {
-double player_pos = me_x + min(1, double(steptimer.elapsed) / current_step_time());
+double player_pos = me.x + min(1, double(steptimer.elapsed) / current_step_time());
 return pr.meet_x + (projectile_speed_factor - 1) * (pr.meet_x - player_pos);
 }
 /* Runs every frame: moves each flying loop to its current position. sound_pool's update_sound_2d() rounds to whole
@@ -62,7 +62,7 @@ for (uint i = 0; i < projectiles.length(); i++)
 {
 if (@projectiles[i] == null) continue;
 projectile@ pr = projectiles[i];
-if (me_x == pr.meet_x and !pr.spent)
+if (me.x == pr.meet_x and !pr.spent)
 {
 pr.spent = true;
 if (!is_ducked())
@@ -78,12 +78,12 @@ p.play_stationary(hit_clip, false);
 end_run_hit();
 return;
 }
-projectilepool.play_2d(hit_clip, me_x, 0, pr.meet_x, 0, false);
+projectilepool.play_2d(hit_clip, me.x, 0, pr.meet_x, 0, false);
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
 }
 // Ducked under, it flies on behind you until it's as far behind as obstacles appear ahead; then dropped.
-if (me_x > pr.meet_x + spawn_distance()) remove_projectile(i);
+if (me.x > pr.meet_x + spawn_distance()) remove_projectile(i);
 }
 }
 // The countdown: one misc/trap/projectiles warn cue per step before each meeting tile (see play_countdown()). Runs once per step.

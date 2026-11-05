@@ -28,7 +28,7 @@ forcefield f;
 f.x = fx;
 f.theme = theme;
 f.countdown_start = fx - countdown;
-f.loopslot = forcefieldpool.play_2d(get_pack_sound("objects/traps/force_fields/" + theme + "/*on*"), me_x, 0, fx, 0, true);
+f.loopslot = forcefieldpool.play_2d(get_pack_sound("objects/traps/force_fields/" + theme + "/*on*"), me.x, 0, fx, 0, true);
 for (uint i = 0; i < forcefields.length(); i++)
 {
 if (@forcefields[i] == null)
@@ -47,7 +47,7 @@ for (uint i = 0; i < forcefields.length(); i++)
 {
 if (@forcefields[i] == null) continue;
 forcefield@ f = forcefields[i];
-if (me_x == f.x and !f.spent)
+if (me.x == f.x and !f.spent)
 {
 f.spent = true;
 if (f.active)
@@ -67,13 +67,13 @@ return false;
 p.play_stationary(hit_clip, false);
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 cancel_movement();
-me_x += forcefield_knockback_tiles;
+me.x += forcefield_knockback_tiles;
 update_listeners();
 return true;
 }
 }
 // Kept looping until it's as far behind as obstacles appear ahead, so it fades out behind you.
-if (me_x > f.x + spawn_distance()) remove_forcefield(i);
+if (me.x > f.x + spawn_distance()) remove_forcefield(i);
 }
 return false;
 }
@@ -93,8 +93,8 @@ for (uint i = 0; i < forcefields.length(); i++)
 {
 if (@forcefields[i] == null) continue;
 forcefield@ f = forcefields[i];
-if (!f.active or f.spent or me_x < switch_window_start(f)) continue;
-int steps_left = int(f.x - me_x);
+if (!f.active or f.spent or me.x < switch_window_start(f)) continue;
+int steps_left = int(f.x - me.x);
 if (steps_left < 1) continue;
 if (@target == null or steps_left < target_steps)
 {
@@ -112,8 +112,8 @@ forcefieldpool.play_stationary(get_pack_sound("misc/game/*switchpress*"), false)
 switch_off_forcefield(target);
 }
 /* A hand press that grabbed, opened or switched nothing (dev, 2026-11-04): both hands together clap (misc/player
-clap1-3, centred); one hand alone plays woosh, the left hand (A or Tab) 50 to the left and the right (D or Enter) 50 to
-the right. A clap also scares away the nearest animal in reach (animal.nvgt, the dev's use for claps, 2026-11-04).
+clap1-3, centred); one hand alone plays woosh, centred too (dev, 2026-11-04; at first the left hand panned 50 left and
+the right 50 right). A clap also scares away the nearest animal in reach (animal.nvgt, the dev's use for claps, 2026-11-04).
 "Together" is the same frame, one pressed while the other is held, or the other hand within clap_window ms. A lone
 press's woosh waits that long first, so a clap never comes with a woosh in front of it (dev: "I don't like how it plays
 the clap and woosh at the same time"). */
@@ -136,7 +136,7 @@ wooshtimer.restart();
 }
 void play_pending_woosh()
 {
-p.play_stationary_extended(get_pack_sound("misc/player/*woosh*"), false, 0, woosh_pending_side * 50, 0, 100, false);
+p.play_stationary(get_pack_sound("misc/player/*woosh*"), false); // centred (dev, 2026-11-04; it was panned 50 to the hand's side)
 woosh_pending_side = 0;
 }
 // Where a field's switch can first be pressed: the shared hand window (hand_window_start() in spawner.nvgt).
@@ -149,7 +149,7 @@ void switch_off_forcefield(forcefield@ f)
 {
 f.active = false;
 forcefieldpool.destroy_sound(f.loopslot);
-f.loopslot = forcefieldpool.play_2d(get_pack_sound("objects/traps/force_fields/" + f.theme + "/*off*"), me_x, 0, f.x, 0, true);
+f.loopslot = forcefieldpool.play_2d(get_pack_sound("objects/traps/force_fields/" + f.theme + "/*off*"), me.x, 0, f.x, 0, true);
 }
 // The countdown: one misc/trap/force_fields warn cue per step before each field (see play_countdown()). Runs once per step.
 void forcefield_countdown()

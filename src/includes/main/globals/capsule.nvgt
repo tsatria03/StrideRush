@@ -27,8 +27,8 @@ void spawn_capsule(double px, int countdown)
 lifecapsule lc;
 lc.x = px;
 lc.countdown_start = px - countdown;
-capsulepool.play_2d(get_pack_sound(capsule_folder + "*spawn*"), me_x, 0, px, 0, false);
-lc.loopslot = capsulepool.play_2d(get_pack_sound(capsule_folder + "*loop*"), me_x, 0, px, 0, true);
+capsulepool.play_2d(get_pack_sound(capsule_folder + "*spawn*"), me.x, 0, px, 0, false);
+lc.loopslot = capsulepool.play_2d(get_pack_sound(capsule_folder + "*loop*"), me.x, 0, px, 0, true);
 for (uint i = 0; i < capsules.length(); i++)
 {
 if (@capsules[i] == null)
@@ -47,7 +47,7 @@ for (uint i = 0; i < capsules.length(); i++)
 {
 if (@capsules[i] == null) continue;
 lifecapsule@ lc = capsules[i];
-if (lc.spent or me_x < hand_window_start(lc.x, lc.countdown_start) or lc.x - me_x < 1) continue;
+if (lc.spent or me.x < hand_window_start(lc.x, lc.countdown_start) or lc.x - me.x < 1) continue;
 if (@target == null or lc.x < target.x) @target = lc;
 }
 if (@target == null) return false;
@@ -69,10 +69,10 @@ if (@capsules[i] == null) continue;
 lifecapsule@ lc = capsules[i];
 if (!lc.spent)
 {
-if (me_x == lc.x and is_grounded()) break_capsule(lc);
-else if (me_x > lc.x) lc.spent = true; // jumped clean over: its loop carries on and fades behind you
+if (me.x == lc.x and is_grounded()) break_capsule(lc);
+else if (me.x > lc.x) lc.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
-if (me_x > lc.x + spawn_distance()) remove_capsule(i);
+if (me.x > lc.x + spawn_distance()) remove_capsule(i);
 }
 }
 // Called from player_land(): landing on a capsule's tile by mistake breaks it.
@@ -81,7 +81,7 @@ void capsule_landing()
 for (uint i = 0; i < capsules.length(); i++)
 {
 if (@capsules[i] == null) continue;
-if (!capsules[i].spent and me_x == capsules[i].x) break_capsule(capsules[i]);
+if (!capsules[i].spent and me.x == capsules[i].x) break_capsule(capsules[i]);
 }
 }
 // Weapons break capsules like packs: a bullet on its tile, or a swing when it's the nearest target.
@@ -99,7 +99,7 @@ lifecapsule@ target = null;
 for (uint i = 0; i < capsules.length(); i++)
 {
 if (@capsules[i] == null or capsules[i].spent) continue;
-double ahead = capsules[i].x - me_x;
+double ahead = capsules[i].x - me.x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or capsules[i].x < target.x) @target = capsules[i];
 }
@@ -115,7 +115,7 @@ void break_capsule(lifecapsule@ lc)
 {
 lc.spent = true;
 stop_capsule(lc);
-capsulepool.play_2d(get_pack_sound(capsule_folder + "*break*"), me_x, 0, lc.x, 0, false);
+capsulepool.play_2d(get_pack_sound(capsule_folder + "*break*"), me.x, 0, lc.x, 0, false);
 }
 void stop_capsule(lifecapsule@ lc)
 {

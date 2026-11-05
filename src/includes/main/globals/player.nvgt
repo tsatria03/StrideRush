@@ -1,16 +1,15 @@
-/* The player's jump and crouch. me_y is the height above the belt (0 is the ground). A jump rises to jump_height and
+/* The player's jump and crouch. me.y is the height above the belt (0 is the ground). A jump rises to jump_height and
 falls back, one height per jump_tick, so it lasts about the same time at any speed. Crouching is held: it ends on
 release, or by itself after duck_time. Overlaps: Up while crouched cancels the crouch and jumps at once (no unduck
 sound); Down in the air is ignored, but a Down still held on landing starts a crouch. After standing up (or a crouch
 cancelled by a jump), crouching is blocked for duck_cooldown so Down can't be spammed. */
-int me_y = 0;
 int jump_state = 0; // 0 on the ground, 1 rising, 2 falling
 bool ducked = false;
 timer jumptimer, ducktimer, duckcooldowntimer;
 
 void reset_player()
 {
-me_y = 0;
+me.y = 0;
 jump_state = 0;
 ducked = false;
 jumptimer.restart();
@@ -37,13 +36,13 @@ if (jump_state == 0 or jumptimer.elapsed < current_jump_tick()) return; // Moon 
 jumptimer.restart();
 if (jump_state == 1)
 {
-me_y++;
-if (me_y >= jump_height) jump_state = 2;
+me.y++;
+if (me.y >= jump_height) jump_state = 2;
 }
 else
 {
-me_y--;
-if (me_y <= 0) player_land();
+me.y--;
+if (me.y <= 0) player_land();
 }
 }
 void start_jump()
@@ -61,7 +60,7 @@ p.play_stationary(get_pack_sound("misc/player/*rise*"), false);
 // Landing from a jump: the landing sounds, and a Down still held starts a crouch.
 void player_land()
 {
-me_y = 0;
+me.y = 0;
 jump_state = 0;
 play_landing();
 ammopack_landing(); // landing on an ammo pack by mistake breaks it
@@ -77,15 +76,15 @@ pass false, so only the tile is heard (dev, 2026-11-03: it "should not play your
 void play_landing(bool with_player_sound = true)
 {
 if (with_player_sound) p.play_stationary(get_pack_sound("misc/player/*land*"), false);
-string tile = tile_at(me_x);
+string tile = tile_at(me.x);
 if (tile != "") p.play_stationary(get_pack_sound("objects/platforms/" + tile + "/*land*"), false);
 }
 /* Thrown by a force field: any jump or crouch ends silently (no unduck sound) and the player is put on the ground.
-The caller moves me_x, then play_landing() runs once the new tile is known. A crouch cut short still starts the
+The caller moves me.x, then play_landing() runs once the new tile is known. A crouch cut short still starts the
 crouch cooldown. */
 void cancel_movement()
 {
-me_y = 0;
+me.y = 0;
 jump_state = 0;
 if (ducked)
 {

@@ -1,7 +1,10 @@
 /* The run: the belt carries the player one tile per step, the step interval shrinks over time, and the run ends when
 running goes false (quitting from the pause menu now; dying in later sections). start_run() always returns to its
 caller, so main()'s loop reopens the main menu without stacking menu calls. */
-double me_x = 0;
+/* The player (dev, 2026-11-04, the lanes plan's Section 3, like SimpleFighter's and ToyMania's "vector me"): me.x is the
+distance along the belt in tiles and me.y the jump height (0 is the ground), the meanings me_x and me_y had; the lane
+stays in current_lane (lane.nvgt). The engine's vector holds floats. */
+vector me;
 int step_time = start_step_time;
 int lives = starting_lives;
 bool running = false;
@@ -12,7 +15,7 @@ int music_volume = music_start_volume, ambience_volume = ambience_start_volume;
 
 void reset_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives)
 {
-me_x = 0;
+me.x = 0;
 step_time = starting_step_time;
 lives = starting_life_count;
 reset_health();
@@ -86,7 +89,7 @@ void step_check()
 {
 if (steptimer.elapsed < current_step_time()) return; // Slow Motion and Rush Hour shift the normal step_time
 steptimer.restart();
-me_x += 1;
+me.x += 1;
 update_listeners();
 spawn_check();
 // Obstacle contact only on arriving at a tile: in the air at that moment means the obstacle is cleared.
@@ -186,7 +189,7 @@ buffercheck();
 }
 string distance_phrase()
 {
-int tiles = int(me_x);
+int tiles = int(me.x);
 return tiles == 1 ? "You have run 1 tile." : "You have run " + tiles + " tiles.";
 }
 // "1 minute and 5 seconds", "45 seconds" and so on, for the time readout.

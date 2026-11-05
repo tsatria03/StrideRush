@@ -27,8 +27,8 @@ void spawn_ammopack(double ax, int countdown)
 ammopack a;
 a.x = ax;
 a.countdown_start = ax - countdown;
-ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*spawn*"), me_x, 0, ax, 0, false);
-a.loopslot = ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*loop*"), me_x, 0, ax, 0, true);
+ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*spawn*"), me.x, 0, ax, 0, false);
+a.loopslot = ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*loop*"), me.x, 0, ax, 0, true);
 for (uint i = 0; i < ammopacks.length(); i++)
 {
 if (@ammopacks[i] == null)
@@ -48,11 +48,11 @@ for (uint i = 0; i < ammopacks.length(); i++)
 {
 if (@ammopacks[i] == null) continue;
 ammopack@ a = ammopacks[i];
-if (a.spent or me_x < hand_window_start(a.x, a.countdown_start) or a.x - me_x < 1) continue;
-if (@target == null or a.x - me_x < target_dist)
+if (a.spent or me.x < hand_window_start(a.x, a.countdown_start) or a.x - me.x < 1) continue;
+if (@target == null or a.x - me.x < target_dist)
 {
 @target = a;
-target_dist = a.x - me_x;
+target_dist = a.x - me.x;
 }
 }
 if (@target == null) return false; // nothing in reach: the press can still pick up a key
@@ -75,11 +75,11 @@ if (@ammopacks[i] == null) continue;
 ammopack@ a = ammopacks[i];
 if (!a.spent)
 {
-if (me_x == a.x and is_grounded()) break_ammopack(a);
-else if (me_x > a.x) a.spent = true; // jumped clean over: its loop carries on and fades behind you
+if (me.x == a.x and is_grounded()) break_ammopack(a);
+else if (me.x > a.x) a.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 // Kept until it's as far behind as obstacles appear ahead, so a missed pack's loop fades out; then dropped.
-if (me_x > a.x + spawn_distance()) remove_ammopack(i);
+if (me.x > a.x + spawn_distance()) remove_ammopack(i);
 }
 }
 // Called from player_land(): landing on a pack's tile by mistake breaks it.
@@ -88,7 +88,7 @@ void ammopack_landing()
 for (uint i = 0; i < ammopacks.length(); i++)
 {
 if (@ammopacks[i] == null) continue;
-if (!ammopacks[i].spent and me_x == ammopacks[i].x) break_ammopack(ammopacks[i]);
+if (!ammopacks[i].spent and me.x == ammopacks[i].x) break_ammopack(ammopacks[i]);
 }
 }
 /* Weapons break items too (dev, 2026-11-03): a melee swing breaks a pack that's the nearest thing in reach, and a
@@ -107,7 +107,7 @@ ammopack@ target = null;
 for (uint i = 0; i < ammopacks.length(); i++)
 {
 if (@ammopacks[i] == null or ammopacks[i].spent) continue;
-double ahead = ammopacks[i].x - me_x;
+double ahead = ammopacks[i].x - me.x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or ammopacks[i].x < target.x) @target = ammopacks[i];
 }
@@ -123,7 +123,7 @@ void break_ammopack(ammopack@ a)
 {
 a.spent = true;
 stop_ammopack(a);
-ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*break*"), me_x, 0, a.x, 0, false);
+ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*break*"), me.x, 0, a.x, 0, false);
 }
 void stop_ammopack(ammopack@ a)
 {

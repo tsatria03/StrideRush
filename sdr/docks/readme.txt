@@ -76,7 +76,7 @@ Up arrow or letter W: Jumps, if pressed.
 Down arrow or letter S: Crouches, to duck under projectiles, if held down.
 Tab or letter A: Uses your left hand, to switch off a force field, open a door or pick up an item, if pressed.
 Enter or letter D: Uses your right hand, to switch off a force field, open a door or pick up an item, if pressed.
-Both hand keys together, such as A and D or Tab and Enter: Claps, to scare away an animal, if pressed. With nothing for your hands to do, a single hand makes a whoosh to that side and a clap is just a clap.
+Both hand keys together, such as A and D or Tab and Enter: Claps, to scare away an animal, if pressed. With nothing for your hands to do, a single hand makes a whoosh and a clap is just a clap.
 Letter I: Moves to the next item in your inventory, if pressed.
 Shift plus letter I: Moves to the previous item in your inventory, if pressed.
 Letter U: Uses the item you're on in your inventory, such as opening an ammo pack, unlocking a door with a key, putting on a shield, using a life capsule, a health potion or a teleporter, if pressed.

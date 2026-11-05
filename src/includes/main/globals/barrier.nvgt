@@ -80,7 +80,7 @@ return lane_pan(b.lane);
 // Quieter the further it is, ahead or behind, counted in time at the current speed, never below min_volume.
 float barrier_volume(barrier@ b)
 {
-double away_ms = abs(b.x - me_x) * current_step_time();
+double away_ms = abs(b.x - me.x) * current_step_time();
 return float(max(min_volume, -away_ms / barrier_fade_ms));
 }
 // Runs every frame from run_loop(): each loop follows your lane and the distance, so a lane change is heard at once.
@@ -99,7 +99,7 @@ for (uint i = 0; i < barriers.length(); i++)
 {
 if (@barriers[i] == null) continue;
 barrier@ b = barriers[i];
-if (me_x == b.x and !b.spent)
+if (me.x == b.x and !b.spent)
 {
 b.spent = true;
 if (b.lane == current_lane)
@@ -118,7 +118,7 @@ if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*")
 }
 }
 // Kept sounding until it's as far behind as obstacles appear ahead, so a dodged one fades out behind you.
-if (me_x > b.x + spawn_distance()) remove_barrier(i);
+if (me.x > b.x + spawn_distance()) remove_barrier(i);
 }
 }
 // The countdown: the layered misc/trap/barriers cues, only on steps where you're in its lane. Runs once per step.
