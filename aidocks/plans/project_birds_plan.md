@@ -1,0 +1,29 @@
+---
+name: project_birds_plan
+description: SETTLED, not built (2026-11-04, 1.4; 10 damage, belt-wide, 2 sections) - birds on the belt that a clap (both hands together) scares away; the dev's "perfect use for claps"; 24 bird themes in objects/interaction/birds; Q&A log
+metadata:
+  type: project
+---
+
+Status: SETTLED 2026-11-04, not built, started 2026-11-04 on top of 9f7db47, in 1.4. No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). The dev: "I found the perfect use for claps. Rescan the sounds again. It's in my last commit."
+
+What exists already:
+- Sounds (commit 9f7db47): objects/interaction/birds/bird to bird24, 24 themes, each with spawn, loop, scare1 and scare2 (the scare clips are the same two files in every theme; the loops differ). No misc/trap/birds warn cues.
+- Claps: both hands together when nothing was grabbed, opened or switched plays misc/player clap1-3 centred; a lone empty hand plays woosh after clap_window (100 ms) ([[project_controls_plan]]). A clap does nothing else yet: empty_hand_sound() in forcefield.nvgt.
+- Lanes: Sections 1 and 2 rebuilt in 1.4; the belt still runs left to right until Section 3 ([[project_lanes_plan]]).
+
+Q&A log:
+- Q: What happens when you don't scare a bird away before you reach it? (Asked 2026-11-04; Claude offered: it flies into you as a blow through take_damage(), like a trap; or nothing bad happens and a scared bird is a small reward; or it's harmless but blocks something, such as an item. Claude recommended the first: a bird is an obstacle a clap clears, the way a hand clears a force field, with its own small damage.)
+- SOUNDS CHANGED by the dev (2026-11-04, uncommitted at the time: "I fixed up the birds folder... I renamed scare to flight."): every bird folder (all 24) now has spawn, loop, flight1, flight2 and a NEW hit. Only the loops differ between themes; spawn, flight1-2 and hit are the same files in all 24. The new hit clip suggests a bird can hit you, matching Claude's recommended answer above; still to confirm.
+- Q: Does an unscared bird hit you (its hit plus damage), while a clap in time sends it off with a flight sound? (Asked 2026-11-04; Claude recommended yes, with a spike's 20.)
+- A (dev, 2026-11-04): "Yes. Birds only hit you for 10 damage." SETTLED: bird_damage 10 through take_damage() (a shield first), with the bird's hit; a clap in time plays flight1 or flight2 and clears it.
+- The dev asked: "should these be lane dependent like barriers? What do you think?" Claude: no, belt-wide, for the reason the dev gave about ducking and projectiles: anything a lane change can dodge makes its own action optional, so a one-lane bird would let you skip the clap by turning. Belt-wide, the clap is the only answer, which is what gives claps their job. Q: Belt-wide birds, heard centred like every belt-wide obstacle once Section 3 turns the belt? (Asked 2026-11-04; Claude recommended belt-wide.)
+- A: "I agree. belt wide." (dev, 2026-11-04). SETTLED.
+- Q: Are Claude's proposed defaults for the rest OK (asked 2026-11-04)? 1. A clap scares the nearest bird in the same window a hand switches off a force field (hand_window_start(), the countdown or the last half second at top speed); a clap with no bird in reach is just a clap. 2. Jumping, ducking, weapons and a single hand don't help; only a clap. 3. Birds join obstacle_types as an equal pick in "all" and the real game, with a "birds" debug spawn choice. 4. A five-step warning countdown like every trap, from a new misc/trap/birds warn1-5 set the dev adds (nothing gets built until its sounds exist). 5. Spawn plays at the bird's tile, then its loop; flight plays where it is and its loop stops; a hit stops its loop. 6. The code goes in globals/bird.nvgt; the spawner finds themes under objects/interaction/birds (type_folder() gains birds, like doors). 7. Docks: a 1.4 changelog entry and the readme's obstacles and hand keys.
+- SOUNDS MOVED by the dev (2026-11-04, uncommitted at the time: "I made birds actual traps, not interactables."): the 24 themes are now objects/traps/birds/bird to bird24 (same five clips), and objects/interaction holds only doors and switches again. NEW misc/trap/birds: a LAYERED countdown of three groups, warn1-1 to warn3-5, like the barriers' (play_countdown() already layers). So default 4's warn set exists, and default 6 needs no type_folder() change: birds sit under objects/traps/<type> like every trap.
+- A: "approved." (dev, 2026-11-04). All seven defaults agreed. THE PLAN IS SETTLED; build one section per go-ahead.
+
+Build sections (written 2026-11-04; [[feedback_describe_dont_show_code]]):
+Section 1: birds. New globals/bird.nvgt on the trap pattern (birdpool, class bird with x, theme, countdown_start, spent, loopslot; spawn_bird(), bird_check(), bird_countdown(), destroy_all_birds()): spawn plays at its tile, then its loop; arriving on its tile unscared is a blow of bird_damage (10, tuning.nvgt) through take_damage() with its hit, or the fatal ending; jumping and ducking don't help. scare_bird(), tried in hand_check()'s empty-hand path when both hands go together: the nearest unspent bird in its hand window flies off (a random flight clip at its tile, its loop stopped); with none, the clap plays as now. Hooks: "birds" in obstacle_types (so the debug spawn menu lists it), all_pools, clear_run_objects(), step_check(), the countdown, shielded_types, the teleporter's landing check.
+Section 2: docks (a 1.4 changelog entry, the readme's obstacles and hand keys, the todo list).
+- TODO ADDED (dev, 2026-11-04: "Please add birds to the todo list"): "****Unfinished. Add birds that you scare away by clapping your hands." after the lanes item; Section 2 moves it to the finished section.
