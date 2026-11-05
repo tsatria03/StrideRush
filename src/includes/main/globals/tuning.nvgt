@@ -61,11 +61,11 @@ const int life_capsule_max_lives = 2;
 const int debug_lives = 3; // source-only debug runs of a single type start with these; "all" uses starting_lives
 const int player_hp = 200;
 const int spike_damage = 20;
-const int mine_damage = 40;
-const int forcefield_damage = 20; // the throw still happens
-const int projectile_damage = 20;
-const int wall_damage = 20; // crashing into a wall you didn't destroy
-const int door_damage = 60; // crashing into any door, real or fake
+const int mine_damage = 60;
+const int forcefield_damage = 30; // the throw still happens
+const int projectile_damage = 40;
+const int wall_damage = 50; // crashing into a wall you didn't destroy
+const int door_damage = 70; // crashing into any door, real or fake
 
 /* Doors (dev, 2026-11-03). A real door marks each new door_section_ms of speed (450, 400 ... 50) and plays at pitch
 100. A fake door plays at one of these pitches, never near 100, so it always sounds off. */
