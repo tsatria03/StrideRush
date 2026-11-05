@@ -10,6 +10,7 @@ const string shield_folder = "equipments/items/common/steel_shield/";
 class shield
 {
 double x;
+int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
 double countdown_start;
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
 int loopslot = -1;
@@ -38,13 +39,15 @@ string[] shielded_types = {"spikes", "mines", "force_fields", "projectiles", "wa
 if (shielded_types.find(spawn_only) >= 0) give_item("steel_shield", 1);
 }
 // countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.
-void spawn_shield(double sx, int countdown)
+void spawn_shield(double sx, int countdown, int lane = -1)
 {
 shield s;
 s.x = sx;
 s.countdown_start = sx - countdown;
-shieldpool.play_2d(get_pack_sound(shield_folder + "*spawn*"), 0, me.x, 0, sx, false);
-s.loopslot = shieldpool.play_2d(get_pack_sound(shield_folder + "*loop*"), 0, me.x, 0, sx, true);
+s.lane = lane < 0 ? random(lane_left, lane_right) : lane;
+shieldpool.play_2d(get_pack_sound(shield_folder + "*spawn*"), 0, me.x, lane_across(s.lane, sx), sx, false);
+s.loopslot = shieldpool.play_2d(get_pack_sound(shield_folder + "*loop*"), 0, me.x, lane_across(s.lane, sx), sx, true);
+place_lane_sound(shieldpool, s.loopslot, s.lane, s.x);
 for (uint i = 0; i < shields.length(); i++)
 {
 if (@shields[i] == null)
@@ -63,7 +66,7 @@ for (uint i = 0; i < shields.length(); i++)
 {
 if (@shields[i] == null) continue;
 shield@ s = shields[i];
-if (s.spent or me.x < hand_window_start(s.x, s.countdown_start) or s.x - me.x < 1) continue;
+if (s.spent or s.lane != current_lane or me.x < hand_window_start(s.x, s.countdown_start) or s.x - me.x < 1) continue;
 if (@target == null or s.x < target.x) @target = s;
 }
 if (@target == null) return false;
@@ -85,7 +88,7 @@ if (@shields[i] == null) continue;
 shield@ s = shields[i];
 if (!s.spent)
 {
-if (me.x == s.x and is_grounded()) break_shield(s);
+if (me.x == s.x and is_grounded() and s.lane == current_lane) break_shield(s);
 else if (me.x > s.x) s.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 if (me.x > s.x + spawn_distance()) remove_shield(i);
@@ -97,7 +100,7 @@ void shield_landing()
 for (uint i = 0; i < shields.length(); i++)
 {
 if (@shields[i] == null) continue;
-if (!shields[i].spent and me.x == shields[i].x) break_shield(shields[i]);
+if (!shields[i].spent and me.x == shields[i].x and shields[i].lane == current_lane) break_shield(shields[i]);
 }
 }
 // Weapons break shields on the belt like packs and keys: a bullet on its tile, or a swing when it's the nearest target.
@@ -105,7 +108,7 @@ shield@ shield_at(double x)
 {
 for (uint i = 0; i < shields.length(); i++)
 {
-if (@shields[i] != null and !shields[i].spent and shields[i].x == x) return shields[i];
+if (@shields[i] != null and !shields[i].spent and shields[i].x == x and shields[i].lane == current_lane) return shields[i];
 }
 return null;
 }
@@ -114,7 +117,7 @@ shield@ shield_in_reach(int reach)
 shield@ target = null;
 for (uint i = 0; i < shields.length(); i++)
 {
-if (@shields[i] == null or shields[i].spent) continue;
+if (@shields[i] == null or shields[i].spent or shields[i].lane != current_lane) continue;
 double ahead = shields[i].x - me.x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or shields[i].x < target.x) @target = shields[i];
@@ -194,4 +197,13 @@ speak_buffer("You're not wearing a shield.");
 return;
 }
 speak_buffer("Shield strength, " + int(round(100.0 * shield_hp_left / shield_hp, 0)) + " percent.");
+}
+// Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.
+void shield_lane_sounds()
+{
+for (uint i = 0; i < shields.length(); i++)
+{
+if (@shields[i] == null or shields[i].loopslot < 0) continue;
+place_lane_sound(shieldpool, shields[i].loopslot, shields[i].lane, shields[i].x);
+}
 }

@@ -10,6 +10,7 @@ const string ammopack_folder = "equipments/items/common/ammo_pack/";
 class ammopack
 {
 double x;
+int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
 double countdown_start;
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
 int loopslot = -1;
@@ -22,13 +23,15 @@ bool ammopacks_available()
 return get_pack_sound(ammopack_folder + "*loop*") != "";
 }
 // countdown comes from the spawner like an obstacle's; it sets the pickup window and the spacing.
-void spawn_ammopack(double ax, int countdown)
+void spawn_ammopack(double ax, int countdown, int lane = -1)
 {
 ammopack a;
 a.x = ax;
 a.countdown_start = ax - countdown;
-ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*spawn*"), 0, me.x, 0, ax, false);
-a.loopslot = ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*loop*"), 0, me.x, 0, ax, true);
+a.lane = lane < 0 ? random(lane_left, lane_right) : lane;
+ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*spawn*"), 0, me.x, lane_across(a.lane, ax), ax, false);
+a.loopslot = ammopackpool.play_2d(get_pack_sound(ammopack_folder + "*loop*"), 0, me.x, lane_across(a.lane, ax), ax, true);
+place_lane_sound(ammopackpool, a.loopslot, a.lane, a.x);
 for (uint i = 0; i < ammopacks.length(); i++)
 {
 if (@ammopacks[i] == null)
@@ -48,7 +51,7 @@ for (uint i = 0; i < ammopacks.length(); i++)
 {
 if (@ammopacks[i] == null) continue;
 ammopack@ a = ammopacks[i];
-if (a.spent or me.x < hand_window_start(a.x, a.countdown_start) or a.x - me.x < 1) continue;
+if (a.spent or a.lane != current_lane or me.x < hand_window_start(a.x, a.countdown_start) or a.x - me.x < 1) continue;
 if (@target == null or a.x - me.x < target_dist)
 {
 @target = a;
@@ -75,7 +78,7 @@ if (@ammopacks[i] == null) continue;
 ammopack@ a = ammopacks[i];
 if (!a.spent)
 {
-if (me.x == a.x and is_grounded()) break_ammopack(a);
+if (me.x == a.x and is_grounded() and a.lane == current_lane) break_ammopack(a);
 else if (me.x > a.x) a.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 // Kept until it's as far behind as obstacles appear ahead, so a missed pack's loop fades out; then dropped.
@@ -88,7 +91,7 @@ void ammopack_landing()
 for (uint i = 0; i < ammopacks.length(); i++)
 {
 if (@ammopacks[i] == null) continue;
-if (!ammopacks[i].spent and me.x == ammopacks[i].x) break_ammopack(ammopacks[i]);
+if (!ammopacks[i].spent and me.x == ammopacks[i].x and ammopacks[i].lane == current_lane) break_ammopack(ammopacks[i]);
 }
 }
 /* Weapons break items too (dev, 2026-11-03): a melee swing breaks a pack that's the nearest thing in reach, and a
@@ -97,7 +100,7 @@ ammopack@ ammopack_at(double x)
 {
 for (uint i = 0; i < ammopacks.length(); i++)
 {
-if (@ammopacks[i] != null and !ammopacks[i].spent and ammopacks[i].x == x) return ammopacks[i];
+if (@ammopacks[i] != null and !ammopacks[i].spent and ammopacks[i].x == x and ammopacks[i].lane == current_lane) return ammopacks[i];
 }
 return null;
 }
@@ -106,7 +109,7 @@ ammopack@ ammopack_in_reach(int reach)
 ammopack@ target = null;
 for (uint i = 0; i < ammopacks.length(); i++)
 {
-if (@ammopacks[i] == null or ammopacks[i].spent) continue;
+if (@ammopacks[i] == null or ammopacks[i].spent or ammopacks[i].lane != current_lane) continue;
 double ahead = ammopacks[i].x - me.x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or ammopacks[i].x < target.x) @target = ammopacks[i];
@@ -167,4 +170,13 @@ weapon_reserve[w] += rounds;
 p.play_stationary(get_pack_sound(ammopack_folder + "*use*"), false);
 speak_buffer("You got " + rounds + " rounds of ammo.");
 return true;
+}
+// Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.
+void ammopack_lane_sounds()
+{
+for (uint i = 0; i < ammopacks.length(); i++)
+{
+if (@ammopacks[i] == null or ammopacks[i].loopslot < 0) continue;
+place_lane_sound(ammopackpool, ammopacks[i].loopslot, ammopacks[i].lane, ammopacks[i].x);
+}
 }

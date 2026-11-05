@@ -178,37 +178,81 @@ next_spawn_x += next_gap(next_countdown);
 // A force field's throw needs room after it, so the gap after one gets that many extra tiles.
 if (placed == "force_fields") next_spawn_x += forcefield_knockback_tiles;
 }
+/* The six inventory items that sit in lanes (dev, 2026-11-05, the lanes plan's Section 4); powerups stay belt-wide. In
+"all" and the real game, each item spawn takes a random lane, and item_pair_percent of the time a second item of a
+random kind (any of the six, keys too, since any key opens any real door) appears beside it in a different lane.
+Each item has three debug choices, like barriers (dev, 2026-11-05: "I want to do some further testing to see if what I
+discovered was an actual bug, or if my ears were playing a trick on me"): "ammo packs" puts each one in your lane,
+"ammo packs, random lanes" one at a time in any lane, and "ammo packs, multiple lanes" the real game's pairs, of that
+kind only. set_spawn_only() turns the choice into spawn_only (the item's own type) and item_lane_mode. */
+string[] item_lane_types = {"ammo_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters"};
+string item_lane_mode = ""; // "" all and the real game, "own" your lane, "random" one in any lane, "multiple" same-kind pairs
+void set_spawn_only(string only_type)
+{
+spawn_only = only_type;
+item_lane_mode = "";
+for (uint i = 0; i < item_lane_types.length(); i++)
+{
+string base = item_lane_types[i];
+if (only_type == base) item_lane_mode = "own";
+else if (only_type == base + "_random") item_lane_mode = "random";
+else if (only_type == base + "_multiple") item_lane_mode = "multiple";
+else continue;
+spawn_only = base; // every other check sees the plain item type
+return;
+}
+}
+void spawn_items(string type, double x, int countdown)
+{
+if (item_lane_mode == "own")
+{
+spawn_item(type, x, countdown, current_lane);
+return;
+}
+int first = random(lane_left, lane_right);
+spawn_item(type, x, countdown, first);
+if (item_lane_mode == "random" or random(1, 100) > item_pair_percent) return;
+int second = random(lane_left, lane_right - 1);
+if (second >= first) second += 1; // any lane but the first one's
+if (item_lane_mode == "multiple")
+{
+spawn_item(type, x, countdown, second); // a debug pair is the same kind, so the run only ever spawns that item
+return;
+}
+string[] kinds;
+for (uint i = 0; i < item_lane_types.length(); i++)
+{
+if (item_kind_available(item_lane_types[i])) kinds.insert_last(item_lane_types[i]);
+}
+if (kinds.length() == 0) return;
+spawn_item(kinds[random(0, kinds.length() - 1)], x, countdown, second);
+}
+// One item of a kind in a lane. Each kind's sounds are one set, no themes (a key picks its color in spawn_key()).
+void spawn_item(string type, double x, int countdown, int lane)
+{
+if (type == "ammo_packs") spawn_ammopack(x, countdown, lane);
+else if (type == "keys") spawn_key(x, countdown, lane);
+else if (type == "steel_shields") spawn_shield(x, countdown, lane);
+else if (type == "life_capsules") spawn_capsule(x, countdown, lane);
+else if (type == "health_potions") spawn_potion(x, countdown, lane);
+else if (type == "player_teleporters") spawn_teleporter(x, countdown, lane);
+}
+bool item_kind_available(string type)
+{
+if (type == "ammo_packs") return ammopacks_available();
+if (type == "keys") return keys_available();
+if (type == "steel_shields") return shields_available();
+if (type == "life_capsules") return capsules_available();
+if (type == "health_potions") return potions_available();
+if (type == "player_teleporters") return teleporters_available();
+return false;
+}
 void place_obstacle(double x, string type, int countdown)
 {
 if (type == "") return;
-if (type == "ammo_packs")
+if (item_lane_types.find(type) >= 0)
 {
-spawn_ammopack(x, countdown); // one sound set, no themes
-return;
-}
-if (type == "keys")
-{
-spawn_key(x, countdown); // its color is picked in spawn_key()
-return;
-}
-if (type == "steel_shields")
-{
-spawn_shield(x, countdown); // one sound set, no themes
-return;
-}
-if (type == "life_capsules")
-{
-spawn_capsule(x, countdown);
-return;
-}
-if (type == "health_potions")
-{
-spawn_potion(x, countdown);
-return;
-}
-if (type == "player_teleporters")
-{
-spawn_teleporter(x, countdown);
+spawn_items(type, x, countdown);
 return;
 }
 if (type == "powerups")

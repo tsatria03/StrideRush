@@ -10,6 +10,7 @@ const string capsule_folder = "equipments/items/common/life_capsule/";
 class lifecapsule
 {
 double x;
+int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
 double countdown_start;
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
 int loopslot = -1;
@@ -22,13 +23,15 @@ bool capsules_available()
 return get_pack_sound(capsule_folder + "*loop*") != "";
 }
 // countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.
-void spawn_capsule(double px, int countdown)
+void spawn_capsule(double px, int countdown, int lane = -1)
 {
 lifecapsule lc;
 lc.x = px;
 lc.countdown_start = px - countdown;
-capsulepool.play_2d(get_pack_sound(capsule_folder + "*spawn*"), 0, me.x, 0, px, false);
-lc.loopslot = capsulepool.play_2d(get_pack_sound(capsule_folder + "*loop*"), 0, me.x, 0, px, true);
+lc.lane = lane < 0 ? random(lane_left, lane_right) : lane;
+capsulepool.play_2d(get_pack_sound(capsule_folder + "*spawn*"), 0, me.x, lane_across(lc.lane, px), px, false);
+lc.loopslot = capsulepool.play_2d(get_pack_sound(capsule_folder + "*loop*"), 0, me.x, lane_across(lc.lane, px), px, true);
+place_lane_sound(capsulepool, lc.loopslot, lc.lane, lc.x);
 for (uint i = 0; i < capsules.length(); i++)
 {
 if (@capsules[i] == null)
@@ -47,7 +50,7 @@ for (uint i = 0; i < capsules.length(); i++)
 {
 if (@capsules[i] == null) continue;
 lifecapsule@ lc = capsules[i];
-if (lc.spent or me.x < hand_window_start(lc.x, lc.countdown_start) or lc.x - me.x < 1) continue;
+if (lc.spent or lc.lane != current_lane or me.x < hand_window_start(lc.x, lc.countdown_start) or lc.x - me.x < 1) continue;
 if (@target == null or lc.x < target.x) @target = lc;
 }
 if (@target == null) return false;
@@ -69,7 +72,7 @@ if (@capsules[i] == null) continue;
 lifecapsule@ lc = capsules[i];
 if (!lc.spent)
 {
-if (me.x == lc.x and is_grounded()) break_capsule(lc);
+if (me.x == lc.x and is_grounded() and lc.lane == current_lane) break_capsule(lc);
 else if (me.x > lc.x) lc.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 if (me.x > lc.x + spawn_distance()) remove_capsule(i);
@@ -81,7 +84,7 @@ void capsule_landing()
 for (uint i = 0; i < capsules.length(); i++)
 {
 if (@capsules[i] == null) continue;
-if (!capsules[i].spent and me.x == capsules[i].x) break_capsule(capsules[i]);
+if (!capsules[i].spent and me.x == capsules[i].x and capsules[i].lane == current_lane) break_capsule(capsules[i]);
 }
 }
 // Weapons break capsules like packs: a bullet on its tile, or a swing when it's the nearest target.
@@ -89,7 +92,7 @@ lifecapsule@ capsule_at(double x)
 {
 for (uint i = 0; i < capsules.length(); i++)
 {
-if (@capsules[i] != null and !capsules[i].spent and capsules[i].x == x) return capsules[i];
+if (@capsules[i] != null and !capsules[i].spent and capsules[i].x == x and capsules[i].lane == current_lane) return capsules[i];
 }
 return null;
 }
@@ -98,7 +101,7 @@ lifecapsule@ capsule_in_reach(int reach)
 lifecapsule@ target = null;
 for (uint i = 0; i < capsules.length(); i++)
 {
-if (@capsules[i] == null or capsules[i].spent) continue;
+if (@capsules[i] == null or capsules[i].spent or capsules[i].lane != current_lane) continue;
 double ahead = capsules[i].x - me.x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or capsules[i].x < target.x) @target = capsules[i];
@@ -154,4 +157,13 @@ lives += gained;
 p.play_stationary(get_pack_sound(capsule_folder + "*use*"), false); // its use sound only, not the life sound (dev)
 speak_buffer("Gained " + gained + (gained == 1 ? " life." : " lives.")); // the dev's wording (2026-11-04)
 return true;
+}
+// Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.
+void capsule_lane_sounds()
+{
+for (uint i = 0; i < capsules.length(); i++)
+{
+if (@capsules[i] == null or capsules[i].loopslot < 0) continue;
+place_lane_sound(capsulepool, capsules[i].loopslot, capsules[i].lane, capsules[i].x);
+}
 }

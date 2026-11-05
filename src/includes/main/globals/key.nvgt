@@ -11,6 +11,7 @@ const string key_folder = "equipments/items/other/";
 class doorkey
 {
 double x;
+int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
 double countdown_start;
 string color; // its folder, such as "red_key", which is also its inventory name
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
@@ -24,7 +25,7 @@ bool keys_available()
 return get_pack_sound_folders(key_folder + "*").length() > 0;
 }
 // countdown comes from the spawner like a pack's; it sets the pickup window and the spacing. The color is random.
-void spawn_key(double kx, int countdown)
+void spawn_key(double kx, int countdown, int lane = -1)
 {
 string[] colors = get_pack_sound_folders(key_folder + "*");
 if (colors.length() == 0) return;
@@ -33,8 +34,10 @@ k.x = kx;
 k.countdown_start = kx - countdown;
 k.color = colors[random(0, colors.length() - 1)];
 // The wildcards pick at random among a key's spawn and loop clips (spawn1 and spawn2, loop1 to loop4).
-keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*spawn*"), 0, me.x, 0, kx, false);
-k.loopslot = keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*loop*"), 0, me.x, 0, kx, true);
+k.lane = lane < 0 ? random(lane_left, lane_right) : lane;
+keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*spawn*"), 0, me.x, lane_across(k.lane, kx), kx, false);
+k.loopslot = keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*loop*"), 0, me.x, lane_across(k.lane, kx), kx, true);
+place_lane_sound(keypool, k.loopslot, k.lane, k.x);
 for (uint i = 0; i < doorkeys.length(); i++)
 {
 if (@doorkeys[i] == null)
@@ -57,7 +60,7 @@ for (uint i = 0; i < doorkeys.length(); i++)
 {
 if (@doorkeys[i] == null) continue;
 doorkey@ k = doorkeys[i];
-if (k.spent or me.x < hand_window_start(k.x, k.countdown_start) or k.x - me.x < 1) continue;
+if (k.spent or k.lane != current_lane or me.x < hand_window_start(k.x, k.countdown_start) or k.x - me.x < 1) continue;
 if (@target == null or k.x < target.x) @target = k;
 }
 if (@target == null) return false;
@@ -79,7 +82,7 @@ if (@doorkeys[i] == null) continue;
 doorkey@ k = doorkeys[i];
 if (!k.spent)
 {
-if (me.x == k.x and is_grounded()) break_key(k);
+if (me.x == k.x and is_grounded() and k.lane == current_lane) break_key(k);
 else if (me.x > k.x) k.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 if (me.x > k.x + spawn_distance()) remove_key(i);
@@ -91,7 +94,7 @@ void key_landing()
 for (uint i = 0; i < doorkeys.length(); i++)
 {
 if (@doorkeys[i] == null) continue;
-if (!doorkeys[i].spent and me.x == doorkeys[i].x) break_key(doorkeys[i]);
+if (!doorkeys[i].spent and me.x == doorkeys[i].x and doorkeys[i].lane == current_lane) break_key(doorkeys[i]);
 }
 }
 // Weapons break keys like packs (dev, 2026-11-03): a bullet on its tile, or a swing when it's the nearest target.
@@ -99,7 +102,7 @@ doorkey@ key_at(double x)
 {
 for (uint i = 0; i < doorkeys.length(); i++)
 {
-if (@doorkeys[i] != null and !doorkeys[i].spent and doorkeys[i].x == x) return doorkeys[i];
+if (@doorkeys[i] != null and !doorkeys[i].spent and doorkeys[i].x == x and doorkeys[i].lane == current_lane) return doorkeys[i];
 }
 return null;
 }
@@ -108,7 +111,7 @@ doorkey@ key_in_reach(int reach)
 doorkey@ target = null;
 for (uint i = 0; i < doorkeys.length(); i++)
 {
-if (@doorkeys[i] == null or doorkeys[i].spent) continue;
+if (@doorkeys[i] == null or doorkeys[i].spent or doorkeys[i].lane != current_lane) continue;
 double ahead = doorkeys[i].x - me.x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or doorkeys[i].x < target.x) @target = doorkeys[i];
@@ -147,4 +150,13 @@ if (@doorkeys[i] == null) continue;
 stop_key(doorkeys[i]);
 }
 doorkeys.resize(0);
+}
+// Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.
+void key_lane_sounds()
+{
+for (uint i = 0; i < doorkeys.length(); i++)
+{
+if (@doorkeys[i] == null or doorkeys[i].loopslot < 0) continue;
+place_lane_sound(keypool, doorkeys[i].loopslot, doorkeys[i].lane, doorkeys[i].x);
+}
 }

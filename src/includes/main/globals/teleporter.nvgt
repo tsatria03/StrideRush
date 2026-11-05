@@ -9,6 +9,7 @@ const string teleporter_folder = "equipments/items/common/player_teleporter/";
 class teleporter
 {
 double x;
+int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
 double countdown_start;
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
 int loopslot = -1;
@@ -21,13 +22,15 @@ bool teleporters_available()
 return get_pack_sound(teleporter_folder + "*loop*") != "";
 }
 // countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.
-void spawn_teleporter(double tx, int countdown)
+void spawn_teleporter(double tx, int countdown, int lane = -1)
 {
 teleporter t;
 t.x = tx;
 t.countdown_start = tx - countdown;
-teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*spawn*"), 0, me.x, 0, tx, false);
-t.loopslot = teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*loop*"), 0, me.x, 0, tx, true);
+t.lane = lane < 0 ? random(lane_left, lane_right) : lane;
+teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*spawn*"), 0, me.x, lane_across(t.lane, tx), tx, false);
+t.loopslot = teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*loop*"), 0, me.x, lane_across(t.lane, tx), tx, true);
+place_lane_sound(teleporterpool, t.loopslot, t.lane, t.x);
 for (uint i = 0; i < teleporters.length(); i++)
 {
 if (@teleporters[i] == null)
@@ -46,7 +49,7 @@ for (uint i = 0; i < teleporters.length(); i++)
 {
 if (@teleporters[i] == null) continue;
 teleporter@ t = teleporters[i];
-if (t.spent or me.x < hand_window_start(t.x, t.countdown_start) or t.x - me.x < 1) continue;
+if (t.spent or t.lane != current_lane or me.x < hand_window_start(t.x, t.countdown_start) or t.x - me.x < 1) continue;
 if (@target == null or t.x < target.x) @target = t;
 }
 if (@target == null) return false;
@@ -68,7 +71,7 @@ if (@teleporters[i] == null) continue;
 teleporter@ t = teleporters[i];
 if (!t.spent)
 {
-if (me.x == t.x and is_grounded()) break_teleporter(t);
+if (me.x == t.x and is_grounded() and t.lane == current_lane) break_teleporter(t);
 else if (me.x > t.x) t.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 if (me.x > t.x + spawn_distance()) remove_teleporter(i);
@@ -80,7 +83,7 @@ void teleporter_landing()
 for (uint i = 0; i < teleporters.length(); i++)
 {
 if (@teleporters[i] == null) continue;
-if (!teleporters[i].spent and me.x == teleporters[i].x) break_teleporter(teleporters[i]);
+if (!teleporters[i].spent and me.x == teleporters[i].x and teleporters[i].lane == current_lane) break_teleporter(teleporters[i]);
 }
 }
 // Weapons break teleporters like packs: a bullet on its tile, or a swing when it's the nearest target.
@@ -88,7 +91,7 @@ teleporter@ teleporter_at(double x)
 {
 for (uint i = 0; i < teleporters.length(); i++)
 {
-if (@teleporters[i] != null and !teleporters[i].spent and teleporters[i].x == x) return teleporters[i];
+if (@teleporters[i] != null and !teleporters[i].spent and teleporters[i].x == x and teleporters[i].lane == current_lane) return teleporters[i];
 }
 return null;
 }
@@ -97,7 +100,7 @@ teleporter@ teleporter_in_reach(int reach)
 teleporter@ target = null;
 for (uint i = 0; i < teleporters.length(); i++)
 {
-if (@teleporters[i] == null or teleporters[i].spent) continue;
+if (@teleporters[i] == null or teleporters[i].spent or teleporters[i].lane != current_lane) continue;
 double ahead = teleporters[i].x - me.x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or teleporters[i].x < target.x) @target = teleporters[i];
@@ -203,4 +206,13 @@ if (@teleporters[i] == null) continue;
 stop_teleporter(teleporters[i]);
 }
 teleporters.resize(0);
+}
+// Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.
+void teleporter_lane_sounds()
+{
+for (uint i = 0; i < teleporters.length(); i++)
+{
+if (@teleporters[i] == null or teleporters[i].loopslot < 0) continue;
+place_lane_sound(teleporterpool, teleporters[i].loopslot, teleporters[i].lane, teleporters[i].x);
+}
 }

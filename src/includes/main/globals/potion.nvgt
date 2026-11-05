@@ -9,6 +9,7 @@ const string potion_folder = "equipments/items/common/health_potion/";
 class healthpotion
 {
 double x;
+int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
 double countdown_start;
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
 int loopslot = -1;
@@ -21,13 +22,15 @@ bool potions_available()
 return get_pack_sound(potion_folder + "*loop*") != "";
 }
 // countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.
-void spawn_potion(double px, int countdown)
+void spawn_potion(double px, int countdown, int lane = -1)
 {
 healthpotion pot;
 pot.x = px;
 pot.countdown_start = px - countdown;
-potionpool.play_2d(get_pack_sound(potion_folder + "*spawn*"), 0, me.x, 0, px, false);
-pot.loopslot = potionpool.play_2d(get_pack_sound(potion_folder + "*loop*"), 0, me.x, 0, px, true);
+pot.lane = lane < 0 ? random(lane_left, lane_right) : lane;
+potionpool.play_2d(get_pack_sound(potion_folder + "*spawn*"), 0, me.x, lane_across(pot.lane, px), px, false);
+pot.loopslot = potionpool.play_2d(get_pack_sound(potion_folder + "*loop*"), 0, me.x, lane_across(pot.lane, px), px, true);
+place_lane_sound(potionpool, pot.loopslot, pot.lane, pot.x);
 for (uint i = 0; i < potions.length(); i++)
 {
 if (@potions[i] == null)
@@ -46,7 +49,7 @@ for (uint i = 0; i < potions.length(); i++)
 {
 if (@potions[i] == null) continue;
 healthpotion@ pot = potions[i];
-if (pot.spent or me.x < hand_window_start(pot.x, pot.countdown_start) or pot.x - me.x < 1) continue;
+if (pot.spent or pot.lane != current_lane or me.x < hand_window_start(pot.x, pot.countdown_start) or pot.x - me.x < 1) continue;
 if (@target == null or pot.x < target.x) @target = pot;
 }
 if (@target == null) return false;
@@ -68,7 +71,7 @@ if (@potions[i] == null) continue;
 healthpotion@ pot = potions[i];
 if (!pot.spent)
 {
-if (me.x == pot.x and is_grounded()) break_potion(pot);
+if (me.x == pot.x and is_grounded() and pot.lane == current_lane) break_potion(pot);
 else if (me.x > pot.x) pot.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 if (me.x > pot.x + spawn_distance()) remove_potion(i);
@@ -80,7 +83,7 @@ void potion_landing()
 for (uint i = 0; i < potions.length(); i++)
 {
 if (@potions[i] == null) continue;
-if (!potions[i].spent and me.x == potions[i].x) break_potion(potions[i]);
+if (!potions[i].spent and me.x == potions[i].x and potions[i].lane == current_lane) break_potion(potions[i]);
 }
 }
 // Weapons break potions like packs: a bullet on its tile, or a swing when it's the nearest target.
@@ -88,7 +91,7 @@ healthpotion@ potion_at(double x)
 {
 for (uint i = 0; i < potions.length(); i++)
 {
-if (@potions[i] != null and !potions[i].spent and potions[i].x == x) return potions[i];
+if (@potions[i] != null and !potions[i].spent and potions[i].x == x and potions[i].lane == current_lane) return potions[i];
 }
 return null;
 }
@@ -97,7 +100,7 @@ healthpotion@ potion_in_reach(int reach)
 healthpotion@ target = null;
 for (uint i = 0; i < potions.length(); i++)
 {
-if (@potions[i] == null or potions[i].spent) continue;
+if (@potions[i] == null or potions[i].spent or potions[i].lane != current_lane) continue;
 double ahead = potions[i].x - me.x;
 if (ahead < 1 or ahead > reach) continue;
 if (@target == null or potions[i].x < target.x) @target = potions[i];
@@ -153,4 +156,13 @@ p.play_stationary(get_pack_sound(potion_folder + "*use*"), false);
 p.play_stationary(get_pack_sound("misc/player/*heal*"), false);
 speak_buffer("Healed to " + int(round(100.0 * player_health / player_hp, 0)) + " percent health.");
 return true;
+}
+// Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.
+void potion_lane_sounds()
+{
+for (uint i = 0; i < potions.length(); i++)
+{
+if (@potions[i] == null or potions[i].loopslot < 0) continue;
+place_lane_sound(potionpool, potions[i].loopslot, potions[i].lane, potions[i].x);
+}
 }

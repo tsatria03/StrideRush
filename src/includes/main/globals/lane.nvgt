@@ -46,3 +46,43 @@ float belt_pan(int lane)
 {
 return (lane - lane_middle) * lane_pan_amount;
 }
+/* Placing something that sits in one lane on the forward belt (barriers, and the six inventory items since the lanes
+plan's Section 4). Without HRTF, one lane across is one unit and the plain pan (lane_pan_step) keeps a lane's side the
+same at any distance. With HRTF the side comes from the real angle, so one unit across sounded almost straight ahead
+while the thing was far off (dev, 2026-11-05), so its distance across grows with its distance along the belt, keeping
+a fixed angle: one lane over at about 45 degrees (barrier_hrtf_spread 1), two lanes at about 63. */
+float lane_across(int lane, double tile)
+{
+int side = lane - current_lane;
+if (!hrtf or side == 0) return side;
+return float(side * barrier_hrtf_spread * max(1.0, abs(tile - me.x)));
+}
+/* Keeps a lane sound in place, every frame, as you change lanes and as it nears. Its position is set on the pool item
+directly, like a projectile's, since update_sound_2d() rounds to whole tiles. The extra distance of the HRTF angle would
+make a side sound quieter, so its own fade per tile is scaled down to match, and it sounds as loud as one straight
+ahead at the same distance. */
+void place_lane_sound(sound_pool@ pool, int slot, int lane, double tile)
+{
+if (slot < 0 or slot >= int(pool.items.length())) return;
+int side = lane - current_lane;
+float fade = belt_volume_step;
+if (hrtf and side != 0)
+{
+float spread = side * barrier_hrtf_spread;
+fade = belt_volume_step / sqrt(1.0 + spread * spread);
+}
+pool.items[slot].x = lane_across(lane, tile);
+pool.items[slot].y = tile;
+if (fade > 0) pool.items[slot].volume_step = fade;
+pool.items[slot].update(pool.last_listener_x, pool.last_listener_y, pool.last_listener_z, pool.last_listener_rotation, pool.max_distance);
+}
+// Runs every frame from run_loop(): keeps every item on the belt in its lane.
+void item_lane_sounds()
+{
+ammopack_lane_sounds();
+key_lane_sounds();
+shield_lane_sounds();
+capsule_lane_sounds();
+potion_lane_sounds();
+teleporter_lane_sounds();
+}

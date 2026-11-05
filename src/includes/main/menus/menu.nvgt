@@ -237,7 +237,12 @@ m.add_item("barriers, random lanes", "barriers_random"); // each barrier in any 
 m.add_item("barriers, multiple lanes", "barriers_multiple"); // the real game's rule: sometimes two side by side, never in one lane (dev, 2026-11-04)
 for (uint i = 0; i < item_types.length(); i++)
 {
-m.add_item(item_types[i].replace("_", " ", true), item_types[i]);
+string item_name = item_types[i].replace("_", " ", true);
+m.add_item(item_name, item_types[i]);
+// The lane items get the barriers' three choices (dev, 2026-11-05): your lane, random lanes, multiple lanes.
+if (item_lane_types.find(item_types[i]) < 0) continue;
+m.add_item(item_name + ", random lanes", item_types[i] + "_random");
+m.add_item(item_name + ", multiple lanes", item_types[i] + "_multiple");
 }
 m.add_item("all", "all");
 int mres = m.run();

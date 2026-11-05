@@ -38,7 +38,7 @@ update_listeners();
 debug options can start faster, with more lives, with only one obstacle type, or with lives that never run out. */
 void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives, string only_type = "all", bool can_run_out = true)
 {
-spawn_only = only_type; // before reset_run(), whose reset_spawner() picks the first obstacle
+set_spawn_only(only_type); // before reset_run(), whose reset_spawner() picks the first obstacle; splits an item's debug lane choice off
 lives_can_end = can_run_out;
 reset_run(starting_step_time, starting_life_count);
 start_run_audio();
@@ -79,6 +79,7 @@ spike_swing();
 projectile_flight(); // every frame, so a flying projectile moves smoothly between steps
 bullet_flight(); // every frame: bullets move on their own 30 ms timing, not the step's
 barrier_sounds(); // every frame: a barrier follows your lane and its distance
+item_lane_sounds(); // every frame: items in their lanes (the lanes plan's Section 4)
 speedup_check();
 powerup_timers(); // every frame, so a timed powerup ends on time
 powerup_sounds(); // every frame: powerups on the belt replay their sound on a timer
