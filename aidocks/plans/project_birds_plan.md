@@ -1,11 +1,11 @@
 ---
 name: project_birds_plan
-description: SETTLED, not built (2026-11-04, 1.4; 10 damage, belt-wide, 2 sections) - birds on the belt that a clap (both hands together) scares away; the dev's "perfect use for claps"; 24 bird themes in objects/interaction/birds; Q&A log
+description: COMPLETE (2026-11-04, 1.4 at 3 of 10; globals/bird.nvgt; 10 damage, belt-wide) - birds on the belt that a clap (both hands together) scares away; the dev's "perfect use for claps"; 24 bird themes in objects/interaction/birds; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-04, not built, started 2026-11-04 on top of 9f7db47, in 1.4. No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). The dev: "I found the perfect use for claps. Rescan the sounds again. It's in my last commit."
+Status: COMPLETE 2026-11-04 (built, 3 tests passed, docks written), started 2026-11-04 on top of 9f7db47, in 1.4. No code until the plan is settled and the dev gives a go-ahead ([[feedback_plans_record_qna]]). The dev: "I found the perfect use for claps. Rescan the sounds again. It's in my last commit."
 
 What exists already:
 - Sounds (commit 9f7db47): objects/interaction/birds/bird to bird24, 24 themes, each with spawn, loop, scare1 and scare2 (the scare clips are the same two files in every theme; the loops differ). No misc/trap/birds warn cues.
@@ -32,3 +32,4 @@ Section 2: docks (a 1.4 changelog entry, the readme's obstacles and hand keys, t
   - Test 1 (spawn, call and layered countdown; a clap during the countdown plays the clap then flight, and the call and countdown stop; passing its spot does nothing, 100 percent) passed (2026-11-04).
   - Test 2 (an unscared bird hits through a jump; bird and shield hits; shield 95 percent, health 100; a single hand only wooshes and the bird still hits) passed (2026-11-04).
   - Test 3 (the real game: birds among the obstacles; a clapped one flies off, an unscared one costs 5 percent; both hands before an item pick it up with no clap) passed (2026-11-04). SECTION 1 COMPLETE.
+- SECTION 2 WRITTEN (2026-11-04, on top of 0db58b4), so BIRDS ARE COMPLETE. Changelog: "Added birds, ..." on top of "New in 1.4." (also covering the hands' empty-hand sounds, held back until claps had a use), so 1.4 holds 3 of 10. Readme: a birds paragraph after walls in "Obstacles."; the countdown paragraph adds birds (three notes at once, stopping when scared away); a new keyboard line for both hand keys together (claps, and the single-hand whoosh). Todo list: "Add birds that you scare away by clapping your hands." finished on top.

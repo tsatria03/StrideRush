@@ -1,12 +1,12 @@
 ####These are the things that need to be finished for future versions of the game.
 
 ****Unfinished. Add lanes that you can switch between.
-****Unfinished. Add birds that you scare away by clapping your hands.
 ****Unfinished. Add a score, and a results screen at the end of each run.
 ****Unfinished. Add an auto updater.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add birds that you scare away by clapping your hands.
 **Finished. Add health potions that restore some of your health.
 **Finished. Add a settings menu.
 **Finished. Add a screen that shows every key binding.
