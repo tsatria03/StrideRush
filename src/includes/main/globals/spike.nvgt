@@ -43,7 +43,7 @@ for (uint i = 0; i < spikes.length(); i++)
 {
 if (@spikes[i] == null) continue;
 if (runtimer.elapsed < spikes[i].next_swing) continue;
-spikepool.play_2d(get_pack_sound("objects/traps/spikes/" + spikes[i].theme + "/*loop*"), me.x, 0, spikes[i].x, 0, false);
+spikepool.play_2d(get_pack_sound("objects/traps/spikes/" + spikes[i].theme + "/*loop*"), 0, me.x, 0, spikes[i].x, false);
 spikes[i].next_swing = runtimer.elapsed + spikes[i].swing_time;
 }
 }
@@ -65,7 +65,7 @@ p.play_stationary(hit_clip, false);
 end_run_hit();
 return;
 }
-spikepool.play_2d(hit_clip, me.x, 0, spikes[i].x, 0, false);
+spikepool.play_2d(hit_clip, 0, me.x, 0, spikes[i].x, false);
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
 // Kept swinging until it's as far behind as obstacles appear ahead, so its swings fade out behind you.

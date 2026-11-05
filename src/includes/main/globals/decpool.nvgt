@@ -11,15 +11,38 @@ for (uint i = 0; i < all_pools.length(); i++)
 @all_pools[i].mixer = mixer();
 all_pools[i].max_distance = 0;
 all_pools[i].pan_step = 2.5;
-all_pools[i].volume_step = 2.5;
+all_pools[i].volume_step = 2.5; // retuned from the speed every step (update_listeners())
+all_pools[i].behind_pitch_decrease = 5; // anything you've passed sounds a little lower (ToyMania's 5; dev, 2026-11-04)
 }
 }
-// Moves every pool's listener to the player, so positioned obstacle loops pan and fade by distance along the belt.
+/* The belt runs forward (dev, 2026-11-04, the lanes plan's Section 3): x is across the belt and y along it, so the
+listener sits at x 0 and y me.x, and every belt sound at x 0 (straight ahead, whatever lane you're in) and y its tile.
+Ahead is in front of you and gets louder as it nears; passed things fall behind you and drop in pitch. Before every
+listener move the fade per tile is retuned from the current speed (retune_belt_falloff()). */
 void update_listeners()
 {
+retune_belt_falloff();
 for (uint i = 0; i < all_pools.length(); i++)
 {
-all_pools[i].update_listener_2d(me.x, 0);
+all_pools[i].update_listener_2d(0, me.x);
+}
+}
+/* The engine's plain positioning fades a sound by 0.8 * volume_step decibels per tile. Setting volume_step from the step
+time makes every sound fade belt_fade_ms of running per decibel instead, the barriers' feel: a sound 3 seconds away is
+equally loud at 500 ms and at 50 ms. Sounds already playing are retuned too; the listener move that follows applies it. */
+float belt_volume_step = -1;
+void retune_belt_falloff()
+{
+float step = float(current_step_time()) / (belt_fade_ms * 0.8);
+if (step == belt_volume_step) return;
+belt_volume_step = step;
+for (uint h = 0; h < all_pools.length(); h++)
+{
+all_pools[h].volume_step = step;
+for (uint i = 0; i < all_pools[h].items.length(); i++)
+{
+all_pools[h].update_sound_positioning_values(i, -1, step, false);
+}
 }
 }
 // Pauses only sounds that are playing, so resume_pools() can't wake one that had already finished.

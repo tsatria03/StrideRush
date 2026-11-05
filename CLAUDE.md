@@ -19,7 +19,7 @@ Gameplay code lives in `src/includes/main/globals/`:
 - `lives.nvgt` and `endrun.nvgt`: health, lives and how a run ends.
 - `decpool.nvgt`: the pool registry.
 
-A new obstacle type touches its own file, `spawner.nvgt` (`obstacle_types` and `place_obstacle()`), `clear_run_objects()` in `endrun.nvgt`, `all_pools`, and check and countdown calls in `step_check()` (its warning cues live in `sounds/misc/trap/<type>/warn1-5`) ([[project_entity_pattern]]). The **debug options** ([[feedback_call_them_debug_options]]; never "testing menus"): after Yes to "Do you want to play in debug mode?", the speed, spawn and "end the run when out of lives?" menus in `menus/menu.nvgt`, shown in that order (single-type runs start with debug_lives 3). They're source only (`SCRIPT_COMPILED` hides them in releases); keep them out of the docks.
+A new obstacle type touches its own file, `spawner.nvgt` (`obstacle_types` and `place_obstacle()`), `clear_run_objects()` in `endrun.nvgt`, `all_pools`, and check and countdown calls in `step_check()` (its warning cues live in `sounds/misc/trap/<type>/warn1-5`) ([[project_entity_pattern]]). The **debug options** ([[feedback_call_them_debug_options]]; never "testing menus"): after Yes to "Do you want to play in debug mode?", the speed, spawn, "hear your footsteps?" and "end the run when out of lives?" menus in `menus/menu.nvgt`, shown in that order (single-type runs start with debug_lives 2, 3 until 2026-11-04). They're source only (`SCRIPT_COMPILED` hides them in releases); keep them out of the docks.
 
 ## Layout: code and assets are split
 

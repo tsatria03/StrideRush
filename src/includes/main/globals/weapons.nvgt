@@ -99,7 +99,7 @@ p.play_stationary(get_pack_sound(weapon_folder(w) + "*fire*"), false);
 double target_x = weapon_strike(weapon_damage[w] * weapon_damage_multiplier);
 if (target_x < 0) return;
 // A hit: the weapon's hit at the target (the target plays its own hurt or death).
-p.play_2d(get_pack_sound(weapon_folder(w) + "*hit*"), me.x, 0, target_x, 0, false);
+p.play_2d(get_pack_sound(weapon_folder(w) + "*hit*"), 0, me.x, 0, target_x, false);
 }
 // How far ahead a weapon reaches: weapon_reach_time at the current speed, in tiles, at least 1.
 int weapon_reach()

@@ -43,8 +43,8 @@ void spawn_shield(double sx, int countdown)
 shield s;
 s.x = sx;
 s.countdown_start = sx - countdown;
-shieldpool.play_2d(get_pack_sound(shield_folder + "*spawn*"), me.x, 0, sx, 0, false);
-s.loopslot = shieldpool.play_2d(get_pack_sound(shield_folder + "*loop*"), me.x, 0, sx, 0, true);
+shieldpool.play_2d(get_pack_sound(shield_folder + "*spawn*"), 0, me.x, 0, sx, false);
+s.loopslot = shieldpool.play_2d(get_pack_sound(shield_folder + "*loop*"), 0, me.x, 0, sx, true);
 for (uint i = 0; i < shields.length(); i++)
 {
 if (@shields[i] == null)
@@ -131,7 +131,7 @@ void break_shield(shield@ s)
 {
 s.spent = true;
 stop_shield(s);
-shieldpool.play_2d(get_pack_sound(shield_folder + "*break*"), me.x, 0, s.x, 0, false);
+shieldpool.play_2d(get_pack_sound(shield_folder + "*break*"), 0, me.x, 0, s.x, false);
 }
 void stop_shield(shield@ s)
 {

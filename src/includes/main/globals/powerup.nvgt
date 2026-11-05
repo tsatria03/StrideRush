@@ -131,7 +131,7 @@ powerups.insert_last(pu);
 // One one-shot of a powerup's sound at its tile, and when the next is due.
 void play_powerup_sound(powerup@ pu)
 {
-pu.soundslot = poweruppool.play_2d(get_pack_sound(powerup_folder + (pu.flight ? "*powerflight*" : "*powerground*")), me.x, 0, pu.x, 0, false);
+pu.soundslot = poweruppool.play_2d(get_pack_sound(powerup_folder + (pu.flight ? "*powerflight*" : "*powerground*")), 0, me.x, 0, pu.x, false);
 pu.next_sound = runtimer.elapsed + (pu.flight ? powerup_flight_sound_time : powerup_ground_sound_time);
 }
 // Runs every frame from run_loop(): each uncollected powerup replays its sound when its time comes round.

@@ -23,7 +23,7 @@ projectile pr;
 pr.meet_x = mx;
 pr.theme = theme;
 pr.countdown_start = mx - countdown;
-pr.loopslot = projectilepool.play_2d(get_pack_sound("objects/traps/projectiles/" + theme + "/*loop*"), me.x, 0, projectile_x(pr), 0, true);
+pr.loopslot = projectilepool.play_2d(get_pack_sound("objects/traps/projectiles/" + theme + "/*loop*"), 0, me.x, 0, projectile_x(pr), true);
 for (uint i = 0; i < projectiles.length(); i++)
 {
 if (@projectiles[i] == null)
@@ -51,7 +51,7 @@ for (uint i = 0; i < projectiles.length(); i++)
 if (@projectiles[i] == null or projectiles[i].loopslot < 0) continue;
 int slot = projectiles[i].loopslot;
 if (!projectilepool.verify_slot(slot)) continue;
-projectilepool.items[slot].x = float(projectile_x(projectiles[i]));
+projectilepool.items[slot].y = float(projectile_x(projectiles[i]));
 projectilepool.items[slot].update(projectilepool.last_listener_x, projectilepool.last_listener_y, projectilepool.last_listener_z, projectilepool.last_listener_rotation, projectilepool.max_distance);
 }
 }
@@ -78,7 +78,7 @@ p.play_stationary(hit_clip, false);
 end_run_hit();
 return;
 }
-projectilepool.play_2d(hit_clip, me.x, 0, pr.meet_x, 0, false);
+projectilepool.play_2d(hit_clip, 0, me.x, 0, pr.meet_x, false);
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
 }

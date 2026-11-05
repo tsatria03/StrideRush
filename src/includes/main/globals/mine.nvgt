@@ -29,7 +29,7 @@ mine mn;
 mn.x = mx;
 mn.theme = theme;
 mn.countdown_start = mx - countdown;
-minepool.play_2d(get_pack_sound("objects/traps/mines/" + theme + "/*spawn*"), me.x, 0, mx, 0, false);
+minepool.play_2d(get_pack_sound("objects/traps/mines/" + theme + "/*spawn*"), 0, me.x, 0, mx, false);
 for (uint i = 0; i < mines.length(); i++)
 {
 if (@mines[i] == null)
@@ -50,8 +50,8 @@ mine@ mn = mines[i];
 if (!mn.armed and !mn.spent and me.x >= mine_arm_x(mn))
 {
 mn.armed = true;
-minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme + "/*light*"), me.x, 0, mn.x, 0, false);
-mn.loopslot = minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme + "/*loop*"), me.x, 0, mn.x, 0, true);
+minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme + "/*light*"), 0, me.x, 0, mn.x, false);
+mn.loopslot = minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme + "/*loop*"), 0, me.x, 0, mn.x, true);
 }
 if (me.x == mn.x and !mn.spent)
 {
@@ -72,8 +72,8 @@ end_run_hit();
 return;
 }
 // The mine goes off either way; with a shield worn its hit is layered on the shield's.
-minepool.play_2d(explode_clip, me.x, 0, mn.x, 0, false);
-minepool.play_2d(hit_clip, me.x, 0, mn.x, 0, false);
+minepool.play_2d(explode_clip, 0, me.x, 0, mn.x, false);
+minepool.play_2d(hit_clip, 0, me.x, 0, mn.x, false);
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
 }

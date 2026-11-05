@@ -33,8 +33,8 @@ animal bd;
 bd.x = bx;
 bd.theme = kind + "/" + kinds_animals[random(0, kinds_animals.length() - 1)];
 bd.countdown_start = bx - countdown;
-animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*spawn*"), me.x, 0, bx, 0, false);
-bd.loopslot = animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*loop*"), me.x, 0, bx, 0, true);
+animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*spawn*"), 0, me.x, 0, bx, false);
+bd.loopslot = animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*loop*"), 0, me.x, 0, bx, true);
 for (uint i = 0; i < animals.length(); i++)
 {
 if (@animals[i] == null)
@@ -60,7 +60,7 @@ if (@target == null or bd.x < target.x) @target = bd;
 if (@target == null) return false;
 target.spent = true;
 stop_animal(target);
-animalpool.play_2d(get_pack_sound(animal_folder + target.theme + "/*scare*"), me.x, 0, target.x, 0, false);
+animalpool.play_2d(get_pack_sound(animal_folder + target.theme + "/*scare*"), 0, me.x, 0, target.x, false);
 return true;
 }
 // Runs once per step, right after the move: reaching an animal you didn't scare is a blow, in the air or on the ground.
@@ -82,7 +82,7 @@ p.play_stationary(hit_clip, false);
 end_run_hit();
 return;
 }
-animalpool.play_2d(hit_clip, me.x, 0, bd.x, 0, false);
+animalpool.play_2d(hit_clip, 0, me.x, 0, bd.x, false);
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
 if (me.x > bd.x + spawn_distance()) remove_animal(i);

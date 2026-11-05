@@ -27,8 +27,8 @@ void spawn_capsule(double px, int countdown)
 lifecapsule lc;
 lc.x = px;
 lc.countdown_start = px - countdown;
-capsulepool.play_2d(get_pack_sound(capsule_folder + "*spawn*"), me.x, 0, px, 0, false);
-lc.loopslot = capsulepool.play_2d(get_pack_sound(capsule_folder + "*loop*"), me.x, 0, px, 0, true);
+capsulepool.play_2d(get_pack_sound(capsule_folder + "*spawn*"), 0, me.x, 0, px, false);
+lc.loopslot = capsulepool.play_2d(get_pack_sound(capsule_folder + "*loop*"), 0, me.x, 0, px, true);
 for (uint i = 0; i < capsules.length(); i++)
 {
 if (@capsules[i] == null)
@@ -115,7 +115,7 @@ void break_capsule(lifecapsule@ lc)
 {
 lc.spent = true;
 stop_capsule(lc);
-capsulepool.play_2d(get_pack_sound(capsule_folder + "*break*"), me.x, 0, lc.x, 0, false);
+capsulepool.play_2d(get_pack_sound(capsule_folder + "*break*"), 0, me.x, 0, lc.x, false);
 }
 void stop_capsule(lifecapsule@ lc)
 {

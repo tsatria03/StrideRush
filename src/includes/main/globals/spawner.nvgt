@@ -244,7 +244,9 @@ return min(countdown_start, x - ceil(double(switch_min_time) / current_step_time
 /* One countdown cue for an obstacle of this type at ox, whose countdown starts at countdown_start: the LAST ones of
 misc/trap/<type>/warn1 to warn5, so the step before the obstacle always plays warn5 ("act now"). Five countdown steps
 hear 1 to 5; three hear 3 to 5; one hears only 5. Each cue plays in 2d (never stationary) at the tile you've just
-stepped onto, not at the obstacle. Each type's countdown function calls this once per step for each of its obstacles. */
+stepped onto, not at the obstacle. Each type's countdown function calls this once per step for each of its obstacles.
+A cue is exempt from the behind-pitch drop (dev, 2026-11-04): at high speeds the next step comes while it's still
+playing, which would put it behind you and lower its pitch partway through (play_cue()). */
 void play_countdown(sound_pool@ pool, string type, double ox, double countdown_start)
 {
 int steps_left = int(ox - me.x);
@@ -259,11 +261,17 @@ int g = 1;
 string layer = get_pack_sound(folder + "warn" + g + "-" + note + "*");
 while (layer != "")
 {
-pool.play_2d(layer, me.x, 0, me.x, 0, false);
+play_cue(pool, layer);
 g++;
 layer = get_pack_sound(folder + "warn" + g + "-" + note + "*");
 }
 return;
 }
-pool.play_2d(get_pack_sound(folder + "warn" + note + "*"), me.x, 0, me.x, 0, false);
+play_cue(pool, get_pack_sound(folder + "warn" + note + "*"));
+}
+// One cue at your tile, positioned like any belt sound, but never lowered in pitch once you've stepped past it.
+void play_cue(sound_pool@ pool, string clip)
+{
+int slot = pool.play_2d(clip, 0, me.x, 0, me.x, false);
+if (slot > -1) pool.items[slot].behind_pitch_decrease = 0;
 }

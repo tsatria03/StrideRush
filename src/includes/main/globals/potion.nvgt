@@ -26,8 +26,8 @@ void spawn_potion(double px, int countdown)
 healthpotion pot;
 pot.x = px;
 pot.countdown_start = px - countdown;
-potionpool.play_2d(get_pack_sound(potion_folder + "*spawn*"), me.x, 0, px, 0, false);
-pot.loopslot = potionpool.play_2d(get_pack_sound(potion_folder + "*loop*"), me.x, 0, px, 0, true);
+potionpool.play_2d(get_pack_sound(potion_folder + "*spawn*"), 0, me.x, 0, px, false);
+pot.loopslot = potionpool.play_2d(get_pack_sound(potion_folder + "*loop*"), 0, me.x, 0, px, true);
 for (uint i = 0; i < potions.length(); i++)
 {
 if (@potions[i] == null)
@@ -114,7 +114,7 @@ void break_potion(healthpotion@ pot)
 {
 pot.spent = true;
 stop_potion(pot);
-potionpool.play_2d(get_pack_sound(potion_folder + "*break*"), me.x, 0, pot.x, 0, false);
+potionpool.play_2d(get_pack_sound(potion_folder + "*break*"), 0, me.x, 0, pot.x, false);
 }
 void stop_potion(healthpotion@ pot)
 {

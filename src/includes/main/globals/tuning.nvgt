@@ -27,6 +27,8 @@ always hear it that long before its countdown begins. Spacing is built from a ra
 one obstacle's ledge after and the next one's countdown (min_floor_time to max_floor_time below), never under
 min_gap_tiles. */
 const int spawn_ahead_time = 3000;
+// The forward belt (dev, 2026-11-04): every belt sound drops a decibel for each belt_fade_ms of running away from you, at any speed.
+const int belt_fade_ms = 150;
 const int min_gap_tiles = 6;
 
 /* The warning countdown before every trap: always countdown_length steps, warn1 to warn5, one cue per step, at any
@@ -58,7 +60,7 @@ const int starting_lives = 1;
 const int max_lives = 20; // a life capsule can't take you past this; capsules themselves are unlimited (dev, 2026-11-04)
 const int life_capsule_min_lives = 1; // a life capsule gives a random min to max lives (dev, 2026-11-04: "between 1 to 2")
 const int life_capsule_max_lives = 2;
-const int debug_lives = 3; // source-only debug runs of a single type start with these; "all" uses starting_lives
+const int debug_lives = 2; // source-only debug runs of a single type start with these; "all" uses starting_lives (3 until 2026-11-04)
 const int player_hp = 200;
 const int spike_damage = 20;
 const int mine_damage = 60;
@@ -106,7 +108,7 @@ const int machine_gun_fire_gap = 100;
 // Every weapon reaches this far ahead, turned into tiles at the current speed (dev, 2026-11-03).
 const int weapon_reach_time = 2000;
 // A gun's bullet moves one tile every this many ms, at any speed (dev, 2026-11-03); it travels weapon_reach() tiles.
-const int bullet_tile_time = 40; // first 30, tried at 50, settled on 40 (dev, 2026-11-03), so bullets stay ahead of you even at 50 ms steps
+const int bullet_tile_time = 30; // first 30, tried at 50, settled on 40 (dev, 2026-11-03), back to 30 (dev, 2026-11-05), so bullets stay ahead of you even at 50 ms steps
 
 /* Ammo packs (dev, 2026-11-02). About one spawn in ammo_pack_chance is a pack instead of an obstacle. Opening one adds
 a random ammo_pack_min to ammo_pack_max rounds to the reserve of the gun you're holding (dev, 2026-11-03; it was a

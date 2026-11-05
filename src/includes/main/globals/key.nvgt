@@ -33,8 +33,8 @@ k.x = kx;
 k.countdown_start = kx - countdown;
 k.color = colors[random(0, colors.length() - 1)];
 // The wildcards pick at random among a key's spawn and loop clips (spawn1 and spawn2, loop1 to loop4).
-keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*spawn*"), me.x, 0, kx, 0, false);
-k.loopslot = keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*loop*"), me.x, 0, kx, 0, true);
+keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*spawn*"), 0, me.x, 0, kx, false);
+k.loopslot = keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*loop*"), 0, me.x, 0, kx, true);
 for (uint i = 0; i < doorkeys.length(); i++)
 {
 if (@doorkeys[i] == null)
@@ -125,7 +125,7 @@ void break_key(doorkey@ k)
 {
 k.spent = true;
 stop_key(k);
-keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*break*"), me.x, 0, k.x, 0, false);
+keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*break*"), 0, me.x, 0, k.x, false);
 }
 void stop_key(doorkey@ k)
 {

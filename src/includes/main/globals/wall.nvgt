@@ -29,7 +29,7 @@ w.x = wx;
 w.theme = theme;
 w.hp = wall_spawn_hp();
 w.countdown_start = wx - countdown;
-w.loopslot = wallpool.play_2d(get_pack_sound("objects/traps/walls/" + theme + "/*loop*"), me.x, 0, wx, 0, true);
+w.loopslot = wallpool.play_2d(get_pack_sound("objects/traps/walls/" + theme + "/*loop*"), 0, me.x, 0, wx, true);
 for (uint i = 0; i < walls.length(); i++)
 {
 if (@walls[i] == null)
@@ -77,7 +77,7 @@ p.play_stationary(hit_clip, false);
 end_run_hit();
 return;
 }
-wallpool.play_2d(hit_clip, me.x, 0, w.x, 0, false); // no death sound: that's only for a wall your weapons destroy (dev)
+wallpool.play_2d(hit_clip, 0, me.x, 0, w.x, false); // no death sound: that's only for a wall your weapons destroy (dev)
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
 // Dropped once it's as far behind as obstacles appear ahead.
@@ -115,9 +115,9 @@ if (target.hp <= 0)
 {
 target.destroyed = true;
 stop_wall(target);
-wallpool.play_2d(get_pack_sound("objects/traps/walls/" + target.theme + "/*death*"), me.x, 0, target.x, 0, false);
+wallpool.play_2d(get_pack_sound("objects/traps/walls/" + target.theme + "/*death*"), 0, me.x, 0, target.x, false);
 }
-else wallpool.play_2d(get_pack_sound("objects/traps/walls/" + target.theme + "/*hurt*"), me.x, 0, target.x, 0, false);
+else wallpool.play_2d(get_pack_sound("objects/traps/walls/" + target.theme + "/*hurt*"), 0, me.x, 0, target.x, false);
 return target.x;
 }
 // The countdown: the layered misc/trap/walls cues, one per step before each wall (see play_countdown()). Runs once per step.

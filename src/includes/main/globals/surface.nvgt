@@ -34,8 +34,11 @@ if (on_ledge(x)) return "ledge";
 return current_surface;
 }
 // A oneshot footstep on every step, never thinned, at any speed. Silent in the air and while crouched.
+// False only from the source-only debug option "Do you want to hear your footsteps while running?" (dev, 2026-11-04).
+bool footsteps_on = true;
 void play_step()
 {
+if (!footsteps_on) return;
 if (!is_grounded() or is_ducked() or door_moving) return; // silent while a real door carries you through
 string tile = tile_at(me.x);
 if (tile == "") return;

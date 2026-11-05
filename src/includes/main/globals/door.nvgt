@@ -44,7 +44,7 @@ return get_pack_sound_folders(door_folder + "*").length() > 0;
 // Plays one of a door's clips (open, move, hit and so on) at sound_x, at the door's pitch.
 int play_door(door@ d, string clip, double sound_x, bool looping)
 {
-return doorpool.play_extended_2d(get_pack_sound(door_folder + d.theme + "/*" + clip + "*"), me.x, 0, sound_x, 0, 0, 0, 0, 0, looping, 0, 0, 0, d.pitch);
+return doorpool.play_extended_2d(get_pack_sound(door_folder + d.theme + "/*" + clip + "*"), 0, me.x, 0, sound_x, 0, 0, 0, 0, looping, 0, 0, 0, d.pitch);
 }
 // countdown comes from the spawner: it sets the spacing, a real door's hand window and the door's countdown.
 void spawn_door(double dx, string theme, bool real, int countdown)

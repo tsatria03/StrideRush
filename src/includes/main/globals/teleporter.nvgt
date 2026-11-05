@@ -26,8 +26,8 @@ void spawn_teleporter(double tx, int countdown)
 teleporter t;
 t.x = tx;
 t.countdown_start = tx - countdown;
-teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*spawn*"), me.x, 0, tx, 0, false);
-t.loopslot = teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*loop*"), me.x, 0, tx, 0, true);
+teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*spawn*"), 0, me.x, 0, tx, false);
+t.loopslot = teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*loop*"), 0, me.x, 0, tx, true);
 for (uint i = 0; i < teleporters.length(); i++)
 {
 if (@teleporters[i] == null)
@@ -114,7 +114,7 @@ void break_teleporter(teleporter@ t)
 {
 t.spent = true;
 stop_teleporter(t);
-teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*break*"), me.x, 0, t.x, 0, false);
+teleporterpool.play_2d(get_pack_sound(teleporter_folder + "*break*"), 0, me.x, 0, t.x, false);
 }
 void stop_teleporter(teleporter@ t)
 {

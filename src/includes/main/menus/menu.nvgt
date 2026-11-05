@@ -86,16 +86,16 @@ play_game();
 }
 /* Play game. From source it first asks whether to play in debug mode (dev, 2026-11-03): No plays the real game (start
 speed, everything spawning, starting_lives, and the run ends when lives run out), Yes goes on to the debug options, in
-the dev's order: speed, spawn, then whether lives can run out. Escape steps back one menu silently: from the question to
+the dev's order: speed, spawn, footsteps (2026-11-04), then whether lives can run out. Escape steps back one menu silently: from the question to
 the game menu, and from the speed menu back to the question. They're all nested menus, so nothing says "canceled". A
 compiled release skips the question and the debug options and always plays the real game. The lives menu was removed
 with player health: "all" starts with starting_lives, and any single-type choice with debug_lives. */
 void play_game()
 {
-int speed = start_step_time, can_run_out = 1;
+int speed = start_step_time, can_run_out = 1, steps = 1;
 string only_type = "all";
 int stage = 0;
-while (stage < 4)
+while (stage < 5)
 {
 if (stage == 0)
 {
@@ -108,7 +108,8 @@ its "escaped" value behind (a speed of -1 ran every step at once; bug found by t
 speed = start_step_time;
 only_type = "all";
 can_run_out = 1;
-stage = 4;
+steps = 1;
+stage = 5;
 }
 else stage = 1;
 }
@@ -122,12 +123,18 @@ else if (stage == 2)
 only_type = choose_spawn_types();
 stage = only_type == "" ? 1 : 3;
 }
+else if (stage == 3)
+{
+steps = choose_footsteps();
+stage = steps < 0 ? 2 : 4;
+}
 else
 {
 can_run_out = choose_lives_can_end();
-stage = can_run_out < 0 ? 2 : 4;
+stage = can_run_out < 0 ? 3 : 5;
 }
 }
+footsteps_on = steps == 1;
 m.fade_music();
 /* Returns when the run ends, back to the game menu. A run starts over with the same choices when restart run was picked,
 when the debug No answer turned a hazard death into a restart, or when you answer Yes to playing again after a death
@@ -236,6 +243,21 @@ int mres = m.run();
 if (mres < 0) return ""; // silent: escape just steps back to the speed menu
 return m.selected_item_id;
 }
+/* DEBUG OPTION: whether you hear your footsteps while running (dev, 2026-11-04: "extremely useful for the new
+transformed belt tests"), asked before the run-ending question. No silences every footstep, so only the belt's sounds
+are left; landings still play. It only appears when running from source; a compiled release always answers Yes.
+Returns 1 for Yes, 0 for No, or -1 if escaped. */
+int choose_footsteps()
+{
+if (SCRIPT_COMPILED) return 1;
+setupmenu();
+m.intro_text = "Do you want to hear your footsteps while running?";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int mres = m.run();
+if (mres < 0) return -1; // silent: escape just steps back to the spawn menu
+return m.selected_item_id == "yes" ? 1 : 0;
+}
 /* DEBUG OPTION: whether running out of lives ends the run. No means blows can never end it: lives stop at 1 and 0
 health just refills; hazards still end it. It only appears when running from source; a compiled release always answers
 Yes. Returns 1 for Yes, 0 for No, or -1 if escaped. */
@@ -247,6 +269,6 @@ m.intro_text = "Do you want the run to end when you run out of lives?";
 m.add_item("Yes", "yes");
 m.add_item("No", "no");
 int mres = m.run();
-if (mres < 0) return -1; // silent: escape just steps back to the spawn menu
+if (mres < 0) return -1; // silent: escape just steps back to the footsteps question
 return m.selected_item_id == "yes" ? 1 : 0;
 }

@@ -29,7 +29,7 @@ b.range = weapon_reach();
 b.damage = damage;
 b.weapon = w;
 b.next_move = runtimer.elapsed + bullet_tile_time;
-b.loopslot = bulletpool.play_2d(get_pack_sound(weapon_folder(w) + "*loop*"), me.x, 0, b.x, 0, true);
+b.loopslot = bulletpool.play_2d(get_pack_sound(weapon_folder(w) + "*loop*"), 0, me.x, 0, b.x, true);
 for (uint i = 0; i < bullets.length(); i++)
 {
 if (@bullets[i] == null)
@@ -52,7 +52,7 @@ while (@bullets[i] != null and runtimer.elapsed >= b.next_move)
 {
 b.next_move += bullet_tile_time;
 b.x += 1;
-if (b.loopslot > -1) bulletpool.update_sound_2d(b.loopslot, int(b.x), 0);
+if (b.loopslot > -1) bulletpool.update_sound_2d(b.loopslot, 0, int(b.x));
 if (bullet_hits(b))
 {
 remove_bullet(i);
@@ -96,8 +96,8 @@ if (@d != null) target_x = strike_door(d, b.damage);
 else target_x = strike_item_at(b.x); // an item in the bullet's path breaks, as in ToyMania (dev, 2026-11-03)
 }
 if (target_x < 0) return false;
-bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*hit*"), me.x, 0, target_x, 0, false);
-bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*shell*"), me.x, 0, target_x, 0, false); // at the target (dev)
+bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*hit*"), 0, me.x, 0, target_x, false);
+bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*shell*"), 0, me.x, 0, target_x, false); // at the target (dev)
 return true;
 }
 void remove_bullet(uint i)

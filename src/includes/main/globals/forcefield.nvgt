@@ -28,7 +28,7 @@ forcefield f;
 f.x = fx;
 f.theme = theme;
 f.countdown_start = fx - countdown;
-f.loopslot = forcefieldpool.play_2d(get_pack_sound("objects/traps/force_fields/" + theme + "/*on*"), me.x, 0, fx, 0, true);
+f.loopslot = forcefieldpool.play_2d(get_pack_sound("objects/traps/force_fields/" + theme + "/*on*"), 0, me.x, 0, fx, true);
 for (uint i = 0; i < forcefields.length(); i++)
 {
 if (@forcefields[i] == null)
@@ -149,7 +149,7 @@ void switch_off_forcefield(forcefield@ f)
 {
 f.active = false;
 forcefieldpool.destroy_sound(f.loopslot);
-f.loopslot = forcefieldpool.play_2d(get_pack_sound("objects/traps/force_fields/" + f.theme + "/*off*"), me.x, 0, f.x, 0, true);
+f.loopslot = forcefieldpool.play_2d(get_pack_sound("objects/traps/force_fields/" + f.theme + "/*off*"), 0, me.x, 0, f.x, true);
 }
 // The countdown: one misc/trap/force_fields warn cue per step before each field (see play_countdown()). Runs once per step.
 void forcefield_countdown()
