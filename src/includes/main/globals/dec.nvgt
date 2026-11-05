@@ -1,4 +1,5 @@
-bool hrtf=false;
+bool hrtf=true; // on by default (dev, 2026-11-05); the Sound tab's HRTF checkbox, saved in settings.srf and applied at startup
+bool behind_pitch=true; // on by default (dev, 2026-11-05): anything behind you is lowered by 5 in pitch; the Game tab's checkbox
 // Everything Stride Rush keeps on the player's machine goes under here (dev, 2026-11-04, CookieCraze's constant).
 const string APPDATA_DIR = DIRECTORY_APPDATA + "tsatria03/StrideRush/";
 /* The settings, all in one encrypted file (dev, 2026-11-04: "I still want settings.srf, not split"), read by

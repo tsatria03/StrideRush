@@ -12,7 +12,20 @@ for (uint i = 0; i < all_pools.length(); i++)
 all_pools[i].max_distance = 0;
 all_pools[i].pan_step = lane_pan_step; // one lane across = the stationary pan of lane_pan_amount (barriers; belt-wide sounds sit at x 0)
 all_pools[i].volume_step = 2.5; // retuned from the speed every step (update_listeners())
-all_pools[i].behind_pitch_decrease = 5; // anything you've passed sounds a little lower (ToyMania's 5; dev, 2026-11-04)
+all_pools[i].behind_pitch_decrease = behind_pitch ? 5 : 0; // ToyMania's 5 for anything you've passed, or 0 with the Game tab's setting off (dev, 2026-11-04 and 5)
+}
+}
+// The Game tab's behind pitch setting, saved mid-run too: every pool, and every sound already playing, takes it at once.
+void apply_behind_pitch()
+{
+float drop = behind_pitch ? 5 : 0;
+for (uint h = 0; h < all_pools.length(); h++)
+{
+all_pools[h].behind_pitch_decrease = drop;
+for (uint i = 0; i < all_pools[h].items.length(); i++)
+{
+all_pools[h].items[i].behind_pitch_decrease = drop;
+}
 }
 }
 /* The belt runs forward (dev, 2026-11-04, the lanes plan's Section 3): x is across the belt and y along it, so the

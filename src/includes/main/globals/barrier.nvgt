@@ -62,6 +62,7 @@ b.lane = lane;
 b.theme = theme;
 b.countdown_start = bx - countdown;
 b.loopslot = barrierpool.play_2d(get_pack_sound(barrier_folder + theme + "/*loop*"), 0, me.x, barrier_side(b), b.x, true);
+place_barrier(b);
 for (uint i = 0; i < barriers.length(); i++)
 {
 if (@barriers[i] == null)
@@ -78,15 +79,39 @@ int barrier_side(barrier@ b)
 {
 return b.lane - current_lane;
 }
-/* Runs every frame from run_loop(): moves each loop across when you change lanes, so it's heard on its new side at
-once. Its distance along the belt follows the listener like any belt sound. */
+/* Runs every frame from run_loop(): keeps each loop on its side as you change lanes and as it nears. */
 void barrier_sounds()
 {
 for (uint i = 0; i < barriers.length(); i++)
 {
 if (@barriers[i] == null or barriers[i].loopslot < 0) continue;
-barrierpool.update_sound_2d(barriers[i].loopslot, barrier_side(barriers[i]), int(barriers[i].x));
+place_barrier(barriers[i]);
 }
+}
+/* Where a barrier's loop sits. Without HRTF, one lane across is one unit, and the plain pan (lane_pan_step) keeps a lane's
+side the same at any distance. With HRTF the side comes from the real angle, so one unit across sounded almost straight
+ahead while the barrier was far off (dev, 2026-11-05: left and right barriers sounded "sort of in the front, but not
+quite"). So under HRTF its distance across grows with its distance along the belt, keeping a fixed angle: one lane over
+at about 45 degrees (barrier_hrtf_spread 1), two lanes at about 63. The extra distance would make a side barrier
+quieter, so its own fade per tile is scaled down to match, and it sounds as loud as one straight ahead at the same
+distance. Positions are set on the pool item directly, like a projectile's, since update_sound_2d() rounds to whole
+tiles. */
+void place_barrier(barrier@ b)
+{
+if (b.loopslot < 0) return;
+int side = barrier_side(b);
+float across = side;
+float fade = belt_volume_step;
+if (hrtf and side != 0)
+{
+float spread = side * barrier_hrtf_spread;
+across = spread * max(1.0, abs(b.x - me.x));
+fade = belt_volume_step / sqrt(1.0 + spread * spread);
+}
+barrierpool.items[b.loopslot].x = across;
+barrierpool.items[b.loopslot].y = b.x;
+if (fade > 0) barrierpool.items[b.loopslot].volume_step = fade;
+barrierpool.items[b.loopslot].update(barrierpool.last_listener_x, barrierpool.last_listener_y, barrierpool.last_listener_z, barrierpool.last_listener_rotation, barrierpool.max_distance);
 }
 // Runs once per step, right after the move: arriving on its tile in its lane is a blow; in another lane it passes.
 void barrier_check()

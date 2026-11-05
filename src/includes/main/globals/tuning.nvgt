@@ -156,6 +156,8 @@ const int health_potion_max_percent = 10;
 const float lane_pan_amount = 50;
 // The forward belt's pan per lane: the engine pans by x * pan_step / 125, so this makes one lane across lane_pan_amount (2026-11-05).
 const float lane_pan_step = lane_pan_amount * 1.25;
+// With HRTF on, a barrier one lane over sits this many units across per tile ahead: 1 is about 45 degrees to the side, two lanes about 63 (dev, 2026-11-05).
+const float barrier_hrtf_spread = 1.0;
 // A barrier in your lane does barrier_damage (dev: 80, the hardest blow).
 const int barrier_damage = 80;
 // How often, in percent, a barrier spawn is a pair in two different lanes instead of one (dev, 2026-11-04: "half the time").
