@@ -1,4 +1,7 @@
 New in 1.4.
+Made it so the belt now carries you forward instead of to the right, so obstacles come at you from straight ahead and fall behind you once passed, items now sit in one of the three lanes and can only be picked up, broken or hit from that lane, and the settings menu now lets you turn off HRTF and the lower pitch of things behind you.
+Added barriers, such as cars, boulders and firewalls, which fill a single lane, sometimes two side by side with one lane always left open, and which you can only get past by switching lanes, or they take 80 of your health.
+Added lanes, so the belt now has a left, middle and right lane that you switch between with the left and right arrows or Q and E, and L tells you which lane you're in.
 Made it so steel shields now take 400 damage before they break, twice as much as your own health.
 Made it so force fields now take 30 of your health, projectiles 40, walls 50, mines 60 and doors 70, so the harder obstacles hurt more.
 Made it so life capsules now give 1 or 2 lives, up to a limit of 20 lives, and stay in your inventory for later when you're already at the limit.
