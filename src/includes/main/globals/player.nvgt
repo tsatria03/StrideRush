@@ -16,6 +16,7 @@ ducked = false;
 jumptimer.restart();
 ducktimer.restart();
 duckcooldowntimer.force(duck_cooldown); // a new run can crouch straight away
+woosh_pending_side = 0; // no woosh left waiting from the last run
 }
 bool can_duck()
 {

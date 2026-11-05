@@ -78,12 +78,15 @@ if (me_x > f.x + spawn_distance()) remove_forcefield(i);
 return false;
 }
 /* Runs every frame, before step_check(), so a press on the same frame as the step onto the field still counts on the
-warn5 step. Either hand works the same, and every hand sound plays centered (dev, 2026-11-02: panning sounded too far
+warn5 step. Either hand works the same, and every hand sound that acts on something plays centered (dev, 2026-11-02: panning sounded too far
 to the side). It switches off the nearest active field that's counting down. */
 void hand_check()
 {
+// A lone empty hand's woosh waits clap_window ms for the other hand (see empty_hand_sound()); no clap came, so play it.
+if (woosh_pending_side != 0 and wooshtimer.elapsed >= clap_window) play_pending_woosh();
 if (door_moving) return; // no hands while a door carries you
-if (!controls.action_triggered("hand_left") and !controls.action_triggered("hand_right")) return;
+bool left = controls.action_triggered("hand_left"), right = controls.action_triggered("hand_right");
+if (!left and !right) return;
 forcefield@ target = null;
 int target_steps = 0;
 for (uint i = 0; i < forcefields.length(); i++)
@@ -102,11 +105,38 @@ target_steps = steps_left;
 // No field counting down: the same press can act on a door, or else pick up an ammo pack, a key, a shield, a capsule, a potion or a teleporter, or does nothing.
 if (@target == null)
 {
-if (!open_door() and !pick_up_ammopack() and !pick_up_key() and !pick_up_shield() and !pick_up_capsule() and !pick_up_potion()) pick_up_teleporter();
+if (!open_door() and !pick_up_ammopack() and !pick_up_key() and !pick_up_shield() and !pick_up_capsule() and !pick_up_potion() and !pick_up_teleporter()) empty_hand_sound(left, right);
 return;
 }
 forcefieldpool.play_stationary(get_pack_sound("objects/interaction/switches/switch/*press*"), false);
 switch_off_forcefield(target);
+}
+/* A hand press that grabbed, opened or switched nothing (dev, 2026-11-04): both hands together clap (misc/player
+clap1-3, centred); one hand alone plays woosh, the left hand (A or Tab) 50 to the left and the right (D or Enter) 50 to
+the right. Sounds only for now; the dev will say later what a clap does.
+"Together" is the same frame, one pressed while the other is held, or the other hand within clap_window ms. A lone
+press's woosh waits that long first, so a clap never comes with a woosh in front of it (dev: "I don't like how it plays
+the clap and woosh at the same time"). */
+int woosh_pending_side = 0; // -1 a left-hand woosh is waiting, 1 a right-hand one, 0 none
+timer wooshtimer;
+void empty_hand_sound(bool left, bool right)
+{
+int side = left ? -1 : 1;
+bool both = (left and right) or (left and controls.action_down("hand_right")) or (right and controls.action_down("hand_left")) or (woosh_pending_side == -side);
+if (both)
+{
+woosh_pending_side = 0; // the waiting woosh becomes this clap
+p.play_stationary(get_pack_sound("misc/player/*clap*"), false);
+return;
+}
+if (woosh_pending_side == side) play_pending_woosh(); // the same hand twice: the first woosh plays now
+woosh_pending_side = side;
+wooshtimer.restart();
+}
+void play_pending_woosh()
+{
+p.play_stationary_extended(get_pack_sound("misc/player/*woosh*"), false, 0, woosh_pending_side * 50, 0, 100, false);
+woosh_pending_side = 0;
 }
 // Where a field's switch can first be pressed: the shared hand window (hand_window_start() in spawner.nvgt).
 double switch_window_start(forcefield@ f)
