@@ -6,7 +6,7 @@
 
 ##These are the things that are already finished from earlier versions of the game.
 
-**Finished. Add animals, such as birds, that you scare away by clapping your hands.
+**Finished. Add animals, birds and dogs, that you scare away by clapping your hands.
 **Finished. Add health potions that restore some of your health.
 **Finished. Add a settings menu.
 **Finished. Add a screen that shows every key binding.
