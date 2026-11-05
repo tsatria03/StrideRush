@@ -34,7 +34,7 @@ shield_hp_left = 0;
 shield in the inventory, to be worn with U, since shields never spawn in those runs. Called from reset_run(). */
 void give_debug_shield()
 {
-string[] shielded_types = {"spikes", "mines", "force_fields", "projectiles", "walls", "animals", "fake_doors", "real_doors", "real_doors_spread", "powerups", "barriers", "barriers_random", "barriers_multiple"}; // never "all", which plays like the real game (dev)
+string[] shielded_types = {"spikes", "mines", "force_fields", "projectiles", "walls", "animals", "animals_birds", "animals_dogs", "fake_doors", "real_doors", "real_doors_spread", "powerups", "barriers", "barriers_random", "barriers_multiple"}; // never "all", which plays like the real game (dev)
 if (shielded_types.find(spawn_only) >= 0) give_item("steel_shield", 1);
 }
 // countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.

@@ -1,6 +1,6 @@
 /* Animals (dev, 2026-11-04, for 1.4; the birds plan): a belt-wide trap that only a clap clears. The type is "animals"
 (dev: "in the future, you'll be able to scare off other types of animals, such as dogs"); each theme folder in
-objects/traps/animals is one animal, and so far they're all birds, bird to bird24. An animal plays its spawn clip at its
+objects/traps/animals is a kind (birds, dogs), and each folder inside a kind is one animal (bird to bird24, dog and dog2). An animal plays its spawn clip at its
 tile, then its loop (every theme has its own call), with the layered misc/trap/animals countdown. Clapping (both hands
 together, with nothing else for the hands to do) inside its hand window, the same window as a force field's switch,
 scares the nearest animal away: a random scare clip at its tile (dev, 2026-11-04: named scare, not flight, since "dogs cannot fly"), and its
@@ -8,7 +8,7 @@ loop stops. Reaching one you didn't scare is a blow of animal_damage (10) throug
 ducking don't help. Belt-wide on purpose, so turning can't dodge it and the clap stays its only answer (dev: "belt wide").
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_animals() shrinks the array. */
 sound_pool animalpool;
-const string animal_folder = "objects/traps/animals/"; // the dev's animals folder, birds its only kind so far (2026-11-04)
+const string animal_folder = "objects/traps/animals/"; // one folder per kind (birds, dogs), then one per animal (dev, 2026-11-04)
 class animal
 {
 double x;
@@ -19,15 +19,22 @@ int loopslot = -1;
 }
 animal@[] animals(0);
 
-// countdown comes from the spawner like any trap's; it sets the countdown and the clap window.
-void spawn_animal(double bx, string theme, int countdown)
+/* countdown comes from the spawner like any trap's; it sets the countdown and the clap window. kind is the random kind
+folder the spawner picked (birds, dogs and so on), so every kind gets an equal share however many animals it has (dev,
+2026-11-04: "I'd rather go based off the animal kind"); the "animals, birds" and "animals, dogs" debug options force
+theirs. Then one animal of that kind is picked, and its theme is the path below animal_folder ("dogs/dog2"). */
+void spawn_animal(double bx, string kind, int countdown)
 {
+if (spawn_only == "animals_birds") kind = "birds";
+else if (spawn_only == "animals_dogs") kind = "dogs";
+string[] kinds_animals = get_pack_sound_folders(animal_folder + kind + "/*");
+if (kinds_animals.length() == 0) return; // no animals of that kind
 animal bd;
 bd.x = bx;
-bd.theme = theme;
+bd.theme = kind + "/" + kinds_animals[random(0, kinds_animals.length() - 1)];
 bd.countdown_start = bx - countdown;
-animalpool.play_2d(get_pack_sound(animal_folder + theme + "/*spawn*"), me_x, 0, bx, 0, false);
-bd.loopslot = animalpool.play_2d(get_pack_sound(animal_folder + theme + "/*loop*"), me_x, 0, bx, 0, true);
+animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*spawn*"), me_x, 0, bx, 0, false);
+bd.loopslot = animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*loop*"), me_x, 0, bx, 0, true);
 for (uint i = 0; i < animals.length(); i++)
 {
 if (@animals[i] == null)
