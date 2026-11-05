@@ -104,7 +104,7 @@ wall_check();
 if (!running) return;
 barrier_check();
 if (!running) return;
-bird_check();
+animal_check();
 if (!running) return;
 door_check();
 if (!running) return;
@@ -126,7 +126,8 @@ forcefield_countdown();
 projectile_countdown();
 wall_countdown();
 barrier_countdown();
-bird_countdown();
+animal_countdown();
+door_countdown();
 }
 void speedup_check()
 {

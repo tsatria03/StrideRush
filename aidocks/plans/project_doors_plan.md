@@ -80,3 +80,6 @@ Q&A log:
   6. Breaking a fake door: weapon hits through weapon_strike(), like walls. Hurt on each hit, death at 0 hp, after which you run through. Its hp is the walls' speed-scaled hp.
   7. Crashing into a door (an unopened real door, or a fake door still standing): its hit, the player hit and the life sound, costing door_life_cost 3, with no death sound (like walls). On the last lives that make it fatal: its hit through p, then your death, then the tile's fall. The section still begins after a missed real door.
   8. Normal spacing; pause freezes doors; door sounds come from objects/transitions/doors, picked per door.
+
+CHANGED (dev, 2026-11-04, in 1.4): the door sets moved to objects/traps/doors and the dev added misc/trap/doors, a four-layer warn set, so doors now COUNT DOWN like every trap ("Yes. Please do." to Claude's proposal). door_folder is objects/traps/doors/; door_countdown() in door.nvgt plays the layered cues before every standing door, real or fake, stopping once a real door is opened or a fake one broken; run.nvgt calls it after bird_countdown(). This replaces "doors aren't traps, no countdown cues". The readme's "Doors have no countdown" line changes with the next docks.
+- Test (real doors count down with the four layers and stop once opened, the ride as before; fake doors count down and stop once broken) passed (2026-11-04).

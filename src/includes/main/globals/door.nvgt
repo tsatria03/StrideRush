@@ -1,5 +1,6 @@
-/* Doors (dev, 2026-11-03, for 1.1): full-height, and not traps, so they have no countdown cues; you judge them by their
-loop and its pitch. Each door picks one of the four door sets, and every sound it makes plays at its pitch. Weapons
+/* Doors (dev, 2026-11-03, for 1.1): full-height. They first had no countdown cues; since 2026-11-04 (the dev moved them
+into objects/traps and added misc/trap/doors) every standing door, real or fake, counts down like a trap, with a
+four-layer warn set (door_countdown()). Each door picks one of the four door sets, and every sound it makes plays at its pitch. Weapons
 break FAKE doors only (strike_door(), through weapon_strike()): hurt on each hit, death at 0 hp.
 - A REAL door (pitch 100) marks each new 50 ms speed section: the spawner forces one when the step time reaches a new
   mark, 450 down to 50, and none come after that. It starts locked (1.2): U on a key unlocks it from within
@@ -14,7 +15,7 @@ sound, doing door_damage (60) through take_damage(). On the last lives: its hit,
 door's section still begins, since the door only marks it.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_doors() shrinks the array. */
 sound_pool doorpool;
-const string door_folder = "objects/interaction/doors/";
+const string door_folder = "objects/traps/doors/"; // moved from objects/interaction by the dev (2026-11-04)
 class door
 {
 double x;
@@ -45,7 +46,7 @@ int play_door(door@ d, string clip, double sound_x, bool looping)
 {
 return doorpool.play_extended_2d(get_pack_sound(door_folder + d.theme + "/*" + clip + "*"), me_x, 0, sound_x, 0, 0, 0, 0, 0, looping, 0, 0, 0, d.pitch);
 }
-// countdown comes from the spawner: it sets the spacing and a real door's hand window, though doors play no cues.
+// countdown comes from the spawner: it sets the spacing, a real door's hand window and the door's countdown.
 void spawn_door(double dx, string theme, bool real, int countdown)
 {
 door d;
@@ -66,6 +67,16 @@ return;
 }
 }
 doors.insert_last(d);
+}
+/* The countdown: the layered misc/trap/doors cues before each door still standing, so they stop once a real door is
+opened or a fake one broken (see play_countdown()). Runs once per step. */
+void door_countdown()
+{
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] == null or !door_standing(doors[i])) continue;
+play_countdown(doorpool, "doors", doors[i].x, doors[i].countdown_start);
+}
 }
 // A door still blocks the way until it's opened, destroyed or crashed through.
 bool door_standing(door@ d)

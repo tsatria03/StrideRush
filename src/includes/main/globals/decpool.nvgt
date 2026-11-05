@@ -5,7 +5,7 @@ sound_pool@[] all_pools(0);
 
 void initialize_sound_pools()
 {
-all_pools = {p, muspool, ambpool, hazardpool, spikepool, minepool, forcefieldpool, projectilepool, ammopackpool, keypool, shieldpool, capsulepool, potionpool, teleporterpool, poweruppool, wallpool, birdpool, barrierpool, doorpool, bulletpool};
+all_pools = {p, muspool, ambpool, hazardpool, spikepool, minepool, forcefieldpool, projectilepool, ammopackpool, keypool, shieldpool, capsulepool, potionpool, teleporterpool, poweruppool, wallpool, animalpool, barrierpool, doorpool, bulletpool};
 for (uint i = 0; i < all_pools.length(); i++)
 {
 @all_pools[i].mixer = mixer();
