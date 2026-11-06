@@ -1,4 +1,7 @@
 New in 1.5.
+Added difficulty locks, so each level after easy opens once you've finished 5 runs on the level below it, and a run only counts if you opened a real door and got through it before you died.
+Added five difficulty levels for the endless run, from easy to chaos, which start you at different speeds, give you more or less room between obstacles, and bring in new kinds of obstacles and items as you speed up, while chaos throws everything at you from the start.
+Added a choice of game modes when you play the game, where endless run plays the game as before, and practice run lets you practice one kind of obstacle at a speed you choose for as long as you like, without losing or counting toward your progress.
 Made it so the speech buffers now sort what the game says into doors, items, powerups, status, weapons and misc, each showing up only once something has been spoken into it.
 Added a change game version option in the main menu, where you can type an older version number so the updater offers you the latest version again, until you close the game.
 Added an auto updater, which checks for a new version when the game starts and from a new check for updates option in the main menu, and downloads the installer or the portable version for you, and the settings menu now lets you turn off the check at startup.
