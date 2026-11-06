@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-05, nothing built (summary and build sections at the end of the Q&A log). Started 2026-11-05 on top of 37bc763, from the todo item "Add an auto updater." (dev: "I just added some new scripts. We can start the updater plan from here.").
+Status: SETTLED 2026-11-05 (summary and build sections at the end of the Q&A log); Section 1 built, awaiting the dev's check. Started 2026-11-05 on top of 37bc763, from the todo item "Add an auto updater." (dev: "I just added some new scripts. We can start the updater plan from here.").
 
 What the dev added (uncommitted at the start):
 - src/includes/includes.nvgt: #pragma plugin nvgt_curl (sdr/lib/nvgt_curl.dll is already there; the one network exception in [[project_tech_decisions]]).
@@ -54,3 +54,11 @@ Build sections (to confirm on the go-ahead):
 - Section 1: the updater and its setting (globals/updater.nvgt, auto_check_updates in dec.nvgt, savefuncts, the Game tab checkbox, reset, the startup check in sdr.nvgt, the main menu's check for updates).
 - Section 2: change game version.
 - Section 3: docks (a 1.5 changelog entry or two, the readme's Menus and Settings sections, the todo item to finished, CLAUDE.md and memories).
+- The dev asked about the known limit; Claude checked GitHub (gh release list) and the site: the only release is "StrideRush V1.3" (tag V1.30) with exactly the two files get_download_url() builds, and the site's version.txt says 1.3; V1.40 is a tag with no release yet. The download goes by tag (V<version>0), so every version in the dev's scheme (1.0 to 1.9, then 2.0) compares and downloads correctly; only a 1.10 (tag V1.100, which tools.py would never make) would fail both. Left as is. Note for testing: until 1.4 or 1.5 is released, the updater sees 1.3 as the latest.
+- GO-AHEAD for Section 1 (dev, 2026-11-05: "ready for section 1."). BUILT on top of f8f759d (the dev's downloader scripts committed):
+  - New globals/updater.nvgt: check_for_updates() and get_download_url() from SimpleFighter's a22f1717^ version, with update_project "StrideRush" and update_password "FluentSprinter"; cancel in the version menu returns "" and stops; no mainmenu() calls; "canceled" (lowercase) on every cancel path; the new extract message; the quiet (non-precheck) check also stays silent when the site can't be reached (SimpleFighter alerted "Could not check for updates" at every offline startup), which is what "quietly" meant in the settled summary. The dev asked for an explanation, then (2026-11-05): "I actually like this, so keep it if the auto update toggle is enabled." KEPT: the startup check (which only runs with the toggle on) is silent when the site can't be reached; the menu's check for updates still shows the error.
+  - functions/extrafuncts.nvgt: strip_extension() and strip_directory(), SimpleFighter's.
+  - dec.nvgt auto_check_updates true; readpreffs()/writepreffs(); the Game tab's "Enable checking for game updates at startup" after the Escape question; save and reset.
+  - sdr.nvgt: after the buffers are created, if auto_check_updates, check_for_updates(version, update_project), from source too.
+  - menu.nvgt: "check for updates" between settings menu and test speakers, fading the music and running the precheck version.
+  - FIXED after the first launch (sdr/errors.txt: "No matching symbol 'string_trim_sides'" in downloaderfuncts.nvgt's is_newer_version() and in updater.nvgt): it's not an engine function but SimpleFighter's extrafuncts.nvgt helper (the dev: "Look in SF to see if it has it"). Ported into Stride Rush's extrafuncts.nvgt; it uses string_trim_left() and string_trim_right() from deps/bgt_compat.nvgt. Every other function the updater and the downloader scripts call was then checked against the legacy engine and Stride Rush's deps (url_get, file_put_contents, find_directories, expand_environment_variables, the tone_synth's freq_ms, set_edge_fades and write_wave_sound in the engine; string_to_number and string_split in bgt_compat); all exist.

@@ -1,5 +1,5 @@
 /* The main menu (dev, 2026-11-03, for 1.3, SimpleFighter's layout): documentation menu, game menu, settings menu (dev,
-2026-11-04), test speakers (dev, 2026-11-05, ToyMania's), restart game and exit game. main()'s loop reopens it
+2026-11-04), check for updates and test speakers (dev, 2026-11-05, ToyMania's order), restart game and exit game. main()'s loop reopens it
 whenever a submenu returns. */
 void mainmenu()
 {
@@ -7,6 +7,7 @@ setupmenu(true);
 m.add_item("documentation menu", "docks");
 m.add_item("game menu", "game");
 m.add_item("settings menu", "settings");
+m.add_item("check for updates", "updates"); // dev, 2026-11-05; globals/updater.nvgt
 m.add_item("test speakers", "speakers");
 m.add_item("restart game", "rx");
 m.add_item("exit game", "ex");
@@ -23,6 +24,11 @@ exit();
 if(main=="docks") docksmenu();
 else if(main=="game") gamemenu();
 else if(main=="settings") settingsmenu();
+else if(main=="updates")
+{
+m.fade_music();
+check_for_updates(version, update_project, true);
+}
 else if(main=="speakers") test_speakers();
 else if(main=="rx") restart_game();
 }

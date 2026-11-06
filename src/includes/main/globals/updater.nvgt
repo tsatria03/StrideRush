@@ -1,0 +1,138 @@
+/* The updater (dev, 2026-11-05), ported from SimpleFighter's updater.nvgt as it was before a22f1717 (the version that
+still offered the installer), on the dev's deps/downloader.nvgt dl_file() and functions/downloaderfuncts.nvgt, with
+progress beeps from the tone_synth only. Run quietly at startup when auto_check_updates is on (from source too, so it
+can be tested), and with precheck from the main menu's check for updates.
+The latest version is the site's projects/games/StrideRush/version.txt; the files come from the GitHub release tagged
+V<version>0 (1.6 is V1.60), as build/tools.py names them. Changes from SimpleFighter's: cancel in the version menu
+really cancels (it went on to download the installer), nothing calls mainmenu() (every step returns, and main()'s loop
+reopens the main menu), the quiet startup check stays silent when it can't reach the site, and the message after
+extracting says where the new copy is. */
+const string update_project = "StrideRush";
+const string update_password = "FluentSprinter"; // build/tools.ini's archive password
+/* Checks for a newer version and, if there is one and you want it, downloads and installs or extracts it. precheck is
+the menu's check: it says it's checking, says when you're up to date, and says when the site can't be reached. */
+bool check_for_updates(string old_version, string projectname, bool precheck = false)
+{
+if (precheck)
+{
+speak("Checking for updates...");
+wait(1000);
+}
+string version_url = "https://tsatria03.github.io/projects/games/" + projectname + "/version.txt";
+string new_version = url_get(version_url);
+if (new_version == "" || string_contains(new_version, "<!DOCTYPE", 1) > -1)
+{
+if (precheck) alert("Error", "Could not check for updates at this time.");
+return false;
+}
+if (!is_newer_version(old_version, new_version))
+{
+if (precheck) alert("No updates available", "You already have the latest version of the game!");
+return false;
+}
+new_version = string_trim_sides(new_version);
+int response = question("Update Available", "A new version of " + projectname + " is available. Your version: " + old_version + ". Latest version: " + new_version + ". Would you like to download it now?");
+if (response != 1)
+{
+speak("canceled");
+return false;
+}
+wait(500);
+string url = get_download_url(projectname, new_version);
+if (url == "") return false; // canceled in the version menu
+string filename = get_disk_filename(url);
+string bare_name = strip_extension(strip_directory(filename));
+if (!file_exists(filename))
+{
+// A write-protected game folder (an install under Program Files) can't take the download, so offer Downloads.
+string test_file = filename + ".test";
+if (!file_put_contents(test_file, "test"))
+{
+wait(500);
+int choice = question("Permission Denied", "This update can't be downloaded to this directory because it's write-protected. Would you like to download this file to your Downloads folder instead?");
+if (choice != 1)
+{
+speak("canceled");
+return false;
+}
+filename = get_downloads_folder() + strip_directory(filename);
+}
+else
+{
+file_delete(test_file);
+}
+wait(500);
+string result = dl_file(url, filename);
+if (result != "finished")
+{
+if (result == "canceled" && file_exists(filename)) file_delete(filename);
+alert("Download Failed", "The update could not be downloaded.");
+return false;
+}
+}
+else
+{
+wait(500);
+alert("Notice", "The update file already exists. Skipping download.");
+}
+wait(500);
+string ext = filename.substr(filename.rfind(".") + 1);
+setupmenu(false);
+if (ext == "exe") m.add_item("Run Installer", "run");
+else if (ext == "7z" || ext == "zip") m.add_item("Extract file", "extract");
+m.add_item("Cancel", "cancel");
+m.intro_text = "The update has been downloaded. What would you like to do with " + bare_name + "?";
+int mres = m.run();
+string choice = m.selected_item_id;
+if (mres < 0 || choice == "cancel")
+{
+speak("canceled");
+return false;
+}
+if (choice == "run")
+{
+wait(500);
+if (!run(filename, "", false, false))
+{
+alert("Error", "Could not launch the installer.");
+return false;
+}
+exit(); // the installer replaces this copy once the game has closed
+return true;
+}
+wait(500);
+speak("Extracting update...");
+wait(1000);
+/* Into the current folder, as SimpleFighter does (dev, 2026-11-05): the archive holds the sdr folder, so the new copy
+lands at sdr\sdr, inside this one. From source that's the repo's sdr\sdr, which .gitignore leaves out. */
+bool success = run("lib/7zr.exe", "x \"" + filename + "\" -p" + update_password + " -aoa -y", true, true);
+if (!success)
+{
+alert("Extraction Failed", "Failed to extract the archive.");
+return false;
+}
+if (file_exists(filename)) file_delete(filename);
+alert("Update Complete", "The update has been extracted to the sdr folder inside your game folder. Please run the new version from there.");
+exit();
+return true;
+}
+/* Asks which build to download and returns its URL in the V<version>0 release, or "" if canceled. The names match
+build/tools.py's: the installer .exe and the portable .7z. */
+string get_download_url(string projectname, string new_version)
+{
+string base = "https://github.com/tsatria03/" + projectname + "/releases/download/V" + new_version + "0";
+setupmenu(false);
+m.add_item("Windows Installer", "installer");
+m.add_item("Windows Portable", "portable");
+m.add_item("cancel", "cancel");
+m.intro_text = "Which version of the game would you like to download?";
+int mres = m.run();
+string version_choice = m.selected_item_id;
+if (mres < 0 || version_choice == "cancel")
+{
+speak("canceled");
+return "";
+}
+if (version_choice == "portable") return base + "/" + projectname + "_windows_portable_password_is_" + update_password + ".7z";
+return base + "/" + projectname + "_windows_installer_password_is_" + update_password + ".exe";
+}

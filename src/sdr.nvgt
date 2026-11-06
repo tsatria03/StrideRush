@@ -33,6 +33,8 @@ exit();
 }
 if (!load_controls()) exit();
 create_buffer("misc"); // also creates the "all" buffer first
+// The quiet startup check (dev, 2026-11-05), from source too, so it can be tested; it only speaks up when there's an update.
+if (auto_check_updates) check_for_updates(version, update_project);
 while(true)
 {
 wait(5);
