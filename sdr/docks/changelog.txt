@@ -1,4 +1,5 @@
 New in 1.5.
+Added a learn sounds menu in the game menu, where you can play the sounds of items, obstacles and weapons and every obstacle's countdown, and the settings menu now lets you choose whether those sounds loop and whether the menu tells you when a sound has several versions.
 Added a test speakers option in the main menu, which plays a sound so you can check your speakers or headphones before you play.
 Made it so walls are now easier to break at high speeds, so your guns can get through them in time, while fake doors are now much tougher than walls.
 New in 1.4.

@@ -61,9 +61,14 @@ The pairs are: Slow Motion and Rush Hour, which make the belt slower or faster; 
 
 Menus.
 
-The main menu has six options. The documentation menu lets you read the changelog, credits, readme and todo list, each in a window you can move through with the arrow keys and close when you're done. The game menu is where you start a run, by choosing play game. The settings menu is described below. Test speakers plays a sound so you can check your speakers or headphones, and you can press enter to end it early. Restart game closes Stride Rush and opens it again, and exit game closes it. Pressing escape on the main menu also exits.
+The main menu has six options. The documentation menu lets you read the changelog, credits, readme and todo list, each in a window you can move through with the arrow keys and close when you're done. The game menu is where you start a run, by choosing play game, or learn the game's sounds, as described below. The settings menu is described below too. Test speakers plays a sound so you can check your speakers or headphones, and you can press enter to end it early. Restart game closes Stride Rush and opens it again, and exit game closes it. Pressing escape on the main menu also exits.
 During a run, press P for the pause menu, where you can resume, restart or quit the run. Restarting or quitting asks you first, since you'll lose the run you're on. Pressing escape during a run asks straight away whether you want to quit, and the run stops moving while you decide. Whenever you leave a run this way, its sounds fade out.
 When a run ends in a death, you're asked whether you want to replay the current run. Yes starts a new one straight away, and no takes you back to the game menu.
+
+Learning the sounds.
+
+The learn sounds menu, in the game menu, lets you play the game's sounds before you run into them. It has four categories: items, with common items and keys; obstacle cues, with the countdown of each kind of obstacle; obstacles, with a list for each kind of obstacle, and animals split into birds and dogs; and weapons, with artillery and melee. Each category tells you how many sounds it holds, and everything is in alphabetical order. Escape or back takes you up one level.
+In a list of sounds, press enter to play the one you're on, or hold it down to keep starting it again. A sound with several versions plays one of them at random each time. Moving to another sound stops the one playing, space pauses or resumes it, and shift plus page up or page down makes the sounds louder or quieter. A countdown plays its five cues at the starting speed, and you can keep moving through the list while it plays. Each menu remembers where you were until you close the game.
 
 Settings.
 
@@ -71,8 +76,8 @@ The settings menu is a window with a list of tabs at the top. Move through the t
 General: reset settings puts every setting back to how it started, after asking you first. Your key bindings aren't touched.
 Game: choose whether things behind you sound a little lower in pitch, which is ticked to start with and helps you tell what's behind you from what's ahead, and whether escape asks before quitting a run. If you untick the escape question, escape leaves the run straight away.
 Keyboard: view every key binding, or rebind your keys. In the rebind list, you can add another key to an action, change an action's key, or remove an action's keys, and each change is saved as soon as you make it.
-Menu: turn on wrapping, first letter navigation, position information and side scrolling in menus.
-Sound: turn HRTF on or off, which is ticked to start with and makes sounds in front of you, behind you and to your sides easier to place through headphones. You can also choose between fading out by volume, which is ticked to start with, or by pitch when you leave a run, and pick which sound device the game plays through. Your device choice is saved straight away.
+Menu: turn on wrapping, first letter navigation, position information and side scrolling in menus, and choose whether the learn sounds menu tells you when a sound has several versions, which is ticked to start with.
+Sound: turn HRTF on or off, which is ticked to start with and makes sounds in front of you, behind you and to your sides easier to place through headphones. You can also choose between fading out by volume, which is ticked to start with, or by pitch when you leave a run, choose whether the sounds in the learn sounds menu keep looping until you move to another, which is also ticked to start with, and pick which sound device the game plays through. Your device choice is saved straight away.
 Speech: set up your voice, either your screen reader or another voice with its own rate, pitch and volume, and preview how it sounds.
 During a run, F2 opens the settings with only the game, menu and speech tabs, and F1 shows your key bindings. The run is paused while either is open, and carries on when you close it.
 Your settings, including your music, ambience and menu music volumes, are remembered from one launch to the next.
