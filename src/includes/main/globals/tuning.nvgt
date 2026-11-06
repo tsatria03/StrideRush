@@ -119,7 +119,7 @@ at 200 ms the last 3; above 200 ms the countdown already lasts at least this lon
 const int switch_min_time = 500;
 
 /* Weapons (dev, 2026-11-02). Every hit's damage is the weapon's base damage (weapons.nvgt) times this, for all ten
-weapons at once: 4 makes the bat 12 and the pistol 120 (dev, 2026-11-03, while testing walls; it was 2). */
+weapons at once: 4 makes the axe 12 and the pistol 120 (dev, 2026-11-03, while testing walls; it was 2). */
 const int weapon_damage_multiplier = 4;
 // Each gun starts every run with this much loaded and in reserve; ammo packs refill the reserve.
 const int gun_start_loaded = 50;

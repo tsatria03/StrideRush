@@ -403,7 +403,10 @@ if (base == "spawn") return "appear";
 if (base == "grant") return "unlock";
 if (base == "deny") return "locked";
 if (base == "jam") return "jammed";
-if (base == "death") return "break";
+/* Death reads "destroy" (dev, 2026-11-06: "What about Steel shield destroy?", then the walls and doors). It read "break"
+until then, which merged a steel shield's death (a worn shield giving out) with its own break (one broken on the belt)
+into one "break" with two variants (bug found by the dev). Only shields, walls and doors have a death sound here. */
+if (base == "death") return "destroy";
 if (base == "hurt") return "damage";
 if (base == "light") return "light up";
 if (base == "on") return "switched on";

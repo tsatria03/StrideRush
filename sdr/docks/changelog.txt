@@ -1,4 +1,5 @@
 New in 1.5.
+Made it so the boot and laser are now replaced by an axe and a sword, with new sounds for most of the other weapons, and every run now starts with the axe, the weakest weapon, on 1, while the sword sits on 8.
 Added difficulty locks, so each level after easy opens once you've finished 5 runs on the level below it, and a run only counts if you opened a real door and got through it before you died.
 Added five difficulty levels for the endless run, from easy to chaos, which start you at different speeds, give you more or less room between obstacles, and bring in new kinds of obstacles and items as you speed up, while chaos throws everything at you from the start.
 Added a choice of game modes when you play the game, where endless run plays the game as before, and practice run lets you practice one kind of obstacle at a speed you choose for as long as you like, without losing or counting toward your progress.
