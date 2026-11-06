@@ -45,6 +45,19 @@ key_before_door = next_type != "keys";
 next_countdown = countdown_steps();
 return;
 }
+/* Practice only: "practice_doors" mixes real and fake doors at random (dev, 2026-11-05), half and half, so telling them
+apart is practiced, with a key always placed just before each real door, so unlocking is practiced too. It doesn't wait
+for the speed marks, which a fixed-speed practice run never reaches. */
+if (spawn_only == "practice_doors")
+{
+if (!key_before_door) next_type = "real_doors"; // the key was just placed: its door comes next
+else if (keys_available() and random(1, 2) == 1) next_type = "keys";
+else next_type = "fake_doors";
+key_before_door = next_type != "keys";
+if (!doors_available()) next_type = "";
+next_countdown = next_type == "" ? 0 : countdown_steps();
+return;
+}
 // Debug option only: "keys" makes every spawn a key.
 if (spawn_only == "keys")
 {
@@ -191,6 +204,13 @@ void set_spawn_only(string only_type)
 {
 spawn_only = only_type;
 item_lane_mode = "";
+/* Practice doors' keys come one at a time in a random lane, as in the real game, but never with a pair's second item,
+which could be any kind, since a practice run has no items but keys (dev, 2026-11-05). */
+if (only_type == "practice_doors")
+{
+item_lane_mode = "random";
+return;
+}
 for (uint i = 0; i < item_lane_types.length(); i++)
 {
 string base = item_lane_types[i];

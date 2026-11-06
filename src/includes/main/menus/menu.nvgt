@@ -146,6 +146,7 @@ void play_game()
 {
 int speed = start_step_time, can_run_out = 1, steps = 1;
 string only_type = "all";
+bool practicing = false;
 int stage = 0;
 while (stage < 5)
 {
@@ -153,14 +154,15 @@ if (stage == 0)
 {
 string mode = choose_game_mode();
 if (mode == "") return;
+practicing = false; // set again below, so backing out of practice into another mode never leaves it on
 if (mode == "practice")
 {
 // Escaping the obstacle menu stays on the mode menu (stage 0); otherwise straight to the run.
 string practice_type;
 int practice_speed;
 if (!choose_practice(practice_type, practice_speed)) continue;
-/* Until the practice run is built (the game menu refactor plan's Section 3), a practice run starts like a single-type
-debug run: debug_lives, lives that can't run out, the debug shields. */
+// A practice run (Section 3): its fixed speed, the one obstacle, practice_lives that can't run out.
+practicing = true;
 speed = practice_speed;
 only_type = practice_spawn_id(practice_type);
 can_run_out = 0;
@@ -209,8 +211,10 @@ do
 {
 restart_run_requested = false;
 run_died = false;
-// A single-type debug run starts with debug_lives (dev, 2026-11-03); "all" plays like the real game.
-start_run(speed, only_type == "all" ? starting_lives : debug_lives, only_type, can_run_out == 1);
+/* A practice run starts with practice_lives; a single-type debug run with debug_lives (dev, 2026-11-03); "all" plays
+like the real game. A practice run can't die, so it never reaches the replay question. */
+int life_count = practicing ? practice_lives : (only_type == "all" ? starting_lives : debug_lives);
+start_run(speed, life_count, only_type, can_run_out == 1, practicing);
 if (run_died and !restart_run_requested and ask_play_again()) restart_run_requested = true;
 }
 while (restart_run_requested);
@@ -300,12 +304,12 @@ return true;
 }
 return false;
 }
-/* A practice choice as the spawner's spawn_only. Doors and barriers aren't plain obstacle types: until Section 3 adds
-the practice doors mix (real doors with their keys among fake ones), doors practice fake doors only, and barriers use
-the real game's lane rule, sometimes two side by side. */
+/* A practice choice as the spawner's spawn_only. Doors and barriers aren't plain obstacle types: doors are the practice
+mix of real doors, each with its key, and fake ones (choose_next_obstacle()), and barriers use the real game's lane
+rule, sometimes two side by side. */
 string practice_spawn_id(const string&in practice_type)
 {
-if (practice_type == "doors") return "fake_doors";
+if (practice_type == "doors") return "practice_doors";
 if (practice_type == "barriers") return "barriers_multiple";
 return practice_type;
 }

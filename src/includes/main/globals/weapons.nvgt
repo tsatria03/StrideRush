@@ -177,7 +177,7 @@ reloading = false;
 int w = current_weapon;
 int amount = int(min(gun_start_loaded - weapon_loaded[w], weapon_reserve[w]));
 weapon_loaded[w] += amount;
-weapon_reserve[w] -= amount;
+if (!practice_run) weapon_reserve[w] -= amount; // a practice run's reserve never runs out (dev, 2026-11-05)
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*ping*"), false);
 }
 // X: one sentence about the current weapon's ammo.
@@ -189,5 +189,6 @@ if (!is_gun(w))
 speak_buffer("This weapon doesn't take any ammo.", "weapons");
 return;
 }
-speak_buffer("You have " + weapon_loaded[w] + " out of " + gun_start_loaded + " rounds loaded, and " + weapon_reserve[w] + " rounds in reserve.", "weapons");
+if (practice_run) speak_buffer("You have " + weapon_loaded[w] + " out of " + gun_start_loaded + " rounds loaded, and unlimited rounds in reserve.", "weapons");
+else speak_buffer("You have " + weapon_loaded[w] + " out of " + gun_start_loaded + " rounds loaded, and " + weapon_reserve[w] + " rounds in reserve.", "weapons");
 }

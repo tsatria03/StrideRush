@@ -8,6 +8,9 @@ vector me;
 int step_time = start_step_time;
 int lives = starting_lives;
 bool running = false;
+/* A practice run (the game menu refactor plan's Section 3, dev, 2026-11-05): one obstacle at a fixed speed, and you
+can't lose. Set by start_run() before reset_run(), so give_debug_shield() and the spawner see it. */
+bool practice_run = false;
 timer steptimer, speeduptimer, runtimer;
 sound_pool muspool, ambpool;
 int musslot = -1, ambslot = -1;
@@ -35,9 +38,11 @@ reset_spawner();
 update_listeners();
 }
 /* Normally start_step_time, starting_lives, every obstacle type, and a run that ends when lives run out; the source-only
-debug options can start faster, with more lives, with only one obstacle type, or with lives that never run out. */
-void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives, string only_type = "all", bool can_run_out = true)
+debug options can start faster, with more lives, with only one obstacle type, or with lives that never run out; a
+practice run is a single type at a fixed speed with lives that never run out. */
+void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives, string only_type = "all", bool can_run_out = true, bool practice = false)
 {
+practice_run = practice;
 set_spawn_only(only_type); // before reset_run(), whose reset_spawner() picks the first obstacle; splits an item's debug lane choice off
 lives_can_end = can_run_out;
 reset_run(starting_step_time, starting_life_count);
@@ -135,6 +140,7 @@ door_countdown();
 }
 void speedup_check()
 {
+if (practice_run) return; // a practice run stays at its chosen speed all run (dev, 2026-11-05: "keep it as is")
 if (speeduptimer.elapsed < speedup_period) return;
 speeduptimer.restart();
 step_time = int(max(min_step_time, step_time - speedup_amount));
