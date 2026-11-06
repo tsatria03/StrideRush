@@ -89,11 +89,13 @@ while(true)
 {
 setupmenu(true);
 m.add_item("play game", "play");
+m.add_item("learn sounds menu", "learn"); // dev, 2026-11-05; learn_sounds_menu.nvgt
 m.add_item("back", "back");
 m.intro_text="Game menu.";
 int mres=m.run();
 if(mres<0 or m.selected_item_id=="back") return;
-play_game();
+if(m.selected_item_id=="learn") learn_sounds_menu();
+else play_game();
 }
 }
 /* Play game. From source it first asks whether to play in debug mode (dev, 2026-11-03): No plays the real game (start
