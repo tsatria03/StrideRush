@@ -6,16 +6,60 @@ int run_difficulty = -1;
 int run_min_floor_time = min_floor_time;
 int run_max_floor_time = max_floor_time;
 
+/* The locks (Section 6): how many counted runs each level has, saved in saves/game.srf (readgame(), writegame()). A run
+counts toward its level only when it ends in a death after a real door you opened has carried you all the way through
+(dev, 2026-11-05: "you need to open a door and get past it."; a crash doesn't count); quits, restarts, debug and practice
+runs never count. run_door_passed is set by finish_door_move() in door.nvgt. */
+int[] difficulty_runs = {0, 0, 0, 0, 0}; // one per difficulty_names entry (a literal, so it never depends on another file's globals being set first)
+bool run_door_passed = false;
+
 void set_run_difficulty(int level)
 {
 if (level < 0 or level >= int(difficulty_names.length())) level = -1;
 run_difficulty = level;
+run_door_passed = false; // every run, restarts and replays included, has to pass its own door
 run_min_floor_time = level < 0 ? min_floor_time : difficulty_min_floor_times[level];
 run_max_floor_time = level < 0 ? max_floor_time : difficulty_max_floor_times[level];
 }
 /* True when a type or item may spawn yet (Section 5): always in debug and practice runs, which have no level, and on
 chaos; on easy to insane, once step_time (the normal speed, which the speed powerups don't shift) has reached its
 schedule_join_times entry, or always when it isn't in schedule_types. */
+// Easy is always open; every other level once the level below has difficulty_unlock_runs counted runs.
+bool difficulty_unlocked(int level)
+{
+if (level <= 0) return true;
+return difficulty_runs[level - 1] >= difficulty_unlock_runs;
+}
+// Called by finish_run(), at a death: counts the run toward its level if it qualifies, and saves at once.
+void count_difficulty_run()
+{
+if (run_difficulty < 0 or !run_door_passed) return;
+difficulty_runs[run_difficulty] += 1;
+writegame();
+}
+/* A level's line in the difficulty menu (dev, 2026-11-05): "Easy. Available.", or for a locked level "Medium. Unlocked
+after completing 3 more easy runs." ("run" for 1), leaving out "more" when the level below is itself locked: "Hard.
+Unlocked after completing 5 medium runs." */
+string difficulty_line(int level)
+{
+string name = learn_upper_first(difficulty_names[level]);
+if (difficulty_unlocked(level)) return name + ". Available.";
+return name + ". Unlocked " + difficulty_lock_reason(level);
+}
+/* Choosing a locked level (dev, 2026-11-06: "it should say something like. This difficulty is Unlocked after completing
+5 more easy runs."): the dialog's sentence, the same count as the menu line. */
+string difficulty_locked_message(int level)
+{
+return "This difficulty is unlocked " + difficulty_lock_reason(level);
+}
+// The shared end of both: "after completing 3 more easy runs." ("run" for 1; no "more" while the level below is locked).
+string difficulty_lock_reason(int level)
+{
+string below = difficulty_names[level - 1];
+bool below_open = difficulty_unlocked(level - 1);
+int left = below_open ? difficulty_unlock_runs - difficulty_runs[level - 1] : difficulty_unlock_runs;
+return "after completing " + left + (below_open ? " more " : " ") + below + (left == 1 ? " run." : " runs.");
+}
 bool has_joined(const string&in type)
 {
 if (run_difficulty < 0 or run_difficulty == chaos_level) return true;

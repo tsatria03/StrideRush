@@ -81,6 +81,27 @@ break;
 }
 }
 }
+/* Loads the game's progress from saves/game.srf at startup, the settings' way: each value only if the file holds it, so
+a missing file or an older one leaves the rest at 0. For now that's one run count per difficulty level, under
+"difficulty_runs_<level>" (Section 6). */
+void readgame()
+{
+gs.load();
+for (uint i = 0; i < difficulty_names.length(); i++)
+{
+string name = "difficulty_runs_" + difficulty_names[i];
+if (gs.d.exists(name)) difficulty_runs[i] = gs.read_int(name);
+}
+}
+// Writes the game's progress to saves/game.srf; called the moment a run count changes.
+void writegame()
+{
+for (uint i = 0; i < difficulty_names.length(); i++)
+{
+gs.add("difficulty_runs_" + difficulty_names[i], difficulty_runs[i]);
+}
+gs.save();
+}
 /* Writes every setting to settings.srf. Called whenever one changes: the menu music volume (form_menu) and the run
 volumes (Home, End, Page Up and Page Down). Muting a buffer calls it too; mutes aren't saved, so that just rewrites the
 same values. */

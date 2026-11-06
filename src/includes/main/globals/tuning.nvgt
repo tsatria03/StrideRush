@@ -55,6 +55,9 @@ real door outside the schedule. Chaos has everything from the first spawn. */
 const string[] schedule_types = {"projectiles", "force_fields", "animals", "walls", "ammo_packs", "fake_doors", "player_teleporters", "barriers", "powerups"};
 const int[] schedule_join_times = {450, 400, 350, 300, 300, 250, 250, 200, 200};
 const int chaos_level = 4; // difficulty_names' index of chaos, which ignores the schedule
+/* The locks (Section 6, dev, 2026-11-05: "5 runs per level, and a user is required to reach at least 1 door"): easy is
+always open, and each other level opens after this many counted runs on the level below. */
+const int difficulty_unlock_runs = 5;
 
 // Each spike swings on its own rhythm: a random swing time between these, picked when it appears (dev, 2026-11-02).
 const int spike_swing_min = 500;

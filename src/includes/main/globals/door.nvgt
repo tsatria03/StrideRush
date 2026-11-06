@@ -201,6 +201,7 @@ void finish_door_move(door@ d)
 {
 d.closed = true;
 door_moving = false;
+run_door_passed = true; // this run can now count toward its difficulty's lock (difficulty.nvgt)
 if (door_moveslot > -1) doorpool.destroy_sound(door_moveslot);
 door_moveslot = -1;
 play_door(d, "close", d.x, false);

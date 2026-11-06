@@ -80,5 +80,6 @@ void finish_run()
 {
 p.destroy_all();
 run_died = true;
+count_difficulty_run(); // a death after passing a real door counts toward the level's lock (difficulty.nvgt)
 running = false;
 }
