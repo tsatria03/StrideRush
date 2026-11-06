@@ -67,7 +67,7 @@ When a run ends in a death, you're asked whether you want to replay the current 
 
 Learning the sounds.
 
-The learn sounds menu, in the game menu, lets you play the game's sounds before you run into them. It has four categories: countdowns, with the countdown of each kind of obstacle; items, with common items and keys; traps, with a list for each kind of obstacle, and animals split into birds and dogs; and weapons, with artillery and melee. Each category tells you how many sounds it holds, and everything is in alphabetical order. Escape or back takes you up one level.
+Learn sounds, in the game menu, lets you play the game's sounds before you run into them. It has four categories: countdowns, with the countdown of each kind of obstacle; items, with common items and keys; traps, with a list for each kind of obstacle, and animals split into birds and dogs; and weapons, with artillery and melee. Each category tells you how many sounds it holds, and everything is in alphabetical order. Escape or back takes you up one level.
 In a list of sounds, press enter to play the one you're on, or hold it down to keep starting it again. A sound with several versions plays one of them at random each time. Moving to another sound stops the one playing, space pauses or resumes it, and shift plus page up or page down makes the sounds louder or quieter. A countdown plays its five cues at the starting speed, and you can keep moving through the list while it plays. Each menu remembers where you were until you close the game.
 
 Updates.

@@ -212,7 +212,7 @@ int n = cat.subs[i].count();
 m.add_item(cat.subs[i].name + ": This category has a total of " + n + " sound" + (n == 1 ? "" : "s"), "" + i);
 }
 m.add_item("back", "back");
-m.intro_text = path == "learn" ? "Learn sounds menu. Choose a category of sounds, then pick a sound to play it." : learn_upper_first(cat.name) + " menu.";
+m.intro_text = path == "learn" ? "Choose a category of sounds, then pick a sound to play it." : learn_upper_first(cat.name) + " menu.";
 int start = learn_get_focus(path);
 int mres = m.run(start, false, start >= 0);
 if (mres < 0 or m.selected_item_id == "back") return;

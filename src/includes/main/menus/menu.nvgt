@@ -124,9 +124,11 @@ while(true)
 {
 setupmenu(true);
 m.add_item("play game", "play");
-m.add_item("learn sounds menu", "learn"); // dev, 2026-11-05; learn_sounds_menu.nvgt
+m.add_item("learn sounds", "learn"); // dev, 2026-11-05 (first "learn sounds menu"); learn_sounds_menu.nvgt
 m.add_item("back", "back");
-m.intro_text="Game menu.";
+/* ToyMania's game menu intro (dev, 2026-11-05), with only the parts Stride Rush has: its "learn about important
+sounds" from when ToyMania had a learn sounds menu; "view achievements, or check your stats" join when those exist. */
+m.intro_text="Game menu. You can start a new game session, or learn about important sounds here.";
 int mres=m.run();
 if(mres<0 or m.selected_item_id=="back") return;
 if(m.selected_item_id=="learn") learn_sounds_menu();
