@@ -137,7 +137,8 @@ else play_game();
 }
 /* Play game. It opens the mode menu (the practice plan, dev, 2026-11-06, replacing the 2026-11-03 "Do you want to play
 in debug mode?" question): endless run plays the real game (start speed, everything spawning, starting_lives, and the
-run ends when lives run out), and debug run, from source only, goes on to the debug options, in the dev's order: speed,
+run ends when lives run out), practice run goes on to the practice menus (choose_practice()), and debug run, from source
+only, goes on to the debug options, in the dev's order: speed,
 spawn, footsteps (2026-11-04), then whether lives can run out. Escape steps back one menu silently: from the mode menu to
 the game menu, and from the speed menu back to the mode menu. They're all nested menus, so nothing says "canceled". The
 lives menu was removed with player health: "all" starts with starting_lives, and any single-type choice with debug_lives. */
@@ -152,7 +153,21 @@ if (stage == 0)
 {
 string mode = choose_game_mode();
 if (mode == "") return;
-if (mode == "endless")
+if (mode == "practice")
+{
+// Escaping the obstacle menu stays on the mode menu (stage 0); otherwise straight to the run.
+string practice_type;
+int practice_speed;
+if (!choose_practice(practice_type, practice_speed)) continue;
+/* Until the practice run is built (the game menu refactor plan's Section 3), a practice run starts like a single-type
+debug run: debug_lives, lives that can't run out, the debug shields. */
+speed = practice_speed;
+only_type = practice_spawn_id(practice_type);
+can_run_out = 0;
+steps = 1;
+stage = 5;
+}
+else if (mode == "endless")
 {
 /* The real game. Set every choice here, not just once above, since escaping back from a debug option leaves
 its "escaped" value behind (a speed of -1 ran every step at once; bug found by the dev, 2026-11-04). */
@@ -234,8 +249,8 @@ return m.selected_item_id == "yes";
 }
 /* The mode menu (the practice plan, dev, 2026-11-06): the foundation every way to play lands on. Debug run comes first
 and only from source (SCRIPT_COMPILED hides it), then endless run; each item is followed by a ToyMania-style
-description. Practice run joins after endless run in the practice plan's Section 2. Returns "debug", "endless", or ""
-for escape or back, which step back to the game menu silently. */
+description; practice run follows endless run (Section 2). Returns "debug", "endless", "practice", or "" for escape or
+back, which step back to the game menu silently. */
 string choose_game_mode()
 {
 setupmenu();
@@ -244,10 +259,55 @@ if (!SCRIPT_COMPILED) m.add_item("Debug run. This mode lets you choose the speed
 /* "and more obstacles join as you go" joins this description once the difficulty plan's schedule is built (dev,
 2026-11-05). */
 m.add_item("Endless run. This mode lets you run for as long as you can survive. The belt gets faster, and the run ends when you run out of lives or fall into a hazard.", "endless");
+m.add_item("Practice run. This mode lets you practice one kind of obstacle at a time, for as long as you like. You can't lose, and nothing you do here counts toward your progress.", "practice");
 m.add_item("back", "back");
 int mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") return "";
 return m.selected_item_id;
+}
+/* The practice menus (the game menu refactor plan's Section 2, dev, 2026-11-05): the obstacle, then the speed. The
+obstacles come in learning order, the order the difficulty schedule brings them in, not alphabetical; the speeds are
+fixed for the run. Escape or back on the speed menu steps back to the obstacles, and on the obstacles back to the mode
+menu, all silently. Fills practice_type and practice_speed and returns true, or returns false when backed out. */
+bool choose_practice(string &out practice_type, int &out practice_speed)
+{
+practice_type = "";
+practice_speed = start_step_time;
+while (true)
+{
+setupmenu();
+m.intro_text = "Choose an obstacle to practice.";
+string[] obstacles = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "doors", "barriers"};
+for (uint i = 0; i < obstacles.length(); i++)
+{
+m.add_item(obstacles[i].replace("_", " ", true), obstacles[i]);
+}
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+practice_type = m.selected_item_id;
+setupmenu();
+m.intro_text = "Choose a speed.";
+for (int t = start_step_time; t >= 100; t -= 100)
+{
+m.add_item(t + " ms", "" + t);
+}
+m.add_item("back", "back");
+mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") continue; // back to the obstacles
+practice_speed = int(parse_int(m.selected_item_id));
+return true;
+}
+return false;
+}
+/* A practice choice as the spawner's spawn_only. Doors and barriers aren't plain obstacle types: until Section 3 adds
+the practice doors mix (real doors with their keys among fake ones), doors practice fake doors only, and barriers use
+the real game's lane rule, sometimes two side by side. */
+string practice_spawn_id(const string&in practice_type)
+{
+if (practice_type == "doors") return "fake_doors";
+if (practice_type == "barriers") return "barriers_multiple";
+return practice_type;
 }
 /* DEBUG OPTION: pick the starting step time, from start_step_time down in 100 ms steps: 500, 400, 300, 200, 100. The
 50 ms in between (450, 350, 250, 150 and 50) were dropped for door testing (dev, 2026-11-03). It only appears when
