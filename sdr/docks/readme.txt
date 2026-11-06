@@ -67,7 +67,7 @@ When a run ends in a death, you're asked whether you want to replay the current 
 
 Learning the sounds.
 
-The learn sounds menu, in the game menu, lets you play the game's sounds before you run into them. It has four categories: items, with common items and keys; obstacle cues, with the countdown of each kind of obstacle; obstacles, with a list for each kind of obstacle, and animals split into birds and dogs; and weapons, with artillery and melee. Each category tells you how many sounds it holds, and everything is in alphabetical order. Escape or back takes you up one level.
+The learn sounds menu, in the game menu, lets you play the game's sounds before you run into them. It has four categories: countdowns, with the countdown of each kind of obstacle; items, with common items and keys; traps, with a list for each kind of obstacle, and animals split into birds and dogs; and weapons, with artillery and melee. Each category tells you how many sounds it holds, and everything is in alphabetical order. Escape or back takes you up one level.
 In a list of sounds, press enter to play the one you're on, or hold it down to keep starting it again. A sound with several versions plays one of them at random each time. Moving to another sound stops the one playing, space pauses or resumes it, and shift plus page up or page down makes the sounds louder or quieter. A countdown plays its five cues at the starting speed, and you can keep moving through the list while it plays. Each menu remembers where you were until you close the game.
 
 Updates.
@@ -122,7 +122,7 @@ Alt plus F4: Exits the game right away during a run, if pressed.
 
 Speech buffer commands
 
-Everything the game speaks during a run is kept in speech buffers, so you can go back and review it.
+Everything the game speaks during a run is kept in speech buffers, so you can go back and review it. The all buffer holds every message, and the rest each hold one kind: doors, for locked, jammed and unlocked doors; items, for what you pick up, your inventory and what your items do; powerups, for the powerups you collect and when they wear off; status, for your health, shield, lane, distance, speed and running time; weapons, for drawing, reloading and your ammo; and misc, for your music and ambience volume. A buffer only shows up once something has been spoken into it, and they come in alphabetical order after all.
 Comma: Moves to the previous message in the current buffer, if pressed/held down.
 Period: Moves to the next message in the current buffer, if pressed/held down.
 Shift plus comma: Moves to the first message in the current buffer, if pressed.

@@ -2,8 +2,8 @@
 ToyMania one. Everything is built from the sound folders each time it opens, so a new obstacle theme, item or weapon
 dropped into sdr/sounds shows up with no code change:
 - items: common (equipments/items/common) and other (equipments/items/other, the keys)
-- obstacle cues: one countdown per obstacle type (misc/trap/<type>)
-- obstacles: one list per obstacle type (objects/traps/<type>, every theme's sounds)
+- countdowns: one countdown per obstacle type (misc/trap/<type>)
+- traps: one list per obstacle type (objects/traps/<type>, every theme's sounds)
 - weapons: artillery and melee (equipments/weapons/<kind>)
 Every menu and list is alphabetical, and every category says how many sound files it holds. Escape or back steps up a
 level silently, out to the game menu too (they're all nested menus).
@@ -182,12 +182,12 @@ learn_category items("items");
 items.subs.insert_last(learn_folder_category("common", "equipments/items/common", ""));
 items.subs.insert_last(learn_folder_category("other", "equipments/items/other", ""));
 root.subs.insert_last(items);
-learn_category cues("obstacle cues");
+learn_category cues("countdowns"); // "obstacle cues" until 2026-11-05 (dev: "countdowns and traps")
 string[] cue_types = get_pack_sound_folders("misc/trap/*");
 for (uint i = 0; i < cue_types.length(); i++) cues.sounds.insert_last(learn_countdown(cue_types[i]));
 learn_sort_sounds(cues.sounds);
 root.subs.insert_last(cues);
-learn_category obstacles("obstacles");
+learn_category obstacles("traps"); // "obstacles" until 2026-11-05
 string[] types = get_pack_sound_folders("objects/traps/*");
 for (uint i = 0; i < types.length(); i++) obstacles.subs.insert_last(learn_folder_category(types[i].replace("_", " ", true), "objects/traps/" + types[i], ""));
 root.subs.insert_last(obstacles);
