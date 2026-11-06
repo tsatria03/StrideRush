@@ -13,3 +13,13 @@ run_difficulty = level;
 run_min_floor_time = level < 0 ? min_floor_time : difficulty_min_floor_times[level];
 run_max_floor_time = level < 0 ? max_floor_time : difficulty_max_floor_times[level];
 }
+/* True when a type or item may spawn yet (Section 5): always in debug and practice runs, which have no level, and on
+chaos; on easy to insane, once step_time (the normal speed, which the speed powerups don't shift) has reached its
+schedule_join_times entry, or always when it isn't in schedule_types. */
+bool has_joined(const string&in type)
+{
+if (run_difficulty < 0 or run_difficulty == chaos_level) return true;
+int i = schedule_types.find(type);
+if (i < 0) return true;
+return step_time <= schedule_join_times[i];
+}

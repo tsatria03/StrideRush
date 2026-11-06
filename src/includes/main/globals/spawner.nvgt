@@ -110,17 +110,20 @@ string[] available;
 for (uint i = 0; i < obstacle_types.length(); i++)
 {
 if (spawn_only != "all" and obstacle_types[i] != spawn_only) continue;
+if (!has_joined(obstacle_types[i])) continue; // the difficulty schedule (difficulty.nvgt); a new type is an equal pick once in
 if (get_pack_sound_folders(type_folder(obstacle_types[i]) + "*").length() > 0) available.insert_last(obstacle_types[i]);
 }
+/* Items follow the schedule too: each one rolls its chance only once it has joined (has_joined()), so ammo packs,
+teleporters and powerups wait for their speeds on easy to insane. */
 // About one spawn in ammo_pack_chance is an ammo pack instead, or every one when the debug options picked packs only.
-bool packs_ok = ammopacks_available() and (spawn_only == "all" or spawn_only == "ammo_packs");
+bool packs_ok = ammopacks_available() and has_joined("ammo_packs") and (spawn_only == "all" or spawn_only == "ammo_packs");
 // About one in shield_chance is a steel shield, rolled first, or every one when the debug options picked shields only.
-bool shields_ok = shields_available() and (spawn_only == "all" or spawn_only == "steel_shields");
+bool shields_ok = shields_available() and has_joined("steel_shields") and (spawn_only == "all" or spawn_only == "steel_shields");
 // Capsules and teleporters the same way, rolled before the shield.
-bool capsules_ok = capsules_available() and (spawn_only == "all" or spawn_only == "life_capsules");
-bool potions_ok = potions_available() and (spawn_only == "all" or spawn_only == "health_potions");
-bool teleporters_ok = teleporters_available() and (spawn_only == "all" or spawn_only == "player_teleporters");
-bool powerups_ok = powerups_available() and (spawn_only == "all" or spawn_only == "powerups");
+bool capsules_ok = capsules_available() and has_joined("life_capsules") and (spawn_only == "all" or spawn_only == "life_capsules");
+bool potions_ok = potions_available() and has_joined("health_potions") and (spawn_only == "all" or spawn_only == "health_potions");
+bool teleporters_ok = teleporters_available() and has_joined("player_teleporters") and (spawn_only == "all" or spawn_only == "player_teleporters");
+bool powerups_ok = powerups_available() and has_joined("powerups") and (spawn_only == "all" or spawn_only == "powerups");
 if (spawn_only == "ammo_packs") next_type = packs_ok ? "ammo_packs" : "";
 else if (spawn_only == "steel_shields") next_type = shields_ok ? "steel_shields" : "";
 else if (spawn_only == "life_capsules") next_type = capsules_ok ? "life_capsules" : "";
@@ -242,7 +245,8 @@ return;
 string[] kinds;
 for (uint i = 0; i < item_lane_types.length(); i++)
 {
-if (item_kind_available(item_lane_types[i])) kinds.insert_last(item_lane_types[i]);
+// Only kinds that have joined the schedule, so a pair can't sneak in an ammo pack or teleporter early; keys always can.
+if (item_kind_available(item_lane_types[i]) and has_joined(item_lane_types[i])) kinds.insert_last(item_lane_types[i]);
 }
 if (kinds.length() == 0) return;
 spawn_item(kinds[random(0, kinds.length() - 1)], x, countdown, second);
