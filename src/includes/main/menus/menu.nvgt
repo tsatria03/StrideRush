@@ -1,5 +1,6 @@
 /* The main menu (dev, 2026-11-03, for 1.3, SimpleFighter's layout): documentation menu, game menu, settings menu (dev,
-2026-11-04), check for updates and test speakers (dev, 2026-11-05, ToyMania's order), restart game and exit game. main()'s loop reopens it
+2026-11-04), change game version (SimpleFighter's), check for updates and test speakers (dev, 2026-11-05, ToyMania's
+order), restart game and exit game. main()'s loop reopens it
 whenever a submenu returns. */
 void mainmenu()
 {
@@ -7,6 +8,7 @@ setupmenu(true);
 m.add_item("documentation menu", "docks");
 m.add_item("game menu", "game");
 m.add_item("settings menu", "settings");
+m.add_item("Change game version. Currently set to " + version, "version"); // SimpleFighter's (dev, 2026-11-05)
 m.add_item("check for updates", "updates"); // dev, 2026-11-05; globals/updater.nvgt
 m.add_item("test speakers", "speakers");
 m.add_item("restart game", "rx");
@@ -24,6 +26,7 @@ exit();
 if(main=="docks") docksmenu();
 else if(main=="game") gamemenu();
 else if(main=="settings") settingsmenu();
+else if(main=="version") change_game_version();
 else if(main=="updates")
 {
 m.fade_music();
@@ -31,6 +34,32 @@ check_for_updates(version, update_project, true);
 }
 else if(main=="speakers") test_speakers();
 else if(main=="rx") restart_game();
+}
+/* Change game version, SimpleFighter's (dev, 2026-11-05): the number the updater compares against, for this launch
+only (the next launch reports the real version from version.nvgt again). Typing an older one lets you test the
+updater or download the latest release again. The box won't take an empty answer; its cancel or escape says
+"canceled". */
+void change_game_version()
+{
+m.fade_music();
+/* Digits and periods only (dev, 2026-11-05). vd's filter is a member, not input_box()'s own disallowed_chars
+parameter, which it never reads; true makes the list the only characters allowed. Cleared again afterwards, since vd
+is shared with the speech buffer's boxes. */
+vd.set_disallowed_chars("0123456789.", true, "This character is not allowed."); // input_box()'s own wording (dev, 2026-11-05)
+string newver = string_trim_sides(vd.input_box("Game version", "Enter a version number to override what the game reports to the updater. Use this to force a re-download of the latest update or to test against a specific version.", version));
+vd.set_disallowed_chars("");
+if (newver == "")
+{
+speak("canceled");
+return;
+}
+if (newver == version)
+{
+dlgmessage_return("Version already set to " + version + ".");
+return;
+}
+version = newver;
+dlgmessage_return("Version updated to " + version + ".");
 }
 /* Test speakers, after ToyMania's: the menu music fades, ui/menu/speaker plays through (Enter or A fades it out early, dlgplay()'s skip keys), then
 the complete sound and "Speaker test complete." in a dialog. Back in main()'s loop, the main menu opens again. */

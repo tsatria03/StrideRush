@@ -32,13 +32,14 @@ if (!ingame)
 reset_btn = setform.create_button("&Reset settings");
 setform.assign_to_tab(reset_btn, tabs, tab_general);
 }
-// The Game tab, in the dev's order (2026-11-05): behind pitch decrease, the Escape question, then the startup update check.
+/* The Game tab, in the dev's order (2026-11-05): the "Enable" checkboxes first (behind pitch decrease, the startup
+update check), then the Escape question. */
 int behind_box = setform.create_checkbox("Enable behind pitch decrease", new_behind);
 setform.assign_to_tab(behind_box, tabs, tab_game);
-int ask_box = setform.create_checkbox("Ask to quit the run when pressing escape", new_ask);
-setform.assign_to_tab(ask_box, tabs, tab_game);
 int updates_box = setform.create_checkbox("Enable checking for game updates at startup", new_updates); // SimpleFighter's wording (dev, 2026-11-05)
 setform.assign_to_tab(updates_box, tabs, tab_game);
+int ask_box = setform.create_checkbox("Ask to quit the run when pressing escape", new_ask);
+setform.assign_to_tab(ask_box, tabs, tab_game);
 if (!ingame)
 {
 view_btn = setform.create_button("&View current keyboard bindings");

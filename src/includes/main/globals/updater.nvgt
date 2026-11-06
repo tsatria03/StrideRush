@@ -9,6 +9,20 @@ reopens the main menu), the quiet startup check stays silent when it can't reach
 extracting says where the new copy is. */
 const string update_project = "StrideRush";
 const string update_password = "FluentSprinter"; // build/tools.ini's archive password
+const string update_extracted_exe = "sdr/sdr.exe"; // where the portable archive's game lands, from the current folder
+/* True when the downloaded file really is what its name says: an installer starts with "MZ" (every Windows program
+does) and a 7z archive with "7z". An error page saved in its place starts with neither. */
+bool update_file_valid(const string&in filename)
+{
+file f;
+if (!f.open(filename, "rb")) return false;
+string head = f.read(2);
+f.close();
+string ext = filename.substr(filename.rfind(".") + 1);
+if (ext == "exe") return head == "MZ";
+if (ext == "7z") return head == "7z";
+return head.length() == 2;
+}
 /* Checks for a newer version and, if there is one and you want it, downloads and installs or extracts it. precheck is
 the menu's check: it says it's checking, says when you're up to date, and says when the site can't be reached. */
 bool check_for_updates(string old_version, string projectname, bool precheck = false)
@@ -42,6 +56,8 @@ string url = get_download_url(projectname, new_version);
 if (url == "") return false; // canceled in the version menu
 string filename = get_disk_filename(url);
 string bare_name = strip_extension(strip_directory(filename));
+// A broken file left by an earlier try (such as a 9-byte "Not Found") would otherwise be "skipped" forever.
+if (file_exists(filename) && !update_file_valid(filename)) file_delete(filename);
 if (!file_exists(filename))
 {
 // A write-protected game folder (an install under Program Files) can't take the download, so offer Downloads.
@@ -66,6 +82,14 @@ string result = dl_file(url, filename);
 if (result != "finished")
 {
 if (result == "canceled" && file_exists(filename)) file_delete(filename);
+alert("Download Failed", "The update could not be downloaded.");
+return false;
+}
+/* A "finished" download can still be an error page saved in its place (2026-11-05: GitHub's "Not Found" for a
+private repository's release), so the file has to really be an installer or an archive. */
+if (!update_file_valid(filename))
+{
+if (file_exists(filename)) file_delete(filename);
 alert("Download Failed", "The update could not be downloaded.");
 return false;
 }
@@ -104,9 +128,12 @@ wait(500);
 speak("Extracting update...");
 wait(1000);
 /* Into the current folder, as SimpleFighter does (dev, 2026-11-05): the archive holds the sdr folder, so the new copy
-lands at sdr\sdr, inside this one. From source that's the repo's sdr\sdr, which .gitignore leaves out. */
-bool success = run("lib/7zr.exe", "x \"" + filename + "\" -p" + update_password + " -aoa -y", true, true);
-if (!success)
+lands at sdr\sdr, inside this one. From source that's the repo's sdr\sdr, which .gitignore leaves out.
+run() is true as soon as 7zr starts, even if it then fails, so success means the new sdr.exe is really there. A copy
+left by an earlier update is removed first, so it can't pass for this one. On a failure the archive is kept. */
+if (file_exists(update_extracted_exe)) file_delete(update_extracted_exe);
+run("lib/7zr.exe", "x \"" + filename + "\" -p" + update_password + " -aoa -y", true, true);
+if (!file_exists(update_extracted_exe))
 {
 alert("Extraction Failed", "Failed to extract the archive.");
 return false;
