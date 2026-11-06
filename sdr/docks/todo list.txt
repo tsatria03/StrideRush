@@ -4,10 +4,10 @@
 ****Unfinished. Add game achievements in the game menu, for a single run and for all your runs.
 ****Unfinished. Add practice options for obstacles in the game menu.
 ****Unfinished. Add game difficulty options after choosing the play game item.
-****Unfinished. Add an auto updater.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add an auto updater.
 **Finished. Add a learn sounds menu in the game menu.
 **Finished. Add lanes that you can switch between.
 **Finished. Add animals, birds and dogs, that you scare away by clapping your hands.
