@@ -1,5 +1,6 @@
 /* Every folder is glob-included, so dropping a new .nvgt file into one of these folders is all the wiring it needs.
 main/parsers is left out until it holds a file; there are no map files yet. */
+#pragma plugin nvgt_curl
 #include"version.nvgt"
 
 #include"main/deps/*"

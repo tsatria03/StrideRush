@@ -1,0 +1,48 @@
+sound@ progress_sound;
+
+bool is_newer_version(string oldv, string newv)
+{
+oldv = string_trim_sides(oldv);
+newv = string_trim_sides(newv);
+return string_to_number(newv) > string_to_number(oldv);
+}
+bool directory_empty(const string&in dir)
+{
+if (!directory_exists(dir))
+{
+return false;
+}
+string[] files=find_files(dir+"/*");
+string[] folders=find_directories(dir+"/*");
+return files.length()==0 and folders.length()==0;
+}
+
+string get_disk_filename(string url)
+{
+string[] parts = string_split(url, "/", true);
+return (parts.length() > 0) ? parts[parts.length() - 1] : "update_file";
+}
+string get_downloads_folder()
+{
+if (system_is_windows)
+return expand_environment_variables("%USERPROFILE%\\Downloads\\");
+else if (system_is_unix)
+return expand_environment_variables("$HOME/Downloads/");
+else
+return "";
+}
+
+void beep_percentage(double val, double volume = -10)
+{
+val=round(val,0);
+if(val<0) val=0;
+if(val>100) val=100;
+double freq=110*2**(val/25);
+sy.waveform_type=2;
+sy.volume=volume;
+sy.set_edge_fades(1,1);
+sy.freq_ms(""+freq,40);
+@progress_sound=sy.write_wave_sound();
+sy.reset();
+progress_sound.play();
+}

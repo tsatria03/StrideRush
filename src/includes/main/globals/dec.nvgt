@@ -19,3 +19,4 @@ key_config controls; // loaded from data/config/keyboard.ini by load_controls() 
 sound dummy; // loaded at the top of main() before HRTF is set; required for HRTF to work
 sound_pool p, temp, spool; // spool plays the speech-buffer cues
 file logfile; // speech-buffer exports
+tone_synth sy;

@@ -14,6 +14,12 @@ user/
 
 /sdr/errors.txt
 
+# What testing the updater from source leaves behind: the downloaded update file and the extracted copy, which lands
+# inside the current folder (sdr/sdr/), as SimpleFighter's does at sf/sf/. Anchored to the top-level sdr/ folder.
+
+/sdr/sdr/
+/sdr/StrideRush_windows_*
+
 # NVGT compile bundle: tools.py runs `nvgt -c` from src/, so the bundle lands at
 # src/sdr/ before it's moved into releases/. Anchored to src/ so it does NOT match
 # the top-level sdr/ assets folder.
