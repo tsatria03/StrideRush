@@ -136,8 +136,8 @@ else play_game();
 }
 }
 /* Play game. It opens the mode menu (the practice plan, dev, 2026-11-06, replacing the 2026-11-03 "Do you want to play
-in debug mode?" question): endless run plays the real game (start speed, everything spawning, starting_lives, and the
-run ends when lives run out), practice run goes on to the practice menus (choose_practice()), and debug run, from source
+in debug mode?" question): endless run goes on to the difficulty menu (choose_difficulty()) and plays the real game
+(the level's speed and floor, everything spawning, starting_lives, and the run ends when lives run out), practice run goes on to the practice menus (choose_practice()), and debug run, from source
 only, goes on to the debug options, in the dev's order: speed,
 spawn, footsteps (2026-11-04), then whether lives can run out. Escape steps back one menu silently: from the mode menu to
 the game menu, and from the speed menu back to the mode menu. They're all nested menus, so nothing says "canceled". The
@@ -147,6 +147,7 @@ void play_game()
 int speed = start_step_time, can_run_out = 1, steps = 1;
 string only_type = "all";
 bool practicing = false;
+int level = -1; // the endless run's difficulty, or -1
 int stage = 0;
 while (stage < 5)
 {
@@ -155,6 +156,7 @@ if (stage == 0)
 string mode = choose_game_mode();
 if (mode == "") return;
 practicing = false; // set again below, so backing out of practice into another mode never leaves it on
+level = -1; // likewise the difficulty, which only an endless run has
 if (mode == "practice")
 {
 // Escaping the obstacle menu stays on the mode menu (stage 0); otherwise straight to the run.
@@ -171,9 +173,12 @@ stage = 5;
 }
 else if (mode == "endless")
 {
+// Escaping the difficulty menu stays on the mode menu (stage 0); otherwise straight to the run at the level's speed.
+level = choose_difficulty();
+if (level < 0) continue;
 /* The real game. Set every choice here, not just once above, since escaping back from a debug option leaves
 its "escaped" value behind (a speed of -1 ran every step at once; bug found by the dev, 2026-11-04). */
-speed = start_step_time;
+speed = difficulty_start_times[level];
 only_type = "all";
 can_run_out = 1;
 steps = 1;
@@ -214,7 +219,7 @@ run_died = false;
 /* A practice run starts with practice_lives; a single-type debug run with debug_lives (dev, 2026-11-03); "all" plays
 like the real game. A practice run can't die, so it never reaches the replay question. */
 int life_count = practicing ? practice_lives : (only_type == "all" ? starting_lives : debug_lives);
-start_run(speed, life_count, only_type, can_run_out == 1, practicing);
+start_run(speed, life_count, only_type, can_run_out == 1, practicing, level);
 if (run_died and !restart_run_requested and ask_play_again()) restart_run_requested = true;
 }
 while (restart_run_requested);
@@ -268,6 +273,26 @@ m.add_item("back", "back");
 int mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") return "";
 return m.selected_item_id;
+}
+/* The difficulty menu (the game menu refactor plan's Section 4, dev, 2026-11-05), after endless run: the five levels in
+difficulty order (not alphabetical; dev: "this menu will not need it"), then back. All five are open until the locks
+(Section 6). Not saved, but the cursor starts on the last level picked until the game closes, and restart run and
+replays keep the level. Returns the level's index in difficulty_names, or -1 for escape or back, which step back to
+the mode menu silently. */
+int last_difficulty = -1;
+int choose_difficulty()
+{
+setupmenu();
+m.intro_text = "Choose a difficulty.";
+for (uint i = 0; i < difficulty_names.length(); i++)
+{
+m.add_item(difficulty_names[i], "" + i);
+}
+m.add_item("back", "back");
+int mres = m.run(last_difficulty, false, last_difficulty >= 0); // the last pick is focused and spoken, as in the learn sounds menu
+if (mres < 0 or m.selected_item_id == "back") return -1;
+last_difficulty = int(parse_int(m.selected_item_id));
+return last_difficulty;
 }
 /* The practice menus (the game menu refactor plan's Section 2, dev, 2026-11-05): the obstacle, then the speed. The
 obstacles come in learning order, the order the difficulty schedule brings them in, not alphabetical; the speeds are

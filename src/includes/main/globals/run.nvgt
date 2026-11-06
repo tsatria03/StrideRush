@@ -39,10 +39,12 @@ update_listeners();
 }
 /* Normally start_step_time, starting_lives, every obstacle type, and a run that ends when lives run out; the source-only
 debug options can start faster, with more lives, with only one obstacle type, or with lives that never run out; a
-practice run is a single type at a fixed speed with lives that never run out. */
-void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives, string only_type = "all", bool can_run_out = true, bool practice = false)
+practice run is a single type at a fixed speed with lives that never run out. difficulty is the endless run's level
+(an index into difficulty_names), or -1 for debug and practice runs. */
+void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives, string only_type = "all", bool can_run_out = true, bool practice = false, int difficulty = -1)
 {
 practice_run = practice;
+set_run_difficulty(difficulty); // before reset_run(), whose reset_spawner() places the first obstacle with the level's floor
 set_spawn_only(only_type); // before reset_run(), whose reset_spawner() picks the first obstacle; splits an item's debug lane choice off
 lives_can_end = can_run_out;
 reset_run(starting_step_time, starting_life_count);

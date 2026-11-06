@@ -1,0 +1,15 @@
+/* The run's difficulty (the game menu refactor plan's Section 4, dev, 2026-11-05): endless runs pick one of the five
+levels in difficulty_names, which sets the run's starting speed (play_game() passes it) and its floor between obstacles
+for the whole run. Debug and practice runs have no level (-1) and keep min_floor_time to max_floor_time. Set by
+start_run() before reset_run(), whose reset_spawner() places the first obstacle with this floor. */
+int run_difficulty = -1;
+int run_min_floor_time = min_floor_time;
+int run_max_floor_time = max_floor_time;
+
+void set_run_difficulty(int level)
+{
+if (level < 0 or level >= int(difficulty_names.length())) level = -1;
+run_difficulty = level;
+run_min_floor_time = level < 0 ? min_floor_time : difficulty_min_floor_times[level];
+run_max_floor_time = level < 0 ? max_floor_time : difficulty_max_floor_times[level];
+}

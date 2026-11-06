@@ -41,6 +41,13 @@ const int ledge_after_tiles = 2;
 const int min_floor_time = 1000;
 const int max_floor_time = 4000;
 const int min_floor_tiles = 2;
+/* Difficulty (the game menu refactor plan, dev, 2026-11-05), one entry per level in difficulty_names' order: the
+starting step time (the speed-up is the same for everyone), and the floor between obstacles, which stays fixed all run.
+Chaos's floor is the min_floor_time to max_floor_time above, which debug and practice runs keep. */
+const string[] difficulty_names = {"easy", "medium", "hard", "insane", "chaos"};
+const int[] difficulty_start_times = {500, 450, 400, 350, 300};
+const int[] difficulty_min_floor_times = {2000, 1750, 1500, 1250, 1000};
+const int[] difficulty_max_floor_times = {5000, 4750, 4500, 4250, 4000};
 
 // Each spike swings on its own rhythm: a random swing time between these, picked when it appears (dev, 2026-11-02).
 const int spike_swing_min = 500;

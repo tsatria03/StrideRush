@@ -30,7 +30,7 @@ next_key_door = next_door_mark;
 set_key_mark();
 key_before_door = true;
 choose_next_obstacle();
-next_spawn_x = spawn_distance() + next_countdown + floor_tiles(min_floor_time);
+next_spawn_x = spawn_distance() + next_countdown + floor_tiles(run_min_floor_time);
 }
 /* Picks the next obstacle's type at random among the trap folders that have themes (only spawn_only's type, unless it's
 "all"), and its countdown length. */
@@ -168,10 +168,10 @@ int floor_tiles(int ms)
 return int(max(min_floor_tiles, ceil(double(ms) / current_step_time())));
 }
 /* The gap from one obstacle to the next: room for a hazard's ledge after (kept for every type, to be safe), a random
-stretch of normal floor (min_floor_time to max_floor_time), the next one's countdown, and its tile. */
+stretch of normal floor (run_min_floor_time to run_max_floor_time, the level's, difficulty.nvgt), the next one's countdown, and its tile. */
 int next_gap(int countdown)
 {
-int floor_len = random(floor_tiles(min_floor_time), floor_tiles(max_floor_time));
+int floor_len = random(floor_tiles(run_min_floor_time), floor_tiles(run_max_floor_time));
 return int(max(min_gap_tiles, ledge_after_tiles + floor_len + countdown + 1));
 }
 /* After a forward teleport: the next obstacle may now be due on or just ahead of you, with no warning. Pushes it ahead
