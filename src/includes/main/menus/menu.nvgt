@@ -1,11 +1,13 @@
 /* The main menu (dev, 2026-11-03, for 1.3, SimpleFighter's layout): documentation menu, game menu, settings menu (dev,
-2026-11-04), restart game and exit game. main()'s loop reopens it whenever a submenu returns. */
+2026-11-04), test speakers (dev, 2026-11-05, ToyMania's), restart game and exit game. main()'s loop reopens it
+whenever a submenu returns. */
 void mainmenu()
 {
 setupmenu(true);
 m.add_item("documentation menu", "docks");
 m.add_item("game menu", "game");
 m.add_item("settings menu", "settings");
+m.add_item("test speakers", "speakers");
 m.add_item("restart game", "rx");
 m.add_item("exit game", "ex");
 m.intro_text="Main menu. Choose an option with your arrow keys, then press enter to activate one.";
@@ -21,7 +23,17 @@ exit();
 if(main=="docks") docksmenu();
 else if(main=="game") gamemenu();
 else if(main=="settings") settingsmenu();
+else if(main=="speakers") test_speakers();
 else if(main=="rx") restart_game();
+}
+/* Test speakers, after ToyMania's: the menu music fades, ui/menu/speaker plays through (Enter or A fades it out early, dlgplay()'s skip keys), then
+the complete sound and "Speaker test complete." in a dialog. Back in main()'s loop, the main menu opens again. */
+void test_speakers()
+{
+m.fade_music();
+dlgplay(get_pack_sound("ui/menu/*speaker*"));
+dlgplay(get_pack_sound("ui/other/*complete*"), false);
+dlgmessage_return("Speaker test complete.");
 }
 /* The documentation menu, after SimpleFighter's: a loop, so closing a document comes back here and escape or back
 returns to the main menu silently (a nested menu), with nothing stacking up the way ToyMania's menus call each other. */

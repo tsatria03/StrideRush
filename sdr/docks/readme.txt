@@ -61,7 +61,7 @@ The pairs are: Slow Motion and Rush Hour, which make the belt slower or faster; 
 
 Menus.
 
-The main menu has five options. The documentation menu lets you read the changelog, credits, readme and todo list, each in a window you can move through with the arrow keys and close when you're done. The game menu is where you start a run, by choosing play game. The settings menu is described below. Restart game closes Stride Rush and opens it again, and exit game closes it. Pressing escape on the main menu also exits.
+The main menu has six options. The documentation menu lets you read the changelog, credits, readme and todo list, each in a window you can move through with the arrow keys and close when you're done. The game menu is where you start a run, by choosing play game. The settings menu is described below. Test speakers plays a sound so you can check your speakers or headphones, and you can press enter to end it early. Restart game closes Stride Rush and opens it again, and exit game closes it. Pressing escape on the main menu also exits.
 During a run, press P for the pause menu, where you can resume, restart or quit the run. Restarting or quitting asks you first, since you'll lose the run you're on. Pressing escape during a run asks straight away whether you want to quit, and the run stops moving while you decide. Whenever you leave a run this way, its sounds fade out.
 When a run ends in a death, you're asked whether you want to replay the current run. Yes starts a new one straight away, and no takes you back to the game menu.
 
