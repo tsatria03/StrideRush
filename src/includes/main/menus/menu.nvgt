@@ -116,7 +116,7 @@ docform.monitor();
 if(docform.is_pressed(dockclose)) return;
 }
 }
-/* The game menu: play game and back. Play game runs the debug options and then the run; when the run ends you're back
+/* The game menu: play game, learn sounds and back. Play game opens the mode menu and then the run; when the run ends you're back
 here, so you can play again straight away. Escape or back returns to the main menu silently. */
 void gamemenu()
 {
@@ -135,12 +135,12 @@ if(m.selected_item_id=="learn") learn_sounds_menu();
 else play_game();
 }
 }
-/* Play game. From source it first asks whether to play in debug mode (dev, 2026-11-03): No plays the real game (start
-speed, everything spawning, starting_lives, and the run ends when lives run out), Yes goes on to the debug options, in
-the dev's order: speed, spawn, footsteps (2026-11-04), then whether lives can run out. Escape steps back one menu silently: from the question to
-the game menu, and from the speed menu back to the question. They're all nested menus, so nothing says "canceled". A
-compiled release skips the question and the debug options and always plays the real game. The lives menu was removed
-with player health: "all" starts with starting_lives, and any single-type choice with debug_lives. */
+/* Play game. It opens the mode menu (the practice plan, dev, 2026-11-06, replacing the 2026-11-03 "Do you want to play
+in debug mode?" question): endless run plays the real game (start speed, everything spawning, starting_lives, and the
+run ends when lives run out), and debug run, from source only, goes on to the debug options, in the dev's order: speed,
+spawn, footsteps (2026-11-04), then whether lives can run out. Escape steps back one menu silently: from the mode menu to
+the game menu, and from the speed menu back to the mode menu. They're all nested menus, so nothing says "canceled". The
+lives menu was removed with player health: "all" starts with starting_lives, and any single-type choice with debug_lives. */
 void play_game()
 {
 int speed = start_step_time, can_run_out = 1, steps = 1;
@@ -150,11 +150,11 @@ while (stage < 5)
 {
 if (stage == 0)
 {
-int debug_choice = choose_debug_mode();
-if (debug_choice < 0) return;
-if (debug_choice == 0)
+string mode = choose_game_mode();
+if (mode == "") return;
+if (mode == "endless")
 {
-/* No: the real game. Set every choice here, not just once above, since escaping back from a debug option leaves
+/* The real game. Set every choice here, not just once above, since escaping back from a debug option leaves
 its "escaped" value behind (a speed of -1 ran every step at once; bug found by the dev, 2026-11-04). */
 speed = start_step_time;
 only_type = "all";
@@ -232,18 +232,22 @@ return false;
 }
 return m.selected_item_id == "yes";
 }
-/* Source only: whether to play in debug mode, Yes then No. Returns 1 for Yes, 0 for No, or -1 if escaped. A compiled
-release never asks and always answers No, so it plays the real game. */
-int choose_debug_mode()
+/* The mode menu (the practice plan, dev, 2026-11-06): the foundation every way to play lands on. Debug run comes first
+and only from source (SCRIPT_COMPILED hides it), then endless run; each item is followed by a ToyMania-style
+description. Practice run joins after endless run in the practice plan's Section 2. Returns "debug", "endless", or ""
+for escape or back, which step back to the game menu silently. */
+string choose_game_mode()
 {
-if (SCRIPT_COMPILED) return 0;
 setupmenu();
-m.intro_text = "Do you want to play in debug mode?";
-m.add_item("Yes", "yes");
-m.add_item("No", "no");
+m.intro_text = "Choose the game you'd like to play.";
+if (!SCRIPT_COMPILED) m.add_item("Debug run. This mode lets you choose the speed, obstacles, footsteps and whether lives run out, for testing.", "debug");
+/* "and more obstacles join as you go" joins this description once the difficulty plan's schedule is built (dev,
+2026-11-05). */
+m.add_item("Endless run. This mode lets you run for as long as you can survive. The belt gets faster, and the run ends when you run out of lives or fall into a hazard.", "endless");
+m.add_item("back", "back");
 int mres = m.run();
-if (mres < 0) return -1; // silent: escape just steps back to the game menu
-return m.selected_item_id == "yes" ? 1 : 0;
+if (mres < 0 or m.selected_item_id == "back") return "";
+return m.selected_item_id;
 }
 /* DEBUG OPTION: pick the starting step time, from start_step_time down in 100 ms steps: 500, 400, 300, 200, 100. The
 50 ms in between (450, 350, 250, 150 and 50) were dropped for door testing (dev, 2026-11-03). It only appears when
@@ -258,7 +262,7 @@ for (int t = start_step_time; t >= 100; t -= 100)
 m.add_item(t + " ms", "" + t);
 }
 int mres = m.run();
-if (mres < 0) return -1; // silent: escape just steps back to the debug mode question
+if (mres < 0) return -1; // silent: escape just steps back to the mode menu
 return int(parse_int(m.selected_item_id));
 }
 /* DEBUG OPTION: pick which obstacles spawn: one type from obstacle_types and item_types (and any added later), one of
