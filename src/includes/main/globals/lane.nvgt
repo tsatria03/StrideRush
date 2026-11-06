@@ -22,7 +22,7 @@ current_lane = lane_middle;
 // Runs every frame from run_input(): L, then Left/Q and Right/E.
 void lane_input()
 {
-if (controls.action_triggered("info_lane")) speak_buffer(lane_names[current_lane] + " lane.");
+if (controls.action_triggered("info_lane")) speak_buffer(lane_names[current_lane] + " lane.", "status");
 if (door_moving) return; // a door carries you straight through
 if (controls.action_triggered("lane_left")) move_lane(-1);
 else if (controls.action_triggered("lane_right")) move_lane(1);

@@ -58,7 +58,7 @@ stop_potion(target);
 potionpool.play_stationary(get_pack_sound(potion_folder + "*get*"), false);
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item("health_potion", 1);
-speak_buffer(item_display_name("health_potion"));
+speak_buffer(item_display_name("health_potion"), "items");
 return true;
 }
 /* Runs once per step, right after the move. Arriving on a potion's tile on the ground breaks it; once you're past its
@@ -147,14 +147,14 @@ bool use_potion()
 {
 if (player_health >= player_hp)
 {
-speak_buffer("You're already at maximum health."); // the dev's wording (2026-11-04)
+speak_buffer("You're already at maximum health.", "items"); // the dev's wording (2026-11-04)
 return false;
 }
 int heal = player_hp * random(health_potion_min_percent, health_potion_max_percent) / 100;
 player_health = int(min(player_hp, player_health + heal)); // the game's min() works in doubles
 p.play_stationary(get_pack_sound(potion_folder + "*use*"), false);
 p.play_stationary(get_pack_sound("misc/player/*heal*"), false);
-speak_buffer("Healed to " + int(round(100.0 * player_health / player_hp, 0)) + " percent health.");
+speak_buffer("Healed to " + int(round(100.0 * player_health / player_hp, 0)) + " percent health.", "items");
 return true;
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.

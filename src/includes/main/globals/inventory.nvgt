@@ -54,7 +54,7 @@ void cycle_inventory(int dir)
 string[] keys = inventory_keys();
 if (keys.length() == 0)
 {
-speak_buffer("Your inventory is empty.");
+speak_buffer("Your inventory is empty.", "items");
 return;
 }
 invpos += dir;
@@ -66,7 +66,7 @@ string item = keys[invpos];
 int count = item_count(item);
 string name = item_display_name(item);
 string position = "Item " + (invpos + 1) + " of " + keys.length() + ".";
-speak_buffer(count == 1 ? name + ". " + position : name + "s, " + count + ". " + position);
+speak_buffer(count == 1 ? name + ". " + position : name + "s, " + count + ". " + position, "items");
 }
 // U: uses the focused item through that item's own function, which removes it only if it was used.
 void use_item()
@@ -74,7 +74,7 @@ void use_item()
 string[] keys = inventory_keys();
 if (keys.length() == 0)
 {
-speak_buffer("You don't have anything to use.");
+speak_buffer("You don't have anything to use.", "items");
 return;
 }
 string item = keys[invpos];

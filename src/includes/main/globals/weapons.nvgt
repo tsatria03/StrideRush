@@ -74,7 +74,7 @@ if (w == current_weapon) return;
 current_weapon = w;
 reloading = false;
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*draw*"), false);
-speak_buffer(weapon_display_name(w) + " equipped.");
+speak_buffer(weapon_display_name(w) + " equipped.", "weapons");
 }
 void fire_weapon()
 {
@@ -145,23 +145,23 @@ void start_reload()
 int w = current_weapon;
 if (reloading)
 {
-speak_buffer("This weapon is still reloading.");
+speak_buffer("This weapon is still reloading.", "weapons");
 return;
 }
 if (!is_gun(w))
 {
-speak_buffer("This weapon doesn't take any ammo.");
+speak_buffer("This weapon doesn't take any ammo.", "weapons");
 return;
 }
 if (weapon_loaded[w] >= gun_start_loaded)
 {
-speak_buffer("This weapon is already fully loaded.");
+speak_buffer("This weapon is already fully loaded.", "weapons");
 return;
 }
 if (weapon_reserve[w] <= 0)
 {
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*empty*"), false);
-speak_buffer("This weapon has no more reserved ammo to reload.");
+speak_buffer("This weapon has no more reserved ammo to reload.", "weapons");
 return;
 }
 int slot = p.play_stationary(get_pack_sound(weapon_folder(w) + "*reload*"), false);
@@ -186,8 +186,8 @@ void speak_ammo()
 int w = current_weapon;
 if (!is_gun(w))
 {
-speak_buffer("This weapon doesn't take any ammo.");
+speak_buffer("This weapon doesn't take any ammo.", "weapons");
 return;
 }
-speak_buffer("You have " + weapon_loaded[w] + " out of " + gun_start_loaded + " rounds loaded, and " + weapon_reserve[w] + " rounds in reserve.");
+speak_buffer("You have " + weapon_loaded[w] + " out of " + gun_start_loaded + " rounds loaded, and " + weapon_reserve[w] + " rounds in reserve.", "weapons");
 }

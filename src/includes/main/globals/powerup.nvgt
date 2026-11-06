@@ -186,7 +186,7 @@ return choices[random(0, choices.length() - 1)];
 void apply_powerup(int index)
 {
 string name = powerup_names[index];
-speak_buffer(name + ".");
+speak_buffer(name + ".", "powerups");
 int kind = powerup_name_kinds[index];
 active_powerups[kind] = name;
 powerup_ends[kind] = runtimer.elapsed + powerup_time;
@@ -197,7 +197,7 @@ void powerup_timers()
 for (int k = 0; k < powerup_kinds; k++)
 {
 if (active_powerups[k] == "" or runtimer.elapsed < powerup_ends[k]) continue;
-speak_buffer(active_powerups[k] + " wore off.");
+speak_buffer(active_powerups[k] + " wore off.", "powerups");
 active_powerups[k] = "";
 }
 }

@@ -105,7 +105,7 @@ return true;
 if (target.locked)
 {
 doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/*deny*"), false, 0, 0, 0, target.pitch, false);
-speak_buffer("This door is locked.");
+speak_buffer("This door is locked.", "doors");
 return true;
 }
 target.opened = true;
@@ -120,7 +120,7 @@ return true;
 void jam_door(door@ d)
 {
 doorpool.play_stationary_extended(get_pack_sound(door_folder + d.theme + "/*jam*"), false, 0, 0, 0, d.pitch, false);
-speak_buffer("This door is jammed.");
+speak_buffer("This door is jammed.", "doors");
 }
 /* U on a key (dev, 2026-11-03): the first half of opening a real door. Unlocks the nearest locked real door within
 weapon_reach(): the key's use and the door's grant play centered. Refused, keeping the key: a fake door in reach jams,
@@ -152,12 +152,12 @@ if (@locked_door != null)
 locked_door.locked = false;
 keypool.play_stationary(get_pack_sound(key_folder + color + "/*use*"), false);
 doorpool.play_stationary_extended(get_pack_sound(door_folder + locked_door.theme + "/*grant*"), false, 0, 0, 0, locked_door.pitch, false);
-speak_buffer("The door is unlocked.");
+speak_buffer("The door is unlocked.", "doors");
 return true;
 }
-if (@open_door_ahead != null) speak_buffer("This door is already unlocked.");
+if (@open_door_ahead != null) speak_buffer("This door is already unlocked.", "doors");
 else if (@fake != null) jam_door(fake);
-else speak_buffer("There is no door nearby.");
+else speak_buffer("There is no door nearby.", "doors");
 return false;
 }
 // The standing FAKE door exactly at x, or null. A bullet checks the tile it has just moved onto; real doors let it through.

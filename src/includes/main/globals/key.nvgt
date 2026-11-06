@@ -69,7 +69,7 @@ stop_key(target);
 keypool.play_stationary(get_pack_sound(key_sound_folder(target) + "*get*"), false);
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item(target.color, 1);
-speak_buffer(item_display_name(target.color)); // just its name, like a pack: "red key"
+speak_buffer(item_display_name(target.color), "items"); // just its name, like a pack: "red key"
 return true;
 }
 /* Runs once per step, right after the move. Arriving on a key's tile on the ground breaks it; once you're past its tile

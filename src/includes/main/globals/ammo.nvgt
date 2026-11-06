@@ -65,7 +65,7 @@ ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*get*"), false);
 // The player's give sound as it goes into the inventory, together with get, like ToyMania's item pickups (dev).
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item("ammo_pack", 1);
-speak_buffer(item_display_name("ammo_pack")); // just the item's name, like ToyMania's pickups (dev)
+speak_buffer(item_display_name("ammo_pack"), "items"); // just the item's name, like ToyMania's pickups (dev)
 return true;
 }
 /* Runs once per step, right after the move. Arriving on a pack's tile on the ground breaks it; arriving in the air
@@ -157,18 +157,18 @@ bool use_ammopack()
 int w = current_weapon;
 if (!is_gun(w))
 {
-speak_buffer("This weapon doesn't take any ammo.");
+speak_buffer("This weapon doesn't take any ammo.", "items");
 return false;
 }
 if (weapon_reserve[w] >= gun_max_reserve)
 {
-speak_buffer("This weapon's reserve is already full.");
+speak_buffer("This weapon's reserve is already full.", "items");
 return false;
 }
 int rounds = int(min(random(ammo_pack_min, ammo_pack_max), gun_max_reserve - weapon_reserve[w]));
 weapon_reserve[w] += rounds;
 p.play_stationary(get_pack_sound(ammopack_folder + "*use*"), false);
-speak_buffer("You got " + rounds + " rounds of ammo.");
+speak_buffer("You got " + rounds + " rounds of ammo.", "items");
 return true;
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.

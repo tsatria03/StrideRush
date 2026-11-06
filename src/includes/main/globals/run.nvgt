@@ -176,9 +176,9 @@ exit();
 }
 if (controls.action_triggered("info_lives")) speak_health(); // H: health percent and lives
 if (controls.action_triggered("info_shield")) speak_shield_strength(); // key_config keeps a plain M quiet during Shift+M (buffer mute)
-if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase());
-if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + current_step_time() + " ms."); // the step interval itself, which shrinks as you speed up
-if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".");
+if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase(), "status");
+if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + current_step_time() + " ms.", "status"); // the step interval itself, which shrinks as you speed up
+if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".", "status");
 weapon_input();
 inventory_input();
 lane_input();

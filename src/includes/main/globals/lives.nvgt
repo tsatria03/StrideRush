@@ -44,5 +44,5 @@ return blow_life_lost;
 void speak_health()
 {
 int percent = int(round(100.0 * player_health / player_hp, 0));
-speak_buffer(percent + " percent health remaining, " + (lives == 1 ? "1 life." : lives + " lives."));
+speak_buffer(percent + " percent health remaining, " + (lives == 1 ? "1 life." : lives + " lives."), "status");
 }

@@ -59,7 +59,7 @@ stop_capsule(target);
 capsulepool.play_stationary(get_pack_sound(capsule_folder + "*get*"), false);
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item("life_capsule", 1);
-speak_buffer(item_display_name("life_capsule"));
+speak_buffer(item_display_name("life_capsule"), "items");
 return true;
 }
 /* Runs once per step, right after the move. Arriving on a capsule's tile on the ground breaks it; once you're past its
@@ -149,13 +149,13 @@ bool use_capsule()
 {
 if (lives >= max_lives)
 {
-speak_buffer("You're already at maximum lives.");
+speak_buffer("You're already at maximum lives.", "items");
 return false;
 }
 int gained = int(min(random(life_capsule_min_lives, life_capsule_max_lives), max_lives - lives));
 lives += gained;
 p.play_stationary(get_pack_sound(capsule_folder + "*use*"), false); // its use sound only, not the life sound (dev)
-speak_buffer("Gained " + gained + (gained == 1 ? " life." : " lives.")); // the dev's wording (2026-11-04)
+speak_buffer("Gained " + gained + (gained == 1 ? " life." : " lives."), "items"); // the dev's wording (2026-11-04)
 return true;
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.

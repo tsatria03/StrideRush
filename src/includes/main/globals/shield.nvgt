@@ -75,7 +75,7 @@ stop_shield(target);
 shieldpool.play_stationary(get_pack_sound(shield_folder + "*get*"), false);
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item("steel_shield", 1);
-speak_buffer(item_display_name("steel_shield"));
+speak_buffer(item_display_name("steel_shield"), "items");
 return true;
 }
 /* Runs once per step, right after the move. Arriving on a shield's tile on the ground breaks it; once you're past its
@@ -162,13 +162,13 @@ bool use_shield()
 {
 if (shield_worn)
 {
-speak_buffer("You're already wearing a shield.");
+speak_buffer("You're already wearing a shield.", "items");
 return false;
 }
 shield_worn = true;
 shield_hp_left = shield_hp;
 p.play_stationary(get_pack_sound(shield_folder + "*use*"), false);
-speak_buffer("You put on the steel shield.");
+speak_buffer("You put on the steel shield.", "items");
 return true;
 }
 /* A blow that would cost lives, from anything but a hazard. With a shield worn it takes damage instead and this
@@ -193,10 +193,10 @@ void speak_shield_strength()
 {
 if (!shield_worn)
 {
-speak_buffer("You're not wearing a shield.");
+speak_buffer("You're not wearing a shield.", "status");
 return;
 }
-speak_buffer("Shield strength, " + int(round(100.0 * shield_hp_left / shield_hp, 0)) + " percent.");
+speak_buffer("Shield strength, " + int(round(100.0 * shield_hp_left / shield_hp, 0)) + " percent.", "status");
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.
 void shield_lane_sounds()
