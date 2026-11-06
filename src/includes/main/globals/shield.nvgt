@@ -31,12 +31,12 @@ void reset_shield()
 shield_worn = false;
 shield_hp_left = 0;
 }
-/* Debug options only (dev, 2026-11-03): a single-type debug run of something a shield protects from starts with one steel
-shield in the inventory, to be worn with U, since shields never spawn in those runs. Called from reset_run(). */
+/* Debug options only (dev, 2026-11-03): a single-type debug run of something a shield protects from starts with two steel
+shields in the inventory (one until 2026-11-05), to be worn with U, since shields never spawn in those runs. Called from reset_run(). */
 void give_debug_shield()
 {
 string[] shielded_types = {"spikes", "mines", "force_fields", "projectiles", "walls", "animals", "animals_birds", "animals_dogs", "fake_doors", "real_doors", "real_doors_spread", "powerups", "barriers", "barriers_random", "barriers_multiple"}; // never "all", which plays like the real game (dev)
-if (shielded_types.find(spawn_only) >= 0) give_item("steel_shield", 1);
+if (shielded_types.find(spawn_only) >= 0) give_item("steel_shield", 2); // 2 since 2026-11-05 (dev: "in debug, you'll have 2 shields in your inv"), was 1
 }
 // countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.
 void spawn_shield(double sx, int countdown, int lane = -1)

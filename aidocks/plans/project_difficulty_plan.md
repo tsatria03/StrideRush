@@ -1,11 +1,11 @@
 ---
 name: project_difficulty_plan
-description: SETTLED, not built (2026-11-05, 1.5; easy 500 to chaos 300, obstacles and items join by speed, spacing per level, each level locked until 5 runs past a real door on the one below) - game difficulty options after choosing play game (todo item); the dev: today the game "throws everything in the kitchen at you"; ToyMania's 5-tier ladder as reference; Q&A log
+description: SETTLED and PARKED, not built (2026-11-05, 1.5; easy 500 to chaos 300, obstacles and items join by speed, spacing per level, each level locked until 5 runs past a real door on the one below) - game difficulty options after choosing play game (todo item); the dev: today the game "throws everything in the kitchen at you"; ToyMania's 5-tier ladder as reference; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED 2026-11-05, nothing built (summary at the end of the Q&A log). Started 2026-11-05 on top of 6980e4d, from the todo item "Add game difficulty options after choosing the play game item." (dev: "right now it throws everything in the kitchen at you when playing the game").
+Status: SETTLED and PARKED 2026-11-05 (dev: "Perfect! We can park this plan."), nothing built (summary at the end of the Q&A log, with the Section 3 locks summary and the menu wording after it). Not to be built until the dev picks it up. Started 2026-11-05 on top of 6980e4d, from the todo item "Add game difficulty options after choosing the play game item." (dev: "right now it throws everything in the kitchen at you when playing the game").
 
 Today's real game (tuning.nvgt, spawner.nvgt): every run starts at 500 ms and speeds up 10 ms every 10 s to 50 ms; every obstacle type in obstacle_types (hazards, spikes, mines, force fields, projectiles, walls, fake doors, animals, barriers) is an equal pick from the first spawn, plus real doors at each 50 ms mark; 3 s spawn-ahead, 1 to 4 s of floor between obstacles; 1 life and 200 health; damages from animals 10 to barriers 80; items by their chances.
 
