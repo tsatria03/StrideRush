@@ -210,44 +210,60 @@ int mres = m.run();
 if (mres < 0) return -1; // silent: escape just steps back to the debug mode question
 return int(parse_int(m.selected_item_id));
 }
-/* DEBUG OPTION: pick which obstacles spawn: one type from obstacle_types (hazards, spikes, mines, and any added later),
-or all, listed in that order (dev's order). It only appears when running from source; a compiled release always
-spawns all. Returns the type, "all", or "" if escaped. */
+/* DEBUG OPTION: pick which obstacles spawn: one type from obstacle_types and item_types (and any added later), one of
+the extra choices below, or all. Every choice is gathered first, then listed in alphabetical order, "all" included
+(dev, 2026-11-05: "Please make the debug options in alphabetical order"). It only appears when running from source; a
+compiled release always spawns all. Returns the type, "all", or "" if escaped. */
 string choose_spawn_types()
 {
 if (SCRIPT_COMPILED) return "all";
-setupmenu();
-m.intro_text = "Choose which obstacles spawn for debugging.";
+string[] labels;
+dictionary ids; // label -> spawn id
 for (uint i = 0; i < obstacle_types.length(); i++)
 {
 if (obstacle_types[i] == "animals") continue; // listed by kind below instead (dev, 2026-11-04)
 if (obstacle_types[i] == "barriers") continue; // the three barrier choices below cover it (dev, 2026-11-05)
-m.add_item(obstacle_types[i].replace("_", " ", true), obstacle_types[i]); // "force_fields" reads as "force fields"
+add_spawn_choice(labels, ids, obstacle_types[i].replace("_", " ", true), obstacle_types[i]); // "force_fields" reads as "force fields"
 }
 // Debug options: animals of one kind only (dev, 2026-11-04); "all" still mixes every kind.
-m.add_item("animals, birds", "animals_birds");
-m.add_item("animals, dogs", "animals_dogs");
+add_spawn_choice(labels, ids, "animals, birds", "animals_birds");
+add_spawn_choice(labels, ids, "animals, dogs", "animals_dogs");
 // Real doors aren't in the random mix (they mark speed sections), but as a debug option they can be the only thing that spawns.
-m.add_item("real doors", "real_doors");
+add_spawn_choice(labels, ids, "real doors", "real_doors");
 // Debug option: only the real doors at the 50 ms speed marks, with nothing in between (dev, 2026-11-03).
-m.add_item("real doors, spread", "real_doors_spread");
-// Debug option: only barriers, the lane trap, which stays out of the normal mix until the belt turns forward (dev, 2026-11-04).
-m.add_item("barriers", "barriers");
-m.add_item("barriers, random lanes", "barriers_random"); // each barrier in any of the three lanes, as in the real game later (dev, 2026-11-04)
-m.add_item("barriers, multiple lanes", "barriers_multiple"); // the real game's rule: sometimes two side by side, never in one lane (dev, 2026-11-04)
+add_spawn_choice(labels, ids, "real doors, spread", "real_doors_spread");
+// Debug option: only barriers, in your lane, in random lanes, or the real game's pairs (dev, 2026-11-04).
+add_spawn_choice(labels, ids, "barriers", "barriers");
+add_spawn_choice(labels, ids, "barriers, random lanes", "barriers_random"); // each barrier in any of the three lanes
+add_spawn_choice(labels, ids, "barriers, multiple lanes", "barriers_multiple"); // the real game's rule: sometimes two side by side, never in one lane
 for (uint i = 0; i < item_types.length(); i++)
 {
 string item_name = item_types[i].replace("_", " ", true);
-m.add_item(item_name, item_types[i]);
+add_spawn_choice(labels, ids, item_name, item_types[i]);
 // The lane items get the barriers' three choices (dev, 2026-11-05): your lane, random lanes, multiple lanes.
 if (item_lane_types.find(item_types[i]) < 0) continue;
-m.add_item(item_name + ", random lanes", item_types[i] + "_random");
-m.add_item(item_name + ", multiple lanes", item_types[i] + "_multiple");
+add_spawn_choice(labels, ids, item_name + ", random lanes", item_types[i] + "_random");
+add_spawn_choice(labels, ids, item_name + ", multiple lanes", item_types[i] + "_multiple");
 }
-m.add_item("all", "all");
+add_spawn_choice(labels, ids, "all", "all");
+labels.sort_ascending();
+setupmenu();
+m.intro_text = "Choose which obstacles spawn for debugging.";
+for (uint i = 0; i < labels.length(); i++)
+{
+string id;
+ids.get(labels[i], id);
+m.add_item(labels[i], id);
+}
 int mres = m.run();
 if (mres < 0) return ""; // silent: escape just steps back to the speed menu
 return m.selected_item_id;
+}
+// One spawn choice for choose_spawn_types(): its spoken label and the id start_run() gets.
+void add_spawn_choice(string[]@ labels, dictionary@ ids, const string&in label, const string&in id)
+{
+labels.insert_last(label);
+ids.set(label, id);
 }
 /* DEBUG OPTION: whether you hear your footsteps while running (dev, 2026-11-04: "extremely useful for the new
 transformed belt tests"), asked before the run-ending question. No silences every footstep, so only the belt's sounds
