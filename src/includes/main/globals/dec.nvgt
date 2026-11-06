@@ -1,5 +1,8 @@
 bool hrtf=true; // on by default (dev, 2026-11-05); the Sound tab's HRTF checkbox, saved in settings.srf and applied at startup
 bool behind_pitch=true; // on by default (dev, 2026-11-05): anything behind you is lowered by 5 in pitch; the Game tab's checkbox
+// The learn sounds menu's two settings (dev, 2026-11-05, ToyMania's), both on by default and saved in settings.srf.
+bool loop_previews=true; // the Sound tab: a previewed sound (or countdown) repeats until you move to another or leave
+bool variant_descriptions=true; // the Menu tab: a sound with numbered variants adds ". This sound has multiple variants." to its label
 // Everything Stride Rush keeps on the player's machine goes under here (dev, 2026-11-04, CookieCraze's constant).
 const string APPDATA_DIR = DIRECTORY_APPDATA + "tsatria03/StrideRush/";
 /* The settings, all in one encrypted file (dev, 2026-11-04: "I still want settings.srf, not split"), read by

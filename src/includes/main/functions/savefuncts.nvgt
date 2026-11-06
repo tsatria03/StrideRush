@@ -40,6 +40,14 @@ if(st.d.exists("behind_pitch"))
 {
 behind_pitch=st.read_bool("behind_pitch");
 }
+if(st.d.exists("loop_previews"))
+{
+loop_previews=st.read_bool("loop_previews");
+}
+if(st.d.exists("variant_descriptions"))
+{
+variant_descriptions=st.read_bool("variant_descriptions");
+}
 if(st.d.exists("fademode"))
 {
 fademode=st.read_int("fademode");
@@ -84,6 +92,8 @@ st.add("speak_menu_position",speak_menu_position);
 st.add("fademode",fademode);
 st.add("hrtf",hrtf);
 st.add("behind_pitch",behind_pitch);
+st.add("loop_previews",loop_previews);
+st.add("variant_descriptions",variant_descriptions);
 st.add("ask_quit_on_escape",ask_quit_on_escape);
 st.add("tts_config",tts_dump_config(tts, true));
 st.add("soundcard",soundcard);

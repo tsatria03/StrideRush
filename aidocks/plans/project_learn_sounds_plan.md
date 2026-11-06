@@ -64,3 +64,10 @@ Settled summary:
 - Settings, both ticked by default, saved in settings.srf and reset by reset settings: "Enable looping of previewed sounds" (Sound tab, after the device; countdowns repeat too) and "Enable variant descriptions in the learn sounds menu" (Menu tab, after side scrolling; adds ". This sound has multiple variants.").
 - Left out: surfaces, player, powerups and game sounds, music, ambience, interface sounds.
 - Docks once built: a 1.5 changelog entry, the readme's Menus section (the learn sounds menu and its keys) and Settings section (the two new checkboxes); the todo item moves to finished.
+
+Build sections (written 2026-11-05; one per go-ahead, [[feedback_describe_dont_show_code]]):
+- Section 1: the two settings. dec.nvgt loop_previews and variant_descriptions (true); readpreffs() and writepreffs(); the Sound tab's "Enable looping of previewed sounds" after the device and the Menu tab's "Enable variant descriptions in the learn sounds menu" after side scrolling; saved on save settings, put back on by reset settings. Nothing reads them yet.
+- Section 2: the menu. The game menu's "learn sounds menu"; the folder-built menus and lists with sound counts, friendly names (the swap table) and the variants note; learn_game_sounds_menu() extended (Space, preview volume, silent menu sounds, loop previews, remembering the last category and sound, asynchronous countdowns).
+- Section 3: docks.
+- GO-AHEAD for Section 1 (dev, 2026-11-05: "Thanks! Now I'm ready for the learn sounds menu. section 1."). BUILT on top of eccd57b as above. The Sound tab is main menu only (like HRTF), so F2 mid-run never changes loop_previews; the Menu tab shows on F2 too, so variant descriptions can change mid-run (harmless). No test steps (not gameplay); a relaunch check of both tabs.
+  - CHANGED (dev, 2026-11-05: "check boxes always appear before buttons in the settings, so please move this check box."): the Sound tab is HRTF, volume fading, looping of previewed sounds, then the device button. A standing rule for the settings menu: in every tab, checkboxes come before buttons ([[project_settings_plan]]).

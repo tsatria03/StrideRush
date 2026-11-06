@@ -7,7 +7,7 @@ open something of their own (reset, the sound device, the voice, the key screens
 rebuilds the window afterwards, so the unsaved ticks are carried in locals across the rebuild. */
 void settingsmenu(bool ingame = false)
 {
-bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf;
+bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions;
 int tab_shown = 0; // opens on the first tab: General from the main menu (dev, 2026-11-04), Game from F2
 while (true)
 {
@@ -26,7 +26,7 @@ int tab_keyboard = ingame ? -1 : 2;
 int tab_menu = ingame ? 1 : 3;
 int tab_sound = ingame ? -1 : 4;
 int tab_speech = ingame ? 2 : 5;
-int reset_btn = -1, view_btn = -1, rebind_btn = -1, fade_box = -1, hrtf_box = -1, device_btn = -1;
+int reset_btn = -1, view_btn = -1, rebind_btn = -1, fade_box = -1, hrtf_box = -1, device_btn = -1, loop_box = -1;
 if (!ingame)
 {
 reset_btn = setform.create_button("&Reset settings");
@@ -52,13 +52,19 @@ int position_box = setform.create_checkbox("Enable position information in menus
 setform.assign_to_tab(position_box, tabs, tab_menu);
 int scroll_box = setform.create_checkbox("Enable side scrolling in menus", new_scroll);
 setform.assign_to_tab(scroll_box, tabs, tab_menu);
+// The learn sounds menu's labels (dev, 2026-11-05, ToyMania's setting), after side scrolling.
+int variants_box = setform.create_checkbox("Enable variant descriptions in the learn sounds menu", new_variants);
+setform.assign_to_tab(variants_box, tabs, tab_menu);
 if (!ingame)
 {
-// The Sound tab, in the dev's order (2026-11-05): HRTF, volume fading, then the device.
+/* The Sound tab, in the dev's order (2026-11-05): HRTF, volume fading, the learn sounds menu's looping, then the device.
+Checkboxes always come before buttons in a tab (dev, 2026-11-05). */
 hrtf_box = setform.create_checkbox("Enable global HRTF support", new_hrtf); // SimpleFighter's wording; main menu only (dev, 2026-11-04)
 setform.assign_to_tab(hrtf_box, tabs, tab_sound);
 fade_box = setform.create_checkbox("Enable global volume fading", new_fade);
 setform.assign_to_tab(fade_box, tabs, tab_sound);
+loop_box = setform.create_checkbox("Enable looping of previewed sounds", new_loop); // ToyMania's setting (dev, 2026-11-05)
+setform.assign_to_tab(loop_box, tabs, tab_sound);
 device_btn = setform.create_button("Select sound &device. Currently set to " + soundcard);
 setform.assign_to_tab(device_btn, tabs, tab_sound);
 }
@@ -83,6 +89,8 @@ new_scroll = setform.is_checked(scroll_box);
 if (fade_box != -1) new_fade = setform.is_checked(fade_box);
 new_behind = setform.is_checked(behind_box);
 if (hrtf_box != -1) new_hrtf = setform.is_checked(hrtf_box);
+if (loop_box != -1) new_loop = setform.is_checked(loop_box);
+new_variants = setform.is_checked(variants_box);
 int tab_now = setform.get_list_position(tabs);
 if (tab_now >= 0) tab_shown = tab_now;
 if (setform.is_pressed(cancel_btn))
@@ -98,6 +106,8 @@ first_letter = new_letter;
 speak_menu_position = new_position;
 side_scrolling = new_scroll;
 if (!ingame) fademode = new_fade ? 1 : 0;
+if (!ingame) loop_previews = new_loop;
+variant_descriptions = new_variants;
 behind_pitch = new_behind;
 apply_behind_pitch();
 if (!ingame)
@@ -122,6 +132,8 @@ new_scroll = side_scrolling;
 new_fade = fademode == 1;
 new_behind = behind_pitch;
 new_hrtf = hrtf;
+new_loop = loop_previews;
+new_variants = variant_descriptions;
 }
 break;
 }
@@ -183,6 +195,8 @@ behind_pitch = true;
 apply_behind_pitch();
 hrtf = true;
 sound_global_hrtf = hrtf;
+loop_previews = true;
+variant_descriptions = true;
 use_sr = true;
 tts.set_rate(0);
 tts.set_pitch(0);
