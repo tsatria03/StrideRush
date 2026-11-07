@@ -1,4 +1,5 @@
 New in 1.6.
+Made it so the I key now moves to the previous item in your inventory and the O key to the next one, instead of the shift plus I and I keys.
 Added music and ambience to every run, where the music shuffles through all its tracks one after another, and the ambience changes to a new place every 1 to 2 minutes, fading from one into the next, with F3 and F4 now also changing the music volume and F5 and F6 the ambience volume.
 New in 1.5.
 Made it so the laser is now replaced by a sword, on 8, with new sounds for most of the other weapons.

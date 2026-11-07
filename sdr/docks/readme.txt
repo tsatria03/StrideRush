@@ -110,8 +110,8 @@ Right arrow or letter E: Moves one lane to the right, if pressed.
 Tab or letter A: Uses your left hand, to switch off a force field, open a door or pick up an item, if pressed.
 Enter or letter D: Uses your right hand, to switch off a force field, open a door or pick up an item, if pressed.
 Both hand keys together, such as A and D or Tab and Enter: Claps, to scare away an animal, if pressed. With nothing for your hands to do, a single hand makes a whoosh and a clap is just a clap.
-Letter I: Moves to the next item in your inventory, if pressed.
-Shift plus letter I: Moves to the previous item in your inventory, if pressed.
+Letter I: Moves to the previous item in your inventory, if pressed.
+Letter O: Moves to the next item in your inventory, if pressed.
 Letter U: Uses the item you're on in your inventory, such as opening an ammo pack, unlocking a door with a key, putting on a shield, using a life capsule, a health potion or a teleporter, if pressed.
 Numbers 1 through 0: Draws the bat, boot, club, feat, fist, hammer, knife, sword, machine gun or pistol, if pressed.
 Space: Swings or fires your weapon, if pressed. With the machine gun, it keeps firing, if held down.
