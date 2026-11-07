@@ -52,8 +52,9 @@ string stat_line(const string&in label, const string&in value)
 {
 return label + ", " + value;
 }
-// The last endless run, or a single line before the first one (dev, 2026-11-05: "both").
-string[] session_stat_lines()
+/* The last endless run, or a single line before the first one (dev, 2026-11-05: "both"). With live, the run going on now
+(the session results plan, 2026-11-07): steps ran, time ran and top speed read live, and no "run ended by" yet. */
+string[] session_stat_lines(bool live = false)
 {
 string[] lines;
 if (!has_session)
@@ -61,11 +62,24 @@ if (!has_session)
 lines.insert_last("You haven't played an endless run yet.");
 return lines;
 }
+dictionary@ stats = @session_stats;
+if (live) @stats = live_session_stats();
 lines.insert_last(stat_line("difficulty", last_run_difficulty));
-add_running_lines(lines, session_stats, false);
-add_obstacle_and_hit_lines(lines, session_stats, false);
-lines.insert_last(stat_line("run ended by", end_cause_text(session_end_cause)));
+add_running_lines(lines, stats, false);
+add_obstacle_and_hit_lines(lines, stats, false);
+if (!live) lines.insert_last(stat_line("run ended by", end_cause_text(session_end_cause)));
 return lines;
+}
+/* A copy of the session so far, with the three stats end_run_stats() only measures at the end filled in live, as
+achievements read them. A copy, so the real session is never touched mid-run. */
+dictionary@ live_session_stats()
+{
+dictionary@ stats = dictionary();
+for (uint i = 0; i < stat_keys.length(); i++) stats.set(stat_keys[i], stat_value(session_stats, stat_keys[i]));
+stats.set("steps", live_session_value("steps"));
+stats.set("time_running", live_session_value("time_running"));
+stats.set("top_speed", live_session_value("top_speed"));
+return stats;
 }
 // Every endless run added up, starting with when the last one ended, as ToyMania's lifetime stats do.
 string[] lifetime_stat_lines()

@@ -41,15 +41,33 @@ void pause_menu()
 {
 pause_game();
 temp.play_stationary(get_pack_sound("misc/game/*pause*"), false);
+int focus = -1;
 while (true)
 {
 setupmenu();
 m.intro_text = "Pause menu.";
 m.add_item("resume run", "resume");
-m.add_item("restart run", "restart");
+m.add_item("restart run", "restart"); // right after resume run (dev, 2026-11-07)
+// Session results, in an endless run only (the session results plan, 2026-11-07); practice and debug runs count nothing.
+if (stats_counting)
+{
+m.add_item("view session results", "view");
+m.add_item("copy session results to clipboard", "copy");
+m.add_item("export session results to file", "export");
+}
 m.add_item("quit run", "quit");
-int mres = m.run();
+int mres = m.run(focus, false, focus >= 0);
+focus = -1;
 string choice = mres < 0 ? "" : m.selected_item_id;
+// The results items come back to the pause menu on the item chosen, still paused.
+if (choice == "view" or choice == "copy" or choice == "export")
+{
+focus = mres;
+if (choice == "view") view_session_results();
+else if (choice == "copy") copy_session_results(true);
+else export_session_results(true);
+continue;
+}
 // Escape resumes, the same as choosing resume run.
 if (mres < 0 or choice == "resume")
 {
