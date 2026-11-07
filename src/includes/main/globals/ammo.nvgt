@@ -65,6 +65,7 @@ ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*get*"), false);
 // The player's give sound as it goes into the inventory, together with get, like ToyMania's item pickups (dev).
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item("ammo_pack", 1);
+stat_add("ammo_packs_picked_up");
 speak_buffer(item_display_name("ammo_pack"), "items"); // just the item's name, like ToyMania's pickups (dev)
 return true;
 }
@@ -124,6 +125,7 @@ return a.x;
 }
 void break_ammopack(ammopack@ a)
 {
+stat_add("ammo_packs_broken");
 a.spent = true;
 stop_ammopack(a);
 ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)

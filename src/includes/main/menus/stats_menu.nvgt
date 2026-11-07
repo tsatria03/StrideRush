@@ -79,6 +79,27 @@ for (uint i = 0; i < kinds.length(); i++)
 int64 count = stat_value(stats, "caught_" + kinds[i]);
 if (count > 0) lines.insert_last(lead[i] + " " + total + count_text(count, "time", "times") + ".");
 }
+add_item_and_weapon_lines(lines, stats, lifetime);
+}
+/* Section 4's Items and Weapons lines: each inventory item picked up, broken (run onto, landed on or hit) and used, then
+powerups, then swings, shots and reloads. */
+void add_item_and_weapon_lines(string[]@ lines, dictionary@ stats, bool lifetime)
+{
+string total = lifetime ? "a total of " : "";
+string[] kinds = {"ammo_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters"};
+string[] one = {"ammo pack", "key", "steel shield", "life capsule", "health potion", "player teleporter"};
+string[] many = {"ammo packs", "keys", "steel shields", "life capsules", "health potions", "player teleporters"};
+for (uint i = 0; i < kinds.length(); i++)
+{
+lines.insert_last("You have picked up " + total + count_text(stat_value(stats, kinds[i] + "_picked_up"), one[i], many[i]) + ".");
+lines.insert_last("You have broken " + total + count_text(stat_value(stats, kinds[i] + "_broken"), one[i], many[i]) + ".");
+lines.insert_last("You have used " + total + count_text(stat_value(stats, kinds[i] + "_used"), one[i], many[i]) + ".");
+}
+lines.insert_last("You have collected " + total + count_text(stat_value(stats, "ground_powerups_collected"), "ground powerup", "ground powerups") + ".");
+lines.insert_last("You have collected " + total + count_text(stat_value(stats, "air_powerups_collected"), "air powerup", "air powerups") + "."); // the flight ones (dev, 2026-11-06)
+lines.insert_last("You have swung your melee weapons " + total + count_text(stat_value(stats, "melee_swings"), "time", "times") + ".");
+lines.insert_last("You have fired " + total + count_text(stat_value(stats, "shots_fired"), "shot", "shots") + ".");
+lines.insert_last("You have reloaded " + total + count_text(stat_value(stats, "reloads"), "time", "times") + ".");
 }
 // The last run's ending: the obstacle that ended it, or a quit or restart ("" also covers a session saved before Section 3).
 string end_cause_line(const string&in cause)

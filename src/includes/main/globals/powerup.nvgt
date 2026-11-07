@@ -165,6 +165,7 @@ if (me.x > pu.x + spawn_distance()) remove_powerup(i);
 }
 void collect_powerup(powerup@ pu)
 {
+stat_add(pu.flight ? "air_powerups_collected" : "ground_powerups_collected"); // run onto, or jumped into
 pu.spent = true;
 pu.collected = true;
 stop_powerup(pu);

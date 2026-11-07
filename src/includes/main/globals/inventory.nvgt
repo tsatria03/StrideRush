@@ -80,28 +80,34 @@ return;
 string item = keys[invpos];
 if (item == "ammo_pack")
 {
-if (use_ammopack()) give_item(item, -1);
+if (use_ammopack()) item_used(item);
 }
 else if (is_key_item(item))
 {
-if (use_key(item)) give_item(item, -1);
+if (use_key(item)) item_used(item);
 }
 else if (item == "steel_shield")
 {
-if (use_shield()) give_item(item, -1);
+if (use_shield()) item_used(item);
 }
 else if (item == "life_capsule")
 {
-if (use_capsule()) give_item(item, -1);
+if (use_capsule()) item_used(item);
 }
 else if (item == "health_potion")
 {
-if (use_potion()) give_item(item, -1); // refused at full health, so the potion is kept
+if (use_potion()) item_used(item); // refused at full health, so the potion is kept
 }
 else if (item == "player_teleporter")
 {
-if (use_teleporter()) give_item(item, -1);
+if (use_teleporter()) item_used(item);
 }
+}
+// A used item leaves the inventory and counts toward the statistics (Section 4), keys all as "keys".
+void item_used(const string&in item)
+{
+give_item(item, -1);
+stat_add((is_key_item(item) ? "keys" : item + "s") + "_used");
 }
 // Keys are stored under their color folder's name, such as "red_key", so any item ending in "_key" is a key.
 bool is_key_item(string item)

@@ -81,6 +81,7 @@ stop_shield(target);
 shieldpool.play_stationary(get_pack_sound(shield_folder + "*get*"), false);
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item("steel_shield", 1);
+stat_add("steel_shields_picked_up");
 speak_buffer(item_display_name("steel_shield"), "items");
 return true;
 }
@@ -138,6 +139,7 @@ return s.x;
 }
 void break_shield(shield@ s)
 {
+stat_add("steel_shields_broken");
 s.spent = true;
 stop_shield(s);
 shieldpool.play_stationary(get_pack_sound(shield_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)

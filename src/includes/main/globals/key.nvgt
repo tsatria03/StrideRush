@@ -69,6 +69,7 @@ stop_key(target);
 keypool.play_stationary(get_pack_sound(key_sound_folder(target) + "*get*"), false);
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item(target.color, 1);
+stat_add("keys_picked_up");
 speak_buffer(item_display_name(target.color), "items"); // just its name, like a pack: "red key"
 return true;
 }
@@ -126,6 +127,7 @@ return k.x;
 }
 void break_key(doorkey@ k)
 {
+stat_add("keys_broken");
 k.spent = true;
 stop_key(k);
 keypool.play_stationary(get_pack_sound(key_sound_folder(k) + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)

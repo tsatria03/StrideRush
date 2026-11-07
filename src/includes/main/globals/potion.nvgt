@@ -58,6 +58,7 @@ stop_potion(target);
 potionpool.play_stationary(get_pack_sound(potion_folder + "*get*"), false);
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item("health_potion", 1);
+stat_add("health_potions_picked_up");
 speak_buffer(item_display_name("health_potion"), "items");
 return true;
 }
@@ -115,6 +116,7 @@ return pot.x;
 }
 void break_potion(healthpotion@ pot)
 {
+stat_add("health_potions_broken");
 pot.spent = true;
 stop_potion(pot);
 potionpool.play_stationary(get_pack_sound(potion_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
