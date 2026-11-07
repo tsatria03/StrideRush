@@ -120,8 +120,8 @@ Letter X: Announces how much ammo your gun has loaded and in reserve, if pressed
 Letter H: Announces how much health you have left, as a percentage, and how many lives you have, if pressed.
 Letter M: Announces how strong the shield you're wearing is, as a percentage, if pressed.
 Letter L: Announces which lane you're in, if pressed.
-Letter Z: Announces how far you've run, in tiles, if pressed.
-Letter C: Announces your current speed, in milliseconds per step, if pressed.
+Letter Z: Announces how far you've run, in steps, if pressed.
+Letter C: Announces your current speed, in steps a second, if pressed.
 Letter T: Announces how long you've been running for, if pressed.
 Page up or F4: Raises the in-game music volume by 1 decibel, if pressed/held down.
 Page down or F3: Lowers the in-game music volume by 1 decibel, if pressed/held down.

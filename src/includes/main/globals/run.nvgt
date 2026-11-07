@@ -287,7 +287,7 @@ exit();
 if (controls.action_triggered("info_lives")) speak_health(); // H: health percent and lives
 if (controls.action_triggered("info_shield")) speak_shield_strength(); // key_config keeps a plain M quiet during Shift+M (buffer mute)
 if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase(), "status");
-if (controls.action_triggered("info_speed")) speak_buffer("Your speed is " + current_step_time() + " ms.", "status"); // the step interval itself, which shrinks as you speed up
+if (controls.action_triggered("info_speed")) speak_buffer(speed_phrase(), "status");
 if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".", "status");
 weapon_input();
 inventory_input();
@@ -298,10 +298,23 @@ if (controls.action_triggered("ambience_up")) change_ambience_volume(volume_chan
 if (controls.action_triggered("ambience_down")) change_ambience_volume(-volume_change);
 buffercheck();
 }
+/* C: the speed in steps a second, to one decimal place (dev, 2026-11-06: steps a second instead of "Your speed is 470 ms.",
+first rounded down to whole steps, then "I meant switch it to 1 dessimal place, so it says 2.1, 2.2, etc.", since whole
+steps read 2 all the way from 500 to 334 ms). current_step_time() keeps it between 500 and 50 ms, so it reads 2.0 to 20.0,
+and the speed powerups count. Built from tenths; a whole number reads without its ".0" (dev, 2026-11-06: "I want it to
+say 2, unless the speed increases"), so 500 ms is "2" and 470 ms "2.1". */
+string speed_phrase()
+{
+int tenths = int(round(10000.0 / current_step_time(), 0));
+string amount = "" + (tenths / 10);
+if (tenths % 10 != 0) amount += "." + (tenths % 10);
+return "You are running " + amount + " steps a second.";
+}
+// Z: the distance in steps, one per tile the belt has carried you (dev, 2026-11-06: "say x steps, not x tiles").
 string distance_phrase()
 {
-int tiles = int(me.x);
-return tiles == 1 ? "You have run 1 tile." : "You have run " + tiles + " tiles.";
+int steps = int(me.x);
+return steps == 1 ? "You have run 1 step." : "You have run " + steps + " steps.";
 }
 // "1 minute and 5 seconds", "45 seconds" and so on, for the time readout.
 string time_phrase(int64 ms)

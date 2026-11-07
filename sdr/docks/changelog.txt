@@ -1,4 +1,6 @@
 New in 1.6.
+Made it so C now tells you your speed in steps a second instead of milliseconds per step.
+Made it so Z now tells you how far you've run in steps instead of tiles.
 Made it so the I key now moves to the previous item in your inventory and the O key to the next one, instead of the shift plus I and I keys.
 Added music and ambience to every run, where the music shuffles through all its tracks one after another, and the ambience changes to a new place every 1 to 2 minutes, fading from one into the next, with F3 and F4 now also changing the music volume and F5 and F6 the ambience volume.
 New in 1.5.
