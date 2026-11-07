@@ -42,7 +42,11 @@ if (me.x == hazards[i].x and is_grounded())
 {
 string fall_clip = get_pack_sound("objects/traps/hazards/" + hazards[i].theme + "/*fall*");
 if (practice_run) practice_set_down(hazards[i], fall_clip);
-else end_run_hazard(fall_clip);
+else
+{
+stat_caught("hazards"); // the statistics: times fell into hazards (dev, 2026-11-06)
+end_run_hazard(fall_clip);
+}
 return;
 }
 if (me.x == hazards[i].x) stat_add("hazards_jumped"); // in the air on its tile: cleared (a grounded arrival returned above)

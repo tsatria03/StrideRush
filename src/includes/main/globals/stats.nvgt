@@ -8,7 +8,7 @@ difficulty, and the lifetime counts runs per difficulty. The difficulty_runs unl
 A new stat is one more name in stat_keys plus a stat_add() where it happens; readgame() and writegame() pick it up. */
 const string[] stat_keys = {"steps", "time_running", "top_speed", "lane_changes",
 "hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "barriers_dodged", "walls_broken", "fake_doors_broken", "real_doors_opened",
-"damage_taken", "lives_lost", "caught_spikes", "caught_mines", "caught_projectiles", "caught_force_fields", "caught_animals", "caught_barriers", "caught_walls", "caught_doors",
+"damage_taken", "lives_lost", "caught_hazards", "caught_spikes", "caught_mines", "caught_projectiles", "caught_force_fields", "caught_animals", "caught_barriers", "caught_walls", "caught_doors",
 "ammo_packs_picked_up", "ammo_packs_broken", "ammo_packs_used", "keys_picked_up", "keys_broken", "keys_used", "steel_shields_picked_up", "steel_shields_broken", "steel_shields_used",
 "life_capsules_picked_up", "life_capsules_broken", "life_capsules_used", "health_potions_picked_up", "health_potions_broken", "health_potions_used", "player_teleporters_picked_up", "player_teleporters_broken", "player_teleporters_used",
 "ground_powerups_collected", "air_powerups_collected", "melee_swings", "shots_fired", "reloads"};
