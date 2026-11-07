@@ -1,0 +1,57 @@
+/* The achievements menu (the achievements plan's Section 2, dev, 2026-11-06), CookieCraze's trophy shelf with Stride
+Rush's two scopes as its only groups: view game achievements in the game menu opens achievements_menu(), session
+achievements, lifetime achievements, back, each a list in achievements.ini's order (dev: "Keep them in the ini order"),
+earned ones by name and the rest as "<name>, locked". Enter shows the description, or "This achievement is locked."
+and its hint, then reopens on the same one. Escape or back steps back one menu silently. Progress numbers live in
+achievement statistics instead (Section 3), as CookieCraze keeps them. */
+void achievements_menu()
+{
+int focus = -1;
+while (true)
+{
+setupmenu();
+m.intro_text = "Achievements menu. " + earned_count("") + " of " + achievements.length() + " unlocked in total.";
+m.add_item("session achievements", "session");
+m.add_item("lifetime achievements", "lifetime");
+m.add_item("back", "back");
+int mres = m.run(focus, false, focus >= 0);
+if (mres < 0 or m.selected_item_id == "back") return;
+focus = mres;
+achievement_list(m.selected_item_id);
+}
+}
+// One scope's list: its intro counts it, enter tells you about the one you're on, and back or escape returns.
+void achievement_list(const string&in scope)
+{
+int focus = -1;
+while (true)
+{
+setupmenu();
+achievement@[] shown;
+for (uint i = 0; i < achievements.length(); i++)
+{
+if (achievements[i].scope != scope) continue;
+shown.insert_last(achievements[i]);
+m.add_item(achievement_earned(achievements[i]) ? achievements[i].name : achievements[i].name + ", locked", "" + (shown.length() - 1));
+}
+m.add_item("back", "back");
+m.intro_text = (scope == "session" ? "Session" : "Lifetime") + " achievements. " + earned_count(scope) + " of " + shown.length() + " unlocked.";
+int mres = m.run(focus, false, focus >= 0);
+if (mres < 0 or m.selected_item_id == "back") return;
+focus = mres;
+achievement@ a = shown[int(parse_int(m.selected_item_id))];
+if (achievement_earned(a)) dlgmessage_return(achievement_description(a));
+else dlgmessage_return("This achievement is locked. " + a.hint);
+}
+}
+// How many achievements of a scope ("" for both) are earned.
+int earned_count(const string&in scope)
+{
+int count = 0;
+for (uint i = 0; i < achievements.length(); i++)
+{
+if (scope != "" and achievements[i].scope != scope) continue;
+if (achievement_earned(achievements[i])) count += 1;
+}
+return count;
+}
