@@ -55,3 +55,65 @@ if (achievement_earned(achievements[i])) count += 1;
 }
 return count;
 }
+/* Achievement statistics (the achievements plan's Section 3, dev, 2026-11-06), first in the statistics menu: how many are
+unlocked, then every achievement in the ini's order, session ones first: "lane changer, complete", with no number, since
+a cleared stat would show less than it needed (dev, 2026-11-07: "super confusing indeed. Do not add a number after it."),
+or "side stepper, incomplete, 120 of 500 lane changes". An incomplete session one shows your best single run ("door to
+door, incomplete, best record, 2 of 3 real doors opened"). Lowercase, like the other stat lines; time in minutes and top
+speed in steps a second, as the file writes them. */
+string[] achievement_stat_lines()
+{
+string[] lines;
+lines.insert_last(stat_line("achievements unlocked", earned_count("") + " of " + achievements.length()));
+string[] scopes = {"session", "lifetime"};
+for (uint s = 0; s < scopes.length(); s++)
+{
+for (uint i = 0; i < achievements.length(); i++)
+{
+achievement@ a = achievements[i];
+if (a.scope != scopes[s]) continue;
+if (achievement_earned(a))
+{
+lines.insert_last(a.name.lower() + ", complete");
+continue;
+}
+int64 value = 0;
+if (a.scope == "session") best_runs.get(a.stat, value);
+else value = stat_value(lifetime_stats, a.stat);
+string amount = stat_amount_text(a.stat, value) + " of " + stat_threshold_text(a) + stat_unit(a.stat, a.threshold);
+if (a.scope == "session") amount = "best record, " + amount; // your best single run (dev, 2026-11-07: "best run," at first, then "I like best record better")
+lines.insert_last(a.name.lower() + ", incomplete, " + amount);
+}
+}
+return lines;
+}
+// A stat's value as a number in the file's friendly units: minutes for time, steps a second for top speed.
+string stat_amount_text(const string&in stat, int64 value)
+{
+if (stat == "time_running") return thousands_text(value / 60000);
+if (stat == "top_speed") return tenths_text(value);
+return thousands_text(value);
+}
+// An achievement's threshold as the file wrote it.
+string stat_threshold_text(achievement@ a)
+{
+if (a.stat == "top_speed") return tenths_text(a.threshold);
+return thousands_text(int64(a.shown));
+}
+// The words after a stat's number, " lane change" or " lane changes" by the amount, with its leading space.
+string stat_unit(const string&in stat, int64 amount)
+{
+string[] keys = {"steps", "time_running", "top_speed", "lane_changes", "hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "barriers_dodged", "walls_broken", "fake_doors_broken", "real_doors_opened", "damage_taken", "lives_lost", "caught_hazards", "caught_spikes", "caught_mines", "caught_projectiles", "caught_force_fields", "caught_animals", "caught_barriers", "caught_walls", "caught_doors", "ground_powerups_collected", "air_powerups_collected", "melee_swings", "shots_fired", "reloads"};
+string[] one = {"step", "minute", "steps a second", "lane change", "hazard jumped", "spike jumped", "mine jumped", "projectile ducked", "force field switched off", "animal scared", "barrier dodged", "wall broken", "fake door broken", "real door opened", "damage", "life lost", "hazard fall", "spike hit", "mine hit", "projectile hit", "force field hit", "animal run-in", "barrier hit", "wall crash", "door crash", "ground powerup collected", "air powerup collected", "melee swing", "gunshot fired", "gun reload"};
+string[] many = {"steps", "minutes", "steps a second", "lane changes", "hazards jumped", "spikes jumped", "mines jumped", "projectiles ducked", "force fields switched off", "animals scared", "barriers dodged", "walls broken", "fake doors broken", "real doors opened", "damage", "lives lost", "hazard falls", "spike hits", "mine hits", "projectile hits", "force field hits", "animal run-ins", "barrier hits", "wall crashes", "door crashes", "ground powerups collected", "air powerups collected", "melee swings", "gunshots fired", "gun reloads"};
+int i = keys.find(stat);
+if (i >= 0) return " " + (amount == 1 ? one[i] : many[i]);
+// The six items, "<item>_used": "1 ammo pack used", "10 ammo packs used".
+if (stat.length() > 5 and stat.substr(stat.length() - 5) == "_used")
+{
+string item = stat.substr(0, stat.length() - 5).replace("_", " ", true);
+if (amount == 1 and item.substr(item.length() - 1) == "s") item = item.substr(0, item.length() - 1);
+return " " + item + " used";
+}
+return " " + stat.replace("_", " ", true);
+}

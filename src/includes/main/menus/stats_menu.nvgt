@@ -11,6 +11,7 @@ while (true)
 {
 setupmenu();
 m.intro_text = "Statistics menu. You can view the stats from your last endless run, or your totals across all of them here.";
+m.add_item("achievement statistics", "achievements"); // first (dev, 2026-11-06), the achievements plan's Section 3
 m.add_item("session statistics", "session");
 m.add_item("lifetime statistics", "lifetime");
 m.add_item("clear game statistics", "clear");
@@ -20,7 +21,8 @@ m.add_item("back", "back");
 int mres = m.run(focus, false, focus >= 0);
 if (mres < 0 or m.selected_item_id == "back") return;
 focus = mres;
-if (m.selected_item_id == "clear") clear_stats_menu();
+if (m.selected_item_id == "achievements") show_stat_lines("Achievement statistics menu. You can see your progress on every achievement here.", achievement_stat_lines());
+else if (m.selected_item_id == "clear") clear_stats_menu();
 else if (m.selected_item_id == "copy") copy_all_stats();
 else if (m.selected_item_id == "export") export_all_stats();
 else if (m.selected_item_id == "session") show_stat_lines("Session statistics menu. You can see the stats from your last endless run here.", session_stat_lines());
@@ -204,8 +206,11 @@ return;
 "Session stats:", a dash before each line, a blank line, then "Lifetime stats:". */
 string all_stats_text()
 {
-string text = "Session stats:\r\n";
-string[] lines = session_stat_lines();
+string text = "Achievement stats:\r\n"; // first, as in the statistics menu (the achievements plan's Section 3)
+string[] lines = achievement_stat_lines();
+for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";
+text += "\r\nSession stats:\r\n";
+lines = session_stat_lines();
 for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";
 text += "\r\nLifetime stats:\r\n";
 lines = lifetime_stat_lines();
