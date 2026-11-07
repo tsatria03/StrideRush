@@ -117,3 +117,56 @@ return " " + item + " used";
 }
 return " " + stat.replace("_", " ", true);
 }
+/* The game menu's three "all progress" items (the achievements plan's Section 4, dev, 2026-11-06: "I want them always
+shown"), ToyMania's clear, copy and export of game progresses, for statistics and achievements together. Clearing never
+touches the difficulty unlocks, and doesn't stamp the last played date the way ToyMania's resetgame() does. */
+void clear_all_progress()
+{
+setupmenu();
+m.intro_text = "Are you sure you want to clear all of your game progresses? This action cannot be undone.";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "no")
+{
+speak("canceled");
+return;
+}
+clear_session_stats();
+clear_lifetime_stats(); // the best records go with it
+earned_achievements.delete_all();
+writegame();
+temp.play_stationary(get_pack_sound("ui/other/*complete*"), false);
+dlgmessage_return("Game progresses cleared.");
+}
+/* Everything as one text, built once from the menus' own lines (ToyMania wrote it out twice): "Achievement stats:" (every
+achievement, complete or incomplete with its progress), then "Session stats:" and "Lifetime stats:". */
+string all_progress_text()
+{
+string text = "Achievement stats:\r\n";
+string[] lines = achievement_stat_lines();
+for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";
+return text + "\r\n" + all_stats_text();
+}
+void copy_all_progress()
+{
+clipboard_copy_text(all_progress_text());
+temp.play_stationary(get_pack_sound("ui/other/*copied*"), false);
+dlgmessage_return("All game progresses have been copied to your clipboard.");
+}
+// Into APPDATA_DIR's stats folder as player_progresses.txt, beside player_statistics.txt, replacing any older copy.
+void export_all_progress()
+{
+string folder = APPDATA_DIR + "stats";
+if (!directory_exists(folder)) directory_create(folder);
+file f;
+if (!f.open(folder + "/player_progresses.txt", "wb"))
+{
+dlgmessage_return("Unable to export the game progresses.");
+return;
+}
+f.write(all_progress_text());
+f.close();
+temp.play_stationary(get_pack_sound("ui/other/*export*"), false);
+dlgmessage_return("All game progresses have been exported to stats/player_progresses.txt.");
+}

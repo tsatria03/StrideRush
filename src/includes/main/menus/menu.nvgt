@@ -127,6 +127,9 @@ m.add_item("play game", "play");
 m.add_item("learn sounds", "learn"); // dev, 2026-11-05 (first "learn sounds menu"); learn_sounds_menu.nvgt
 m.add_item("view game achievements", "achievements"); // before statistics (dev, 2026-11-06); achievements_menu.nvgt
 m.add_item("view game statistics", "stats"); // after learn sounds (dev, 2026-11-06); stats_menu.nvgt
+m.add_item("clear game progresses", "clearall"); // the three "all progress" items, always shown (achievements_menu.nvgt)
+m.add_item("copy all game progresses to clipboard", "copyall");
+m.add_item("export all game progresses to file", "exportall");
 m.add_item("back", "back");
 /* ToyMania's game menu intro (dev, 2026-11-05), with only the parts Stride Rush has: its "learn about important
 sounds" from when ToyMania had a learn sounds menu, and its "check your stats" with statistics (2026-11-06), in the
@@ -137,6 +140,9 @@ if(mres<0 or m.selected_item_id=="back") return;
 if(m.selected_item_id=="learn") learn_sounds_menu();
 else if(m.selected_item_id=="achievements") achievements_menu();
 else if(m.selected_item_id=="stats") statistics_menu();
+else if(m.selected_item_id=="clearall") clear_all_progress();
+else if(m.selected_item_id=="copyall") copy_all_progress();
+else if(m.selected_item_id=="exportall") export_all_progress();
 else play_game();
 }
 }

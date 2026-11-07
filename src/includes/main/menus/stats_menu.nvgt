@@ -175,7 +175,7 @@ void clear_stats_menu()
 while (true)
 {
 setupmenu();
-m.intro_text = "Choose which game statistics to clear. This won't change which difficulties you've unlocked.";
+m.intro_text = "Choose which game statistics to clear. This won't clear your achievements or change which difficulties you've unlocked.";
 m.add_item("session stats", "session");
 m.add_item("lifetime stats", "lifetime");
 m.add_item("session and lifetime stats", "both");
@@ -206,11 +206,10 @@ return;
 "Session stats:", a dash before each line, a blank line, then "Lifetime stats:". */
 string all_stats_text()
 {
-string text = "Achievement stats:\r\n"; // first, as in the statistics menu (the achievements plan's Section 3)
-string[] lines = achievement_stat_lines();
-for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";
-text += "\r\nSession stats:\r\n";
-lines = session_stat_lines();
+/* Session and lifetime stats only: achievement stats belong to the game menu's copy and export of all progress
+(achievements_menu.nvgt's all_progress_text(); dev, 2026-11-07, ToyMania's split). */
+string text = "Session stats:\r\n";
+string[] lines = session_stat_lines();
 for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";
 text += "\r\nLifetime stats:\r\n";
 lines = lifetime_stat_lines();

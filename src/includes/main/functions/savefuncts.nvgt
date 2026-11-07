@@ -135,7 +135,7 @@ gs.add("last_played_time", last_played_time);
 gs.add("session_end_cause", session_end_cause);
 for (uint i = 0; i < achievements.length(); i++)
 {
-if (achievement_earned(achievements[i])) gs.add("ach_" + achievements[i].id, true);
+gs.add("ach_" + achievements[i].id, achievement_earned(achievements[i])); // false too, so clearing all progress takes it off the save
 }
 string[] best_stats = best_run_stats();
 for (uint i = 0; i < best_stats.length(); i++)
