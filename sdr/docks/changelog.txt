@@ -1,4 +1,6 @@
 New in 1.6.
+Added options to clear, copy or export your game statistics, where clearing never changes which difficulties you've unlocked, and exporting saves them to a text file.
+Added game statistics in the game menu, where you can look through your last endless run and your totals across every run, from steps and top speed to every obstacle you've got past or been hit by, every item you've picked up and every shot you've fired.
 Made it so C now tells you your speed in steps a second instead of milliseconds per step.
 Made it so Z now tells you how far you've run in steps instead of tiles.
 Made it so the I key now moves to the previous item in your inventory and the O key to the next one, instead of the shift plus I and I keys.

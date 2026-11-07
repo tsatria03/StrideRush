@@ -1,10 +1,10 @@
 ####These are the things that need to be finished for future versions of the game.
 
-****Unfinished. Add game statistics in the game menu, for your last run, for all your runs, and for your progress on each achievement.
-****Unfinished. Add game achievements in the game menu, for a single run and for all your runs.
+****Unfinished. Add game achievements in the game menu, for a single run and for all your runs, with your progress on each one.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add game statistics in the game menu, for your last run and for all your runs.
 **Finished. Lock each game difficulty until you've finished enough runs on the one before it.
 **Finished. Add game difficulty options after choosing the play game item.
 **Finished. Add practice options for obstacles in the game menu.
