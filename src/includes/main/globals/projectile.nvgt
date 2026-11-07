@@ -65,12 +65,14 @@ projectile@ pr = projectiles[i];
 if (me.x == pr.meet_x and !pr.spent)
 {
 pr.spent = true;
+if (is_ducked()) stat_add("projectiles_ducked"); // crouched as it reaches you: it flies over
 if (!is_ducked())
 {
 string hit_clip = get_pack_sound("objects/traps/projectiles/" + pr.theme + "/*hit*");
 stop_projectile(pr); // it hit you: the loop ends at once
 /* A fatal hit plays the projectile's hit through p (silence_run() would otherwise cut it off) and no player hit,
 since end_run_hit() plays the player's death instead. */
+stat_caught("projectiles"); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(projectile_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {

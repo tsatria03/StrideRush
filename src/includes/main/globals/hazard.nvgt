@@ -45,6 +45,7 @@ if (practice_run) practice_set_down(hazards[i], fall_clip);
 else end_run_hazard(fall_clip);
 return;
 }
+if (me.x == hazards[i].x) stat_add("hazards_jumped"); // in the air on its tile: cleared (a grounded arrival returned above)
 // Kept until it's as far behind as obstacles appear ahead, so its loop fades out behind you instead of cutting off.
 if (me.x > max(hazards[i].ledge_end, hazards[i].x + spawn_distance())) remove_hazard(i);
 }

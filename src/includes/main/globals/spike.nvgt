@@ -58,6 +58,7 @@ if (me.x == spikes[i].x and is_grounded())
 string hit_clip = get_pack_sound("objects/traps/spikes/" + spikes[i].theme + "/*hit*");
 /* A fatal hit plays the spike's hit through p (silence_run() clears spikepool, which cut it off) and no player hit,
 since end_run_hit() plays the player's death instead. */
+stat_caught("spikes"); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(spike_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {
@@ -68,6 +69,7 @@ return;
 spikepool.play_2d(hit_clip, 0, me.x, 0, spikes[i].x, false);
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
+if (me.x == spikes[i].x and !is_grounded()) stat_add("spikes_jumped"); // in the air on its tile: cleared
 // Kept swinging until it's as far behind as obstacles appear ahead, so its swings fade out behind you.
 if (me.x > spikes[i].x + spawn_distance()) remove_spike(i);
 }

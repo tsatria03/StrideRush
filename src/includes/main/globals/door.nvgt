@@ -109,6 +109,7 @@ speak_buffer("This door is locked.", "doors");
 return true;
 }
 target.opened = true;
+stat_add("real_doors_opened");
 stop_door(target);
 cancel_movement(); // any jump or crouch ends silently: the door carries you from here
 doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/*open*"), false, 0, 0, 0, target.pitch, false); // stationary (dev)
@@ -190,6 +191,7 @@ target.hp -= damage;
 if (target.hp <= 0)
 {
 target.destroyed = true;
+stat_add("fake_doors_broken"); // only fake doors can be broken
 stop_door(target);
 play_door(target, "death", target.x, false);
 }
@@ -221,6 +223,7 @@ if (door_standing(d))
 d.crashed = true;
 stop_door(d);
 // A fatal crash plays the door's hit through p, at its pitch, and no player hit; end_run_hit() plays the death.
+stat_caught("doors"); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(door_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {

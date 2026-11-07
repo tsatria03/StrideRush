@@ -6,13 +6,18 @@ Escape question, Alt+F4), it's added to the lifetime and both are saved to saves
 time (writegame()). There's no autosave. One set covers every difficulty (dev, 2026-11-06); the session remembers its
 difficulty, and the lifetime counts runs per difficulty. The difficulty_runs unlock counts are separate (difficulty.nvgt).
 A new stat is one more name in stat_keys plus a stat_add() where it happens; readgame() and writegame() pick it up. */
-const string[] stat_keys = {"steps", "time_running", "top_speed", "lane_changes"};
+const string[] stat_keys = {"steps", "time_running", "top_speed", "lane_changes",
+"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "barriers_dodged", "walls_broken", "fake_doors_broken", "real_doors_opened",
+"damage_taken", "lives_lost", "caught_spikes", "caught_mines", "caught_projectiles", "caught_force_fields", "caught_animals", "caught_barriers", "caught_walls", "caught_doors"};
 // The lifetime also has runs_played and runs_<level> for each difficulty_names entry, which a session doesn't need.
 dictionary session_stats, lifetime_stats;
 bool stats_counting = false; // true only during an endless run
 bool has_session = false; // false until the first endless run, so session statistics can say there's none yet
 string last_run_difficulty = ""; // the session's difficulty, such as "easy"
 string last_played_date = "", last_played_time = ""; // when the last endless run ended (get_date() and get_time())
+/* What ended the run (Section 3): last_caught is the obstacle whose blow came last (stat_caught()), run_end_cause what
+ended this run ("hazards", an obstacle type, or "" for a quit or restart), and session_end_cause the last run's, saved. */
+string last_caught = "", run_end_cause = "", session_end_cause = "";
 
 int64 stat_value(dictionary@ stats, const string&in key)
 {
@@ -25,6 +30,13 @@ void stat_add(const string&in key, int64 amount = 1)
 {
 if (!stats_counting) return;
 session_stats.set(key, stat_value(session_stats, key) + amount);
+}
+/* Called just before an obstacle's blow (its take_damage()): counts caught_<type>, and remembers the type in case the blow
+is fatal, for end_run_hit(). */
+void stat_caught(const string&in type)
+{
+stat_add("caught_" + type);
+last_caught = type;
 }
 // top_speed keeps its highest value in the lifetime instead of a total; every other stat adds up.
 bool stat_is_highest(const string&in key)
@@ -45,6 +57,8 @@ void start_run_stats()
 stats_counting = run_difficulty >= 0;
 if (!stats_counting) return;
 session_stats.delete_all();
+last_caught = "";
+run_end_cause = "";
 has_session = true;
 last_run_difficulty = difficulty_names[run_difficulty];
 }
@@ -58,6 +72,7 @@ session_stats.set("steps", int64(me.x));
 session_stats.set("time_running", int64(runtimer.elapsed)); // runtimer pauses with the game, so paused time isn't counted
 // The top speed in tenths of a step a second (C's measure); step_time only ever gets faster, so its last value is the top.
 session_stats.set("top_speed", int64(round(10000.0 / step_time, 0)));
+session_end_cause = run_end_cause;
 stats_counting = false;
 for (uint i = 0; i < stat_keys.length(); i++)
 {

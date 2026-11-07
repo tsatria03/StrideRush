@@ -41,7 +41,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Plans record Q&A](general/feedback_plans_record_qna.md) — several gameplay plans get discussed before any game code; log every Q&A in the plan file
 - [Tell when to commit plans](general/feedback_tell_when_to_commit_plans.md) — flag when a plan is settled with all Q&A recorded so the dev can commit it
 - [Ask one question at a time](general/feedback_ask_one_question_at_a_time.md) — one question per turn, with a recommendation
-- [Test steps one at a time](general/feedback_test_steps_one_at_a_time.md) — no tests in build summaries; ask "ready for the test steps?" first, then one numbered step per message with what to hear, ask if it passed, wait
+- [Test steps one at a time](general/feedback_test_steps_one_at_a_time.md) — numbered "Test x of y" (2026-11-06); no tests in build summaries; ask "ready for the test steps?" first, then one numbered step per message with what to hear, ask if it passed, wait
 - [Describe, don't show code](general/feedback_describe_dont_show_code.md) — give all section plans up front, build per go-ahead, never paste code in chat
 - [List modified files](general/feedback_list_modified_files.md) — end editing turns with "Files changed:" plus a relaunch note
 - [Don't run or build the game](general/feedback_dont_run_or_build_the_game.md) — never launch or compile; the dev verifies

@@ -50,7 +50,49 @@ lines.insert_last("You have run " + count_text(stat_value(session_stats, "steps"
 lines.insert_last("You have been running for " + time_phrase(stat_value(session_stats, "time_running")) + ".");
 lines.insert_last("Your top speed was " + tenths_text(stat_value(session_stats, "top_speed")) + " steps a second.");
 lines.insert_last("You have changed lanes " + count_text(stat_value(session_stats, "lane_changes"), "time", "times") + ".");
+add_obstacle_and_hit_lines(lines, session_stats, false);
+lines.insert_last(end_cause_line(session_end_cause));
 return lines;
+}
+/* Section 3's Obstacles and Hits lines, for either menu: what you got past, then damage and lives, then how often each
+kind of obstacle caught you, listing only the kinds that did, to keep the menu short. lifetime adds "a total of". */
+void add_obstacle_and_hit_lines(string[]@ lines, dictionary@ stats, bool lifetime)
+{
+string total = lifetime ? "a total of " : "";
+lines.insert_last("You have jumped over " + total + count_text(stat_value(stats, "hazards_jumped"), "hazard", "hazards") + ".");
+lines.insert_last("You have jumped over " + total + count_text(stat_value(stats, "spikes_jumped"), "spike", "spikes") + ".");
+lines.insert_last("You have jumped over " + total + count_text(stat_value(stats, "mines_jumped"), "mine", "mines") + ".");
+lines.insert_last("You have ducked under " + total + count_text(stat_value(stats, "projectiles_ducked"), "projectile", "projectiles") + ".");
+lines.insert_last("You have switched off " + total + count_text(stat_value(stats, "force_fields_switched_off"), "force field", "force fields") + ".");
+lines.insert_last("You have scared away " + total + count_text(stat_value(stats, "animals_scared"), "animal", "animals") + ".");
+lines.insert_last("You have dodged " + total + count_text(stat_value(stats, "barriers_dodged"), "barrier", "barriers") + ".");
+lines.insert_last("You have broken " + total + count_text(stat_value(stats, "walls_broken"), "wall", "walls") + ".");
+lines.insert_last("You have broken " + total + count_text(stat_value(stats, "fake_doors_broken"), "fake door", "fake doors") + ".");
+lines.insert_last("You have opened " + total + count_text(stat_value(stats, "real_doors_opened"), "real door", "real doors") + ".");
+lines.insert_last("You have taken " + total + thousands_text(stat_value(stats, "damage_taken")) + " damage.");
+lines.insert_last("You have lost " + total + count_text(stat_value(stats, "lives_lost"), "life", "lives") + ".");
+// Each kind that caught you: its subject, then what it did.
+string[] kinds = {"spikes", "mines", "projectiles", "force_fields", "animals", "barriers", "walls", "doors"};
+string[] lead = {"Spikes have hit you", "Mines have gone off under you", "Projectiles have hit you", "Force fields have hit you", "Animals have run into you", "Barriers have hit you", "You have crashed into walls", "You have crashed into doors"};
+for (uint i = 0; i < kinds.length(); i++)
+{
+int64 count = stat_value(stats, "caught_" + kinds[i]);
+if (count > 0) lines.insert_last(lead[i] + " " + total + count_text(count, "time", "times") + ".");
+}
+}
+// The last run's ending: the obstacle that ended it, or a quit or restart ("" also covers a session saved before Section 3).
+string end_cause_line(const string&in cause)
+{
+if (cause == "hazards") return "Your run ended when you fell into a hazard.";
+if (cause == "spikes") return "Your run ended when a spike hit you.";
+if (cause == "mines") return "Your run ended when a mine went off under you.";
+if (cause == "projectiles") return "Your run ended when a projectile hit you.";
+if (cause == "force_fields") return "Your run ended when a force field hit you.";
+if (cause == "animals") return "Your run ended when an animal ran into you.";
+if (cause == "barriers") return "Your run ended when a barrier hit you.";
+if (cause == "walls") return "Your run ended when you crashed into a wall.";
+if (cause == "doors") return "Your run ended when you crashed into a door.";
+return "You quit the run.";
 }
 // Every endless run added up, starting with when the last one ended, as ToyMania's lifetime stats do.
 string[] lifetime_stat_lines()
@@ -67,6 +109,7 @@ lines.insert_last("You have run a total of " + count_text(stat_value(lifetime_st
 lines.insert_last("You have been running for a total of " + time_phrase(stat_value(lifetime_stats, "time_running")) + ".");
 lines.insert_last("Your top speed is " + tenths_text(stat_value(lifetime_stats, "top_speed")) + " steps a second.");
 lines.insert_last("You have changed lanes a total of " + count_text(stat_value(lifetime_stats, "lane_changes"), "time", "times") + ".");
+add_obstacle_and_hit_lines(lines, lifetime_stats, true);
 return lines;
 }
 // "1 step" or "4,000 steps": the count with thousands commas, then the right word.

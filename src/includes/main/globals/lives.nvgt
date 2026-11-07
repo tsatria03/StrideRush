@@ -24,12 +24,15 @@ through p and calls end_run_hit(), as a fatal hit always has. */
 int take_damage(int damage)
 {
 if (shield_absorb(damage)) return blow_shielded;
-player_health -= powerup_damage(damage, "Tough Hide", "Soft Hide"); // halved or doubled by the health powerups
+int dealt = powerup_damage(damage, "Tough Hide", "Soft Hide"); // halved or doubled by the health powerups
+stat_add("damage_taken", dealt < player_health ? dealt : player_health); // only what your health had to lose, as damage past 0 is dropped
+player_health -= dealt;
 if (player_health > 0) return blow_hurt;
 if (lives_can_end and lives <= 1)
 {
 player_health = 0;
 lives = 0;
+stat_add("lives_lost"); // the last one
 return blow_fatal;
 }
 player_health = player_hp; // the next life starts at full health
@@ -37,6 +40,7 @@ player_health = player_hp; // the next life starts at full health
 (bug found by the dev, 2026-11-04: it played life.ogg anyway). */
 if (lives <= 1) return blow_hurt;
 lives -= 1; // a life goes whenever there's one to spare
+stat_add("lives_lost");
 p.play_stationary(get_pack_sound("misc/player/*life*"), false);
 return blow_life_lost;
 }

@@ -72,6 +72,7 @@ stop_wall(w);
 string hit_clip = get_pack_sound("objects/traps/walls/" + w.theme + "/*hit*");
 /* A fatal crash plays the wall's hit through p (silence_run() would otherwise cut it off) and no player hit,
 since end_run_hit() plays the player's death instead. */
+stat_caught("walls"); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(wall_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {
@@ -116,6 +117,7 @@ target.hp -= damage;
 if (target.hp <= 0)
 {
 target.destroyed = true;
+stat_add("walls_broken");
 stop_wall(target);
 wallpool.play_2d(get_pack_sound("objects/traps/walls/" + target.theme + "/*death*"), 0, me.x, 0, target.x, false);
 }

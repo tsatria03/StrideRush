@@ -59,6 +59,7 @@ if (@target == null or bd.x < target.x) @target = bd;
 }
 if (@target == null) return false;
 target.spent = true;
+stat_add("animals_scared");
 stop_animal(target);
 animalpool.play_2d(get_pack_sound(animal_folder + target.theme + "/*scare*"), 0, me.x, 0, target.x, false);
 return true;
@@ -75,6 +76,7 @@ if (me.x == bd.x and !bd.spent)
 bd.spent = true;
 string hit_clip = get_pack_sound(animal_folder + bd.theme + "/*hit*");
 stop_animal(bd); // it ran into you: its call ends
+stat_caught("animals"); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(animal_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {

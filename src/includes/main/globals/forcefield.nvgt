@@ -56,6 +56,7 @@ if (f.active)
 string hit_clip = get_pack_sound("objects/traps/force_fields/" + f.theme + "/*hit*");
 /* A fatal hit plays no player hit and no throw, since end_run_hit() plays the player's death and then the fall of
 the field's tile. */
+stat_caught("force_fields"); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(forcefield_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {
@@ -148,6 +149,7 @@ return hand_window_start(f.x, f.countdown_start);
 void switch_off_forcefield(forcefield@ f)
 {
 f.active = false;
+stat_add("force_fields_switched_off");
 forcefieldpool.destroy_sound(f.loopslot);
 f.loopslot = forcefieldpool.play_2d(get_pack_sound("objects/traps/force_fields/" + f.theme + "/*off*"), 0, me.x, 0, f.x, true);
 }
