@@ -1,11 +1,11 @@
 ---
 name: project_session_results_plan
-description: SETTLED, not built (2026-11-07; 3 sections: core and pause menu, death flow, docks; for 1.6's last 2 changelog entries) - current session results: a pause menu item, a results screen with copy and export when a run ends in a death, and a setting for the copy and export prompt, after ToyMania's, built once from session_stat_lines(); Q&A log
+description: COMPLETE (2026-11-07, 1.6 FULL at 10 of 10; 3 sections built, tested and docked; for 1.6's last 2 changelog entries) - current session results: a pause menu item, a results screen with copy and export when a run ends in a death, and a setting for the copy and export prompt, after ToyMania's, built once from session_stat_lines(); Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED, nothing built. Started 2026-11-07 on top of 1665772 (the achievements docks), with 1.6 at 8 of 10.
+Status: COMPLETE (2026-11-07). Started 2026-11-07 on top of 1665772 (the achievements docks), with 1.6 at 8 of 10.
 
 Background:
 - Todo item (dev, 2026-11-07): "Add current session results during and after a run, which you can copy or export."
@@ -45,3 +45,4 @@ Q&A log:
 - TEST CHANGE (dev, 2026-11-07: "Also it should say, death outcome, reason.", then "I want it to say death outcome, none when you didn't actually die by a real obstacle."): the line is now "death outcome, <reason>" (falling into a hazard, a spike hit and so on), and a quit or restart reads "death outcome, none" (end_cause_text() returns "none" instead of "quitting"); everywhere the session lines show.
 - Section 2 tested 2026-11-07 (all 3 passed: the death results with difficulty then death outcome first and the question menu; copy, export and replay run; escape saying canceled, and the debug death's shorter menu with return to game menu). The dev approved every death outcome wording ("There all good.").
 - Section 3 details (proposed 2026-11-07): two 1.6 changelog entries, filling 1.6 at 10 of 10: the after death results and menu (replacing the replay question, with death outcome), and view, copy and export session results in the pause menu (with restart run moved up); the readme's Menus part (pause menu items, the death flow) and Statistics part (death outcome in place of how it ended); the todo item to finished; this plan COMPLETE; MEMORY.md and CLAUDE.md.
+- Section 3 BUILT 2026-11-07 (dev: "ready for docks"): two 1.6 changelog entries (10 of 10, 1.6 full), the pause menu's session results and the after death results and menu; the readme's Menus part (the pause menu's session results, the death flow in place of the replay question), Statistics part (death outcome, and copy and export of session results to player_results.txt) and the P key line; the todo item moved to finished; this plan COMPLETE; MEMORY.md and CLAUDE.md updated.

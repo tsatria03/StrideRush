@@ -1,4 +1,6 @@
 New in 1.6.
+Made it so dying in an endless run now shows your results for the run, starting with your death outcome, followed by a menu where you can copy or export them, replay the run, or return to the game menu, instead of only asking whether to replay.
+Added view, copy and export session results options in the pause menu during an endless run, so you can check your stats for the run so far, and restart run now comes right after resume run.
 Added options in the game menu to clear, copy or export all of your game progress, both your statistics and your achievements, where clearing never changes which difficulties you've unlocked.
 Added game achievements in the game menu, over 80 of them across single runs and all your runs, which are announced the moment you earn one and stay earned for good, and achievement statistics in the statistics menu now show your progress on each one.
 Added options to clear, copy or export your game statistics, where clearing never changes which difficulties you've unlocked, and exporting saves them to a text file.
