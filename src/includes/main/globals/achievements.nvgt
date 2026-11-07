@@ -1,0 +1,112 @@
+/* Achievements (the achievements plan's Section 1, dev, 2026-11-06). Every achievement is a [section] in
+data/config/achievements.ini, so none of their text lives in the code: stat (a name from stat_keys in stats.nvgt),
+threshold, scope (session, one run, or lifetime, all runs), name, description (with %threshold%) and hint. The file
+uses friendly units, converted here: time_running in minutes and top_speed in steps a second. Each is earned once and
+kept for good (its id saved in saves/game.srf), only in endless runs, and announced the moment it's earned: speak_buffer()
+into the achievements buffer and misc/game achsession or achlife. The best single run of each stat a session
+achievement reads is kept too, for achievement statistics, and cleared with the lifetime stats. */
+const string achievements_path = "data/config/achievements.ini";
+class achievement
+{
+string id, stat, scope, name, description, hint;
+int64 threshold = 0; // in the stat's own units (milliseconds, tenths of a step a second)
+double shown = 0; // the file's friendly number, for the description
+}
+achievement@[] achievements;
+dictionary earned_achievements; // id -> true
+dictionary best_runs; // stat -> its best single run, for the stats session achievements read
+
+// At startup, before readgame(), which needs the ids: every section of achievements.ini, in the file's order.
+void load_achievements()
+{
+achievements.resize(0);
+ini file_data;
+if (!file_data.load(achievements_path)) return; // a missing file just means no achievements
+string[]@ ids = file_data.list_sections();
+for (uint i = 0; i < ids.length(); i++)
+{
+achievement a;
+a.id = ids[i];
+a.stat = file_data.get_string(a.id, "stat");
+a.scope = file_data.get_string(a.id, "scope");
+a.name = file_data.get_string(a.id, "name");
+a.description = file_data.get_string(a.id, "description");
+a.hint = file_data.get_string(a.id, "hint");
+a.shown = file_data.get_double(a.id, "threshold");
+// Friendly units into the stat's own: minutes into milliseconds, steps a second into tenths.
+if (a.stat == "time_running") a.threshold = int64(a.shown * 60000);
+else if (a.stat == "top_speed") a.threshold = int64(round(a.shown * 10, 0));
+else a.threshold = int64(a.shown);
+if (a.stat == "" or a.name == "" or (a.scope != "session" and a.scope != "lifetime")) continue; // a broken entry is skipped
+achievements.insert_last(a);
+}
+}
+bool achievement_earned(achievement@ a)
+{
+return earned_achievements.exists(a.id);
+}
+// Its description with %threshold% as the friendly number, with thousands commas: "Run 1,000 steps over all your runs."
+string achievement_description(achievement@ a)
+{
+return a.description.replace("%threshold%", thousands_text(int64(a.shown)), true);
+}
+/* A stat's value in the run so far. Steps, time ran and top speed are only measured when a run ends (end_run_stats()),
+so during a run they're read live; every other stat is counted as it happens. */
+int64 live_session_value(const string&in stat)
+{
+if (stat == "steps") return int64(me.x);
+if (stat == "time_running") return int64(runtimer.elapsed);
+if (stat == "top_speed") return int64(round(10000.0 / step_time, 0));
+return stat_value(session_stats, stat);
+}
+// What an achievement is measured against now: the run so far, or the lifetime with the run so far added in.
+int64 achievement_progress(achievement@ a)
+{
+int64 run_value = live_session_value(a.stat);
+if (a.scope == "session") return run_value;
+int64 saved = stat_value(lifetime_stats, a.stat);
+if (stat_is_highest(a.stat)) return run_value > saved ? run_value : saved;
+return saved + run_value;
+}
+/* Once a step from step_check(), and at a run's end from end_run_stats(): earns every achievement that's reached its
+threshold. Only during an endless run. */
+void check_achievements()
+{
+if (!stats_counting) return;
+for (uint i = 0; i < achievements.length(); i++)
+{
+achievement@ a = achievements[i];
+if (achievement_earned(a)) continue;
+if (achievement_progress(a) >= a.threshold) earn_achievement(a);
+}
+}
+// Earned for good: its sound, "Achievement unlocked: First Steps. Run 1,000 steps over all your runs." in the buffer, and saved at once.
+void earn_achievement(achievement@ a)
+{
+earned_achievements.set(a.id, true);
+p.play_stationary(get_pack_sound("misc/game/" + (a.scope == "session" ? "*achsession*" : "*achlife*")), false);
+speak_buffer("Achievement unlocked: " + a.name + ". " + achievement_description(a), "achievements"); // how you got it too, as CookieCraze does (dev, 2026-11-06)
+writegame();
+}
+// Every stat a session achievement reads, once each: the stats whose best single run is kept.
+string[] best_run_stats()
+{
+string[] stats;
+for (uint i = 0; i < achievements.length(); i++)
+{
+if (achievements[i].scope == "session" and stats.find(achievements[i].stat) < 0) stats.insert_last(achievements[i].stat);
+}
+return stats;
+}
+// From end_run_stats(), with the session's final values: raises each best run the session beat.
+void update_best_runs()
+{
+string[] stats = best_run_stats();
+for (uint i = 0; i < stats.length(); i++)
+{
+int64 value = stat_value(session_stats, stats[i]);
+int64 best = 0;
+best_runs.get(stats[i], best);
+if (value > best) best_runs.set(stats[i], value);
+}
+}

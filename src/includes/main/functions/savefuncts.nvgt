@@ -107,6 +107,16 @@ if (gs.d.exists("last_run_difficulty")) last_run_difficulty = gs.read_string("la
 if (gs.d.exists("last_played_date")) last_played_date = gs.read_string("last_played_date");
 if (gs.d.exists("last_played_time")) last_played_time = gs.read_string("last_played_time");
 if (gs.d.exists("session_end_cause")) session_end_cause = gs.read_string("session_end_cause");
+// The achievements (achievements.nvgt, loaded first): each earned id as "ach_<id>", and each best run as "best_<stat>".
+for (uint i = 0; i < achievements.length(); i++)
+{
+if (gs.d.exists("ach_" + achievements[i].id) and gs.read_bool("ach_" + achievements[i].id)) earned_achievements.set(achievements[i].id, true);
+}
+string[] best_stats = best_run_stats();
+for (uint i = 0; i < best_stats.length(); i++)
+{
+if (gs.d.exists("best_" + best_stats[i])) best_runs.set(best_stats[i], gs.read_int64("best_" + best_stats[i]));
+}
 }
 // Writes the game's progress to saves/game.srf; called the moment a run count changes.
 void writegame()
@@ -123,6 +133,17 @@ gs.add("last_run_difficulty", last_run_difficulty);
 gs.add("last_played_date", last_played_date);
 gs.add("last_played_time", last_played_time);
 gs.add("session_end_cause", session_end_cause);
+for (uint i = 0; i < achievements.length(); i++)
+{
+if (achievement_earned(achievements[i])) gs.add("ach_" + achievements[i].id, true);
+}
+string[] best_stats = best_run_stats();
+for (uint i = 0; i < best_stats.length(); i++)
+{
+int64 best = 0;
+best_runs.get(best_stats[i], best);
+gs.add("best_" + best_stats[i], best);
+}
 gs.save();
 }
 /* Writes every setting to settings.srf. Called whenever one changes: the menu music volume (form_menu) and the run

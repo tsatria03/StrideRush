@@ -202,6 +202,7 @@ void step_check()
 if (steptimer.elapsed < current_step_time()) return; // Slow Motion and Rush Hour shift the normal step_time
 steptimer.restart();
 me.x += 1;
+check_achievements(); // once a step: anything reached so far, steps and time included (achievements.nvgt)
 update_listeners();
 spawn_check();
 // Obstacle contact only on arriving at a tile: in the air at that moment means the obstacle is cleared.

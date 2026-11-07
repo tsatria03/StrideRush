@@ -23,6 +23,7 @@ void main()
 if (!directory_exists(APPDATA_DIR + "preffs")) directory_create(APPDATA_DIR + "preffs");
 readpreffs();
 if (!directory_exists(APPDATA_DIR + "saves")) directory_create(APPDATA_DIR + "saves");
+load_achievements(); // before readgame(), which reads the earned achievements by their ids
 readgame(); // the difficulty run counts, so the difficulty menu knows what's open
 dummy.load("dummy"); // must load before sound_global_hrtf is set, or HRTF doesn't take effect
 sound_global_hrtf = hrtf;

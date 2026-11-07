@@ -75,6 +75,8 @@ session_stats.set("steps", int64(me.x));
 session_stats.set("time_running", int64(runtimer.elapsed)); // runtimer pauses with the game, so paused time isn't counted
 // The top speed in tenths of a step a second (C's measure); step_time only ever gets faster, so its last value is the top.
 session_stats.set("top_speed", int64(round(10000.0 / step_time, 0)));
+check_achievements(); // the run's final values, before counting stops
+update_best_runs();
 session_end_cause = run_end_cause;
 stats_counting = false;
 for (uint i = 0; i < stat_keys.length(); i++)
@@ -105,6 +107,7 @@ session_end_cause = "";
 void clear_lifetime_stats()
 {
 lifetime_stats.delete_all();
+best_runs.delete_all(); // the best runs go with the lifetime (the achievements plan)
 last_played_date = "";
 last_played_time = "";
 }
