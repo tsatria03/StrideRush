@@ -48,9 +48,11 @@ set_run_difficulty(difficulty); // before reset_run(), whose reset_spawner() pla
 set_spawn_only(only_type); // before reset_run(), whose reset_spawner() picks the first obstacle; splits an item's debug lane choice off
 lives_can_end = can_run_out;
 reset_run(starting_step_time, starting_life_count);
+start_run_stats(); // an endless run starts a fresh session (stats.nvgt)
 start_run_audio();
 running = true;
 run_loop();
+end_run_stats(); // the session into the lifetime and saved, however the run ended (stats.nvgt)
 // Also covers quitting from the pause menu; after a death these were already done and repeating them is harmless.
 stop_run_audio();
 clear_run_objects();
@@ -281,6 +283,7 @@ return;
 // Alt+F4 closes the whole program, from inside a run only, with no confirm.
 if (controls.action_triggered("exit_program"))
 {
+end_run_stats(); // a run left with Alt+F4 still counts and saves
 speak("exiting");
 exit();
 }

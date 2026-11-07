@@ -39,6 +39,7 @@ p.play_stationary_extended(get_pack_sound("misc/player/*bump*"), false, 0, belt_
 return;
 }
 current_lane = target;
+stat_add("lane_changes"); // a bump at an edge isn't a change
 p.play_stationary_extended(get_pack_sound("misc/player/*turn*"), false, 0, belt_pan(current_lane), 0, 100, false);
 }
 // A spot across the belt as a pan, from the middle lane: the left lane lane_pan_amount to the left, the right lane to the right.

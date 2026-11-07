@@ -82,8 +82,8 @@ break;
 }
 }
 /* Loads the game's progress from saves/game.srf at startup, the settings' way: each value only if the file holds it, so
-a missing file or an older one leaves the rest at 0. For now that's one run count per difficulty level, under
-"difficulty_runs_<level>" (Section 6). */
+a missing file or an older one leaves the rest at 0: a run count per difficulty level, under
+"difficulty_runs_<level>" (the game menu refactor plan's Section 6), and the statistics (stats.nvgt, 2026-11-06). */
 void readgame()
 {
 gs.load();
@@ -92,6 +92,20 @@ for (uint i = 0; i < difficulty_names.length(); i++)
 string name = "difficulty_runs_" + difficulty_names[i];
 if (gs.d.exists(name)) difficulty_runs[i] = gs.read_int(name);
 }
+// The statistics (stats.nvgt): lifetime stats as "stat_<key>", the last run's as "session_<key>", then the strings.
+string[] keys = lifetime_stat_keys();
+for (uint i = 0; i < keys.length(); i++)
+{
+if (gs.d.exists("stat_" + keys[i])) lifetime_stats.set(keys[i], gs.read_int64("stat_" + keys[i]));
+}
+for (uint i = 0; i < stat_keys.length(); i++)
+{
+if (gs.d.exists("session_" + stat_keys[i])) session_stats.set(stat_keys[i], gs.read_int64("session_" + stat_keys[i]));
+}
+if (gs.d.exists("has_session")) has_session = gs.read_bool("has_session");
+if (gs.d.exists("last_run_difficulty")) last_run_difficulty = gs.read_string("last_run_difficulty");
+if (gs.d.exists("last_played_date")) last_played_date = gs.read_string("last_played_date");
+if (gs.d.exists("last_played_time")) last_played_time = gs.read_string("last_played_time");
 }
 // Writes the game's progress to saves/game.srf; called the moment a run count changes.
 void writegame()
@@ -100,6 +114,13 @@ for (uint i = 0; i < difficulty_names.length(); i++)
 {
 gs.add("difficulty_runs_" + difficulty_names[i], difficulty_runs[i]);
 }
+string[] keys = lifetime_stat_keys();
+for (uint i = 0; i < keys.length(); i++) gs.add("stat_" + keys[i], stat_value(lifetime_stats, keys[i]));
+for (uint i = 0; i < stat_keys.length(); i++) gs.add("session_" + stat_keys[i], stat_value(session_stats, stat_keys[i]));
+gs.add("has_session", has_session);
+gs.add("last_run_difficulty", last_run_difficulty);
+gs.add("last_played_date", last_played_date);
+gs.add("last_played_time", last_played_time);
 gs.save();
 }
 /* Writes every setting to settings.srf. Called whenever one changes: the menu music volume (form_menu) and the run
