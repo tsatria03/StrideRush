@@ -22,7 +22,7 @@ Current tree (rescanned 2026-11-01 after the dev's second reorganization; 300 fi
   - hit: plays when a force field, mine or spike hits the player, at the same moment as the obstacle's own clips (dev, 2026-11-01). It's Stride Rush's version of SimpleFighter's character hurt sound.
   - death: plays when the player dies, but only from force fields, mines and spikes. Hazards don't use it, since they bring their own fall clip (dev, 2026-11-01).
 - equipments/shields/steel: wear, hit, break, remove (added 2026-11-01; renamed from the misspelled "steal" by Claude at the dev's request the same day). For later; the dev will describe it when its time comes.
-- objects/audio/musics and objects/audio/sources: empty. Music tracks and ambience loops for runs go here (they replaced the old objects/sources/tracks and ambiences).
+- objects/audio/tracks (60 files, music1-60, 49 MB) and objects/audio/ambiences (163 files, 175 MB), added by the dev 2026-11-06; run.nvgt's start_run_audio() was repointed to them that day (it still named the empty musics and sources folders). They are nearly nine tenths of the sounds folder (about 255 MB in all; a 7z release about 234 MB). How they play is [[project_music_ambience_plan]].
 - objects/construction (example elements added 2026-11-01; 279 files total in sounds/ now):
   - platforms: REPLACED by the dev on 2026-11-03 with 132 folders, so the sound tree went from about 375 files to 1524. carpet and marble are gone; ledge is unchanged.
     - The new folders are ash, cement to cement4, concrete to concrete47, deapsand, dirt to dirt20, grass to grass11, gravel to gravel12, hay, largerock, lawn, leaves to leaves6, pavement, pine, rocks to rocks5, sand to sand8, shortgrass, soil, stone to stone5, thickforrest and weed to weed3.

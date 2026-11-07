@@ -56,12 +56,13 @@ stop_run_audio();
 clear_run_objects();
 p.destroy_all();
 }
-// A random music track and a random ambience, found at runtime; an empty folder just stays silent.
+/* A random music track (objects/audio/tracks) and a random ambience (objects/audio/ambiences, both repointed 2026-11-06 from the
+old musics and sources folders), found at runtime; an empty folder just stays silent. */
 void start_run_audio()
 {
-string track = get_pack_sound("objects/audio/musics/*");
+string track = get_pack_sound("objects/audio/tracks/*");
 if (track != "") musslot = muspool.play_stationary_extended(track, true, 0, 0, music_volume, 100, false);
-string ambience = get_pack_sound("objects/audio/sources/*");
+string ambience = get_pack_sound("objects/audio/ambiences/*");
 if (ambience != "") ambslot = ambpool.play_stationary_extended(ambience, true, 0, 0, ambience_volume, 100, false);
 }
 void stop_run_audio()
