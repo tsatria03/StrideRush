@@ -138,9 +138,9 @@ else play_game();
 /* Play game. It opens the mode menu (the practice plan, dev, 2026-11-06, replacing the 2026-11-03 "Do you want to play
 in debug mode?" question): endless run goes on to the difficulty menu (choose_difficulty()) and plays the real game
 (the level's speed and floor, everything spawning, starting_lives, and the run ends when lives run out), practice run goes on to the practice menus (choose_practice()), and debug run, from source
-only, goes on to the debug options, in the dev's order: speed,
-spawn, footsteps (2026-11-04), then whether lives can run out. Escape steps back one menu silently: from the mode menu to
-the game menu, and from the speed menu back to the mode menu. They're all nested menus, so nothing says "canceled". The
+only, goes on to the debug options, in the dev's order: spawn (before speed since 2026-11-06), speed,
+footsteps (2026-11-04), then whether lives can run out. Escape steps back one menu silently: from the mode menu to
+the game menu, and from the spawn menu back to the mode menu. They're all nested menus, so nothing says "canceled". The
 lives menu was removed with player health: "all" starts with starting_lives, and any single-type choice with debug_lives. */
 void play_game()
 {
@@ -188,13 +188,14 @@ else stage = 1;
 }
 else if (stage == 1)
 {
-speed = choose_start_speed();
-stage = speed < 0 ? 0 : 2;
+// The spawn choice first, then the speed (dev, 2026-11-06: "Please make the speed menu come after the obstical/item menu").
+only_type = choose_spawn_types();
+stage = only_type == "" ? 0 : 2;
 }
 else if (stage == 2)
 {
-only_type = choose_spawn_types();
-stage = only_type == "" ? 1 : 3;
+speed = choose_start_speed();
+stage = speed < 0 ? 1 : 3;
 }
 else if (stage == 3)
 {
@@ -363,7 +364,7 @@ for (int t = start_step_time; t >= 100; t -= 100)
 m.add_item(t + " ms", "" + t);
 }
 int mres = m.run();
-if (mres < 0) return -1; // silent: escape just steps back to the mode menu
+if (mres < 0) return -1; // silent: escape just steps back to the spawn menu
 return int(parse_int(m.selected_item_id));
 }
 /* DEBUG OPTION: pick which obstacles spawn: one type from obstacle_types and item_types (and any added later), one of
@@ -402,6 +403,7 @@ add_spawn_choice(labels, ids, item_name + ", random lanes", item_types[i] + "_ra
 add_spawn_choice(labels, ids, item_name + ", multiple lanes", item_types[i] + "_multiple");
 }
 add_spawn_choice(labels, ids, "all", "all");
+add_spawn_choice(labels, ids, "nothing", "nothing"); // an empty belt, for the music and ambience (dev, 2026-11-06)
 labels.sort_ascending();
 setupmenu();
 m.intro_text = "Choose which obstacles spawn for debugging.";
@@ -412,7 +414,7 @@ ids.get(labels[i], id);
 m.add_item(labels[i], id);
 }
 int mres = m.run();
-if (mres < 0) return ""; // silent: escape just steps back to the speed menu
+if (mres < 0) return ""; // silent: escape just steps back to the mode menu
 return m.selected_item_id;
 }
 // One spawn choice for choose_spawn_types(): its spoken label and the id start_run() gets.
@@ -433,7 +435,7 @@ m.intro_text = "Do you want to hear your footsteps while running?";
 m.add_item("Yes", "yes");
 m.add_item("No", "no");
 int mres = m.run();
-if (mres < 0) return -1; // silent: escape just steps back to the spawn menu
+if (mres < 0) return -1; // silent: escape just steps back to the speed menu
 return m.selected_item_id == "yes" ? 1 : 0;
 }
 /* DEBUG OPTION: whether running out of lives ends the run. No means blows can never end it: lives stop at 1 and 0

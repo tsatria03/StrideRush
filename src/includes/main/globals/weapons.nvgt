@@ -1,7 +1,7 @@
 /* The weapons (dev, 2026-11-02), adapted from ToyMania's weapon system with its bugs fixed: one table instead of two
 disagreeing damage tables, separate ammo per gun, reloading any time a gun isn't full, and one generic target hook
 instead of a copy of the firing code per enemy type.
-All ten are available from the start of every run on 1 to 0, in this order, and a run starts with the axe drawn.
+All ten are available from the start of every run on 1 to 0, in this order, and a run starts with the bat drawn.
 Space swings or fires; the machine gun keeps firing while Space is held. Melee hits at once; a gun fires a bullet that
 travels (bullet.nvgt). A gun with nothing loaded, or mid-reload,
 plays empty instead. R reloads, timed by the length of the gun's reload sound like SimpleFighter, and ping plays when
@@ -9,9 +9,9 @@ it's done. X speaks the ammo. weapon_strike() is the target hook: walls, fake do
 Every weapon reaches the same weapon_reach_time ahead; ToyMania's per-weapon tile ranges were dropped, so weapons differ
 only by damage. */
 /* Alphabetical, the guns last on 9 and 0 (dev, 2026-11-06, the weapon lineup plan: the boot and laser sounds went, the axe
-and sword came; "Keep it alphabetical, and remap the damages to it"). */
-string[] weapon_names = {"axe", "bat", "club", "feat", "fist", "hammer", "knife", "sword", "machine_gun", "pistol"};
-// Base damage by key, from ToyMania's draw_weapon(): the axe (1) 3 up to the pistol (0) 30; every hit is this times weapon_damage_multiplier.
+and sword came; "Keep it alphabetical, and remap the damages to it"; later that day the boot came back and the axe went). */
+string[] weapon_names = {"bat", "boot", "club", "feat", "fist", "hammer", "knife", "sword", "machine_gun", "pistol"};
+// Base damage by key, from ToyMania's draw_weapon(): the bat (1) 3 up to the pistol (0) 30; every hit is this times weapon_damage_multiplier.
 int[] weapon_damage = {3, 6, 9, 12, 15, 18, 21, 24, 27, 30};
 // Ammo for each weapon; only the guns use it.
 int[] weapon_loaded(10);
@@ -36,8 +36,8 @@ string weapon_display_name(int w)
 {
 return weapon_names[w].replace("_", " ", true);
 }
-/* Every run starts fresh: the guns full, nothing reloading, and the axe drawn the normal way, with its draw sound and
-"axe equipped." (dev, 2026-11-02; the bat until 2026-11-06). current_weapon is cleared first so draw_weapon() doesn't skip it as already held. */
+/* Every run starts fresh: the guns full, nothing reloading, and the bat drawn the normal way, with its draw sound and
+"bat equipped." (dev, 2026-11-02; the axe for part of 2026-11-06). current_weapon is cleared first so draw_weapon() doesn't skip it as already held. */
 void reset_weapons()
 {
 for (int w = 0; w < int(weapon_names.length()); w++)

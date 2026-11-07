@@ -56,14 +56,35 @@ stop_run_audio();
 clear_run_objects();
 p.destroy_all();
 }
-/* A random music track (objects/audio/tracks) and a random ambience (objects/audio/ambiences, both repointed 2026-11-06 from the
-old musics and sources folders), found at runtime; an empty folder just stays silent. */
+/* The run's music and ambience (the music and ambience plan, dev, 2026-11-06), from objects/audio/tracks and
+objects/audio/ambiences (repointed that day from the old, empty musics and sources folders); an empty folder just stays
+silent. Every run, restarts and replays included, starts a fresh shuffle and a new random ambience.
+- Music is a shuffle (dev: "a playlist behavior that shuffles a track, then plays another one when it ends"): every
+  track once, not looping, in a random order, then a fresh order that never opens with the track just played.
+- The ambience loops, and every random ambience_min_time to ambience_max_time on runtimer (so pausing freezes it) it
+  crossfades over ambience_fade_time to another random one, never the same twice in a row.
+musslot and ambslot always hold what's playing now, so the volume keys reach it; a fading-out ambience is amb_old_slot. */
+const string tracks_folder = "objects/audio/tracks/";
+const string ambiences_folder = "objects/audio/ambiences/";
+string[] track_order; // the shuffle: full paths, played from track_pos on
+int track_pos = 0;
+string current_track = "", current_ambience = "";
+int amb_old_slot = -1;
+double ambience_change_at = 0, ambience_fade_start = -1; // on runtimer; -1 means no crossfade under way
+
 void start_run_audio()
 {
-string track = get_pack_sound("objects/audio/tracks/*");
-if (track != "") musslot = muspool.play_stationary_extended(track, true, 0, 0, music_volume, 100, false);
-string ambience = get_pack_sound("objects/audio/ambiences/*");
+track_order.resize(0);
+track_pos = 0;
+current_track = "";
+play_next_track();
+current_ambience = "";
+string ambience = pick_ambience();
 if (ambience != "") ambslot = ambpool.play_stationary_extended(ambience, true, 0, 0, ambience_volume, 100, false);
+current_ambience = ambience;
+amb_old_slot = -1;
+ambience_fade_start = -1;
+ambience_change_at = runtimer.elapsed + random(ambience_min_time, ambience_max_time);
 }
 void stop_run_audio()
 {
@@ -71,6 +92,85 @@ muspool.destroy_all();
 ambpool.destroy_all();
 musslot = -1;
 ambslot = -1;
+amb_old_slot = -1;
+ambience_fade_start = -1;
+}
+// Runs every frame from run_loop(): the next track when one ends, and the ambience's timer and crossfade.
+void run_audio_check()
+{
+// The run loop doesn't run while the pause menu, F1 or F2 has the music paused, so a paused track never counts as ended.
+if (track_order.length() > 0 and !muspool.sound_is_playing(musslot)) play_next_track();
+ambience_check();
+}
+// The next track in the shuffle, shuffling a fresh order when the last one has played.
+void play_next_track()
+{
+if (track_pos >= int(track_order.length())) shuffle_tracks();
+if (track_order.length() == 0) return;
+current_track = track_order[track_pos];
+track_pos += 1;
+if (musslot > -1) muspool.destroy_sound(musslot);
+musslot = muspool.play_stationary_extended(current_track, false, 0, 0, music_volume, 100, false);
+if (musslot < 0) track_order.resize(0); // a track that won't play stops the music for this run, rather than retrying every frame
+}
+/* Every track in a random order (Fisher-Yates). With more than one track, an order that would open with the track that
+just played swaps it with another, so no track plays twice in a row. */
+void shuffle_tracks()
+{
+track_order.resize(0);
+track_pos = 0;
+string[] names = find_files("sounds/" + tracks_folder + "*");
+for (uint i = 0; i < names.length(); i++) track_order.insert_last("sounds/" + tracks_folder + names[i]);
+for (int i = int(track_order.length()) - 1; i > 0; i--)
+{
+int j = random(0, i);
+string held = track_order[i];
+track_order[i] = track_order[j];
+track_order[j] = held;
+}
+if (track_order.length() > 1 and track_order[0] == current_track)
+{
+int j = random(1, track_order.length() - 1);
+track_order[0] = track_order[j];
+track_order[j] = current_track;
+}
+}
+// A random ambience, never the one playing now when there's another to choose.
+string pick_ambience()
+{
+string[] names = find_files("sounds/" + ambiences_folder + "*");
+if (names.length() == 0) return "";
+string choice = "sounds/" + ambiences_folder + names[random(0, names.length() - 1)];
+while (names.length() > 1 and choice == current_ambience) choice = "sounds/" + ambiences_folder + names[random(0, names.length() - 1)];
+return choice;
+}
+// The ambience's timer, then its crossfade: the old one falls ambience_fade_floor decibels while the new one rises to your volume.
+void ambience_check()
+{
+if (current_ambience == "") return;
+if (ambience_fade_start < 0)
+{
+if (runtimer.elapsed < ambience_change_at) return;
+string next = pick_ambience();
+if (next == "" or next == current_ambience)
+{
+ambience_change_at = runtimer.elapsed + random(ambience_min_time, ambience_max_time);
+return;
+}
+amb_old_slot = ambslot;
+ambslot = ambpool.play_stationary_extended(next, true, 0, 0, ambience_volume - ambience_fade_floor, 100, false);
+current_ambience = next;
+ambience_fade_start = runtimer.elapsed;
+return;
+}
+double progress = min(1.0, (runtimer.elapsed - ambience_fade_start) / double(ambience_fade_time));
+ambpool.update_sound_start_values(ambslot, 0, ambience_volume - ambience_fade_floor * (1 - progress), 100);
+if (amb_old_slot > -1) ambpool.update_sound_start_values(amb_old_slot, 0, ambience_volume - ambience_fade_floor * progress, 100);
+if (progress < 1) return;
+if (amb_old_slot > -1) ambpool.destroy_sound(amb_old_slot);
+amb_old_slot = -1;
+ambience_fade_start = -1;
+ambience_change_at = runtimer.elapsed + random(ambience_min_time, ambience_max_time);
 }
 void run_loop()
 {
@@ -91,6 +191,7 @@ item_lane_sounds(); // every frame: items in their lanes (the lanes plan's Secti
 speedup_check();
 powerup_timers(); // every frame, so a timed powerup ends on time
 powerup_sounds(); // every frame: powerups on the belt replay their sound on a timer
+run_audio_check(); // every frame: the next track when one ends, and the ambience's switch and crossfade
 run_input();
 }
 }
@@ -214,16 +315,22 @@ string min_text = minutes == 1 ? "1 minute" : minutes + " minutes";
 return min_text + " and " + sec_text;
 }
 // Spoken the ToyMania way: "track" plus the music volume and "source" plus the ambience volume, in decibels (for example "track -10").
+/* At either end of the range a press does nothing at all, with no speech (dev, 2026-11-06: "When you reach the top and
+bottum of a value, it should stop repeating it. Example, pressing home passed 0 keeps saying source 0."). */
 void change_music_volume(int delta)
 {
-music_volume = int(max(min_volume, min(0, music_volume + delta)));
+int volume = int(max(min_volume, min(0, music_volume + delta)));
+if (volume == music_volume) return;
+music_volume = volume;
 if (musslot > -1) muspool.update_sound_start_values(musslot, 0, music_volume, 100);
 speak_buffer("track " + music_volume);
 writepreffs(); // remembered for the next launch (dev, 2026-11-04)
 }
 void change_ambience_volume(int delta)
 {
-ambience_volume = int(max(min_volume, min(0, ambience_volume + delta)));
+int volume = int(max(min_volume, min(0, ambience_volume + delta)));
+if (volume == ambience_volume) return;
+ambience_volume = volume;
 if (ambslot > -1) ambpool.update_sound_start_values(ambslot, 0, ambience_volume, 100);
 speak_buffer("source " + ambience_volume);
 writepreffs();

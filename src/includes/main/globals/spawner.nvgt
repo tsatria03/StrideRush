@@ -58,6 +58,14 @@ if (!doors_available()) next_type = "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
+/* Debug option only: "nothing" spawns no obstacles, items, powerups or doors at all, for listening to the run's music,
+ambience and footsteps alone (dev, 2026-11-06: "That way it's much easier to test the ambience/music setup."). */
+if (spawn_only == "nothing")
+{
+next_type = "";
+next_countdown = 0;
+return;
+}
 // Debug option only: "keys" makes every spawn a key.
 if (spawn_only == "keys")
 {

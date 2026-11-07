@@ -1,6 +1,6 @@
 ---
 name: project_weapon_lineup_plan
-description: COMPLETE (2026-11-06; built, tested and docked, the 10th 1.5 entry, so 1.5 is FULL) - the dev's weapon sound changes (boot and laser removed, axe and sword added) need the weapon list redone: alphabetical, guns on 9 and 0, damages remapped by key; Q&A log
+description: COMPLETE (2026-11-06; built, tested and docked, the 10th 1.5 entry, so 1.5 is FULL) - the dev's weapon sound changes (the laser replaced by a sword; an axe briefly replaced the boot) need the weapon list redone: alphabetical, guns on 9 and 0, damages remapped by key; Q&A log
 metadata:
   type: project
 ---
@@ -18,3 +18,5 @@ Q&A log:
 Settled summary (one small build, then docks):
 - weapons.nvgt: the new weapon_names; weapon_damage unchanged by position; anything naming "bat" as the start weapon checked.
 - Docks: a changelog entry (in whichever version is open then), the readme's weapons paragraph ("the bat, boot ... laser ...", "Each run starts with the bat") and its keyboard line for 1 through 0.
+- REVISED (dev, 2026-11-06, after V1.50 was tagged: "I forgot to tell you that I added back boot as a weapon, and got rid of axe."): melee/axe deleted and melee/boot restored (draw, fire1-3, hit1-3). By the settled rule (alphabetical, damage by key), weapon_names is now bat, boot, club, feat, fist, hammer, knife, sword, machine_gun, pistol, so the bat (key 1, 3 damage) starts again, the boot is key 2 (6), and the sword stays on 8 (24); the comments in weapons.nvgt and tuning.nvgt and the readme's three weapon mentions follow. The tagged 1.5 changelog entry still names the axe; how to record the change is asked.
+- A (dev, 2026-11-06): "Since 1.5 was nver released, you are free to rephrase that entry." DONE: the 1.5 entry now reads "Made it so the laser is now replaced by a sword, on 8, with new sounds for most of the other weapons." (V1.50's tagged text still has the axe version; the next tag will carry this one.)

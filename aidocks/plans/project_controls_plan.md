@@ -30,8 +30,8 @@ Keys set by the dev (2026-11-01). Every action is rebindable through SimpleFight
 - C: current speed readout, spoken as the step time in ms (moved from E, dev, 2026-11-02).
 - T: time in this run readout.
 - F: score or money readout.
-- Home and End: ambience volume.
-- Page Up and Page Down: music volume.
+- Home and End: ambience volume (also F6 up and F5 down since 2026-11-06, dev: "f3/f4=music, and f5/f6=ambience").
+- Page Up and Page Down: music volume (also F4 up and F3 down since 2026-11-06).
 
 Later features named by these keys: ducking, weapons (number row plus fire, ammo check and reload), the two interact hands, lanes, a pause menu, and separate ambience and music volume.
 
