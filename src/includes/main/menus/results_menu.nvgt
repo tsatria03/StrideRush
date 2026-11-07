@@ -1,10 +1,47 @@
 /* Session results (the session results plan, dev, 2026-11-07), after ToyMania's, but built once: the session's stat
 lines, from session_stat_lines(), in a menu, never a dialog (dev: "I'd much rather a menu, not a dlg with 50 lines").
 Endless runs only. Section 1: the pause menu's view session results, copy session results to clipboard and export
-session results to file, all reading the run so far (live). Section 2 brings them to the death flow. */
+session results to file, all reading the run so far (live). Section 2: after a death, after_death_menu(). */
 void view_session_results()
 {
 show_stat_lines("Session results menu. You can see the stats from your current run so far here.", session_stat_lines(true));
+}
+/* After a death that ends the run (Section 2, replacing the Yes/No replay question): in an endless run, the results menu
+with the run's final lines (end_run_stats() has measured them), then back or escape brings the question menu, copy,
+export (dev, 2026-11-07: "it should be like toy mania where it asks what you'd like to do"), replay run (after export,
+dev) and return to game menu. Copy and export reopen it on the same item; escape says "canceled" and returns to the game
+menu. A debug death (no difficulty, nothing counted) skips the results and has only replay run and return to game menu.
+True to replay the run with the same choices. */
+bool after_death_menu()
+{
+bool endless = run_difficulty >= 0;
+if (endless) show_stat_lines("You have died. Here are your current results for this session.", session_stat_lines());
+int focus = -1;
+while (true)
+{
+setupmenu();
+m.intro_text = endless ? "What would you like to do now? You can copy or export your session results, replay the current run, or return to the game menu." : "What would you like to do now? You can replay the current run, or return to the game menu.";
+if (endless)
+{
+m.add_item("copy session results to clipboard", "copy");
+m.add_item("export session results to file", "export");
+}
+m.add_item("replay run", "replay");
+m.add_item("return to game menu", "return");
+int mres = m.run(focus, false, focus >= 0);
+if (mres < 0)
+{
+speak("canceled");
+return false;
+}
+string choice = m.selected_item_id;
+if (choice == "replay") return true;
+if (choice == "return") return false;
+focus = mres;
+if (choice == "copy") copy_session_results(false);
+else export_session_results(false);
+}
+return false;
 }
 // The results as one text, as the statistics menu's copy does: "Session results:", then a dash before each line.
 string session_results_text(bool live)

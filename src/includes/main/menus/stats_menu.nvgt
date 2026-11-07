@@ -53,7 +53,7 @@ string stat_line(const string&in label, const string&in value)
 return label + ", " + value;
 }
 /* The last endless run, or a single line before the first one (dev, 2026-11-05: "both"). With live, the run going on now
-(the session results plan, 2026-11-07): steps ran, time ran and top speed read live, and no "run ended by" yet. */
+(the session results plan, 2026-11-07): steps ran, time ran and top speed read live, and no "death outcome" yet. */
 string[] session_stat_lines(bool live = false)
 {
 string[] lines;
@@ -65,9 +65,10 @@ return lines;
 dictionary@ stats = @session_stats;
 if (live) @stats = live_session_stats();
 lines.insert_last(stat_line("difficulty", last_run_difficulty));
+// Right after the difficulty (dev, 2026-11-07), so a death's results say what ended the run first; last until then.
+if (!live) lines.insert_last(stat_line("death outcome", end_cause_text(session_end_cause)));
 add_running_lines(lines, stats, false);
 add_obstacle_and_hit_lines(lines, stats, false);
-if (!live) lines.insert_last(stat_line("run ended by", end_cause_text(session_end_cause)));
 return lines;
 }
 /* A copy of the session so far, with the three stats end_run_stats() only measures at the end filled in live, as
@@ -153,7 +154,7 @@ add_count_line(lines, stats, lifetime, "melee swings", "melee_swings");
 add_count_line(lines, stats, lifetime, "gunshots fired", "shots_fired"); // "gun" in both (dev, 2026-11-06)
 add_count_line(lines, stats, lifetime, "gun reloads", "reloads");
 }
-// How the last run ended: the obstacle that ended it, or a quit or restart ("" also covers a session saved before Section 3).
+// How the last run ended: the obstacle that killed you, or "none" for a quit or restart (dev, 2026-11-07: "death outcome, none when you didn't actually die"; "" also covers a session saved before Section 3).
 string end_cause_text(const string&in cause)
 {
 if (cause == "hazards") return "falling into a hazard";
@@ -165,7 +166,7 @@ if (cause == "animals") return "an animal running into you";
 if (cause == "barriers") return "a barrier hit";
 if (cause == "walls") return "crashing into a wall";
 if (cause == "doors") return "crashing into a door";
-return "quitting";
+return "none";
 }
 // A whole number with a comma every three digits: 4000 reads "4,000".
 string thousands_text(int64 amount)

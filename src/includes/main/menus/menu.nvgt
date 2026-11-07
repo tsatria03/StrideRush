@@ -222,17 +222,17 @@ stage = can_run_out < 0 ? 3 : 5;
 footsteps_on = steps == 1;
 m.fade_music();
 /* Returns when the run ends, back to the game menu. A run starts over with the same choices when restart run was picked,
-when the debug No answer turned a hazard death into a restart, or when you answer Yes to playing again after a death
+when the debug No answer turned a hazard death into a restart, or when you choose replay run after a death (after_death_menu(), results_menu.nvgt)
 (dev, 2026-11-03, in releases too). Quitting from the pause menu or the Escape question just returns here. */
 do
 {
 restart_run_requested = false;
 run_died = false;
 /* A practice run starts with practice_lives; a single-type debug run with debug_lives (dev, 2026-11-03); "all" plays
-like the real game. A practice run can't die, so it never reaches the replay question. */
+like the real game. A practice run can't die, so it never reaches the after death menu. */
 int life_count = practicing ? practice_lives : (only_type == "all" ? starting_lives : debug_lives);
 start_run(speed, life_count, only_type, can_run_out == 1, practicing, level);
-if (run_died and !restart_run_requested and ask_play_again()) restart_run_requested = true;
+if (run_died and !restart_run_requested and after_death_menu()) restart_run_requested = true;
 }
 while (restart_run_requested);
 }
@@ -251,22 +251,6 @@ alert("Error", "Unable to restart Stride Rush.");
 return;
 }
 exit();
-}
-/* After a death that ends the run, ToyMania-style: Yes then No. Yes plays the same game again with the same choices; No
-returns to the game menu, and escape says "canceled" and does the same. True for Yes. */
-bool ask_play_again()
-{
-setupmenu();
-m.intro_text = "You have died. Would you like to replay the current run again?";
-m.add_item("Yes", "yes");
-m.add_item("No", "no");
-int mres = m.run();
-if (mres < 0)
-{
-speak("canceled");
-return false;
-}
-return m.selected_item_id == "yes";
 }
 /* The mode menu (the practice plan, dev, 2026-11-06): the foundation every way to play lands on. Debug run comes first
 and only from source (SCRIPT_COMPILED hides it), then endless run; each item is followed by a ToyMania-style
