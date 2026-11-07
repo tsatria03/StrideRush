@@ -1,6 +1,6 @@
 ---
 name: project_music_ambience_plan
-description: SETTLED, BUILT and tested, docks next (2026-11-06; shuffled playlist per run, ambience crossfading every 1 to 2 min) - how run music (objects/audio/tracks, 60 files) and ambience (objects/audio/ambiences, 163 files) play; the paths were repointed first; Q&A log
+description: COMPLETE (2026-11-06, the first 1.6 entry; shuffled playlist per run, ambience crossfading every 1 to 2 min) - how run music (objects/audio/tracks, 60 files) and ambience (objects/audio/ambiences, 163 files) play; the paths were repointed first; Q&A log
 metadata:
   type: project
 ---
@@ -32,3 +32,4 @@ Settled summary:
 - ADDED for testing (dev, 2026-11-06: "I wish there was a nothing option in the debug menu to spawn no obsticals and items. That way it's much easier to test the ambience/music setup."): a "nothing" debug spawn choice (menu.nvgt's choose_spawn_types(), sorted in with the rest); choose_next_obstacle() returns no type for it, so the belt stays empty, real doors and keys included. Source only, kept out of the docks like every debug option.
 - Test 1 PASSED (2026-11-06). ADDED (dev, 2026-11-06: "Please add f3/f4/f5/f6 as alt keys to change ambience/music volumes in the game.", then "It should be f3/f4=music, and f5/f6=ambience."): second keys in sdr/data/config/keyboard.ini, no code: music_down PAGEDOWN and F3, music_up PAGEUP and F4, ambience_down END and F5, ambience_up HOME and F6, each :repeat. For the docks: the readme's four volume key lines.
 - Test 2 PASSED (2026-11-06: the F keys, the next track when one ends, and pausing keeping the track), and the dev confirmed "Ambiences fade in and out propperly as well." All tests passed; the docks are next (the first 1.6 entry, opening "New in 1.6." and bumping build/version.txt to 1.6, and the readme).
+- DOCKS DONE (dev, 2026-11-06: "ready."): build/version.txt bumped to 1.6; "New in 1.6." opened with "Added music and ambience to every run, where the music shuffles through all its tracks one after another, and the ambience changes to a new place every 1 to 2 minutes, fading from one into the next, with F3 and F4 now also changing the music volume and F5 and F6 the ambience volume." (1 of 10); the readme gained a music and ambience paragraph after "Runs are endless." and the four volume key lines name the F keys. THE PLAN IS COMPLETE.

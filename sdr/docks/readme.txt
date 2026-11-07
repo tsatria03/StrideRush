@@ -8,6 +8,7 @@ You start at a speed of 500 milliseconds per step on easy, or faster on the hard
 Obstacles are heard in front of you, about 3 seconds before you reach them, getting louder as they come closer, and once you're past one you'll hear it fall behind you, a little lower in pitch. Jump at the right moment to sail over most of them. If you're still on the ground when you step onto one, it will catch you. There are six exceptions: you crouch under projectiles, you switch off force fields with one of your hands, you scare animals away by clapping, you break walls with your weapons, you open doors with your hands, and you dodge barriers by switching lanes.
 A jump lasts about a second. You can't jump again until you land, and when you land you'll hear the ground you came down on.
 Runs are endless. The goal is to get as far as you can before something stops you.
+Every run has music and an ambience playing behind it. The music shuffles through all its tracks, playing one after another, and every run starts a new shuffle. The ambience puts you somewhere, such as a city street, a beach or a forest in the rain, and every 1 to 2 minutes it fades into a different one. Change the music volume with page up and page down or F4 and F3, and the ambience volume with home and end or F6 and F5. Each change is spoken, and a key does nothing once its volume is as high or as low as it goes.
 
 Lanes.
 
@@ -122,10 +123,10 @@ Letter L: Announces which lane you're in, if pressed.
 Letter Z: Announces how far you've run, in tiles, if pressed.
 Letter C: Announces your current speed, in milliseconds per step, if pressed.
 Letter T: Announces how long you've been running for, if pressed.
-Page up: Raises the in-game music volume by 1 decibel, if pressed/held down.
-Page down: Lowers the in-game music volume by 1 decibel, if pressed/held down.
-Home: Raises the in-game ambience volume by 1 decibel, if pressed/held down.
-End: Lowers the in-game ambience volume by 1 decibel, if pressed/held down.
+Page up or F4: Raises the in-game music volume by 1 decibel, if pressed/held down.
+Page down or F3: Lowers the in-game music volume by 1 decibel, if pressed/held down.
+Home or F6: Raises the in-game ambience volume by 1 decibel, if pressed/held down.
+End or F5: Lowers the in-game ambience volume by 1 decibel, if pressed/held down.
 Letter P: Brings up the pause menu, if pressed. The pause menu lets you resume, restart or quit the run. Pressing escape in the pause menu also resumes the run.
 Escape: Asks whether you want to quit the run, or quits it straight away if you've turned the question off in the settings menu, if pressed.
 F1: Shows every key binding, with the run paused until you close it, if pressed.

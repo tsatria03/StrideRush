@@ -1,3 +1,5 @@
+New in 1.6.
+Added music and ambience to every run, where the music shuffles through all its tracks one after another, and the ambience changes to a new place every 1 to 2 minutes, fading from one into the next, with F3 and F4 now also changing the music volume and F5 and F6 the ambience volume.
 New in 1.5.
 Made it so the laser is now replaced by a sword, on 8, with new sounds for most of the other weapons.
 Added difficulty locks, so each level after easy opens once you've finished 5 runs on the level below it, and a run only counts if you opened a real door and got through it before you died.
