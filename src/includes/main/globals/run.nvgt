@@ -309,9 +309,14 @@ say 2, unless the speed increases"), so 500 ms is "2" and 470 ms "2.1". */
 string speed_phrase()
 {
 int tenths = int(round(10000.0 / current_step_time(), 0));
+return "You are running " + tenths_text(tenths) + " steps a second.";
+}
+// A count of tenths as a number: 21 reads "2.1" and 20 reads "2" (C, and the top speed stats).
+string tenths_text(int64 tenths)
+{
 string amount = "" + (tenths / 10);
 if (tenths % 10 != 0) amount += "." + (tenths % 10);
-return "You are running " + amount + " steps a second.";
+return amount;
 }
 // Z: the distance in steps, one per tile the belt has carried you (dev, 2026-11-06: "say x steps, not x tiles").
 string distance_phrase()

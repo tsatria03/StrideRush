@@ -1,0 +1,90 @@
+/* The statistics menus (the statistics plan's Section 2, dev, 2026-11-05 and 2026-11-06), after ToyMania's statsmenu(),
+view_session_stats() and view_lifetime_stats(), as loops instead of its menus calling each other. View game statistics
+in the game menu opens statistics_menu(): session statistics, lifetime statistics, back (clear, copy and export join it
+in Section 5). Each stat menu is one stat per item, worded ToyMania's way, then back. Pressing enter on a stat keeps you
+on it; escape or back steps back one menu silently, as every nested menu does. */
+void statistics_menu()
+{
+int focus = -1;
+while (true)
+{
+setupmenu();
+m.intro_text = "Statistics menu. You can view the stats from your last endless run, or your totals across all of them here.";
+m.add_item("session statistics", "session");
+m.add_item("lifetime statistics", "lifetime");
+m.add_item("back", "back");
+int mres = m.run(focus, false, focus >= 0);
+if (mres < 0 or m.selected_item_id == "back") return;
+focus = mres;
+if (m.selected_item_id == "session") show_stat_lines("Session statistics menu. You can see the stats from your last endless run here.", session_stat_lines());
+else show_stat_lines("Lifetime statistics menu. You can see your total stats across all of your endless runs here.", lifetime_stat_lines());
+}
+}
+/* One stat menu: the lines and back; enter on a line reopens it on that line (with its intro, as ToyMania's menus do),
+and escape or back returns. */
+void show_stat_lines(const string&in intro, string[]@ lines)
+{
+int focus = -1;
+while (true)
+{
+setupmenu();
+m.intro_text = intro;
+for (uint i = 0; i < lines.length(); i++) m.add_item(lines[i], "");
+m.add_item("back", "back");
+int mres = m.run(focus, false, focus >= 0);
+if (mres < 0 or m.selected_item_id == "back") return;
+focus = mres;
+}
+}
+// The last endless run, or a single line before the first one (dev, 2026-11-05: "both").
+string[] session_stat_lines()
+{
+string[] lines;
+if (!has_session)
+{
+lines.insert_last("You haven't played an endless run yet.");
+return lines;
+}
+lines.insert_last("You played on " + last_run_difficulty + ".");
+lines.insert_last("You have run " + count_text(stat_value(session_stats, "steps"), "step", "steps") + ".");
+lines.insert_last("You have been running for " + time_phrase(stat_value(session_stats, "time_running")) + ".");
+lines.insert_last("Your top speed was " + tenths_text(stat_value(session_stats, "top_speed")) + " steps a second.");
+lines.insert_last("You have changed lanes " + count_text(stat_value(session_stats, "lane_changes"), "time", "times") + ".");
+return lines;
+}
+// Every endless run added up, starting with when the last one ended, as ToyMania's lifetime stats do.
+string[] lifetime_stat_lines()
+{
+string[] lines;
+lines.insert_last("Last played date: " + (last_played_date == "" ? "never" : last_played_date) + ".");
+lines.insert_last("Last played time: " + (last_played_time == "" ? "never" : last_played_time) + ".");
+lines.insert_last("You have played a total of " + count_text(stat_value(lifetime_stats, "runs_played"), "run", "runs") + ".");
+for (uint i = 0; i < difficulty_names.length(); i++)
+{
+lines.insert_last("You have played " + count_text(stat_value(lifetime_stats, "runs_" + difficulty_names[i]), "run", "runs") + " on " + difficulty_names[i] + ".");
+}
+lines.insert_last("You have run a total of " + count_text(stat_value(lifetime_stats, "steps"), "step", "steps") + ".");
+lines.insert_last("You have been running for a total of " + time_phrase(stat_value(lifetime_stats, "time_running")) + ".");
+lines.insert_last("Your top speed is " + tenths_text(stat_value(lifetime_stats, "top_speed")) + " steps a second.");
+lines.insert_last("You have changed lanes a total of " + count_text(stat_value(lifetime_stats, "lane_changes"), "time", "times") + ".");
+return lines;
+}
+// "1 step" or "4,000 steps": the count with thousands commas, then the right word.
+string count_text(int64 amount, const string&in one, const string&in many)
+{
+return thousands_text(amount) + " " + (amount == 1 ? one : many);
+}
+// A whole number with a comma every three digits: 4000 reads "4,000".
+string thousands_text(int64 amount)
+{
+string digits = "" + (amount < 0 ? -amount : amount);
+string result = "";
+int count = 0;
+for (int i = int(digits.length()) - 1; i >= 0; i--)
+{
+if (count > 0 and count % 3 == 0) result = "," + result;
+result = digits.substr(i, 1) + result;
+count += 1;
+}
+return amount < 0 ? "-" + result : result;
+}
