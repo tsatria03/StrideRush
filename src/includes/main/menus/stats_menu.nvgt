@@ -1,7 +1,8 @@
 /* The statistics menus (the statistics plan's Section 2, dev, 2026-11-05 and 2026-11-06), after ToyMania's statsmenu(),
 view_session_stats() and view_lifetime_stats(), as loops instead of its menus calling each other. View game statistics
-in the game menu opens statistics_menu(): session statistics, lifetime statistics, back (clear, copy and export join it
-in Section 5). Each stat menu is one stat per item, worded ToyMania's way, then back. Pressing enter on a stat keeps you
+in the game menu opens statistics_menu(): session statistics, lifetime statistics, and (Section 5) clear game statistics,
+copy all game statistics to clipboard and export all game statistics to file, always shown (dev: "I do not want these
+buttons to be hidable"), then back. Each stat menu is one stat per item, then back. Pressing enter on a stat keeps you
 on it; escape or back steps back one menu silently, as every nested menu does. */
 void statistics_menu()
 {
@@ -12,11 +13,17 @@ setupmenu();
 m.intro_text = "Statistics menu. You can view the stats from your last endless run, or your totals across all of them here.";
 m.add_item("session statistics", "session");
 m.add_item("lifetime statistics", "lifetime");
+m.add_item("clear game statistics", "clear");
+m.add_item("copy all game statistics to clipboard", "copy");
+m.add_item("export all game statistics to file", "export");
 m.add_item("back", "back");
 int mres = m.run(focus, false, focus >= 0);
 if (mres < 0 or m.selected_item_id == "back") return;
 focus = mres;
-if (m.selected_item_id == "session") show_stat_lines("Session statistics menu. You can see the stats from your last endless run here.", session_stat_lines());
+if (m.selected_item_id == "clear") clear_stats_menu();
+else if (m.selected_item_id == "copy") copy_all_stats();
+else if (m.selected_item_id == "export") export_all_stats();
+else if (m.selected_item_id == "session") show_stat_lines("Session statistics menu. You can see the stats from your last endless run here.", session_stat_lines());
 else show_stat_lines("Lifetime statistics menu. You can see your total stats across all of your endless runs here.", lifetime_stat_lines());
 }
 }
@@ -36,6 +43,13 @@ if (mres < 0 or m.selected_item_id == "back") return;
 focus = mres;
 }
 }
+/* The stat lines (dev, 2026-11-06: "I wish it looked something like ... total runs played, x"): each is a short label,
+a comma, then the value, all lowercase like the other menus. Lifetime labels start with "total" (dev: "I like it
+prepended"), except top speed and the last played date and time; session labels drop it. Copy and export reuse them. */
+string stat_line(const string&in label, const string&in value)
+{
+return label + ", " + value;
+}
 // The last endless run, or a single line before the first one (dev, 2026-11-05: "both").
 string[] session_stat_lines()
 {
@@ -45,39 +59,62 @@ if (!has_session)
 lines.insert_last("You haven't played an endless run yet.");
 return lines;
 }
-lines.insert_last("You played on " + last_run_difficulty + ".");
-lines.insert_last("You have run " + count_text(stat_value(session_stats, "steps"), "step", "steps") + ".");
-lines.insert_last("You have been running for " + time_phrase(stat_value(session_stats, "time_running")) + ".");
-lines.insert_last("Your top speed was " + tenths_text(stat_value(session_stats, "top_speed")) + " steps a second.");
-lines.insert_last("You have changed lanes " + count_text(stat_value(session_stats, "lane_changes"), "time", "times") + ".");
+lines.insert_last(stat_line("difficulty", last_run_difficulty));
+add_running_lines(lines, session_stats, false);
 add_obstacle_and_hit_lines(lines, session_stats, false);
-lines.insert_last(end_cause_line(session_end_cause));
+lines.insert_last(stat_line("run ended by", end_cause_text(session_end_cause)));
 return lines;
 }
+// Every endless run added up, starting with when the last one ended, as ToyMania's lifetime stats do.
+string[] lifetime_stat_lines()
+{
+string[] lines;
+lines.insert_last(stat_line("last played date", last_played_date == "" ? "never" : last_played_date));
+lines.insert_last(stat_line("last played time", last_played_time == "" ? "never" : last_played_time));
+lines.insert_last(stat_line("total runs played", thousands_text(stat_value(lifetime_stats, "runs_played"))));
+for (uint i = 0; i < difficulty_names.length(); i++)
+{
+lines.insert_last(stat_line("total " + difficulty_names[i] + " runs", thousands_text(stat_value(lifetime_stats, "runs_" + difficulty_names[i]))));
+}
+add_running_lines(lines, lifetime_stats, true);
+add_obstacle_and_hit_lines(lines, lifetime_stats, true);
+return lines;
+}
+// A count stat's line: "total " first in the lifetime, then the label and the count.
+void add_count_line(string[]@ lines, dictionary@ stats, bool lifetime, const string&in label, const string&in key)
+{
+lines.insert_last(stat_line((lifetime ? "total " : "") + label, thousands_text(stat_value(stats, key))));
+}
+// The Running lines: steps, time, top speed (never "total", as it's the highest, not a sum) and lanes.
+void add_running_lines(string[]@ lines, dictionary@ stats, bool lifetime)
+{
+string total = lifetime ? "total " : "";
+add_count_line(lines, stats, lifetime, "steps ran", "steps");
+lines.insert_last(stat_line(total + "time ran", time_phrase(stat_value(stats, "time_running"))));
+lines.insert_last(stat_line("top speed", tenths_text(stat_value(stats, "top_speed")) + " steps a second"));
+add_count_line(lines, stats, lifetime, "lanes changed", "lane_changes");
+}
 /* Section 3's Obstacles and Hits lines, for either menu: what you got past, then damage and lives, then how often each
-kind of obstacle caught you, listing only the kinds that did, to keep the menu short. lifetime adds "a total of". */
+kind of obstacle caught you, listing only the kinds that did, to keep the menu short. */
 void add_obstacle_and_hit_lines(string[]@ lines, dictionary@ stats, bool lifetime)
 {
-string total = lifetime ? "a total of " : "";
-lines.insert_last("You have jumped over " + total + count_text(stat_value(stats, "hazards_jumped"), "hazard", "hazards") + ".");
-lines.insert_last("You have jumped over " + total + count_text(stat_value(stats, "spikes_jumped"), "spike", "spikes") + ".");
-lines.insert_last("You have jumped over " + total + count_text(stat_value(stats, "mines_jumped"), "mine", "mines") + ".");
-lines.insert_last("You have ducked under " + total + count_text(stat_value(stats, "projectiles_ducked"), "projectile", "projectiles") + ".");
-lines.insert_last("You have switched off " + total + count_text(stat_value(stats, "force_fields_switched_off"), "force field", "force fields") + ".");
-lines.insert_last("You have scared away " + total + count_text(stat_value(stats, "animals_scared"), "animal", "animals") + ".");
-lines.insert_last("You have dodged " + total + count_text(stat_value(stats, "barriers_dodged"), "barrier", "barriers") + ".");
-lines.insert_last("You have broken " + total + count_text(stat_value(stats, "walls_broken"), "wall", "walls") + ".");
-lines.insert_last("You have broken " + total + count_text(stat_value(stats, "fake_doors_broken"), "fake door", "fake doors") + ".");
-lines.insert_last("You have opened " + total + count_text(stat_value(stats, "real_doors_opened"), "real door", "real doors") + ".");
-lines.insert_last("You have taken " + total + thousands_text(stat_value(stats, "damage_taken")) + " damage.");
-lines.insert_last("You have lost " + total + count_text(stat_value(stats, "lives_lost"), "life", "lives") + ".");
-// Each kind that caught you: its subject, then what it did.
+add_count_line(lines, stats, lifetime, "hazards jumped", "hazards_jumped");
+add_count_line(lines, stats, lifetime, "spikes jumped", "spikes_jumped");
+add_count_line(lines, stats, lifetime, "mines jumped", "mines_jumped");
+add_count_line(lines, stats, lifetime, "projectiles ducked", "projectiles_ducked");
+add_count_line(lines, stats, lifetime, "force fields switched off", "force_fields_switched_off");
+add_count_line(lines, stats, lifetime, "animals scared", "animals_scared");
+add_count_line(lines, stats, lifetime, "barriers dodged", "barriers_dodged");
+add_count_line(lines, stats, lifetime, "walls broken", "walls_broken");
+add_count_line(lines, stats, lifetime, "fake doors broken", "fake_doors_broken");
+add_count_line(lines, stats, lifetime, "real doors opened", "real_doors_opened");
+add_count_line(lines, stats, lifetime, "damage taken", "damage_taken");
+add_count_line(lines, stats, lifetime, "lives lost", "lives_lost");
 string[] kinds = {"spikes", "mines", "projectiles", "force_fields", "animals", "barriers", "walls", "doors"};
-string[] lead = {"Spikes have hit you", "Mines have gone off under you", "Projectiles have hit you", "Force fields have hit you", "Animals have run into you", "Barriers have hit you", "You have crashed into walls", "You have crashed into doors"};
+string[] label = {"times hit by spikes", "times hit by mines", "times hit by projectiles", "times hit by force fields", "times run into by animals", "times hit by barriers", "walls crashed into", "doors crashed into"};
 for (uint i = 0; i < kinds.length(); i++)
 {
-int64 count = stat_value(stats, "caught_" + kinds[i]);
-if (count > 0) lines.insert_last(lead[i] + " " + total + count_text(count, "time", "times") + ".");
+if (stat_value(stats, "caught_" + kinds[i]) > 0) add_count_line(lines, stats, lifetime, label[i], "caught_" + kinds[i]);
 }
 add_item_and_weapon_lines(lines, stats, lifetime);
 }
@@ -85,58 +122,33 @@ add_item_and_weapon_lines(lines, stats, lifetime);
 powerups, then swings, shots and reloads. */
 void add_item_and_weapon_lines(string[]@ lines, dictionary@ stats, bool lifetime)
 {
-string total = lifetime ? "a total of " : "";
 string[] kinds = {"ammo_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters"};
-string[] one = {"ammo pack", "key", "steel shield", "life capsule", "health potion", "player teleporter"};
-string[] many = {"ammo packs", "keys", "steel shields", "life capsules", "health potions", "player teleporters"};
 for (uint i = 0; i < kinds.length(); i++)
 {
-lines.insert_last("You have picked up " + total + count_text(stat_value(stats, kinds[i] + "_picked_up"), one[i], many[i]) + ".");
-lines.insert_last("You have broken " + total + count_text(stat_value(stats, kinds[i] + "_broken"), one[i], many[i]) + ".");
-lines.insert_last("You have used " + total + count_text(stat_value(stats, kinds[i] + "_used"), one[i], many[i]) + ".");
+string name = kinds[i].replace("_", " ", true);
+add_count_line(lines, stats, lifetime, name + " picked up", kinds[i] + "_picked_up");
+add_count_line(lines, stats, lifetime, name + " broken", kinds[i] + "_broken");
+add_count_line(lines, stats, lifetime, name + " used", kinds[i] + "_used");
 }
-lines.insert_last("You have collected " + total + count_text(stat_value(stats, "ground_powerups_collected"), "ground powerup", "ground powerups") + ".");
-lines.insert_last("You have collected " + total + count_text(stat_value(stats, "air_powerups_collected"), "air powerup", "air powerups") + "."); // the flight ones (dev, 2026-11-06)
-lines.insert_last("You have swung your melee weapons " + total + count_text(stat_value(stats, "melee_swings"), "time", "times") + ".");
-lines.insert_last("You have fired " + total + count_text(stat_value(stats, "shots_fired"), "shot", "shots") + ".");
-lines.insert_last("You have reloaded " + total + count_text(stat_value(stats, "reloads"), "time", "times") + ".");
+add_count_line(lines, stats, lifetime, "ground powerups collected", "ground_powerups_collected");
+add_count_line(lines, stats, lifetime, "air powerups collected", "air_powerups_collected"); // the flight ones (dev, 2026-11-06)
+add_count_line(lines, stats, lifetime, "melee swings", "melee_swings");
+add_count_line(lines, stats, lifetime, "gunshots fired", "shots_fired"); // "gun" in both (dev, 2026-11-06)
+add_count_line(lines, stats, lifetime, "gun reloads", "reloads");
 }
-// The last run's ending: the obstacle that ended it, or a quit or restart ("" also covers a session saved before Section 3).
-string end_cause_line(const string&in cause)
+// How the last run ended: the obstacle that ended it, or a quit or restart ("" also covers a session saved before Section 3).
+string end_cause_text(const string&in cause)
 {
-if (cause == "hazards") return "Your run ended when you fell into a hazard.";
-if (cause == "spikes") return "Your run ended when a spike hit you.";
-if (cause == "mines") return "Your run ended when a mine went off under you.";
-if (cause == "projectiles") return "Your run ended when a projectile hit you.";
-if (cause == "force_fields") return "Your run ended when a force field hit you.";
-if (cause == "animals") return "Your run ended when an animal ran into you.";
-if (cause == "barriers") return "Your run ended when a barrier hit you.";
-if (cause == "walls") return "Your run ended when you crashed into a wall.";
-if (cause == "doors") return "Your run ended when you crashed into a door.";
-return "You quit the run.";
-}
-// Every endless run added up, starting with when the last one ended, as ToyMania's lifetime stats do.
-string[] lifetime_stat_lines()
-{
-string[] lines;
-lines.insert_last("Last played date: " + (last_played_date == "" ? "never" : last_played_date) + ".");
-lines.insert_last("Last played time: " + (last_played_time == "" ? "never" : last_played_time) + ".");
-lines.insert_last("You have played a total of " + count_text(stat_value(lifetime_stats, "runs_played"), "run", "runs") + ".");
-for (uint i = 0; i < difficulty_names.length(); i++)
-{
-lines.insert_last("You have played " + count_text(stat_value(lifetime_stats, "runs_" + difficulty_names[i]), "run", "runs") + " on " + difficulty_names[i] + ".");
-}
-lines.insert_last("You have run a total of " + count_text(stat_value(lifetime_stats, "steps"), "step", "steps") + ".");
-lines.insert_last("You have been running for a total of " + time_phrase(stat_value(lifetime_stats, "time_running")) + ".");
-lines.insert_last("Your top speed is " + tenths_text(stat_value(lifetime_stats, "top_speed")) + " steps a second.");
-lines.insert_last("You have changed lanes a total of " + count_text(stat_value(lifetime_stats, "lane_changes"), "time", "times") + ".");
-add_obstacle_and_hit_lines(lines, lifetime_stats, true);
-return lines;
-}
-// "1 step" or "4,000 steps": the count with thousands commas, then the right word.
-string count_text(int64 amount, const string&in one, const string&in many)
-{
-return thousands_text(amount) + " " + (amount == 1 ? one : many);
+if (cause == "hazards") return "falling into a hazard";
+if (cause == "spikes") return "a spike hit";
+if (cause == "mines") return "a mine going off";
+if (cause == "projectiles") return "a projectile hit";
+if (cause == "force_fields") return "a force field hit";
+if (cause == "animals") return "an animal running into you";
+if (cause == "barriers") return "a barrier hit";
+if (cause == "walls") return "crashing into a wall";
+if (cause == "doors") return "crashing into a door";
+return "quitting";
 }
 // A whole number with a comma every three digits: 4000 reads "4,000".
 string thousands_text(int64 amount)
@@ -151,4 +163,73 @@ result = digits.substr(i, 1) + result;
 count += 1;
 }
 return amount < 0 ? "-" + result : result;
+}
+/* Clear game statistics (Section 5, ToyMania's): which stats, then Yes or No. Yes clears and saves them, plays complete
+and says so; No or escape on the question says "canceled"; escape or back on the choice steps back silently. Clearing
+both resets everything, unlike ToyMania's, which forgot one counter. The difficulty unlocks are never touched. */
+void clear_stats_menu()
+{
+while (true)
+{
+setupmenu();
+m.intro_text = "Choose which game statistics to clear. This won't change which difficulties you've unlocked.";
+m.add_item("session stats", "session");
+m.add_item("lifetime stats", "lifetime");
+m.add_item("session and lifetime stats", "both");
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return;
+string which = m.selected_item_id;
+string name = which == "both" ? "session and lifetime" : which;
+setupmenu();
+m.intro_text = "Are you sure you want to clear your " + name + " stats? This action cannot be undone.";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+mres = m.run();
+if (mres < 0 or m.selected_item_id == "no")
+{
+speak("canceled");
+continue;
+}
+if (which != "lifetime") clear_session_stats();
+if (which != "session") clear_lifetime_stats();
+writegame();
+temp.play_stationary(get_pack_sound("ui/other/*complete*"), false);
+dlgmessage_return("Your " + name + " stats have been cleared.");
+return;
+}
+}
+/* Both lists as one text, for copy and export, built from the very lines the menus show (ToyMania built it twice):
+"Session stats:", a dash before each line, a blank line, then "Lifetime stats:". */
+string all_stats_text()
+{
+string text = "Session stats:\r\n";
+string[] lines = session_stat_lines();
+for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";
+text += "\r\nLifetime stats:\r\n";
+lines = lifetime_stat_lines();
+for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";
+return text;
+}
+void copy_all_stats()
+{
+clipboard_copy_text(all_stats_text());
+temp.play_stationary(get_pack_sound("ui/other/*copied*"), false);
+dlgmessage_return("All game statistics have been copied to your clipboard.");
+}
+// Into APPDATA_DIR's stats folder as player_statistics.txt, replacing any older copy.
+void export_all_stats()
+{
+string folder = APPDATA_DIR + "stats";
+if (!directory_exists(folder)) directory_create(folder);
+file f;
+if (!f.open(folder + "/player_statistics.txt", "wb"))
+{
+dlgmessage_return("Unable to export the game statistics.");
+return;
+}
+f.write(all_stats_text());
+f.close();
+temp.play_stationary(get_pack_sound("ui/other/*export*"), false);
+dlgmessage_return("All game statistics have been exported to stats/player_statistics.txt.");
 }

@@ -93,3 +93,18 @@ last_played_date = get_date(true, false); // "Friday, November 6, 2026", as ToyM
 last_played_time = get_time(true, false); // "3:07 PM"
 writegame();
 }
+// Clear game statistics (Section 5): the last run, as if no endless run had been played yet.
+void clear_session_stats()
+{
+session_stats.delete_all();
+has_session = false;
+last_run_difficulty = "";
+session_end_cause = "";
+}
+// Every total, the runs per difficulty and the last played date and time; the difficulty unlocks are separate.
+void clear_lifetime_stats()
+{
+lifetime_stats.delete_all();
+last_played_date = "";
+last_played_time = "";
+}
