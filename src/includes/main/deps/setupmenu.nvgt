@@ -5,7 +5,9 @@ if (music_added) {
 m.add_music(musicpath != "" ? musicpath : get_pack_sound("ui/menu/*music*"));
 m.play_music();
 }
-else m.add_music("");
+/* A menu without music of its own leaves playing menu music alone (dev, 2026-11-07), so it carries on through every menu
+reached from the main menu; it only closes music that has already faded or stopped, as in a run's menus. */
+else if (!m.music.playing) m.add_music("");
 
 m.wrap=menuwrap;
 m.first_letter_navigation=first_letter;

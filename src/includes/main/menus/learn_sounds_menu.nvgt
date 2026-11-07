@@ -176,7 +176,7 @@ paused = false;
 // The game menu's entry: builds every category from the folders, then browses them.
 void learn_sounds_menu()
 {
-m.fade_music();
+m.fade_music(); // so the sounds play on their own (dev, 2026-11-07: "fade the music when you open learn sounds")
 learn_category root("learn sounds menu");
 learn_category items("items");
 items.subs.insert_last(learn_folder_category("common", "equipments/items/common", ""));

@@ -56,6 +56,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Sounds before features](general/feedback_sounds_before_features.md) — nothing gets built until its sounds exist in sdr/sounds; design it and defer
 - [Docks later](general/feedback_docks_later.md) — HOLD LIFTED 2026-11-02: docks written in first-build Section 7; player-facing changes now get docks entries; todo list is player-facing entries only
 - [Dock line length 1024](general/feedback_dock_line_length_1024.md) — lines in sdr/docks/ stay at or under 1024 chars
+- [Menu music rule](general/project_menu_music_rule.md) — the menu music plays through every main menu submenu; fades only for a run starting, opening a document, the settings menu, learn sounds, change game version, test speakers or check for updates, a clear, copy or export dialog, exit and restart; run menus silent (2026-11-07)
 - [One-sentence game messages](general/feedback_one_sentence_game_messages.md) — achievement announcements are the exception (2026-11-06); in-game speech is one sentence, no trailing advice
 - [Menus say canceled](general/feedback_menus_say_canceled.md) — every escape, Back or No path speaks "canceled", except nested menus stepping back to their parent (silent, even back to the main menu)
 - [Alphabetical menus](general/feedback_alphabetical_menus.md) — alphabetical only where the dev asked (kept sorted there); new menus use their natural order unless asked; numbered names sort naturally

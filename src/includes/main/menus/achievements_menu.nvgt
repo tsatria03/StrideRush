@@ -136,8 +136,10 @@ clear_session_stats();
 clear_lifetime_stats(); // the best records go with it
 earned_achievements.delete_all();
 writegame();
+m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
 temp.play_stationary(get_pack_sound("ui/other/*complete*"), false);
 dlgmessage_return("Game progresses cleared.");
+m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
 }
 /* Everything as one text, built once from the menus' own lines (ToyMania wrote it out twice): "Achievement stats:" (every
 achievement, complete or incomplete with its progress), then "Session stats:" and "Lifetime stats:". */
@@ -151,8 +153,10 @@ return text + "\r\n" + all_stats_text();
 void copy_all_progress()
 {
 clipboard_copy_text(all_progress_text());
+m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
 temp.play_stationary(get_pack_sound("ui/other/*copied*"), false);
 dlgmessage_return("All game progresses have been copied to your clipboard.");
+m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
 }
 // Into APPDATA_DIR's stats folder as player_progresses.txt, beside player_statistics.txt, replacing any older copy.
 void export_all_progress()
@@ -162,11 +166,15 @@ if (!directory_exists(folder)) directory_create(folder);
 file f;
 if (!f.open(folder + "/player_progresses.txt", "wb"))
 {
+m.fade_music();
 dlgmessage_return("Unable to export the game progresses.");
+m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
 return;
 }
 f.write(all_progress_text());
 f.close();
+m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
 temp.play_stationary(get_pack_sound("ui/other/*export*"), false);
 dlgmessage_return("All game progresses have been exported to stats/player_progresses.txt.");
+m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
 }

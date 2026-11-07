@@ -212,8 +212,10 @@ continue;
 if (which != "lifetime") clear_session_stats();
 if (which != "session") clear_lifetime_stats();
 writegame();
+m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
 temp.play_stationary(get_pack_sound("ui/other/*complete*"), false);
 dlgmessage_return("Your " + name + " stats have been cleared.");
+m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
 return;
 }
 }
@@ -234,8 +236,10 @@ return text;
 void copy_all_stats()
 {
 clipboard_copy_text(all_stats_text());
+m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
 temp.play_stationary(get_pack_sound("ui/other/*copied*"), false);
 dlgmessage_return("All game statistics have been copied to your clipboard.");
+m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
 }
 // Into APPDATA_DIR's stats folder as player_statistics.txt, replacing any older copy.
 void export_all_stats()
@@ -245,11 +249,15 @@ if (!directory_exists(folder)) directory_create(folder);
 file f;
 if (!f.open(folder + "/player_statistics.txt", "wb"))
 {
+m.fade_music();
 dlgmessage_return("Unable to export the game statistics.");
+m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
 return;
 }
 f.write(all_stats_text());
 f.close();
+m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
 temp.play_stationary(get_pack_sound("ui/other/*export*"), false);
 dlgmessage_return("All game statistics have been exported to stats/player_statistics.txt.");
+m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
 }
