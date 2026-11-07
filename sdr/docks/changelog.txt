@@ -1,4 +1,6 @@
 New in 1.6.
+Added options in the game menu to clear, copy or export all of your game progress, both your statistics and your achievements, where clearing never changes which difficulties you've unlocked.
+Added game achievements in the game menu, over 80 of them across single runs and all your runs, which are announced the moment you earn one and stay earned for good, and achievement statistics in the statistics menu now show your progress on each one.
 Added options to clear, copy or export your game statistics, where clearing never changes which difficulties you've unlocked, and exporting saves them to a text file.
 Added game statistics in the game menu, where you can look through your last endless run and your totals across every run, from steps and top speed to every obstacle you've got past or been hit by, every item you've picked up and every shot you've fired.
 Made it so C now tells you your speed in steps a second instead of milliseconds per step.
