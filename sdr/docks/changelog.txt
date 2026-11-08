@@ -1,4 +1,5 @@
 New in 1.7.
+Made it so the pause menu now opens on resume run and remembers your place when you back out of anything inside it.
 Made it so pressing escape or P during a run now pauses every sound but the ambience, so the game is never silent while you decide.
 Made it so Alt plus F4 now does nothing during a run, instead of closing the game.
 Added volume sliders to the settings menu, with game ambience and game music volume in the game tab and menu music and master game volume in the sound tab, and the game's music and ambience can now go much quieter than before.
