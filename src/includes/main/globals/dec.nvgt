@@ -18,6 +18,7 @@ int fademode = 1; // how leaving a run fades every pool: 1 the volume fade (defa
 bool ask_quit_on_escape = true; // false: Escape leaves the run at once, without the quit run question
 bool show_death_results = true; // false: a death skips the results menu (the death settings plan, 2026-11-08)
 bool show_death_copy_export = true; // false: the after death menu leaves out copy and export
+int master_volume = 0; // the master game volume in dB, -100 to 0, through sound_master_volume (the volume sliders plan, 2026-11-08)
 string soundcard = "Default"; // the chosen sound device by name, matched to sound_output_device when the settings load
 form_menu m;
 virtual_dialogs vd; // the speech buffer's review boxes use vd.info_box

@@ -195,8 +195,9 @@ const int clap_window = 100;
 const int teleport_min_time = 2000;
 const int teleport_max_time = 5000;
 
-// Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. Home/End and Page Up/Down move by volume_change.
-const int min_volume = -50;
+// Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. The settings sliders show it as 0 to 100 percent. Home/End and Page Up/Down move by volume_change.
+const int min_volume = -100; // -50 until 2026-11-08 (the volume sliders plan: "the ambience/music volumes should be able to go to -100")
+const int learn_min_volume = -50; // the learn sounds menu's floor, unchanged
 const int volume_change = 1; // 1 per press, like ToyMania (dev, 2026-11-02)
 const int music_start_volume = 0; // full volume at the start, like ToyMania (dev, 2026-11-02)
 const int ambience_start_volume = 0;

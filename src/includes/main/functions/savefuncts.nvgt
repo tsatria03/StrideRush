@@ -16,6 +16,11 @@ if(st.d.exists("ambience_volume"))
 {
 ambience_volume=st.read_int("ambience_volume");
 }
+if(st.d.exists("master_volume"))
+{
+master_volume=st.read_int("master_volume");
+}
+sound_master_volume = master_volume; // set at every launch, ToyMania-style
 if(st.d.exists("menuwrap"))
 {
 menuwrap=st.read_bool("menuwrap");
@@ -162,6 +167,7 @@ void writepreffs()
 st.add("menumusvolume",menumusvolume);
 st.add("music_volume",music_volume);
 st.add("ambience_volume",ambience_volume);
+st.add("master_volume",master_volume);
 st.add("menuwrap",menuwrap);
 st.add("first_letter",first_letter);
 st.add("side_scrolling",side_scrolling);
