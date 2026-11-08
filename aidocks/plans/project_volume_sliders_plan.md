@@ -1,11 +1,11 @@
 ---
 name: project_volume_sliders_plan
-description: SECTION 1 BUILT AND TESTED (2026-11-08, for 1.7; docks to come, shared with the death settings plan; on save only, 0 to 100 percent = -100 to 0 dB) - volume sliders in the settings menu (game ambience and game music in the Game tab, menu music, master game), after ToyMania's audio settings; Q&A log
+description: COMPLETE (2026-11-08, 1.7 at 3 of 10, docked with the death settings plan; on save only, 0 to 100 percent = -100 to 0 dB) - volume sliders in the settings menu (game ambience and game music in the Game tab, menu music, master game), after ToyMania's audio settings; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED, nothing built. Started 2026-11-08, after the death settings plan ([[project_death_settings_plan]]) was settled, for 1.7.
+Status: COMPLETE (2026-11-08). Started 2026-11-08, after the death settings plan ([[project_death_settings_plan]]) was settled, for 1.7.
 
 Background:
 - The dev (2026-11-08): "In the sound tab, there should be a master volume slider, a game volume slider, and a music volume slider. Look at how the audio settings work in toy mania", then: "Oh I forgot I also want menu music volume."
@@ -22,3 +22,4 @@ Q&A log:
 - Section 1 BUILT 2026-11-08, awaiting tests (dev: "ready for the volume sliders.", after da82c11): master_volume in globals/dec.nvgt (0 dB), read and saved in settings.srf and set through sound_master_volume at every launch (the engine maps -100 to 0 onto 0 to 1, so the percent is a real level); tuning.nvgt's min_volume -100 (F3 to F6 reach it), with learn_min_volume -50 keeping the learn sounds menu's floor unchanged; settings_menu.nvgt: "Game ambience volume" and "Game music volume" first in the Game tab, "Menu music volume" and "Master game volume" first in the Sound tab, create_slider(0 to 100, "percent", step 1) at volume + 100, carried in locals across rebuilds, applied on save settings by apply_volume_settings() (the playing ambience and music updated mid-run, the menu music if playing, the master), reset putting all four at 0 dB.
 - TEST CHANGE (dev, 2026-11-08: "Please put a comma after the word volume. So it says something like, game ambience volume,"): the four captions end with a comma, "Game ambience volume," and so on, so the value reads after a pause.
 - Section 1 tested 2026-11-08 (dev: "The volume settings work. all of them."). Section 2, the docks, is shared with the death settings plan.
+- Section 2 BUILT 2026-11-08 (dev: "Ready for docks."), shared by the death settings and volume sliders plans: build/version.txt 1.7; a "New in 1.7." changelog block with three entries (the death settings, the volume sliders, and Alt plus F4 now doing nothing in a run, the exit_program key removed the same day); the readme's Settings part (sliders on save, Game tab volumes and death settings, Sound tab volumes) and death flow; both todo items to finished; this plan COMPLETE; MEMORY.md and CLAUDE.md updated.

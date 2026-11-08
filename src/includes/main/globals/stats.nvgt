@@ -2,7 +2,7 @@
 keeps them: the session (the current run, then kept as your last run) and the lifetime (every run added up). Only
 endless runs count (run_difficulty 0 or more): practice and debug runs never touch them. The session is cleared when an
 endless run starts, counted through it, and at the run's end, however it ends (a death, quit run, restart run, the
-Escape question, Alt+F4), it's added to the lifetime and both are saved to saves/game.srf with the last played date and
+Escape question), it's added to the lifetime and both are saved to saves/game.srf with the last played date and
 time (writegame()). There's no autosave. One set covers every difficulty (dev, 2026-11-06); the session remembers its
 difficulty, and the lifetime counts runs per difficulty. The difficulty_runs unlock counts are separate (difficulty.nvgt).
 A new stat is one more name in stat_keys plus a stat_add() where it happens; readgame() and writegame() pick it up. */
@@ -65,7 +65,7 @@ run_end_cause = "";
 has_session = true;
 last_run_difficulty = difficulty_names[run_difficulty];
 }
-/* From start_run() when the run loop returns, and from Alt+F4 mid-run: the stats measured at the end (steps, time
+/* From start_run() when the run loop returns: the stats measured at the end (steps, time
 running and top speed), then the session added into the lifetime and everything saved. Does nothing outside an endless
 run, or a second time for the same run. */
 void end_run_stats()

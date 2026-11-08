@@ -1,3 +1,7 @@
+New in 1.7.
+Made it so Alt plus F4 now does nothing during a run, instead of closing the game.
+Added volume sliders to the settings menu, with game ambience and game music volume in the game tab and menu music and master game volume in the sound tab, and the game's music and ambience can now go much quieter than before.
+Added settings in the game tab to turn off the session results after you die, and the copy and export options in the menu that follows.
 New in 1.6.
 Made it so dying in an endless run now shows your results for the run, starting with your death outcome, followed by a menu where you can copy or export them, replay the run, or return to the game menu, instead of only asking whether to replay.
 Added view, copy and export session results options in the pause menu during an endless run, so you can check your stats for the run so far, and restart run now comes right after resume run.

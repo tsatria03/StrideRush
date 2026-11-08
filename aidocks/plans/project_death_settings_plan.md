@@ -1,11 +1,11 @@
 ---
 name: project_death_settings_plan
-description: SECTION 1 BUILT AND TESTED (2026-11-08, for 1.7; docks to come, shared with the volume sliders plan) - settings to turn off the results menu after a death, and the copy and export items in the after death menu; Q&A log
+description: COMPLETE (2026-11-08, 1.7 at 3 of 10, docked with the volume sliders plan) - settings to turn off the results menu after a death, and the copy and export items in the after death menu; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED, nothing built. Started 2026-11-08, with 1.6 closed (V1.60) and 1.7 not yet opened.
+Status: COMPLETE (2026-11-08). Started 2026-11-08, with 1.6 closed (V1.60) and 1.7 not yet opened.
 
 Background:
 - The dev (2026-11-08): "I had some ides for 1.7, and they all have to do with dying in the game. You know how after you dye, it shows the results menu every single time? I wish there were settings to disable that, including the copy/export options found in the replay menu."
@@ -20,3 +20,4 @@ Q&A log:
 - Section 1 tested 2026-11-08 (all 3 passed: results off with copy and export kept; both off, replayed; F2 mid-run with the settings saved across a restart).
 - TEST CHANGE (dev, 2026-11-08: "I don't wanna know that I died after I copy/export stats from there."): "You have died. " only when the question menu first opens (focus still -1), not when it reopens after a copy or export.
 - The "You have died." change tested 2026-11-08 (passed: said when the question menu first opens after a skipped results menu, not after a copy or export, and not after the results menu). Section 1 is done; Section 2, the docks, is shared with the volume sliders plan once its Section 1 is built.
+- Section 2 BUILT 2026-11-08 (dev: "Ready for docks."), shared by the death settings and volume sliders plans: build/version.txt 1.7; a "New in 1.7." changelog block with three entries (the death settings, the volume sliders, and Alt plus F4 now doing nothing in a run, the exit_program key removed the same day); the readme's Settings part (sliders on save, Game tab volumes and death settings, Sound tab volumes) and death flow; both todo items to finished; this plan COMPLETE; MEMORY.md and CLAUDE.md updated.

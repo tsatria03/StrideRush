@@ -281,13 +281,6 @@ settingsmenu(true);
 resume_game();
 return;
 }
-// Alt+F4 closes the whole program, from inside a run only, with no confirm.
-if (controls.action_triggered("exit_program"))
-{
-end_run_stats(); // a run left with Alt+F4 still counts and saves
-speak("exiting");
-exit();
-}
 if (controls.action_triggered("info_lives")) speak_health(); // H: health percent and lives
 if (controls.action_triggered("info_shield")) speak_shield_strength(); // key_config keeps a plain M quiet during Shift+M (buffer mute)
 if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase(), "status");
