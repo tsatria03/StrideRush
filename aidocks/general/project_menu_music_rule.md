@@ -16,3 +16,5 @@ The rule: m.fade_music() is called only in play_game() (a debug, endless or prac
 No changelog entry (dev, 2026-11-07: "these menu changes do not require any change log mentions"), so 1.6 stays full at 10 of 10 with no 1.7 block for them.
 
 Deliberately left over the music (dev, 2026-11-07: "You can leave them. That does it all for the menus"): the achievement description or locked hint dialog in the achievements lists, and the locked difficulty dialog in the difficulty menu, since they are opened often and a fade would restart the music each time. The menu music work is finished.
+
+Menu sounds are cached (dev, 2026-11-08): setupmenu.nvgt's menu_sound(name) searches sounds/ui/menu/*name* once per launch and keeps every match, picking one at random each time, so the music, click, close, edge, enter, open and wrap lookups no longer hit the disk on every menu. A new ui/menu file added while the game runs is only seen after a relaunch.

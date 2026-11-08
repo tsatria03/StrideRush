@@ -2,7 +2,7 @@ void setupmenu(bool music_added = false, string musicpath = "", string clicksoun
 {
 m.reset(true);
 if (music_added) {
-m.add_music(musicpath != "" ? musicpath : get_pack_sound("ui/menu/*music*"));
+m.add_music(musicpath != "" ? musicpath : menu_sound("music"));
 m.play_music();
 }
 /* A menu without music of its own leaves playing menu music alone (dev, 2026-11-07), so it carries on through every menu
@@ -14,10 +14,30 @@ m.first_letter_navigation=first_letter;
 m.side_scrolling=side_scrolling;
 m.speak_position_information=speak_menu_position;
 
-m.click_sound = clicksound != "" ? clicksound : get_pack_sound("ui/menu/*click*");
-m.close_sound = closesound != "" ? closesound : get_pack_sound("ui/menu/*close*");
-m.edge_sound = edgesound != "" ? edgesound : get_pack_sound("ui/menu/*edge*");
-m.enter_sound = entersound != "" ? entersound : get_pack_sound("ui/menu/*enter*");
-m.open_sound = opensound != "" ? opensound : get_pack_sound("ui/menu/*open*");
-m.wrap_sound = wrapsound != "" ? wrapsound : get_pack_sound("ui/menu/*wrap*");
+m.click_sound = clicksound != "" ? clicksound : menu_sound("click");
+m.close_sound = closesound != "" ? closesound : menu_sound("close");
+m.edge_sound = edgesound != "" ? edgesound : menu_sound("edge");
+m.enter_sound = entersound != "" ? entersound : menu_sound("enter");
+m.open_sound = opensound != "" ? opensound : menu_sound("open");
+m.wrap_sound = wrapsound != "" ? wrapsound : menu_sound("wrap");
+}
+/* The menu sounds, cached (dev, 2026-11-08: "You'll never know when I'll need it"): each ui/menu name is searched on disk
+once per launch, the first time a menu needs it, instead of every time a menu opens, which was slow on a busy disk.
+The cache keeps every file that matches, and a random one is still picked each time, as get_pack_sound() does, so
+variants such as click2.ogg keep working. A name with no files caches an empty list and plays nothing, as before. */
+string[] menu_sound_names;
+string[][] menu_sound_files;
+string menu_sound(const string&in name)
+{
+int i = menu_sound_names.find(name);
+if (i < 0)
+{
+string[] found = find_files("sounds/ui/menu/*" + name + "*");
+for (uint f = 0; f < found.length(); f++) found[f] = "sounds/ui/menu/" + found[f];
+menu_sound_names.insert_last(name);
+menu_sound_files.insert_last(found);
+i = int(menu_sound_names.length()) - 1;
+}
+if (menu_sound_files[i].length() == 0) return "";
+return menu_sound_files[i][random(0, menu_sound_files[i].length() - 1)];
 }
