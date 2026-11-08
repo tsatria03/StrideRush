@@ -60,6 +60,14 @@ if(st.d.exists("ask_quit_on_escape"))
 {
 ask_quit_on_escape=st.read_bool("ask_quit_on_escape");
 }
+if(st.d.exists("show_death_results"))
+{
+show_death_results=st.read_bool("show_death_results");
+}
+if(st.d.exists("show_death_copy_export"))
+{
+show_death_copy_export=st.read_bool("show_death_copy_export");
+}
 if(st.d.exists("tts_config"))
 {
 tts_load_config(st.read_string("tts_config"), tts);
@@ -165,6 +173,8 @@ st.add("loop_previews",loop_previews);
 st.add("variant_descriptions",variant_descriptions);
 st.add("auto_check_updates",auto_check_updates);
 st.add("ask_quit_on_escape",ask_quit_on_escape);
+st.add("show_death_results",show_death_results);
+st.add("show_death_copy_export",show_death_copy_export);
 st.add("tts_config",tts_dump_config(tts, true));
 st.add("soundcard",soundcard);
 st.save();

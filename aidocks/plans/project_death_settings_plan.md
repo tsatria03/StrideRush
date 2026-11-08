@@ -1,6 +1,6 @@
 ---
 name: project_death_settings_plan
-description: SETTLED, not built (2026-11-08, for 1.7; 2 sections) - settings to turn off the results menu after a death, and the copy and export items in the after death menu; Q&A log
+description: SECTION 1 BUILT AND TESTED (2026-11-08, for 1.7; docks to come, shared with the volume sliders plan) - settings to turn off the results menu after a death, and the copy and export items in the after death menu; Q&A log
 metadata:
   type: project
 ---
@@ -15,3 +15,8 @@ Background:
 Q&A log:
 - Q (2026-11-08): two Game tab checkboxes after "Ask to quit the run when pressing escape", both on by default: "Show session results after dying" (off: a death skips the results menu and goes straight to the question menu) and "Show copy and export options after dying" (off: the question menu is only replay run and return to game menu, with the intro "What would you like to do now? You can replay the current run, or return to the game menu.", as a debug death has now); independent of each other, changeable mid-run through F2. A (dev, 2026-11-08): "Yes please. That's exactly right." SETTLED as proposed. The pause menu's view, copy and export session results are untouched.
 - SETTLED (2026-11-08). Build sections (one per go-ahead): 1. the two settings (saved in settings.srf, on by default, in the Game tab and the reset to defaults) and after_death_menu() reading them; 2. docks (a 1.7 changelog entry opening the block with build/version.txt at 1.7, the readme's settings and death flow, the todo item to finished, this plan COMPLETE, MEMORY.md and CLAUDE.md).
+- Section 1 BUILT 2026-11-08, awaiting tests (after the dev committed both 1.7 plans as 462ceb5): show_death_results and show_death_copy_export in globals/dec.nvgt (true), read and saved in settings.srf (savefuncts.nvgt); the Game tab's "Show session results after dying" and "Show copy and export options after dying" after "Ask to quit the run when pressing escape", applied on save settings, both true again on reset; after_death_menu() skips the results menu when the first is off, and drops copy and export, with the shorter intro, when the second is off (copy_shown), as a debug death does.
+- TEST CHANGE (dev, 2026-11-08, after all 3 Section 1 tests passed: "this part looks weard after both is unchecked. After you dye, it says, "What would you like to do now?" I want to know that I died.", then "Yes please"): when the results menu was skipped (results off, or a debug death), the question menu's intro starts with "You have died. "; with results on it stays as it was, since the results menu said it first.
+- Section 1 tested 2026-11-08 (all 3 passed: results off with copy and export kept; both off, replayed; F2 mid-run with the settings saved across a restart).
+- TEST CHANGE (dev, 2026-11-08: "I don't wanna know that I died after I copy/export stats from there."): "You have died. " only when the question menu first opens (focus still -1), not when it reopens after a copy or export.
+- The "You have died." change tested 2026-11-08 (passed: said when the question menu first opens after a skipped results menu, not after a copy or export, and not after the results menu). Section 1 is done; Section 2, the docks, is shared with the volume sliders plan once its Section 1 is built.

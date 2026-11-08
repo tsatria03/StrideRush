@@ -16,6 +16,8 @@ savefuncts.nvgt, with its own key (dev, 2026-11-06). */
 savedata gs(APPDATA_DIR + "saves/game.srf", "w9vxiXkaVVDnkJWUFz4tFENQsUmxHXMadxtYP7kA6YGIGdMQvgG5V6QEcZgBSZ9MsWOXa9Uhj7st4xthfmI0d7n8YS7GjR5yFctG8NAKt1FsTb51sfd0FFptgOnnFrUKeHMgnR4YqlCF62ZK4ehtB4PWdHrUQAZsGwuCwZrBd6koOAYNkduCmxykdD5ag1M0gPLWLjhg9arHpdWZXW4kmgL2g9bUFGrhPXl75r7xHfIorNfSuT6f0K7jsZIocJsjfvQBv6BDun24STk6H0wnkbxf5yZRljJzWoJE7SjUTQe7336Au3DDXCdCoa5dh31DgHJ2Gfi7hasYfGOWPI4Lu9CpeoDHL");
 int fademode = 1; // how leaving a run fades every pool: 1 the volume fade (default, dev, 2026-11-04), 0 the pitch wind-down
 bool ask_quit_on_escape = true; // false: Escape leaves the run at once, without the quit run question
+bool show_death_results = true; // false: a death skips the results menu (the death settings plan, 2026-11-08)
+bool show_death_copy_export = true; // false: the after death menu leaves out copy and export
 string soundcard = "Default"; // the chosen sound device by name, matched to sound_output_device when the settings load
 form_menu m;
 virtual_dialogs vd; // the speech buffer's review boxes use vd.info_box
