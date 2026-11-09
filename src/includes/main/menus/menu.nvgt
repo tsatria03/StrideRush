@@ -328,10 +328,10 @@ int mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") return false;
 practice_type = m.selected_item_id;
 setupmenu();
-m.intro_text = "Choose a speed.";
+m.intro_text = "Choose a speed, in steps a second."; // dev, 2026-11-08, so the bare numbers make sense
 for (int t = start_step_time; t >= 100; t -= 100)
 {
-m.add_item(t + " ms", "" + t);
+m.add_item(tenths_text(int(round(10000.0 / t, 0))), "" + t); // steps a second as bare numbers, 2, 2.5, 3.3, 5, 10 (dev, 2026-11-08)
 }
 m.add_item("back", "back");
 mres = m.run();

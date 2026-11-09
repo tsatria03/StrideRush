@@ -305,8 +305,12 @@ first rounded down to whole steps, then "I meant switch it to 1 dessimal place, 
 steps read 2 all the way from 500 to 334 ms). current_step_time() keeps it between 500 and 50 ms, so it reads 2.0 to 20.0,
 and the speed powerups count. Built from tenths; a whole number reads without its ".0" (dev, 2026-11-06: "I want it to
 say 2, unless the speed increases"), so 500 ms is "2" and 470 ms "2.1". */
+/* C: steps a second in endless and practice runs, but milliseconds per step in a debug run (dev, 2026-11-08: "speaking
+of debug, please make the C key read in milliseconds"), the debug speed menu's own units. A debug run is the one with no
+difficulty that isn't practice. */
 string speed_phrase()
 {
+if (run_difficulty < 0 and !practice_run) return "You are running " + current_step_time() + " milliseconds per step.";
 int tenths = int(round(10000.0 / current_step_time(), 0));
 return "You are running " + tenths_text(tenths) + " steps a second.";
 }
