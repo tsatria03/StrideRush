@@ -43,7 +43,11 @@ while (true)
 {
 wait(5);
 bindform.monitor();
-if (bindform.is_pressed(close_btn)) return;
+if (bindform.is_pressed(close_btn))
+{
+if (key_down(KEY_ESCAPE)) speak("canceled"); // escape, not the close button, says so (dev, 2026-11-09)
+return;
+}
 }
 }
 /* The rebind list: every action with its keys, and add, edit and remove buttons. Each change is written straight to
