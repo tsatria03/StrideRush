@@ -1,3 +1,5 @@
+New in 1.8.
+Made it so the menu music, music and ambience volumes now start at 80 percent instead of full volume, including after you reset your settings.
 New in 1.7.
 Made it so the sound device menu now tells you which device is active.
 Made it so the setting to check for updates when the game starts is now in the general tab of the settings menu, instead of the game tab.

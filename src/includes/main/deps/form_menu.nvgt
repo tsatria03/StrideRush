@@ -15,7 +15,7 @@ bool first_letter=false;
 bool side_scrolling=false;
 bool speak_menu_position=false;
 
-int menumusvolume=0;
+int menumusvolume=-20; // menu_music_start_volume in tuning.nvgt: 80 percent (dev, 2026-11-09)
 sound_pool menupool;
 
 class form_menu {

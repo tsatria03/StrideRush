@@ -199,8 +199,9 @@ const int teleport_max_time = 5000;
 const int min_volume = -100; // -50 until 2026-11-08 (the volume sliders plan: "the ambience/music volumes should be able to go to -100")
 const int learn_min_volume = -50; // the learn sounds menu's floor, unchanged
 const int volume_change = 1; // 1 per press (dev, 2026-11-02)
-const int music_start_volume = 0; // full volume at the start (dev, 2026-11-02)
-const int ambience_start_volume = 0;
+const int music_start_volume = -20; // 80 percent at the start and after a settings reset (dev, 2026-11-09; full volume until then)
+const int ambience_start_volume = -20; // 80 percent, the same
+const int menu_music_start_volume = -20; // 80 percent, the same (form_menu.nvgt starts menumusvolume at it)
 /* The ambience changes the way the ground does (the music and ambience plan, dev, 2026-11-06: "I like the 1 to 2minute
 switch"): after a random ambience_min_time to ambience_max_time on runtimer, it crossfades over ambience_fade_time to
 another random one, the old fading down to ambience_fade_floor decibels below your ambience volume as the new one rises. */

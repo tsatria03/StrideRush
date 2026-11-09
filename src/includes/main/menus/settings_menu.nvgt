@@ -225,7 +225,7 @@ return false;
 keyboard.ini, not settings.srf. */
 void reset_settings()
 {
-menumusvolume = 0;
+menumusvolume = menu_music_start_volume;
 music_volume = music_start_volume;
 ambience_volume = ambience_start_volume;
 heartbeat_volume = 0;
