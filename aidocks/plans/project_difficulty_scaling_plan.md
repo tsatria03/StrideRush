@@ -1,6 +1,6 @@
 ---
 name: project_difficulty_scaling_plan
-description: SETTLED, not built (2026-11-09, for 1.8; 3 sections: damage, speed caps, docks) - each difficulty scales the damage you take and the belt's top speed, from easy up to chaos at full; Q&A log
+description: SECTION 1 BUILT AND TESTED (2026-11-09, for 1.8; 3 sections: damage, speed caps, docks) - each difficulty scales the damage you take and the belt's top speed, from easy up to chaos at full; Q&A log
 metadata:
   type: project
 ---
@@ -23,3 +23,5 @@ Q&A log:
   1. Damage: a per-level percentage in tuning.nvgt (60, 70, 80, 90, 100 by difficulty_names' order) applied in take_damage() to every obstacle's blow, before the shield and the damage powerups; practice and debug runs at 100; hazards unchanged.
   2. Speed caps: a per-level top step time in tuning.nvgt (200, 150, 100, 75, 50 ms) where the belt's speed-ups stop in an endless run (the last one stopping at the cap, so insane holds at 75), with no real doors past it; Rush Hour still 50 ms past the cap, never past min_step_time; practice and debug runs unchanged; the Top Speed and Sound Barrier hints in achievements.ini.
   3. Docks: opening 1.8 (build/version.txt 1.8, a "New in 1.8." block), the readme's difficulty section and the two hints, the todo item to finished, this plan COMPLETE, MEMORY.md and CLAUDE.md.
+- Section 1 BUILT 2026-11-09, awaiting tests (dev: "Let's do the first suggestion. DIfficulties", after b0df06c): tuning.nvgt's difficulty_damage_percents {60, 70, 80, 90, 100}; level_damage() in difficulty.nvgt (the full amount when run_difficulty is -1, practice and debug); take_damage() in lives.nvgt scales every blow with it first, so a worn shield and Tough Hide or Soft Hide work on the scaled amount, and damage_taken counts it. Hazards never come through take_damage(), so they still end the run.
+- Section 1 tested 2026-11-09 (both passed: a spike on easy took 12, H 94 percent; a spike in a debug run took the full 20, H 90 percent).

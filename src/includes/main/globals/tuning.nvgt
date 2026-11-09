@@ -48,6 +48,10 @@ const string[] difficulty_names = {"easy", "medium", "hard", "insane", "chaos"};
 const int[] difficulty_start_times = {500, 450, 400, 350, 300};
 const int[] difficulty_min_floor_times = {2000, 1750, 1500, 1250, 1000};
 const int[] difficulty_max_floor_times = {5000, 4750, 4500, 4250, 4000};
+/* Damage by level (the difficulty scaling plan, dev, 2026-11-09: "I like option 2 much better"): the percent of every
+obstacle's damage a blow does, so easy takes 60 percent and chaos the full amount. Practice and debug runs, which have no
+level, take 100. Every result is a whole number with today's damages (animals 6 on easy, barriers 48). */
+const int[] difficulty_damage_percents = {60, 70, 80, 90, 100};
 /* The schedule (Section 5, dev, 2026-11-05): on easy to insane, each of these types and items joins the mix once the
 belt reaches its speed, one obstacle type per 50 ms mark, in order of the action it needs. Anything not listed is in from
 the start: hazards, spikes and mines, health potions, life capsules and steel shields, and keys, which come before every

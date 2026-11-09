@@ -23,6 +23,7 @@ player_health = spawn_only == "health_potions" ? player_hp / 2 : player_hp;
 through p and calls end_run_hit(), as a fatal hit always has. */
 int take_damage(int damage)
 {
+damage = level_damage(damage); // the level's share first: 60 percent on easy up to the full amount on chaos (difficulty.nvgt)
 if (shield_absorb(damage)) return blow_shielded;
 int dealt = powerup_damage(damage, "Tough Hide", "Soft Hide"); // halved or doubled by the health powerups
 stat_add("damage_taken", dealt < player_health ? dealt : player_health); // only what your health had to lose, as damage past 0 is dropped

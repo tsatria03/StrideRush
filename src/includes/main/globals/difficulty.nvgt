@@ -67,3 +67,11 @@ int i = schedule_types.find(type);
 if (i < 0) return true;
 return step_time <= schedule_join_times[i];
 }
+/* A blow's damage for the run's level (the difficulty scaling plan's Section 1, dev, 2026-11-09): difficulty_damage_percents
+of it in an endless run, the full amount in practice and debug runs. take_damage() scales every blow with it first, so
+the shield and the Tough Hide and Soft Hide powerups work on the scaled amount. */
+int level_damage(int damage)
+{
+if (run_difficulty < 0) return damage;
+return damage * difficulty_damage_percents[run_difficulty] / 100;
+}
