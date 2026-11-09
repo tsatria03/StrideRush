@@ -35,6 +35,7 @@ reset_powerups();
 reset_lane();
 give_debug_shield(); // after clear_inventory(), so the debug shield isn't wiped
 reset_spawner();
+reset_heartbeat(); // the heartbeat plan: a fresh heart, its first beat on the run's first frame
 update_listeners();
 }
 /* Normally start_step_time, starting_lives, every obstacle type, and a run that ends when lives run out; the source-only
@@ -194,6 +195,7 @@ speedup_check();
 powerup_timers(); // every frame, so a timed powerup ends on time
 powerup_sounds(); // every frame: powerups on the belt replay their sound on a timer
 run_audio_check(); // every frame: the next track when one ends, and the ambience's switch and crossfade
+heartbeat_check(); // every frame: the heartbeat, faster as you speed up (heartbeat.nvgt)
 run_input();
 }
 }
@@ -286,6 +288,7 @@ if (controls.action_triggered("info_shield")) speak_shield_strength(); // key_co
 if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase(), "status");
 if (controls.action_triggered("info_speed")) speak_buffer(speed_phrase(), "status");
 if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".", "status");
+if (controls.action_triggered("info_heart")) speak_heart_rate(); // B: your heart rate (heartbeat.nvgt)
 weapon_input();
 inventory_input();
 lane_input();

@@ -25,6 +25,7 @@ ducktimer.pause();
 duckcooldowntimer.pause();
 firetimer.pause();
 reloadtimer.pause();
+heartbeat_timer.pause();
 }
 void resume_timers()
 {
@@ -36,6 +37,7 @@ ducktimer.resume();
 duckcooldowntimer.resume();
 firetimer.resume();
 reloadtimer.resume();
+heartbeat_timer.resume();
 }
 void pause_menu()
 {

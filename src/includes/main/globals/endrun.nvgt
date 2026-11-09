@@ -76,6 +76,7 @@ destroy_all_powerups();
 destroy_all_walls();
 destroy_all_doors();
 destroy_all_bullets();
+heartpool.destroy_all(); // the heartbeat, so a death silences them too
 }
 // Both deaths end here; quitting or restarting from the pause menu goes through leave_paused_run() instead.
 void finish_run()

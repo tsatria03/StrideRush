@@ -1,6 +1,6 @@
 ####These are the things that need to be finished for future versions of the game.
 
-****Unfinished. Add a heartbeat and breathing that speed up as you run faster.
+****Unfinished. Add a heartbeat that speeds up as you run faster.
 
 ##These are the things that are already finished from earlier versions of the game.
 
