@@ -1,5 +1,5 @@
 New in 1.7.
-Added a getting started section near the top of the readme, which walks you through starting your first run and the few keys you need to stay alive, while the rest of the readme stays as the full reference.
+Added a getting started section near the top of the readme, which walks you through starting your first run and the few keys you need to stay alive, and the keyboard commands now come right after it instead of at the end, while the rest of the readme stays as the full reference.
 Added a heartbeat that speeds up as you run faster, from 5 beats per minute at the start up to 155, which B now tells you, and which you can turn up or down with shift plus home and end or F7 and F8, or from a new game heartbeat volume slider in the settings menu.
 Made it so the pause menu now opens on resume run and remembers your place when you back out of anything inside it.
 Made it so pressing escape or P during a run now pauses every sound but the ambience, so the game is never silent while you decide.
