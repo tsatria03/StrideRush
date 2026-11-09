@@ -1,4 +1,5 @@
 New in 1.7.
+Made it so the sound device menu now tells you which device is active.
 Made it so the setting to check for updates when the game starts is now in the general tab of the settings menu, instead of the game tab.
 Made it so the practice run's speeds are now given in steps a second instead of milliseconds.
 Added a getting started section near the top of the readme, which walks you through starting your first run and the few keys you need to stay alive, and the keyboard commands now come right after it instead of at the end, while the rest of the readme stays as the full reference.

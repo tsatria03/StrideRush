@@ -264,7 +264,8 @@ devices.remove_at(0);
 setupmenu();
 for (uint i = 0; i < devices.length(); i++)
 {
-m.add_item(devices[i], devices[i]);
+// Each one says whether it's the device in use (dev, 2026-11-08): "Speakers, active" or "Headphones, inactive".
+m.add_item(devices[i] + (i + 1 == uint(sound_output_device) ? ", active" : ", inactive"), devices[i]);
 }
 m.intro_text = "Choose a sound device you'd like to use in the game.";
 int mres = m.run();
