@@ -13,7 +13,7 @@ if (key_repeating(KEY_C) and dlgcoppy==true)
 temp.destroy_all();
 temp.play_stationary(get_pack_sound("ui/dialog/*copy*"),false);
 speak("Text copied");
-clipboard_copy_text(string_replace(message, " Press enter or space to continue.", "", true)); // copies without dlgmessage_return's prompt, like CookieCraze
+clipboard_copy_text(string_replace(message, " Press enter or space to continue.", "", true));
 }
 if (key_repeating(KEY_LEFT) or key_repeating(KEY_RIGHT) or key_repeating(KEY_UP) or key_repeating(KEY_DOWN))
 {
@@ -24,7 +24,7 @@ if (key_repeating(KEY_ESCAPE))
 temp.destroy_all();
 return true;
 }
-if(key_repeating(KEY_RETURN) or key_repeating(KEY_SPACE) or key_down(KEY_A)) // space too, as dlgmessage_return's prompt says
+if(key_repeating(KEY_RETURN) or key_down(KEY_A))
 {
 temp.destroy_all();
 break;
@@ -54,8 +54,7 @@ return;
 }
 temp.play_stationary(get_pack_sound("ui/dialog/*close*"),false);
 }
-// CookieCraze's: a dlgmessage() with the continue prompt added (dev, 2026-11-04, first used by Preview voice).
 void dlgmessage_return(string msg)
 {
-dlgmessage(msg + " Press enter or space to continue.");
+dlgmessage(msg + " Press enter to continue.");
 }
