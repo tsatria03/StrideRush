@@ -56,7 +56,7 @@ if (me.x > max(hazards[i].ledge_end, hazards[i].x + spawn_distance())) remove_ha
 }
 /* A practice run can't be lost (dev, 2026-11-05), but a fall still stops it (dev, 2026-11-06: "It feels weird that you
 fall in a lava while running at the same time."): the run freezes as the pause menu freezes it, the fall plays on its
-own as a real death's does, and "You died." waits in a dialog for Enter or space. Then you're set down on the ledge just
+own as a real death's does, and "You died." waits in a dialog for Enter. Then you're set down on the ledge just
 past the hazard, landing like after a teleport, with no damage, and the run goes on. The ledge after a hazard is always
 clear floor, and the hazard stays behind you, its loop fading out as usual. */
 void practice_set_down(hazard@ h, const string&in fall_clip)

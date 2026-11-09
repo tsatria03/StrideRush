@@ -221,8 +221,9 @@ if (mres >= 0 and m.selected_item_id == "yes") return true;
 speak("canceled");
 return false;
 }
-/* Puts every setting back to its default and saves (dev, 2026-11-04). Key bindings are left alone: they live in
-keyboard.ini, not settings.srf. */
+/* Puts every setting back to its default and saves (dev, 2026-11-04), then restarts the game (dev, 2026-11-09), so
+every default, the sound device and HRTF included, starts fresh. Key bindings are left alone: they live in keyboard.ini,
+not settings.srf. Reset is only offered from the main menu, so no run is ever cut off. */
 void reset_settings()
 {
 menumusvolume = menu_music_start_volume;
@@ -253,7 +254,8 @@ tts.set_volume(100);
 soundcard = "Default";
 sound_output_device = 1;
 writepreffs();
-dlg("Settings reset.");
+dlgmessage_return("Settings reset.");
+restart_game(); // "restarting", then a fresh copy of the game; if that fails, its alert shows and the settings stay open
 }
 /* The device chooser: every output device but the first entry, which isn't a real device. The choice takes
 effect and is saved at once; escape steps back to the settings silently (a nested menu). */

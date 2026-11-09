@@ -13,7 +13,7 @@ if (key_repeating(KEY_C) and dlgcoppy==true)
 temp.destroy_all();
 temp.play_stationary(get_pack_sound("ui/dialog/*copy*"),false);
 speak("Text copied");
-clipboard_copy_text(string_replace(message, " Press enter or space to continue.", "", true));
+clipboard_copy_text(string_replace(message, " Press enter to continue.", "", true));
 }
 if (key_repeating(KEY_LEFT) or key_repeating(KEY_RIGHT) or key_repeating(KEY_UP) or key_repeating(KEY_DOWN))
 {
