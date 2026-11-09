@@ -1,6 +1,24 @@
 Welcome to Stride Rush!
 In this audio game, you ride a belt that carries you forward one step at a time, and you have to jump over, duck under, dodge, switch off, open or smash through everything that gets in your way.
 
+Getting started.
+
+Starting a run.
+
+From the main menu, choose game menu, then play game, then endless run, and pick easy, the only difficulty open at first. If you'd rather learn one obstacle at a time, choose practice run instead, where nothing can end your run. Learn sounds, in the game menu, lets you hear every obstacle's countdown before you meet it in a run.
+
+Your first run.
+
+The belt carries you forward on its own, so you never press a key to move ahead. Listen in front of you: every obstacle plays a five-cue countdown as it comes, and on easy you have time to act on the last few cues.
+Press the up arrow or W to jump over hazards, spikes and mines, and hold the down arrow or S to crouch under projectiles.
+Press the left and right arrows, or Q and E, to switch lanes out of a barrier's way.
+Press tab or A for your left hand and enter or D for your right, to switch off force fields, pick up items and open doors, and press both together to clap animals away.
+Press space to swing or fire your weapon at walls and fake doors, and the number keys to choose a different weapon.
+Press I and O to move through your inventory and U to use an item. Before each real door, pick up its key, then use it with U to unlock the door.
+Press P to pause, or escape to quit the run.
+
+The sections below explain every obstacle, item and feature in detail, and the keys section near the end lists every key, including the ones you can pick up later, such as the readouts and the volume keys.
+
 How to play.
 
 Once a run starts, you never stop moving. The belt carries you straight ahead, and you'll hear a footstep with every step you take. The ground under your feet changes every 10 to 20 seconds, so listen for new footstep sounds as you go.
@@ -33,7 +51,7 @@ Spikes, mines, force fields, projectiles, walls, animals, barriers and doors hav
 
 Health and lives.
 
-You start each endless run with 1 life and 200 health. Spikes, mines, force fields, projectiles, walls, animals, barriers and doors each take some of your health when they catch you, and you'll hear yourself get hit. When your health runs out, you lose a life: if you have lives to spare, you'll hear a sound, your health fills back up to 200, and you keep running. If it was your last life, the run ends and you're asked whether you want to replay it. Hazards are different: falling into one ends your run straight away, however much health or how many lives you have. A steel shield takes those hits before your health does, health potions heal you a little, and life capsules give you more lives. Press H to hear how much health you have left, and how many lives.
+You start each endless run with 1 life and 200 health. Spikes, mines, force fields, projectiles, walls, animals, barriers and doors each take some of your health when they catch you, and you'll hear yourself get hit. When your health runs out, you lose a life: if you have lives to spare, you'll hear a sound, your health fills back up to 200, and you keep running. If it was your last life, the run ends, and you can see your results and replay it, as described under menus. Hazards are different: falling into one ends your run straight away, however much health or how many lives you have. A steel shield takes those hits before your health does, health potions heal you a little, and life capsules give you more lives. Press H to hear how much health you have left, and how many lives.
 
 Crouching.
 
