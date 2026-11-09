@@ -1,9 +1,9 @@
-/* The achievements menu (the achievements plan's Section 2, dev, 2026-11-06), CookieCraze's trophy shelf with Stride
-Rush's two scopes as its only groups: view game achievements in the game menu opens achievements_menu(), session
+/* The achievements menu (the achievements plan's Section 2, dev, 2026-11-06), with
+the two scopes as its only groups: view game achievements in the game menu opens achievements_menu(), session
 achievements, lifetime achievements, back, each a list in achievements.ini's order (dev: "Keep them in the ini order"),
 earned ones by name and the rest as "<name>, locked". Enter shows the description, or "This achievement is locked."
 and its hint, then reopens on the same one. Escape or back steps back one menu silently. Progress numbers live in
-achievement statistics instead (Section 3), as CookieCraze keeps them. */
+achievement statistics instead (Section 3). */
 void achievements_menu()
 {
 int focus = -1;
@@ -118,8 +118,8 @@ return " " + item + " used";
 return " " + stat.replace("_", " ", true);
 }
 /* The game menu's three "all progress" items (the achievements plan's Section 4, dev, 2026-11-06: "I want them always
-shown"), ToyMania's clear, copy and export of game progresses, for statistics and achievements together. Clearing never
-touches the difficulty unlocks, and doesn't stamp the last played date the way ToyMania's resetgame() does. */
+shown"), clear, copy and export of game progresses, for statistics and achievements together. Clearing never
+touches the difficulty unlocks, and doesn't stamp the last played date. */
 void clear_all_progress()
 {
 setupmenu();
@@ -141,7 +141,7 @@ temp.play_stationary(get_pack_sound("ui/other/*complete*"), false);
 dlgmessage_return("Game progresses cleared.");
 m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
 }
-/* Everything as one text, built once from the menus' own lines (ToyMania wrote it out twice): "Achievement stats:" (every
+/* Everything as one text, built once from the menus' own lines: "Achievement stats:" (every
 achievement, complete or incomplete with its progress), then "Session stats:" and "Lifetime stats:". */
 string all_progress_text()
 {

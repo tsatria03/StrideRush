@@ -44,7 +44,7 @@ stat_add("lives_lost");
 p.play_stationary(get_pack_sound("misc/player/*life*"), false);
 return blow_life_lost;
 }
-// H: "70 percent health remaining, 2 lives." in SimpleFighter's percent format (dev, 2026-11-03).
+// H: "70 percent health remaining, 2 lives." (dev, 2026-11-03).
 void speak_health()
 {
 int percent = int(round(100.0 * player_health / player_hp, 0));

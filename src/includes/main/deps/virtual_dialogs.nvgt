@@ -11,7 +11,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
 */
 
-/* Altered source version, modified for SimpleFighter (marked as such per clause 2 of the license above):
+/* Altered source version (marked as such per clause 2 of the license above):
  * - Added the disallowed-chars support to virtual_dialogs: the disallowed_chars / use_only_disallowed_chars / char_disallowed_description members plus set_disallowed_chars() and is_disallowed_char().
  * - Added optional secure (password mask) and max_length parameters to input_box().
  * - Removed the unused free-function wrappers (virtual_alert, virtual_info_box, virtual_input_box, virtual_message_box, virtual_question); callers use the virtual_dialogs class directly, via the global vd object.

@@ -10,7 +10,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
 */
 /* Altered source version, modified for Stride Rush (marked as such per clause 2 of the license above):
- * - Added speak_buffer(), adapted from CookieCraze's, which logs a line to a speech-buffer category and speaks it.
+ * - Added speak_buffer(), which logs a line to a speech-buffer category and speaks it.
  * - tts_dump_config() no longer asks for the name of voice -1 when no voice is chosen; it saves "default" and keeps the rest.
 */
 

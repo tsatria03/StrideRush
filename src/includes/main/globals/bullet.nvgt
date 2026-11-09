@@ -1,12 +1,11 @@
 /* Bullets (dev, 2026-11-03, for 1.1): the guns fire bullets that travel, instead of hitting at once like melee. A bullet
-starts at your tile and moves one tile every bullet_tile_time, playing its gun's loop at the bullet the whole way, the
-way SimpleFighter's bullets carry their loop. On each new tile it checks for a standing wall, fake door or item there; the
+starts at your tile and moves one tile every bullet_tile_time, playing its gun's loop at the bullet the whole way.
+On each new tile it checks for a standing wall, fake door or item there; the
 first it reaches takes the gun's damage, the gun's hit and shell play at it, and the target plays its own hurt or death. A
 bullet that has gone weapon_reach() tiles from where it was fired (counted when it was fired) just vanishes, so firing
 at something still out of reach wastes the round. Real doors and the other traps don't stop it.
 Moves are timed off runtimer, which pauses with the game, so a pause freezes bullets in the air.
-Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_bullets() shrinks the array.
-ToyMania's bullet.nvgt is the model for movement (there only enemy cars fire them). */
+Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_bullets() shrinks the array. */
 sound_pool bulletpool;
 class bullet
 {
@@ -93,7 +92,7 @@ else
 {
 door@ d = fake_door_at(b.x);
 if (@d != null) target_x = strike_door(d, b.damage);
-else target_x = strike_item_at(b.x); // an item in the bullet's path breaks, as in ToyMania (dev, 2026-11-03)
+else target_x = strike_item_at(b.x); // an item in the bullet's path breaks (dev, 2026-11-03)
 }
 if (target_x < 0) return false;
 bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*hit*"), 0, me.x, 0, target_x, false);

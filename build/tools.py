@@ -23,7 +23,7 @@ BUNDLE       = os.path.join(SRC_DIR, NVGT_OUT)  # nvgt -c (run from src) produce
 VERSION_NVGT = os.path.join(SRC_DIR, "includes", "version.nvgt")  # generated mirror of version.txt (the source of truth)
 ASSET_FOLDERS = ["data", "docks", "lib", "sounds"]  # sounds are bundled: there is no first-run sound downloader
 
-# The Windows installer, ported from ToyMania (build/installer.iss, compiled with iscc in the package stage).
+# The Windows installer (build/installer.iss, compiled with iscc in the package stage).
 INSTALLER_ISS = _cfg["installer"]["iss"]
 APP_ID       = _cfg["installer"]["app_id"]
 APP_URL      = _cfg["installer"]["app_url"]
@@ -38,7 +38,7 @@ SEVENZIP = _tools["tools"]["sevenzip"]
 GH      = _tools["tools"]["gh"]
 ISCC    = _tools["tools"]["iscc"]
 
-# ToyMania's naming: the 7z is the portable copy, beside the installer.
+# The 7z is the portable copy, beside the installer.
 WIN_SOURCE   = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_windows_portable_password_is_{PASSWORD}", NVGT_OUT)
 ARCHIVE_DIR  = os.path.join(REPO_DIR, "releases", "archives")
 ARCHIVE_NAME = f"{GAME}_windows_portable_password_is_{PASSWORD}.7z"

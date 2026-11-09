@@ -1,5 +1,5 @@
-/* The statistics menus (the statistics plan's Section 2, dev, 2026-11-05 and 2026-11-06), after ToyMania's statsmenu(),
-view_session_stats() and view_lifetime_stats(), as loops instead of its menus calling each other. View game statistics
+/* The statistics menus (the statistics plan's Section 2, dev, 2026-11-05 and 2026-11-06),
+as loops instead of menus calling each other. View game statistics
 in the game menu opens statistics_menu(): session statistics, lifetime statistics, and (Section 5) clear game statistics,
 copy all game statistics to clipboard and export all game statistics to file, always shown (dev: "I do not want these
 buttons to be hidable"), then back. Each stat menu is one stat per item, then back. Pressing enter on a stat keeps you
@@ -29,7 +29,7 @@ else if (m.selected_item_id == "session") show_stat_lines("Session statistics me
 else show_stat_lines("Lifetime statistics menu. You can see your total stats across all of your endless runs here.", lifetime_stat_lines());
 }
 }
-/* One stat menu: the lines and back; enter on a line reopens it on that line (with its intro, as ToyMania's menus do),
+/* One stat menu: the lines and back; enter on a line reopens it on that line (with its intro),
 and escape or back returns. */
 void show_stat_lines(const string&in intro, string[]@ lines)
 {
@@ -82,7 +82,7 @@ stats.set("time_running", live_session_value("time_running"));
 stats.set("top_speed", live_session_value("top_speed"));
 return stats;
 }
-// Every endless run added up, starting with when the last one ended, as ToyMania's lifetime stats do.
+// Every endless run added up, starting with when the last one ended.
 string[] lifetime_stat_lines()
 {
 string[] lines;
@@ -182,9 +182,9 @@ count += 1;
 }
 return amount < 0 ? "-" + result : result;
 }
-/* Clear game statistics (Section 5, ToyMania's): which stats, then Yes or No. Yes clears and saves them, plays complete
+/* Clear game statistics (Section 5): which stats, then Yes or No. Yes clears and saves them, plays complete
 and says so; No or escape on the question says "canceled"; escape or back on the choice steps back silently. Clearing
-both resets everything, unlike ToyMania's, which forgot one counter. The difficulty unlocks are never touched. */
+both resets everything. The difficulty unlocks are never touched. */
 void clear_stats_menu()
 {
 while (true)
@@ -219,12 +219,12 @@ m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
 return;
 }
 }
-/* Both lists as one text, for copy and export, built from the very lines the menus show (ToyMania built it twice):
+/* Both lists as one text, for copy and export, built from the very lines the menus show:
 "Session stats:", a dash before each line, a blank line, then "Lifetime stats:". */
 string all_stats_text()
 {
 /* Session and lifetime stats only: achievement stats belong to the game menu's copy and export of all progress
-(achievements_menu.nvgt's all_progress_text(); dev, 2026-11-07, ToyMania's split). */
+(achievements_menu.nvgt's all_progress_text(); dev, 2026-11-07). */
 string text = "Session stats:\r\n";
 string[] lines = session_stat_lines();
 for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";

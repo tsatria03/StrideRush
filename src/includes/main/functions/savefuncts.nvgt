@@ -1,4 +1,4 @@
-/* Loads the settings from settings.srf at startup, CookieCraze-style: each value is read only if the file holds it, so a
+/* Loads the settings from settings.srf at startup: each value is read only if the file holds it, so a
 setting added in a later version keeps its default for players whose file is older (dev, 2026-11-04). A missing file
 loads as empty, leaving every default. */
 void readpreffs()
@@ -24,7 +24,7 @@ if(st.d.exists("heartbeat_volume"))
 {
 heartbeat_volume=st.read_int("heartbeat_volume");
 }
-sound_master_volume = master_volume; // set at every launch, ToyMania-style
+sound_master_volume = master_volume; // set at every launch
 if(st.d.exists("menuwrap"))
 {
 menuwrap=st.read_bool("menuwrap");
@@ -81,8 +81,8 @@ if(st.d.exists("tts_config"))
 {
 tts_load_config(st.read_string("tts_config"), tts);
 }
-/* The sound device is saved by name, since its place in the list can change as devices come and go (SimpleFighter's
-way). One that's no longer there leaves the default device. */
+/* The sound device is saved by name, since its place in the list can change as devices come and go.
+One that's no longer there leaves the default device. */
 if(st.d.exists("soundcard"))
 {
 soundcard=st.read_string("soundcard");

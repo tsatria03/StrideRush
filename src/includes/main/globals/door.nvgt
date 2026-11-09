@@ -4,8 +4,8 @@ four-layer warn set (door_countdown()). Each door picks one of the four door set
 break FAKE doors only (strike_door(), through weapon_strike()): hurt on each hit, death at 0 hp.
 - A REAL door (pitch 100) marks each new 50 ms speed section: the spawner forces one when the step time reaches a new
   mark, 450 down to 50, and none come after that. It starts locked (1.2): U on a key unlocks it from within
-  weapon_reach() (use_key()), then either hand opens it within hand_window_start(); a hand on a locked one plays deny. Like ToyMania's
-  doors: open plays and the door's loop stops, then its move sound LOOPS while the door carries you through. While it
+  weapon_reach() (use_key()), then either hand opens it within hand_window_start(); a hand on a locked one plays deny.
+  Open plays and the door's loop stops, then its move sound LOOPS while the door carries you through. While it
   carries you (door_moving) there are no footsteps, and you can't jump, crouch, use a hand or use weapons. Once you're
   past its tile, the move loop stops and close plays behind you, fading as you run on (dev, 2026-11-03).
 - A FAKE door (pitch 80, 90, 110 or 120) is in the random mix at every speed. A hand or a key on it only plays jam ("This door is jammed."); it has to be

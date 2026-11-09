@@ -1,7 +1,7 @@
 /* The run: the belt carries the player one tile per step, the step interval shrinks over time, and the run ends when
 running goes false (quitting from the pause menu now; dying in later sections). start_run() always returns to its
 caller, so main()'s loop reopens the main menu without stacking menu calls. */
-/* The player (dev, 2026-11-04, the lanes plan's Section 3, like SimpleFighter's and ToyMania's "vector me"): me.x is the
+/* The player (dev, 2026-11-04, the lanes plan's Section 3, "vector me"): me.x is the
 distance along the belt in tiles and me.y the jump height (0 is the ground), the meanings me_x and me_y had; the lane
 stays in current_lane (lane.nvgt). The engine's vector holds floats. */
 vector me;
@@ -338,7 +338,7 @@ if (minutes == 0) return sec_text;
 string min_text = minutes == 1 ? "1 minute" : minutes + " minutes";
 return min_text + " and " + sec_text;
 }
-// Spoken the ToyMania way: "track" plus the music volume and "source" plus the ambience volume, in decibels (for example "track -10").
+// Spoken as "track" plus the music volume and "source" plus the ambience volume, in decibels (for example "track -10").
 /* At either end of the range a press does nothing at all, with no speech (dev, 2026-11-06: "When you reach the top and
 bottum of a value, it should stop repeating it. Example, pressing home passed 0 keeps saying source 0."). */
 void change_music_volume(int delta)

@@ -1,6 +1,6 @@
-/* The main menu (dev, 2026-11-03, for 1.3, SimpleFighter's layout): documentation menu, game menu, settings menu (dev,
-2026-11-04), change game version (SimpleFighter's), check for updates and test speakers (dev, 2026-11-05, ToyMania's
-order), restart game and exit game. main()'s loop reopens it
+/* The main menu (dev, 2026-11-03, for 1.3): documentation menu, game menu, settings menu (dev,
+2026-11-04), change game version, check for updates and test speakers (dev, 2026-11-05),
+restart game and exit game. main()'s loop reopens it
 whenever a submenu returns. */
 void mainmenu()
 {
@@ -8,7 +8,7 @@ setupmenu(true);
 m.add_item("documentation menu", "docks");
 m.add_item("game menu", "game");
 m.add_item("settings menu", "settings");
-m.add_item("Change game version. Currently set to " + version, "version"); // SimpleFighter's (dev, 2026-11-05)
+m.add_item("Change game version. Currently set to " + version, "version"); // dev, 2026-11-05
 m.add_item("check for updates", "updates"); // dev, 2026-11-05; globals/updater.nvgt
 m.add_item("test speakers", "speakers");
 m.add_item("restart game", "rx");
@@ -39,7 +39,7 @@ check_for_updates(version, update_project, true);
 else if(main=="speakers") test_speakers();
 else if(main=="rx") restart_game();
 }
-/* Change game version, SimpleFighter's (dev, 2026-11-05): the number the updater compares against, for this launch
+/* Change game version (dev, 2026-11-05): the number the updater compares against, for this launch
 only (the next launch reports the real version from version.nvgt again). Typing an older one lets you test the
 updater or download the latest release again. The box won't take an empty answer; its cancel or escape says
 "canceled". */
@@ -65,7 +65,7 @@ return;
 version = newver;
 dlgmessage_return("Version updated to " + version + ".");
 }
-/* Test speakers, after ToyMania's: the menu music fades (dev, 2026-11-07), ui/menu/speaker plays through (Enter or A fades it out early, dlgplay()'s skip keys), then
+/* Test speakers: the menu music fades (dev, 2026-11-07), ui/menu/speaker plays through (Enter or A fades it out early, dlgplay()'s skip keys), then
 the complete sound and "Speaker test complete." in a dialog. Back in main()'s loop, the main menu opens again. */
 void test_speakers()
 {
@@ -74,8 +74,8 @@ dlgplay(get_pack_sound("ui/menu/*speaker*"));
 dlgplay(get_pack_sound("ui/other/*complete*"), false);
 dlgmessage_return("Speaker test complete.");
 }
-/* The documentation menu, after SimpleFighter's: a loop, so closing a document comes back here and escape or back
-returns to the main menu silently (a nested menu), with nothing stacking up the way ToyMania's menus call each other. */
+/* The documentation menu: a loop, so closing a document comes back here and escape or back
+returns to the main menu silently (a nested menu), with nothing stacking up. */
 void docksmenu()
 {
 while(true)
@@ -135,8 +135,8 @@ m.add_item("clear game progresses", "clearall"); // the three "all progress" ite
 m.add_item("copy all game progresses to clipboard", "copyall");
 m.add_item("export all game progresses to file", "exportall");
 m.add_item("back", "back");
-/* ToyMania's game menu intro (dev, 2026-11-05), with only the parts Stride Rush has: its "learn about important
-sounds" from when ToyMania had a learn sounds menu, and its "check your stats" with statistics (2026-11-06), in the
+/* The game menu intro (dev, 2026-11-05): "learn about important
+sounds" for the learn sounds menu, and "check your stats" with statistics (2026-11-06), in the
 menu's order, and "view achievements" with achievements (2026-11-06). */
 m.intro_text="Game menu. You can start a new game session, learn about important sounds, view achievements, or check your stats here.";
 int mres=m.run();
@@ -240,8 +240,8 @@ if (run_died and !restart_run_requested and after_death_menu()) restart_run_requ
 }
 while (restart_run_requested);
 }
-/* Restart game, after SimpleFighter's restart(): starts a fresh copy of the game and closes this one. Compiled, it runs
-sdr.exe, the name nvgt -c gives sdr.nvgt's build (SimpleFighter's is sf.exe); from source, the pinned engine's nvgtw.exe on
+/* Restart game: starts a fresh copy of the game and closes this one. Compiled, it runs
+sdr.exe, the name nvgt -c gives sdr.nvgt's build; from source, the pinned engine's nvgtw.exe on
 ../src/sdr.nvgt, which resolves because the launcher set the cwd to sdr/. A source restart skips sdr/sdr.py, so it doesn't
 sync build/version.txt or write errors.txt. */
 void restart_game()
@@ -257,7 +257,7 @@ return;
 exit();
 }
 /* The mode menu (the practice plan, dev, 2026-11-06): the foundation every way to play lands on. Debug run comes first
-and only from source (SCRIPT_COMPILED hides it), then endless run; each item is followed by a ToyMania-style
+and only from source (SCRIPT_COMPILED hides it), then endless run; each item is followed by a
 description; practice run follows endless run (Section 2). Returns "debug", "endless", "practice", or "" for escape or
 back, which step back to the game menu silently. */
 string choose_game_mode()
@@ -297,7 +297,7 @@ if (mres < 0 or m.selected_item_id == "back") return -1;
 int level = int(parse_int(m.selected_item_id));
 if (!difficulty_unlocked(level))
 {
-dlgmessage_return(difficulty_locked_message(level)); // ToyMania's way: say why, and stay in the menu
+dlgmessage_return(difficulty_locked_message(level)); // say why, and stay in the menu
 focus = level;
 continue;
 }

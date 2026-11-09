@@ -1,4 +1,4 @@
-; Stride Rush's Windows installer, ported from ToyMania's build/installer.iss (dev, 2026-11-04). tools.py's package stage
+; Stride Rush's Windows installer (dev, 2026-11-04). tools.py's package stage
 ; compiles it with iscc, passing MyAppId, MyAppName, MyAppURL, MyAppExeName, MyAppPassword and MySourcePath from
 ; tools.ini; the version comes from version.txt beside this file.
 #define MyAppVersion Trim(FileRead(FileOpen("version.txt")))

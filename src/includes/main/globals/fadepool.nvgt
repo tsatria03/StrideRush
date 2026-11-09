@@ -1,4 +1,4 @@
-/* Fades every game pool out when you leave a run, ported from SimpleFighter's fadepool.nvgt (dev, 2026-11-04), then
+/* Fades every game pool out when you leave a run (dev, 2026-11-04), then
 clears them. fademode picks the fade: 1 lowers every playing sound's volume (the default), 0 winds their pitch down.
 Leaving a run by Escape's quit, quit run or restart run fades; a death doesn't, since it has its own ending sounds. */
 void fade_multi_pool(int fade_mode)

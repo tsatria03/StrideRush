@@ -1,5 +1,5 @@
-/* The learn sounds menu (dev, 2026-11-05), in the game menu, after CaveDefender's learnsoundsmenu() and the dev's old
-ToyMania one. Everything is built from the sound folders each time it opens, so a new obstacle theme, item or weapon
+/* The learn sounds menu (dev, 2026-11-05), in the game menu.
+Everything is built from the sound folders each time it opens, so a new obstacle theme, item or weapon
 dropped into sdr/sounds shows up with no code change:
 - items: common (equipments/items/common) and other (equipments/items/other, the keys)
 - countdowns: one countdown per obstacle type (misc/trap/<type>)
@@ -250,8 +250,8 @@ while (true)
 wait(5);
 learn_preview_keys(preview);
 preview.update();
-/* Enter is handled here, not by the form (dev, 2026-11-05: holding Enter should keep restarting the sound, as in
-ToyMania). The form waits for Enter to lift before it counts a press, so held Enter would play just once; here every
+/* Enter is handled here, not by the form (dev, 2026-11-05: holding Enter should keep restarting the sound).
+The form waits for Enter to lift before it counts a press, so held Enter would play just once; here every
 key repeat starts the sound again, the Windows keyboard's own repeat (dev, 2026-11-05: key_repeating, not key_down). A
 pass with a repeat skips the form, and between repeats the form sees no repeat to act on, so it never starts its wait. */
 if (key_repeating(KEY_RETURN) or key_repeating(KEY_NUMPAD_ENTER))

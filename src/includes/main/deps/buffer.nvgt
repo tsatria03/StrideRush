@@ -1,4 +1,4 @@
-/* Speech buffers, ported from CaveDefender's client buffer.nvgt. Adapted for Stride Rush: no networking, logs go to
+/* Speech buffers. Adapted for Stride Rush: no networking, logs go to
 tsatria03/StrideRush/logs, sounds come through get_pack_sound from ui/buffer and ui/other, keys are the [buffer]
 actions in data/config/keyboard.ini, and the menu uses item ids. */
 buffer@[]buffers(0);
@@ -13,7 +13,7 @@ name=n;
 }class buffer
 {
 string name;
-bool interrupt=true; // CookieCraze-style: a category speaks over current speech unless set false (speak_buffer reads this)
+bool interrupt=true; // a category speaks over current speech unless set false (speak_buffer reads this)
 bool muted=false;
 buffer_item@[]items;
 int bpos;

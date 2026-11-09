@@ -1,5 +1,5 @@
-/* Game statistics (the statistics plan, dev, 2026-11-05, built from 2026-11-06). Every stat is kept twice, as ToyMania
-keeps them: the session (the current run, then kept as your last run) and the lifetime (every run added up). Only
+/* Game statistics (the statistics plan, dev, 2026-11-05, built from 2026-11-06). Every stat is kept twice:
+the session (the current run, then kept as your last run) and the lifetime (every run added up). Only
 endless runs count (run_difficulty 0 or more): practice and debug runs never touch them. The session is cleared when an
 endless run starts, counted through it, and at the run's end, however it ends (a death, quit run, restart run, the
 Escape question), it's added to the lifetime and both are saved to saves/game.srf with the last played date and
@@ -91,7 +91,7 @@ else lifetime_stats.set(key, old + value);
 lifetime_stats.set("runs_played", stat_value(lifetime_stats, "runs_played") + 1);
 string runs_key = "runs_" + last_run_difficulty;
 lifetime_stats.set(runs_key, stat_value(lifetime_stats, runs_key) + 1);
-last_played_date = get_date(true, false); // "Friday, November 6, 2026", as ToyMania
+last_played_date = get_date(true, false); // "Friday, November 6, 2026"
 last_played_time = get_time(true, false); // "3:07 PM"
 writegame();
 }

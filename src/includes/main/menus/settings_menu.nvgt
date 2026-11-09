@@ -1,4 +1,4 @@
-/* The settings menu (dev, 2026-11-04, for 1.3), after SimpleFighter's settingsmenu(): one audio form window with a
+/* The settings menu (dev, 2026-11-04, for 1.3): one audio form window with a
 Category tab panel, and save settings and cancel buttons. From the main menu it has General, Game, Keyboard, Menu,
 Sound and Speech; F2 during a run shows only Game, Menu and Speech (ingame), so keys can't be rebound mid-run.
 
@@ -32,7 +32,7 @@ int reset_btn = -1, view_btn = -1, rebind_btn = -1, fade_box = -1, hrtf_box = -1
 if (!ingame)
 {
 // The General tab: the startup update check (moved from the Game tab, dev, 2026-11-08), then reset, checkboxes before buttons.
-updates_box = setform.create_checkbox("Enable checking for game updates at startup", new_updates); // SimpleFighter's wording (dev, 2026-11-05)
+updates_box = setform.create_checkbox("Enable checking for game updates at startup", new_updates); // dev, 2026-11-05
 setform.assign_to_tab(updates_box, tabs, tab_general);
 reset_btn = setform.create_button("&Reset settings");
 setform.assign_to_tab(reset_btn, tabs, tab_general);
@@ -70,7 +70,7 @@ int position_box = setform.create_checkbox("Enable position information in menus
 setform.assign_to_tab(position_box, tabs, tab_menu);
 int scroll_box = setform.create_checkbox("Enable side scrolling in menus", new_scroll);
 setform.assign_to_tab(scroll_box, tabs, tab_menu);
-// The learn sounds menu's labels (dev, 2026-11-05, ToyMania's setting), after side scrolling.
+// The learn sounds menu's labels (dev, 2026-11-05), after side scrolling.
 int variants_box = setform.create_checkbox("Enable variant descriptions in the learn sounds menu", new_variants);
 setform.assign_to_tab(variants_box, tabs, tab_menu);
 if (!ingame)
@@ -82,18 +82,18 @@ menu_vol_slider = setform.create_slider("Menu music volume,", new_menu_vol + 100
 setform.assign_to_tab(menu_vol_slider, tabs, tab_sound);
 master_vol_slider = setform.create_slider("Master game volume,", new_master_vol + 100, 0, 100, "percent", 1);
 setform.assign_to_tab(master_vol_slider, tabs, tab_sound);
-hrtf_box = setform.create_checkbox("Enable global HRTF support", new_hrtf); // SimpleFighter's wording; main menu only (dev, 2026-11-04)
+hrtf_box = setform.create_checkbox("Enable global HRTF support", new_hrtf); // main menu only (dev, 2026-11-04)
 setform.assign_to_tab(hrtf_box, tabs, tab_sound);
 fade_box = setform.create_checkbox("Enable global volume fading", new_fade);
 setform.assign_to_tab(fade_box, tabs, tab_sound);
-loop_box = setform.create_checkbox("Enable looping of previewed sounds", new_loop); // ToyMania's setting (dev, 2026-11-05)
+loop_box = setform.create_checkbox("Enable looping of previewed sounds", new_loop); // dev, 2026-11-05
 setform.assign_to_tab(loop_box, tabs, tab_sound);
 device_btn = setform.create_button("Select sound &device. Currently set to " + soundcard);
 setform.assign_to_tab(device_btn, tabs, tab_sound);
 }
 int voice_btn = setform.create_button("&Configure voice");
 setform.assign_to_tab(voice_btn, tabs, tab_speech);
-int preview_btn = setform.create_button("&Preview voice"); // SimpleFighter's (dev, 2026-11-04)
+int preview_btn = setform.create_button("&Preview voice"); // dev, 2026-11-04
 setform.assign_to_tab(preview_btn, tabs, tab_speech);
 int save_btn = setform.create_button("&Save settings", true);
 int cancel_btn = setform.create_button("&Cancel", false, true);
@@ -148,7 +148,7 @@ apply_behind_pitch();
 if (!ingame)
 {
 hrtf = new_hrtf;
-sound_global_hrtf = hrtf; // takes effect for sounds from now on, like SimpleFighter's checkbox
+sound_global_hrtf = hrtf; // takes effect for sounds from now on
 }
 writepreffs();
 dlgmessage_return("Settings saved."); // a dialog you dismiss (dev, 2026-11-05), like Preview voice
@@ -255,7 +255,7 @@ sound_output_device = 1;
 writepreffs();
 dlg("Settings reset.");
 }
-/* SimpleFighter's device chooser: every output device but the first entry, which isn't a real device. The choice takes
+/* The device chooser: every output device but the first entry, which isn't a real device. The choice takes
 effect and is saved at once; escape steps back to the settings silently (a nested menu). */
 void choose_sound_device()
 {

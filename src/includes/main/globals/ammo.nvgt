@@ -62,11 +62,11 @@ if (@target == null) return false; // nothing in reach: the press can still pick
 target.spent = true;
 stop_ammopack(target);
 ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*get*"), false);
-// The player's give sound as it goes into the inventory, together with get, like ToyMania's item pickups (dev).
+// The player's give sound as it goes into the inventory, together with get (dev).
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item("ammo_pack", 1);
 stat_add("ammo_packs_picked_up");
-speak_buffer(item_display_name("ammo_pack"), "items"); // just the item's name, like ToyMania's pickups (dev)
+speak_buffer(item_display_name("ammo_pack"), "items"); // just the item's name (dev)
 return true;
 }
 /* Runs once per step, right after the move. Arriving on a pack's tile on the ground breaks it; arriving in the air
@@ -151,7 +151,7 @@ stop_ammopack(ammopacks[i]);
 }
 ammopacks.resize(0);
 }
-/* U on an ammo pack: adds a random ammo_pack_min to ammo_pack_max rounds (like ToyMania's random 5 to 10) to the
+/* U on an ammo pack: adds a random ammo_pack_min to ammo_pack_max rounds to the
 reserve of the gun you're HOLDING only (dev, 2026-11-03), never above gun_max_reserve, and says how many. Refused,
 keeping the pack, with a melee weapon out or when that gun's reserve is already full. Returns true if it was used. */
 bool use_ammopack()

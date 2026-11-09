@@ -1,4 +1,4 @@
-/* Session results (the session results plan, dev, 2026-11-07), after ToyMania's, but built once: the session's stat
+/* Session results (the session results plan, dev, 2026-11-07), built once: the session's stat
 lines, from session_stat_lines(), in a menu, never a dialog (dev: "I'd much rather a menu, not a dlg with 50 lines").
 Endless runs only. Section 1: the pause menu's view session results, copy session results to clipboard and export
 session results to file, all reading the run so far (live). Section 2: after a death, after_death_menu(). */
@@ -8,7 +8,7 @@ show_stat_lines("Session results menu. You can see the stats from your current r
 }
 /* After a death that ends the run (Section 2, replacing the Yes/No replay question): in an endless run, the results menu
 with the run's final lines (end_run_stats() has measured them), then back or escape brings the question menu, copy,
-export (dev, 2026-11-07: "it should be like toy mania where it asks what you'd like to do"), replay run (after export,
+export (dev, 2026-11-07: a menu that asks what you'd like to do), replay run (after export,
 dev) and return to game menu. Copy and export reopen it on the same item; escape says "canceled" and returns to the game
 menu. A debug death (no difficulty, nothing counted) skips the results and has only replay run and return to game menu.
 True to replay the run with the same choices. */
@@ -64,7 +64,7 @@ temp.play_stationary(get_pack_sound("ui/other/*copied*"), false);
 dlgmessage_return("Your session results have been copied to your clipboard.");
 }
 /* Into APPDATA_DIR's stats folder as player_results.txt, beside player_statistics.txt and player_progresses.txt,
-replacing any older copy (one folder, unlike ToyMania's two paths). */
+replacing any older copy. */
 void export_session_results(bool live)
 {
 string folder = APPDATA_DIR + "stats";

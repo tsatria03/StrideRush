@@ -39,6 +39,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 ## Feedback: how the dev wants me to work
 - [Confirm before implementing](general/feedback_confirm_before_implementing.md) — a design discussion is a request for a plan; wait for go-ahead; one step at a time
 - [Plans record Q&A](general/feedback_plans_record_qna.md) — several gameplay plans get discussed before any game code; log every Q&A in the plan file
+- [No game names in code](general/feedback_no_game_names_in_code.md) — never name ToyMania, SimpleFighter, CookieCraze, CaveDefender or the HeartbeatSimulator in code, data or build files; provenance goes only in aidocks (2026-11-09)
 - [Tell when to commit plans](general/feedback_tell_when_to_commit_plans.md) — flag when a plan is settled so the dev can commit it, then wait for "committed" before building any section
 - [Ask one question at a time](general/feedback_ask_one_question_at_a_time.md) — one question per turn, with a recommendation
 - [Test steps one at a time](general/feedback_test_steps_one_at_a_time.md) — numbered "Test x of y" (2026-11-06); no tests in build summaries; ask "ready for the test steps?" first, then one numbered step per message with what to hear, ask if it passed, wait; tests use the debug run unless the mode itself is under test

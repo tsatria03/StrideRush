@@ -1,4 +1,4 @@
-/* The heartbeat (the heartbeat plan, dev, 2026-11-08), after the dev's HeartbeatSimulator. Your heart rate
+/* The heartbeat (the heartbeat plan, dev, 2026-11-08). Your heart rate
 follows your actual speed, speed powerups included (current_step_time(), which already stays between min_step_time and
 start_step_time), as a whole number from heart_start_bpm to heart_max_bpm (tuning.nvgt). One timer plays the heartbeat, faster as
 the heart rate climbs (the breathing was taken out, dev, 2026-11-08: "I didn't like them"). Every kind of run has it. It lives in heartpool, one of
@@ -21,7 +21,7 @@ if (bpm > heart_max_bpm) bpm = heart_max_bpm;
 if (bpm < heart_start_bpm) bpm = heart_start_bpm;
 return bpm;
 }
-// The gap between beats in ms, the simulator's rule: 1950 at 5 bpm, 450 at 155.
+// The gap between beats in ms: 1950 at 5 bpm, 450 at 155.
 int heartbeat_gap(int bpm)
 {
 return heart_gap_base - heart_gap_per_bpm * bpm;
@@ -52,8 +52,8 @@ void speak_heart_rate()
 {
 speak_buffer("Your heart rate is " + heart_rate() + " beats per minute.", "status");
 }
-/* Shift+Home or F8 up, Shift+End or F7 down (the heartbeat plan's Section 2, dev, 2026-11-08, after ToyMania's heart_vol
-keys): one dB a press from min_volume to 0, "heart" plus the volume like ToyMania's "heart -10", silent at either end
+/* Shift+Home or F8 up, Shift+End or F7 down (the heartbeat plan's Section 2, dev, 2026-11-08):
+one dB a press from min_volume to 0, "heart" plus the volume, such as "heart -10", silent at either end
 like the music and ambience keys, and saved at once. The next beat plays at the new volume. */
 void change_heartbeat_volume(int delta)
 {

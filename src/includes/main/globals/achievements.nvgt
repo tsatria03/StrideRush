@@ -85,7 +85,7 @@ void earn_achievement(achievement@ a)
 {
 earned_achievements.set(a.id, true);
 p.play_stationary(get_pack_sound("misc/game/" + (a.scope == "session" ? "*achsession*" : "*achlife*")), false);
-speak_buffer("Achievement unlocked: " + a.name + ". " + achievement_description(a), "achievements"); // how you got it too, as CookieCraze does (dev, 2026-11-06)
+speak_buffer("Achievement unlocked: " + a.name + ". " + achievement_description(a), "achievements"); // how you got it too (dev, 2026-11-06)
 writegame();
 }
 // Every stat a session achievement reads, once each: the stats whose best single run is kept.

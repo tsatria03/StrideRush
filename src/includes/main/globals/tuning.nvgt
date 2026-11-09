@@ -123,7 +123,7 @@ weapons at once: 4 makes the bat 12 and the pistol 120 (dev, 2026-11-03, while t
 const int weapon_damage_multiplier = 4;
 // Each gun starts every run with this much loaded and in reserve; ammo packs refill the reserve.
 const int gun_start_loaded = 50;
-const int gun_start_reserve = 50; // was ToyMania's 250; lowered so ammo packs matter (dev, 2026-11-03)
+const int gun_start_reserve = 50; // was 250; lowered so ammo packs matter (dev, 2026-11-03)
 /* The shortest gap between two swings (melee) or two pistol shots per Space press, and the machine gun's rate while Space
 is held. Both press gaps were one shared 50 ms, too short for the weapon powerups to be heard (dev, 2026-11-04). */
 const int melee_fire_gap = 200;
@@ -198,8 +198,8 @@ const int teleport_max_time = 5000;
 // Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. The settings sliders show it as 0 to 100 percent. Home/End and Page Up/Down move by volume_change.
 const int min_volume = -100; // -50 until 2026-11-08 (the volume sliders plan: "the ambience/music volumes should be able to go to -100")
 const int learn_min_volume = -50; // the learn sounds menu's floor, unchanged
-const int volume_change = 1; // 1 per press, like ToyMania (dev, 2026-11-02)
-const int music_start_volume = 0; // full volume at the start, like ToyMania (dev, 2026-11-02)
+const int volume_change = 1; // 1 per press (dev, 2026-11-02)
+const int music_start_volume = 0; // full volume at the start (dev, 2026-11-02)
 const int ambience_start_volume = 0;
 /* The ambience changes the way the ground does (the music and ambience plan, dev, 2026-11-06: "I like the 1 to 2minute
 switch"): after a random ambience_min_time to ambience_max_time on runtimer, it crossfades over ambience_fade_time to
@@ -211,7 +211,7 @@ const int ambience_fade_floor = 40;
 
 /* The heartbeat (the heartbeat plan, dev, 2026-11-08): heart_start_bpm at start_step_time, rising in a straight line to
 heart_max_bpm at heart_full_speed_ms: 5 + (500 - step time) x 150 / 350, about 4.3 bpm per 10 ms, so 155 at 150 ms, held there at any faster speed. A beat comes every
-heart_gap_base - heart_gap_per_bpm x bpm ms (the dev's HeartbeatSimulator: 1950 ms at 5 bpm, 450 at 155).
+heart_gap_base - heart_gap_per_bpm x bpm ms (1950 ms at 5 bpm, 450 at 155).
 (The breathing bands were taken out with the breath sounds, dev, 2026-11-08.) */
 const int heart_start_bpm = 5; // 50 for a test on 2026-11-08, then back to 5 (dev: "5=500, and 150=200")
 const int heart_max_bpm = 155; // reached at heart_full_speed_ms and held at any faster speed, powerups included (150 at 200 ms until 2026-11-08)

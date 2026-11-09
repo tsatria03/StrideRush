@@ -1,6 +1,6 @@
 /* Health potions (dev, 2026-11-04, for 1.4, with the old life potion sounds): an item that heals a random 5 to 10
-percent of your health, small on purpose so you collect a few (dev: "I don't want those to be too strong"). ToyMania's
-range. On the belt it works exactly like a life capsule: its spawn clip, then its loop at its tile; either hand picks it up within hand_window_start() (get and the player's
+percent of your health, small on purpose so you collect a few (dev: "I don't want those to be too strong").
+On the belt it works exactly like a life capsule: its spawn clip, then its loop at its tile; either hand picks it up within hand_window_start() (get and the player's
 give, centered) and it goes into the inventory as "health_potion". Arriving on its tile on the ground, landing on it, or
 a weapon hit breaks it (break) and it's lost; a clean jump over it misses it. U uses it (use_potion()).
 Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_potions() shrinks the array. */
@@ -142,7 +142,7 @@ stop_potion(potions[i]);
 }
 potions.resize(0);
 }
-/* U on a health potion, ToyMania's way: refused at full health, keeping the potion; otherwise it heals a random
+/* U on a health potion: refused at full health, keeping the potion; otherwise it heals a random
 health_potion_min_percent to health_potion_max_percent of player_hp, never past full, with its use sound and the
 player's heal together. True if it was used. */
 bool use_potion()

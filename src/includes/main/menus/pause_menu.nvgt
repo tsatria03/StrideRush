@@ -2,8 +2,8 @@
 main menu's restart game and exit game are about the program. Pausing freezes the run's timers and every game pool.
 Restart run and quit run each ask Yes/No first; on Yes, restart starts the run straight over with the same choices
 (restart_run_requested, read by play_game()) and quit ends it so start_run() returns to the game menu. P opens this
-menu; Escape during a run asks the quit question directly (quit_run_prompt()). The confirm reads its OWN menu result
-(ToyMania's pause menu read the outer menu's result, so answering No still quit). */
+menu; Escape during a run asks the quit question directly (quit_run_prompt()). The confirm reads its OWN menu result,
+so answering No never quits. */
 void pause_game()
 {
 pause_timers();
@@ -117,8 +117,8 @@ void leave_paused_run(bool restart)
 resume_game();
 leave_run(restart);
 }
-/* Every way of choosing to leave a run ends here: the run's sounds fade out the way fademode says (SimpleFighter's
-fade, dev, 2026-11-04), then the run stops. A death never comes through here, so it keeps its own ending sounds. */
+/* Every way of choosing to leave a run ends here: the run's sounds fade out the way fademode says
+(dev, 2026-11-04), then the run stops. A death never comes through here, so it keeps its own ending sounds. */
 void leave_run(bool restart)
 {
 fade_multi_pool(fademode);

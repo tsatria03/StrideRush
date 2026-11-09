@@ -10,7 +10,7 @@ kinds run together. Their effects come through the current_ helpers and powerup_
 Same entity pattern as the items: null-slot removal, reused slots, and only destroy_all_powerups() shrinks the array. */
 sound_pool poweruppool;
 const string powerup_folder = "misc/game/";
-/* Not looped (dev, 2026-11-04): like SimpleFighter's non-looping checkpoints and items, a powerup replays its sound as a
+/* Not looped (dev, 2026-11-04): a powerup replays its sound as a
 one-shot every powerup_ground_sound_time or powerup_flight_sound_time, on runtimer so pausing stops it. soundslot is the latest one-shot. */
 class powerup
 {

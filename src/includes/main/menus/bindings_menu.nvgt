@@ -1,4 +1,4 @@
-/* The key bindings screens (dev, 2026-11-04, for 1.3), ported from SimpleFighter's menus/menu.nvgt. F1 during a run and
+/* The key bindings screens (dev, 2026-11-04, for 1.3). F1 during a run and
 the settings menu's Keyboard tab both open the read-only view; rebinding is only reachable from the settings menu
 outside a run, since keys are never rebound mid-run. */
 

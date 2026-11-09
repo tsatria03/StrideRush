@@ -1,10 +1,9 @@
-/* The updater (dev, 2026-11-05), ported from SimpleFighter's updater.nvgt as it was before a22f1717 (the version that
-still offered the installer), on the dev's deps/downloader.nvgt dl_file() and functions/downloaderfuncts.nvgt, with
+/* The updater (dev, 2026-11-05), offering the installer or the portable copy, on the dev's deps/downloader.nvgt dl_file() and functions/downloaderfuncts.nvgt, with
 progress beeps from the tone_synth only. Run quietly at startup when auto_check_updates is on (from source too, so it
 can be tested), and with precheck from the main menu's check for updates.
 The latest version is the site's projects/games/StrideRush/version.txt; the files come from the GitHub release tagged
-V<version>0 (1.6 is V1.60), as build/tools.py names them. Changes from SimpleFighter's: cancel in the version menu
-really cancels (it went on to download the installer), nothing calls mainmenu() (every step returns, and main()'s loop
+V<version>0 (1.6 is V1.60), as build/tools.py names them. Cancel in the version menu
+really cancels, nothing calls mainmenu() (every step returns, and main()'s loop
 reopens the main menu), the quiet startup check stays silent when it can't reach the site, and the message after
 extracting says where the new copy is. */
 const string update_project = "StrideRush";
@@ -127,7 +126,7 @@ return true;
 wait(500);
 speak("Extracting update...");
 wait(1000);
-/* Into the current folder, as SimpleFighter does (dev, 2026-11-05): the archive holds the sdr folder, so the new copy
+/* Into the current folder (dev, 2026-11-05): the archive holds the sdr folder, so the new copy
 lands at sdr\sdr, inside this one. From source that's the repo's sdr\sdr, which .gitignore leaves out.
 run() is true as soon as 7zr starts, even if it then fails, so success means the new sdr.exe is really there. A copy
 left by an earlier update is removed first, so it can't pass for this one. On a failure the archive is kept. */
