@@ -1,6 +1,6 @@
 ---
 name: project_heartbeat_plan
-description: SECTION 1 BUILT AND TESTED (2026-11-08, for 1.7; 3 sections; breathing taken out) - a heartbeat that speeds up with the belt: 5 bpm at 500 ms rising to 155 bpm at 150 ms and held there, after the dev's HeartbeatSimulator; Q&A log
+description: SECTIONS 1 AND 2 BUILT AND TESTED, docks to come (2026-11-08, for 1.7; 3 sections; breathing taken out) - a heartbeat that speeds up with the belt: 5 bpm at 500 ms rising to 155 bpm at 150 ms and held there, after the dev's HeartbeatSimulator; Q&A log
 metadata:
   type: project
 ---
@@ -36,3 +36,6 @@ Q&A log:
 - CHANGED (dev, 2026-11-08: "Final beat change. Put the max heart rate to 155 at 150ms", option 1 of a straight line or a second short climb: "Option 1. I'll test with that first."): heart_max_bpm 155, heart_full_speed_ms 150; one straight line, 5 + (500 - current_step_time()) x 150 / 350 (about 4.3 bpm per 10 ms; 112 at 250 ms, 134 at 200 ms), held at 155 from 150 ms down, powerups included; the gap is 450 ms at 155.
 - Test 3c passed 2026-11-08 (dev: "passed, and it's perfect": 134 bpm at 200 ms, 155 at 100 ms and steady). The 5 to 155 at 150 ms line is final.
 - Test 3d passed 2026-11-08 (debug run, spikes: the beat stops at the death, nothing over the menu after). Section 1 tested.
+- Section 2 BUILT 2026-11-08, awaiting tests (dev: "Ready for section 2.", after 051c4ec): heartbeat_volume (heartbeat.nvgt, 0 dB) plays every beat through play_stationary_extended(); change_heartbeat_volume() (1 dB a press, min_volume to 0, "heart -10" into the misc buffer, silent at either end, writepreffs()); keyboard.ini [volume] heartbeat_up=SHIFT+HOME:repeat,F8:repeat and heartbeat_down=SHIFT+END:repeat,F7:repeat, read in run_input() (key_config consumes Home and End while Shift is held, so ambience_up and ambience_down don't fire too); saved and read in settings.srf; the Game tab's "Game heartbeat volume," slider after "Game music volume,", applied on save by apply_volume_settings(), 0 dB again on reset.
+- TEST CHANGE (dev, 2026-11-08: "Please put the heart volume before the music volume in the settings."): the Game tab is now game ambience volume, game heartbeat volume, game music volume, then the checkboxes.
+- Section 2 tested 2026-11-08 (both passed: F7, F8, Shift+Home and Shift+End with "heart" and silence at the top, the ambience unchanged; the slider showing what the keys set, applied on save mid-run, kept across a restart, and back to 100 on reset). Section 3, the docks, is next.

@@ -8,6 +8,7 @@ clear_run_objects() stops it, so a death silences it with everything else. */
 sound_pool heartpool;
 timer heartbeat_timer; // paused and resumed with the run's other timers (pause_menu.nvgt)
 bool heart_beat_now = true; // the next beat plays at once: a run's first, or the first after a door sets you down
+int heartbeat_volume = 0; // in dB, -100 to 0: the Game tab's "Game heartbeat volume," and Shift+Home/F8 and Shift+End/F7 (Section 2)
 
 /* A straight line from heart_start_bpm at start_step_time to heart_max_bpm at heart_full_speed_ms, rounded: 5 at the
 start, about 134 at 200 ms, 155 at 150 ms, and held at 155 at any faster speed, powerups included (dev, 2026-11-08:
@@ -44,10 +45,21 @@ int bpm = heart_rate();
 if (!heart_beat_now and heartbeat_timer.elapsed < heartbeat_gap(bpm)) return;
 heart_beat_now = false;
 heartbeat_timer.restart();
-heartpool.play_stationary(get_pack_sound("misc/player/*heartbeat*"), false);
+heartpool.play_stationary_extended(get_pack_sound("misc/player/*heartbeat*"), false, 0, 0, heartbeat_volume, 100, false);
 }
 // B: "Your heart rate is 100 beats per minute." into the status buffer (dev, 2026-11-08), like the other readouts.
 void speak_heart_rate()
 {
 speak_buffer("Your heart rate is " + heart_rate() + " beats per minute.", "status");
+}
+/* Shift+Home or F8 up, Shift+End or F7 down (the heartbeat plan's Section 2, dev, 2026-11-08, after ToyMania's heart_vol
+keys): one dB a press from min_volume to 0, "heart" plus the volume like ToyMania's "heart -10", silent at either end
+like the music and ambience keys, and saved at once. The next beat plays at the new volume. */
+void change_heartbeat_volume(int delta)
+{
+int volume = int(max(min_volume, min(0, heartbeat_volume + delta)));
+if (volume == heartbeat_volume) return;
+heartbeat_volume = volume;
+speak_buffer("heart " + heartbeat_volume);
+writepreffs();
 }

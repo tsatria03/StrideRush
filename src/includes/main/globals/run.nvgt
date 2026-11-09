@@ -296,6 +296,8 @@ if (controls.action_triggered("music_up")) change_music_volume(volume_change);
 if (controls.action_triggered("music_down")) change_music_volume(-volume_change);
 if (controls.action_triggered("ambience_up")) change_ambience_volume(volume_change);
 if (controls.action_triggered("ambience_down")) change_ambience_volume(-volume_change);
+if (controls.action_triggered("heartbeat_up")) change_heartbeat_volume(volume_change);
+if (controls.action_triggered("heartbeat_down")) change_heartbeat_volume(-volume_change);
 buffercheck();
 }
 /* C: the speed in steps a second, to one decimal place (dev, 2026-11-06: steps a second instead of "Your speed is 470 ms.",
