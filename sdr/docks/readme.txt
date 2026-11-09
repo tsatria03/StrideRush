@@ -9,6 +9,7 @@ Obstacles are heard in front of you, about 3 seconds before you reach them, gett
 A jump lasts about a second. You can't jump again until you land, and when you land you'll hear the ground you came down on.
 Runs are endless. The goal is to get as far as you can before something stops you.
 Every run has music and an ambience playing behind it. The music shuffles through all its tracks, playing one after another, and every run starts a new shuffle. The ambience puts you somewhere, such as a city street, a beach or a forest in the rain, and every 1 to 2 minutes it fades into a different one. Change the music volume with page up and page down or F4 and F3, and the ambience volume with home and end or F6 and F5. Each change is spoken, and a key does nothing once its volume is as high or as low as it goes.
+You can also hear your heartbeat, which speeds up as you run faster. It starts at 5 beats per minute and climbs steadily as the belt speeds up, reaching 155 beats per minute at 150 milliseconds a step, where it stays however much faster you go. A speed powerup changes it too, for as long as the powerup lasts. Press B to hear your heart rate, and change the heartbeat volume with shift plus home and shift plus end or F8 and F7. The heartbeat goes quiet while a door carries you, like your footsteps, and pauses with everything else.
 
 Lanes.
 
@@ -106,7 +107,7 @@ Settings.
 
 The settings menu is a window with a list of tabs at the top. Move through the tabs with the arrow keys, and tab through the options on each one. Nothing you tick or slide takes effect until you choose save settings, and cancel or escape leaves everything as it was. Each volume slider goes from 0 to 100 percent in steps of 1, where 100 percent is full volume, and the volume keys and the sliders always agree, since each shows what the other last set.
 General: reset settings puts every setting back to how it started, after asking you first. Your key bindings aren't touched.
-Game: set the volume of the game's ambience and music, then choose whether things behind you sound a little lower in pitch, which is ticked to start with and helps you tell what's behind you from what's ahead, whether the game checks for updates when it starts, which is also ticked to start with, and whether escape asks before quitting a run. If you untick the escape question, escape leaves the run straight away. Last, choose whether your session results come up after you die, and whether the menu that follows offers to copy or export them, both ticked to start with.
+Game: set the volume of the game's ambience, your heartbeat and the music, then choose whether things behind you sound a little lower in pitch, which is ticked to start with and helps you tell what's behind you from what's ahead, whether the game checks for updates when it starts, which is also ticked to start with, and whether escape asks before quitting a run. If you untick the escape question, escape leaves the run straight away. Last, choose whether your session results come up after you die, and whether the menu that follows offers to copy or export them, both ticked to start with.
 Keyboard: view every key binding, or rebind your keys. In the rebind list, you can add another key to an action, change an action's key, or remove an action's keys, and each change is saved as soon as you make it.
 Menu: turn on wrapping, first letter navigation, position information and side scrolling in menus, and choose whether the learn sounds menu tells you when a sound has several versions, which is ticked to start with.
 Sound: set the menu music volume and the master game volume, which turns every sound in the game up or down together. Turn HRTF on or off, which is ticked to start with and makes sounds in front of you, behind you and to your sides easier to place through headphones. You can also choose between fading out by volume, which is ticked to start with, or by pitch when you leave a run, choose whether the sounds in the learn sounds menu keep looping until you move to another, which is also ticked to start with, and pick which sound device the game plays through. Your device choice is saved straight away.
@@ -136,10 +137,13 @@ Letter L: Announces which lane you're in, if pressed.
 Letter Z: Announces how far you've run, in steps, if pressed.
 Letter C: Announces your current speed, in steps a second, if pressed.
 Letter T: Announces how long you've been running for, if pressed.
+Letter B: Announces your heart rate, in beats per minute, if pressed.
 Page up or F4: Raises the in-game music volume by 1 decibel, if pressed/held down.
 Page down or F3: Lowers the in-game music volume by 1 decibel, if pressed/held down.
 Home or F6: Raises the in-game ambience volume by 1 decibel, if pressed/held down.
 End or F5: Lowers the in-game ambience volume by 1 decibel, if pressed/held down.
+Shift plus home or F8: Raises the heartbeat volume by 1 decibel, if pressed/held down.
+Shift plus end or F7: Lowers the heartbeat volume by 1 decibel, if pressed/held down.
 Letter P: Brings up the pause menu, if pressed. The pause menu lets you resume, restart or quit the run, and in an endless run, view, copy or export your session results. Pressing escape in the pause menu also resumes the run.
 Escape: Asks whether you want to quit the run, or quits it straight away if you've turned the question off in the settings menu, if pressed.
 F1: Shows every key binding, with the run paused until you close it, if pressed.

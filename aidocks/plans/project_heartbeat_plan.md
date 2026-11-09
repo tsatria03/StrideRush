@@ -1,11 +1,11 @@
 ---
 name: project_heartbeat_plan
-description: SECTIONS 1 AND 2 BUILT AND TESTED, docks to come (2026-11-08, for 1.7; 3 sections; breathing taken out) - a heartbeat that speeds up with the belt: 5 bpm at 500 ms rising to 155 bpm at 150 ms and held there, after the dev's HeartbeatSimulator; Q&A log
+description: COMPLETE (2026-11-08, 1.7 at 6 of 10; 3 sections; breathing taken out) - a heartbeat that speeds up with the belt: 5 bpm at 500 ms rising to 155 bpm at 150 ms and held there, after the dev's HeartbeatSimulator; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED, nothing built. Started 2026-11-08, with 1.7 open at 5 of 10.
+Status: COMPLETE (2026-11-08). Started 2026-11-08, with 1.7 open at 5 of 10.
 
 Background:
 - Sounds (dev, 265030e): sounds/misc/player/heartbeat.ogg and breath1.ogg to breath3.ogg.
@@ -39,3 +39,4 @@ Q&A log:
 - Section 2 BUILT 2026-11-08, awaiting tests (dev: "Ready for section 2.", after 051c4ec): heartbeat_volume (heartbeat.nvgt, 0 dB) plays every beat through play_stationary_extended(); change_heartbeat_volume() (1 dB a press, min_volume to 0, "heart -10" into the misc buffer, silent at either end, writepreffs()); keyboard.ini [volume] heartbeat_up=SHIFT+HOME:repeat,F8:repeat and heartbeat_down=SHIFT+END:repeat,F7:repeat, read in run_input() (key_config consumes Home and End while Shift is held, so ambience_up and ambience_down don't fire too); saved and read in settings.srf; the Game tab's "Game heartbeat volume," slider after "Game music volume,", applied on save by apply_volume_settings(), 0 dB again on reset.
 - TEST CHANGE (dev, 2026-11-08: "Please put the heart volume before the music volume in the settings."): the Game tab is now game ambience volume, game heartbeat volume, game music volume, then the checkboxes.
 - Section 2 tested 2026-11-08 (both passed: F7, F8, Shift+Home and Shift+End with "heart" and silence at the top, the ambience unchanged; the slider showing what the keys set, applied on save mid-run, kept across a restart, and back to 100 on reset). Section 3, the docks, is next.
+- Section 3 BUILT 2026-11-08 (dev: "ready for the next section.", after 084fe1b): a 1.7 changelog entry (6 of 10); the readme's heartbeat paragraph after the music and ambience one, B in the keys, Shift+Home or F8 and Shift+End or F7 with the volume keys, and the heartbeat in the Game tab's description; the todo item to finished; this plan COMPLETE; MEMORY.md and CLAUDE.md updated.
