@@ -21,54 +21,54 @@ The sections below explain every obstacle, item and feature in detail, and the k
 
 Keyboard commands
 
-Up arrow or letter W: Jumps, if pressed.
-Down arrow or letter S: Crouches, to duck under projectiles, if held down.
-Left arrow or letter Q: Moves one lane to the left, if pressed.
-Right arrow or letter E: Moves one lane to the right, if pressed.
-Tab or letter A: Uses your left hand, to switch off a force field, open a door or pick up an item, if pressed.
-Enter or letter D: Uses your right hand, to switch off a force field, open a door or pick up an item, if pressed.
-Both hand keys together, such as A and D or Tab and Enter: Claps, to scare away an animal, if pressed. With nothing for your hands to do, a single hand makes a whoosh and a clap is just a clap.
-Letter I: Moves to the previous item in your inventory, if pressed.
-Letter O: Moves to the next item in your inventory, if pressed.
-Letter U: Uses the item you're on in your inventory, such as opening an ammo pack, unlocking a door with a key, putting on a shield, using a life capsule, a health potion or a teleporter, if pressed.
-Numbers 1 through 0: Draws the bat, boot, club, feat, fist, hammer, knife, sword, machine gun or pistol, if pressed.
-Space: Swings or fires your weapon, if pressed. With the machine gun, it keeps firing, if held down.
-Letter R: Reloads your gun, if pressed.
-Letter X: Announces how much ammo your gun has loaded and in reserve, if pressed.
-Letter H: Announces how much health you have left, as a percentage, and how many lives you have, if pressed.
-Letter M: Announces how strong the shield you're wearing is, as a percentage, if pressed.
-Letter L: Announces which lane you're in, if pressed.
-Letter Z: Announces how far you've run, in steps, if pressed.
-Letter C: Announces your current speed, in steps a second, if pressed.
-Letter T: Announces how long you've been running for, if pressed.
-Letter B: Announces your heart rate, in beats per minute, if pressed.
-Page up or F4: Raises the in-game music volume by 1 decibel, if pressed/held down.
-Page down or F3: Lowers the in-game music volume by 1 decibel, if pressed/held down.
-Home or F6: Raises the in-game ambience volume by 1 decibel, if pressed/held down.
-End or F5: Lowers the in-game ambience volume by 1 decibel, if pressed/held down.
-Shift plus home or F8: Raises the heartbeat volume by 1 decibel, if pressed/held down.
-Shift plus end or F7: Lowers the heartbeat volume by 1 decibel, if pressed/held down.
-Letter P: Brings up the pause menu, if pressed. The pause menu lets you resume, restart or quit the run, and in an endless run, view, copy or export your session results. Pressing escape in the pause menu also resumes the run.
-Escape: Asks whether you want to quit the run, or quits it straight away if you've turned the question off in the settings menu, if pressed.
-F1: Shows every key binding, with the run paused until you close it, if pressed.
-F2: Opens the settings menu with its game, menu and speech tabs, with the run paused until you close it, if pressed.
+Up arrow or letter W: Jumps.
+Down arrow or letter S: Crouches, to duck under projectiles.
+Left arrow or letter Q: Moves one lane to the left.
+Right arrow or letter E: Moves one lane to the right.
+Tab or letter A: Uses your left hand, to switch off a force field, open a door or pick up an item.
+Enter or letter D: Uses your right hand, to switch off a force field, open a door or pick up an item.
+Both hand keys together, such as A and D or Tab and Enter: Claps, to scare away an animal. With nothing for your hands to do, a single hand makes a whoosh and a clap is just a clap.
+Letter I: Moves to the previous item in your inventory.
+Letter O: Moves to the next item in your inventory.
+Letter U: Uses the item you're on in your inventory, such as opening an ammo pack, unlocking a door with a key, putting on a shield, using a life capsule, a health potion or a teleporter.
+Numbers 1 through 0: Draws the bat, boot, club, feat, fist, hammer, knife, sword, machine gun or pistol.
+Space: Swings or fires your weapon. With the machine gun, it keeps firing.
+Letter R: Reloads your gun.
+Letter X: Announces how much ammo your gun has loaded and in reserve.
+Letter H: Announces how much health you have left, as a percentage, and how many lives you have.
+Letter M: Announces how strong the shield you're wearing is, as a percentage.
+Letter L: Announces which lane you're in.
+Letter Z: Announces how far you've run, in steps.
+Letter C: Announces your current speed, in steps a second.
+Letter T: Announces how long you've been running for.
+Letter B: Announces your heart rate, in beats per minute.
+Page up or F4: Raises the in-game music volume by 1 decibel.
+Page down or F3: Lowers the in-game music volume by 1 decibel.
+Home or F6: Raises the in-game ambience volume by 1 decibel.
+End or F5: Lowers the in-game ambience volume by 1 decibel.
+Shift plus home or F8: Raises the heartbeat volume by 1 decibel.
+Shift plus end or F7: Lowers the heartbeat volume by 1 decibel.
+Letter P: Brings up the pause menu. The pause menu lets you resume, restart or quit the run, and in an endless run, view, copy or export your session results. Pressing escape in the pause menu also resumes the run.
+Escape: Asks whether you want to quit the run, or quits it straight away if you've turned the question off in the settings menu.
+F1: Shows every key binding, with the run paused until you close it.
+F2: Opens the settings menu with its game, menu and speech tabs, with the run paused until you close it.
 
 Speech buffer commands
 
 Everything the game speaks during a run is kept in speech buffers, so you can go back and review it. The all buffer holds every message, and the rest each hold one kind: achievements, for the achievements you earn; doors, for locked, jammed and unlocked doors; items, for what you pick up, your inventory and what your items do; powerups, for the powerups you collect and when they wear off; status, for your health, shield, lane, distance, speed and running time; weapons, for drawing, reloading and your ammo; and misc, for your music and ambience volume. A buffer only shows up once something has been spoken into it, and they come in alphabetical order after all.
-Comma: Moves to the previous message in the current buffer, if pressed/held down.
-Period: Moves to the next message in the current buffer, if pressed/held down.
-Shift plus comma: Moves to the first message in the current buffer, if pressed.
-Shift plus period: Moves to the last message in the current buffer, if pressed.
-Left bracket: Moves to the previous buffer, if pressed/held down.
-Right bracket: Moves to the next buffer, if pressed/held down.
-Shift plus left bracket: Moves to the first buffer, if pressed.
-Shift plus right bracket: Moves to the last buffer, if pressed.
-Shift plus letter M: Mutes or unmutes the current buffer, if pressed.
-Shift plus letter C: Copies the current message to the clipboard, if pressed.
-Alt plus shift plus letter C: Opens the current message in a box you can read with the arrow keys, if pressed.
-Shift plus letter B: Brings up the buffer menu, where you can copy, export, mute or review a buffer or a message, if pressed.
-Shift plus backslash: Exports the current buffer to a text file, then clears it, if pressed.
+Comma: Moves to the previous message in the current buffer.
+Period: Moves to the next message in the current buffer.
+Shift plus comma: Moves to the first message in the current buffer.
+Shift plus period: Moves to the last message in the current buffer.
+Left bracket: Moves to the previous buffer.
+Right bracket: Moves to the next buffer.
+Shift plus left bracket: Moves to the first buffer.
+Shift plus right bracket: Moves to the last buffer.
+Shift plus letter M: Mutes or unmutes the current buffer.
+Shift plus letter C: Copies the current message to the clipboard.
+Alt plus shift plus letter C: Opens the current message in a box you can read with the arrow keys.
+Shift plus letter B: Brings up the buffer menu, where you can copy, export, mute or review a buffer or a message.
+Shift plus backslash: Exports the current buffer to a text file, then clears it.
 
 How to play.
 
