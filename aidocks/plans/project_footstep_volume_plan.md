@@ -28,3 +28,5 @@ Sections:
 1. The footstep slider: footstep_volume (in surface.nvgt, with play_step()); readpreffs() and writepreffs() in savefuncts.nvgt; settings_menu.nvgt's new_step_vol, the slider before the heartbeat's, its read on save, reset_settings() and apply_volume_settings() taking it.
 2. The heartbeat keys removed: keyboard.ini (LF), run.nvgt, heartbeat.nvgt (the function and heartbeat_volume's comment).
 3. Docks: the readme (the settings section's Game tab, the key list's F8 and F7 lines, the heartbeat paragraph), both changelog entries, CLAUDE.md, this plan COMPLETE.
+- Section 1 built (2026-11-10): footstep_volume in surface.nvgt, play_step() through play_stationary_extended() at it; readpreffs()/writepreffs() "footstep_volume"; settings_menu.nvgt's new_step_vol and step_vol_slider between ambience and heartbeat, read on save, reset to the current value on cancel, 0 on reset_settings(); apply_volume_settings() takes it last (step).
+- Section 1 tested (dev, 2026-11-10): "It should be footsteps volume, not, footstep volume. Also it works." The slider is now "Game footsteps volume,". Section 1 COMPLETE.

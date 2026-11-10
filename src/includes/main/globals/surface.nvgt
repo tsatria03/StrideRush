@@ -36,11 +36,14 @@ return current_surface;
 // A oneshot footstep on every step, never thinned, at any speed. Silent in the air and while crouched.
 // False only from the source-only debug option "Do you want to hear your footsteps while running?" (dev, 2026-11-04).
 bool footsteps_on = true;
+/* The step sounds' volume in dB, -100 to 0 (the footstep volume plan, dev, 2026-11-10): the Game tab's "Game footsteps
+volume," slider, saved in settings.srf. Only the steps use it (ledges too); landings and falls stay at full volume. */
+int footstep_volume = 0;
 void play_step()
 {
 if (!footsteps_on) return;
 if (!is_grounded() or is_ducked() or door_moving) return; // silent while a real door carries you through
 string tile = tile_at(me.x);
 if (tile == "") return;
-p.play_stationary(get_pack_sound("objects/platforms/" + tile + "/*step*"), false);
+p.play_stationary_extended(get_pack_sound("objects/platforms/" + tile + "/*step*"), false, 0, 0, footstep_volume, 100, false);
 }

@@ -8,8 +8,8 @@ rebuilds the window afterwards, so the unsaved ticks are carried in locals acros
 void settingsmenu(bool ingame = false)
 {
 bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions, new_updates = auto_check_updates, new_death_results = show_death_results, new_death_copy = show_death_copy_export;
-// The four volume sliders (the volume sliders plan, 2026-11-08), in dB from -100 to 0, shown as 0 to 100 percent.
-int new_amb_vol = ambience_volume, new_mus_vol = music_volume, new_heart_vol = heartbeat_volume, new_menu_vol = menumusvolume, new_master_vol = master_volume;
+// The volume sliders (the volume sliders plan, 2026-11-08), in dB from -100 to 0, shown as 0 to 100 percent.
+int new_amb_vol = ambience_volume, new_step_vol = footstep_volume, new_mus_vol = music_volume, new_heart_vol = heartbeat_volume, new_menu_vol = menumusvolume, new_master_vol = master_volume;
 int tab_shown = 0; // opens on the first tab: General from the main menu (dev, 2026-11-04), Game from F2
 while (true)
 {
@@ -40,6 +40,8 @@ setform.assign_to_tab(reset_btn, tabs, tab_general);
 // The Game tab's volume sliders come first, before its checkboxes (dev, 2026-11-08).
 int amb_vol_slider = setform.create_slider("Game ambience volume,", new_amb_vol + 100, 0, 100, "percent", 1);
 setform.assign_to_tab(amb_vol_slider, tabs, tab_game);
+int step_vol_slider = setform.create_slider("Game footsteps volume,", new_step_vol + 100, 0, 100, "percent", 1); // after the ambience, before the heartbeat (the footstep volume plan, dev, 2026-11-10)
+setform.assign_to_tab(step_vol_slider, tabs, tab_game);
 int heart_vol_slider = setform.create_slider("Game heartbeat volume,", new_heart_vol + 100, 0, 100, "percent", 1); // before the music (the heartbeat plan, dev, 2026-11-08)
 setform.assign_to_tab(heart_vol_slider, tabs, tab_game);
 int mus_vol_slider = setform.create_slider("Game music volume,", new_mus_vol + 100, 0, 100, "percent", 1);
@@ -120,6 +122,7 @@ new_death_copy = setform.is_checked(death_copy_box);
 new_amb_vol = int(setform.get_slider(amb_vol_slider)) - 100;
 new_mus_vol = int(setform.get_slider(mus_vol_slider)) - 100;
 new_heart_vol = int(setform.get_slider(heart_vol_slider)) - 100;
+new_step_vol = int(setform.get_slider(step_vol_slider)) - 100;
 if (menu_vol_slider != -1) new_menu_vol = int(setform.get_slider(menu_vol_slider)) - 100;
 if (master_vol_slider != -1) new_master_vol = int(setform.get_slider(master_vol_slider)) - 100;
 int tab_now = setform.get_list_position(tabs);
@@ -142,7 +145,7 @@ variant_descriptions = new_variants;
 if (!ingame) auto_check_updates = new_updates;
 show_death_results = new_death_results;
 show_death_copy_export = new_death_copy;
-apply_volume_settings(new_amb_vol, new_mus_vol, new_heart_vol, new_menu_vol, new_master_vol); // only on save (dev, 2026-11-08)
+apply_volume_settings(new_amb_vol, new_mus_vol, new_heart_vol, new_menu_vol, new_master_vol, new_step_vol); // only on save (dev, 2026-11-08)
 behind_pitch = new_behind;
 apply_behind_pitch();
 if (!ingame)
@@ -175,6 +178,7 @@ new_death_copy = show_death_copy_export;
 new_amb_vol = ambience_volume;
 new_mus_vol = music_volume;
 new_heart_vol = heartbeat_volume;
+new_step_vol = footstep_volume;
 new_menu_vol = menumusvolume;
 new_master_vol = master_volume;
 }
@@ -230,6 +234,7 @@ menumusvolume = menu_music_start_volume;
 music_volume = music_start_volume;
 ambience_volume = ambience_start_volume;
 heartbeat_volume = 0;
+footstep_volume = 0;
 master_volume = 0;
 sound_master_volume = master_volume;
 menuwrap = false;
@@ -278,11 +283,12 @@ writepreffs();
 dlg("Sound device set to " + soundcard + ".");
 }
 /* Save settings's volumes (the volume sliders plan, 2026-11-08), each in dB from -100 to 0: the run's ambience and music,
-heard at once if a run is playing them (F2 mid-run), the heartbeat from its next beat, the menu music, and the master through the engine's
+heard at once if a run is playing them (F2 mid-run), the heartbeat from its next beat, the footsteps from the next step, the menu music, and the master through the engine's
 sound_master_volume. writepreffs() after it saves them with the rest. */
-void apply_volume_settings(int amb, int mus, int heart, int menu, int master)
+void apply_volume_settings(int amb, int mus, int heart, int menu, int master, int step)
 {
 heartbeat_volume = heart; // the next beat plays at it
+footstep_volume = step; // and the next step
 ambience_volume = amb;
 if (ambslot > -1) ambpool.update_sound_start_values(ambslot, 0, ambience_volume, 100);
 music_volume = mus;
