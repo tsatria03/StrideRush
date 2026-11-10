@@ -9,8 +9,8 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.0 (open)
-Next player-facing change opens "New in 2.0." and sets build/version.txt to 2.0; up to 20 entries.
+## 2.0 (open, 1 of 20)
+- The second keys back (dev, 2026-11-10: playing with letters only "got very challanging"): keyboard.ini has the arrows for jump, crouch and lanes, Shift+Tab and Tab for the inventory, RETURN for item use (ENTER isn't a registered key name), Page Up and Page Down for the music and Home and End for the ambience, as before 1.8, alongside the single defaults; hands stay A and D only. Docks only, no code change. A rebuild of a deleted keyboard.ini was discussed and not taken up.
 
 ## 1.9: tagged V1.90 at 5ed3664 (10 of 10)
 - The item balance ([[project_item_balance_plan]], after a player ran an hour taking every hit): difficulty_item_percents 25/20/15/10/5 (tuning.nvgt) through item_percent() in difficulty.nvgt and survival_roll() in spawner.nvgt for life capsules, steel shields and health potions, pairs' second items too, debug at 100; barrier_weight 2 in the obstacle pick.

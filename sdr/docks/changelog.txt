@@ -1,3 +1,5 @@
+New in 2.0.
+Made it so the arrow keys now jump, crouch and switch lanes again, tab and shift plus tab move through your inventory, enter uses an item, and page up, page down, home and end change the music and ambience volume, alongside the letter and F keys, which all still work.
 New in 1.9.
 Made it so barriers now come about twice as often as each other kind of obstacle, since many of them pass in another lane.
 Made it so life capsules, steel shields and health potions now come much less often, and less often still on each harder difficulty, so you can no longer survive forever by taking every hit, leaving more room for obstacles.
