@@ -208,12 +208,13 @@ learn_browse(root, "learn");
 }
 /* A category's count (dev, 2026-11-10, after a player's report that countdowns said 85 sounds with only 9 in it): the
 entries you can pick, then every file when variants or layers make that more, "This category has 9 individual sounds,
-85 in total."; when they match, just "This category has 6 sounds." */
+85 in total."; when they match, "This category has a total of 6 sounds." (dev, 2026-11-10: "it should say total
+sounds here") */
 string learn_count_text(learn_category@ cat)
 {
 int entries = cat.entries();
 int files = cat.count();
-if (files == entries) return "This category has " + entries + " sound" + (entries == 1 ? "." : "s.");
+if (files == entries) return "This category has a total of " + entries + " sound" + (entries == 1 ? "." : "s.");
 return "This category has " + entries + " individual sound" + (entries == 1 ? "" : "s") + ", " + files + " in total.";
 }
 /* A menu of categories, each with its sound count, then back. Picking one opens it; when it returns you're back here on
