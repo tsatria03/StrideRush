@@ -1,4 +1,5 @@
 New in 1.9.
+Added practice locks, so each practice obstacle opens once you've got past 5 of the one before it, and endless run opens once you've jumped over 5 hazards in a practice run, while anyone who has already played an endless run has everything open.
 Made it so quitting or restarting a practice run now just asks if you're sure, without warning that you'll lose your session's progress.
 Made it so every run now starts with your fist drawn, instead of the bat.
 New in 1.8.

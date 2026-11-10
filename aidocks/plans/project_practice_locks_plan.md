@@ -1,11 +1,11 @@
 ---
 name: project_practice_locks_plan
-description: SETTLED (2026-11-10, for 1.9; 3 sections) - practice obstacles locked in a chain like the difficulty levels, each opened by getting past 1 of the obstacle before it; Q&A log
+description: COMPLETE (2026-11-10, 1.9 at 3 of 10; 3 sections) - practice obstacles locked in a chain like the difficulty levels, each opened by getting past 1 of the obstacle before it; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED again (2026-11-10), waiting for the dev to commit it before Section 1. First committed as settled (6369ba4); the dev then added the endless run lock, folded into the Revised sections at the end, which replace the earlier ones. Started 2026-11-10, after the fist change opened 1.9 (1 of 10).
+Status: COMPLETE (2026-11-10, 1.9 at 3 of 10). First committed as settled (6369ba4); the dev then added the endless run lock, folded into the Revised sections at the end, which replace the earlier ones. Started 2026-11-10, after the fist change opened 1.9 (1 of 10).
 
 Background:
 - The dev (2026-11-10): "Make the practice items locked behind goals similar to the difficulty locking behavior." Then: "for each obstical you need to complete at least 1 of it to unlock the next one. Here are examples. jump 1 hazard, jump 1 mine, jump 1 spike, duck 1 projectile. That one needs a better word because duck 1 projectile sounds a bit weird."
@@ -67,3 +67,5 @@ Revised sections:
 - Section 2 Test 2 passed (dev, 2026-11-10), with: "The endless run item should say available if I unlock it." Q: keep the description ("Endless run. Available. This mode lets you ...") or replace it ("Endless run. Available.")? (Claude recommended keeping it.) A: "I like the first one." Changed in choose_game_mode().
 - CHANGED back (dev, 2026-11-10, before Section 2 Test 4): "I do not want it saying available for the endless run thing, as it sort of looks ocward when the practice run item does not say available." Open, endless run is just its description again.
 - Section 2 COMPLETE (dev, 2026-11-10): all 4 tests passed.
+- Section 3 (docks) done (2026-11-10): the readme's getting started now begins with practicing hazards; two new practice runs paragraphs (the chain, goals, count, unlock messages, saving, returning players); play game's line in menus; misc buffer; the two clearing lines. Changelog: "Added practice locks, ...". Todo list's finished section. CLAUDE.md. Plan COMPLETE.
+- Changelog entry reworded (dev, 2026-11-10: "Please do not mention version numbers in change log entries"): "... while anyone who has already played an endless run has everything open."
