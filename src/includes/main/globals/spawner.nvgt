@@ -217,7 +217,7 @@ spawn_only = only_type;
 item_lane_mode = "";
 /* Practice doors' keys come one at a time in a random lane, as in the real game, but never with a pair's second item,
 which could be any kind, since a practice run has no items but keys (dev, 2026-11-05). */
-if (only_type == "practice_doors")
+if (only_type == "practice_doors" or (practice_run and only_type == "real_doors")) // practice's real doors too (2026-11-09)
 {
 item_lane_mode = "random";
 return;

@@ -318,7 +318,7 @@ while (true)
 {
 setupmenu();
 m.intro_text = "Choose an obstacle to practice.";
-string[] obstacles = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "doors", "barriers"};
+string[] obstacles = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "fake_doors", "real_doors", "mixed_doors", "barriers"}; // three door choices (dev, 2026-11-09)
 for (uint i = 0; i < obstacles.length(); i++)
 {
 m.add_item(obstacles[i].replace("_", " ", true), obstacles[i]);
@@ -341,12 +341,13 @@ return true;
 }
 return false;
 }
-/* A practice choice as the spawner's spawn_only. Doors and barriers aren't plain obstacle types: doors are the practice
-mix of real doors, each with its key, and fake ones (choose_next_obstacle()), and barriers use the real game's lane
-rule, sometimes two side by side. */
+/* A practice choice as the spawner's spawn_only (dev, 2026-11-09: "fake doors, real doors, mixed doors"). Fake doors are
+the plain obstacle type; real doors are a key then its real door, in turn, as the debug run's real doors spawn; mixed
+doors are the practice mix of real doors, each with its key, and fake ones (choose_next_obstacle()); and barriers use
+the real game's lane rule, sometimes two side by side. */
 string practice_spawn_id(const string&in practice_type)
 {
-if (practice_type == "doors") return "practice_doors";
+if (practice_type == "mixed_doors") return "practice_doors";
 if (practice_type == "barriers") return "barriers_multiple";
 return practice_type;
 }

@@ -117,3 +117,4 @@ Settled summary:
 
 Merge Q&A log:
 - The dev (2026-11-06), after Section 1 was built and tested: merge the difficulty plan into one game menu refactor plan, the current sections first, then the difficulty sections, docks at the end. Done as above: sections 1 to 3 from the practice plan, 4 to 6 from the difficulty plan (its 1, 2 and 3), one docks section last.
+- CHANGED (dev, 2026-11-09, for 1.8: "Add fake doors to the practice menu, and rename the doors to real doors", then "fake doors, real doors, mixed doors"): the practice list is hazards, spikes, mines, projectiles, force fields, animals, walls, fake doors, real doors, mixed doors, barriers; fake_doors is the plain type, real_doors the key-then-door spawn (its keys in random lanes, set_spawn_only()), mixed_doors the old practice_doors mix. All 3 tests passed (one per choice).
