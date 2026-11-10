@@ -180,6 +180,7 @@ int practice_speed;
 if (!choose_practice(practice_type, practice_speed)) continue;
 // A practice run (Section 3): its fixed speed, the one obstacle, practice_lives that can't run out.
 practicing = true;
+practice_choice = practice_type; // what the run's clean passes count toward (practice.nvgt)
 speed = practice_speed;
 only_type = practice_spawn_id(practice_type);
 can_run_out = 0;

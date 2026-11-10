@@ -86,6 +86,7 @@ const int max_lives = 20; // a life capsule can't take you past this; capsules t
 const int life_capsule_min_lives = 1; // a life capsule gives a random min to max lives (dev, 2026-11-04: "between 1 to 2")
 const int life_capsule_max_lives = 2;
 const int debug_lives = 2; // source-only debug runs of a single type start with these; "all" uses starting_lives (3 until 2026-11-04)
+const int practice_unlock_count = 5; // clean passes of a practice obstacle that open the next one; hazards open endless run too (the practice locks plan, dev, 2026-11-10: "just like the diff modes")
 const int practice_lives = 1; // every practice run starts with this, and gets it back after each practice death (dev, 2026-11-09: 1, not 2; only debug runs get 2)
 const int practice_shields = 1; // and with this steel shield in the inventory, none on the belt (dev, 2026-11-09: 1, not 2)
 const int player_hp = 200;

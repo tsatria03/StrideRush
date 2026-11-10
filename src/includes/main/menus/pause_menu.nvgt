@@ -78,19 +78,26 @@ temp.play_stationary(get_pack_sound("misc/game/*resume*"), false);
 resume_game();
 return;
 }
-if (choice == "restart" and confirm_leave_run("Are you sure you want to restart this run? You will lose all progress for this current session."))
+if (choice == "restart" and confirm_leave_run(leave_run_question("restart")))
 {
 leave_paused_run(true);
 return;
 }
-if (choice == "quit" and confirm_leave_run(quit_run_question))
+if (choice == "quit" and confirm_leave_run(leave_run_question("quit")))
 {
 leave_paused_run(false);
 return;
 }
 }
 }
-const string quit_run_question = "Are you sure you want to quit this run? You will lose all progress for this current session.";
+/* The quit and restart questions (dev, 2026-11-10): an endless run warns that its session goes; a practice or debug run,
+which has no session to lose, asks only "Are you sure you want to quit this run?" (or restart). */
+string leave_run_question(const string&in verb)
+{
+string question = "Are you sure you want to " + verb + " this run?";
+if (run_difficulty >= 0) question += " You will lose all progress for this current session.";
+return question;
+}
 /* Escape during a run (dev, 2026-11-03): the quit run question straight away. The timers and every sound but the ambience
 pause while it's asked (dev, 2026-11-08, replacing 2026-11-03's "the timers should pause, but not the sounds"), with no
 pause or resume cue. Yes ends the run back to the game menu; No or escape says "canceled" and the run carries on. With the Game
@@ -103,7 +110,7 @@ leave_run(false);
 return;
 }
 pause_game(); // the timers and every sound but the ambience (dev, 2026-11-08), no longer the timers alone
-if (confirm_leave_run(quit_run_question))
+if (confirm_leave_run(leave_run_question("quit")))
 {
 leave_paused_run(false);
 return;

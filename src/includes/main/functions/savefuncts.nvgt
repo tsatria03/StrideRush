@@ -134,6 +134,13 @@ for (uint i = 0; i < best_stats.length(); i++)
 {
 if (gs.d.exists("best_" + best_stats[i])) best_runs.set(best_stats[i], gs.read_int64("best_" + best_stats[i]));
 }
+// The practice locks (practice.nvgt): each choice's passes as "practice_passes_<choice>", then the returning player check.
+for (uint i = 0; i < practice_choices.length(); i++)
+{
+if (gs.d.exists("practice_passes_" + practice_choices[i])) practice_passes[i] = gs.read_int("practice_passes_" + practice_choices[i]);
+}
+if (gs.d.exists("practice_unlocks_checked")) practice_unlocks_checked = gs.read_bool("practice_unlocks_checked");
+practice_returning_check(); // once per save, now that the difficulty runs and lifetime stats are read
 }
 // Writes the game's progress to saves/game.srf; called the moment a run count changes.
 void writegame()
@@ -161,6 +168,8 @@ int64 best = 0;
 best_runs.get(best_stats[i], best);
 gs.add("best_" + best_stats[i], best);
 }
+for (uint i = 0; i < practice_choices.length(); i++) gs.add("practice_passes_" + practice_choices[i], practice_passes[i]);
+gs.add("practice_unlocks_checked", practice_unlocks_checked);
 gs.save();
 }
 /* Writes every setting to settings.srf. Called whenever one changes: the menu music volume (form_menu) and the run

@@ -1,0 +1,78 @@
+/* Practice locks (the practice locks plan, dev, 2026-11-10, for 1.9): the practice obstacles open in a chain, in the
+practice menu's order. Hazards are always open; each of the others opens after practice_unlock_count clean passes of the
+one before it, counted only in a practice run of that obstacle, through the same stat_add() hooks the statistics use, so
+a clean pass means the same thing here as in an endless run's statistics. Endless run opens together with spikes. The
+passes add up across runs and practice deaths, are saved in saves/game.srf, and clearing game progresses keeps them. */
+const string[] practice_choices = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "fake_doors", "real_doors", "mixed_doors", "barriers"};
+/* Each choice's goal: the stat key (or either of two) a clean pass adds to, and how the lock line says it. Barriers come
+last and open nothing, so they have no goal (dev, 2026-11-10: "No goal. It should just say available"). */
+const string[] practice_goal_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "walls_broken", "fake_doors_broken", "real_doors_opened", "real_doors_opened", ""};
+const string[] practice_goal_stats2 = {"", "", "", "", "", "", "", "", "", "fake_doors_broken", ""}; // mixed doors: a real door opened or a fake door broken
+const string[] practice_goal_verbs = {"jump over", "jump over", "jump over", "duck under", "switch off", "scare off", "break", "break", "open", "get through", ""};
+const string[] practice_goal_singulars = {"hazard", "spike", "mine", "projectile", "force field", "animal", "wall", "fake door", "real door", "mixed door", "barrier"};
+int[] practice_passes = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // one per practice_choices entry, saved as practice_passes_<choice>
+string practice_choice = ""; // the practice run's choice, such as "mixed_doors", set by play_game()
+bool practice_unlocks_checked = false; // the one-time returning player check has run for this save
+
+// Hazards are always open; any other choice once the one before has its passes.
+bool practice_unlocked(int i)
+{
+if (i <= 0) return true;
+return practice_passes[i - 1] >= practice_unlock_count;
+}
+// Endless run opens together with spikes (dev, 2026-11-10: "jumpping over 5 hazards").
+bool endless_unlocked()
+{
+return practice_unlocked(1);
+}
+// "spikes" as the menu says it: "Spikes", "Mixed doors".
+string practice_display_name(int i)
+{
+return learn_upper_first(practice_choices[i].replace("_", " ", true));
+}
+/* From stat_add() in stats.nvgt, before its endless-only check: in a practice run, a clean pass of the practiced
+obstacle's goal adds one, while it's under practice_unlock_count, and is saved at once. The pass that reaches it plays
+pracunlock and says "Obstacle unlocked: Spikes are now available for practice." in the misc buffer; for hazards, the mode
+comes first, pracunlock and "Mode unlocked: Endless run is now available to play.", then the obstacle's (dev, 2026-11-10: "It's
+just 2 unlocks"; after testing Section 1: "the mode unlock should appear first in the misc buffer"). */
+void practice_pass(const string&in key)
+{
+if (!practice_run) return;
+int i = practice_choices.find(practice_choice);
+if (i < 0 or practice_goal_stats[i] == "") return;
+if (key != practice_goal_stats[i] and key != practice_goal_stats2[i]) return;
+if (practice_passes[i] >= practice_unlock_count) return;
+practice_passes[i] += 1;
+writegame();
+if (practice_passes[i] < practice_unlock_count) return;
+bool both = (i == 0);
+if (both)
+{
+p.play_stationary(get_pack_sound("misc/game/*pracunlock*"), false);
+speak_buffer("Mode unlocked: Endless run is now available to play.", "misc");
+}
+p.play_stationary(get_pack_sound("misc/game/*pracunlock*"), false);
+speak_buffer("Obstacle unlocked: " + practice_display_name(i + 1) + " are now available for practice.", "misc", both ? false : tts_default_interrupt); // after the mode's, queued, not cutting it off
+}
+/* The returning player check (dev, 2026-11-10), once per save, from readgame(): a save from before the practice locks
+that shows any endless play (a counted difficulty run, or a run in the lifetime statistics) gets every practice
+obstacle opened, which opens endless run too. Difficulty progress is left as earned. A fresh save just marks the check
+done, so a new player starts with only hazards open. */
+void practice_returning_check()
+{
+if (practice_unlocks_checked) return;
+practice_unlocks_checked = true;
+bool returning = stat_value(lifetime_stats, "runs_played") > 0;
+for (uint i = 0; i < difficulty_runs.length(); i++)
+{
+if (difficulty_runs[i] > 0) returning = true;
+}
+if (returning)
+{
+for (uint i = 0; i < practice_passes.length(); i++)
+{
+if (practice_goal_stats[i] != "") practice_passes[i] = practice_unlock_count;
+}
+}
+writegame();
+}

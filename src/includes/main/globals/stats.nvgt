@@ -28,9 +28,11 @@ int64 value = 0;
 stats.get(key, value);
 return value;
 }
-// Adds to a session stat, only during an endless run.
+/* Adds to a session stat, only during an endless run. A practice run's clean passes go to practice_pass() first (the
+practice locks plan, 2026-11-10), which counts them toward the next practice obstacle and never touches the stats. */
 void stat_add(const string&in key, int64 amount = 1)
 {
+practice_pass(key);
 if (!stats_counting) return;
 session_stats.set(key, stat_value(session_stats, key) + amount);
 }
