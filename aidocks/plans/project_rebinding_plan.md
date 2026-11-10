@@ -1,11 +1,11 @@
 ---
 name: project_rebinding_plan
-description: SECTIONS 1 AND 2 BUILT AND TESTED, docks to come (2026-11-09, for 1.8; 3 sections: capture, writing, docks) - the key binder: capture combos like Shift plus Tab, and write Alt, Control and Shift without a side (SHIFT, not LSHIFT and RSHIFT) in keyboard.ini and the binding screens; Q&A log
+description: COMPLETE (2026-11-09, 1.8 FULL at 10 of 10; 3 sections: capture, writing, docks) - the key binder: capture combos like Shift plus Tab, and write Alt, Control and Shift without a side (SHIFT, not LSHIFT and RSHIFT) in keyboard.ini and the binding screens; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED, nothing built. Started 2026-11-09, after 51441fa (the practice door choices), with 1.8 at 6 of 10.
+Status: COMPLETE (2026-11-09). Started 2026-11-09, after 51441fa (the practice door choices), with 1.8 at 6 of 10.
 
 Background:
 - The dev (2026-11-09): "Fix the key binder so you can press multiple keys at once for binding. Example, shift plus tab" and "Make it so you are able to put alt, control, and or shift for a key, instead of each individual hand key, like left shift, right shift. This especially goes for the keyboard file. You'll need to look at the file to see what I mean", with "2 of the keyboard ones will require one plan."
@@ -29,3 +29,4 @@ Q&A log:
 - Section 2 BUILT 2026-11-09, awaiting tests (dev: "It's commited. ready for section 2.", after 51c4f8f): get_keyboard_action_string() in key_config.nvgt now writes the compact form: each binding's four modifier sides (kc_modifier_index(), kc_modifier_is_left()) with left and right pairs that differ only in one modifier joined back into CTRL, ALT, SHIFT or GUI, one modifier at a time (ALT+SHIFT+C's four variants come back as one), modifiers first in that order, and no :press. Found and fixed with it: kc_save_preserving() dropped an action's line once it had no keys (remove binding, or a replace that left an action with none), so the action vanished from keyboard.ini and the rebind list; it now writes "fire=", and load_keyboard_from() adds the action before clearing it, so an empty one still loads and can be rebound.
 - Test 2 of Section 2 passed 2026-11-09 (adding Tab to inventory_next changed only that line, to "inventory_next=O:repeat,TAB:repeat"). Both Shifts plus Tab captured nothing on the dev's keyboard: NVDA's input help heard "shift+shift+space" but nothing for Tab or Enter with both Shifts held, so it's the keyboard's key rollover, not the binder (one Shift plus Tab works on either side). The readme should tell players to hold the modifiers first, and that some keyboards can't send both sides with every key.
 - Section 2 tested 2026-11-09 (all 3 passed: F1 in the compact form; a save changing only its own line; reload removed stayed in the rebind list as "reload: (unbound)").
+- Section 3 BUILT 2026-11-09 (dev: "I'm ready for section 3."): the 1.8 changelog's tenth entry (1.8 FULL at 10 of 10); the readme's Keyboard line (combinations with the modifiers held first, one side or both sides, the keyboard rollover note, the replace and trigger questions, empty actions kept); the todo item to finished; this plan COMPLETE; MEMORY.md and CLAUDE.md updated.

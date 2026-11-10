@@ -1,9 +1,10 @@
 ####These are the things that need to be finished for future versions of the game.
 
-****Unfinished. Let the key binder take combinations such as shift plus tab, and keep shift, control and alt without a left or right side.
+Nothing is waiting here right now. New bugs, planned changes and anything still to be decided will be listed here as they come up.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Let the key binder take combinations such as shift plus tab, and keep shift, control and alt without a left or right side.
 **Finished. Make a practice run let you die like the real game, then try again from just past what got you.
 **Finished. Make each difficulty level change how much damage you take and how fast the belt can go.
 **Finished. Add a heartbeat that speeds up as you run faster.
