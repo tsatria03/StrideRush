@@ -1,4 +1,6 @@
 New in 1.9.
+Removed the F7 and F8 keys for the heartbeat volume, which is now changed only with its slider in the settings menu's game tab.
+Added a footsteps volume slider to the settings menu's game tab, which turns down only your footsteps, not your landings or falls.
 Made it so control plus tab and control plus shift plus tab now move to the next or previous tab in the settings menu, from anywhere in it.
 Added practice locks, so each practice obstacle opens once you've got past 5 of the one before it, and endless run opens once you've jumped over 5 hazards in a practice run, while anyone who has already played an endless run has everything open.
 Made it so quitting or restarting a practice run now just asks if you're sure, without warning that you'll lose your session's progress.

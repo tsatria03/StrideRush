@@ -1,11 +1,11 @@
 ---
 name: project_footstep_volume_plan
-description: SETTLED (2026-11-10, for 1.9; 3 sections) - a footstep volume slider in the Game tab (steps only), and the heartbeat's F7/F8 volume keys removed; Q&A log
+description: COMPLETE (2026-11-10, 1.9 at 6 of 10; 3 sections) - a footstep volume slider in the Game tab (steps only), and the heartbeat's F7/F8 volume keys removed; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-10), waiting for the dev to commit it before Section 1. Started 2026-11-10, with 1.9 at 4 of 10.
+Status: COMPLETE (2026-11-10, 1.9 at 6 of 10). Started 2026-11-10, with 1.9 at 4 of 10.
 
 Background:
 - The dev (2026-11-10): "I want to be able to adjust the footstep volume in the game tab."
@@ -32,3 +32,4 @@ Sections:
 - Section 1 tested (dev, 2026-11-10): "It should be footsteps volume, not, footstep volume. Also it works." The slider is now "Game footsteps volume,". Section 1 COMPLETE.
 - Section 2 built (2026-11-10): heartbeat_up and heartbeat_down out of keyboard.ini (found CRLF now, kept as is), their checks out of run_input() in run.nvgt, change_heartbeat_volume() out of heartbeat.nvgt, heartbeat_volume's comment updated.
 - Section 2 COMPLETE (dev, 2026-11-10): both tests passed (F7 and F8 do nothing and are gone from F1; the heartbeat slider still works, B too).
+- Section 3 (docks) done (2026-11-10): the readme's F8 and F7 lines removed, the heartbeat paragraph points to its slider, the settings section's Game tab and starting volumes name the footsteps; two changelog entries (Added, Removed); CLAUDE.md. Plan COMPLETE.
