@@ -5,9 +5,9 @@ Getting started.
 
 From the main menu, choose game menu, then play game, then endless run, and pick easy, the only difficulty open at first. If you'd rather learn one obstacle at a time, choose practice run instead, where nothing can end your run. Learn sounds, in the game menu, lets you hear every obstacle's countdown before you meet it in a run.
 The belt carries you forward on its own, so you never press a key to move ahead. Listen in front of you: every obstacle plays a five-cue countdown as it comes, and on easy you have time to act on the last few cues.
-Press the up arrow or W to jump over hazards, spikes and mines, and hold the down arrow or S to crouch under projectiles.
-Press the left and right arrows, or Q and E, to switch lanes out of a barrier's way.
-Press tab or A for your left hand and enter or D for your right, to switch off force fields, pick up items and open doors, and press both together to clap animals away.
+Press W to jump over hazards, spikes and mines, and hold S to crouch under projectiles.
+Press Q and E to switch lanes out of a barrier's way.
+Press A for your left hand and D for your right, to switch off force fields, pick up items and open doors, and press both together to clap animals away.
 Press space to swing or fire your weapon at walls and fake doors, and the number keys to choose a different weapon.
 Press I and O to move through your inventory and U to use an item. Before each real door, pick up its key, then use it with U to unlock the door.
 Press P to pause, or escape to quit the run.
@@ -16,13 +16,13 @@ The sections below explain every obstacle, item and feature in detail, and the k
 
 Keyboard commands
 
-Up arrow or letter W: Jumps.
-Down arrow or letter S: Crouches, to duck under projectiles.
-Left arrow or letter Q: Moves one lane to the left.
-Right arrow or letter E: Moves one lane to the right.
-Tab or letter A: Uses your left hand, to switch off a force field, open a door or pick up an item.
-Enter or letter D: Uses your right hand, to switch off a force field, open a door or pick up an item.
-Both hand keys together, such as A and D or Tab and Enter: Claps, to scare away an animal. With nothing for your hands to do, a single hand makes a whoosh and a clap is just a clap.
+Letter W: Jumps.
+Letter S: Crouches, to duck under projectiles.
+Letter Q: Moves one lane to the left.
+Letter E: Moves one lane to the right.
+Letter A: Uses your left hand, to switch off a force field, open a door or pick up an item.
+Letter D: Uses your right hand, to switch off a force field, open a door or pick up an item.
+Both hand keys together, A and D: Claps, to scare away an animal. With nothing for your hands to do, a single hand makes a whoosh and a clap is just a clap.
 Letter I: Moves to the previous item in your inventory.
 Letter O: Moves to the next item in your inventory.
 Letter U: Uses the item you're on in your inventory, such as opening an ammo pack, unlocking a door with a key, putting on a shield, using a life capsule, a health potion or a teleporter.
@@ -37,12 +37,12 @@ Letter Z: Announces how far you've run, in steps.
 Letter C: Announces your current speed, in steps a second.
 Letter T: Announces how long you've been running for.
 Letter B: Announces your heart rate, in beats per minute.
-Page up or F4: Raises the in-game music volume by 1 decibel.
-Page down or F3: Lowers the in-game music volume by 1 decibel.
-Home or F6: Raises the in-game ambience volume by 1 decibel.
-End or F5: Lowers the in-game ambience volume by 1 decibel.
-Shift plus home or F8: Raises the heartbeat volume by 1 decibel.
-Shift plus end or F7: Lowers the heartbeat volume by 1 decibel.
+F4: Raises the in-game music volume by 1 decibel.
+F3: Lowers the in-game music volume by 1 decibel.
+F6: Raises the in-game ambience volume by 1 decibel.
+F5: Lowers the in-game ambience volume by 1 decibel.
+F8: Raises the heartbeat volume by 1 decibel.
+F7: Lowers the heartbeat volume by 1 decibel.
 Letter P: Brings up the pause menu. The pause menu lets you resume, restart or quit the run, and in an endless run, view, copy or export your session results. Pressing escape in the pause menu also resumes the run.
 Escape: Asks whether you want to quit the run, or quits it straight away if you've turned the question off in the settings menu.
 F1: Shows every key binding, with the run paused until you close it.
@@ -73,12 +73,12 @@ You start at a speed of 2 steps a second on easy, or faster on the harder diffic
 Obstacles are heard in front of you, about 3 seconds before you reach them, getting louder as they come closer, and once you're past one you'll hear it fall behind you, a little lower in pitch. Jump at the right moment to sail over most of them. If you're still on the ground when you step onto one, it will catch you. There are six exceptions: you crouch under projectiles, you switch off force fields with one of your hands, you scare animals away by clapping, you break walls with your weapons, you open doors with your hands, and you dodge barriers by switching lanes.
 A jump lasts about a second. You can't jump again until you land, and when you land you'll hear the ground you came down on.
 Runs are endless. The goal is to get as far as you can before something stops you.
-Every run has music and an ambience playing behind it. The music shuffles through all its tracks, playing one after another, and every run starts a new shuffle. The ambience puts you somewhere, such as a city street, a beach or a forest in the rain, and every 1 to 2 minutes it fades into a different one. Change the music volume with page up and page down or F4 and F3, and the ambience volume with home and end or F6 and F5. Each change is spoken, and a key does nothing once its volume is as high or as low as it goes.
-You can also hear your heartbeat, which speeds up as you run faster. It starts at 5 beats per minute and climbs steadily as the belt speeds up, reaching 155 beats per minute at 6.7 steps a second, where it stays however much faster you go. A speed powerup changes it too, for as long as the powerup lasts. Press B to hear your heart rate, and change the heartbeat volume with shift plus home and shift plus end or F8 and F7. The heartbeat goes quiet while a door carries you, like your footsteps, and pauses with everything else.
+Every run has music and an ambience playing behind it. The music shuffles through all its tracks, playing one after another, and every run starts a new shuffle. The ambience puts you somewhere, such as a city street, a beach or a forest in the rain, and every 1 to 2 minutes it fades into a different one. Change the music volume with F4 and F3, and the ambience volume with F6 and F5. Each change is spoken, and a key does nothing once its volume is as high or as low as it goes.
+You can also hear your heartbeat, which speeds up as you run faster. It starts at 5 beats per minute and climbs steadily as the belt speeds up, reaching 155 beats per minute at 6.7 steps a second, where it stays however much faster you go. A speed powerup changes it too, for as long as the powerup lasts. Press B to hear your heart rate, and change the heartbeat volume with F8 and F7. The heartbeat goes quiet while a door carries you, like your footsteps, and pauses with everything else.
 
 Lanes.
 
-The belt has three lanes, left, middle and right, and every run starts in the middle one. Press the left arrow or Q to move one lane to the left, and the right arrow or E to move one lane to the right. You can switch at any time, even in the middle of a jump or a crouch, except while a door is carrying you. You'll hear yourself turn from the lane you move into, and if you try to go past the left or right edge of the belt, you'll bump into it and stay where you are. Press L to hear which lane you're in.
+The belt has three lanes, left, middle and right, and every run starts in the middle one. Press Q to move one lane to the left, and E to move one lane to the right. You can switch at any time, even in the middle of a jump or a crouch, except while a door is carrying you. You'll hear yourself turn from the lane you move into, and if you try to go past the left or right edge of the belt, you'll bump into it and stay where you are. Press L to hear which lane you're in.
 Most obstacles fill the whole belt, so they always sound straight ahead of you whichever lane you're in, and switching lanes won't get you past them. Barriers and items are different: each one sits in a single lane. One in your lane sounds straight ahead, one a lane over sounds off to that side, and one two lanes over sounds further out still. Powerups fill the whole belt like obstacles, so you can collect one from any lane.
 Sometimes two barriers or two items turn up side by side in different lanes. When two sound the same, one on each side of you, your ears can blend them into a single sound that seems to come from straight ahead, even though nothing is in your lane. There are two ways to tell. A barrier in your lane always plays its countdown, so a barrier that sounds centred but has no countdown means there's one on each side of you, and the lane you're in is the open one. For items, or whenever you're not sure, switch lanes for a moment: two side by side split apart straight away, one coming in front of you and the other going far off to the side.
 

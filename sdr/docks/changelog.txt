@@ -1,4 +1,5 @@
 New in 1.8.
+Made it so each action now has a single key by default, such as W to jump, Q and E to switch lanes, A and D for your hands and F3 to F8 for the volumes, leaving the arrows, tab, enter, home, end, page up and page down free for you to bind in the settings menu.
 Fixed a bug where drawing one weapon after another played both draw sounds over each other, instead of the new one cutting off the last.
 Made it so practice runs now offer fake doors, real doors and mixed doors, instead of only a mix of real and fake doors.
 Made it so dying in a practice run, from a hit on your last life or a fall into a hazard, now stops the run like a real death, then lets you try again from just past what caught you with your health, life and shield back, and practice runs now start with 1 life and 1 steel shield instead of 2.
