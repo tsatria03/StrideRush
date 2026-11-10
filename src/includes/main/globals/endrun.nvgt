@@ -118,6 +118,7 @@ update_listeners();
 spawner_catch_up(); // so what comes next still arrives with its full warning
 player_health = player_hp;
 lives = practice_lives;
+reset_shield(); // a worn shield comes off too, so you're back as a practice run starts (dev, 2026-11-10: it stayed on)
 int shields = item_count("steel_shield");
 if (shields < practice_shields) give_item("steel_shield", practice_shields - shields);
 resume_game();
