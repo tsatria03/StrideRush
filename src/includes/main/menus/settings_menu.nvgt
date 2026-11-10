@@ -251,7 +251,7 @@ hrtf = true;
 sound_global_hrtf = hrtf;
 loop_previews = true;
 variant_descriptions = true;
-auto_check_updates = true;
+auto_check_updates = false; // off by default (dev, 2026-11-10)
 use_sr = true;
 tts.set_rate(0);
 tts.set_pitch(0);
