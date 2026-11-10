@@ -30,6 +30,33 @@ string practice_display_name(int i)
 {
 return learn_upper_first(practice_choices[i].replace("_", " ", true));
 }
+/* What still opens choice i, from the goal of the one before it, with no full stop: "after you jump over 5 hazards", or
+"after you jump over 2 more hazards" once that one is open and started ("1 more hazard" for 1). */
+string practice_lock_reason(int i)
+{
+int g = i - 1;
+bool started = practice_unlocked(g) and practice_passes[g] > 0;
+int left = started ? practice_unlock_count - practice_passes[g] : practice_unlock_count;
+string noun = left == 1 ? practice_goal_singulars[g] : practice_choices[g].replace("_", " ", true);
+return "after you " + practice_goal_verbs[g] + " " + left + (started ? " more " : " ") + noun;
+}
+/* A choice's line in the practice menu (Section 2, dev, 2026-11-10), as difficulty_line() puts a level's: "Hazards.
+Available." or "Spikes. Unlocked after you jump over 2 more hazards." */
+string practice_line(int i)
+{
+if (practice_unlocked(i)) return practice_display_name(i) + ". Available.";
+return practice_display_name(i) + ". Unlocked " + practice_lock_reason(i) + ".";
+}
+// Choosing a locked choice: "This obstacle is unlocked after you jump over 2 more hazards."
+string practice_locked_message(int i)
+{
+return "This obstacle is unlocked " + practice_lock_reason(i) + ".";
+}
+// Endless run's lock, spikes' with where to go: "after you jump over 5 hazards in a practice run" (dev, 2026-11-10).
+string endless_lock_reason()
+{
+return practice_lock_reason(1) + " in a practice run.";
+}
 /* From stat_add() in stats.nvgt, before its endless-only check: in a practice run, a clean pass of the practiced
 obstacle's goal adds one, while it's under practice_unlock_count, and is saved at once. The pass that reaches it plays
 pracunlock and says "Obstacle unlocked: Spikes are now available for practice." in the misc buffer; for hazards, the mode
