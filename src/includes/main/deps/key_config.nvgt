@@ -250,6 +250,66 @@ class key_config {
 		if (kb.exists(a)) kb.set(a, array<kc_combo@>());
 		invalidate_cache();
 	}
+	/* The binder's replace question (the rebinding plan, dev, 2026-11-09): every action but except_action with a keyboard
+	binding that uses the same keys as one of combo_str's side variants (SHIFT+TAB overlaps LSHIFT+TAB), whatever its trigger. */
+	string[]@ actions_using(const string&in combo_str, const string&in except_action) {
+		string[] found;
+		string[]@ actions = kb.get_keys();
+		for (uint a = 0; a < actions.length(); a++) {
+			if (actions[a] == except_action) continue;
+			if (overlap_count(actions[a], combo_str) > 0) found.insert_last(actions[a]);
+		}
+		return found;
+	}
+	// How many of an action's keyboard bindings use the same keys as one of combo_str's side variants.
+	int overlap_count(const string&in action, const string&in combo_str) {
+		if (!kb.exists(action)) return 0;
+		kc_combo@[]@ list;
+		kb.get(action, @list);
+		string[] variants = _kc_expand_modifiers(combo_str);
+		int count = 0;
+		for (uint i = 0; i < list.length(); i++) {
+			for (uint v = 0; v < variants.length(); v++) {
+				kc_combo@ c = parse_combo(variants[v], KC_PRESS);
+				if (@c != null and same_keys(list[i].keys, c.keys)) {
+					count++;
+					break;
+				}
+			}
+		}
+		return count;
+	}
+	// How many keyboard bindings an action has (each side variant counts once).
+	int keyboard_binding_count(const string&in action) {
+		if (!kb.exists(action)) return 0;
+		kc_combo@[]@ list;
+		kb.get(action, @list);
+		return int(list.length());
+	}
+	// Takes off only the bindings that overlap combo_str, so hand_left keeps A when Tab is replaced.
+	void unbind_combo(const string&in action, const string&in combo_str) {
+		if (!kb.exists(action)) return;
+		kc_combo@[]@ list;
+		kb.get(action, @list);
+		string[] variants = _kc_expand_modifiers(combo_str);
+		for (int i = int(list.length()) - 1; i >= 0; i--) {
+			for (uint v = 0; v < variants.length(); v++) {
+				kc_combo@ c = parse_combo(variants[v], KC_PRESS);
+				if (@c != null and same_keys(list[i].keys, c.keys)) {
+					list.remove_at(i);
+					break;
+				}
+			}
+		}
+		invalidate_cache();
+	}
+	// The same keys, in any order.
+	private bool same_keys(uint[]@ a, uint[]@ b) {
+		if (a.length() != b.length()) return false;
+		for (uint i = 0; i < a.length(); i++)
+			if (b.find(a[i]) < 0) return false;
+		return true;
+	}
 
 	// ---- joystick binding ----
 	void set_joystick(joystick@ j) { @pad = @j; }
@@ -756,21 +816,15 @@ bool kc_save_preserving(key_config@ kc, const string&in path) {
 	return true;
 }
 
-// Interactive: capture a key combo from the user. Uses the passed-in
-// audio_form (resets it). Returns the combo as a string like "LSHIFT+A",
-// or "" if the user cancels.
-//
-// Escape is treated specially: pops a BGT-menu (uses the global `m` and
-// `setupmenu`) asking whether to bind it or cancel.
+/* Interactive: capture a key combo from the user, as a string like "LSHIFT+A", or "" if the user cancels. It reads the
+keys itself, not through a form, so Tab, Shift plus Tab and the like reach it (the rebinding plan, dev, 2026-11-09);
+the form passed in is left alone. A modifier held on both sides captures its side-agnostic name (SHIFT, CTRL, ALT), one
+side captures that side (LSHIFT, RSHIFT, ...), and they mix (dev: "only if they pressed both ... together").
+Escape is treated specially: pops a menu (the global `m` and `setupmenu`) asking whether to bind it or cancel. */
 string kc_capture_combo(audio_form@ form, const string&in prompt) {
-	form.reset();
-	form.create_window(prompt, false);
-	int karea = form.create_keyboard_area(prompt);
-	form.focus(karea);
 	speak(prompt);
 	while (true) {
 		wait(5);
-		form.monitor();
 		key_code[]@ pressed = keys_pressed();
 		for (uint i = 0; i < pressed.length(); i++) {
 			uint k = pressed[i];
@@ -783,16 +837,21 @@ string kc_capture_combo(audio_form@ form, const string&in prompt) {
 				if (eres == -1 || m.get_item_id(eres) == "cancel") return "";
 				return "ESCAPE";
 			}
-			// Skip modifier-only presses — wait for a real key.
-			if (k == KEY_LSHIFT || k == KEY_RSHIFT || k == KEY_LCTRL || k == KEY_RCTRL || k == KEY_LALT || k == KEY_RALT) continue;
-			string combo = "";
-			if (key_down(KEY_LSHIFT) || key_down(KEY_RSHIFT)) combo += "LSHIFT+";
-			if (key_down(KEY_LCTRL)  || key_down(KEY_RCTRL))  combo += "LCTRL+";
-			if (key_down(KEY_LALT)   || key_down(KEY_RALT))   combo += "LALT+";
-			combo += get_key_name(k);
-			return combo;
+			// Skip modifier-only presses: wait for a real key.
+			if (k == KEY_LSHIFT || k == KEY_RSHIFT || k == KEY_LCTRL || k == KEY_RCTRL || k == KEY_LALT || k == KEY_RALT || k == KEY_LGUI || k == KEY_RGUI) continue;
+			return kc_modifier_side("CTRL", KEY_LCTRL, KEY_RCTRL) + kc_modifier_side("ALT", KEY_LALT, KEY_RALT) + kc_modifier_side("SHIFT", KEY_LSHIFT, KEY_RSHIFT) + kc_code_to_name(k);
 		}
 	}
+	return "";
+}
+
+// One modifier for a captured combo: "SHIFT+" with both sides held, "LSHIFT+" or "RSHIFT+" with one, "" with neither.
+string kc_modifier_side(const string&in name, uint left, uint right) {
+	bool l = key_down(left);
+	bool r = key_down(right);
+	if (l and r) return name + "+";
+	if (l) return "L" + name + "+";
+	if (r) return "R" + name + "+";
 	return "";
 }
 

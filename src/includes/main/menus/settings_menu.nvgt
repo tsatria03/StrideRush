@@ -57,10 +57,10 @@ int death_copy_box = setform.create_checkbox("Show copy and export options after
 setform.assign_to_tab(death_copy_box, tabs, tab_game);
 if (!ingame)
 {
-view_btn = setform.create_button("&View current keyboard bindings");
-setform.assign_to_tab(view_btn, tabs, tab_keyboard);
 rebind_btn = setform.create_button("Re&bind keyboard controls");
 setform.assign_to_tab(rebind_btn, tabs, tab_keyboard);
+view_btn = setform.create_button("&View current keyboard bindings");
+setform.assign_to_tab(view_btn, tabs, tab_keyboard);
 }
 int wrap_box = setform.create_checkbox("Enable wrapping in menus", new_wrap);
 setform.assign_to_tab(wrap_box, tabs, tab_menu);

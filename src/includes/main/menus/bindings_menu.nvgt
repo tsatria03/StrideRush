@@ -110,8 +110,11 @@ if (combo == "")
 speak("canceled");
 return;
 }
-kc_trigger trig = kc_choose_trigger();
-controls.bind_key(action, combo, trig);
+if (!rebind_replace_question(action, combo)) return;
+int trig = rebind_trigger_question();
+if (trig < 0) return;
+rebind_take_over(action, combo);
+controls.bind_key(action, combo, kc_trigger(trig));
 save_bindings("Added " + combo + " to " + action + ".");
 }
 // Replaces all of an action's keys with one new combo.
@@ -123,9 +126,12 @@ if (combo == "")
 speak("canceled");
 return;
 }
-kc_trigger trig = kc_choose_trigger();
+if (!rebind_replace_question(action, combo)) return;
+int trig = rebind_trigger_question();
+if (trig < 0) return;
+rebind_take_over(action, combo);
 controls.clear_keyboard_action(action);
-controls.bind_key(action, combo, trig);
+controls.bind_key(action, combo, kc_trigger(trig));
 save_bindings(action + " is now bound to " + combo + ".");
 }
 // Clears every key from an action, after a Yes then No question.
@@ -144,9 +150,59 @@ return;
 controls.clear_keyboard_action(action);
 save_bindings(action + " bindings cleared.");
 }
+/* The replace question (the rebinding plan, dev, 2026-11-09: "It should ask you if you want to replace that key."): when
+the combo already belongs to other actions, Yes then No, naming them, and saying when one would be left with no key.
+True to go on (no other action has it, or Yes); No or escape says "canceled". Nothing is changed until the binding is
+made (rebind_take_over()), so canceling the trigger question afterwards leaves every action as it was. */
+bool rebind_replace_question(const string&in action, const string&in combo)
+{
+string[]@ owners = controls.actions_using(combo, action);
+if (owners.length() == 0) return true;
+string question;
+if (owners.length() == 1 and controls.overlap_count(owners[0], combo) >= controls.keyboard_binding_count(owners[0]))
+question = combo + " is the only key for " + owners[0] + ", so " + owners[0] + " will have no key. Would you like to replace it?";
+else
+{
+string names = owners[0];
+for (uint i = 1; i < owners.length(); i++) names += (i == owners.length() - 1 ? " and " : ", ") + owners[i];
+question = combo + " is already bound to " + names + ". Would you like to replace it?";
+}
+setupmenu();
+m.intro_text = question;
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int mres = m.run();
+if (mres >= 0 and m.selected_item_id == "yes") return true;
+speak("canceled");
+return false;
+}
+// Takes the combo off every other action that has it, once the binding is going ahead (they keep their other keys).
+void rebind_take_over(const string&in action, const string&in combo)
+{
+string[]@ owners = controls.actions_using(combo, action);
+for (uint i = 0; i < owners.length(); i++) controls.unbind_combo(owners[i], combo);
+}
+/* The trigger question (dev, 2026-11-09: "it should ask them if they want to change the default key trigger"): Yes then
+No; No keeps a press, Yes opens the trigger menu, escape says "canceled" and cancels the binding. Returns the trigger,
+or -1 for canceled. */
+int rebind_trigger_question()
+{
+setupmenu();
+m.intro_text = "Would you like to change the trigger for this key? It's set to press by default.";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int mres = m.run();
+if (mres < 0)
+{
+speak("canceled");
+return -1;
+}
+if (m.selected_item_id == "no") return int(KC_PRESS);
+return int(kc_choose_trigger());
+}
 // Writes the bindings back to keyboard.ini and confirms, or says the change only lasts for this session.
 void save_bindings(const string&in done_message)
 {
-if (!kc_save_preserving(controls, keyboard_ini_path)) dlg("The change works for now, but it could not be saved to keyboard.ini.");
-else dlg(done_message);
+if (!kc_save_preserving(controls, keyboard_ini_path)) dlgmessage_return("The change works for now, but it could not be saved to keyboard.ini.");
+else dlgmessage_return(done_message); // dev, 2026-11-09
 }
