@@ -1,11 +1,11 @@
 ---
 name: project_item_balance_plan
-description: SETTLED (2026-11-10, for 1.9; 3 sections) - a player could run an hour without dodging, on stocked shields and lives; rebalance how often survival items spawn; Q&A log
+description: COMPLETE (2026-11-10, 1.9 FULL at 10 of 10; 3 sections) - a player could run an hour without dodging, on stocked shields and lives; rebalance how often survival items spawn; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-10), waiting for the dev to commit it before Section 1. Started 2026-11-10, with 1.9 at 7 of 10.
+Status: COMPLETE (2026-11-10, 1.9 FULL at 10 of 10). Started 2026-11-10, with 1.9 at 7 of 10.
 
 Background:
 - A player's report, passed on by the dev (2026-11-10): "I was running like an hour or so, because i had 6 steel shields and over 10 lives and did not even have to jump or dodge anything, I could just listen how i was speedrunning and being hit by obstacles. I think you should decrease the spawning rate of items." The dev wasn't sure it's a bug.
@@ -35,3 +35,4 @@ Sections:
 - Section 1 COMPLETE (dev, 2026-11-10): both tests passed (an easy endless run has survival items much rarer; a debug run with everything spawning has them as before).
 - Section 2 built (2026-11-10): barrier_weight 2 in tuning.nvgt; choose_next_obstacle() adds barriers to its available list barrier_weight times.
 - Section 2 COMPLETE (dev, 2026-11-10): the test passed (barriers clearly more often in a debug run with everything spawning).
+- Section 3 (docks) done (2026-11-10): the readme's barriers, shields, capsules and difficulty paragraphs; two changelog entries (1.9 FULL at 10 of 10); the todo list's new finished entry, and the 1.8 difficulty entry now names walls and fake doors (dev: "Do both"); CLAUDE.md. Plan COMPLETE.

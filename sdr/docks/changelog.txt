@@ -1,4 +1,6 @@
 New in 1.9.
+Made it so barriers now come about twice as often as each other kind of obstacle, since many of them pass in another lane.
+Made it so life capsules, steel shields and health potions now come much less often, and less often still on each harder difficulty, so you can no longer survive forever by taking every hit, leaving more room for obstacles.
 Made it so the game no longer checks for updates when it starts unless you toggle that setting in the settings menu's general tab, which is now unchecked to start with.
 Fixed a bug where the learn sounds menu counted every version and layer of a sound as a separate sound, so countdowns said it had 85 sounds when it holds 9, and it now says 9 individual sounds, 85 in total.
 Removed the F7 and F8 keys for the heartbeat volume, which is now changed only with its slider in the settings menu's game tab.
