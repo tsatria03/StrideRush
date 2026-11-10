@@ -70,10 +70,15 @@ return step_time <= schedule_join_times[i];
 /* A blow's damage for the run's level (the difficulty scaling plan's Section 1, dev, 2026-11-09): difficulty_damage_percents
 of it in an endless run, the full amount in practice and debug runs. take_damage() scales every blow with it first, so
 the shield and the Tough Hide and Soft Hide powerups work on the scaled amount. */
+// The level's percent from difficulty_damage_percents, 100 in practice and debug runs: shared by damage and wall toughness.
+int level_percent()
+{
+if (run_difficulty < 0) return 100;
+return difficulty_damage_percents[run_difficulty];
+}
 int level_damage(int damage)
 {
-if (run_difficulty < 0) return damage;
-return damage * difficulty_damage_percents[run_difficulty] / 100;
+return damage * level_percent() / 100;
 }
 /* The fastest the belt goes in this run (the difficulty scaling plan's Section 2): the level's difficulty_top_step_times
 in an endless run, min_step_time in a debug run. The speed-ups stop there (speedup_check()), and so do the real door and

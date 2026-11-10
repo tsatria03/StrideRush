@@ -1,11 +1,11 @@
 ---
 name: project_difficulty_scaling_plan
-description: SECTIONS 1 AND 2 BUILT AND TESTED (2026-11-09, for 1.8; 4 sections: damage, speed caps, wall and fake door toughness, docks) - each difficulty scales the damage you take and the belt's top speed, from easy up to chaos at full; Q&A log
+description: COMPLETE (2026-11-09, 1.8 at 4 of 10; 4 sections: damage, speed caps, wall and fake door toughness, docks) - each difficulty scales the damage you take and the belt's top speed, from easy up to chaos at full; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED, nothing built. Started 2026-11-09, with 1.7 closed (V1.70) and 1.8 not yet opened.
+Status: COMPLETE (2026-11-09). Started 2026-11-09, with 1.7 closed (V1.70) and 1.8 not yet opened.
 
 Background:
 - The dev (2026-11-09): "to make the game a bit easier, you could lower the damage recieved by obsticals by like 20 percent per difficulty so than by chaos, you get the full damage. The same applies, but for the max run speed cap, witch is currently 50ms for all diff modes." With examples for both: "easy=20, medium=40, hard=60, insain=80, chaos=100".
@@ -30,3 +30,6 @@ Q&A log:
 - Section 2 tested 2026-11-09 (both passed: the easy cap, and the two hints in the achievements menu).
 - Q (2026-11-09): wall and fake door toughness by level, the same 60, 70, 80, 90, 100 percent ladder (at each level's cap, walls then fake doors: easy about 210 and 420 hp instead of 350 and 700, medium 280 and 560, hard 360 and 720, insane 428 and 855, chaos 500 and 1000; on easy at the cap a wall takes about 18 bat swings instead of 30, 2 pistol shots instead of 3)? The 20 percent spread stays; practice and debug keep full toughness. A (dev, 2026-11-09): "Yes. Most deffenatly." SETTLED.
 - RE-SECTIONED (2026-11-09): Section 3 is now wall and fake door toughness (wall_spawn_hp()'s roll scaled by difficulty_damage_percents through a shared percent, the full amount in practice and debug runs), and Section 4 the docks (as Section 3 was).
+- Section 3 BUILT 2026-11-09, awaiting tests (dev: "commited. ready for section3.", after c8e1f65): level_percent() in difficulty.nvgt (difficulty_damage_percents, or 100 in practice and debug runs), now shared by level_damage() and wall_spawn_hp() in wall.nvgt, which scales the rolled hp of every new wall and fake door by it (never below 1).
+- Section 3 tested 2026-11-09 (both passed: a debug run at 300 ms, walls 2 or 3 pistol shots; easy at 3.3 steps a second, 1 or 2). Section 4, the docks, is next.
+- Section 4 BUILT 2026-11-09 (dev: "Please do the docks now. Section 3 seemed small."): a 1.8 changelog entry (4 of 10) covering damage, wall and fake door toughness and the top speeds; the readme's How to play (your level's top speed), Difficulty (each level's top speed, no doors past it, and the 60 to 100 percent damage and toughness, practice at full) and Health and lives (the listed damages are the full amounts); the todo item to finished; this plan COMPLETE; MEMORY.md and CLAUDE.md updated.

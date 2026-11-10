@@ -51,7 +51,10 @@ progress = max(0, min(1, progress));
 double center = min_hp + progress * (max_hp - min_hp);
 int low = int(max(min_hp, center * (100 - wall_hp_spread) / 100));
 int high = int(min(max_hp, center * (100 + wall_hp_spread) / 100));
-return random(low, high);
+/* Then the level's share (the difficulty scaling plan's Section 3, dev, 2026-11-09): 60 percent on easy up to the full
+toughness on chaos, the same ladder as damage, never below 1. */
+int hp = random(low, high) * level_percent() / 100;
+return hp < 1 ? 1 : hp;
 }
 // A wall still blocks the way until it's destroyed or crashed through.
 bool wall_standing(wall@ w)
