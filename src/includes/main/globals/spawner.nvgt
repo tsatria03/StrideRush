@@ -119,7 +119,12 @@ for (uint i = 0; i < obstacle_types.length(); i++)
 {
 if (spawn_only != "all" and obstacle_types[i] != spawn_only) continue;
 if (!has_joined(obstacle_types[i])) continue; // the difficulty schedule (difficulty.nvgt); a new type is an equal pick once in
-if (get_pack_sound_folders(type_folder(obstacle_types[i]) + "*").length() > 0) available.insert_last(obstacle_types[i]);
+if (get_pack_sound_folders(type_folder(obstacle_types[i]) + "*").length() > 0)
+{
+// Barriers go in barrier_weight times, so the pick below finds them that much more often (dev, 2026-11-10).
+int shares = obstacle_types[i] == "barriers" ? barrier_weight : 1;
+for (int s = 0; s < shares; s++) available.insert_last(obstacle_types[i]);
+}
 }
 /* Items follow the schedule too: each one rolls its chance only once it has joined (has_joined()), so ammo packs,
 teleporters and powerups wait for their speeds on easy to insane. */
