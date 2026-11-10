@@ -1,4 +1,5 @@
 New in 1.8.
+Fixed a bug where drawing one weapon after another played both draw sounds over each other, instead of the new one cutting off the last.
 Made it so practice runs now offer fake doors, real doors and mixed doors, instead of only a mix of real and fake doors.
 Made it so dying in a practice run, from a hit on your last life or a fall into a hazard, now stops the run like a real death, then lets you try again from just past what caught you with your health, life and shield back, and practice runs now start with 1 life and 1 steel shield instead of 2.
 Made it so each difficulty level now changes how much damage you take, how tough walls and fake doors are, and how fast the belt can go, from 60 percent of the damage and toughness and a top speed of 5 steps a second on easy, up to the full amount and 20 steps a second on chaos.

@@ -18,6 +18,7 @@ int[] weapon_loaded(10);
 int[] weapon_reserve(10);
 
 int current_weapon = -1;
+sound draw_sound; // its own sound, so drawing another weapon cuts the last draw off (dev, 2026-11-09), with no pool slot to go stale
 bool reloading = false;
 int reload_length = 0;
 timer firetimer, reloadtimer;
@@ -75,7 +76,9 @@ void draw_weapon(int w)
 if (w == current_weapon) return;
 current_weapon = w;
 reloading = false;
-p.play_stationary(get_pack_sound(weapon_folder(w) + "*draw*"), false);
+// A new draw cuts off the one still playing, so quick swaps never stack (dev, 2026-11-09).
+draw_sound.close();
+if (draw_sound.load(get_pack_sound(weapon_folder(w) + "*draw*"))) draw_sound.play();
 speak_buffer(weapon_display_name(w) + " equipped.", "weapons");
 }
 void fire_weapon()
