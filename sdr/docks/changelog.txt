@@ -1,4 +1,5 @@
 New in 1.8.
+Made it so add binding in the rebind list now adds a key to the action you have selected, instead of asking you to choose the action again from another list.
 Made it so each action now has a single key by default, such as W to jump, Q and E to switch lanes, A and D for your hands and F3 to F8 for the volumes, leaving the arrows, tab, enter, home, end, page up and page down free for you to bind in the settings menu.
 Fixed a bug where drawing one weapon after another played both draw sounds over each other, instead of the new one cutting off the last.
 Made it so practice runs now offer fake doors, real doors and mixed doors, instead of only a mix of real and fake doors.

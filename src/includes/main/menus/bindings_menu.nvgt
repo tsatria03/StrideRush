@@ -81,12 +81,12 @@ while (true)
 wait(5);
 rebindform.monitor();
 if (rebindform.is_pressed(close_btn)) return;
-if (rebindform.is_pressed(add_btn))
+int pos = rebindform.get_list_position(list);
+if (rebindform.is_pressed(add_btn) && pos >= 0 && pos < int(actions.length()))
 {
-rebind_add_binding(rebindform);
+rebind_add_binding(rebindform, actions[pos]);
 break;
 }
-int pos = rebindform.get_list_position(list);
 if (rebindform.is_pressed(edit_btn) && pos >= 0 && pos < int(actions.length()))
 {
 rebind_edit_binding(rebindform, actions[pos]);
@@ -100,23 +100,10 @@ break;
 }
 }
 }
-// Adds one more key to an action, keeping its others.
-void rebind_add_binding(audio_form@ rebindform)
+/* Adds one more key to the action selected in the list, keeping its others, like edit and remove (dev, 2026-11-09: no
+separate menu of every action, which only repeated the list). */
+void rebind_add_binding(audio_form@ rebindform, const string&in action)
 {
-string[]@ actions = keyboard_actions_in_order();
-setupmenu();
-for (uint i = 0; i < actions.length(); i++)
-{
-m.add_item(actions[i], actions[i]);
-}
-m.intro_text = "Choose an action to add a binding to.";
-int mres = m.run();
-if (mres < 0)
-{
-speak("canceled");
-return;
-}
-string action = m.selected_item_id;
 string combo = kc_capture_combo(rebindform, "Press the key combo to bind to " + action + ", or escape to cancel.");
 if (combo == "")
 {
