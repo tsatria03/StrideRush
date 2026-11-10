@@ -252,7 +252,7 @@ void speedup_check()
 if (practice_run) return; // a practice run stays at its chosen speed all run (dev, 2026-11-05: "keep it as is")
 if (speeduptimer.elapsed < speedup_period) return;
 speeduptimer.restart();
-step_time = int(max(min_step_time, step_time - speedup_amount));
+step_time = int(max(run_top_step_time(), step_time - speedup_amount)); // the level's top speed, so insane stops at 75 (difficulty.nvgt)
 }
 void run_input()
 {

@@ -1,6 +1,6 @@
 ---
 name: project_difficulty_scaling_plan
-description: SECTION 1 BUILT AND TESTED (2026-11-09, for 1.8; 3 sections: damage, speed caps, docks) - each difficulty scales the damage you take and the belt's top speed, from easy up to chaos at full; Q&A log
+description: SECTIONS 1 AND 2 BUILT AND TESTED (2026-11-09, for 1.8; 4 sections: damage, speed caps, wall and fake door toughness, docks) - each difficulty scales the damage you take and the belt's top speed, from easy up to chaos at full; Q&A log
 metadata:
   type: project
 ---
@@ -25,3 +25,8 @@ Q&A log:
   3. Docks: opening 1.8 (build/version.txt 1.8, a "New in 1.8." block), the readme's difficulty section and the two hints, the todo item to finished, this plan COMPLETE, MEMORY.md and CLAUDE.md.
 - Section 1 BUILT 2026-11-09, awaiting tests (dev: "Let's do the first suggestion. DIfficulties", after b0df06c): tuning.nvgt's difficulty_damage_percents {60, 70, 80, 90, 100}; level_damage() in difficulty.nvgt (the full amount when run_difficulty is -1, practice and debug); take_damage() in lives.nvgt scales every blow with it first, so a worn shield and Tough Hide or Soft Hide work on the scaled amount, and damage_taken counts it. Hazards never come through take_damage(), so they still end the run.
 - Section 1 tested 2026-11-09 (both passed: a spike on easy took 12, H 94 percent; a spike in a debug run took the full 20, H 90 percent).
+- Section 2 BUILT 2026-11-09, awaiting tests (dev: "ready for section 2. commited", after 32ef491): tuning.nvgt's difficulty_top_step_times {200, 150, 100, 75, 50}; run_top_step_time() in difficulty.nvgt (min_step_time in a debug run); speedup_check() in run.nvgt stops the belt there (insane's last speed-up stops at 75); spawner.nvgt's real door and key marks stop at it, so no doors past the cap; current_step_time() still clamps at min_step_time, so Rush Hour goes 50 ms past the cap; achievements.ini's Sound Barrier and Top Speed hints as settled (the file is LF, kept). Wall and fake door hp still scale over the full 500 to 50 ms range.
+- Test 1 of Section 2 passed 2026-11-09 (easy: C climbed and held at 5 steps a second from about 5 minutes, B at 134, no more real doors). The dev asked, to discuss after the tests: should wall and fake door toughness also scale by a percentage per difficulty, so on easy they never take much to break even at the fastest speed?
+- Section 2 tested 2026-11-09 (both passed: the easy cap, and the two hints in the achievements menu).
+- Q (2026-11-09): wall and fake door toughness by level, the same 60, 70, 80, 90, 100 percent ladder (at each level's cap, walls then fake doors: easy about 210 and 420 hp instead of 350 and 700, medium 280 and 560, hard 360 and 720, insane 428 and 855, chaos 500 and 1000; on easy at the cap a wall takes about 18 bat swings instead of 30, 2 pistol shots instead of 3)? The 20 percent spread stays; practice and debug keep full toughness. A (dev, 2026-11-09): "Yes. Most deffenatly." SETTLED.
+- RE-SECTIONED (2026-11-09): Section 3 is now wall and fake door toughness (wall_spawn_hp()'s roll scaled by difficulty_damage_percents through a shared percent, the full amount in practice and debug runs), and Section 4 the docks (as Section 3 was).

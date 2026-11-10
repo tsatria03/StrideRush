@@ -100,7 +100,7 @@ set_key_mark();
 next_countdown = countdown_steps();
 return;
 }
-if (marks_on and next_door_mark >= min_step_time and step_time <= next_door_mark and doors_available())
+if (marks_on and next_door_mark >= run_top_step_time() and step_time <= next_door_mark and doors_available())
 {
 next_type = "real_doors";
 next_door_mark -= door_section_ms;
@@ -155,7 +155,7 @@ next_key_mark = next_key_door + door_section_ms / 2 + random(0, door_section_ms 
 // True when the next real door's key should be placed: its door is still to come and the speed has reached its mark.
 bool key_due()
 {
-return keys_available() and next_key_door >= min_step_time and step_time <= next_key_mark;
+return keys_available() and next_key_door >= run_top_step_time() and step_time <= next_key_mark;
 }
 // Where a type's theme folders live: doors in door_folder, everything else (animals included) in objects/traps/<type>.
 string type_folder(string type)
