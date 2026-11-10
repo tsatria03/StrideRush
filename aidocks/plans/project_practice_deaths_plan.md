@@ -1,11 +1,11 @@
 ---
 name: project_practice_deaths_plan
-description: SECTION 1 BUILT AND TESTED, docks to come (2026-11-09, for 1.8; 2 sections; practice_lives and practice_shields 1) - in a practice run, losing your last life (or a hazard fall) is a death like the real game's, "You died." and Enter, then you try again from just past the obstacle with everything back; Q&A log
+description: COMPLETE (2026-11-09, 1.8 at 5 of 10; practice_lives and practice_shields 1) - in a practice run, losing your last life (or a hazard fall) is a death like the real game's, "You died." and Enter, then you try again from just past the obstacle with everything back; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED, nothing built. Started 2026-11-09, after the difficulty scaling plan was settled and committed (a89e742).
+Status: COMPLETE (2026-11-09). Started 2026-11-09, after the difficulty scaling plan was settled and committed (a89e742).
 
 Background:
 - The dev (2026-11-09): "I was thinking for practice. It will behave like hazards where you will dye, but you are able to press entry to try again, and it will pass the obstical for you."
@@ -23,3 +23,4 @@ Q&A log:
 - Section 1 BUILT 2026-11-09, awaiting tests (dev: "ready for the next plan, section 1.", after 836bfea): practice_death(past_x, fall_clip) in endrun.nvgt: pause_timers() and pause_pools(true) (decpool.nvgt's new keep_player leaves p playing, so the blow's hit plays out; the ambience always plays on), the fall clip or the player's death through dlgplay, wait_for_pool(p), "You died." (dlgmessage_return), the key-release wait, cancel_movement(), me.x = past_x, update_listeners(), spawner_catch_up(), full health, lives = practice_lives, steel shields topped up to practice_shields, resume_game(), play_landing(false). take_damage() returns blow_fatal on a practice run's last life (lives_can_end or practice_run); end_run_hit() hands a practice run to practice_death(me.x + 1, "") (every blow lands on your tile), and practice_set_down() in hazard.nvgt to practice_death(h.x + 1, fall_clip).
 - CHANGED (dev, 2026-11-09, before the tests: "Please make practice runs only have 1 life and 1 shield, not 2. ONly debug runs can have that."): practice_lives 1 and practice_shields 1, so a practice run starts, and starts again after each practice death, with 1 life and 1 steel shield; debug runs keep 2 shields and debug_lives.
 - Section 1 tested 2026-11-09 (all 3 passed, in practice runs: barriers, the third hit frozen with the ambience, hit and death, "You died.", a landing, H at 100 percent and 1 life; a broken shield, then the shield back after the death; a hazard fall, set down past it with everything back).
+- Section 2 BUILT 2026-11-09 (dev: "commited. Yes. Fix the readme."): a 1.8 changelog entry (5 of 10); the readme's practice paragraph rewritten without "lose" (dev: "What's the difference between losing and dying in a run? That seems confusing."): "A practice run never ends on its own ... you die just as you would in a real run, but the run doesn't end ..."; the mode menu's practice description (menu.nvgt) changed from "You can't lose" to "If you die, you try again from just past what caught you"; the todo item to finished; this plan COMPLETE; MEMORY.md and CLAUDE.md updated.

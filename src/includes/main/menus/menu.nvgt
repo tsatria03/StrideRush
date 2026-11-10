@@ -267,7 +267,7 @@ m.intro_text = "Choose the game you'd like to play.";
 if (!SCRIPT_COMPILED) m.add_item("Debug run. This mode lets you choose the speed, obstacles, footsteps and whether lives run out, for testing.", "debug");
 // "and more obstacles join as you go" joined with the difficulty schedule (Section 5; dev, 2026-11-05).
 m.add_item("Endless run. This mode lets you run for as long as you can survive. The belt gets faster and more obstacles join as you go, and the run ends when you run out of lives or fall into a hazard.", "endless");
-m.add_item("Practice run. This mode lets you practice one kind of obstacle at a time, for as long as you like. You can't lose, and nothing you do here counts toward your progress.", "practice");
+m.add_item("Practice run. This mode lets you practice one kind of obstacle at a time, for as long as you like. If you die, you try again from just past what caught you, and nothing you do here counts toward your progress.", "practice");
 m.add_item("back", "back");
 int mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") return "";
