@@ -456,6 +456,7 @@ class key_config {
 			if (@actions == null) continue;
 			for (uint i = 0; i < actions.length(); i++) {
 				string a = actions[i];
+				add_action(a); // so an action written with no keys ("fire=") still exists and can be rebound
 				clear_keyboard_action(a);
 				string[] entries = cfg.get_string(sections[s], a, "").split(",", true);
 				for (uint j = 0; j < entries.length(); j++) {
@@ -473,21 +474,63 @@ class key_config {
 			cfg.set_string("keyboard", actions[i], get_keyboard_action_string(actions[i]));
 	}
 
-	// Returns the bindings for one action as an ini-format string,
-	// e.g. "LSHIFT+A:press,RSHIFT+A:press". Empty string if no bindings.
+	/* One action's bindings as an ini string, in the compact form keyboard.ini is written in by hand (the rebinding plan's
+	Section 2, dev, 2026-11-09): bindings that differ only in one modifier's side are joined back into its side-agnostic
+	name, so the LSHIFT and RSHIFT halves of SHIFT+HOME are written "SHIFT+HOME" again, and a press has no ":press"
+	("jump=W"). Modifiers come first, CTRL, ALT, SHIFT then GUI, as "ALT+SHIFT+C" is written. Saving, F1 and the rebind
+	list all use this. Empty string if no bindings. */
 	string get_keyboard_action_string(const string&in action) {
 		if (!kb.exists(action)) return "";
 		kc_combo@[]@ list;
 		kb.get(action, @list);
-		string result = "";
-		for (uint i = 0; i < list.length(); i++) {
-			if (i > 0) result += ",";
+		uint n = list.length();
+		// Each binding as its four modifier sides ("" none, "L", "R", or "B" for either), its other keys and its trigger.
+		array<string[]> sides;
+		string[] rest;
+		int[] trig;
+		for (uint i = 0; i < n; i++) {
+			string[] s = {"", "", "", ""};
+			string r = "";
 			kc_combo@ c = list[i];
 			for (uint j = 0; j < c.keys.length(); j++) {
-				if (j > 0) result += "+";
-				result += kc_code_to_name(c.keys[j]);
+				uint k = c.keys[j];
+				int mi = kc_modifier_index(k);
+				if (mi >= 0) s[mi] = kc_modifier_is_left(k) ? "L" : "R";
+				else r += (r == "" ? "" : "+") + kc_code_to_name(k);
 			}
-			result += ":" + trigger_name(c.trigger);
+			sides.insert_last(s);
+			rest.insert_last(r);
+			trig.insert_last(int(c.trigger));
+		}
+		// Join left and right pairs, one modifier at a time, so ALT+SHIFT's four variants come back as one.
+		bool[] gone(n, false);
+		for (uint mi = 0; mi < 4; mi++) {
+			for (uint a = 0; a < n; a++) {
+				if (gone[a] or sides[a][mi] != "L") continue;
+				for (uint b = 0; b < n; b++) {
+					if (b == a or gone[b] or sides[b][mi] != "R" or rest[a] != rest[b] or trig[a] != trig[b]) continue;
+					bool same = true;
+					for (uint k = 0; k < 4; k++)
+						if (k != mi and sides[a][k] != sides[b][k]) same = false;
+					if (!same) continue;
+					sides[a][mi] = "B";
+					gone[b] = true;
+					break;
+				}
+			}
+		}
+		string[] names = {"CTRL", "ALT", "SHIFT", "GUI"};
+		string result = "";
+		for (uint i = 0; i < n; i++) {
+			if (gone[i]) continue;
+			string one = "";
+			for (uint mi = 0; mi < 4; mi++) {
+				if (sides[i][mi] == "B") one += names[mi] + "+";
+				else if (sides[i][mi] != "") one += sides[i][mi] + names[mi] + "+";
+			}
+			one += rest[i];
+			if (trig[i] != int(KC_PRESS)) one += ":" + trigger_name(kc_trigger(trig[i]));
+			result += (result == "" ? "" : ",") + one;
 		}
 		return result;
 	}
@@ -796,11 +839,9 @@ bool kc_save_preserving(key_config@ kc, const string&in path) {
 		if (eq < 0) { output += line + "\n"; continue; }
 		string act = trimmed.substr(0, eq).trim_whitespace();
 		if (!kc.has_action(act)) { output += line + "\n"; continue; }
-		string val = kc.get_keyboard_action_string(act);
-		if (val.length() > 0) {
-			output += act + "=" + val + "\n";
-			written.set(act, true);
-		}
+		// Written even with no keys left ("fire="), so the action keeps its line and its place in the rebind list.
+		output += act + "=" + kc.get_keyboard_action_string(act) + "\n";
+		written.set(act, true);
 	}
 	string[]@ actions = kc.get_actions();
 	for (uint i = 0; i < actions.length(); i++) {
@@ -845,6 +886,17 @@ string kc_capture_combo(audio_form@ form, const string&in prompt) {
 	return "";
 }
 
+// Which modifier a key is, for the compact form: 0 CTRL, 1 ALT, 2 SHIFT, 3 GUI, or -1 for any other key.
+int kc_modifier_index(uint k) {
+	if (k == KEY_LCTRL || k == KEY_RCTRL) return 0;
+	if (k == KEY_LALT || k == KEY_RALT) return 1;
+	if (k == KEY_LSHIFT || k == KEY_RSHIFT) return 2;
+	if (k == KEY_LGUI || k == KEY_RGUI) return 3;
+	return -1;
+}
+bool kc_modifier_is_left(uint k) {
+	return k == KEY_LCTRL || k == KEY_LALT || k == KEY_LSHIFT || k == KEY_LGUI;
+}
 // One modifier for a captured combo: "SHIFT+" with both sides held, "LSHIFT+" or "RSHIFT+" with one, "" with neither.
 string kc_modifier_side(const string&in name, uint left, uint right) {
 	bool l = key_down(left);
