@@ -6,7 +6,7 @@ Fixed a bug where drawing one weapon after another played both draw sounds over 
 Made it so practice runs now offer fake doors, real doors and mixed doors, instead of only a mix of real and fake doors.
 Made it so dying in a practice run, from a hit on your last life or a fall into a hazard, now stops the run like a real death, then lets you try again from just past what caught you with your health, life and shield back, and practice runs now start with 1 life and 1 steel shield instead of 2.
 Made it so each difficulty level now changes how much damage you take, how tough walls and fake doors are, and how fast the belt can go, from 60 percent of the damage and toughness and a top speed of 5 steps a second on easy, up to the full amount and 20 steps a second on chaos.
-Removed a bunch of ambiences that were no longer needed.
+Removed a bunch of ambiences and platforms that were no longer needed in the game.
 Made it so resetting your settings now restarts the game, so every setting starts fresh.
 Made it so the menu music, music and ambience volumes now start at 80 percent instead of full volume, including after you reset your settings.
 New in 1.7.
