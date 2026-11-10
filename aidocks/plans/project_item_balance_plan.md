@@ -31,3 +31,5 @@ Sections:
 1. Survival item scaling: difficulty_item_percents in tuning.nvgt; item_percent() in difficulty.nvgt beside level_percent() (100 when run_difficulty < 0); survival_roll() and its use in choose_next_obstacle()'s capsule, potion and shield rolls and in spawn_items()' pair, in spawner.nvgt.
 2. Barrier weight: barrier_weight in tuning.nvgt; barriers added that many times to choose_next_obstacle()'s available list.
 3. Docks: the readme's items and difficulty sections, the changelog (one entry each), CLAUDE.md, this plan COMPLETE.
+- Section 1 built (2026-11-10): difficulty_item_percents in tuning.nvgt; item_percent() in difficulty.nvgt; survival_roll() and is_survival_item() in spawner.nvgt, the capsule, potion and shield rolls each needing survival_roll() too (a miss falls through to the next roll, as a failed chance always has), and a pair's survival item that misses gives no second item.
+- Section 1 COMPLETE (dev, 2026-11-10): both tests passed (an easy endless run has survival items much rarer; a debug run with everything spawning has them as before).

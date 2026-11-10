@@ -52,6 +52,10 @@ const int[] difficulty_max_floor_times = {5000, 4750, 4500, 4250, 4000};
 obstacle's damage a blow does, so easy takes 60 percent and chaos the full amount. Practice and debug runs, which have no
 level, take 100. Every result is a whole number with today's damages (animals 6 on easy, barriers 48). */
 const int[] difficulty_damage_percents = {60, 70, 80, 90, 100};
+/* Survival items by level (the item balance plan, dev, 2026-11-10, after a player ran an hour taking every hit): life
+capsules, steel shields and health potions spawn at this percent of their _chance rates, easy to chaos, pairs' second
+items too; debug runs at 100. Below these, taking every hit costs more than the items give back, at every level. */
+const int[] difficulty_item_percents = {25, 20, 15, 10, 5};
 /* Top speed by level (the difficulty scaling plan, dev, 2026-11-09): the step time where an endless run's belt stops
 speeding up, 5, 6.7, 10, 13.3 and 20 steps a second. Every obstacle and item has joined by easy's 200. Debug runs keep
 min_step_time, and Rush Hour can still go speedup_amount past the cap, never past min_step_time. */

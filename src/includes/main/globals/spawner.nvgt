@@ -138,11 +138,11 @@ else if (spawn_only == "life_capsules") next_type = capsules_ok ? "life_capsules
 else if (spawn_only == "health_potions") next_type = potions_ok ? "health_potions" : "";
 else if (spawn_only == "player_teleporters") next_type = teleporters_ok ? "player_teleporters" : "";
 else if (spawn_only == "powerups") next_type = powerups_ok ? "powerups" : "";
-else if (capsules_ok and random(1, life_capsule_chance) == 1) next_type = "life_capsules";
-else if (potions_ok and random(1, health_potion_chance) == 1) next_type = "health_potions";
+else if (capsules_ok and random(1, life_capsule_chance) == 1 and survival_roll()) next_type = "life_capsules";
+else if (potions_ok and random(1, health_potion_chance) == 1 and survival_roll()) next_type = "health_potions";
 else if (teleporters_ok and random(1, teleporter_chance) == 1) next_type = "player_teleporters";
 else if (powerups_ok and random(1, powerup_chance) == 1) next_type = "powerups";
-else if (shields_ok and random(1, shield_chance) == 1) next_type = "steel_shields";
+else if (shields_ok and random(1, shield_chance) == 1 and survival_roll()) next_type = "steel_shields";
 else if (packs_ok and random(1, ammo_pack_chance) == 1) next_type = "ammo_packs";
 else next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
@@ -257,7 +257,19 @@ for (uint i = 0; i < item_lane_types.length(); i++)
 if (item_kind_available(item_lane_types[i]) and has_joined(item_lane_types[i])) kinds.insert_last(item_lane_types[i]);
 }
 if (kinds.length() == 0) return;
-spawn_item(kinds[random(0, kinds.length() - 1)], x, countdown, second);
+string kind = kinds[random(0, kinds.length() - 1)];
+if (is_survival_item(kind) and !survival_roll()) return; // a survival item that misses the level's percent: no second item (dev, 2026-11-10)
+spawn_item(kind, x, countdown, second);
+}
+/* The item balance plan (dev, 2026-11-10): life capsules, steel shields and health potions are the survival items, and
+each one that comes up must also pass the level's item_percent(), so they get rarer on harder levels. */
+bool is_survival_item(const string&in type)
+{
+return type == "life_capsules" or type == "steel_shields" or type == "health_potions";
+}
+bool survival_roll()
+{
+return random(1, 100) <= item_percent();
 }
 // One item of a kind in a lane. Each kind's sounds are one set, no themes (a key picks its color in spawn_key()).
 void spawn_item(string type, double x, int countdown, int lane)

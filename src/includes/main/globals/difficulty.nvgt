@@ -76,6 +76,12 @@ int level_percent()
 if (run_difficulty < 0) return 100;
 return difficulty_damage_percents[run_difficulty];
 }
+// The level's percent from difficulty_item_percents for the survival items, 100 in practice and debug runs.
+int item_percent()
+{
+if (run_difficulty < 0) return 100;
+return difficulty_item_percents[run_difficulty];
+}
 int level_damage(int damage)
 {
 return damage * level_percent() / 100;
