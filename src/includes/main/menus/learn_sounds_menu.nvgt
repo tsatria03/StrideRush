@@ -64,6 +64,13 @@ for (uint i = 0; i < subs.length(); i++) total += subs[i].count();
 for (uint i = 0; i < sounds.length(); i++) total += sounds[i].count();
 return total;
 }
+// The entries you can pick, across any smaller categories inside, where count() is every file (variants and layers).
+int entries()
+{
+int total = int(sounds.length());
+for (uint i = 0; i < subs.length(); i++) total += subs[i].entries();
+return total;
+}
 }
 // What's playing in a sound list: a plain preview, or a countdown stepped along by update().
 class learn_preview
@@ -199,6 +206,16 @@ learn_sort_categories(root.subs);
 for (uint i = 0; i < root.subs.length(); i++) learn_sort_categories(root.subs[i].subs);
 learn_browse(root, "learn");
 }
+/* A category's count (dev, 2026-11-10, after a player's report that countdowns said 85 sounds with only 9 in it): the
+entries you can pick, then every file when variants or layers make that more, "This category has 9 individual sounds,
+85 in total."; when they match, just "This category has 6 sounds." */
+string learn_count_text(learn_category@ cat)
+{
+int entries = cat.entries();
+int files = cat.count();
+if (files == entries) return "This category has " + entries + " sound" + (entries == 1 ? "." : "s.");
+return "This category has " + entries + " individual sound" + (entries == 1 ? "" : "s") + ", " + files + " in total.";
+}
 /* A menu of categories, each with its sound count, then back. Picking one opens it; when it returns you're back here on
 it. Escape or back returns silently. */
 void learn_browse(learn_category@ cat, const string&in path)
@@ -208,8 +225,7 @@ while (true)
 setupmenu(false);
 for (uint i = 0; i < cat.subs.length(); i++)
 {
-int n = cat.subs[i].count();
-m.add_item(cat.subs[i].name + ": This category has a total of " + n + " sound" + (n == 1 ? "" : "s"), "" + i);
+m.add_item(cat.subs[i].name + ": " + learn_count_text(cat.subs[i]), "" + i);
 }
 m.add_item("back", "back");
 m.intro_text = path == "learn" ? "Choose a category of sounds, then pick a sound to play it." : learn_upper_first(cat.name) + " menu.";

@@ -1,4 +1,5 @@
 New in 1.9.
+Fixed a bug where the learn sounds menu counted every version and layer of a sound as a separate sound, so countdowns said it had 85 sounds when it holds 9, and it now says 9 individual sounds, 85 in total.
 Removed the F7 and F8 keys for the heartbeat volume, which is now changed only with its slider in the settings menu's game tab.
 Added a footsteps volume slider to the settings menu's game tab, which turns down only your footsteps, not your landings or falls.
 Made it so control plus tab and control plus shift plus tab now move to the next or previous tab in the settings menu, from anywhere in it.
