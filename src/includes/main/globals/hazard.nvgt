@@ -54,25 +54,12 @@ if (me.x == hazards[i].x) stat_add("hazards_jumped"); // in the air on its tile:
 if (me.x > max(hazards[i].ledge_end, hazards[i].x + spawn_distance())) remove_hazard(i);
 }
 }
-/* A practice run can't be lost (dev, 2026-11-05), but a fall still stops it (dev, 2026-11-06: "It feels weird that you
-fall in a lava while running at the same time."): the run freezes as the pause menu freezes it, the fall plays on its
-own as a real death's does, and "You died." waits in a dialog for Enter. Then you're set down on the ledge just
-past the hazard, landing like after a teleport, with no damage, and the run goes on. The ledge after a hazard is always
-clear floor, and the hazard stays behind you, its loop fading out as usual. */
+/* A hazard fall in a practice run is a practice death (dev, 2026-11-06, then the practice deaths plan, 2026-11-09: every
+practice death gives everything back): the fall plays, "You died.", and you're set down on the ledge just past the
+hazard, which is always clear floor, while the hazard stays behind you. practice_death() is in endrun.nvgt. */
 void practice_set_down(hazard@ h, const string&in fall_clip)
 {
-pause_game();
-if (fall_clip != "") dlgplay(fall_clip);
-dlgmessage_return("You died.");
-/* The key that closed the dialog must be let go first, or it would carry into the run as a hand, a weapon, or Escape's
-quit question. */
-while (key_down(KEY_RETURN) or key_down(KEY_SPACE) or key_down(KEY_A) or key_down(KEY_ESCAPE)) wait(5);
-cancel_movement();
-me.x = h.x + 1;
-update_listeners();
-spawner_catch_up(); // so what comes next still arrives with its full warning
-resume_game();
-play_landing(false); // the tile's landing only, as after a teleport
+practice_death(h.x + 1, fall_clip);
 }
 // The countdown: one misc/trap/hazards warn cue per ledge step (see play_countdown() in spawner.nvgt). Runs once per step.
 void hazard_countdown()

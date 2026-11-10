@@ -60,11 +60,13 @@ all_pools[h].update_sound_positioning_values(i, -1, step, false);
 }
 /* Pauses only sounds that are playing, so resume_pools() can't wake one that had already finished. The ambience keeps
 playing, so a paused run is never dead silent (dev, 2026-11-08: "every sound should be paused, excluding the ambience"). */
-void pause_pools()
+// keep_player leaves p playing too, so a practice death's hit can play out while everything else is frozen (endrun.nvgt).
+void pause_pools(bool keep_player = false)
 {
 for (uint h = 0; h < all_pools.length(); h++)
 {
 if (@all_pools[h] is @ambpool) continue;
+if (keep_player and @all_pools[h] is @p) continue;
 for (uint i = 0; i < all_pools[h].items.length(); i++)
 {
 if (@all_pools[h].items[i].handle == null) continue;
