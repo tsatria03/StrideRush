@@ -385,6 +385,46 @@ class audio_form {
 			c_form[i].visible = (c_form[owner].list_position == c_form[i].tab_panel_slot);
 		}
 	}
+	/* Moves the tab panel the focused control belongs to (or the focused panel itself, or else the form's first visible
+	panel) one tab along, wrapping at either end, then focuses the panel: from another control it says "Category Tab panel"
+	and the tab, and on the panel only the new tab, "Game tab", as arrowing on it does; its cursor event still fires, so a panel's own sounds play. False when the form has no panel to
+	switch, so control plus tab then falls through to plain tab. */
+	private bool switch_tab_panel(int focused, int direction) {
+		int panel = -1;
+		if (focused >= 0 && focused <= control_counter) {
+			if (c_form[focused].type == ct_list && c_form[focused].list_is_tab_panel) panel = focused;
+			else if (c_form[focused].tab_assigned) panel = c_form[focused].tab_panel_owner;
+		}
+		if (panel < 0 || panel > control_counter) {
+			panel = -1;
+			for (int i = 0; i <= control_counter; i++) {
+				if (c_form[i].type == ct_list && c_form[i].list_is_tab_panel && c_form[i].visible && c_form[i].active) {
+					panel = i;
+					break;
+				}
+			}
+		}
+		if (panel < 0 || c_form[panel].type != ct_list || !c_form[panel].list_is_tab_panel) return false;
+		int count = int(c_form[panel].list.length());
+		if (count < 1) return false;
+		int old_position = c_form[panel].list_position;
+		int new_position = old_position + direction;
+		if (new_position < 0) new_position = count - 1;
+		if (new_position >= count) new_position = 0;
+		c_form[panel].list_position = new_position;
+		dictionary args = {{"key", direction < 0 ? KEY_UP : KEY_DOWN}};
+		if (@c_form[panel].event_callback != null and c_form[panel].event_callback(this, panel, event_list_cursor, args) == 1) {
+			c_form[panel].list_position = old_position;
+			return true;
+		}
+		update_tab_visibility();
+		// Coming from another control, the panel is announced in full, "Category Tab panel, Game tab", as tabbing to it does
+		// (dev, 2026-11-10); already on it, only the new tab.
+		if (args.exists("silent")) focus_silently(panel);
+		else if (control_focus != panel) focus_interrupt(panel);
+		else c_form[panel].speak_list_item();
+		return true;
+	}
 	int create_button(string caption, bool primary = false, bool cancel = false, bool overwrite = true) {
 		form_error = 0;
 		if (active_controls >= 50) {
@@ -656,7 +696,14 @@ class audio_form {
 		int autotab = 0;
 		if (focused > -1 && focused <= control_counter && c_form[focused].type == ct_form && @c_form[focused].subform != null && c_form[focused].subform.get_control_count() > 0)
 			autotab = c_form[focused].subform.monitor();
-		if (key_repeating(KEY_TAB) || autotab != 0 && autotab < 2) {
+		/* Control plus tab and control plus shift plus tab switch the form's tab panel from anywhere (dev, 2026-11-10). Tab is
+		read once into tab_hit, since a second key_repeating() of the same key in a frame comes back false. It comes after a focused subform's
+		monitor(), which reads Tab first, as it always has. */
+		bool tab_hit = key_repeating(KEY_TAB);
+		if (tab_hit && (key_down(KEY_LCTRL) || key_down(KEY_RCTRL)) && !key_down(KEY_LALT) && !key_down(KEY_RALT) && !key_down(KEY_LGUI) && !key_down(KEY_RGUI)) {
+			if (switch_tab_panel(focused, (key_down(KEY_LSHIFT) || key_down(KEY_RSHIFT)) ? -1 : 1)) return 0;
+		}
+		if (tab_hit || autotab != 0 && autotab < 2) {
 			if ((control_counter < 0) || (key_down(KEY_LALT)) || (key_down(KEY_LGUI)) || (key_down(KEY_RALT)) || (key_down(KEY_RGUI)))
 				return 0;
 			if ((control_counter == 0) && (control_focus == 0)) {
