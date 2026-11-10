@@ -1,7 +1,7 @@
 /* The weapons (dev, 2026-11-02): one damage table,
 separate ammo per gun, reloading any time a gun isn't full, and one generic target hook
 instead of a copy of the firing code per enemy type.
-All ten are available from the start of every run on 1 to 0, in this order, and a run starts with the bat drawn.
+All ten are available from the start of every run on 1 to 0, in this order, and a run starts with the fist drawn.
 Space swings or fires; the machine gun keeps firing while Space is held. Melee hits at once; a gun fires a bullet that
 travels (bullet.nvgt). A gun with nothing loaded, or mid-reload,
 plays empty instead. R reloads, timed by the length of the gun's reload sound, and ping plays when
@@ -37,8 +37,9 @@ string weapon_display_name(int w)
 {
 return weapon_names[w].replace("_", " ", true);
 }
-/* Every run starts fresh: the guns full, nothing reloading, and the bat drawn the normal way, with its draw sound and
-"bat equipped." (dev, 2026-11-02; the axe for part of 2026-11-06). current_weapon is cleared first so draw_weapon() doesn't skip it as already held. */
+/* Every run starts fresh: the guns full, nothing reloading, and the fist drawn the normal way, with its draw sound and
+"fist equipped." (dev, 2026-11-10; the bat from 2026-11-02, the axe for part of 2026-11-06). The fist is found by name, so
+a reordered lineup still starts with it. current_weapon is cleared first so draw_weapon() doesn't skip it as already held. */
 void reset_weapons()
 {
 for (int w = 0; w < int(weapon_names.length()); w++)
@@ -50,7 +51,7 @@ reloading = false;
 firetimer.restart();
 reloadtimer.restart();
 current_weapon = -1;
-draw_weapon(0);
+draw_weapon(weapon_names.find("fist"));
 }
 // Runs every frame from run_input(): the reload finishing, the number keys, Space, R and X.
 void weapon_input()

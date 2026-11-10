@@ -1,3 +1,5 @@
+New in 1.9.
+Made it so every run now starts with your fist drawn, instead of the bat.
 New in 1.8.
 Made it so the key binder now takes combinations such as shift plus tab, binds either side of shift, control or alt when you hold both, warns you when a key already belongs to another action and offers to replace it, only shows the trigger menu when you ask to change it, and keeps keyboard.ini in its short form when it saves.
 Made it so add binding in the rebind list now adds a key to the action you have selected, instead of asking you to choose the action again from another list.
