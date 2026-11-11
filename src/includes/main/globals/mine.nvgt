@@ -29,7 +29,7 @@ mine mn;
 mn.x = mx;
 mn.theme = theme;
 mn.countdown_start = mx - countdown;
-minepool.play_2d(get_pack_sound("objects/traps/mines/" + theme + "/*spawn*"), 0, me.x, 0, mx, false);
+minepool.play_2d(get_pack_sound("environments/default/traps/mines/" + theme + "/*spawn*"), 0, me.x, 0, mx, false);
 for (uint i = 0; i < mines.length(); i++)
 {
 if (@mines[i] == null)
@@ -50,8 +50,8 @@ mine@ mn = mines[i];
 if (!mn.armed and !mn.spent and me.x >= mine_arm_x(mn))
 {
 mn.armed = true;
-minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme + "/*light*"), 0, me.x, 0, mn.x, false);
-mn.loopslot = minepool.play_2d(get_pack_sound("objects/traps/mines/" + mn.theme + "/*loop*"), 0, me.x, 0, mn.x, true);
+minepool.play_2d(get_pack_sound("environments/default/traps/mines/" + mn.theme + "/*light*"), 0, me.x, 0, mn.x, false);
+mn.loopslot = minepool.play_2d(get_pack_sound("environments/default/traps/mines/" + mn.theme + "/*loop*"), 0, me.x, 0, mn.x, true);
 }
 if (me.x == mn.x and !mn.spent)
 {
@@ -60,8 +60,8 @@ if (!is_grounded()) stat_add("mines_jumped"); // in the air on its tile: cleared
 if (is_grounded())
 {
 silence_mine(mn); // set off: the ticking stops at once
-string explode_clip = get_pack_sound("objects/traps/mines/" + mn.theme + "/*explode*");
-string hit_clip = get_pack_sound("objects/traps/mines/" + mn.theme + "/*hit*");
+string explode_clip = get_pack_sound("environments/default/traps/mines/" + mn.theme + "/*explode*");
+string hit_clip = get_pack_sound("environments/default/traps/mines/" + mn.theme + "/*hit*");
 /* A fatal hit plays explode and the mine's hit through p (silence_run() would otherwise cut them off) and no player
 hit, since end_run_hit() plays the player's death instead. */
 stat_caught("mines"); // the statistics: what caught you, and what ended the run if it's fatal

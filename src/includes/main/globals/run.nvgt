@@ -59,16 +59,16 @@ stop_run_audio();
 clear_run_objects();
 p.destroy_all();
 }
-/* The run's music and ambience (the music and ambience plan, dev, 2026-11-06), from objects/audio/tracks and
-objects/audio/ambiences (repointed that day from the old, empty musics and sources folders); an empty folder just stays
+/* The run's music and ambience (the music and ambience plan, dev, 2026-11-06), from environments/default/audio/tracks and
+environments/default/audio/ambiences (repointed that day from the old, empty musics and sources folders); an empty folder just stays
 silent. Every run, restarts and replays included, starts a fresh shuffle and a new random ambience.
 - Music is a shuffle (dev: "a playlist behavior that shuffles a track, then plays another one when it ends"): every
   track once, not looping, in a random order, then a fresh order that never opens with the track just played.
 - The ambience loops, and every random ambience_min_time to ambience_max_time on runtimer (so pausing freezes it) it
   crossfades over ambience_fade_time to another random one, never the same twice in a row.
 musslot and ambslot always hold what's playing now, so the volume keys reach it; a fading-out ambience is amb_old_slot. */
-const string tracks_folder = "objects/audio/tracks/";
-const string ambiences_folder = "objects/audio/ambiences/";
+const string tracks_folder = "environments/default/audio/tracks/";
+const string ambiences_folder = "environments/default/audio/ambiences/";
 string[] track_order; // the shuffle: full paths, played from track_pos on
 int track_pos = 0;
 string current_track = "", current_ambience = "";

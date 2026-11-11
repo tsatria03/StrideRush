@@ -1,4 +1,5 @@
 New in 2.0.
+Made it so the game's music, ambiences, ground surfaces and obstacle sounds now live together in a default environment, ready for more environments to be added later.
 Fixed a bug where dying in a practice run left you still wearing your old shield, as well as giving you a fresh one.
 Made it so the arrow keys now jump, crouch and switch lanes again, tab and shift plus tab move through your inventory, enter uses an item, and page up, page down, home and end change the music and ambience volume, alongside the letter and F keys, which all still work as before.
 New in 1.9.

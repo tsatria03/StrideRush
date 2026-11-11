@@ -29,7 +29,7 @@ w.x = wx;
 w.theme = theme;
 w.hp = wall_spawn_hp(wall_min_hp, wall_max_hp);
 w.countdown_start = wx - countdown;
-w.loopslot = wallpool.play_2d(get_pack_sound("objects/traps/walls/" + theme + "/*loop*"), 0, me.x, 0, wx, true);
+w.loopslot = wallpool.play_2d(get_pack_sound("environments/default/traps/walls/" + theme + "/*loop*"), 0, me.x, 0, wx, true);
 for (uint i = 0; i < walls.length(); i++)
 {
 if (@walls[i] == null)
@@ -72,7 +72,7 @@ if (me.x == w.x and wall_standing(w))
 {
 w.crashed = true;
 stop_wall(w);
-string hit_clip = get_pack_sound("objects/traps/walls/" + w.theme + "/*hit*");
+string hit_clip = get_pack_sound("environments/default/traps/walls/" + w.theme + "/*hit*");
 /* A fatal crash plays the wall's hit through p (silence_run() would otherwise cut it off) and no player hit,
 since end_run_hit() plays the player's death instead. */
 stat_caught("walls"); // the statistics: what caught you, and what ended the run if it's fatal
@@ -122,9 +122,9 @@ if (target.hp <= 0)
 target.destroyed = true;
 stat_add("walls_broken");
 stop_wall(target);
-wallpool.play_2d(get_pack_sound("objects/traps/walls/" + target.theme + "/*death*"), 0, me.x, 0, target.x, false);
+wallpool.play_2d(get_pack_sound("environments/default/traps/walls/" + target.theme + "/*death*"), 0, me.x, 0, target.x, false);
 }
-else wallpool.play_2d(get_pack_sound("objects/traps/walls/" + target.theme + "/*hurt*"), 0, me.x, 0, target.x, false);
+else wallpool.play_2d(get_pack_sound("environments/default/traps/walls/" + target.theme + "/*hurt*"), 0, me.x, 0, target.x, false);
 return target.x;
 }
 // The countdown: the layered misc/trap/walls cues, one per step before each wall (see play_countdown()). Runs once per step.

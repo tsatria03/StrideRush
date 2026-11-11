@@ -21,7 +21,7 @@ h.x = hx;
 h.theme = theme;
 h.ledge_start = hx - countdown;
 h.ledge_end = hx + ledge_after_tiles;
-h.loopslot = hazardpool.play_2d(get_pack_sound("objects/traps/hazards/" + theme + "/*loop*"), 0, me.x, 0, hx, true);
+h.loopslot = hazardpool.play_2d(get_pack_sound("environments/default/traps/hazards/" + theme + "/*loop*"), 0, me.x, 0, hx, true);
 for (uint i = 0; i < hazards.length(); i++)
 {
 if (@hazards[i] == null)
@@ -40,7 +40,7 @@ for (uint i = 0; i < hazards.length(); i++)
 if (@hazards[i] == null) continue;
 if (me.x == hazards[i].x and is_grounded())
 {
-string fall_clip = get_pack_sound("objects/traps/hazards/" + hazards[i].theme + "/*fall*");
+string fall_clip = get_pack_sound("environments/default/traps/hazards/" + hazards[i].theme + "/*fall*");
 if (practice_run) practice_set_down(hazards[i], fall_clip);
 else
 {

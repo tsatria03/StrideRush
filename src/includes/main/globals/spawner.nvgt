@@ -162,11 +162,11 @@ bool key_due()
 {
 return keys_available() and next_key_door >= run_top_step_time() and step_time <= next_key_mark;
 }
-// Where a type's theme folders live: doors in door_folder, everything else (animals included) in objects/traps/<type>.
+// Where a type's theme folders live: doors in door_folder, everything else (animals included) in environments/default/traps/<type>.
 string type_folder(string type)
 {
 if (type == "fake_doors" or type == "real_doors") return door_folder;
-return "objects/traps/" + type + "/";
+return "environments/default/traps/" + type + "/";
 }
 // The countdown before an obstacle (and an item's spacing and pickup window): countdown_length steps at any speed.
 int countdown_steps()

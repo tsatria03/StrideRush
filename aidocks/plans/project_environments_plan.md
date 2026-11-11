@@ -34,3 +34,4 @@ Open questions, to ask one per turn later:
 
 Q&A log:
 - Correction (dev, 2026-11-10): no objects folder: sounds/environments/<env>/audio, platforms and traps, and the top-level sounds/objects folder is gone, its three folders moving into the environments.
+- First step done (dev, 2026-11-10: "I just started the sound reorg. The default will be the main env used in the game. We will not be adding new enviornments yet. In the code, all you have to do right now is to just repoint the old sound paths."): the dev moved sounds/objects to sounds/environments/default (707 files, unchanged); Claude repointed every objects/<audio|platforms|traps> path to environments/default/<...> (38 places in 15 files: animal, barrier, door, endrun, forcefield, hazard, mine, player, projectile, run, spawner, spike, surface, wall and learn_sounds_menu). No behavior change; the plan's questions stay unasked.

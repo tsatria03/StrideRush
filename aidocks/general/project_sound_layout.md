@@ -4,6 +4,8 @@ description: sdr/sounds/ layout - no top-level packs (sounds/ is the root), no m
 metadata:
   type: project
 ---
+REORGANIZED (dev, 2026-11-10, the start of [[project_environments_plan]]): sounds/objects is gone. Its three folders now live in sounds/environments/default/: audio (tracks, ambiences), platforms (45 concrete folders and ledge) and traps (animals, barriers, doors, force_fields, hazards, mines, projectiles, spikes, walls); all 707 files moved unchanged. default is the main environment the game uses; no other environments yet. Every code path was repointed from objects/<audio|platforms|traps> to environments/default/<...> (38 places in 15 files). This deliberately relaxes the no-packs rule below for environments only: a level under sounds/environments/ switches a place's sounds, while equipments, misc and ui stay shared at the top. Older notes below still say objects/; read them as environments/default/.
+
 
 No top-level sound packs: there will never be a sounds/<packname>/ level, so sdr/sounds/ is the root and paths go straight to the category. Settled 2026-11-01. Since 2026-11-04 the sounds are TRACKED in git (the dev removed *.mp3, *.ogg and *.wav from .gitignore; sdr/sounds is about 27 MB), so git status and git log now show added, removed and renamed clips. Before that they were ignored and this memory was the only record of which clips existed; keep it in step with the folder anyway, as a readable summary.
 

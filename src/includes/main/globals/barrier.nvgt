@@ -1,7 +1,7 @@
 /* Barriers (dev, 2026-11-04; Section 2 of the lanes plan, first built in 1.3, undone, and brought back for 1.4 on top of
 the rebuilt lanes): the one trap that fills a single lane, avoided only by moving to another lane. Jumping, crouching,
 weapons and hands don't help. Each barrier is placed in the lane you're in when it appears, about 3 s ahead, and stays
-in that lane. Its theme is random among objects/traps/barriers.
+in that lane. Its theme is random among environments/default/traps/barriers.
 Sound: since Section 3 turned the belt forward (2026-11-05), a barrier's loop is placed like every belt sound, at its
 tile along the belt, but across it by its lane relative to yours (barrier_side()): your lane is straight ahead, one
 lane over is to that side, two lanes over further. It gets louder as it nears and falls behind you once passed,
@@ -14,7 +14,7 @@ Barriers are in obstacle_types, an equal pick in "all" and the real game, with t
 three barrier debug choices still pick one rule each.
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_barriers() shrinks the array. */
 sound_pool barrierpool;
-const string barrier_folder = "objects/traps/barriers/";
+const string barrier_folder = "environments/default/traps/barriers/";
 class barrier
 {
 double x;

@@ -1,6 +1,6 @@
 /* Animals (dev, 2026-11-04, for 1.4; the birds plan): a belt-wide trap that only a clap clears. The type is "animals"
 (dev: "in the future, you'll be able to scare off other types of animals, such as dogs"); each theme folder in
-objects/traps/animals is a kind (birds, dogs), and each folder inside a kind is one animal (bird to bird24, dog and dog2). An animal plays its spawn clip at its
+environments/default/traps/animals is a kind (birds, dogs), and each folder inside a kind is one animal (bird to bird24, dog and dog2). An animal plays its spawn clip at its
 tile, then its loop (every theme has its own call), with the layered misc/trap/animals countdown. Clapping (both hands
 together, with nothing else for the hands to do) inside its hand window, the same window as a force field's switch,
 scares the nearest animal away: a random scare clip at its tile (dev, 2026-11-04: named scare, not flight, since "dogs cannot fly"), and its
@@ -8,7 +8,7 @@ loop stops. Reaching one you didn't scare is a blow of animal_damage (10) throug
 ducking don't help. Belt-wide on purpose, so turning can't dodge it and the clap stays its only answer (dev: "belt wide").
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_animals() shrinks the array. */
 sound_pool animalpool;
-const string animal_folder = "objects/traps/animals/"; // one folder per kind (birds, dogs), then one per animal (dev, 2026-11-04)
+const string animal_folder = "environments/default/traps/animals/"; // one folder per kind (birds, dogs), then one per animal (dev, 2026-11-04)
 class animal
 {
 double x;

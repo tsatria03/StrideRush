@@ -3,7 +3,7 @@ Everything is built from the sound folders each time it opens, so a new obstacle
 dropped into sdr/sounds shows up with no code change:
 - items: common (equipments/items/common) and other (equipments/items/other, the keys)
 - countdowns: one countdown per obstacle type (misc/trap/<type>)
-- traps: one list per obstacle type (objects/traps/<type>, every theme's sounds)
+- traps: one list per obstacle type (environments/default/traps/<type>, every theme's sounds)
 - weapons: artillery and melee (equipments/weapons/<kind>)
 Every menu and list is alphabetical, and every category says how many sound files it holds. Escape or back steps up a
 level silently, out to the game menu too (they're all nested menus).
@@ -195,8 +195,8 @@ for (uint i = 0; i < cue_types.length(); i++) cues.sounds.insert_last(learn_coun
 learn_sort_sounds(cues.sounds);
 root.subs.insert_last(cues);
 learn_category obstacles("traps"); // "obstacles" until 2026-11-05
-string[] types = get_pack_sound_folders("objects/traps/*");
-for (uint i = 0; i < types.length(); i++) obstacles.subs.insert_last(learn_folder_category(types[i].replace("_", " ", true), "objects/traps/" + types[i], ""));
+string[] types = get_pack_sound_folders("environments/default/traps/*");
+for (uint i = 0; i < types.length(); i++) obstacles.subs.insert_last(learn_folder_category(types[i].replace("_", " ", true), "environments/default/traps/" + types[i], ""));
 root.subs.insert_last(obstacles);
 learn_category weapons("weapons");
 weapons.subs.insert_last(learn_folder_category("artillery", "equipments/weapons/artillery", "artillery"));
