@@ -3,16 +3,18 @@ practice menu's order. Hazards are always open; each of the others opens after p
 one before it, counted only in a practice run of that obstacle, through the same stat_add() hooks the statistics use, so
 a clean pass means the same thing here as in an endless run's statistics. Endless run opens together with spikes. The
 passes add up across runs and practice deaths, are saved in saves/game.srf, and clearing game progresses keeps them. */
-const string[] practice_choices = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "fake_doors", "real_doors", "mixed_doors", "barriers"};
-/* Each choice's goal: the stat key (or either of two) a clean pass adds to, and how the lock line says it. Barriers come
-last and open nothing, so they have no goal (dev, 2026-11-10: "No goal. It should just say available"). */
-const string[] practice_goal_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "walls_broken", "fake_doors_broken", "real_doors_opened", "real_doors_opened", ""};
-const string[] practice_goal_stats2 = {"", "", "", "", "", "", "", "", "", "fake_doors_broken", ""}; // mixed doors: a real door opened or a fake door broken
-const string[] practice_goal_verbs = {"jump over", "jump over", "jump over", "duck under", "switch off", "scare off", "break", "break", "open", "get through", ""};
-const string[] practice_goal_singulars = {"hazard", "spike", "mine", "projectile", "force field", "animal", "wall", "fake door", "real door", "mixed door", "barrier"};
-int[] practice_passes = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // one per practice_choices entry, saved as practice_passes_<choice>
+const string[] practice_choices = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "fake_doors", "real_doors", "mixed_doors", "barriers", "combinations"};
+/* Each choice's goal: the stat key (or either of two) a clean pass adds to, and how the lock line says it. The last choice
+opens nothing, so it has no goal (dev, 2026-11-10: "No goal. It should just say available"): barriers until combinations
+came after them (the combined obstacles plan, dev, 2026-11-11), when barriers got "dodge past", the dev's earlier wording. */
+const string[] practice_goal_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "walls_broken", "fake_doors_broken", "real_doors_opened", "real_doors_opened", "barriers_dodged", ""};
+const string[] practice_goal_stats2 = {"", "", "", "", "", "", "", "", "", "fake_doors_broken", "", ""}; // mixed doors: a real door opened or a fake door broken
+const string[] practice_goal_verbs = {"jump over", "jump over", "jump over", "duck under", "switch off", "scare off", "break", "break", "open", "get through", "dodge past", ""};
+const string[] practice_goal_singulars = {"hazard", "spike", "mine", "projectile", "force field", "animal", "wall", "fake door", "real door", "mixed door", "barrier", "combination"};
+int[] practice_passes = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // one per practice_choices entry, saved as practice_passes_<choice>
 string practice_choice = ""; // the practice run's choice, such as "mixed_doors", set by play_game()
 bool practice_unlocks_checked = false; // the one-time returning player check has run for this save
+bool practice_combos_checked = false; // the one-time combinations check (practice_combos_check()) has run for this save
 
 // Hazards are always open; any other choice once the one before has its passes.
 bool practice_unlocked(int i)
@@ -102,4 +104,26 @@ if (practice_goal_stats[i] != "") practice_passes[i] = practice_unlock_count;
 }
 }
 writegame();
+}
+/* Once per save, after the returning player check (the combined obstacles plan, 2026-11-11): barriers had no goal until
+combinations came after them, so nobody could have passes for them. A save that already has barriers open (returning
+players, who got everything opened, or anyone who reached them) gets combinations opened too; everyone else unlocks
+them by dodging past 5 barriers. */
+void practice_combos_check()
+{
+if (practice_combos_checked) return;
+practice_combos_checked = true;
+int b = practice_choices.find("barriers");
+if (b >= 0 and practice_unlocked(b)) practice_passes[b] = practice_unlock_count;
+writegame();
+}
+// Can a practice run of this choice be in this environment: its obstacle there, or for combinations, both of some pair's.
+bool practice_env_ok(const string&in env, const string&in choice)
+{
+if (choice != "combinations") return env_has_type(env, practice_trap_type(choice));
+for (uint i = 0; i < combo_firsts.length(); i++)
+{
+if (env_has_type(env, practice_trap_type(combo_firsts[i])) and env_has_type(env, practice_trap_type(combo_seconds[i]))) return true;
+}
+return false;
 }
