@@ -67,3 +67,4 @@ Sections:
 2. Clearing a pair: each part knowing its pair; a pair cleared when both parts pass cleanly, a hit on either spoiling it; combinations_cleared in stats.nvgt's stat_keys; the six achievements in achievements.ini.
 3. Practice: "combinations" in practice_choices after barriers; barriers' goal "dodge past" (barriers_dodged); every spawn a pair; the practice pass on a cleared pair; environment eligibility for combinations.
 4. Docks: the readme (combinations in a run, the practice line, statistics and achievements), the changelog, the todo list, CLAUDE.md, the version history, this plan COMPLETE.
+- Side change (dev, 2026-11-11: "They should not come with a shield for hazards. Also update the readme for practice"): hazards practice starts with no steel shield and gets none back after a practice death (practice_shield_count() in shield.nvgt); its own 2.0 entry (6 of 20); the readme's practice paragraph.

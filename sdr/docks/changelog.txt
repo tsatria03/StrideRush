@@ -1,4 +1,5 @@
 New in 2.0.
+Made it so a practice run of hazards no longer gives you a steel shield, since a shield can't save you from a hazard.
 Added environments, places with their own ground, music, ambience and obstacle sounds, so every run starts in a random one and moves to a different one every 1 to 2 minutes, with a second environment that brings back many of the ground surfaces, ambiences and music tracks from earlier versions.
 Made it so the learn sounds menu now has environments, items and weapons, with each environment holding its own countdowns and traps.
 Made it so the game's music, ambiences, ground surfaces, obstacle sounds and obstacle countdowns now live together in a default environment, ready for more environments to be added later.

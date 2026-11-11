@@ -35,14 +35,21 @@ shield_hp_left = 0;
 shields in the inventory (one until 2026-11-05), to be worn with U, since shields never spawn in those runs. Called from reset_run(). */
 void give_debug_shield()
 {
-// Every practice run starts with practice_shields, whatever it practices, hazards included (dev, 2026-11-05).
+// Every practice run starts with its practice shields (practice_shield_count()), none for hazards.
 if (practice_run)
 {
-give_item("steel_shield", practice_shields);
+if (practice_shield_count() > 0) give_item("steel_shield", practice_shield_count());
 return;
 }
 string[] shielded_types = {"spikes", "mines", "force_fields", "projectiles", "walls", "animals", "animals_birds", "animals_dogs", "fake_doors", "real_doors", "real_doors_spread", "powerups", "barriers", "barriers_random", "barriers_multiple"}; // never "all", which plays like the real game (dev)
 if (shielded_types.find(spawn_only) >= 0) give_item("steel_shield", 2); // 2 since 2026-11-05 (dev: "in debug, you'll have 2 shields in your inv"), was 1
+}
+/* The steel shields a practice run starts with and gets back after each practice death: practice_shields, but none when
+practicing hazards, which shields can't stop (dev, 2026-11-11: "They should not come with a shield for hazards"; every
+practice run had one since 2026-11-05). */
+int practice_shield_count()
+{
+return practice_choice == "hazards" ? 0 : practice_shields;
 }
 // countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.
 void spawn_shield(double sx, int countdown, int lane = -1)

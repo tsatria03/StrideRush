@@ -120,7 +120,7 @@ player_health = player_hp;
 lives = practice_lives;
 reset_shield(); // a worn shield comes off too, so you're back as a practice run starts (dev, 2026-11-10: it stayed on)
 int shields = item_count("steel_shield");
-if (shields < practice_shields) give_item("steel_shield", practice_shields - shields);
+if (shields < practice_shield_count()) give_item("steel_shield", practice_shield_count() - shields); // none for hazards
 resume_game();
 play_landing(false); // the tile's landing only, as after a teleport
 }
