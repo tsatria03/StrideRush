@@ -1,11 +1,11 @@
 ---
 name: project_combined_obstacles_plan
-description: SETTLED (2026-11-11, for 2.0; 4 sections) - combined obstacles, two (three on chaos) at once needing actions in a row; background, the explained design and the questions to ask; Q&A log
+description: COMPLETE (2026-11-11, 2.0 at 8 of 20; 4 sections) - combined obstacles, two (three on chaos) at once needing actions in a row; background, the explained design and the questions to ask; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-11), waiting for the dev to commit it before Section 1. The dev (2026-11-10): "Pleast start this plan, Do not ask me any questions yet. I still want to look at your other suggestions". Ask the open questions below one per turn once the dev says to go on.
+Status: COMPLETE (2026-11-11, 2.0 at 8 of 20). The dev (2026-11-10): "Pleast start this plan, Do not ask me any questions yet. I still want to look at your other suggestions". Ask the open questions below one per turn once the dev says to go on.
 
 Background:
 - One of Claude's 2.0 suggestions ([[project_suggestions]]), liked by the dev ("es. Deffenatly") and copied to the todo list's open section: "Add combined obstacles, two at once that need two actions in a row, such as crouching under a projectile and then jumping a spike."
@@ -80,3 +80,4 @@ Sections:
 - Section 2 COMPLETE (dev, 2026-11-11): all 3 tests passed (the six achievements listed, 92 in all; combinations cleared counting only pairs with no hit, in an endless run; Quick Pair earned at the fifth pair of a run).
 - Section 3 built (2026-11-11): practice.nvgt's tables gain "combinations" last (no goal), and barriers' goal (barriers_dodged, "dodge past", singular "barrier"); practice_combos_check() (once per save, flag practice_combos_checked in game.srf, after the returning player check): a save with barriers already open gets barriers' passes, so combinations open too; practice_env_ok() (combinations need both obstacles of some pair in the environment), used by env.nvgt's pick_start_env() and env_eligible(); menu.nvgt's practice_spawn_id() maps combinations to combinations_mixed, every spawn a pair from all 16. A cleared pair needs no practice count: combinations open nothing after them.
 - Section 3 COMPLETE (dev, 2026-11-11): "I tested it with both saves, my current save with everything unlocked, and a new save with everything locked. All of the practice tests passed" (the menu line and locked dialog, the unlock, a combinations practice run).
+- Section 4 (docks) done (2026-11-11): the readme (a combinations paragraph in How to play; combinations last in practice, opened by dodging past 5 barriers; over 90 achievements); two changelog entries at the dev's word (combinations; practising them), 2.0 at 8 of 20; the todo item to finished; CLAUDE.md, the version history. Plan COMPLETE.

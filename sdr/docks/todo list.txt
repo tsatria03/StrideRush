@@ -3,10 +3,10 @@
 ****Unfinished. Add winds that drift across the lanes toward you and shove you sideways, which you can step out of the way of at the last moment or crouch to brace against.
 ****Unfinished. Add trampolines that launch you over the next few obstacles when you run onto one.
 ****Unfinished. Add slides, slippery stretches of ground that carry you faster for a few seconds.
-****Unfinished. Add combined obstacles, two at once that need two actions in a row, such as crouching under a projectile and then jumping a spike.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add combinations, two obstacles at once that need two actions in a row, such as crouching under a projectile and then jumping a spike.
 **Finished. Add environments, each with its own music, ambience, surfaces and obstacle sounds, which you pass through during a run.
 **Finished. Make survival items rarer on harder difficulties, and barriers more common.
 **Finished. Lock practice obstacles until you've practiced the one before them, and endless run until you've practiced hazards.
