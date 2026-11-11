@@ -1,0 +1,94 @@
+/* Combined obstacles (the combined obstacles plan, dev, 2026-11-11; Section 1): sometimes the spawner places a pair, two
+obstacles close together that need two actions in a row, in place of one ordinary obstacle. Pairs only, never three
+(dev: "That will just make the game too hard"), and never with real doors. The pairs are combo_firsts[i] then
+combo_seconds[i] (tuning.nvgt), and each also comes reversed. A pair can come once both its obstacles have joined the
+run and the current environment has both. The second part sits after the first by the first action's gap
+(combo_gap_ms()), so each part keeps its own countdown, the two overlapping, with no extra cue. A pair's barrier is a
+single one in your lane. */
+
+// The pair the spawner will place next (next_type "combinations"), first then second.
+string next_combo_first = "", next_combo_second = "";
+// How far past the first part the last placed pair's second part was, so the next spawn comes after it.
+int last_pair_span = 0;
+
+/* Debug spawn choices: "combinations" spawns only the first-order pairs, "combinations_reverse" only the reversed ones,
+and "combinations_mixed" both (dev, 2026-11-11). */
+bool combo_debug_only()
+{
+return spawn_only == "combinations" or spawn_only == "combinations_reverse" or spawn_only == "combinations_mixed";
+}
+/* The share of obstacle spawns that become a pair: the level's difficulty_combo_percents entry, the full chaos rate in a
+debug run, none in practice (practice gets its own combinations choice in Section 3). */
+int combo_percent()
+{
+if (practice_run) return 0;
+if (run_difficulty < 0) return difficulty_combo_percents[difficulty_combo_percents.length() - 1];
+return difficulty_combo_percents[run_difficulty];
+}
+// Can this type be a pair's part right now: joined the schedule, with themes in the current environment?
+bool combo_part_ready(const string&in type)
+{
+return has_joined(type) and get_pack_sound_folders(type_folder(type) + "*").length() > 0;
+}
+/* Picks a pair the run can have now into next_combo_first and next_combo_second, from the first-order pairs, the reversed
+ones, or both (a normal run). False when none is ready. */
+bool choose_combo()
+{
+string[] firsts, seconds;
+bool forward = spawn_only != "combinations_reverse";
+bool reverse = spawn_only != "combinations";
+for (uint i = 0; i < combo_firsts.length(); i++)
+{
+if (!combo_part_ready(combo_firsts[i]) or !combo_part_ready(combo_seconds[i])) continue;
+if (forward)
+{
+firsts.insert_last(combo_firsts[i]);
+seconds.insert_last(combo_seconds[i]);
+}
+if (reverse)
+{
+firsts.insert_last(combo_seconds[i]);
+seconds.insert_last(combo_firsts[i]);
+}
+}
+if (firsts.length() == 0) return false;
+int pick = random(0, firsts.length() - 1);
+next_combo_first = firsts[pick];
+next_combo_second = seconds[pick];
+return true;
+}
+/* The gap after a pair's first part, in ms, by what the first part asks of you (dev, 2026-11-11): a jump keeps you in
+the air about a second, a crouch has to be stood up from, and lane switches, firing and single hands are instant. Between a
+force field and an animal, either way, the gap is wider, so a hand press never has both in reach (hand_check() gives it
+to the field first). */
+int combo_gap_ms(const string&in first, const string&in second)
+{
+if ((first == "force_fields" and second == "animals") or (first == "animals" and second == "force_fields")) return combo_gap_hands;
+if (first == "hazards" or first == "spikes" or first == "mines") return combo_gap_jump;
+if (first == "projectiles") return combo_gap_crouch;
+return combo_gap_quick; // barriers, walls, fake doors, force fields, animals
+}
+// That gap in tiles at the current speed, rounded up, never under 1.
+int combo_gap_tiles(const string&in first, const string&in second)
+{
+return int(max(1, ceil(double(combo_gap_ms(first, second)) / current_step_time())));
+}
+/* Places the pair: the first part at x, the second after the gap, each with the full countdown. A barrier part is a
+single barrier in your lane, so the lane switch is always part of it. */
+void place_pair(double x, int countdown)
+{
+int span = combo_gap_tiles(next_combo_first, next_combo_second);
+place_pair_part(x, next_combo_first, countdown);
+place_pair_part(x + span, next_combo_second, countdown);
+last_pair_span = span;
+}
+void place_pair_part(double x, const string&in type, int countdown)
+{
+if (type == "barriers")
+{
+string[] themes = get_pack_sound_folders(type_folder(type) + "*");
+if (themes.length() > 0) spawn_barrier(x, themes[random(0, themes.length() - 1)], countdown, current_lane);
+return;
+}
+place_obstacle(x, type, countdown);
+}

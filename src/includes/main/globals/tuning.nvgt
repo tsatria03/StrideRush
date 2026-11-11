@@ -59,6 +59,17 @@ const int[] difficulty_item_percents = {25, 20, 15, 10, 5};
 /* How many shares barriers get in the obstacle pick, where every other type has 1 (the item balance plan, dev,
 2026-11-10): half of them pass in other lanes, where their countdown doesn't play, so they come twice as often. */
 const int barrier_weight = 2;
+/* Combined obstacles (the combined obstacles plan, dev, 2026-11-11): a pair replaces this percent of obstacle spawns,
+easy to chaos (debug runs at chaos's). The pairs, each also coming reversed (combo.nvgt), and the gap after a pair's
+first part by its action, in ms: a jump, a crouch, a quick action (a lane switch, firing or one hand), and the wider gap
+between a force field and an animal either way. */
+const int[] difficulty_combo_percents = {5, 10, 15, 20, 25};
+const string[] combo_firsts = {"projectiles", "force_fields", "force_fields", "mines", "barriers", "walls", "animals", "fake_doors"};
+const string[] combo_seconds = {"spikes", "walls", "animals", "barriers", "projectiles", "barriers", "hazards", "mines"};
+const int combo_gap_jump = 1200;
+const int combo_gap_crouch = 600;
+const int combo_gap_quick = 500;
+const int combo_gap_hands = 1000;
 /* Top speed by level (the difficulty scaling plan, dev, 2026-11-09): the step time where an endless run's belt stops
 speeding up, 5, 6.7, 10, 13.3 and 20 steps a second. Every obstacle and item has joined by easy's 200. Debug runs keep
 min_step_time, and Rush Hour can still go speedup_amount past the cap, never past min_step_time. */

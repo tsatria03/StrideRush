@@ -114,6 +114,13 @@ next_type = "";
 next_countdown = 0;
 return;
 }
+// Debug options only: "combinations" and "combinations, reverse" make every spawn a pair (combo.nvgt).
+if (combo_debug_only())
+{
+next_type = choose_combo() ? "combinations" : "";
+next_countdown = next_type == "" ? 0 : countdown_steps();
+return;
+}
 string[] available;
 for (uint i = 0; i < obstacle_types.length(); i++)
 {
@@ -149,7 +156,12 @@ else if (teleporters_ok and random(1, teleporter_chance) == 1) next_type = "play
 else if (powerups_ok and random(1, powerup_chance) == 1) next_type = "powerups";
 else if (shields_ok and random(1, shield_chance) == 1 and survival_roll()) next_type = "steel_shields";
 else if (packs_ok and random(1, ammo_pack_chance) == 1) next_type = "ammo_packs";
-else next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
+else
+{
+next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
+// Sometimes a pair takes the obstacle's place (combo.nvgt), in a normal run only.
+if (next_type != "" and spawn_only == "all" and random(1, 100) <= combo_percent() and choose_combo()) next_type = "combinations";
+}
 next_countdown = next_type == "" ? 0 : countdown_steps();
 }
 // A random point in the first half of the stretch before next_key_door: 50 ms sections give 475 to 500 before the 450 door.
@@ -204,10 +216,13 @@ void spawn_check()
 if (me.x + spawn_distance() + next_countdown < next_spawn_x) return;
 place_obstacle(next_spawn_x, next_type, next_countdown);
 string placed = next_type;
+// A pair ends at its second part, so the next spawn counts from there, and a force field there needs its throw's room too.
+string last_part = placed == "combinations" ? next_combo_second : placed;
+int span = placed == "combinations" ? last_pair_span : 0;
 choose_next_obstacle();
-next_spawn_x += next_gap(next_countdown);
+next_spawn_x += span + next_gap(next_countdown);
 // A force field's throw needs room after it, so the gap after one gets that many extra tiles.
-if (placed == "force_fields") next_spawn_x += forcefield_knockback_tiles;
+if (last_part == "force_fields") next_spawn_x += forcefield_knockback_tiles;
 }
 /* The six inventory items that sit in lanes (dev, 2026-11-05, the lanes plan's Section 4); powerups stay belt-wide. In
 "all" and the real game, each item spawn takes a random lane, and item_pair_percent of the time a second item of a
@@ -301,6 +316,11 @@ return false;
 void place_obstacle(double x, string type, int countdown)
 {
 if (type == "") return;
+if (type == "combinations")
+{
+place_pair(x, countdown); // combo.nvgt
+return;
+}
 if (item_lane_types.find(type) >= 0)
 {
 spawn_items(type, x, countdown);

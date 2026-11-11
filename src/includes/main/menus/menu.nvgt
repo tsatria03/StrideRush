@@ -441,6 +441,10 @@ if (item_lane_types.find(item_types[i]) < 0) continue;
 add_spawn_choice(labels, ids, item_name + ", random lanes", item_types[i] + "_random");
 add_spawn_choice(labels, ids, item_name + ", multiple lanes", item_types[i] + "_multiple");
 }
+// Debug options: every spawn a pair (the combined obstacles plan, dev, 2026-11-11): first-order pairs, reversed ones, or both mixed.
+add_spawn_choice(labels, ids, "combinations", "combinations");
+add_spawn_choice(labels, ids, "combinations, reversed", "combinations_reverse"); // "reversed" (dev, 2026-11-11)
+add_spawn_choice(labels, ids, "combinations, mixed", "combinations_mixed");
 add_spawn_choice(labels, ids, "all", "all");
 add_spawn_choice(labels, ids, "nothing", "nothing"); // an empty belt, for the music and ambience (dev, 2026-11-06)
 labels.sort_ascending();

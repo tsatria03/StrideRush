@@ -23,6 +23,8 @@ The dev asked for 2.0 ideas "related to the run modes itself. Example, new macan
 
 Statistics and achievements (dev, 2026-11-11: "I forgot to mention that wind and trampoleens will also get achievements/stats as well."): winds and trampolines each get their own statistic and achievements when they're planned, like every obstacle (likely the same lifetime and single-run tiers).
 
+10. A wall and fake door combination pair, both orders. NOT CERTAIN, for later reconsideration (dev, 2026-11-11). Detail in [[project_combined_obstacles_plan]].
+
 ## Lane-changing barriers in detail (as explained to the dev, 2026-11-10)
 - In play: a barrier (a car, say) is heard coming in one lane, then plays a swerve cue (tyre squeal, horn) and its sound slides into a neighbouring lane; you track where it ends up and dodge that. The skill is listening for where it lands, not where it started.
 - Fairness: the drift is always announced by its own cue; it moves once, one lane, never at the last moment, finishing while there's still time to react; at least one lane always stays open, as with pairs today. Its countdown (which plays only in its own lane) picks up as it drifts into yours.
