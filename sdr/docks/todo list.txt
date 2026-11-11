@@ -1,7 +1,7 @@
 ####These are the things that need to be finished for future versions of the game.
 
 ****Unfinished. Add winds that drift across the lanes toward you and shove you sideways, which you can step out of the way of at the last moment or crouch to brace against.
-****Unfinished. Add jump pads that launch you over the next few obstacles when you run onto one.
+****Unfinished. Add trampolines that launch you over the next few obstacles when you run onto one.
 ****Unfinished. Add slides, slippery stretches of ground that carry you faster for a few seconds.
 ****Unfinished. Add combined obstacles, two at once that need two actions in a row, such as crouching under a projectile and then jumping a spike.
 
