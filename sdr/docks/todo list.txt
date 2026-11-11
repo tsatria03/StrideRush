@@ -1,6 +1,7 @@
 ####These are the things that need to be finished for future versions of the game.
 
-Nothing is waiting here right now. New bugs, planned changes and anything still to be decided will be listed here as they come up.
+****Unfinished. Add environments, such as a factory, each with its own music, ambience, surfaces and obstacle sounds, which you can choose before a run or pass through during one.
+****Unfinished. Add combined obstacles, two at once that need two actions in a row, such as crouching under a projectile and then jumping a spike.
 
 ##These are the things that are already finished from earlier versions of the game.
 
