@@ -80,6 +80,7 @@ return env_root(current_env) + "audio/ambiences/";
 string[] track_order; // the shuffle: full paths, played from track_pos on
 int track_pos = 0;
 string current_track = "", current_ambience = "";
+string track_env = ""; // the environment the shuffle was drawn from, so a switch makes the next track come from the new one
 int amb_old_slot = -1;
 double ambience_change_at = 0, ambience_fade_start = -1; // on runtimer; -1 means no crossfade under way
 
@@ -96,6 +97,7 @@ current_ambience = ambience;
 amb_old_slot = -1;
 ambience_fade_start = -1;
 ambience_change_at = runtimer.elapsed + random(ambience_min_time, ambience_max_time);
+start_env(); // the switch timer and the starting announcement (env.nvgt)
 }
 void stop_run_audio()
 {
@@ -106,16 +108,20 @@ ambslot = -1;
 amb_old_slot = -1;
 ambience_fade_start = -1;
 }
-// Runs every frame from run_loop(): the next track when one ends, and the ambience's timer and crossfade.
+// Runs every frame from run_loop(): an environment switch, the next track when one ends, and the ambience's timer and crossfade.
 void run_audio_check()
 {
-// The run loop doesn't run while the pause menu, F1 or F2 has the music paused, so a paused track never counts as ended.
-if (track_order.length() > 0 and !muspool.sound_is_playing(musslot)) play_next_track();
+env_check();
+/* The run loop doesn't run while the pause menu, F1 or F2 has the music paused, so a paused track never counts as ended.
+After a switch the track playing finishes first (dev, 2026-11-10: "I want to finish the song"), then the next comes from
+the new environment, even if the old shuffle had run dry or the old environment had no tracks. */
+if (!muspool.sound_is_playing(musslot) and (track_order.length() > 0 or track_env != current_env)) play_next_track();
 ambience_check();
 }
 // The next track in the shuffle, shuffling a fresh order when the last one has played.
 void play_next_track()
 {
+if (track_env != current_env) track_pos = int(track_order.length()); // a switch: draw the next from the new environment
 if (track_pos >= int(track_order.length())) shuffle_tracks();
 if (track_order.length() == 0) return;
 current_track = track_order[track_pos];
@@ -130,6 +136,7 @@ void shuffle_tracks()
 {
 track_order.resize(0);
 track_pos = 0;
+track_env = current_env;
 string[] names = find_files("sounds/" + tracks_folder() + "*");
 for (uint i = 0; i < names.length(); i++) track_order.insert_last("sounds/" + tracks_folder() + names[i]);
 for (int i = int(track_order.length()) - 1; i > 0; i--)
@@ -146,6 +153,16 @@ track_order[0] = track_order[j];
 track_order[j] = current_track;
 }
 }
+/* Starts a crossfade to next, from the timer or an environment switch. An empty next (an environment with no ambiences)
+just fades the old one out. A fade still under way is cut short first, its old ambience dropped. */
+void begin_ambience_fade(string next)
+{
+if (amb_old_slot > -1) ambpool.destroy_sound(amb_old_slot);
+amb_old_slot = ambslot;
+ambslot = next == "" ? -1 : ambpool.play_stationary_extended(next, true, 0, 0, ambience_volume - ambience_fade_floor, 100, false);
+current_ambience = next;
+ambience_fade_start = runtimer.elapsed;
+}
 // A random ambience, never the one playing now when there's another to choose.
 string pick_ambience()
 {
@@ -155,12 +172,13 @@ string choice = "sounds/" + ambiences_folder() + names[random(0, names.length() 
 while (names.length() > 1 and choice == current_ambience) choice = "sounds/" + ambiences_folder() + names[random(0, names.length() - 1)];
 return choice;
 }
-// The ambience's timer, then its crossfade: the old one falls ambience_fade_floor decibels while the new one rises to your volume.
+/* The ambience's timer, then its crossfade: the old one falls ambience_fade_floor decibels while the new one rises to your
+volume. While the run switches environments, the switch brings each new ambience (env_check()), so the timer waits. */
 void ambience_check()
 {
-if (current_ambience == "") return;
 if (ambience_fade_start < 0)
 {
+if (env_switching() or current_ambience == "") return;
 if (runtimer.elapsed < ambience_change_at) return;
 string next = pick_ambience();
 if (next == "" or next == current_ambience)
@@ -168,14 +186,11 @@ if (next == "" or next == current_ambience)
 ambience_change_at = runtimer.elapsed + random(ambience_min_time, ambience_max_time);
 return;
 }
-amb_old_slot = ambslot;
-ambslot = ambpool.play_stationary_extended(next, true, 0, 0, ambience_volume - ambience_fade_floor, 100, false);
-current_ambience = next;
-ambience_fade_start = runtimer.elapsed;
+begin_ambience_fade(next);
 return;
 }
 double progress = min(1.0, (runtimer.elapsed - ambience_fade_start) / double(ambience_fade_time));
-ambpool.update_sound_start_values(ambslot, 0, ambience_volume - ambience_fade_floor * (1 - progress), 100);
+if (ambslot > -1) ambpool.update_sound_start_values(ambslot, 0, ambience_volume - ambience_fade_floor * (1 - progress), 100);
 if (amb_old_slot > -1) ambpool.update_sound_start_values(amb_old_slot, 0, ambience_volume - ambience_fade_floor * progress, 100);
 if (progress < 1) return;
 if (amb_old_slot > -1) ambpool.destroy_sound(amb_old_slot);

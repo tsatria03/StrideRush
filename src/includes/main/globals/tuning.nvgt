@@ -225,6 +225,12 @@ const int ambience_min_time = 60000;
 const int ambience_max_time = 120000;
 const int ambience_fade_time = 2000;
 const int ambience_fade_floor = 40;
+/* Environments (the environments plan's Section 2, dev, 2026-11-10: "I'd say 1 to 2 minutes"): with more than one
+environment to go to, a run moves to a random different one every random env_switch_min_time to env_switch_max_time of
+running time (runtimer, so pausing freezes it). The switch brings the new ambience, so the ambience timer above only
+runs when there's nothing to switch to. */
+const int env_switch_min_time = 60000;
+const int env_switch_max_time = 120000;
 
 /* The heartbeat (the heartbeat plan, dev, 2026-11-08): heart_start_bpm at start_step_time, rising in a straight line to
 heart_max_bpm at heart_full_speed_ms: 5 + (500 - step time) x 150 / 350, about 4.3 bpm per 10 ms, so 155 at 150 ms, held there at any faster speed. A beat comes every
