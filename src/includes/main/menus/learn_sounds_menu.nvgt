@@ -2,8 +2,9 @@
 Everything is built from the sound folders each time it opens, so a new obstacle theme, item or weapon
 dropped into sdr/sounds shows up with no code change:
 - items: common (equipments/items/common) and other (equipments/items/other, the keys)
-- countdowns: one countdown per obstacle type that has cues (environments/default/traps/<type>/countdown)
-- traps: one list per obstacle type (environments/default/traps/<type>/general, every theme's sounds)
+- environments: one category per folder in environments/, named by it (default so far), each with
+  - countdowns: one countdown per obstacle type that has cues (environments/<env>/traps/<type>/countdown)
+  - traps: one list per obstacle type (environments/<env>/traps/<type>/general, every theme's sounds)
 - weapons: artillery and melee (equipments/weapons/<kind>)
 Every menu and list is alphabetical, and every category says how many sound files it holds. Escape or back steps up a
 level silently, out to the game menu too (they're all nested menus).
@@ -189,20 +190,13 @@ learn_category items("items");
 items.subs.insert_last(learn_folder_category("common", "equipments/items/common", ""));
 items.subs.insert_last(learn_folder_category("other", "equipments/items/other", ""));
 root.subs.insert_last(items);
-learn_category cues("countdowns"); // "obstacle cues" until 2026-11-05 (dev: "countdowns and traps")
-string[] cue_types = get_pack_sound_folders("environments/default/traps/*");
-for (uint i = 0; i < cue_types.length(); i++)
-{
-// Only types whose countdown folder has cues (slides, trampolines and winds have empty ones for now).
-if (get_pack_sound("environments/default/traps/" + cue_types[i] + "/countdown/warn*") == "") continue;
-cues.sounds.insert_last(learn_countdown(cue_types[i]));
-}
-learn_sort_sounds(cues.sounds);
-root.subs.insert_last(cues);
-learn_category obstacles("traps"); // "obstacles" until 2026-11-05
-string[] types = get_pack_sound_folders("environments/default/traps/*");
-for (uint i = 0; i < types.length(); i++) obstacles.subs.insert_last(learn_folder_category(types[i].replace("_", " ", true), "environments/default/traps/" + types[i] + "/general", ""));
-root.subs.insert_last(obstacles);
+/* Environments (the environments plan, dev, 2026-11-10: "environments, items, and weapons", switched straight away "so I
+can see how it looks"): one category per folder in environments/, named by the folder, each with its own countdowns and
+traps, since both belong to a place; items and weapons stay global. Each is listed by its folder name alone. */
+learn_category envs("environments");
+string[] env_names = get_pack_sound_folders("environments/*");
+for (uint i = 0; i < env_names.length(); i++) envs.subs.insert_last(learn_environment_category(env_names[i]));
+root.subs.insert_last(envs);
 learn_category weapons("weapons");
 weapons.subs.insert_last(learn_folder_category("artillery", "equipments/weapons/artillery", "artillery"));
 weapons.subs.insert_last(learn_folder_category("melee", "equipments/weapons/melee", "melee"));
@@ -210,6 +204,28 @@ root.subs.insert_last(weapons);
 learn_sort_categories(root.subs);
 for (uint i = 0; i < root.subs.length(); i++) learn_sort_categories(root.subs[i].subs);
 learn_browse(root, "learn");
+}
+// One environment's category: its countdowns (only types whose countdown folder has cues) and its traps, one list per type.
+learn_category@ learn_environment_category(const string&in env)
+{
+string env_root = "environments/" + env + "/";
+learn_category@ place = learn_category(env.replace("_", " ", true)); // just its name, "default" (dev, 2026-11-10: "not, default environment")
+learn_category cues("countdowns"); // "obstacle cues" until 2026-11-05 (dev: "countdowns and traps")
+string[] types = get_pack_sound_folders(env_root + "traps/*");
+for (uint i = 0; i < types.length(); i++)
+{
+// Slides, trampolines and winds have empty countdown folders for now, so they're left out.
+if (get_pack_sound(env_root + "traps/" + types[i] + "/countdown/warn*") == "") continue;
+cues.sounds.insert_last(learn_countdown(env_root, types[i]));
+}
+learn_sort_sounds(cues.sounds);
+place.subs.insert_last(cues);
+learn_category obstacles("traps"); // "obstacles" until 2026-11-05
+for (uint i = 0; i < types.length(); i++) obstacles.subs.insert_last(learn_folder_category(types[i].replace("_", " ", true), env_root + "traps/" + types[i] + "/general", ""));
+learn_sort_categories(obstacles.subs);
+place.subs.insert_last(obstacles);
+learn_sort_categories(place.subs);
+return place;
 }
 /* A category's count (dev, 2026-11-10, after a player's report that countdowns said 85 sounds with only 9 in it): the
 entries you can pick, then every file when variants or layers make that more, "This category has 9 individual sounds,
@@ -439,13 +455,13 @@ return base.replace("_", " ", true);
 }
 /* One obstacle type's countdown, the way play_countdown() plays it: five steps, each with every layer of a layered set
 (warn<group>-<note>) or the plain warn<note>. */
-learn_sound@ learn_countdown(const string&in type)
+learn_sound@ learn_countdown(const string&in env_root, const string&in type)
 {
 learn_sound s;
 s.label = learn_upper_first(type.replace("_", " ", true) + " countdown");
 s.theme = type;
 s.sound_name = "countdown";
-string folder = "environments/default/traps/" + type + "/countdown/";
+string folder = env_root + "traps/" + type + "/countdown/";
 bool layered = get_pack_sound(folder + "warn1-1*") != "";
 for (int note = 1; note <= countdown_length; note++)
 {
