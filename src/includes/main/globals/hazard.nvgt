@@ -8,6 +8,7 @@ class hazard
 double x;
 string theme;
 string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 int loopslot = -1;
 double ledge_start, ledge_end;
 }
@@ -21,6 +22,7 @@ hazard h;
 h.x = hx;
 h.theme = theme;
 h.env = current_env;
+h.pair = placing_pair;
 h.ledge_start = hx - countdown;
 h.ledge_end = hx + ledge_after_tiles;
 h.loopslot = hazardpool.play_2d(get_pack_sound(trap_folder(current_env, "hazards") + theme + "/*loop*"), 0, me.x, 0, hx, true);
@@ -46,12 +48,17 @@ string fall_clip = get_pack_sound(trap_folder(hazards[i].env, "hazards") + hazar
 if (practice_run) practice_set_down(hazards[i], fall_clip);
 else
 {
-stat_caught("hazards"); // the statistics: times fell into hazards (dev, 2026-11-06)
+stat_caught("hazards");
+pair_part_hit(hazards[i].pair); // the statistics: times fell into hazards (dev, 2026-11-06)
 end_run_hazard(fall_clip);
 }
 return;
 }
-if (me.x == hazards[i].x) stat_add("hazards_jumped"); // in the air on its tile: cleared (a grounded arrival returned above)
+if (me.x == hazards[i].x) // in the air on its tile: cleared (a grounded arrival returned above)
+{
+stat_add("hazards_jumped");
+pair_part_cleared(hazards[i].pair);
+}
 // Kept until it's as far behind as obstacles appear ahead, so its loop fades out behind you instead of cutting off.
 if (me.x > max(hazards[i].ledge_end, hazards[i].x + spawn_distance())) remove_hazard(i);
 }

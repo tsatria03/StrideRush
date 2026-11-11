@@ -25,6 +25,7 @@ double x;
 int lane;
 string theme;
 string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 double countdown_start;
 bool spent = false; // reached: it can never hit again
 int loopslot = -1;
@@ -66,6 +67,7 @@ b.x = bx;
 b.lane = lane;
 b.theme = theme;
 b.env = current_env;
+b.pair = placing_pair;
 b.countdown_start = bx - countdown;
 b.loopslot = barrierpool.play_2d(get_pack_sound(barrier_folder(current_env) + theme + "/*loop*"), 0, me.x, barrier_side(b), b.x, true);
 place_barrier(b);
@@ -111,12 +113,17 @@ barrier@ b = barriers[i];
 if (me.x == b.x and !b.spent)
 {
 b.spent = true;
-if (b.lane != current_lane) stat_add("barriers_dodged"); // it reached you in another lane
+if (b.lane != current_lane)
+{
+stat_add("barriers_dodged"); // it reached you in another lane
+pair_part_cleared(b.pair);
+}
 if (b.lane == current_lane)
 {
 string hit_clip = get_pack_sound(barrier_folder(b.env) + b.theme + "/*hit*");
 // Its loop carries on through you and fades behind, like a spike's (dev, 2026-11-05); a fatal hit silences the run anyway.
-stat_caught("barriers"); // the statistics: what caught you, and what ended the run if it's fatal
+stat_caught("barriers");
+pair_part_hit(b.pair); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(barrier_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {

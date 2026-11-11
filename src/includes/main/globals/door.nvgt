@@ -25,6 +25,7 @@ class door
 double x;
 string theme;
 string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 int pitch = 100;
 bool real = false;
 bool locked = false; // a real door starts locked until a key unlocks it (U)
@@ -58,6 +59,7 @@ door d;
 d.x = dx;
 d.theme = theme;
 d.env = current_env;
+d.pair = placing_pair;
 d.real = real;
 d.locked = real;
 d.pitch = real ? 100 : fake_door_pitches[random(0, fake_door_pitches.length() - 1)];
@@ -198,6 +200,7 @@ if (target.hp <= 0)
 {
 target.destroyed = true;
 stat_add("fake_doors_broken"); // only fake doors can be broken
+pair_part_cleared(target.pair);
 stop_door(target);
 play_door(target, "death", target.x, false);
 }
@@ -229,7 +232,8 @@ if (door_standing(d))
 d.crashed = true;
 stop_door(d);
 // A fatal crash plays the door's hit through p, at its pitch, and no player hit; end_run_hit() plays the death.
-stat_caught("doors"); // the statistics: what caught you, and what ended the run if it's fatal
+stat_caught("doors");
+pair_part_hit(d.pair); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(door_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {

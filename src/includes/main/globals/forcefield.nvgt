@@ -15,6 +15,7 @@ class forcefield
 double x;
 string theme;
 string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 bool active = true; // on loop while true, off loop while false
 bool spent = false; // reached: it can never hit again
 int loopslot = -1;
@@ -29,6 +30,7 @@ forcefield f;
 f.x = fx;
 f.theme = theme;
 f.env = current_env;
+f.pair = placing_pair;
 f.countdown_start = fx - countdown;
 f.loopslot = forcefieldpool.play_2d(get_pack_sound(trap_folder(current_env, "force_fields") + theme + "/*on*"), 0, me.x, 0, fx, true);
 for (uint i = 0; i < forcefields.length(); i++)
@@ -58,7 +60,8 @@ if (f.active)
 string hit_clip = get_pack_sound(trap_folder(f.env, "force_fields") + f.theme + "/*hit*");
 /* A fatal hit plays no player hit and no throw, since end_run_hit() plays the player's death and then the fall of
 the field's tile. */
-stat_caught("force_fields"); // the statistics: what caught you, and what ended the run if it's fatal
+stat_caught("force_fields");
+pair_part_hit(f.pair); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(forcefield_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {
@@ -161,6 +164,7 @@ void switch_off_forcefield(forcefield@ f)
 {
 f.active = false;
 stat_add("force_fields_switched_off");
+pair_part_cleared(f.pair);
 forcefieldpool.destroy_sound(f.loopslot);
 f.loopslot = forcefieldpool.play_2d(get_pack_sound(trap_folder(f.env, "force_fields") + f.theme + "/*off*"), 0, me.x, 0, f.x, true);
 }

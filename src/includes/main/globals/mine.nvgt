@@ -11,6 +11,7 @@ class mine
 double x;
 string theme;
 string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 bool armed = false;
 bool spent = false; // passed or set off: it can never arm or hit again (a passed one keeps ticking until dropped)
 int loopslot = -1;
@@ -30,6 +31,7 @@ mine mn;
 mn.x = mx;
 mn.theme = theme;
 mn.env = current_env;
+mn.pair = placing_pair;
 mn.countdown_start = mx - countdown;
 minepool.play_2d(get_pack_sound(trap_folder(current_env, "mines") + theme + "/*spawn*"), 0, me.x, 0, mx, false);
 for (uint i = 0; i < mines.length(); i++)
@@ -58,7 +60,11 @@ mn.loopslot = minepool.play_2d(get_pack_sound(trap_folder(mn.env, "mines") + mn.
 if (me.x == mn.x and !mn.spent)
 {
 mn.spent = true;
-if (!is_grounded()) stat_add("mines_jumped"); // in the air on its tile: cleared
+if (!is_grounded())
+{
+stat_add("mines_jumped"); // in the air on its tile: cleared
+pair_part_cleared(mn.pair);
+}
 if (is_grounded())
 {
 silence_mine(mn); // set off: the ticking stops at once
@@ -66,7 +72,8 @@ string explode_clip = get_pack_sound(trap_folder(mn.env, "mines") + mn.theme + "
 string hit_clip = get_pack_sound(trap_folder(mn.env, "mines") + mn.theme + "/*hit*");
 /* A fatal hit plays explode and the mine's hit through p (silence_run() would otherwise cut them off) and no player
 hit, since end_run_hit() plays the player's death instead. */
-stat_caught("mines"); // the statistics: what caught you, and what ended the run if it's fatal
+stat_caught("mines");
+pair_part_hit(mn.pair); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(mine_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {

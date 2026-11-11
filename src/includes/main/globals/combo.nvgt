@@ -10,6 +10,45 @@ single one in your lane. */
 string next_combo_first = "", next_combo_second = "";
 // How far past the first part the last placed pair's second part was, so the next spawn comes after it.
 int last_pair_span = 0;
+/* Section 2: clearing a pair. While place_pair() places its parts, placing_pair is that pair's id, and each part keeps it
+(its pair field; 0 for anything else). The live pairs are kept here by id: how many parts are still to come, and
+whether a hit spoiled it. Each part reports once, cleared (pair_part_cleared()) where its own clean-pass statistic is
+counted, or hit (pair_part_hit()) where its blow is; the pair is cleared when both parts were cleared. */
+int placing_pair = 0;
+int last_pair_id = 0;
+int[] pair_ids, pair_parts_left;
+bool[] pair_spoiled;
+// From reset_spawner(): every run starts with no pairs.
+void reset_pairs()
+{
+pair_ids.resize(0);
+pair_parts_left.resize(0);
+pair_spoiled.resize(0);
+placing_pair = 0;
+}
+void pair_part_cleared(int id)
+{
+pair_part_done(id, false);
+}
+void pair_part_hit(int id)
+{
+pair_part_done(id, true);
+}
+/* One part reported: a hit spoils the pair; when both parts are in, a pair with no hit counts as cleared
+(combinations_cleared, which also reaches practice_pass() through stat_add()), and it's forgotten either way. */
+void pair_part_done(int id, bool hit)
+{
+if (id == 0) return;
+int i = pair_ids.find(id);
+if (i < 0) return;
+if (hit) pair_spoiled[i] = true;
+pair_parts_left[i] -= 1;
+if (pair_parts_left[i] > 0) return;
+if (!pair_spoiled[i]) stat_add("combinations_cleared");
+pair_ids.remove_at(i);
+pair_parts_left.remove_at(i);
+pair_spoiled.remove_at(i);
+}
 
 /* Debug spawn choices: "combinations" spawns only the first-order pairs, "combinations_reverse" only the reversed ones,
 and "combinations_mixed" both (dev, 2026-11-11). */
@@ -78,8 +117,14 @@ single barrier in your lane, so the lane switch is always part of it. */
 void place_pair(double x, int countdown)
 {
 int span = combo_gap_tiles(next_combo_first, next_combo_second);
+last_pair_id += 1;
+placing_pair = last_pair_id; // each part keeps it (Section 2)
+pair_ids.insert_last(placing_pair);
+pair_parts_left.insert_last(2);
+pair_spoiled.insert_last(false);
 place_pair_part(x, next_combo_first, countdown);
 place_pair_part(x + span, next_combo_second, countdown);
+placing_pair = 0;
 last_pair_span = span;
 }
 void place_pair_part(double x, const string&in type, int countdown)

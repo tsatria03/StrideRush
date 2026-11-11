@@ -25,6 +25,7 @@ string spawn_only = "all";
 // The first obstacle sits a full spawn distance, its countdown and a minimum stretch of floor into the run.
 void reset_spawner()
 {
+reset_pairs(); // combo.nvgt
 next_door_mark = ((step_time - 1) / door_section_ms) * door_section_ms; // 500 gives 450, 400 gives 350
 next_key_door = next_door_mark;
 set_key_mark();
