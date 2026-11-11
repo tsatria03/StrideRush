@@ -1,11 +1,11 @@
 ---
 name: project_environments_plan
-description: STARTED, NO QUESTIONS YET (2026-11-10, for 2.0) - sounds/environments/<env>/{audio,platforms,traps}, chosen before a run or switched automatically during one (zones folded in); background, the design so far and the questions to ask; Q&A log
+description: SETTLED (2026-11-10, for 2.0; 3 sections) - sounds/environments/<env>/{audio,platforms,traps}, chosen before a run or switched automatically during one (zones folded in); background, the design so far and the questions to ask; Q&A log
 metadata:
   type: project
 ---
 
-Status: STARTED (2026-11-10), questions not asked yet, like [[project_combined_obstacles_plan]]. The dev: "Yes. You can start this plan." Ask the open questions below one per turn once the dev says to go on.
+Status: SETTLED (2026-11-10), waiting for the dev to commit it before Section 1. The learn sounds layout was built ahead (ef56935).
 
 Background:
 - The dev's idea (2026-11-10), in their words: "Remember when I removed nearly all of the run surfaces in an earlier commit in v1x? I was thinking of bringing them back, but this time, I'd create an environments folder. This folder will have the following. An env name, such as factory. In that factory, you'd have the objects folder with the current audio/platform/trap folders in it. That way, only sounds that belong to that env can go in there, and then you can switch to a different one in the game, either automaticly durring a run, and or manually if it asks witch env you want to play on."
@@ -53,3 +53,23 @@ Q&A log:
 - Built ahead of the rest (dev, 2026-11-10: "Yes please. Also add a seprat change log entry for this."): learn sounds' environments, items, weapons layout (learn_environment_category(), learn_countdown(env_root, type)); its own 2.0 entry; the readme's learn sounds paragraph. The rest of the plan waits on the last question (statistics and achievements) and the dev's commit.
 - Changed after the build (dev, 2026-11-10: "When you are in the env category, it should just say default, not, default environment"): each environment is listed by its name alone ("default").
 - The learn sounds layout tested (dev, 2026-11-10): both tests passed (the three top-level categories, default with countdowns and traps; countdowns, traps, items and weapons all play as before).
+- Q: Should environments have statistics or achievements? (Asked 2026-11-10; Claude recommended none for now.) A: "I do not want them to have achievements or statistics. After all, they are just sound themes" (dev, 2026-11-10). None.
+
+Settled design:
+- Layout: sounds/environments/<env>/audio, platforms (a ledge in each) and traps/<type>/countdown and /general/<theme>; equipments, misc and ui shared. default is the only environment so far.
+- Automatic only, no environment menu: a run starts in a random environment and switches to a random different one every random 1 to 2 minutes of running time (paused with the game). With one environment there's no switching.
+- At a switch: the ambience fades into one of the new environment's (this replaces the separate ambience crossfade, which only runs when there's nothing to switch to); the music finishes its song, then the next comes from the new environment's shuffle; footsteps and new obstacles come from the new environment at once.
+- Announced in the misc buffer, no sound: "You've entered the <name> environment." (folder name, underscores as spaces), at the start of a run and at each switch, but only when there's more than one environment.
+- Never fall back to default: a type with no folder in an environment doesn't spawn there; a single missing clip just doesn't play; no ledge folder means silent ledges.
+- Practice runs switch only among environments that have the practiced obstacle. Debug runs get an environment debug option, "changing" first then each environment, source only.
+- Learn sounds: environments, items, weapons; each environment by its name with its countdowns and traps (built, ef56935).
+- No statistics or achievements for environments.
+
+Sections:
+1. The current environment: env.nvgt with current_env and env_root(); every sound path built from it instead of environments/default (the 38-odd spots in run, surface, player, endrun, spawner and the obstacle files); obstacles remember the environment they spawned in, so one still on the belt after a switch keeps playing its own sounds; the spawner's type availability read per environment; a run picks its starting environment at random (practice: only those with the practiced type); the debug option. With only default, nothing audible changes.
+2. Switching: the 1 to 2 minute timer on runtimer, a random different environment, the ambience fade, the music's next track from the new environment, the announcement; the ambience crossfade kept only for a single environment. Testing needs a second environment folder (a temporary copy of default, renamed, would do).
+3. Docks: the readme (environments in a run), the changelog, CLAUDE.md, the sound layout memory, this plan COMPLETE.
+- Before Section 2 (dev, 2026-11-10: "For section 2, we wil need the ambiences/platforms that were previously removed. Let me know when we get to section 2 so I can make a sound backup to the user folder."): when Section 1 is done, tell the dev Section 2 is next, so they can back up the sounds to user/ and bring back the removed ambiences and platforms for a second environment. Don't start Section 2 until they say it's ready.
+- The removed sounds restored (dev, 2026-11-10: "put in a new env folder, call it like custom, and then I can sort the sounds accordingly"): from git history into sounds/environments/custom: audio/ambiences (158 files: the city, parks and villages, water and coast, forest, night and weather ambiences removed over 1.6 to 1.8) and platforms (81 folders, 573 files: dirt, grass, gravel, leaves, sand, stone, rocks, cement and the rest, removed in 5c885c4; ledge and concrete skipped, being in default); about 176 MB. custom is a staging folder for the dev to sort into environments: it has no traps or tracks, so learn sounds lists it with empty countdowns and traps, and Section 1 must not pick it for a run as it stands (it would have no obstacles).
+- Renamed ambiences (dev, 2026-11-10: "a lot of the ambiences were renamed"): the restore had followed deletions only, so some were old names of files still in default. By content: 40 custom ambiences were copies of default's (american_street = street1, citypark = city1, countryside1 to 3 = birds31 to 33, outside1 to 6 = city3 to 8, and so on) and were removed; 17 more were copies of each other within custom under two names (forest2 and nighttime1 = night, rain_forest2 = rainforest, waves1 = waves, ...), and only one name of each was kept (the one without a number). custom now holds 101 distinct ambiences and the 81 platform folders (none duplicated default), about 112 MB.
+- Count check (dev, 2026-11-10: "there were actually 163 ambiences right? So far I see 161"): the 2026-11-06 set (79368ec) was 163 files but 162 distinct recordings (forest2.ogg and night.ogg were the same file). One was missing: the original traffic2.ogg, removed in b0df06c; the restore skipped it because default has a different traffic2.ogg now. Restored into custom as traffic2.ogg. Every recording from the original set is now in default or custom: 60 + 102 = 162.
