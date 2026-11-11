@@ -1,14 +1,14 @@
 /* Animals (dev, 2026-11-04, for 1.4; the birds plan): a belt-wide trap that only a clap clears. The type is "animals"
 (dev: "in the future, you'll be able to scare off other types of animals, such as dogs"); each theme folder in
-environments/default/traps/animals is a kind (birds, dogs), and each folder inside a kind is one animal (bird to bird24, dog and dog2). An animal plays its spawn clip at its
-tile, then its loop (every theme has its own call), with the layered misc/trap/animals countdown. Clapping (both hands
+environments/default/traps/animals/general is a kind (birds, dogs), and each folder inside a kind is one animal (bird to bird24, dog and dog2). An animal plays its spawn clip at its
+tile, then its loop (every theme has its own call), with the layered animals countdown countdown. Clapping (both hands
 together, with nothing else for the hands to do) inside its hand window, the same window as a force field's switch,
 scares the nearest animal away: a random scare clip at its tile (dev, 2026-11-04: named scare, not flight, since "dogs cannot fly"), and its
 loop stops. Reaching one you didn't scare is a blow of animal_damage (10) through take_damage(), with its hit; jumping and
 ducking don't help. Belt-wide on purpose, so turning can't dodge it and the clap stays its only answer (dev: "belt wide").
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_animals() shrinks the array. */
 sound_pool animalpool;
-const string animal_folder = "environments/default/traps/animals/"; // one folder per kind (birds, dogs), then one per animal (dev, 2026-11-04)
+const string animal_folder = "environments/default/traps/animals/general/"; // one folder per kind (birds, dogs), then one per animal (dev, 2026-11-04)
 class animal
 {
 double x;
@@ -90,7 +90,7 @@ if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*")
 if (me.x > bd.x + spawn_distance()) remove_animal(i);
 }
 }
-// The countdown: the layered misc/trap/animals cues before each animal still there (see play_countdown()). Runs once per step.
+// The countdown: the layered animals countdown cues before each animal still there (see play_countdown()). Runs once per step.
 void animal_countdown()
 {
 for (uint i = 0; i < animals.length(); i++)

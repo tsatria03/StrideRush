@@ -21,7 +21,7 @@ h.x = hx;
 h.theme = theme;
 h.ledge_start = hx - countdown;
 h.ledge_end = hx + ledge_after_tiles;
-h.loopslot = hazardpool.play_2d(get_pack_sound("environments/default/traps/hazards/" + theme + "/*loop*"), 0, me.x, 0, hx, true);
+h.loopslot = hazardpool.play_2d(get_pack_sound("environments/default/traps/hazards/general/" + theme + "/*loop*"), 0, me.x, 0, hx, true);
 for (uint i = 0; i < hazards.length(); i++)
 {
 if (@hazards[i] == null)
@@ -40,7 +40,7 @@ for (uint i = 0; i < hazards.length(); i++)
 if (@hazards[i] == null) continue;
 if (me.x == hazards[i].x and is_grounded())
 {
-string fall_clip = get_pack_sound("environments/default/traps/hazards/" + hazards[i].theme + "/*fall*");
+string fall_clip = get_pack_sound("environments/default/traps/hazards/general/" + hazards[i].theme + "/*fall*");
 if (practice_run) practice_set_down(hazards[i], fall_clip);
 else
 {
@@ -61,7 +61,7 @@ void practice_set_down(hazard@ h, const string&in fall_clip)
 {
 practice_death(h.x + 1, fall_clip);
 }
-// The countdown: one misc/trap/hazards warn cue per ledge step (see play_countdown() in spawner.nvgt). Runs once per step.
+// The countdown: one hazards countdown warn cue per ledge step (see play_countdown() in spawner.nvgt). Runs once per step.
 void hazard_countdown()
 {
 for (uint i = 0; i < hazards.length(); i++)

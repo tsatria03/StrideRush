@@ -43,7 +43,7 @@ for (uint i = 0; i < spikes.length(); i++)
 {
 if (@spikes[i] == null) continue;
 if (runtimer.elapsed < spikes[i].next_swing) continue;
-spikepool.play_2d(get_pack_sound("environments/default/traps/spikes/" + spikes[i].theme + "/*loop*"), 0, me.x, 0, spikes[i].x, false);
+spikepool.play_2d(get_pack_sound("environments/default/traps/spikes/general/" + spikes[i].theme + "/*loop*"), 0, me.x, 0, spikes[i].x, false);
 spikes[i].next_swing = runtimer.elapsed + spikes[i].swing_time;
 }
 }
@@ -55,7 +55,7 @@ for (uint i = 0; i < spikes.length(); i++)
 if (@spikes[i] == null) continue;
 if (me.x == spikes[i].x and is_grounded())
 {
-string hit_clip = get_pack_sound("environments/default/traps/spikes/" + spikes[i].theme + "/*hit*");
+string hit_clip = get_pack_sound("environments/default/traps/spikes/general/" + spikes[i].theme + "/*hit*");
 /* A fatal hit plays the spike's hit through p (silence_run() clears spikepool, which cut it off) and no player hit,
 since end_run_hit() plays the player's death instead. */
 stat_caught("spikes"); // the statistics: what caught you, and what ended the run if it's fatal
@@ -74,7 +74,7 @@ if (me.x == spikes[i].x and !is_grounded()) stat_add("spikes_jumped"); // in the
 if (me.x > spikes[i].x + spawn_distance()) remove_spike(i);
 }
 }
-// The countdown: one misc/trap/spikes warn cue per step before each spike (see play_countdown()). Runs once per step.
+// The countdown: one spikes countdown warn cue per step before each spike (see play_countdown()). Runs once per step.
 void spike_countdown()
 {
 for (uint i = 0; i < spikes.length(); i++)

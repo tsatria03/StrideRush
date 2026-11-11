@@ -162,11 +162,12 @@ bool key_due()
 {
 return keys_available() and next_key_door >= run_top_step_time() and step_time <= next_key_mark;
 }
-// Where a type's theme folders live: doors in door_folder, everything else (animals included) in environments/default/traps/<type>.
+/* Where a type's theme folders live: doors in door_folder, everything else (animals included) in
+environments/default/traps/<type>/general (dev, 2026-11-10: each type's themes moved into general, beside its countdown). */
 string type_folder(string type)
 {
 if (type == "fake_doors" or type == "real_doors") return door_folder;
-return "environments/default/traps/" + type + "/";
+return "environments/default/traps/" + type + "/general/";
 }
 // The countdown before an obstacle (and an item's spacing and pickup window): countdown_length steps at any speed.
 int countdown_steps()
@@ -335,7 +336,7 @@ double hand_window_start(double x, double countdown_start)
 return min(countdown_start, x - ceil(double(switch_min_time) / current_step_time()));
 }
 /* One countdown cue for an obstacle of this type at ox, whose countdown starts at countdown_start: the LAST ones of
-misc/trap/<type>/warn1 to warn5, so the step before the obstacle always plays warn5 ("act now"). Five countdown steps
+environments/default/traps/<type>/countdown/warn1 to warn5 (misc/trap/<type> until 2026-11-10), so the step before the obstacle always plays warn5 ("act now"). Five countdown steps
 hear 1 to 5; three hear 3 to 5; one hears only 5. Each cue plays in 2d (never stationary) at the tile you've just
 stepped onto, not at the obstacle. Each type's countdown function calls this once per step for each of its obstacles.
 A cue is exempt from the behind-pitch drop (dev, 2026-11-04): at high speeds the next step comes while it's still
@@ -345,7 +346,7 @@ void play_countdown(sound_pool@ pool, string type, double ox, double countdown_s
 int steps_left = int(ox - me.x);
 if (steps_left < 1 or steps_left > 5 or me.x < countdown_start) return;
 int note = 6 - steps_left;
-string folder = "misc/trap/" + type + "/";
+string folder = "environments/default/traps/" + type + "/countdown/";
 /* A layered set (dev, 2026-11-03) stacks octaves as warn<group>-<note>, such as the walls' warn1-3 (low) with warn2-3
 (high): every group's note for this step plays at once, for as many groups as exist. A plain set has warn<note>. */
 if (get_pack_sound(folder + "warn1-1*") != "")

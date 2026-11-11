@@ -23,7 +23,7 @@ projectile pr;
 pr.meet_x = mx;
 pr.theme = theme;
 pr.countdown_start = mx - countdown;
-pr.loopslot = projectilepool.play_2d(get_pack_sound("environments/default/traps/projectiles/" + theme + "/*loop*"), 0, me.x, 0, projectile_x(pr), true);
+pr.loopslot = projectilepool.play_2d(get_pack_sound("environments/default/traps/projectiles/general/" + theme + "/*loop*"), 0, me.x, 0, projectile_x(pr), true);
 for (uint i = 0; i < projectiles.length(); i++)
 {
 if (@projectiles[i] == null)
@@ -68,7 +68,7 @@ pr.spent = true;
 if (is_ducked()) stat_add("projectiles_ducked"); // crouched as it reaches you: it flies over
 if (!is_ducked())
 {
-string hit_clip = get_pack_sound("environments/default/traps/projectiles/" + pr.theme + "/*hit*");
+string hit_clip = get_pack_sound("environments/default/traps/projectiles/general/" + pr.theme + "/*hit*");
 stop_projectile(pr); // it hit you: the loop ends at once
 /* A fatal hit plays the projectile's hit through p (silence_run() would otherwise cut it off) and no player hit,
 since end_run_hit() plays the player's death instead. */
@@ -88,7 +88,7 @@ if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*")
 if (me.x > pr.meet_x + spawn_distance()) remove_projectile(i);
 }
 }
-// The countdown: one misc/trap/projectiles warn cue per step before each meeting tile (see play_countdown()). Runs once per step.
+// The countdown: one projectiles countdown warn cue per step before each meeting tile (see play_countdown()). Runs once per step.
 void projectile_countdown()
 {
 for (uint i = 0; i < projectiles.length(); i++)

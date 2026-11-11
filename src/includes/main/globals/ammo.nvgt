@@ -3,7 +3,7 @@ when it appears, then its loop at its tile. Either hand picks it up within the s
 (hand_window_start()): get plays centered (stationary, not panned; dev, 2026-11-02) and the pack goes into the inventory, to be opened later with U.
 Arriving on its tile on the ground (standing or crouched), or landing on it from a jump, breaks it: break plays and
 it's lost. A clean jump that's still in the air across its tile misses it, and its loop fades out behind you.
-There are no countdown cues for packs (no misc/trap warn set); their loop is the guide.
+There are no countdown cues for packs (no countdown warn set); their loop is the guide.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_ammopacks() shrinks the array. */
 sound_pool ammopackpool;
 const string ammopack_folder = "equipments/items/common/ammo_pack/";
