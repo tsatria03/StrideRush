@@ -1,11 +1,11 @@
 ---
 name: project_environments_plan
-description: SETTLED (2026-11-10, for 2.0; 3 sections) - sounds/environments/<env>/{audio,platforms,traps}, chosen before a run or switched automatically during one (zones folded in); background, the design so far and the questions to ask; Q&A log
+description: COMPLETE (2026-11-11, 2.0 at 5 of 20; 3 sections) - sounds/environments/<env>/{audio,platforms,traps}, chosen before a run or switched automatically during one (zones folded in); background, the design so far and the questions to ask; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-10), waiting for the dev to commit it before Section 1. The learn sounds layout was built ahead (ef56935).
+Status: COMPLETE (2026-11-11, 2.0 at 5 of 20).
 
 Background:
 - The dev's idea (2026-11-10), in their words: "Remember when I removed nearly all of the run surfaces in an earlier commit in v1x? I was thinking of bringing them back, but this time, I'd create an environments folder. This folder will have the following. An env name, such as factory. In that factory, you'd have the objects folder with the current audio/platform/trap folders in it. That way, only sounds that belong to that env can go in there, and then you can switch to a different one in the game, either automaticly durring a run, and or manually if it asks witch env you want to play on."
@@ -83,3 +83,5 @@ Sections:
 - No backup needed before Section 2 (dev, 2026-11-10: "I don't think I even need to make the backup anymore because we already did the sound prepperation."): custom is already the second environment for testing.
 - Section 2 built (2026-11-10): env_switch_min_time 60000 and env_switch_max_time 120000 in tuning.nvgt; env.nvgt's env_switch_at, env_eligible(), env_switch_choices() (empty for a debug run held in one environment), env_switching(), start_env() (the first switch time and the queued starting announcement, from start_run_audio()), announce_env() and env_check() (from run_audio_check(): a random different eligible environment, the announcement, a new surface, begin_ambience_fade() into one of its ambiences); run.nvgt's track_env (play_next_track() draws from the new environment once the song ends, even after a dry shuffle or an environment with no tracks), begin_ambience_fade() (an empty next fades the old one out; a fade under way is cut short), and ambience_check() leaving its timer alone while the run switches.
 - Section 2 tests 1 to 3 passed (dev, 2026-11-11). Then: "the env switch should be interupted when you start a turn. RIght now the weapon equip speaks first." The starting announcement now interrupts (announce_env(true) in start_env()), so it's heard at a run's start instead of after "fist equipped.", which stays in the weapons buffer.
+- Section 2 COMPLETE (dev, 2026-11-11): tests passed and committed. Section 3 (docks) next.
+- Section 3 (docks) done (2026-11-11): the readme's How to play (a paragraph on environments), the practice section (switching only among environments with the obstacle), the misc buffer; the 2.0 entry "Added environments, ..." (5 of 20); the todo item moved to finished; CLAUDE.md, the version history and the sound layout memory. Plan COMPLETE.
