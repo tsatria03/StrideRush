@@ -11,6 +11,7 @@ class spike
 {
 double x;
 string theme;
+string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
 int swing_time;
 int64 next_swing;
 double countdown_start;
@@ -23,6 +24,7 @@ void spawn_spike(double sx, string theme, int countdown)
 spike s;
 s.x = sx;
 s.theme = theme;
+s.env = current_env;
 s.countdown_start = sx - countdown;
 s.swing_time = random(spike_swing_min, spike_swing_max);
 s.next_swing = runtimer.elapsed; // the first swing plays straight away
@@ -43,7 +45,7 @@ for (uint i = 0; i < spikes.length(); i++)
 {
 if (@spikes[i] == null) continue;
 if (runtimer.elapsed < spikes[i].next_swing) continue;
-spikepool.play_2d(get_pack_sound("environments/default/traps/spikes/general/" + spikes[i].theme + "/*loop*"), 0, me.x, 0, spikes[i].x, false);
+spikepool.play_2d(get_pack_sound(trap_folder(spikes[i].env, "spikes") + spikes[i].theme + "/*loop*"), 0, me.x, 0, spikes[i].x, false);
 spikes[i].next_swing = runtimer.elapsed + spikes[i].swing_time;
 }
 }
@@ -55,7 +57,7 @@ for (uint i = 0; i < spikes.length(); i++)
 if (@spikes[i] == null) continue;
 if (me.x == spikes[i].x and is_grounded())
 {
-string hit_clip = get_pack_sound("environments/default/traps/spikes/general/" + spikes[i].theme + "/*hit*");
+string hit_clip = get_pack_sound(trap_folder(spikes[i].env, "spikes") + spikes[i].theme + "/*hit*");
 /* A fatal hit plays the spike's hit through p (silence_run() clears spikepool, which cut it off) and no player hit,
 since end_run_hit() plays the player's death instead. */
 stat_caught("spikes"); // the statistics: what caught you, and what ended the run if it's fatal
@@ -80,7 +82,7 @@ void spike_countdown()
 for (uint i = 0; i < spikes.length(); i++)
 {
 if (@spikes[i] == null) continue;
-play_countdown(spikepool, "spikes", spikes[i].x, spikes[i].countdown_start);
+play_countdown(spikepool, "spikes", spikes[i].x, spikes[i].countdown_start, spikes[i].env);
 }
 }
 void remove_spike(uint i)

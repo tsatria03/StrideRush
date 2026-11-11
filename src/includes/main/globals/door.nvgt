@@ -15,11 +15,16 @@ sound, doing door_damage (60) through take_damage(). On the last lives: its hit,
 door's section still begins, since the door only marks it.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_doors() shrinks the array. */
 sound_pool doorpool;
-const string door_folder = "environments/default/traps/doors/general/"; // moved from objects/interaction by the dev (2026-11-04)
+// Where an environment keeps its doors themes (env.nvgt). // moved from objects/interaction by the dev (2026-11-04)
+string door_folder(const string&in env)
+{
+return trap_folder(env, "doors");
+}
 class door
 {
 double x;
 string theme;
+string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
 int pitch = 100;
 bool real = false;
 bool locked = false; // a real door starts locked until a key unlocks it (U)
@@ -39,12 +44,12 @@ int door_moveslot = -1;
 // True when door sounds exist, so the spawner can offer doors.
 bool doors_available()
 {
-return get_pack_sound_folders(door_folder + "*").length() > 0;
+return get_pack_sound_folders(door_folder(current_env) + "*").length() > 0;
 }
 // Plays one of a door's clips (open, move, hit and so on) at sound_x, at the door's pitch.
 int play_door(door@ d, string clip, double sound_x, bool looping)
 {
-return doorpool.play_extended_2d(get_pack_sound(door_folder + d.theme + "/*" + clip + "*"), 0, me.x, 0, sound_x, 0, 0, 0, 0, looping, 0, 0, 0, d.pitch);
+return doorpool.play_extended_2d(get_pack_sound(door_folder(d.env) + d.theme + "/*" + clip + "*"), 0, me.x, 0, sound_x, 0, 0, 0, 0, looping, 0, 0, 0, d.pitch);
 }
 // countdown comes from the spawner: it sets the spacing, a real door's hand window and the door's countdown.
 void spawn_door(double dx, string theme, bool real, int countdown)
@@ -52,6 +57,7 @@ void spawn_door(double dx, string theme, bool real, int countdown)
 door d;
 d.x = dx;
 d.theme = theme;
+d.env = current_env;
 d.real = real;
 d.locked = real;
 d.pitch = real ? 100 : fake_door_pitches[random(0, fake_door_pitches.length() - 1)];
@@ -75,7 +81,7 @@ void door_countdown()
 for (uint i = 0; i < doors.length(); i++)
 {
 if (@doors[i] == null or !door_standing(doors[i])) continue;
-play_countdown(doorpool, "doors", doors[i].x, doors[i].countdown_start);
+play_countdown(doorpool, "doors", doors[i].x, doors[i].countdown_start, doors[i].env);
 }
 }
 // A door still blocks the way until it's opened, destroyed or crashed through.
@@ -104,7 +110,7 @@ return true;
 }
 if (target.locked)
 {
-doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/*deny*"), false, 0, 0, 0, target.pitch, false);
+doorpool.play_stationary_extended(get_pack_sound(door_folder(target.env) + target.theme + "/*deny*"), false, 0, 0, 0, target.pitch, false);
 speak_buffer("This door is locked.", "doors");
 return true;
 }
@@ -112,15 +118,15 @@ target.opened = true;
 stat_add("real_doors_opened");
 stop_door(target);
 cancel_movement(); // any jump or crouch ends silently: the door carries you from here
-doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/*open*"), false, 0, 0, 0, target.pitch, false); // stationary (dev)
-door_moveslot = doorpool.play_stationary_extended(get_pack_sound(door_folder + target.theme + "/*move*"), true, 0, 0, 0, target.pitch, false);
+doorpool.play_stationary_extended(get_pack_sound(door_folder(target.env) + target.theme + "/*open*"), false, 0, 0, 0, target.pitch, false); // stationary (dev)
+door_moveslot = doorpool.play_stationary_extended(get_pack_sound(door_folder(target.env) + target.theme + "/*move*"), true, 0, 0, 0, target.pitch, false);
 door_moving = true;
 return true;
 }
 // A fake door can't be opened or unlocked: jam1 or jam2 plays centered, at its pitch, and nothing else happens.
 void jam_door(door@ d)
 {
-doorpool.play_stationary_extended(get_pack_sound(door_folder + d.theme + "/*jam*"), false, 0, 0, 0, d.pitch, false);
+doorpool.play_stationary_extended(get_pack_sound(door_folder(d.env) + d.theme + "/*jam*"), false, 0, 0, 0, d.pitch, false);
 speak_buffer("This door is jammed.", "doors");
 }
 /* U on a key (dev, 2026-11-03): the first half of opening a real door. Unlocks the nearest locked real door within
@@ -152,7 +158,7 @@ if (@locked_door != null)
 {
 locked_door.locked = false;
 keypool.play_stationary(get_pack_sound(key_folder + color + "/*use*"), false);
-doorpool.play_stationary_extended(get_pack_sound(door_folder + locked_door.theme + "/*grant*"), false, 0, 0, 0, locked_door.pitch, false);
+doorpool.play_stationary_extended(get_pack_sound(door_folder(locked_door.env) + locked_door.theme + "/*grant*"), false, 0, 0, 0, locked_door.pitch, false);
 speak_buffer("The door is unlocked.", "doors");
 return true;
 }
@@ -227,7 +233,7 @@ stat_caught("doors"); // the statistics: what caught you, and what ended the run
 int blow = take_damage(door_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {
-p.play_stationary_extended(get_pack_sound(door_folder + d.theme + "/*hit*"), false, 0, 0, 0, d.pitch, false);
+p.play_stationary_extended(get_pack_sound(door_folder(d.env) + d.theme + "/*hit*"), false, 0, 0, 0, d.pitch, false);
 end_run_hit();
 return;
 }

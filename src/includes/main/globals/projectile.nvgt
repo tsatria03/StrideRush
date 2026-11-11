@@ -10,6 +10,7 @@ class projectile
 {
 double meet_x;
 string theme;
+string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
 bool spent = false; // reached meet_x: it can never hit again
 int loopslot = -1; // -1 once it has hit you
 double countdown_start;
@@ -22,8 +23,9 @@ void spawn_projectile(double mx, string theme, int countdown)
 projectile pr;
 pr.meet_x = mx;
 pr.theme = theme;
+pr.env = current_env;
 pr.countdown_start = mx - countdown;
-pr.loopslot = projectilepool.play_2d(get_pack_sound("environments/default/traps/projectiles/general/" + theme + "/*loop*"), 0, me.x, 0, projectile_x(pr), true);
+pr.loopslot = projectilepool.play_2d(get_pack_sound(trap_folder(current_env, "projectiles") + theme + "/*loop*"), 0, me.x, 0, projectile_x(pr), true);
 for (uint i = 0; i < projectiles.length(); i++)
 {
 if (@projectiles[i] == null)
@@ -68,7 +70,7 @@ pr.spent = true;
 if (is_ducked()) stat_add("projectiles_ducked"); // crouched as it reaches you: it flies over
 if (!is_ducked())
 {
-string hit_clip = get_pack_sound("environments/default/traps/projectiles/general/" + pr.theme + "/*hit*");
+string hit_clip = get_pack_sound(trap_folder(pr.env, "projectiles") + pr.theme + "/*hit*");
 stop_projectile(pr); // it hit you: the loop ends at once
 /* A fatal hit plays the projectile's hit through p (silence_run() would otherwise cut it off) and no player hit,
 since end_run_hit() plays the player's death instead. */
@@ -94,7 +96,7 @@ void projectile_countdown()
 for (uint i = 0; i < projectiles.length(); i++)
 {
 if (@projectiles[i] == null) continue;
-play_countdown(projectilepool, "projectiles", projectiles[i].meet_x, projectiles[i].countdown_start);
+play_countdown(projectilepool, "projectiles", projectiles[i].meet_x, projectiles[i].countdown_start, projectiles[i].env);
 }
 }
 void stop_projectile(projectile@ pr)

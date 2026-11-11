@@ -153,9 +153,9 @@ else play_game();
 /* Play game. It opens the mode menu (the practice plan, dev, 2026-11-06, replacing the 2026-11-03 "Do you want to play
 in debug mode?" question): endless run goes on to the difficulty menu (choose_difficulty()) and plays the real game
 (the level's speed and floor, everything spawning, starting_lives, and the run ends when lives run out), practice run goes on to the practice menus (choose_practice()), and debug run, from source
-only, goes on to the debug options, in the dev's order: spawn (before speed since 2026-11-06), speed,
-footsteps (2026-11-04), then whether lives can run out. Escape steps back one menu silently: from the mode menu to
-the game menu, and from the spawn menu back to the mode menu. They're all nested menus, so nothing says "canceled". The
+only, goes on to the debug options, in the dev's order: the environment (first, 2026-11-10), spawn (before speed since
+2026-11-06), speed, footsteps (2026-11-04), then whether lives can run out. Escape steps back one menu silently: from the
+mode menu to the game menu, and from the environment menu back to the mode menu. They're all nested menus, so nothing says "canceled". The
 lives menu was removed with player health: "all" starts with starting_lives, and any single-type choice with debug_lives. */
 void play_game()
 {
@@ -164,7 +164,7 @@ string only_type = "all";
 bool practicing = false;
 int level = -1; // the endless run's difficulty, or -1
 int stage = 0;
-while (stage < 5)
+while (stage < 6)
 {
 if (stage == 0)
 {
@@ -172,6 +172,7 @@ string mode = choose_game_mode();
 if (mode == "") return;
 practicing = false; // set again below, so backing out of practice into another mode never leaves it on
 level = -1; // likewise the difficulty, which only an endless run has
+debug_env = ""; // and the debug environment choice, which only a debug run has (env.nvgt)
 if (mode == "practice")
 {
 // Escaping the obstacle menu stays on the mode menu (stage 0); otherwise straight to the run.
@@ -185,7 +186,7 @@ speed = practice_speed;
 only_type = practice_spawn_id(practice_type);
 can_run_out = 0;
 steps = 1;
-stage = 5;
+stage = 6;
 }
 else if (mode == "endless")
 {
@@ -198,30 +199,41 @@ speed = difficulty_start_times[level];
 only_type = "all";
 can_run_out = 1;
 steps = 1;
-stage = 5;
+stage = 6;
 }
 else stage = 1;
 }
 else if (stage == 1)
 {
-// The spawn choice first, then the speed (dev, 2026-11-06: "Please make the speed menu come after the obstical/item menu").
-only_type = choose_spawn_types();
-stage = only_type == "" ? 0 : 2;
+// The environment first, before every other debug option (the environments plan, dev, 2026-11-10): one to stay in, or "random".
+string env_choice = choose_debug_env();
+if (env_choice == "-") stage = 0;
+else
+{
+debug_env = env_choice;
+stage = 2;
+}
 }
 else if (stage == 2)
 {
-speed = choose_start_speed();
-stage = speed < 0 ? 1 : 3;
+// Then the spawn choice, then the speed (dev, 2026-11-06: "Please make the speed menu come after the obstical/item menu").
+only_type = choose_spawn_types();
+stage = only_type == "" ? 1 : 3;
 }
 else if (stage == 3)
 {
+speed = choose_start_speed();
+stage = speed < 0 ? 2 : 4;
+}
+else if (stage == 4)
+{
 steps = choose_footsteps();
-stage = steps < 0 ? 2 : 4;
+stage = steps < 0 ? 3 : 5;
 }
 else
 {
 can_run_out = choose_lives_can_end();
-stage = can_run_out < 0 ? 3 : 5;
+stage = can_run_out < 0 ? 4 : 6;
 }
 }
 footsteps_on = steps == 1;
@@ -441,7 +453,7 @@ ids.get(labels[i], id);
 m.add_item(labels[i], id);
 }
 int mres = m.run();
-if (mres < 0) return ""; // silent: escape just steps back to the mode menu
+if (mres < 0) return ""; // silent: escape just steps back to the environment menu
 return m.selected_item_id;
 }
 // One spawn choice for choose_spawn_types(): its spoken label and the id start_run() gets.
@@ -464,6 +476,22 @@ m.add_item("No", "no");
 int mres = m.run();
 if (mres < 0) return -1; // silent: escape just steps back to the speed menu
 return m.selected_item_id == "yes" ? 1 : 0;
+}
+/* DEBUG OPTION: the environment (the environments plan, dev, 2026-11-10), the first debug option, before the spawn menu: each environment to stay in
+for the whole run, to test one environment's sounds directly, then "random" last, the normal random pick (and, once
+switching exists, the run moves between environments). Returns "" for random, the environment's name, or "-" if
+escaped. A compiled release always answers random. */
+string choose_debug_env()
+{
+if (SCRIPT_COMPILED) return "";
+setupmenu();
+m.intro_text = "Which environment do you want to run in?";
+string[] names = env_names();
+for (uint i = 0; i < names.length(); i++) m.add_item(names[i].replace("_", " ", true), names[i]);
+m.add_item("random", "random"); // last (dev, 2026-11-10: "rename this to random, and put it at the bottum")
+int mres = m.run();
+if (mres < 0) return "-"; // silent: escape just steps back to the mode menu
+return m.selected_item_id == "random" ? "" : m.selected_item_id;
 }
 /* DEBUG OPTION: whether running out of lives ends the run. No means blows can never end it: lives stop at 1 and 0
 health just refills; hazards still end it. It only appears when running from source; a compiled release always answers

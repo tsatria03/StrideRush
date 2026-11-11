@@ -1,6 +1,6 @@
 /* Animals (dev, 2026-11-04, for 1.4; the birds plan): a belt-wide trap that only a clap clears. The type is "animals"
 (dev: "in the future, you'll be able to scare off other types of animals, such as dogs"); each theme folder in
-environments/default/traps/animals/general is a kind (birds, dogs), and each folder inside a kind is one animal (bird to bird24, dog and dog2). An animal plays its spawn clip at its
+environments/<env>/traps/animals/general is a kind (birds, dogs), and each folder inside a kind is one animal (bird to bird24, dog and dog2). An animal plays its spawn clip at its
 tile, then its loop (every theme has its own call), with the layered animals countdown countdown. Clapping (both hands
 together, with nothing else for the hands to do) inside its hand window, the same window as a force field's switch,
 scares the nearest animal away: a random scare clip at its tile (dev, 2026-11-04: named scare, not flight, since "dogs cannot fly"), and its
@@ -8,11 +8,16 @@ loop stops. Reaching one you didn't scare is a blow of animal_damage (10) throug
 ducking don't help. Belt-wide on purpose, so turning can't dodge it and the clap stays its only answer (dev: "belt wide").
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_animals() shrinks the array. */
 sound_pool animalpool;
-const string animal_folder = "environments/default/traps/animals/general/"; // one folder per kind (birds, dogs), then one per animal (dev, 2026-11-04)
+// Where an environment keeps its animals themes (env.nvgt). // one folder per kind (birds, dogs), then one per animal (dev, 2026-11-04)
+string animal_folder(const string&in env)
+{
+return trap_folder(env, "animals");
+}
 class animal
 {
 double x;
 string theme;
+string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
 double countdown_start;
 bool spent = false; // scared off or reached: nothing more can happen to it
 int loopslot = -1;
@@ -22,19 +27,20 @@ animal@[] animals(0);
 /* countdown comes from the spawner like any trap's; it sets the countdown and the clap window. kind is the random kind
 folder the spawner picked (birds, dogs and so on), so every kind gets an equal share however many animals it has (dev,
 2026-11-04: "I'd rather go based off the animal kind"); the "animals, birds" and "animals, dogs" debug options force
-theirs. Then one animal of that kind is picked, and its theme is the path below animal_folder ("dogs/dog2"). */
+theirs. Then one animal of that kind is picked, and its theme is the path below the animal folder ("dogs/dog2"). */
 void spawn_animal(double bx, string kind, int countdown)
 {
 if (spawn_only == "animals_birds") kind = "birds";
 else if (spawn_only == "animals_dogs") kind = "dogs";
-string[] kinds_animals = get_pack_sound_folders(animal_folder + kind + "/*");
+string[] kinds_animals = get_pack_sound_folders(animal_folder(current_env) + kind + "/*");
 if (kinds_animals.length() == 0) return; // no animals of that kind
 animal bd;
 bd.x = bx;
 bd.theme = kind + "/" + kinds_animals[random(0, kinds_animals.length() - 1)];
+bd.env = current_env;
 bd.countdown_start = bx - countdown;
-animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*spawn*"), 0, me.x, 0, bx, false);
-bd.loopslot = animalpool.play_2d(get_pack_sound(animal_folder + bd.theme + "/*loop*"), 0, me.x, 0, bx, true);
+animalpool.play_2d(get_pack_sound(animal_folder(bd.env) + bd.theme + "/*spawn*"), 0, me.x, 0, bx, false);
+bd.loopslot = animalpool.play_2d(get_pack_sound(animal_folder(bd.env) + bd.theme + "/*loop*"), 0, me.x, 0, bx, true);
 for (uint i = 0; i < animals.length(); i++)
 {
 if (@animals[i] == null)
@@ -61,7 +67,7 @@ if (@target == null) return false;
 target.spent = true;
 stat_add("animals_scared");
 stop_animal(target);
-animalpool.play_2d(get_pack_sound(animal_folder + target.theme + "/*scare*"), 0, me.x, 0, target.x, false);
+animalpool.play_2d(get_pack_sound(animal_folder(target.env) + target.theme + "/*scare*"), 0, me.x, 0, target.x, false);
 return true;
 }
 // Runs once per step, right after the move: reaching an animal you didn't scare is a blow, in the air or on the ground.
@@ -74,7 +80,7 @@ animal@ bd = animals[i];
 if (me.x == bd.x and !bd.spent)
 {
 bd.spent = true;
-string hit_clip = get_pack_sound(animal_folder + bd.theme + "/*hit*");
+string hit_clip = get_pack_sound(animal_folder(bd.env) + bd.theme + "/*hit*");
 stop_animal(bd); // it ran into you: its call ends
 stat_caught("animals"); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(animal_damage); // a worn shield, else your health
@@ -96,7 +102,7 @@ void animal_countdown()
 for (uint i = 0; i < animals.length(); i++)
 {
 if (@animals[i] == null or animals[i].spent) continue;
-play_countdown(animalpool, "animals", animals[i].x, animals[i].countdown_start);
+play_countdown(animalpool, "animals", animals[i].x, animals[i].countdown_start, animals[i].env);
 }
 }
 // The animal still on tile x, for a teleport's landing check, or null.

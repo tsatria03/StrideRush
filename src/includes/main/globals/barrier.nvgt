@@ -1,7 +1,7 @@
 /* Barriers (dev, 2026-11-04; Section 2 of the lanes plan, first built in 1.3, undone, and brought back for 1.4 on top of
 the rebuilt lanes): the one trap that fills a single lane, avoided only by moving to another lane. Jumping, crouching,
 weapons and hands don't help. Each barrier is placed in the lane you're in when it appears, about 3 s ahead, and stays
-in that lane. Its theme is random among environments/default/traps/barriers/general.
+in that lane. Its theme is random among the current environment's traps/barriers/general.
 Sound: since Section 3 turned the belt forward (2026-11-05), a barrier's loop is placed like every belt sound, at its
 tile along the belt, but across it by its lane relative to yours (barrier_side()): your lane is straight ahead, one
 lane over is to that side, two lanes over further. It gets louder as it nears and falls behind you once passed,
@@ -14,12 +14,17 @@ Barriers are in obstacle_types, an equal pick in "all" and the real game, with t
 three barrier debug choices still pick one rule each.
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_barriers() shrinks the array. */
 sound_pool barrierpool;
-const string barrier_folder = "environments/default/traps/barriers/general/";
+// Where an environment keeps its barriers themes (env.nvgt).
+string barrier_folder(const string&in env)
+{
+return trap_folder(env, "barriers");
+}
 class barrier
 {
 double x;
 int lane;
 string theme;
+string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
 double countdown_start;
 bool spent = false; // reached: it can never hit again
 int loopslot = -1;
@@ -29,7 +34,7 @@ barrier@[] barriers(0);
 // True when barrier sounds exist, so the spawner can offer them.
 bool barriers_available()
 {
-return get_pack_sound_folders(barrier_folder + "*").length() > 0;
+return get_pack_sound_folders(barrier_folder(current_env) + "*").length() > 0;
 }
 /* One barrier spawn, from place_obstacle() (dev, 2026-11-04):
 - "barriers" (debug): a single barrier in the lane you're in right now, for testing hits.
@@ -50,7 +55,7 @@ spawn_barrier(bx, theme, countdown, first);
 if (spawn_only == "barriers_random" or random(1, 100) > barrier_pair_percent) return;
 int second = random(lane_left, lane_right - 1);
 if (second >= first) second += 1; // any lane but the first one's
-string[] themes = get_pack_sound_folders(barrier_folder + "*");
+string[] themes = get_pack_sound_folders(barrier_folder(current_env) + "*");
 spawn_barrier(bx, themes[random(0, themes.length() - 1)], countdown, second);
 }
 // countdown comes from the spawner like any trap's; lane is decided by spawn_barriers().
@@ -60,8 +65,9 @@ barrier b;
 b.x = bx;
 b.lane = lane;
 b.theme = theme;
+b.env = current_env;
 b.countdown_start = bx - countdown;
-b.loopslot = barrierpool.play_2d(get_pack_sound(barrier_folder + theme + "/*loop*"), 0, me.x, barrier_side(b), b.x, true);
+b.loopslot = barrierpool.play_2d(get_pack_sound(barrier_folder(current_env) + theme + "/*loop*"), 0, me.x, barrier_side(b), b.x, true);
 place_barrier(b);
 for (uint i = 0; i < barriers.length(); i++)
 {
@@ -108,7 +114,7 @@ b.spent = true;
 if (b.lane != current_lane) stat_add("barriers_dodged"); // it reached you in another lane
 if (b.lane == current_lane)
 {
-string hit_clip = get_pack_sound(barrier_folder + b.theme + "/*hit*");
+string hit_clip = get_pack_sound(barrier_folder(b.env) + b.theme + "/*hit*");
 // Its loop carries on through you and fades behind, like a spike's (dev, 2026-11-05); a fatal hit silences the run anyway.
 stat_caught("barriers"); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(barrier_damage); // a worn shield, else your health
@@ -132,7 +138,7 @@ void barrier_countdown()
 for (uint i = 0; i < barriers.length(); i++)
 {
 if (@barriers[i] == null or barriers[i].lane != current_lane) continue;
-play_countdown(barrierpool, "barriers", barriers[i].x, barriers[i].countdown_start);
+play_countdown(barrierpool, "barriers", barriers[i].x, barriers[i].countdown_start, barriers[i].env);
 }
 }
 // The standing barrier on tile x in your lane, for a teleport's landing check, or null.

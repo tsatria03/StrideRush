@@ -35,7 +35,7 @@ string tile = tile_at(me.x);
 silence_run();
 dlgplay(get_pack_sound("misc/player/*death*"));
 wait_for_pool(p);
-if (tile != "") dlgplay(get_pack_sound("environments/default/platforms/" + tile + "/*fall*"));
+if (tile != "") dlgplay(get_pack_sound(env_root(current_env) + "platforms/" + tile + "/*fall*"));
 finish_run();
 }
 // Blocks until every sound in the pool has finished, or Enter is pressed.

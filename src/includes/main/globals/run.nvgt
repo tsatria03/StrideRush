@@ -47,6 +47,7 @@ void start_run(int starting_step_time = start_step_time, int starting_life_count
 practice_run = practice;
 set_run_difficulty(difficulty); // before reset_run(), whose reset_spawner() places the first obstacle with the level's floor
 set_spawn_only(only_type); // before reset_run(), whose reset_spawner() picks the first obstacle; splits an item's debug lane choice off
+pick_start_env(); // after practice_run and the difficulty are set, and before anything spawns or plays (env.nvgt)
 lives_can_end = can_run_out;
 reset_run(starting_step_time, starting_life_count);
 start_run_stats(); // an endless run starts a fresh session (stats.nvgt)
@@ -59,16 +60,23 @@ stop_run_audio();
 clear_run_objects();
 p.destroy_all();
 }
-/* The run's music and ambience (the music and ambience plan, dev, 2026-11-06), from environments/default/audio/tracks and
-environments/default/audio/ambiences (repointed that day from the old, empty musics and sources folders); an empty folder just stays
+/* The run's music and ambience (the music and ambience plan, dev, 2026-11-06), from the current environment's audio/tracks and
+audio/ambiences (env.nvgt) (repointed that day from the old, empty musics and sources folders); an empty folder just stays
 silent. Every run, restarts and replays included, starts a fresh shuffle and a new random ambience.
 - Music is a shuffle (dev: "a playlist behavior that shuffles a track, then plays another one when it ends"): every
   track once, not looping, in a random order, then a fresh order that never opens with the track just played.
 - The ambience loops, and every random ambience_min_time to ambience_max_time on runtimer (so pausing freezes it) it
   crossfades over ambience_fade_time to another random one, never the same twice in a row.
 musslot and ambslot always hold what's playing now, so the volume keys reach it; a fading-out ambience is amb_old_slot. */
-const string tracks_folder = "environments/default/audio/tracks/";
-const string ambiences_folder = "environments/default/audio/ambiences/";
+// The current environment's music and ambience folders (env.nvgt).
+string tracks_folder()
+{
+return env_root(current_env) + "audio/tracks/";
+}
+string ambiences_folder()
+{
+return env_root(current_env) + "audio/ambiences/";
+}
 string[] track_order; // the shuffle: full paths, played from track_pos on
 int track_pos = 0;
 string current_track = "", current_ambience = "";
@@ -122,8 +130,8 @@ void shuffle_tracks()
 {
 track_order.resize(0);
 track_pos = 0;
-string[] names = find_files("sounds/" + tracks_folder + "*");
-for (uint i = 0; i < names.length(); i++) track_order.insert_last("sounds/" + tracks_folder + names[i]);
+string[] names = find_files("sounds/" + tracks_folder() + "*");
+for (uint i = 0; i < names.length(); i++) track_order.insert_last("sounds/" + tracks_folder() + names[i]);
 for (int i = int(track_order.length()) - 1; i > 0; i--)
 {
 int j = random(0, i);
@@ -141,10 +149,10 @@ track_order[j] = current_track;
 // A random ambience, never the one playing now when there's another to choose.
 string pick_ambience()
 {
-string[] names = find_files("sounds/" + ambiences_folder + "*");
+string[] names = find_files("sounds/" + ambiences_folder() + "*");
 if (names.length() == 0) return "";
-string choice = "sounds/" + ambiences_folder + names[random(0, names.length() - 1)];
-while (names.length() > 1 and choice == current_ambience) choice = "sounds/" + ambiences_folder + names[random(0, names.length() - 1)];
+string choice = "sounds/" + ambiences_folder() + names[random(0, names.length() - 1)];
+while (names.length() > 1 and choice == current_ambience) choice = "sounds/" + ambiences_folder() + names[random(0, names.length() - 1)];
 return choice;
 }
 // The ambience's timer, then its crossfade: the old one falls ambience_fade_floor decibels while the new one rises to your volume.
