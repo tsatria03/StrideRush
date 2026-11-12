@@ -1,11 +1,11 @@
 ---
 name: project_slides_plan
-description: SETTLED (2026-11-11, for 2.0; 3 sections) - slides, slippery stretches that carry you faster for a few seconds; Q&A log
+description: COMPLETE (2026-11-11, 2.0 at 9 of 20; 3 sections) - slides, slippery stretches that carry you faster for a few seconds; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-11), waiting for the dev to commit it before Section 1. Started 2026-11-11 (dev: "Let's start that plan now."), with 2.0 at 8 of 20 and no other plan open.
+Status: COMPLETE (2026-11-11, 2.0 at 9 of 20). Started 2026-11-11 (dev: "Let's start that plan now."), with 2.0 at 8 of 20 and no other plan open.
 
 Background:
 - Claude's suggestion 6b ([[project_suggestions]]), liked by the dev with trampolines and on the todo list: "Add slides, slippery stretches of ground that carry you faster for a few seconds." First described as slippery ground (ice, oil) across the belt: the belt carries you faster, footsteps change to a slide, countdowns shorter while on it; maybe slower lane switches or shorter jumps; through the same speed system as Rush Hour and Slow Motion (current_step_time() in powerup.nvgt).
@@ -49,3 +49,4 @@ Sections:
 - Section 1 COMPLETE (dev, 2026-11-11): all 4 tests passed (a ride: sounds, double speed, blocks with lanes allowed; obstacles silent and harmless, your lane's items caught, no air powerups; the clear landing, real doors and keys after; slides from 3.3 steps a second in endless runs, none in practice).
 - Section 2 built (2026-11-11): slides_ridden and slide_items_caught in stats.nvgt's stat_keys, after combinations_cleared; start_slide() adds slides_ridden; slide_update() adds slide_items_caught for each item a pick_up_*() catches (each also counts in its own pick-up statistic); achievements.ini: slides_10, _50, _250 and slide_items_10, _100, _500 (lifetime) after combinations_500, and slides_run_3, _5, _10 and slide_items_run_5, _10, _20 (session) after combinations_run_20; 104 achievements. Counted in endless runs only, as always.
 - Section 2 COMPLETE (dev, 2026-11-11): all 3 tests passed (the 12 achievements listed, 104 in all; slides ridden and slide items caught counting in an endless run; a slide achievement earned as you get on).
+- Section 3 (docks) done (2026-11-11): the readme (a slides paragraph in How to play, no slides in practice, over 100 achievements); the 2.0 entry "Added slides, ..." (9 of 20); the todo item to finished; CLAUDE.md, the version history. Plan COMPLETE.
