@@ -46,7 +46,11 @@ if (carried() and me.x == hazards[i].x) continue; // on a slide you pass over it
 if (me.x == hazards[i].x and is_grounded())
 {
 string fall_clip = get_pack_sound(trap_folder(hazards[i].env, "hazards") + hazards[i].theme + "/*fall*");
-if (practice_run) practice_set_down(hazards[i], fall_clip);
+if (practice_run)
+{
+last_caught = "hazards"; // the practice death's line (practicehints.nvgt); a practice fall counts nothing, so no stat_caught()
+practice_set_down(hazards[i], fall_clip);
+}
 else
 {
 stat_caught("hazards");

@@ -101,7 +101,10 @@ the real game, but let you try again."), for the last life lost to a blow (end_r
 except that a blow's hit, already playing through p, plays out. Then the death: the hazard's fall clip, or the player's
 death sound, with no tile fall. "You died." waits for Enter, then you're set down at past_x, just past what caught you,
 with everything back (dev: "It gives you everything back."): full health, practice_lives and steel shields topped up to
-practice_shields, keys kept. The run picks up where it froze, with a landing. */
+practice_shields, keys kept. The run picks up where it froze, with a landing. Since the practice guidance plan's Section 3
+(dev, 2026-11-12): the dialog says what caught you and how to get past it (practice_death_text()), then a menu asks
+"What would you like to do now?": retry practice sets you down as above; return to game menu, or Escape ("canceled"),
+ends the run as quit run does. */
 void practice_death(double past_x, const string&in fall_clip)
 {
 pause_timers();
@@ -112,8 +115,21 @@ else
 dlgplay(get_pack_sound("misc/player/*death*"));
 wait_for_pool(p); // the blow's hit, if it's still going
 }
-dlgmessage_return("You died.");
-// The key that closed the dialog must be let go first, or it would carry into the run as a hand, a weapon, or Escape's quit question.
+dlgmessage_return(practice_death_text()); // practicehints.nvgt
+while (key_down(KEY_RETURN) or key_down(KEY_SPACE) or key_down(KEY_A) or key_down(KEY_ESCAPE)) wait(5);
+setupmenu();
+m.intro_text = "What would you like to do now?";
+m.add_item("retry practice", "retry");
+m.add_item("return to game menu", "return");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id != "retry")
+{
+if (mres < 0) speak("canceled");
+resume_game();
+leave_run(false); // as quit run does (pause_menu.nvgt): back to the game menu
+return;
+}
+// The key that closed the menu must be let go first, or it would carry into the run as a hand, a weapon, or Escape's quit question.
 while (key_down(KEY_RETURN) or key_down(KEY_SPACE) or key_down(KEY_A) or key_down(KEY_ESCAPE)) wait(5);
 cancel_movement();
 me.x = past_x;

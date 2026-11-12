@@ -26,6 +26,30 @@ practice_goal_placed = 0;
 practice_closing_x = -1;
 practice_hints_done = false;
 }
+// An animal kind folder as one animal: "birds" is "bird".
+string animal_singular(const string&in kind)
+{
+if (kind.length() > 1 and kind.substr(kind.length() - 1) == "s") return kind.substr(0, kind.length() - 1);
+return kind;
+}
+/* The practice death's dialog (Section 3, dev, 2026-11-12): "You died.", what caught you, and how to get past it, from
+last_caught and last_caught_kind; in a combination, the part that caught you. No keyboard key is ever named. */
+string practice_death_text()
+{
+string how = "";
+if (last_caught == "hazards") how = "You fell into a hazard. Jump just before you reach the edge.";
+else if (last_caught == "spikes") how = "A spike hit you. Jump as its last countdown cue plays to sail over it.";
+else if (last_caught == "mines") how = "A mine went off under you. Jump as its last countdown cue plays to clear it.";
+else if (last_caught == "projectiles") how = "A projectile hit you. Crouch before it reaches you, and stay down until it passes.";
+else if (last_caught == "force_fields") how = "A force field hit you. Press either hand during its countdown to switch it off.";
+else if (last_caught == "animals") how = "A " + (last_caught_kind == "" ? "bird" : last_caught_kind) + " hit you. Clap with both hands to scare it away.";
+else if (last_caught == "walls") how = "You crashed into a wall. Break it with your weapons before you reach it.";
+else if (last_caught == "doors" and last_caught_kind == "real") how = "You crashed into a real door. Use a key from your inventory to unlock it, then open it with a hand.";
+else if (last_caught == "doors") how = "You crashed into a fake door. It won't open, so break it with your weapons.";
+else if (last_caught == "barriers") how = "A barrier hit you. If you're in its lane, switch to another lane before it reaches you.";
+else if (last_caught == "winds") how = "A wind hit you. Wait for its last move, then switch lanes so it can't follow.";
+return how == "" ? "You died." : "You died. " + how;
+}
 // From reset_spawner(): every run starts its hints over.
 void reset_practice_hints()
 {
