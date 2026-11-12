@@ -69,6 +69,7 @@ if (s.reached and !sliding and me.x >= s.land_to) slides.remove_at(i);
 void start_slide(slide_obj@ s)
 {
 sliding = true;
+stat_add("slides_ridden"); // Section 2
 slide_end_at = runtimer.elapsed + s.ride_ms;
 slidepool.play_stationary(get_pack_sound("misc/game/*slidestart*"), false);
 slide_moveslot = slidepool.play_stationary(get_pack_sound("misc/game/*slidemove*"), true);
@@ -78,12 +79,13 @@ lane within reach, so they're caught as they arrive), and the ride ends on time 
 void slide_update()
 {
 if (!sliding) return;
-pick_up_ammopack();
-pick_up_key();
-pick_up_shield();
-pick_up_capsule();
-pick_up_potion();
-pick_up_teleporter();
+// Each item caught counts in its own pick-up statistic and, here, as an item caught on a slide (Section 2).
+if (pick_up_ammopack()) stat_add("slide_items_caught");
+if (pick_up_key()) stat_add("slide_items_caught");
+if (pick_up_shield()) stat_add("slide_items_caught");
+if (pick_up_capsule()) stat_add("slide_items_caught");
+if (pick_up_potion()) stat_add("slide_items_caught");
+if (pick_up_teleporter()) stat_add("slide_items_caught");
 if (runtimer.elapsed < slide_end_at) return;
 sliding = false;
 if (slide_moveslot > -1) slidepool.destroy_sound(slide_moveslot);
