@@ -157,6 +157,11 @@ for (uint i = 0; i < projectiles.length(); i++)
 {
 if (@projectiles[i] != null and !projectiles[i].spent and projectiles[i].meet_x == x) return true;
 }
+// A wind in any lane, since it moves toward yours (wind.nvgt).
+for (uint i = 0; i < winds.length(); i++)
+{
+if (@winds[i] != null and !winds[i].spent and winds[i].meet_x == x) return true;
+}
 if (@wall_at(x) != null) return true;
 if (@barrier_in_my_lane_at(x) != null) return true; // only one in your lane blocks you
 if (@animal_at(x) != null) return true;

@@ -76,6 +76,11 @@ it 1 in 2 instead. A ride lasts a random slide_min_time to slide_max_time. */
 const int slide_chance = 6;
 const int slide_min_time = 2000;
 const int slide_max_time = 4000;
+/* Winds (the winds plan, dev, 2026-11-10 and 11): a wind closes in wind_speed_factor times as fast as a still obstacle
+(moving toward you at half the belt's speed), moves one lane toward yours every wind_beat_time ms, and does wind_damage. */
+const double wind_speed_factor = 1.5;
+const int wind_beat_time = 750;
+const int wind_damage = 5;
 /* Top speed by level (the difficulty scaling plan, dev, 2026-11-09): the step time where an endless run's belt stops
 speeding up, 5, 6.7, 10, 13.3 and 20 steps a second. Every obstacle and item has joined by easy's 200. Debug runs keep
 min_step_time, and Rush Hour can still go speedup_amount past the cap, never past min_step_time. */
@@ -84,8 +89,8 @@ const int[] difficulty_top_step_times = {200, 150, 100, 75, 50};
 belt reaches its speed, one obstacle type per 50 ms mark, in order of the action it needs. Anything not listed is in from
 the start: hazards, spikes and mines, health potions, life capsules and steel shields, and keys, which come before every
 real door outside the schedule. Chaos has everything from the first spawn. */
-const string[] schedule_types = {"projectiles", "force_fields", "animals", "walls", "ammo_packs", "fake_doors", "player_teleporters", "barriers", "powerups", "slides"};
-const int[] schedule_join_times = {450, 400, 350, 300, 300, 250, 250, 200, 200, 300}; // slides at 3.3 steps a second (the slides plan, dev, 2026-11-11)
+const string[] schedule_types = {"projectiles", "force_fields", "animals", "walls", "ammo_packs", "fake_doors", "player_teleporters", "barriers", "powerups", "slides", "winds"};
+const int[] schedule_join_times = {450, 400, 350, 300, 300, 250, 250, 200, 200, 300, 200}; // slides at 3.3 steps a second (the slides plan), winds at 5 (the winds plan), dev, 2026-11-11
 const int chaos_level = 4; // difficulty_names' index of chaos, which ignores the schedule
 /* The locks (Section 6, dev, 2026-11-05: "5 runs per level, and a user is required to reach at least 1 door"): easy is
 always open, and each other level opens after this many counted runs on the level below. */

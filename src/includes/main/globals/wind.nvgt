@@ -1,0 +1,179 @@
+/* Winds (the winds plan, dev, 2026-11-10 and 11; Section 1): a gust that chases you across the lanes and shoves you
+sideways. Each is timed to a meeting tile, meet_x, like a projectile, and closes in wind_speed_factor (1.5) times as fast
+as a still obstacle, so it reaches meet_x on the same step you do. It appears in a random lane, its loop placed in its
+lane like a barrier's (place_lane_sound()), and every wind_beat_time (on runtimer, so pausing freezes it) it moves one
+lane toward the lane you're in, remembering which way it went. Its countdown (the layered traps/winds/countdown set)
+plays only on steps when it's in your lane, so the cues start when it catches you and stop when you lose it.
+On meet_x: in another lane, it passes you, a clean dodge (winds_dodged). In your lane, its hit and wind_damage (5, scaled
+by difficulty through take_damage(), a worn shield first), and a shove of one lane (shove_dir(): toward the middle from an
+edge lane, the way it last drifted from the middle, a random way if it never moved); crouching as it arrives is a brace: no shove, still the hit, which
+counts as caught. Either way its loop carries on behind you. On a slide you pass through it harmlessly.
+Not in combinations (the dev, 2026-11-11). Same entity pattern as the other traps: null-slot removal, reused slots, and
+only destroy_all_winds() shrinks the array. */
+sound_pool windpool;
+class wind
+{
+double meet_x;
+string theme;
+string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+int pair = 0; // never set: winds aren't in combinations, kept for the shared pair hooks
+int lane;
+int drift_dir = 0; // -1 it last moved left, 1 right, 0 it hasn't moved
+double next_beat; // on runtimer
+bool spent = false; // reached meet_x: it can never hit again
+int loopslot = -1;
+double countdown_start;
+}
+wind@[] winds(0);
+
+// countdown comes from the spawner, the same countdown_steps() a hazard's ledge uses.
+void spawn_wind(double mx, string theme, int countdown)
+{
+wind w;
+w.meet_x = mx;
+w.theme = theme;
+w.env = current_env;
+w.pair = placing_pair;
+w.lane = random(lane_left, lane_right);
+w.next_beat = runtimer.elapsed + wind_beat_time;
+w.countdown_start = mx - countdown;
+w.loopslot = windpool.play_2d(get_pack_sound(trap_folder(current_env, "winds") + theme + "/*loop*"), 0, me.x, 0, wind_x(w), true);
+place_lane_sound(windpool, w.loopslot, w.lane, wind_x(w));
+for (uint i = 0; i < winds.length(); i++)
+{
+if (@winds[i] == null)
+{
+@winds[i] = w;
+return;
+}
+}
+winds.insert_last(w);
+}
+// Where a wind is along the belt right now, as a projectile_x() but at wind_speed_factor.
+double wind_x(wind@ w)
+{
+double player_pos = me.x + min(1, double(steptimer.elapsed) / current_step_time());
+return w.meet_x + (wind_speed_factor - 1) * (w.meet_x - player_pos);
+}
+/* Every frame from run_loop(): each wind's beat (one lane toward yours while it's still to reach you), then its loop
+moved to its lane and its place along the belt. */
+void wind_flight()
+{
+for (uint i = 0; i < winds.length(); i++)
+{
+if (@winds[i] == null) continue;
+wind@ w = winds[i];
+if (!w.spent and runtimer.elapsed >= w.next_beat)
+{
+w.next_beat += wind_beat_time;
+if (w.lane != current_lane)
+{
+w.drift_dir = current_lane > w.lane ? 1 : -1;
+w.lane += w.drift_dir;
+}
+}
+if (w.loopslot < 0 or !windpool.verify_slot(w.loopslot)) continue;
+place_lane_sound(windpool, w.loopslot, w.lane, wind_x(w));
+}
+}
+// Runs once per step, right after the move: reaching meet_x in its lane is a hit and a shove; in another lane, a dodge.
+void wind_check()
+{
+for (uint i = 0; i < winds.length(); i++)
+{
+if (@winds[i] == null) continue;
+wind@ w = winds[i];
+if (sliding and me.x == w.meet_x and !w.spent)
+{
+w.spent = true; // passed through on a slide (slide.nvgt)
+continue;
+}
+if (me.x == w.meet_x and !w.spent)
+{
+w.spent = true;
+if (w.lane != current_lane)
+{
+stat_add("winds_dodged"); // it reached you in another lane: a clean dodge
+pair_part_cleared(w.pair);
+}
+else
+{
+string hit_clip = get_pack_sound(trap_folder(w.env, "winds") + w.theme + "/*hit*");
+bool braced = is_ducked(); // crouching as it arrives: no shove, still the hit (dev, 2026-11-11)
+/* A fatal hit plays the wind's hit through p and no player hit, since end_run_hit() plays the player's death
+instead. */
+stat_caught("winds");
+pair_part_hit(w.pair); // the statistics: what caught you, and what ended the run if it's fatal
+int blow = take_damage(wind_damage); // a worn shield, else your health
+if (blow == blow_fatal)
+{
+p.play_stationary(hit_clip, false);
+end_run_hit();
+return;
+}
+windpool.play_2d(hit_clip, 0, me.x, 0, w.meet_x, false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (!braced)
+{
+wind_shove(shove_dir(w));
+}
+}
+}
+// It blows on behind you until it's as far behind as obstacles appear ahead; then dropped.
+if (me.x > w.meet_x + spawn_distance()) remove_wind(i);
+}
+}
+/* Which way a wind shoves you (dev, 2026-11-11, after testing: at an edge it only bumped you, since a wind reaching an
+edge lane was always drifting toward that edge): from the left lane, right toward the middle; from the right lane, left
+toward the middle; from the middle, the way it was drifting, or a random way if it never moved. So a shove always moves
+you one lane. */
+int shove_dir(wind@ w)
+{
+if (current_lane == lane_left) return 1;
+if (current_lane == lane_right) return -1;
+if (w.drift_dir != 0) return w.drift_dir;
+return random(0, 1) == 0 ? -1 : 1;
+}
+/* The shove, like move_lane() in lane.nvgt (turn from the lane you land in; past an edge, bump and you stay put) but not
+counted as one of your lane changes, since the wind moved you. */
+void wind_shove(int dir)
+{
+int target = current_lane + dir;
+if (target < lane_left or target > lane_right)
+{
+p.play_stationary_extended(get_pack_sound("misc/player/*bump*"), false, 0, belt_pan(target), 0, 100, false);
+return;
+}
+current_lane = target;
+p.play_stationary_extended(get_pack_sound("misc/player/*turn*"), false, 0, belt_pan(current_lane), 0, 100, false);
+}
+// The countdown: the winds countdown cues, only on steps where it's in your lane (dev, 2026-11-11). Runs once per step.
+void wind_countdown()
+{
+for (uint i = 0; i < winds.length(); i++)
+{
+if (@winds[i] == null or winds[i].spent or winds[i].lane != current_lane) continue;
+play_countdown(windpool, "winds", winds[i].meet_x, winds[i].countdown_start, winds[i].env);
+}
+}
+void stop_wind(wind@ w)
+{
+if (w.loopslot > -1) windpool.destroy_sound(w.loopslot);
+w.loopslot = -1;
+}
+void remove_wind(uint i)
+{
+if (i >= winds.length() or @winds[i] == null) return;
+stop_wind(winds[i]);
+@winds[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_winds()
+{
+for (uint i = 0; i < winds.length(); i++)
+{
+if (@winds[i] == null) continue;
+stop_wind(winds[i]);
+}
+winds.resize(0);
+}
