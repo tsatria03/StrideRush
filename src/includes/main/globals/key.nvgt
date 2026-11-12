@@ -83,7 +83,7 @@ if (@doorkeys[i] == null) continue;
 doorkey@ k = doorkeys[i];
 if (!k.spent)
 {
-if (me.x == k.x and is_grounded() and k.lane == current_lane) break_key(k);
+if (me.x == k.x and is_grounded() and k.lane == current_lane and !sliding) break_key(k); // not on a slide: there it's caught or passes (slide.nvgt)
 else if (me.x > k.x) k.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 if (me.x > k.x + spawn_distance()) remove_key(i);

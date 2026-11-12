@@ -66,6 +66,11 @@ for (uint i = 0; i < projectiles.length(); i++)
 {
 if (@projectiles[i] == null) continue;
 projectile@ pr = projectiles[i];
+if (sliding and me.x == pr.meet_x and !pr.spent)
+{
+pr.spent = true; // passed through on a slide (slide.nvgt)
+continue;
+}
 if (me.x == pr.meet_x and !pr.spent)
 {
 pr.spent = true;

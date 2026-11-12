@@ -79,7 +79,7 @@ if (@ammopacks[i] == null) continue;
 ammopack@ a = ammopacks[i];
 if (!a.spent)
 {
-if (me.x == a.x and is_grounded() and a.lane == current_lane) break_ammopack(a);
+if (me.x == a.x and is_grounded() and a.lane == current_lane and !sliding) break_ammopack(a); // not on a slide: there it's caught or passes (slide.nvgt)
 else if (me.x > a.x) a.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 // Kept until it's as far behind as obstacles appear ahead, so a missed pack's loop fades out; then dropped.

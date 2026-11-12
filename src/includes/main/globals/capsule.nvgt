@@ -73,7 +73,7 @@ if (@capsules[i] == null) continue;
 lifecapsule@ lc = capsules[i];
 if (!lc.spent)
 {
-if (me.x == lc.x and is_grounded() and lc.lane == current_lane) break_capsule(lc);
+if (me.x == lc.x and is_grounded() and lc.lane == current_lane and !sliding) break_capsule(lc); // not on a slide: there it's caught or passes (slide.nvgt)
 else if (me.x > lc.x) lc.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 if (me.x > lc.x + spawn_distance()) remove_capsule(i);

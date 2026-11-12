@@ -93,7 +93,7 @@ return;
 single-type debug run spawns strictly that type (dev, 2026-11-03), except "real doors, spread", which is the marks alone. */
 bool marks_on = spawn_only == "all" or spawn_only == "real_doors_spread";
 // The key for the next real door comes first, so it's always on the belt before its door.
-if (marks_on and key_due())
+if (marks_on and !slide_holds() and key_due()) // a slide holds the next key and door back (slide.nvgt)
 {
 next_type = "keys";
 next_key_door -= door_section_ms;
@@ -101,7 +101,7 @@ set_key_mark();
 next_countdown = countdown_steps();
 return;
 }
-if (marks_on and next_door_mark >= run_top_step_time() and step_time <= next_door_mark and doors_available())
+if (marks_on and !slide_holds() and next_door_mark >= run_top_step_time() and step_time <= next_door_mark and doors_available())
 {
 next_type = "real_doors";
 next_door_mark -= door_section_ms;
@@ -145,12 +145,15 @@ bool capsules_ok = capsules_available() and has_joined("life_capsules") and (spa
 bool potions_ok = potions_available() and has_joined("health_potions") and (spawn_only == "all" or spawn_only == "health_potions");
 bool teleporters_ok = teleporters_available() and has_joined("player_teleporters") and (spawn_only == "all" or spawn_only == "player_teleporters");
 bool powerups_ok = powerups_available() and has_joined("powerups") and (spawn_only == "all" or spawn_only == "powerups");
+// Slides: normal runs only, never in practice, one at a time (slide.nvgt).
+bool slides_ok = slides_available() and has_joined("slides") and spawn_only == "all" and !practice_run and !slide_holds();
 if (spawn_only == "ammo_packs") next_type = packs_ok ? "ammo_packs" : "";
 else if (spawn_only == "steel_shields") next_type = shields_ok ? "steel_shields" : "";
 else if (spawn_only == "life_capsules") next_type = capsules_ok ? "life_capsules" : "";
 else if (spawn_only == "health_potions") next_type = potions_ok ? "health_potions" : "";
 else if (spawn_only == "player_teleporters") next_type = teleporters_ok ? "player_teleporters" : "";
 else if (spawn_only == "powerups") next_type = powerups_ok ? "powerups" : "";
+else if (slides_ok and random(1, slides_debug ? 2 : slide_chance) == 1 and (slides_debug or survival_roll())) next_type = "slides";
 else if (capsules_ok and random(1, life_capsule_chance) == 1 and survival_roll()) next_type = "life_capsules";
 else if (potions_ok and random(1, health_potion_chance) == 1 and survival_roll()) next_type = "health_potions";
 else if (teleporters_ok and random(1, teleporter_chance) == 1) next_type = "player_teleporters";
@@ -215,6 +218,7 @@ next_spawn_x = max(next_spawn_x, me.x + spawn_distance() + next_countdown + 1);
 void spawn_check()
 {
 if (me.x + spawn_distance() + next_countdown < next_spawn_x) return;
+next_spawn_x = slide_landing_push(next_spawn_x); // a slide's landing stays clear (slide.nvgt)
 place_obstacle(next_spawn_x, next_type, next_countdown);
 string placed = next_type;
 // A pair ends at its second part, so the next spawn counts from there, and a force field there needs its throw's room too.
@@ -238,6 +242,9 @@ void set_spawn_only(string only_type)
 {
 spawn_only = only_type;
 item_lane_mode = "";
+// Debug option: "slides" is the full game with a slide about every other spawn (slide.nvgt).
+slides_debug = only_type == "slides";
+if (slides_debug) spawn_only = "all";
 /* Practice doors' keys come one at a time in a random lane, as in the real game, but never with a pair's second item,
 which could be any kind, since a practice run has no items but keys (dev, 2026-11-05). */
 if (only_type == "practice_doors" or (practice_run and only_type == "real_doors")) // practice's real doors too (2026-11-09)
@@ -322,6 +329,11 @@ if (type == "combinations")
 place_pair(x, countdown); // combo.nvgt
 return;
 }
+if (type == "slides")
+{
+spawn_slide(x); // slide.nvgt
+return;
+}
 if (item_lane_types.find(type) >= 0)
 {
 spawn_items(type, x, countdown);
@@ -365,6 +377,7 @@ A cue is exempt from the behind-pitch drop (dev, 2026-11-04): at high speeds the
 playing, which would put it behind you and lower its pitch partway through (play_cue()). */
 void play_countdown(sound_pool@ pool, string type, double ox, double countdown_start, const string&in env)
 {
+if (sliding) return; // no warnings on a slide: everything passes through you harmlessly (the slides plan, dev, 2026-11-11)
 int steps_left = int(ox - me.x);
 if (steps_left < 1 or steps_left > 5 or me.x < countdown_start) return;
 int note = 6 - steps_left;

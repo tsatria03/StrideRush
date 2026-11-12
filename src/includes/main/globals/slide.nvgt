@@ -1,0 +1,120 @@
+/* Slides (the slides plan, dev, 2026-11-11; Section 1). A slide covers the whole belt, so you always go onto it. Its
+sounds are shared, beside the powerups': misc/game/slideground loops at its tile as you run toward it, slidestart plays
+as you get on, slidemove loops while it carries you, and slidestop plays as you come off. No countdown for now.
+On a slide, for its ride_ms (slide_min_time to slide_max_time, on runtimer so pausing freezes it): your current speed is
+halved (current_step_time(), powerups included); there are no footsteps and no heartbeat; jumping, crouching, hands,
+inventory and weapons are blocked like a door carry, but lane switches work. Obstacles keep coming with no countdown and
+you pass through them harmlessly, counting toward nothing. Items in whatever lane you're in are collected automatically
+(slide_update()). Air powerups never come during a slide, and real doors and their keys wait until it's over. The landing
+is clear: nothing is placed from where the slide ends to a full countdown and the minimum floor past it. */
+sound_pool slidepool;
+class slide_obj
+{
+double x;
+int ride_ms;
+double land_from, land_to; // the clear landing: where the ride should end, and where the next thing may go
+bool reached;
+int loopslot;
+}
+slide_obj@[] slides;
+bool sliding = false;
+double slide_end_at = 0; // on runtimer
+int slide_moveslot = -1;
+bool slides_debug = false; // the debug spawn choice "slides": the full game, with a slide about every other spawn
+
+// Every run starts off a slide, with none on the belt.
+void reset_slides()
+{
+slidepool.destroy_all();
+slides.resize(0);
+sliding = false;
+slide_moveslot = -1;
+}
+bool slides_available()
+{
+return get_pack_sound("misc/game/*slideground*") != "";
+}
+/* Places a slide at x: its ride length is picked now, so the spawner knows where it'll end and can keep the landing
+clear. At double the current speed, ride_ms covers that many tiles. */
+void spawn_slide(double x)
+{
+slide_obj s;
+s.x = x;
+s.reached = false;
+s.loopslot = -1;
+s.ride_ms = random(slide_min_time, slide_max_time);
+int tiles = int(ceil(double(s.ride_ms) / (current_step_time() / 2.0)));
+s.land_from = x + tiles;
+s.land_to = s.land_from + countdown_steps() + floor_tiles(run_min_floor_time);
+s.loopslot = slidepool.play_2d(get_pack_sound("misc/game/*slideground*"), 0, me.x, 0, x, true);
+slides.insert_last(s);
+}
+// Runs once per step, right after the move: reaching a slide's tile puts you on it, in the air or on the ground.
+void slide_check()
+{
+for (int i = int(slides.length()) - 1; i >= 0; i--)
+{
+slide_obj@ s = slides[i];
+if (!s.reached and me.x >= s.x)
+{
+s.reached = true;
+if (s.loopslot > -1) slidepool.destroy_sound(s.loopslot);
+s.loopslot = -1;
+start_slide(s);
+}
+// Forgotten once the ride and its landing are behind you.
+if (s.reached and !sliding and me.x >= s.land_to) slides.remove_at(i);
+}
+}
+void start_slide(slide_obj@ s)
+{
+sliding = true;
+slide_end_at = runtimer.elapsed + s.ride_ms;
+slidepool.play_stationary(get_pack_sound("misc/game/*slidestart*"), false);
+slide_moveslot = slidepool.play_stationary(get_pack_sound("misc/game/*slidemove*"), true);
+}
+/* Every frame from run_loop(): on a slide, the items in your lane are caught (each pick-up takes the nearest one in your
+lane within reach, so they're caught as they arrive), and the ride ends on time with slidestop. */
+void slide_update()
+{
+if (!sliding) return;
+pick_up_ammopack();
+pick_up_key();
+pick_up_shield();
+pick_up_capsule();
+pick_up_potion();
+pick_up_teleporter();
+if (runtimer.elapsed < slide_end_at) return;
+sliding = false;
+if (slide_moveslot > -1) slidepool.destroy_sound(slide_moveslot);
+slide_moveslot = -1;
+slidepool.play_stationary(get_pack_sound("misc/game/*slidestop*"), false);
+}
+// True while a slide is on its way, being ridden, or its landing is still ahead: no new slide, real door or key then.
+bool slide_holds()
+{
+if (sliding) return true;
+for (uint i = 0; i < slides.length(); i++)
+{
+if (!slides[i].reached or me.x < slides[i].land_to) return true;
+}
+return false;
+}
+// True when x is along a slide's ride, where an air powerup could never be caught.
+bool slide_covers(double x)
+{
+for (uint i = 0; i < slides.length(); i++)
+{
+if (x >= slides[i].x and x <= slides[i].land_from) return true;
+}
+return false;
+}
+// The clear landing: a spawn that would fall in it moves to just past it.
+double slide_landing_push(double x)
+{
+for (uint i = 0; i < slides.length(); i++)
+{
+if (x >= slides[i].land_from and x < slides[i].land_to) return slides[i].land_to;
+}
+return x;
+}

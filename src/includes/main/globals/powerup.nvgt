@@ -73,7 +73,9 @@ int current_step_time()
 int t = step_time;
 if (powerup_active("Slow Motion")) t += powerup_speed_ms;
 else if (powerup_active("Rush Hour")) t -= powerup_speed_ms;
-return int(max(min_step_time, min(start_step_time, t)));
+t = int(max(min_step_time, min(start_step_time, t)));
+if (sliding) t /= 2; // a slide doubles your current speed, powerups included (the slides plan, dev, 2026-11-11)
+return int(max(min_step_time, t));
 }
 // A jump's time per height: Moon Jump makes jumps longer, Short Hop shorter.
 double current_jump_tick()
@@ -116,7 +118,7 @@ void spawn_powerup(double px, int countdown)
 {
 powerup pu;
 pu.x = px;
-pu.flight = random(0, 1) == 1;
+pu.flight = random(0, 1) == 1 and !slide_covers(px); // no air powerups along a slide, where you can't jump (dev, 2026-11-11)
 play_powerup_sound(pu); // the first one-shot at once, then on its kind's timer
 for (uint i = 0; i < powerups.length(); i++)
 {

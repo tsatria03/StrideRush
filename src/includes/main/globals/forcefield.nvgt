@@ -51,6 +51,11 @@ for (uint i = 0; i < forcefields.length(); i++)
 {
 if (@forcefields[i] == null) continue;
 forcefield@ f = forcefields[i];
+if (sliding and me.x == f.x and !f.spent)
+{
+f.spent = true; // passed through on a slide (slide.nvgt)
+continue;
+}
 if (me.x == f.x and !f.spent)
 {
 f.spent = true;
@@ -96,7 +101,7 @@ if (left_used_on_field and !controls.action_down("hand_left")) left_used_on_fiel
 if (right_used_on_field and !controls.action_down("hand_right")) right_used_on_field = false;
 // A lone empty hand's woosh waits clap_window ms for the other hand (see empty_hand_sound()); no clap came, so play it.
 if (woosh_pending_side != 0 and wooshtimer.elapsed >= clap_window) play_pending_woosh();
-if (door_moving) return; // no hands while a door carries you
+if (door_moving or sliding) return; // no hands while a door carries you or on a slide
 bool left = controls.action_triggered("hand_left"), right = controls.action_triggered("hand_right");
 if (!left and !right) return;
 forcefield@ target = null;

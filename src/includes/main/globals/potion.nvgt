@@ -72,7 +72,7 @@ if (@potions[i] == null) continue;
 healthpotion@ pot = potions[i];
 if (!pot.spent)
 {
-if (me.x == pot.x and is_grounded() and pot.lane == current_lane) break_potion(pot);
+if (me.x == pot.x and is_grounded() and pot.lane == current_lane and !sliding) break_potion(pot); // not on a slide: there it's caught or passes (slide.nvgt)
 else if (me.x > pot.x) pot.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 if (me.x > pot.x + spawn_distance()) remove_potion(i);

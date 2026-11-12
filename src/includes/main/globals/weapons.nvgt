@@ -57,7 +57,7 @@ draw_weapon(weapon_names.find("fist"));
 void weapon_input()
 {
 reload_check(); // a reload already under way still finishes
-if (door_moving) return; // no drawing, firing, reloading or ammo checks while a door carries you
+if (door_moving or sliding) return; // no drawing, firing, reloading or ammo checks while a door carries you
 for (int k = 1; k <= 10; k++)
 {
 if (controls.action_triggered("weapon_" + k)) draw_weapon(k - 1);

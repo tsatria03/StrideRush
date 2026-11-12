@@ -72,6 +72,11 @@ for (uint i = 0; i < walls.length(); i++)
 {
 if (@walls[i] == null) continue;
 wall@ w = walls[i];
+if (sliding and me.x == w.x and wall_standing(w))
+{
+w.crashed = true; // passed through on a slide, no crash (slide.nvgt)
+continue;
+}
 if (me.x == w.x and wall_standing(w))
 {
 w.crashed = true;

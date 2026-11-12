@@ -42,7 +42,7 @@ int footstep_volume = 0;
 void play_step()
 {
 if (!footsteps_on) return;
-if (!is_grounded() or is_ducked() or door_moving) return; // silent while a real door carries you through
+if (!is_grounded() or is_ducked() or door_moving or sliding) return; // slidemove plays on a slide // silent while a real door carries you through
 string tile = tile_at(me.x);
 if (tile == "") return;
 p.play_stationary_extended(get_pack_sound(env_root(current_env) + "platforms/" + tile + "/*step*"), false, 0, 0, footstep_volume, 100, false);

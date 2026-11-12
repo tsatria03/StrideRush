@@ -41,6 +41,11 @@ if (practice_run)
 if (practice_shield_count() > 0) give_item("steel_shield", practice_shield_count());
 return;
 }
+if (slides_debug)
+{
+give_item("steel_shield", 2); // the debug choice "slides" plays like "all" but gets the debug shields (dev, 2026-11-11)
+return;
+}
 string[] shielded_types = {"spikes", "mines", "force_fields", "projectiles", "walls", "animals", "animals_birds", "animals_dogs", "fake_doors", "real_doors", "real_doors_spread", "powerups", "barriers", "barriers_random", "barriers_multiple", "combinations", "combinations_reverse", "combinations_mixed"}; // never "all", which plays like the real game (dev); the combination choices since 2026-11-11 (dev)
 if (shielded_types.find(spawn_only) >= 0) give_item("steel_shield", 2); // 2 since 2026-11-05 (dev: "in debug, you'll have 2 shields in your inv"), was 1
 }
@@ -102,7 +107,7 @@ if (@shields[i] == null) continue;
 shield@ s = shields[i];
 if (!s.spent)
 {
-if (me.x == s.x and is_grounded() and s.lane == current_lane) break_shield(s);
+if (me.x == s.x and is_grounded() and s.lane == current_lane and !sliding) break_shield(s); // not on a slide: there it's caught or passes (slide.nvgt)
 else if (me.x > s.x) s.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 if (me.x > s.x + spawn_distance()) remove_shield(i);

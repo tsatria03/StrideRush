@@ -72,7 +72,7 @@ if (@teleporters[i] == null) continue;
 teleporter@ t = teleporters[i];
 if (!t.spent)
 {
-if (me.x == t.x and is_grounded() and t.lane == current_lane) break_teleporter(t);
+if (me.x == t.x and is_grounded() and t.lane == current_lane and !sliding) break_teleporter(t); // not on a slide: there it's caught or passes (slide.nvgt)
 else if (me.x > t.x) t.spent = true; // jumped clean over: its loop carries on and fades behind you
 }
 if (me.x > t.x + spawn_distance()) remove_teleporter(i);

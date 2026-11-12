@@ -80,6 +80,11 @@ for (uint i = 0; i < animals.length(); i++)
 {
 if (@animals[i] == null) continue;
 animal@ bd = animals[i];
+if (sliding and me.x == bd.x and !bd.spent)
+{
+bd.spent = true; // passed through on a slide (slide.nvgt)
+continue;
+}
 if (me.x == bd.x and !bd.spent)
 {
 bd.spent = true;
