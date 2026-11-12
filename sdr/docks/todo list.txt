@@ -1,12 +1,13 @@
 ####These are the things that need to be finished for future versions of the game.
 
-****Unfinished. Make it so practice runs of obstacles that don't need weapons have no weapons drawn, and the weapon keys do nothing.
-****Unfinished. Make it so dying in a practice run tells you what caught you and how to get past it.
-****Unfinished. Add spoken hints in practice runs, in their own practice buffer, saying what has appeared and what to do, for the first 5 of each kind in every run.
-****Unfinished. Add a menu after a practice death, asking whether to retry practice or return to the game menu.
+Nothing is waiting here right now. New bugs, planned changes and anything still to be decided will be listed here as they come up.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add a menu after a practice death, asking whether to retry practice or return to the game menu.
+**Finished. Add spoken hints in practice runs, in their own practice buffer, saying what has appeared and what to do, for the first 5 of each kind in every run.
+**Finished. Make it so dying in a practice run tells you what caught you and how to get past it.
+**Finished. Make it so practice runs of obstacles that don't need weapons have no weapons drawn, and the weapon keys do nothing.
 **Finished. Add trampolines that launch you over the next few obstacles when you run onto one.
 **Finished. Add winds that chase you across the lanes and shove you sideways.
 **Finished. Add slides that carry you faster for a few seconds while you catch items.

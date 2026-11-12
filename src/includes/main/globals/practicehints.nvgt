@@ -125,5 +125,5 @@ void practice_hints_check()
 {
 if (!practice_run or practice_hints_done or practice_closing_x < 0 or me.x <= practice_closing_x) return;
 practice_hints_done = true;
-speak_buffer("Well done, that's all the hints for this run, so keep practicing at your own pace and trust your ears.", "practice");
+speak_buffer("Well done, that's all the hints for this run, so keep practicing at your own pace and trust your ears, or quit the run whenever you're ready to stop.", "practice");
 }

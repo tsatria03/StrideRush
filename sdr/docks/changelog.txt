@@ -1,4 +1,8 @@
 New in 2.0.
+Added a menu after a practice death, so you can retry practice or return to the game menu.
+Added spoken hints to practice runs, in their own practice buffer, saying what has appeared, which lane it's in and what to do, for the first 5 of each kind in every run, with a closing line once you've heard them all.
+Made it so dying in a practice run now tells you what caught you and how to get past it.
+Made it so practice runs of obstacles that don't need weapons now start with no weapon drawn, and the weapon keys do nothing.
 Added trampolines to practice runs, opened once you've cleared 5 combinations, so you can drill all four kinds of trampoline at your own speed.
 Added trampolines, in one lane or across the whole belt, which launch you on a long flight over everything ahead, or give you only a short bounce when they're worn, with their own statistics and nine achievements.
 Added winds to practice runs, opened once you've dodged past 5 barriers, so you can drill dodging winds at your own speed.
