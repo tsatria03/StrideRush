@@ -1,0 +1,51 @@
+---
+name: project_winds_plan
+description: SETTLED (2026-11-11, for 2.0; 3 sections) - winds that drift across the lanes toward you and shove you sideways; most of the design decided in the suggestions; Q&A log
+metadata:
+  type: project
+---
+
+Status: SETTLED (2026-11-11), waiting for the dev to commit it before Section 1. Started 2026-11-11 (dev: "Let's continue with wind"), with 2.0 at 9 of 20 and no other plan open.
+
+Background:
+- The dev added the sounds (2026-11-10): environments/<env>/traps/winds/general/wind to wind6, each hit and loop, in default and custom; traps/winds/countdown is empty.
+- The todo item: "Add winds that drift across the lanes toward you and shove you sideways, which you can step out of the way of at the last moment or crouch to brace against."
+- Modelled on SimpleFighter's builder/traps/wind.nvgt (read only): an emitter with a gust loop homes one tile toward you per its own tick while you're in range; on your tile it pushes you a set number of tiles in its fixed direction, one at a time, stopping at a wall; with a health value it plays hit and chips that much; never kills outright; a chase and shove rhythm.
+
+Already decided in the suggestions ([[project_suggestions]], 2026-11-10 and 11):
+- Sideways: a wind drifts across the lanes toward your lane, one lane at a time as it comes, and shoves you sideways across the lanes, stopping at the belt's edge (not along the belt, which force fields and teleporters already do).
+- It also hits you: 5 damage, scaled by difficulty like every blow (3 on easy to 5 on chaos), a worn shield first.
+- Speed: it closes in 1.5 times as fast as a still obstacle (moving toward you at half the belt's speed), scaling with the belt like projectiles' factor 2. One kind only (no fast blasts).
+- Avoiding it, both ways: outrun it with a lane switch just before it arrives (it follows one lane per beat; too early and it follows you), a clean dodge with no hit and no shove; or brace by crouching as it reaches you, no shove but you still take the hit.
+- Statistics and achievements, like every obstacle (dev, 2026-11-11).
+
+Settled by later work (applies to winds too):
+- Environments: a type with no folder in an environment doesn't spawn there; each wind keeps the environment it spawned in.
+- Slides: obstacles pass through you harmlessly on a slide, with no countdown.
+
+Q&A log:
+- Q: How a wind follows you: it appears in a random lane, its loop placed there, and moves one lane toward the lane you're in every wind_beat_time (0.75 s), one lane per beat; a lane switch less than a beat before it arrives beats it (a clean dodge); in your lane on arrival it hits (5 damage and a shove) unless you're crouching to brace. (Asked 2026-11-11; Claude recommended it.) A: "I agree. Also I added a countdown" (dev, 2026-11-11).
+- The dev added a countdown (2026-11-11): environments/default/traps/winds/countdown, a layered set warn1-1 to warn1-5 and warn2-1 to warn2-5 (two groups played together per step, like walls). custom's countdown folder is still empty, so winds in custom would come with no countdown (the never-fall-back rule) until it's copied there.
+- Q: Should a wind's countdown play only while it's in your lane (as barriers'), or always? (Asked 2026-11-11; Claude recommended your lane only.) A: "It should only play in your lane." (dev, 2026-11-11).
+- Q: Which way a wind shoves you: the way it was drifting (random if it never moved), a random side, or toward the centre; off the belt's edge you stay put but still take the damage? (Asked 2026-11-11; Claude recommended the way it was drifting.) A: "I agree." (dev, 2026-11-11). One lane, in its last drift direction; at an edge, no move, still 5 damage.
+- Q: Winds as an equal pick among obstacles (no double share like barriers), and when they join on easy to insane: with barriers at 5 steps a second, at 4 with fake doors, or later? (Asked 2026-11-11; Claude recommended an equal pick, with barriers at 5.) A: "I like the equal pick better." (dev, 2026-11-11). An equal pick; the joining speed asked again.
+- Q: When winds join on easy to insane? (Asked again 2026-11-11; Claude recommended 5 steps a second, with barriers.) A: "I'll do speed 5 steps" (dev, 2026-11-11). schedule_join_times 200 for winds; from the start on chaos.
+- Q: Where winds go in practice: between barriers and combinations (barriers' "dodge past 5" opens winds, a winds goal opens combinations, with a one-time check opening winds on saves that already have combinations), after combinations, or not at all? (Asked 2026-11-11; Claude recommended between, with the check.) A: "I like bariors, then wind" (dev, 2026-11-11). The chain: ... barriers, winds, combinations; the one-time check as recommended.
+- Q: What counts as getting past a wind cleanly: dodging only, or dodging and crouching? The dev suggested "dodging or crouching passt them"; Claude noted bracing still costs the 5 damage, so a crouch counting as clean would want no damage, which makes holding crouch the easy answer, unless timed like projectiles. The dev asked what winds and ducking were for; Claude recalled the original design (dodging, a last-beat lane switch, is the skill and the only clean pass; bracing is damage control: no shove, 5 damage, for when you can't dodge; crouching otherwise is for projectiles) and recommended keeping it. A: "Keep the dodging option for practice" (dev, 2026-11-11). Dodging only counts (winds_dodged), for practice, statistics and achievements; a brace is a hit (caught_winds) that stops the shove. Practice line: "Combinations. Unlocked after you dodge 5 winds."
+- Q: Statistics winds_dodged and caught_winds (braces count there), and achievements in the barriers' pattern: dodging, lifetime 10 and 100; hit by winds, lifetime 10, 100, 500 (5 new, 109 in all)? (Asked 2026-11-11; Claude recommended it.) A: "I agree" (dev, 2026-11-11).
+- Q: The five achievements' names and hints (dodging: Second Wind 10, Storm Chaser 100; hit: Blown Away 10, Windswept 100, Weather Beaten 500, with Claude's hints)? (Asked 2026-11-11.) A: "they all work" (dev, 2026-11-11).
+
+Settled design (2026-11-11):
+- A wind appears in a random lane, its loop placed in its lane, and closes in at wind_speed_factor 1.5 (moving toward you at half the belt's speed, like projectiles' factor 2), scaling with the belt.
+- Every wind_beat_time (750 ms) it moves one lane toward the lane you're in. Its countdown (the layered traps/winds/countdown set) plays only on steps when it's in your lane.
+- Reaching you in your lane: its hit, wind_damage 5 through take_damage() (scaled by difficulty, a worn shield first), and a shove one lane in the direction it last drifted (random if it never moved); at the belt's edge you stay put. Crouching as it reaches you (a brace): no shove, still the damage, and it counts as caught. In another lane: a clean dodge, winds_dodged. Never kills outright except as any blow on your last health.
+- An equal pick among obstacles once joined (no double share), joining at 5 steps a second (200 ms) on easy to insane, from the start on chaos. Only in environments with traps/winds/general (custom has no countdown cues yet). Not in combinations. Passes through you harmlessly on a slide.
+- Practice: winds between barriers and combinations; barriers' "dodge past 5" opens winds, and "Combinations. Unlocked after you dodge 5 winds."; a one-time check opens winds on saves where combinations are already open.
+- Statistics winds_dodged and caught_winds. Achievements: Second Wind (dodge 10 over all your runs; "A wind follows you one lane at a time. Switch lanes in its last beat, so it can't follow."), Storm Chaser (100; "A wind's countdown only plays while it's in your lane. When the cues stop, it's lost you."), Blown Away (hit 10; "Switch too early, and the wind just follows you into your new lane."), Windswept (100; "Crouching as a wind hits keeps you in your lane, though it still costs you some health."), Weather Beaten (500; "A wind blows you the way it was drifting, so listen for the side it came from."); 109 in all.
+- Debug: "winds" in the spawn menu (it lists every obstacle type), starting with 2 debug shields.
+
+Sections:
+1. Winds on the belt: globals/wind.nvgt (spawn, approach, the beat, lane placement, the in-lane countdown, the hit, brace and shove, the dodge, slides pass-through, env and pair fields), tuning (wind_speed_factor, wind_beat_time, wind_damage, winds in schedule_types at 200), obstacle_types, place_obstacle(), clear_run_objects(), all_pools, step_check() and the countdown call, the debug shields list.
+2. Statistics, achievements and practice: winds_dodged and caught_winds in stat_keys; the five achievements; winds in practice.nvgt's tables between barriers and combinations (goal winds_dodged, "dodge", singular "wind"), the one-time check (practice_winds_checked).
+3. Docks: the readme, the changelog, the todo list, CLAUDE.md, the version history, this plan COMPLETE.
+- Wind combinations (the dev asked, 2026-11-11, whether they'd work or winds are already complicated): kept out for now; only wind then spike, mine or hazard might suit, recorded in [[project_suggestions]] (item 11) to reconsider after winds are built.
