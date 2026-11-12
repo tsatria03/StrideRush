@@ -35,6 +35,7 @@ if (spawn_only == "animals_birds") kind = "birds";
 else if (spawn_only == "animals_dogs") kind = "dogs";
 string[] kinds_animals = get_pack_sound_folders(animal_folder(current_env) + kind + "/*");
 if (kinds_animals.length() == 0) return; // no animals of that kind
+practice_hint("animals", -1, bx, kind.substr(kind.length() - 1) == "s" ? kind.substr(0, kind.length() - 1) : kind); // "birds" says "A bird has appeared." (practicehints.nvgt)
 animal bd;
 bd.x = bx;
 bd.theme = kind + "/" + kinds_animals[random(0, kinds_animals.length() - 1)];

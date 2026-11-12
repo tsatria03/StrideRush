@@ -1,0 +1,105 @@
+/* Practice hints (the practice guidance plan's Section 2, dev, 2026-11-12). In a practice run, as each thing appears, the
+practice buffer says what appeared and what to do, two sentences, cutting in. Each kind gets its first practice_hint_limit
+(5) appearances in each practice run, starting over every run. A thing in one lane names its exact lane (left, middle
+or right), never "your lane", which goes stale once you move; belt-wide things name none. No line ever names a keyboard
+key, since keys can be rebound (dev, 2026-11-12). A hint waits its turn instead of cutting in when another hint was
+said in the same moment (two barriers side by side, a combination's two parts) or an unlock line in the last practice_unlock_hold.
+Once the practiced choice's fifth thing (the fifth pair, for combinations; the fifth door of either kind, for mixed
+doors; the fifth trampoline of any kind, for trampolines) has passed you, the closing line plays and the run's hints
+stop. A hit from anything but a hazard (a fall is a death), or a missed key, broken or left behind, starts the run's
+hints over, every kind and the closing count, until the closing line has played; after it, nothing brings them back (dev, 2026-11-12: "it should reset the hints, and re-speak them"; "it should
+repeat if you miss an item, like a key"). Each spawn function calls practice_hint() with its kind, lane and tile; it does nothing outside a practice run. */
+dictionary practice_hint_counts; // hints said this run, by kind
+int practice_goal_placed = 0; // the practiced choice's things placed this run
+double practice_closing_x = -1; // the tile of the fifth one, -1 until it's placed
+bool practice_hints_done = false; // the closing line has played: no more hints this run
+double practice_last_hint_at = -1000000; // on runtimer
+double practice_unlock_said_at = -1000000; // on runtimer, from practice_pass()
+
+/* A hit (stat_caught() in stats.nvgt, hazards left out) or a missed key (key.nvgt) in a practice run: the hints start over,
+and the closing line comes again after five more. The timing guards stay, so a hint just after still waits its turn. */
+void practice_hints_restart()
+{
+if (!practice_run or practice_hints_done) return; // after the closing line, the run stays quiet (dev, 2026-11-12)
+practice_hint_counts.delete_all();
+practice_goal_placed = 0;
+practice_closing_x = -1;
+practice_hints_done = false;
+}
+// From reset_spawner(): every run starts its hints over.
+void reset_practice_hints()
+{
+practice_hint_counts.delete_all();
+practice_goal_placed = 0;
+practice_closing_x = -1;
+practice_hints_done = false;
+practice_last_hint_at = -1000000;
+practice_unlock_said_at = -1000000;
+}
+string practice_lane_name(int lane)
+{
+if (lane == lane_left) return "left";
+if (lane == lane_middle) return "middle";
+return "right";
+}
+// The hint for a kind; lane is -1 for belt-wide things, animal the animal's singular name ("bird").
+string practice_hint_text(const string&in kind, int lane, const string&in animal)
+{
+string where = lane >= 0 ? " in the " + practice_lane_name(lane) + " lane" : "";
+if (kind == "hazards") return "A hazard has appeared. Jump just before you reach the edge.";
+if (kind == "spikes") return "A spike has appeared. Jump as its last countdown cue plays.";
+if (kind == "mines") return "A mine has appeared. Jump as its last countdown cue plays.";
+if (kind == "projectiles") return "A projectile has appeared. Crouch before it reaches you, and stay down until it passes.";
+if (kind == "force_fields") return "A force field has appeared. Press either hand during its countdown to switch it off.";
+if (kind == "animals") return "A " + animal + " has appeared. Clap with both hands to scare it away.";
+if (kind == "walls") return "A wall has appeared. Break it with your weapons before you reach it.";
+if (kind == "fake_doors") return "A fake door has appeared. It won't open, so break it with your weapons.";
+if (kind == "real_doors") return "A real door has appeared. Use a key from your inventory to unlock it, then open it with a hand.";
+if (kind == "keys") return "A key has appeared" + where + ". Move into its lane and use a hand to grab it.";
+if (kind == "barriers") return "A barrier has appeared" + where + ". If you're in that lane, switch to another lane before it reaches you.";
+if (kind == "winds") return "A wind has appeared" + where + ". Wait for its last move, then switch lanes so it can't follow.";
+if (kind == "good_lane_trampoline") return "A good trampoline has appeared" + where + ". Move into its lane to fly over what comes next.";
+if (kind == "worn_lane_trampoline") return "A worn trampoline has appeared" + where + ". Stay out of its lane, since it only gives a short bounce.";
+if (kind == "good_belt_trampoline") return "A good belt-wide trampoline has appeared. You can't avoid it, so get ready to fly.";
+if (kind == "worn_belt_trampoline") return "A worn belt-wide trampoline has appeared. You can't avoid it, so get ready for a short bounce.";
+return "";
+}
+// Does a placed kind count toward the practiced choice's closing line? Combinations count pairs instead (practice_pair_placed()).
+bool practice_goal_kind(const string&in kind)
+{
+if (practice_choice == "mixed_doors") return kind == "real_doors" or kind == "fake_doors";
+if (practice_choice == "trampolines") return kind.find("trampoline") >= 0;
+return kind == practice_choice;
+}
+void practice_hint(const string&in kind, int lane, double x, const string&in animal = "")
+{
+if (!practice_run or practice_hints_done) return;
+int64 said = 0;
+practice_hint_counts.get(kind, said);
+if (said < practice_hint_limit)
+{
+practice_hint_counts.set(kind, said + 1);
+bool interrupt = runtimer.elapsed - practice_last_hint_at >= practice_hint_together and runtimer.elapsed - practice_unlock_said_at >= practice_unlock_hold;
+practice_last_hint_at = runtimer.elapsed;
+speak_buffer(practice_hint_text(kind, lane, animal), "practice", interrupt);
+}
+if (practice_choice != "combinations" and practice_goal_kind(kind)) practice_goal_counted(x);
+}
+// From place_pair() (combo.nvgt): in a combinations practice run, each pair counts once, at its second part's tile.
+void practice_pair_placed(double second_x)
+{
+if (!practice_run or practice_hints_done or practice_choice != "combinations") return;
+practice_goal_counted(second_x);
+}
+void practice_goal_counted(double x)
+{
+practice_goal_placed += 1;
+if (practice_goal_placed == practice_hint_limit) practice_closing_x = x;
+}
+// Once a step from step_check(): the fifth has passed you, so the closing line, and no more hints this run.
+void practice_hints_check()
+{
+if (!practice_run or practice_hints_done or practice_closing_x < 0 or me.x <= practice_closing_x) return;
+practice_hints_done = true;
+speak_buffer("Well done, that's all the hints for this run, so keep practicing at your own pace and trust your ears.", "practice");
+}

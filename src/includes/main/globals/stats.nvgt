@@ -42,6 +42,7 @@ void stat_caught(const string&in type)
 {
 stat_add("caught_" + type);
 last_caught = type;
+if (type != "hazards") practice_hints_restart(); // a practice run's hints start over after a hit (practicehints.nvgt)
 }
 // top_speed keeps its highest value in the lifetime instead of a total; every other stat adds up.
 bool stat_is_highest(const string&in key)

@@ -35,6 +35,7 @@ k.countdown_start = kx - countdown;
 k.color = colors[random(0, colors.length() - 1)];
 // The wildcards pick at random among a key's spawn and loop clips (spawn1 and spawn2, loop1 to loop4).
 k.lane = lane < 0 ? random(lane_left, lane_right) : lane;
+practice_hint("keys", k.lane, kx); // practicehints.nvgt, a practice run only
 keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*spawn*"), 0, me.x, lane_across(k.lane, kx), kx, false);
 k.loopslot = keypool.play_2d(get_pack_sound(key_sound_folder(k) + "*loop*"), 0, me.x, lane_across(k.lane, kx), kx, true);
 place_lane_sound(keypool, k.loopslot, k.lane, k.x);
@@ -84,7 +85,11 @@ doorkey@ k = doorkeys[i];
 if (!k.spent)
 {
 if (me.x == k.x and is_grounded() and k.lane == current_lane and !sliding) break_key(k); // not on a slide: there it's caught or passes (slide.nvgt)
-else if (me.x > k.x) k.spent = true; // jumped clean over: its loop carries on and fades behind you
+else if (me.x > k.x)
+{
+k.spent = true; // jumped clean over: its loop carries on and fades behind you
+practice_hints_restart(); // a missed key starts a practice run's hints over (practicehints.nvgt)
+}
 }
 if (me.x > k.x + spawn_distance()) remove_key(i);
 }
@@ -129,6 +134,7 @@ void break_key(doorkey@ k)
 {
 stat_add("keys_broken");
 k.spent = true;
+practice_hints_restart(); // a broken key is a missed key: a practice run's hints start over (practicehints.nvgt)
 stop_key(k);
 keypool.play_stationary(get_pack_sound(key_sound_folder(k) + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
 }

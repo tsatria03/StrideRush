@@ -57,6 +57,7 @@ t.env = current_env;
 t.worn = random(1, 100) <= trampoline_worn_percent;
 t.pitch = t.worn ? fake_door_pitches[random(0, fake_door_pitches.length() - 1)] : 100;
 if (random(1, 100) > trampoline_belt_percent) t.lane = random(lane_left, lane_right);
+practice_hint((t.worn ? "worn" : "good") + (t.lane >= 0 ? "_lane" : "_belt") + "_trampoline", t.lane, x); // practicehints.nvgt, a practice run only
 string folder = trap_folder(current_env, "trampolines") + theme + "/";
 int spawnslot = trampolinepool.play_extended_2d(get_pack_sound(folder + "*spawn*"), 0, me.x, 0, x, 0, 0, 0, 0, false, 0, 0, 0, t.pitch);
 t.loopslot = trampolinepool.play_extended_2d(get_pack_sound(folder + "*loop*"), 0, me.x, 0, x, 0, 0, 0, 0, true, 0, 0, 0, t.pitch);

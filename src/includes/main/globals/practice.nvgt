@@ -84,6 +84,7 @@ if (practice_passes[i] >= practice_unlock_count) return;
 practice_passes[i] += 1;
 writegame();
 if (practice_passes[i] < practice_unlock_count) return;
+practice_unlock_said_at = runtimer.elapsed; // a hint right after waits for the unlock lines (practicehints.nvgt)
 bool both = (i == 0);
 if (both)
 {

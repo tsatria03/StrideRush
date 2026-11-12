@@ -233,6 +233,7 @@ me.x += 1;
 check_achievements(); // once a step: anything reached so far, steps and time included (achievements.nvgt)
 update_listeners();
 spawn_check();
+practice_hints_check(); // practicehints.nvgt: the closing line once the practiced choice's fifth has passed you
 // Obstacle contact only on arriving at a tile: in the air at that moment means the obstacle is cleared.
 hazard_check();
 if (!running) return;

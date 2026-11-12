@@ -26,6 +26,7 @@ string spawn_only = "all";
 void reset_spawner()
 {
 reset_pairs(); // combo.nvgt
+reset_practice_hints(); // practicehints.nvgt: every run's hints start over
 next_door_mark = ((step_time - 1) / door_section_ms) * door_section_ms; // 500 gives 450, 400 gives 350
 next_key_door = next_door_mark;
 set_key_mark();
@@ -367,6 +368,7 @@ string theme = themes[random(0, themes.length() - 1)];
 if (type == "real_doors" or type == "fake_doors")
 {
 spawn_door(x, theme, type == "real_doors", countdown);
+practice_hint(type, -1, x); // practicehints.nvgt, a practice run only
 return;
 }
 if (type == "hazards") spawn_hazard(x, theme, countdown);
@@ -378,6 +380,8 @@ else if (type == "walls") spawn_wall(x, theme, countdown);
 else if (type == "animals") spawn_animal(x, theme, countdown);
 else if (type == "barriers") spawn_barriers(x, theme, countdown); // one or two, lanes per spawn_barriers()
 else if (type == "winds") spawn_wind(x, theme, countdown); // wind.nvgt
+// The belt-wide obstacles' practice hints; lane things, animals and trampolines give theirs in their own spawn functions (practicehints.nvgt).
+if (type == "hazards" or type == "spikes" or type == "mines" or type == "force_fields" or type == "projectiles" or type == "walls") practice_hint(type, -1, x);
 else if (type == "trampolines") spawn_trampoline(x, theme, countdown); // trampoline.nvgt
 }
 /* Where a hand can first act on something at x whose countdown starts at countdown_start: the countdown start, or

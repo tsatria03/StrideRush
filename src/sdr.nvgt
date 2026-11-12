@@ -37,7 +37,7 @@ exit();
 if (!load_controls()) exit();
 /* The speech buffers (dev, 2026-11-05), alphabetical after "all", which the first one creates. Each stays out of the
 bracket-key rotation until its first message (buffer_visible()); achievements waits for achievements. */
-string[] buffer_names = {"achievements", "doors", "items", "misc", "powerups", "status", "weapons"};
+string[] buffer_names = {"achievements", "doors", "items", "misc", "powerups", "practice", "status", "weapons"}; // practice: the practice hints (practicehints.nvgt)
 for (uint i = 0; i < buffer_names.length(); i++) create_buffer(buffer_names[i]);
 // The quiet startup check (dev, 2026-11-05), from source too, so it can be tested; it only speaks up when there's an update.
 if (auto_check_updates) check_for_updates(version, update_project);

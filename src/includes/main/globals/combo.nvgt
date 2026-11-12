@@ -126,6 +126,7 @@ place_pair_part(x, next_combo_first, countdown);
 place_pair_part(x + span, next_combo_second, countdown);
 placing_pair = 0;
 last_pair_span = span;
+practice_pair_placed(x + span); // a combinations practice run's closing line counts pairs (practicehints.nvgt)
 }
 void place_pair_part(double x, const string&in type, int countdown)
 {
