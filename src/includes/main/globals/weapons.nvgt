@@ -26,6 +26,7 @@ timer firetimer, reloadtimer;
 // The guns are the artillery: the last two in the table.
 bool is_gun(int w)
 {
+if (w < 0) return false; // no weapon drawn, in a practice run without weapons (practice_weapons_off())
 return weapon_names[w] == "machine_gun" or weapon_names[w] == "pistol";
 }
 string weapon_folder(int w)
@@ -51,11 +52,13 @@ reloading = false;
 firetimer.restart();
 reloadtimer.restart();
 current_weapon = -1;
+if (practice_weapons_off()) return; // a practice run that needs no weapons: none drawn (practice.nvgt)
 draw_weapon(weapon_names.find("fist"));
 }
 // Runs every frame from run_input(): the reload finishing, the number keys, Space, R and X.
 void weapon_input()
 {
+if (practice_weapons_off()) return; // silent: no weapons in this practice run (practice.nvgt)
 reload_check(); // a reload already under way still finishes
 if (door_moving or sliding) return; // no drawing, firing, reloading or ammo checks while a door carries you
 for (int k = 1; k <= 10; k++)

@@ -48,3 +48,5 @@ Sections:
 2. The practice buffer, the hints and the closing line: buffer_names, a hint per kind as it spawns with its lane, the per-run counts, interruption behind unlock lines, the closing line after the practiced choice's fifth.
 3. Deaths: the death dialog per obstacle, then the retry practice menu.
 4. Docks: the four changelog entries, the readme, CLAUDE.md, the version history, this plan COMPLETE.
+- Section 1 built (2026-11-12): practice_weapon_choices and practice_weapons_off() in practice.nvgt (practice_run and practice_choice not among walls, fake doors, mixed doors, combinations, trampolines); reset_weapons() leaves current_weapon at -1 with no draw then; weapon_input() returns at once then, so the number row, fire, reload and ammo check are silent; is_gun() false for -1, so current_fire_gap() and use_ammopack() stay safe with nothing drawn.
+- Section 1 COMPLETE (dev, 2026-11-12): both tests passed (no weapon drawn and the weapon keys silent in a spikes practice run; walls practice drawing, firing, reloading and checking ammo as before).

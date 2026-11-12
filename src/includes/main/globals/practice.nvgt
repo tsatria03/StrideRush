@@ -18,6 +18,14 @@ bool practice_combos_checked = false; // the one-time combinations check (practi
 bool practice_winds_checked = false; // the one-time winds check (practice_winds_check()) has run for this save
 bool practice_trampolines_checked = false; // the one-time trampolines check (practice_trampolines_check()) has run for this save
 
+/* The practice guidance plan's Section 1 (dev, 2026-11-12: "Weapons should not be available for obsticals that don't need
+them"): the choices that keep their weapons, the ones that can bring a wall or a fake door (combinations and trampolines can
+too). Every other practice run draws no weapon, and the number row, fire, reload and ammo check do nothing (weapons.nvgt). */
+const string[] practice_weapon_choices = {"walls", "fake_doors", "mixed_doors", "combinations", "trampolines"};
+bool practice_weapons_off()
+{
+return practice_run and practice_weapon_choices.find(practice_choice) < 0;
+}
 // Hazards are always open; any other choice once the one before has its passes.
 bool practice_unlocked(int i)
 {
