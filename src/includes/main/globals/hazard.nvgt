@@ -42,7 +42,7 @@ void hazard_check()
 for (uint i = 0; i < hazards.length(); i++)
 {
 if (@hazards[i] == null) continue;
-if (sliding and me.x == hazards[i].x) continue; // on a slide you pass over it (slide.nvgt)
+if (carried() and me.x == hazards[i].x) continue; // on a slide you pass over it (slide.nvgt)
 if (me.x == hazards[i].x and is_grounded())
 {
 string fall_clip = get_pack_sound(trap_folder(hazards[i].env, "hazards") + hazards[i].theme + "/*fall*");

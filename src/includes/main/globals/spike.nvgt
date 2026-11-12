@@ -57,7 +57,7 @@ void spike_check()
 for (uint i = 0; i < spikes.length(); i++)
 {
 if (@spikes[i] == null) continue;
-if (sliding and me.x == spikes[i].x) continue; // on a slide you pass through it (slide.nvgt)
+if (carried() and me.x == spikes[i].x) continue; // on a slide you pass through it (slide.nvgt)
 if (me.x == spikes[i].x and is_grounded())
 {
 string hit_clip = get_pack_sound(trap_folder(spikes[i].env, "spikes") + spikes[i].theme + "/*hit*");

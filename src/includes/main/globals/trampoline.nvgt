@@ -1,0 +1,162 @@
+/* Trampolines (the trampolines plan, dev, 2026-11-11; Section 1). Four kinds of pad: good or worn (worn
+trampoline_worn_percent of the time, playing every sound at an odd pitch like a fake door; good at 100), and in one lane
+or across the whole belt (trampoline_belt_percent). Themes from environments/<env>/traps/trampolines/general/<pad>: spawn
+as it appears, one of its loops as you approach (a lane pad's in its lane, a belt-wide one's straight ahead), rise as you
+launch, land as you come down. No countdown.
+Arriving on its tile (in its lane, for a lane pad) launches you, on the ground or in the air: jumping never avoids a pad
+(dev, 2026-11-11, reversing the first rule); a lane pad is avoided only by being in another lane. On a slide or a flight
+you pass over it. The kinds, named this way throughout (dev): good lane trampoline, worn lane trampoline, good
+belt-wide trampoline, worn belt-wide trampoline.
+- A good pad: a fixed trampoline_air_time flight (jump_state 3 in player.nvgt). Everything you reach before the landing
+  tile passes under you, silent and counting toward nothing (carried()); anything after it counts down as normal while
+  you're in the air (play_countdown()). You can switch lanes, use your hands, fire and use your inventory; jumping and
+  crouching wait until you land. Air powerups you fly through are collected.
+- A worn pad: a short bounce, a normal jump (start of jump_state 1), clearing only what a jump clears.
+Not in combinations. Same entity pattern as the other traps: null-slot removal, reused slots, and only
+destroy_all_trampolines() shrinks the array. */
+sound_pool trampolinepool;
+class trampoline
+{
+double x;
+string theme;
+string env;
+int pair = 0; // never set: trampolines aren't in combinations
+int lane = -1; // -1 across the whole belt
+bool worn = false;
+int pitch = 100;
+bool spent = false;
+int loopslot = -1;
+}
+trampoline@[] trampolines(0);
+bool flying = false; // on a good pad's flight
+double flight_end = 0; // on runtimer
+double flight_land_x = 0; // the tile you'll land on, for the countdowns (play_countdown())
+// The landing sound still to play: the pad that launched you, at its pitch, in its environment.
+string pending_land_folder = "";
+int pending_land_pitch = 100;
+bool trampolines_debug = false; // the debug spawn choice "trampolines": the full game, with a pad about every other spawn
+
+// On a slide or a good pad's flight, everything you reach passes through or under you, counting toward nothing.
+bool carried()
+{
+return sliding or flying;
+}
+// From reset_player() and cancel_movement(): no flight, and no landing waiting.
+void reset_flight()
+{
+flying = false;
+pending_land_folder = "";
+}
+void spawn_trampoline(double x, string theme, int countdown)
+{
+trampoline t;
+t.x = x;
+t.theme = theme;
+t.env = current_env;
+t.worn = random(1, 100) <= trampoline_worn_percent;
+t.pitch = t.worn ? fake_door_pitches[random(0, fake_door_pitches.length() - 1)] : 100;
+if (random(1, 100) > trampoline_belt_percent) t.lane = random(lane_left, lane_right);
+string folder = trap_folder(current_env, "trampolines") + theme + "/";
+int spawnslot = trampolinepool.play_extended_2d(get_pack_sound(folder + "*spawn*"), 0, me.x, 0, x, 0, 0, 0, 0, false, 0, 0, 0, t.pitch);
+t.loopslot = trampolinepool.play_extended_2d(get_pack_sound(folder + "*loop*"), 0, me.x, 0, x, 0, 0, 0, 0, true, 0, 0, 0, t.pitch);
+// A lane pad's spawn and loop both come from its lane, like a barrier's (dev, 2026-11-11: the spawn was heard in the centre); a
+// belt-wide pad's are straight ahead.
+if (t.lane >= 0)
+{
+place_lane_sound(trampolinepool, spawnslot, t.lane, x);
+place_lane_sound(trampolinepool, t.loopslot, t.lane, x);
+}
+for (uint i = 0; i < trampolines.length(); i++)
+{
+if (@trampolines[i] == null)
+{
+@trampolines[i] = t;
+return;
+}
+}
+trampolines.insert_last(t);
+}
+// Every frame from run_loop(): lane pads' loops follow your lane, as barriers' do.
+void trampoline_sounds()
+{
+for (uint i = 0; i < trampolines.length(); i++)
+{
+if (@trampolines[i] == null or trampolines[i].lane < 0 or trampolines[i].loopslot < 0) continue;
+place_lane_sound(trampolinepool, trampolines[i].loopslot, trampolines[i].lane, trampolines[i].x);
+}
+}
+// Runs once per step, right after the move: arriving on a pad's tile, in its lane for a lane pad, launches you, on the ground or in the air.
+void trampoline_check()
+{
+for (uint i = 0; i < trampolines.length(); i++)
+{
+if (@trampolines[i] == null) continue;
+trampoline@ t = trampolines[i];
+if (me.x == t.x and !t.spent)
+{
+t.spent = true;
+if (carried() or (t.lane >= 0 and t.lane != current_lane)) continue; // carried over it, or a lane pad in another lane; jumping never avoids one
+stop_trampoline(t);
+launch(t);
+}
+// Kept until it's as far behind as obstacles appear ahead.
+if (me.x > t.x + spawn_distance()) remove_trampoline(i);
+}
+}
+// The pad's rise at its pitch, then a good pad's flight or a worn pad's short bounce; its land plays as you come down.
+void launch(trampoline@ t)
+{
+string folder = trap_folder(t.env, "trampolines") + t.theme + "/";
+if (is_ducked()) ducked = false; // a crouch can't hold you down; no unduck sound
+trampolinepool.play_stationary_extended(get_pack_sound(folder + "*rise*"), false, 0, 0, 0, t.pitch, false);
+pending_land_folder = folder;
+pending_land_pitch = t.pitch;
+if (t.worn)
+{
+// A worn pad: only a normal jump's worth (dev, 2026-11-11), with Moon Jump and Short Hop as for any jump; caught mid-jump,
+// you rise again from where you are.
+jump_state = 1;
+jumptimer.restart();
+return;
+}
+flying = true;
+jump_state = 3;
+me.y = jump_height;
+flight_end = runtimer.elapsed + trampoline_air_time;
+flight_land_x = me.x + ceil(double(trampoline_air_time) / current_step_time());
+}
+// From jump_check() each frame during a flight: the flight ends on time and you land.
+void flight_check()
+{
+if (!flying or runtimer.elapsed < flight_end) return;
+flying = false;
+player_land();
+}
+// From player_land(): the pad's own land sound, at its pitch, after a trampoline launch.
+void play_pad_landing()
+{
+if (pending_land_folder == "") return;
+trampolinepool.play_stationary_extended(get_pack_sound(pending_land_folder + "*land*"), false, 0, 0, 0, pending_land_pitch, false);
+pending_land_folder = "";
+}
+void stop_trampoline(trampoline@ t)
+{
+if (t.loopslot > -1) trampolinepool.destroy_sound(t.loopslot);
+t.loopslot = -1;
+}
+void remove_trampoline(uint i)
+{
+if (i >= trampolines.length() or @trampolines[i] == null) return;
+stop_trampoline(trampolines[i]);
+@trampolines[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_trampolines()
+{
+for (uint i = 0; i < trampolines.length(); i++)
+{
+if (@trampolines[i] == null) continue;
+stop_trampoline(trampolines[i]);
+}
+trampolines.resize(0);
+}

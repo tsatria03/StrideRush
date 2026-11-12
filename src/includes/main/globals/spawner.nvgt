@@ -147,6 +147,8 @@ bool teleporters_ok = teleporters_available() and has_joined("player_teleporters
 bool powerups_ok = powerups_available() and has_joined("powerups") and (spawn_only == "all" or spawn_only == "powerups");
 // Slides: normal runs only, never in practice, one at a time (slide.nvgt).
 bool slides_ok = slides_available() and has_joined("slides") and spawn_only == "all" and !practice_run and !slide_holds();
+// Trampolines: normal runs only here; a pad of any kind (trampoline.nvgt).
+bool trampolines_ok = has_joined("trampolines") and spawn_only == "all" and !practice_run and get_pack_sound_folders(type_folder("trampolines") + "*").length() > 0;
 if (spawn_only == "ammo_packs") next_type = packs_ok ? "ammo_packs" : "";
 else if (spawn_only == "steel_shields") next_type = shields_ok ? "steel_shields" : "";
 else if (spawn_only == "life_capsules") next_type = capsules_ok ? "life_capsules" : "";
@@ -154,6 +156,7 @@ else if (spawn_only == "health_potions") next_type = potions_ok ? "health_potion
 else if (spawn_only == "player_teleporters") next_type = teleporters_ok ? "player_teleporters" : "";
 else if (spawn_only == "powerups") next_type = powerups_ok ? "powerups" : "";
 else if (slides_ok and random(1, slides_debug ? 2 : slide_chance) == 1 and (slides_debug or survival_roll())) next_type = "slides";
+else if (trampolines_ok and random(1, trampolines_debug ? 2 : trampoline_chance) == 1 and (trampolines_debug or survival_roll())) next_type = "trampolines";
 else if (capsules_ok and random(1, life_capsule_chance) == 1 and survival_roll()) next_type = "life_capsules";
 else if (potions_ok and random(1, health_potion_chance) == 1 and survival_roll()) next_type = "health_potions";
 else if (teleporters_ok and random(1, teleporter_chance) == 1) next_type = "player_teleporters";
@@ -245,6 +248,9 @@ item_lane_mode = "";
 // Debug option: "slides" is the full game with a slide about every other spawn (slide.nvgt).
 slides_debug = only_type == "slides";
 if (slides_debug) spawn_only = "all";
+// And "trampolines", the full game with a pad about every other spawn (trampoline.nvgt).
+trampolines_debug = only_type == "trampolines";
+if (trampolines_debug) spawn_only = "all";
 /* Practice doors' keys come one at a time in a random lane, as in the real game, but never with a pair's second item,
 which could be any kind, since a practice run has no items but keys (dev, 2026-11-05). */
 if (only_type == "practice_doors" or (practice_run and only_type == "real_doors")) // practice's real doors too (2026-11-09)
@@ -361,6 +367,7 @@ else if (type == "walls") spawn_wall(x, theme, countdown);
 else if (type == "animals") spawn_animal(x, theme, countdown);
 else if (type == "barriers") spawn_barriers(x, theme, countdown); // one or two, lanes per spawn_barriers()
 else if (type == "winds") spawn_wind(x, theme, countdown); // wind.nvgt
+else if (type == "trampolines") spawn_trampoline(x, theme, countdown); // trampoline.nvgt
 }
 /* Where a hand can first act on something at x whose countdown starts at countdown_start: the countdown start, or
 switch_min_time before it at the current speed, whichever is earlier, so at top speed, where the countdown is a single
@@ -379,6 +386,7 @@ playing, which would put it behind you and lower its pitch partway through (play
 void play_countdown(sound_pool@ pool, string type, double ox, double countdown_start, const string&in env)
 {
 if (sliding) return; // no warnings on a slide: everything passes through you harmlessly (the slides plan, dev, 2026-11-11)
+if (flying and ox < flight_land_x) return; // nor for anything a trampoline flight carries you over; past the landing they count down (trampoline.nvgt)
 int steps_left = int(ox - me.x);
 if (steps_left < 1 or steps_left > 5 or me.x < countdown_start) return;
 int note = 6 - steps_left;

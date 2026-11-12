@@ -16,6 +16,7 @@ jumptimer.restart();
 ducktimer.restart();
 duckcooldowntimer.force(duck_cooldown); // a new run can crouch straight away
 woosh_pending_side = 0; // no woosh left waiting from the last run
+reset_flight(); // trampoline.nvgt
 }
 bool can_duck()
 {
@@ -32,6 +33,12 @@ return ducked;
 void jump_check()
 {
 if (controls.action_triggered("jump") and is_grounded() and !door_moving and !sliding) start_jump(); // no jumping while a door carries you
+// A good trampoline's flight (jump_state 3) is timed by the clock, not by jump ticks (trampoline.nvgt).
+if (jump_state == 3)
+{
+flight_check();
+return;
+}
 if (jump_state == 0 or jumptimer.elapsed < current_jump_tick()) return; // Moon Jump and Short Hop change this
 jumptimer.restart();
 if (jump_state == 1)
@@ -62,6 +69,7 @@ void player_land()
 {
 me.y = 0;
 jump_state = 0;
+play_pad_landing(); // a trampoline's land, after a launch (trampoline.nvgt)
 play_landing();
 ammopack_landing(); // landing on an ammo pack by mistake breaks it
 key_landing(); // and so does landing on a key or a shield
@@ -86,6 +94,7 @@ void cancel_movement()
 {
 me.y = 0;
 jump_state = 0;
+reset_flight(); // trampoline.nvgt
 if (ducked)
 {
 ducked = false;

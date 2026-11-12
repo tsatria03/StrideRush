@@ -51,7 +51,7 @@ for (uint i = 0; i < forcefields.length(); i++)
 {
 if (@forcefields[i] == null) continue;
 forcefield@ f = forcefields[i];
-if (sliding and me.x == f.x and !f.spent)
+if (carried() and me.x == f.x and !f.spent)
 {
 f.spent = true; // passed through on a slide (slide.nvgt)
 continue;

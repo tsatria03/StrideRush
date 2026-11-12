@@ -83,7 +83,7 @@ for (uint i = 0; i < winds.length(); i++)
 {
 if (@winds[i] == null) continue;
 wind@ w = winds[i];
-if (sliding and me.x == w.meet_x and !w.spent)
+if (carried() and me.x == w.meet_x and !w.spent)
 {
 w.spent = true; // passed through on a slide (slide.nvgt)
 continue;

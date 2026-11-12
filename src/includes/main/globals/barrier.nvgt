@@ -110,7 +110,7 @@ for (uint i = 0; i < barriers.length(); i++)
 {
 if (@barriers[i] == null) continue;
 barrier@ b = barriers[i];
-if (sliding and me.x == b.x and !b.spent)
+if (carried() and me.x == b.x and !b.spent)
 {
 b.spent = true; // passed through on a slide, in any lane (slide.nvgt)
 continue;

@@ -214,6 +214,7 @@ projectile_flight(); // every frame, so a flying projectile moves smoothly betwe
 bullet_flight(); // every frame: bullets move on their own 30 ms timing, not the step's
 barrier_sounds(); // every frame: a barrier follows your lane and its distance
 wind_flight(); // every frame: each wind's beat toward your lane and its place (wind.nvgt)
+trampoline_sounds(); // every frame: lane pads follow your lane (trampoline.nvgt)
 item_lane_sounds(); // every frame: items in their lanes (the lanes plan's Section 4)
 speedup_check();
 powerup_timers(); // every frame, so a timed powerup ends on time
@@ -252,6 +253,7 @@ animal_check();
 if (!running) return;
 door_check();
 slide_check(); // slide.nvgt: reaching a slide puts you on it
+trampoline_check(); // trampoline.nvgt: a grounded arrival on a pad launches you
 if (!running) return;
 ammopack_check();
 key_check();

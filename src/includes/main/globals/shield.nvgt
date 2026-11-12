@@ -41,7 +41,7 @@ if (practice_run)
 if (practice_shield_count() > 0) give_item("steel_shield", practice_shield_count());
 return;
 }
-if (slides_debug)
+if (slides_debug or trampolines_debug)
 {
 give_item("steel_shield", 2); // the debug choice "slides" plays like "all" but gets the debug shields (dev, 2026-11-11)
 return;

@@ -225,7 +225,7 @@ for (uint i = 0; i < doors.length(); i++)
 {
 if (@doors[i] == null) continue;
 door@ d = doors[i];
-if (sliding and me.x == d.x and door_standing(d))
+if (carried() and me.x == d.x and door_standing(d))
 {
 d.crashed = true; // a fake door passed through on a slide (real ones wait for it to end) (slide.nvgt)
 continue;

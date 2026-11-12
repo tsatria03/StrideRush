@@ -83,6 +83,7 @@ destroy_all_walls();
 destroy_all_doors();
 destroy_all_bullets();
 destroy_all_winds();
+destroy_all_trampolines();
 reset_slides(); // slide.nvgt: off any slide, none on the belt
 heartpool.destroy_all(); // the heartbeat, so a death silences them too
 }

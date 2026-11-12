@@ -448,6 +448,8 @@ add_spawn_choice(labels, ids, "combinations, reversed", "combinations_reverse");
 add_spawn_choice(labels, ids, "combinations, mixed", "combinations_mixed");
 // Debug option: the full game with a slide about every other spawn (the slides plan, dev, 2026-11-11).
 add_spawn_choice(labels, ids, "slides", "slides");
+// Debug option: the full game with a trampoline about every other spawn (the trampolines plan, dev, 2026-11-11).
+add_spawn_choice(labels, ids, "trampolines", "trampolines");
 add_spawn_choice(labels, ids, "all", "all");
 add_spawn_choice(labels, ids, "nothing", "nothing"); // an empty belt, for the music and ambience (dev, 2026-11-06)
 labels.sort_ascending();

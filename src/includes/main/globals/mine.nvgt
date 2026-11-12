@@ -57,7 +57,7 @@ mn.armed = true;
 minepool.play_2d(get_pack_sound(trap_folder(mn.env, "mines") + mn.theme + "/*light*"), 0, me.x, 0, mn.x, false);
 mn.loopslot = minepool.play_2d(get_pack_sound(trap_folder(mn.env, "mines") + mn.theme + "/*loop*"), 0, me.x, 0, mn.x, true);
 }
-if (sliding and me.x == mn.x and !mn.spent)
+if (carried() and me.x == mn.x and !mn.spent)
 {
 mn.spent = true; // passed through on a slide, counting toward nothing (slide.nvgt)
 continue;
