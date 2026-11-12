@@ -1,9 +1,9 @@
 ####These are the things that need to be finished for future versions of the game.
 
-****Unfinished. Add trampolines that launch you over the next few obstacles when you run onto one.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add trampolines that launch you over the next few obstacles when you run onto one.
 **Finished. Add winds that chase you across the lanes and shove you sideways.
 **Finished. Add slides that carry you faster for a few seconds while you catch items.
 **Finished. Add combinations, two obstacles at once that need two actions in a row, such as crouching under a projectile and then jumping a spike.

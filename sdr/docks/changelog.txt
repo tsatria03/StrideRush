@@ -1,4 +1,5 @@
 New in 2.0.
+Added trampolines, in one lane or across the whole belt, which launch you on a long flight over everything ahead, or give you only a short bounce when they're worn, with practice after combinations, their own statistics and nine achievements.
 Added winds, gusts that chase you across the lanes and shove you sideways, which you dodge by switching lanes at the last moment or brace against by crouching, with practice between barriers and combinations, their own statistics and five achievements.
 Added slides, which cover the whole belt and carry you along at twice your speed for a few seconds, letting you pass straight through obstacles and steer into lanes to catch items, with their own statistics and twelve achievements.
 Added combinations to practice runs, opened once you've dodged past 5 barriers, so you can drill pairs of obstacles at your own speed.

@@ -1,11 +1,11 @@
 ---
 name: project_trampolines_plan
-description: SETTLED (2026-11-11, for 2.0; 3 sections) - trampolines, pads in one lane that launch you into a long jump over the next few obstacles; Q&A log
+description: COMPLETE (2026-11-11, 2.0 at 11 of 20; 3 sections) - trampolines, pads in one lane that launch you into a long jump over the next few obstacles; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-11), waiting for the dev to commit it before Section 1. Started 2026-11-11 (dev: "Ready."), with 2.0 at 10 of 20 and no other plan open.
+Status: COMPLETE (2026-11-11, 2.0 at 11 of 20). Started 2026-11-11 (dev: "Ready."), with 2.0 at 10 of 20 and no other plan open.
 
 Background:
 - Claude's suggestion 6 ([[project_suggestions]], first called jump pads; the dev renamed them trampolines), liked and on the todo list: "Add trampolines that launch you over the next few obstacles when you run onto one."
@@ -52,3 +52,4 @@ Sections:
 - Section 1 COMPLETE (dev, 2026-11-11): all 4 tests passed (the four kinds, placed by lane or straight ahead, worn at odd pitches, belt-wide ones catching you mid-jump; a good flight with silent passes, countdowns past the landing, lanes and firing allowed; worn bounces from the ground and mid-jump; trampolines among everything else, passed over on a slide, none in practice yet).
 - Section 2 built (2026-11-11): statistics trampoline_flights (a good trampoline's full flight, counted as you land in flight_check(), so a flight cut short by a teleport doesn't count) and worn_bounces (counted at launch(), lane or belt-wide), after slide_items_caught in stat_keys; the nine achievements in achievements.ini (lifetime flights after slide_items_500, single-run flights after slide_items_run_20, worn bounces at the end; 118 in all; Trampoline Artist's hint says trampolines, not pads); practice: trampolines last in practice_choices, combinations' goal combinations_cleared with the verb "clear" ("Trampolines. Unlocked after you clear 5 combinations."), practice_trampolines_check() after the winds check (practice_trampolines_checked saved in game.srf); practice_spawn_id() gives "practice_trampolines", where choose_next_obstacle() alternates a trampoline of any kind (practice_trampoline_turn, reset by reset_spawner(), so the first spawn is one) with an obstacle of any type, no items.
 - Section 2 COMPLETE (dev, 2026-11-11): all 3 tests passed (the practice menu's last two lines and the one-time check; a trampolines practice run alternating the four kinds with obstacles, no items; trampoline flights and worn bounces in the last run and lifetime statistics).
+- Section 3 (docks) done (2026-11-11): the readme (a trampolines paragraph after slides; the practice list, the trampolines practice line, no trampolines in other practice, and the chain ending with clear 5 combinations to open trampolines); the 2.0 entry "Added trampolines, ..." (11 of 20); the todo item to finished; CLAUDE.md, the version history, the index, the suggestions. Plan COMPLETE.
