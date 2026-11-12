@@ -1,11 +1,11 @@
 ---
 name: project_winds_plan
-description: SETTLED (2026-11-11, for 2.0; 3 sections) - winds that drift across the lanes toward you and shove you sideways; most of the design decided in the suggestions; Q&A log
+description: COMPLETE (2026-11-11, 2.0 at 10 of 20; 3 sections) - winds that drift across the lanes toward you and shove you sideways; most of the design decided in the suggestions; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-11), waiting for the dev to commit it before Section 1. Started 2026-11-11 (dev: "Let's continue with wind"), with 2.0 at 9 of 20 and no other plan open.
+Status: COMPLETE (2026-11-11, 2.0 at 10 of 20). Started 2026-11-11 (dev: "Let's continue with wind"), with 2.0 at 9 of 20 and no other plan open.
 
 Background:
 - The dev added the sounds (2026-11-10): environments/<env>/traps/winds/general/wind to wind6, each hit and loop, in default and custom; traps/winds/countdown is empty.
@@ -54,3 +54,4 @@ Sections:
 - Section 1 COMPLETE (dev, 2026-11-11): all 4 tests passed (following you with the in-lane countdown; the hit and the shove from every lane; a last-beat dodge and a brace; winds among everything else, and passing through on a slide).
 - Section 2 built (2026-11-11): winds_dodged (after barriers_dodged) and caught_winds (after caught_barriers) in stat_keys; achievements.ini: winds_10 and winds_100 after barriers_100, hit_by_winds_10, _100, _500 at the end after the barrier ones; 109 in all. practice.nvgt: winds between barriers and combinations in every table (goal winds_dodged, verb "dodge", singular "wind"); practice_winds_check() (flag practice_winds_checked in game.srf, after the combinations check): a save with winds open (barriers' passes done) gets winds' passes, so combinations stay open.
 - Section 2 COMPLETE (dev, 2026-11-11): all 3 tests passed (the five achievements, 109 in all, and winds open on the dev's save with combinations still open; a new save showing winds and combinations locked; winds practice, and winds dodged and caught winds counting in an endless run).
+- Section 3 (docks) done (2026-11-11): the readme (a winds paragraph after barriers; the exceptions' lane item now barriers and winds; winds join at 5; the practice list and chain); the 2.0 entry "Added winds, ..." (10 of 20); the todo item to finished; CLAUDE.md, the version history. Plan COMPLETE.
