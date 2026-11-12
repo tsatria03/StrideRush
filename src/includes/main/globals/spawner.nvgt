@@ -30,6 +30,7 @@ next_door_mark = ((step_time - 1) / door_section_ms) * door_section_ms; // 500 g
 next_key_door = next_door_mark;
 set_key_mark();
 key_before_door = true;
+practice_trampoline_turn = false; // a trampolines practice run starts with a trampoline
 choose_next_obstacle();
 next_spawn_x = spawn_distance() + next_countdown + floor_tiles(run_min_floor_time);
 }
@@ -125,7 +126,7 @@ return;
 string[] available;
 for (uint i = 0; i < obstacle_types.length(); i++)
 {
-if (spawn_only != "all" and obstacle_types[i] != spawn_only) continue;
+if (spawn_only != "all" and spawn_only != "practice_trampolines" and obstacle_types[i] != spawn_only) continue;
 if (!has_joined(obstacle_types[i])) continue; // the difficulty schedule (difficulty.nvgt); a new type is an equal pick once in
 if (get_pack_sound_folders(type_folder(obstacle_types[i]) + "*").length() > 0)
 {
@@ -133,6 +134,16 @@ if (get_pack_sound_folders(type_folder(obstacle_types[i]) + "*").length() > 0)
 int shares = obstacle_types[i] == "barriers" ? barrier_weight : 1;
 for (int s = 0; s < shares; s++) available.insert_last(obstacle_types[i]);
 }
+}
+/* Practice only: "practice_trampolines" (the trampolines plan, dev, 2026-11-11) makes every other spawn a trampoline of
+any of the four kinds, with an obstacle of any type between, and no items. */
+if (spawn_only == "practice_trampolines")
+{
+practice_trampoline_turn = !practice_trampoline_turn;
+if (practice_trampoline_turn and get_pack_sound_folders(type_folder("trampolines") + "*").length() > 0) next_type = "trampolines";
+else next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
+next_countdown = next_type == "" ? 0 : countdown_steps();
+return;
 }
 /* Items follow the schedule too: each one rolls its chance only once it has joined (has_joined()), so ammo packs,
 teleporters and powerups wait for their speeds on easy to insane. */

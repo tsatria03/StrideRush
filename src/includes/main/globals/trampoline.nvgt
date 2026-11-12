@@ -34,6 +34,7 @@ double flight_land_x = 0; // the tile you'll land on, for the countdowns (play_c
 // The landing sound still to play: the pad that launched you, at its pitch, in its environment.
 string pending_land_folder = "";
 int pending_land_pitch = 100;
+bool practice_trampoline_turn = false; // a trampolines practice run: whether the last spawn was a trampoline (choose_next_obstacle())
 bool trampolines_debug = false; // the debug spawn choice "trampolines": the full game, with a pad about every other spawn
 
 // On a slide or a good pad's flight, everything you reach passes through or under you, counting toward nothing.
@@ -113,6 +114,7 @@ pending_land_folder = folder;
 pending_land_pitch = t.pitch;
 if (t.worn)
 {
+stat_add("worn_bounces"); // Section 2: any worn trampoline's bounce, lane or belt-wide
 // A worn pad: only a normal jump's worth (dev, 2026-11-11), with Moon Jump and Short Hop as for any jump; caught mid-jump,
 // you rise again from where you are.
 jump_state = 1;
@@ -130,6 +132,7 @@ void flight_check()
 {
 if (!flying or runtimer.elapsed < flight_end) return;
 flying = false;
+stat_add("trampoline_flights"); // Section 2: a good trampoline's full flight, counted as you land
 player_land();
 }
 // From player_land(): the pad's own land sound, at its pitch, after a trampoline launch.

@@ -146,9 +146,11 @@ if (gs.d.exists("practice_passes_" + practice_choices[i])) practice_passes[i] = 
 if (gs.d.exists("practice_unlocks_checked")) practice_unlocks_checked = gs.read_bool("practice_unlocks_checked");
 if (gs.d.exists("practice_combos_checked")) practice_combos_checked = gs.read_bool("practice_combos_checked");
 if (gs.d.exists("practice_winds_checked")) practice_winds_checked = gs.read_bool("practice_winds_checked");
+if (gs.d.exists("practice_trampolines_checked")) practice_trampolines_checked = gs.read_bool("practice_trampolines_checked");
 practice_returning_check(); // once per save, now that the difficulty runs and lifetime stats are read
 practice_combos_check(); // once per save, after it (practice.nvgt)
 practice_winds_check(); // and the winds check after that (practice.nvgt)
+practice_trampolines_check(); // then the trampolines check (practice.nvgt)
 }
 // Writes the game's progress to saves/game.srf; called the moment a run count changes.
 void writegame()
@@ -180,6 +182,7 @@ for (uint i = 0; i < practice_choices.length(); i++) gs.add("practice_passes_" +
 gs.add("practice_unlocks_checked", practice_unlocks_checked);
 gs.add("practice_combos_checked", practice_combos_checked);
 gs.add("practice_winds_checked", practice_winds_checked);
+gs.add("practice_trampolines_checked", practice_trampolines_checked);
 gs.save();
 }
 /* Writes every setting to settings.srf. Called whenever one changes: the menu music volume (form_menu) and the run
