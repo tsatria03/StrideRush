@@ -12,3 +12,5 @@ The dev's fix (45573ec, 2026-11-03): a general subject line ("Major dock/game en
 **Why:** the git log doubles as a readable history of what shipped. It's easy to forget the descriptive message when several features land between commits.
 
 **How to apply:** when flagging a commit point that includes a new or changed changelog entry, quote the entry and suggest it as the commit message. If more than one entry lands, suggest the 45573ec shape: a general subject with the entries in the body. Never commit yourself ([[feedback_check_git_log_for_commits]]). Don't suggest rewriting old commits to add messages unless the dev asks; it needs a history rewrite, and a force push if they're already pushed. Related: [[feedback_changelog_rules]].
+
+When one commit covers several changelog entries (dev, 2026-11-12, the practice guidance plan's four), the dev puts the entries in the commit description, under a short subject line. Suggest that shape for multi-entry commits.
