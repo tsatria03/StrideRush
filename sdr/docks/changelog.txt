@@ -1,8 +1,10 @@
 New in 2.0.
-Added trampolines, in one lane or across the whole belt, which launch you on a long flight over everything ahead, or give you only a short bounce when they're worn, with practice after combinations, their own statistics and nine achievements.
-Added winds, gusts that chase you across the lanes and shove you sideways, which you dodge by switching lanes at the last moment or brace against by crouching, with practice between barriers and combinations, their own statistics and five achievements.
+Added trampolines to practice runs, opened once you've cleared 5 combinations, so you can drill all four kinds of trampoline at your own speed.
+Added trampolines, in one lane or across the whole belt, which launch you on a long flight over everything ahead, or give you only a short bounce when they're worn, with their own statistics and nine achievements.
+Added winds to practice runs, opened once you've dodged past 5 barriers, so you can drill dodging winds at your own speed.
+Added winds, gusts that chase you across the lanes and shove you sideways, which you dodge by switching lanes at the last moment or brace against by crouching, with their own statistics and five achievements.
 Added slides, which cover the whole belt and carry you along at twice your speed for a few seconds, letting you pass straight through obstacles and steer into lanes to catch items, with their own statistics and twelve achievements.
-Added combinations to practice runs, opened once you've dodged past 5 barriers, so you can drill pairs of obstacles at your own speed.
+Added combinations to practice runs, opened once you've dodged 5 winds, so you can drill pairs of obstacles at your own speed.
 Added combinations, pairs of obstacles that come close together and need two actions in a row, such as crouching under a projectile and then jumping a spike, more often on harder levels, with their own statistic and six achievements.
 Made it so a practice run of hazards no longer gives you a steel shield, since a shield can't save you from a hazard.
 Added environments, places with their own ground, music, ambience and obstacle sounds, so every run starts in a random one and moves to a different one every 1 to 2 minutes, with a second environment that brings back many of the ground surfaces, ambiences and music tracks from earlier versions.
