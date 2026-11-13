@@ -43,8 +43,9 @@ The dev asked for five more after closing what's new and achievements closest to
 22. Records by difficulty: in the statistics menu, the best run on each level (most steps, longest time, top speed reached), so progress on hard isn't hidden in totals. A menu only, never spoken during a run (unlike the declined personal best callout).
 
 ## Waiting for 2.2 (the dev's ideas, 2026-11-13)
-- Floor breakers: a new trap from the dev's sounds, traps/floor_breakers/general/air (spawn, loop, fall, fill, fix1-3); not planned yet (dev, 2026-11-13: "We can also save floor breakers for 2.2 as well.").
+- Floor breakers: a new trap from the dev's sounds, traps/floor_breakers/general/air (spawn, loop, fall, fill, fix1-3); not planned yet (dev, 2026-11-13: "We can also save floor breakers for 2.2 as well."). The dev's idea (2026-11-13): "A floor breaker is something that spawns on the belt. It creates an air tile. Your goal is to fix it by reconstructing the hole on the belt with your hands, otherwise you'll fall off the belt and instently dye as a result. Playing the fall and your character's death sound." Claude judged it medium-sized (a hand action in a window like a force field's switch, an instant death like a hazard, plus practice, statistics, achievements, hints and a death line), better for 2.2. Plan started: [[project_floor_breakers_plan]].
 - Timed runs: settled, [[project_timed_run_plan]].
+- Vehicles: settled, [[project_vehicles_plan]] (moved from 2.1, 2026-11-13).
 
 ## Lane-changing barriers in detail (as explained to the dev, 2026-11-10)
 - In play: a barrier (a car, say) is heard coming in one lane, then plays a swerve cue (tyre squeal, horn) and its sound slides into a neighbouring lane; you track where it ends up and dodge that. The skill is listening for where it lands, not where it started.
