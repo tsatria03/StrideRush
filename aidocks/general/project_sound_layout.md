@@ -85,3 +85,5 @@ Ladder sounds (the dev, 2026-11-12): environments/<env>/traps/ladders/general/me
 Environments renamed (the dev, 2026-11-12, commit d34a4f1): custom is now uncharted (sounds/environments/uncharted); default stays. No code names either one (current_env starts at "default"); earlier memories saying custom mean uncharted.
 
 Optional timed run sounds (2026-11-13, not added yet; [[project_timed_run_plan]]): misc/game/timewin (crossing the finish line), timelost (time's up), timewarn (the 30, 10 and 5 second warnings) (the dev's names, 2026-11-13); played if present, speech alone otherwise.
+
+Transitions (the dev, 2026-11-13, commit 3525a70): each environment has transitions/ beside traps/: doors (with countdown), ladders (with countdown), trampolines, slides (theme plastic: loop, move, start, stop; were misc/game/slide*) and switches (theme switch: press; was misc/game/switchpress). New trap traps/floor_breakers/general/air (spawn, loop, fall, fill, fix1-3; were misc/game/air*), no countdown folder, in default and uncharted. Code still pointed at the old paths when this was written.

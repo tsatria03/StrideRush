@@ -1,11 +1,11 @@
 ---
 name: project_timed_run_plan
-description: SETTLED (2026-11-13, for 2.1; 3 sections) - timed runs: a countdown fed by clean passes, a finish line to win, own level unlocks, records and 5 achievements; Q&A log
+description: SETTLED (2026-11-13, for 2.2; 3 sections) - timed runs: a countdown fed by clean passes, a finish line to win, own level unlocks, records and 5 achievements; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-13), waiting for the dev to commit it. Its entry is 2.1's tenth, after two other plans the dev has in mind.
+Status: SETTLED (2026-11-13), waiting for the dev to commit it. Moved to 2.2 (see the log's end).
 
 Background:
 - The dev (2026-11-13): "I was thinking of a new game mode, but I'm not sure how it would work. I was gonna call it timed run. Or something like that. Can you please look at how time trial works in toy mania? In this game it could work differently."
@@ -53,3 +53,4 @@ Sections:
 2. Records, the results after a run, and the five achievements.
 3. Docks: the readme, the entry (as the tenth), CLAUDE.md, the version history, this plan COMPLETE.
 - Order (dev, 2026-11-13: "We can build the plan later"): the build waits until after the dev's two other 2.1 plans.
+- MOVED to 2.2 (dev, 2026-11-13: "let's save the timed runs to 2.2. You'll know why."): 2.1's last two entries go to the sound restructure in commit 3525a70 (transitions) and the floor breakers trap; timed runs open 2.2.
