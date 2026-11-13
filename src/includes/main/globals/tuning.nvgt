@@ -84,11 +84,14 @@ const int wind_damage = 5;
 /* Ladders (the ladders plan, dev, 2026-11-12): each ladder has a random ladder_rungs_min to ladder_rungs_max rungs by level
 (dev, after testing: 5 felt too short; 6 to 8 on easy up to 10 to 12 on chaos), the first taken as you step on; each
 must come within ladder_rung_times of the last, by level from easy to chaos (practice and debug use easy's); a collapse
-or a fall costs ladder_damage, then the real wall's crash wall_damage. */
+costs ladder_break_damage and a fall ladder_fall_damage, then the real wall's crash wall_damage. */
 const int[] ladder_rungs_min = {6, 7, 8, 9, 10};
 const int[] ladder_rungs_max = {8, 9, 10, 11, 12};
 const double[] ladder_rung_times = {2000, 1750, 1500, 1250, 1000};
-const int ladder_damage = 40;
+const int ladder_break_damage = 60; // a collapse (dev, 2026-11-12: 60 for a collapse, 40 for a fall)
+const int ladder_fall_damage = 40;
+// The least time between rungs by level (dev, 2026-11-12): sooner is rushing it, and you fall off.
+const double[] ladder_rung_min_times = {200, 250, 300, 350, 400};
 const bool ladder_grab_runup = true; // true: after a grab you run on to the ladder before climbing (the dev's choice, 2026-11-12, after trying both); false: the climb starts at the grab
 const int ladder_wall_gap = 5; // steps from a ladder to its real wall (dev, 2026-11-12, after testing)
 /* Trampolines (the trampolines plan, dev, 2026-11-11): like slides, one spawn in trampoline_chance and survival_roll();

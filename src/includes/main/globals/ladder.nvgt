@@ -10,11 +10,11 @@ traps/ladders/countdown set, ending on the step before the ladder, where the gra
 - Climbing: the rest of its rungs (a random height by level, ladder_rungs_min to ladder_rungs_max, so you listen for the
   top instead of counting), each a press of the other hand from the last, a climb sound per rung (the grab plays only as you take hold, dev, 2026-11-12)
   (any of climb1 to climb5, at random),
-  at your own pace, but within ladder_rung_time() of the last (on runtimer, so pausing freezes it). Both hands at once do
+  at your own pace, but no sooner than ladder_rung_min_time() after the last (rushing it, you fall off) and within ladder_rung_time() of it (on runtimer, so pausing freezes it). Both hands at once do
   nothing. The same hand twice, or too long on a rung, collapses it; any lane key makes you fall off. Jumping,
   crouching, weapons and inventory wait until you're down.
 - Reaching it without having grabbed it runs you into it: it collapses.
-- A collapse or a fall: its sound and ladder_damage, then you run on and crash into the real wall when you reach it
+- A collapse or a fall: its sound and ladder_break_damage (60) or ladder_fall_damage (40), then you run on and crash into the real wall when you reach it
   (wall_damage). After the fifth rung: land, and you're set down on the wall's tile, past it, running again.
 - On a slide or a good trampoline's flight, the ladder and its wall pass harmlessly (carried()).
 Not in combinations. Same entity pattern as the other traps: null-slot removal, reused slots, and only
@@ -41,6 +41,7 @@ ladder@ climb_ladder = null;
 int climb_rungs = 0; // rungs climbed, 1 to 5
 int climb_last_hand = 0; // -1 left, 1 right
 double climb_rung_deadline = 0; // on runtimer
+double climb_last_rung_at = 0; // on runtimer: when the last rung was taken, for rushing it
 
 // From reset_player() and cancel_movement(): off any ladder.
 void reset_climb()
@@ -53,6 +54,12 @@ climb_last_hand = 0;
 string ladder_folder(ladder@ l)
 {
 return trap_folder(l.env, "ladders") + l.theme + "/";
+}
+// The least time between rungs by the run's level: a press sooner than this is rushing it (dev, 2026-11-12).
+double ladder_rung_min_time()
+{
+if (run_difficulty < 0) return ladder_rung_min_times[0];
+return ladder_rung_min_times[run_difficulty];
 }
 // The time each rung allows by the run's level (the dev, 2026-11-12), easy's in practice and debug runs.
 double ladder_rung_time()
@@ -155,6 +162,7 @@ climbing = true;
 @climb_ladder = l;
 climb_rungs = 1;
 climb_rung_deadline = runtimer.elapsed + ladder_rung_time();
+climb_last_rung_at = runtimer.elapsed;
 ladderpool.play_stationary(get_pack_sound(ladder_folder(l) + "*climb*"), false); // any of climb1 to climb5
 }
 // From hand_check() while climbing: the next rung, or a collapse for the same hand twice. Both hands at once do nothing.
@@ -167,7 +175,14 @@ if (hand == climb_last_hand)
 ladder_fail(climb_ladder, false);
 return;
 }
+// Too soon after the last rung: rushing it, and you fall off, as with a lane key (dev, 2026-11-12).
+if (runtimer.elapsed - climb_last_rung_at < ladder_rung_min_time())
+{
+ladder_fail(climb_ladder, true);
+return;
+}
 climb_last_hand = hand;
+climb_last_rung_at = runtimer.elapsed;
 climb_rungs += 1;
 ladderpool.play_stationary(get_pack_sound(ladder_folder(climb_ladder) + "*climb*"), false); // any of climb1 to climb5, at random (dev, 2026-11-12)
 if (climb_rungs >= climb_ladder.rungs)
@@ -191,7 +206,7 @@ void ladder_lane_slip()
 {
 if (climbing) ladder_fail(climb_ladder, true);
 }
-/* A collapse (fall false) or a fall off the side (fall true): its sound and ladder_damage, then you run on toward the real
+/* A collapse (fall false) or a fall off the side (fall true): its sound and ladder_break_damage (60) or ladder_fall_damage (40), then you run on toward the real
 wall, which you crash into when you reach it (wall_crash()). A fatal blow plays its sound through p, which end_run_hit()
 leaves alone; a practice death sets you down just past the ladder, so its wall is spent first. */
 void ladder_fail(ladder@ l, bool fall)
@@ -201,7 +216,7 @@ practice_hints_restart(); // a hit: a practice run's hints start over (practiceh
 last_caught = "ladders";
 last_caught_kind = fall ? "fall" : "collapse";
 string clip = get_pack_sound(ladder_folder(l) + (fall ? "*fall*" : "*break*"));
-int blow = take_damage(ladder_damage);
+int blow = take_damage(fall ? ladder_fall_damage : ladder_break_damage);
 if (blow == blow_fatal)
 {
 l.wall_spent = true;
