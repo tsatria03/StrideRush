@@ -118,6 +118,13 @@ climb_hand(left, right);
 return;
 }
 if (grab_ladder(left, right)) return;
+// At a floor breaker's edge your hands rebuild it; a press in its window opens its corridor (floor_breaker.nvgt).
+if (repairing)
+{
+repair_hand(left, right);
+return;
+}
+if (open_floor_breaker(left, right)) return;
 forcefield@ target = null;
 int target_steps = 0;
 for (uint i = 0; i < forcefields.length(); i++)

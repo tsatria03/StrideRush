@@ -23,6 +23,7 @@ current_lane = lane_middle;
 void lane_input()
 {
 if (controls.action_triggered("info_lane")) speak_buffer(lane_names[current_lane] + " lane.", "status");
+if (repairing) return; // at a floor breaker's edge the lane keys do nothing (dev, 2026-11-13)
 if (climbing)
 {
 // No lanes on a ladder: a lane key makes you fall off it (ladder.nvgt).

@@ -1,0 +1,203 @@
+/* Floor breakers (the floor breakers plan, dev, 2026-11-13; Section 1). A belt-wide trap that breaks the floor into a hole
+of air. Sounds from environments/<env>/traps/floor_breakers/general/<theme> (air so far): spawn as it appears, loop at
+the hole as you near it, open as you open the corridor, fix1 to fix3 (one at random) for each piece you lay, repair once
+the floor is whole, fall if you go through. Its layered countdown (traps/floor_breakers/countdown) runs up to the hole and
+stops once the corridor is open.
+- Opening: a hand press in a key's window (hand_window_start()) opens the corridor. You run on to the edge, the step before
+  the hole, where the belt holds you (step_check() waits while repairing).
+- Repairing: a random number of pieces by level (floor_pieces_min to floor_pieces_max), the first press at the edge starting
+  it, each press the other hand from the last, a random fix each, within the ladder's window for the level
+  (ladder_rung_min_time() to ladder_rung_time()), the first within ladder_rung_time() of reaching the edge. Then repair
+  plays and you're set on the mended floor, running on. Jumping, crouching, lane keys, weapons and inventory do nothing
+  at the edge.
+- Falling: reaching the hole without opening it, or a repair mistake (the same hand twice, too slow, too quick): fall, then
+  your death, ending the run outright like a hazard; no shield or life saves you. In practice, a practice death set down
+  just past the hole.
+- On a slide or a good trampoline's flight it passes harmlessly (carried()). Not in combinations.
+Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_floor_breakers() shrinks
+the array. */
+sound_pool floorpool;
+class floor_breaker
+{
+double x; // the hole's tile; its edge is the tile before
+string theme;
+string env;
+int pieces; // its size, picked at spawn
+double countdown_start;
+bool opened = false;
+bool spent = false;
+int loopslot = -1;
+}
+floor_breaker@[] floor_breakers(0);
+bool repairing = false;
+floor_breaker@ repair_floor = null;
+int repair_laid = 0; // pieces laid so far
+int repair_last_hand = 0; // -1 left, 1 right, 0 none yet
+double repair_deadline = 0; // on runtimer
+double repair_last_at = 0; // on runtimer, when the last piece went down
+
+// From reset_player() and cancel_movement(): not at any edge.
+void reset_repair()
+{
+repairing = false;
+@repair_floor = null;
+repair_laid = 0;
+repair_last_hand = 0;
+}
+string floor_folder(floor_breaker@ f)
+{
+return trap_folder(f.env, "floor_breakers") + f.theme + "/";
+}
+void spawn_floor_breaker(double x, string theme, int countdown)
+{
+floor_breaker f;
+f.x = x;
+f.theme = theme;
+f.env = current_env;
+int level = run_difficulty < 0 ? 0 : run_difficulty; // practice and debug runs get easy's holes
+f.pieces = random(floor_pieces_min[level], floor_pieces_max[level]);
+f.countdown_start = x - countdown;
+floorpool.play_2d(get_pack_sound(floor_folder(f) + "*spawn*"), 0, me.x, 0, x, false);
+f.loopslot = floorpool.play_2d(get_pack_sound(floor_folder(f) + "*loop*"), 0, me.x, 0, x, true);
+for (uint i = 0; i < floor_breakers.length(); i++)
+{
+if (@floor_breakers[i] == null)
+{
+@floor_breakers[i] = f;
+return;
+}
+}
+floor_breakers.insert_last(f);
+}
+/* From hand_check(): a hand press in a floor breaker's window opens its corridor (the nearest, if ever two). Opened while
+already standing at its edge, the repair starts at once. True if one was opened, so the press does nothing else. */
+bool open_floor_breaker(bool left, bool right)
+{
+floor_breaker@ target = null;
+for (uint i = 0; i < floor_breakers.length(); i++)
+{
+if (@floor_breakers[i] == null) continue;
+floor_breaker@ f = floor_breakers[i];
+if (f.spent or f.opened or me.x < hand_window_start(f.x, f.countdown_start) or f.x - me.x < 1) continue;
+if (@target == null or f.x < target.x) @target = f;
+}
+if (@target == null) return false;
+target.opened = true;
+floorpool.play_stationary(get_pack_sound(floor_folder(target) + "*open*"), false); // stationary, like a door (dev, 2026-11-13)
+if (me.x == target.x - 1) start_repair(target);
+return true;
+}
+// Runs once per step, right after the move: at an opened hole's edge the repair begins; at an unopened hole you fall.
+void floor_breaker_check()
+{
+for (uint i = 0; i < floor_breakers.length(); i++)
+{
+if (@floor_breakers[i] == null) continue;
+floor_breaker@ f = floor_breakers[i];
+if (!f.spent and carried() and (me.x == f.x - 1 or me.x == f.x))
+{
+if (me.x == f.x) f.spent = true; // over it on a slide or a flight: it passes harmlessly
+continue;
+}
+if (!f.spent and f.opened and me.x == f.x - 1 and !repairing) start_repair(f);
+else if (!f.spent and me.x == f.x)
+{
+fall_through(f); // never opened
+return;
+}
+if (me.x > f.x + spawn_distance()) remove_floor_breaker(i);
+}
+}
+void start_repair(floor_breaker@ f)
+{
+cancel_movement(); // off the ground or crouched, you're at the edge now
+repairing = true;
+@repair_floor = f;
+repair_laid = 0;
+repair_last_hand = 0;
+repair_deadline = runtimer.elapsed + ladder_rung_time();
+repair_last_at = runtimer.elapsed;
+}
+// From hand_check() while repairing: the next piece, or a fall for the same hand twice or rushing. Both hands at once do nothing.
+void repair_hand(bool left, bool right)
+{
+if (left == right) return;
+int hand = left ? -1 : 1;
+if (hand == repair_last_hand or (repair_laid > 0 and runtimer.elapsed - repair_last_at < ladder_rung_min_time()))
+{
+fall_through(repair_floor);
+return;
+}
+repair_last_hand = hand;
+repair_laid += 1;
+repair_last_at = runtimer.elapsed;
+floorpool.play_stationary(get_pack_sound(floor_folder(repair_floor) + "*fix*"), false);
+if (repair_laid >= repair_floor.pieces)
+{
+// Whole again: repair, and you're on the mended floor, running on.
+floor_breaker@ f = repair_floor;
+reset_repair();
+f.spent = true;
+stop_floor_loop(f);
+floorpool.play_2d(get_pack_sound(floor_folder(f) + "*repair*"), 0, me.x, 0, f.x, false);
+me.x = f.x;
+update_listeners();
+steptimer.restart();
+return;
+}
+repair_deadline = runtimer.elapsed + ladder_rung_time();
+}
+// Every frame from run_loop(): too long at the edge, or on a piece, and the patch gives way.
+void floor_breaker_update()
+{
+if (repairing and runtimer.elapsed >= repair_deadline) fall_through(repair_floor);
+}
+/* Through the hole: its fall, then your death, ending the run outright like a hazard (no shield or life saves you). In a
+practice run, a practice death set down just past the hole. */
+void fall_through(floor_breaker@ f)
+{
+reset_repair();
+f.spent = true;
+stop_floor_loop(f);
+last_caught = "floor_breakers"; // what ended the run (stats_menu.nvgt, practice_hints.nvgt)
+last_caught_kind = "";
+string fall_clip = get_pack_sound(floor_folder(f) + "*fall*");
+if (practice_run)
+{
+p.play_stationary(get_pack_sound("misc/player/*death*"), false); // with the fall, at the same time (dev, 2026-11-13); practice_death() keeps p playing
+practice_death(f.x + 1, fall_clip);
+return;
+}
+end_run_floor(fall_clip);
+}
+// The floor breaker's countdown, once per step: until the corridor is open.
+void floor_breaker_countdown()
+{
+for (uint i = 0; i < floor_breakers.length(); i++)
+{
+if (@floor_breakers[i] == null or floor_breakers[i].spent or floor_breakers[i].opened) continue;
+play_countdown(floorpool, "floor_breakers", floor_breakers[i].x, floor_breakers[i].countdown_start, floor_breakers[i].env);
+}
+}
+void stop_floor_loop(floor_breaker@ f)
+{
+if (f.loopslot > -1) floorpool.destroy_sound(f.loopslot);
+f.loopslot = -1;
+}
+void remove_floor_breaker(uint i)
+{
+if (i >= floor_breakers.length() or @floor_breakers[i] == null) return;
+stop_floor_loop(floor_breakers[i]);
+@floor_breakers[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_floor_breakers()
+{
+for (uint i = 0; i < floor_breakers.length(); i++)
+{
+if (@floor_breakers[i] == null) continue;
+stop_floor_loop(floor_breakers[i]);
+}
+floor_breakers.resize(0);
+reset_repair();
+}

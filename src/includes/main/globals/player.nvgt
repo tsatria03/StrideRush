@@ -18,10 +18,11 @@ duckcooldowntimer.force(duck_cooldown); // a new run can crouch straight away
 woosh_pending_side = 0; // no woosh left waiting from the last run
 reset_flight(); // trampoline.nvgt
 reset_climb(); // ladder.nvgt
+reset_repair(); // floor_breaker.nvgt
 }
 bool can_duck()
 {
-return is_grounded() and !ducked and duckcooldowntimer.elapsed >= duck_cooldown and !door_moving and !sliding and !climbing; // not while a door carries you, nor on a ladder
+return is_grounded() and !ducked and duckcooldowntimer.elapsed >= duck_cooldown and !door_moving and !sliding and !climbing and !repairing; // not while a door carries you, nor on a ladder or at a floor breaker's edge
 }
 bool is_grounded()
 {
@@ -33,7 +34,7 @@ return ducked;
 }
 void jump_check()
 {
-if (controls.action_triggered("jump") and is_grounded() and !door_moving and !sliding and !climbing) start_jump(); // no jumping while a door carries you
+if (controls.action_triggered("jump") and is_grounded() and !door_moving and !sliding and !climbing and !repairing) start_jump(); // no jumping while a door carries you
 // A good trampoline's flight (jump_state 3) is timed by the clock, not by jump ticks (trampoline.nvgt).
 if (jump_state == 3)
 {
@@ -97,6 +98,7 @@ me.y = 0;
 jump_state = 0;
 reset_flight(); // trampoline.nvgt
 reset_climb(); // ladder.nvgt
+reset_repair(); // floor_breaker.nvgt
 if (ducked)
 {
 ducked = false;

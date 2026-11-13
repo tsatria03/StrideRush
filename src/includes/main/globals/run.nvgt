@@ -222,6 +222,8 @@ powerup_sounds(); // every frame: powerups on the belt replay their sound on a t
 slide_update(); // every frame: a slide's caught items and its end (slide.nvgt)
 ladder_update(); // every frame: too long on a rung and the ladder collapses (ladder.nvgt)
 if (!running) break;
+floor_breaker_update(); // every frame: too long at a floor breaker's edge and you fall (floor_breaker.nvgt)
+if (!running) break;
 run_audio_check(); // every frame: the next track when one ends, and the ambience's switch and crossfade
 heartbeat_check(); // every frame: the heartbeat, faster as you speed up (heartbeat.nvgt)
 run_input();
@@ -229,8 +231,8 @@ run_input();
 }
 void step_check()
 {
-// A ladder holds you where you are while you climb (ladder.nvgt).
-if (climbing)
+// A ladder holds you where you are while you climb (ladder.nvgt), and a floor breaker's edge while you repair it.
+if (climbing or repairing)
 {
 steptimer.restart();
 return;
@@ -244,6 +246,8 @@ spawn_check();
 practice_hints_check(); // practice_hints.nvgt: the closing line once the practiced choice's fifth has passed you
 // Obstacle contact only on arriving at a tile: in the air at that moment means the obstacle is cleared.
 hazard_check();
+if (!running) return;
+floor_breaker_check(); // floor_breaker.nvgt: the edge holds you, or the hole takes you
 if (!running) return;
 spike_check();
 if (!running) return;
@@ -284,6 +288,7 @@ forcefield_countdown();
 projectile_countdown();
 wall_countdown();
 ladder_countdown(); // ladder.nvgt
+floor_breaker_countdown(); // floor_breaker.nvgt
 barrier_countdown();
 wind_countdown();
 animal_countdown();

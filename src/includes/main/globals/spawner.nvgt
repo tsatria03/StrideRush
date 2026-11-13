@@ -6,7 +6,7 @@ double next_spawn_x = 0;
 string next_type = "";
 int next_countdown = 0;
 // Every obstacle type the spawner knows; a new type is added here. The spawn debug option lists these too.
-string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles", "walls", "fake_doors", "animals", "barriers", "winds", "ladders"}; // ladders: a ladder and its real wall (ladder.nvgt)
+string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles", "walls", "fake_doors", "animals", "barriers", "winds", "ladders", "floor_breakers"}; // ladders: a ladder and its real wall (ladder.nvgt); floor breakers (floor_breaker.nvgt)
 /* The next 50 ms speed mark that gets a real door (dev, 2026-11-03): the first mark below the run's starting speed,
 then door_section_ms lower each time one is placed, until it passes min_step_time. Real doors come at these marks in
 every normal run; a debug run limited to one type gets none (the "real doors" debug choice spawns only them). */
@@ -428,6 +428,7 @@ else if (type == "winds") spawn_wind(x, theme, countdown); // wind.nvgt
 if (type == "hazards" or type == "spikes" or type == "mines" or type == "force_fields" or type == "projectiles" or type == "walls") practice_hint(type, -1, x);
 else if (type == "trampolines") spawn_trampoline(x, theme, countdown); // trampoline.nvgt
 else if (type == "ladders") spawn_ladder(x, theme, countdown); // ladder.nvgt: the ladder at x, its real wall on the next tile
+else if (type == "floor_breakers") spawn_floor_breaker(x, theme, countdown); // floor_breaker.nvgt
 }
 /* Where a hand can first act on something at x whose countdown starts at countdown_start: the countdown start, or
 switch_min_time before it at the current speed, whichever is earlier, so at top speed, where the countdown is a single

@@ -93,7 +93,10 @@ const int ladder_fall_damage = 40;
 // The least time between rungs by level (dev, 2026-11-12): sooner is rushing it, and you fall off.
 const double[] ladder_rung_min_times = {200, 250, 300, 350, 400};
 const bool ladder_grab_runup = true; // true: after a grab you run on to the ladder before climbing (the dev's choice, 2026-11-12, after trying both); false: the climb starts at the grab
-const int ladder_wall_gap = 5; // steps from a ladder to its real wall (dev, 2026-11-12, after testing)
+const int ladder_wall_gap = 5;
+// Floor breakers (the floor breakers plan, dev, 2026-11-13): a random floor_pieces_min to floor_pieces_max pieces by level, easy to chaos.
+const int[] floor_pieces_min = {3, 4, 5, 6, 7};
+const int[] floor_pieces_max = {4, 5, 6, 7, 8}; // steps from a ladder to its real wall (dev, 2026-11-12, after testing)
 /* Trampolines (the trampolines plan, dev, 2026-11-11): like slides, one spawn in trampoline_chance and survival_roll();
 worn pads trampoline_worn_percent of the time, belt-wide ones trampoline_belt_percent; a good pad's flight lasts
 trampoline_air_time. */
@@ -109,8 +112,8 @@ const int[] difficulty_top_step_times = {200, 150, 100, 75, 50};
 belt reaches its speed, one obstacle type per 50 ms mark, in order of the action it needs. Anything not listed is in from
 the start: hazards, spikes and mines, health potions, life capsules and steel shields, and keys, which come before every
 real door outside the schedule. Chaos has everything from the first spawn. */
-const string[] schedule_types = {"projectiles", "force_fields", "animals", "walls", "ammo_packs", "fake_doors", "player_teleporters", "barriers", "powerups", "slides", "winds", "trampolines", "ladders"};
-const int[] schedule_join_times = {450, 400, 350, 300, 300, 250, 250, 200, 200, 300, 200, 300, 250}; // ladders at 4 steps a second, with fake doors (the ladders plan, dev, 2026-11-12) // trampolines with slides (the trampolines plan, dev, 2026-11-11) // slides at 3.3 steps a second (the slides plan), winds at 5 (the winds plan), dev, 2026-11-11
+const string[] schedule_types = {"projectiles", "force_fields", "animals", "walls", "ammo_packs", "fake_doors", "player_teleporters", "barriers", "powerups", "slides", "winds", "trampolines", "ladders", "floor_breakers"};
+const int[] schedule_join_times = {450, 400, 350, 300, 300, 250, 250, 200, 200, 300, 200, 300, 250, 250}; // floor breakers at 4 steps a second (the floor breakers plan, dev, 2026-11-13) // ladders at 4 steps a second, with fake doors (the ladders plan, dev, 2026-11-12) // trampolines with slides (the trampolines plan, dev, 2026-11-11) // slides at 3.3 steps a second (the slides plan), winds at 5 (the winds plan), dev, 2026-11-11
 const int chaos_level = 4; // difficulty_names' index of chaos, which ignores the schedule
 /* The locks (Section 6, dev, 2026-11-05: "5 runs per level, and a user is required to reach at least 1 door"): easy is
 always open, and each other level opens after this many counted runs on the level below. */
