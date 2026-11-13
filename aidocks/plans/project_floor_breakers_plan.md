@@ -37,7 +37,7 @@ Settled design (2026-11-13, for 2.2):
 - Repairing: a random number of presses by level, easy 3-4, medium 4-5, hard 5-6, insane 6-7, chaos 7-8 (the first press at the edge starts it), alternating hands, each with a random fix (fix1-3), each within the ladder's window for the level (ladder_rung_min_times to ladder_rung_times, easy's in practice and debug); then repair plays and you run on over the rebuilt floor. Jumping, crouching, lane keys, weapons and inventory do nothing at the edge.
 - Falling: reaching the hole without opening it, or a repair mistake (the same hand twice, too slow, too quick), and you fall through: fall, then the death sound, ending the run outright like a hazard; no shield or life saves you. In practice, a practice death (set down past the hole, retry practice).
 - On a slide or a good trampoline's flight, it passes harmlessly. Not in combinations.
-- Joins at 4 steps a second (250 ms), an equal pick, chaos from the start.
+- Joins at 4 steps a second (250 ms), an equal pick, chaos from the start; kept on its own like a ladder, nothing still counting down as you reach it and a clear stretch past the hole.
 - Statistics floor_breakers_repaired and caught_floor_breakers ("times fell into floor breakers"; the death outcome "falling into a floor breaker").
 - Achievements (9): Patch Job, Handyman, Master Builder (repaired, lifetime 10, 100, 500); Quick Fix, Road Crew, Solid Ground (repaired in one run, 3, 5, 10); Mind the Gap, Bottomless, Freefall Fanatic (falls, lifetime 10, 100, 500); descriptions and hints as in the Q&A log.
 - Practice: after mixed doors, before barriers (get through 5 mixed doors opens it; repair 5 floor breakers opens barriers); no shield; a one-time check opening floor breakers on saves with barriers open; mixed obstacles gains it.
@@ -47,3 +47,5 @@ Sections (2.2):
 1. The trap: globals/floor_breaker.nvgt, spawning and its sounds, the countdown, opening, the edge hold, the repair and its timing, falling and death, slides and flights, the schedule, a debug choice.
 2. Statistics, achievements, practice and the practice lines.
 3. Docks.
+- Build order for 2.2 (dev, 2026-11-13): "start with floor breakers, then vehicles, then last, timed runs".
+- Q (before building): kept on its own like a ladder, nothing still counting down as you reach the hole and a clear stretch after it? A: "yes" (dev, 2026-11-13). Added to the settled design: the spawner keeps a floor breaker alone, with a clear landing past the hole.

@@ -50,3 +50,4 @@ Sections (2.2):
 1. The obstacle: globals/vehicle.nvgt, the vehicles category's folders, spawning by kind and theme, the countdown, the drift, the bursts and their shots, weapon hits and health, the ram, slides and flights, the schedule, the debug choice.
 2. Statistics, achievements, practice and the practice lines.
 3. Docks.
+- Build order for 2.2 (dev, 2026-11-13): "start with floor breakers, then vehicles, then last, timed runs".

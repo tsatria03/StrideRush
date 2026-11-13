@@ -54,3 +54,4 @@ Sections:
 3. Docks: the readme, the entry (as the tenth), CLAUDE.md, the version history, this plan COMPLETE.
 - Order (dev, 2026-11-13: "We can build the plan later"): the build waits until after the dev's two other 2.1 plans.
 - MOVED to 2.2 (dev, 2026-11-13: "let's save the timed runs to 2.2. You'll know why."): 2.1's last two entries go to the sound restructure in commit 3525a70 (transitions) and the floor breakers trap; timed runs open 2.2.
+- Build order for 2.2 (dev, 2026-11-13): "start with floor breakers, then vehicles, then last, timed runs".

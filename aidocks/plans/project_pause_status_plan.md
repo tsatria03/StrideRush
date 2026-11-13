@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-Status: COMPLETE once tested (2026-11-13, 2.1 FULL at 10 of 10).
+Status: COMPLETE (2026-11-13, 2.1 FULL at 10 of 10; released in V2.10).
 
 Background:
 - The dev (2026-11-13, "For 1.9" meaning 2.1's last entry): "I have my last idea. The statis readouts. I suggest they live in the pause menu. Does toy mania have something similar in the pause menu?" Close to suggestion 19 in [[project_suggestions]] (a status summary).
