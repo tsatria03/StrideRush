@@ -215,10 +215,11 @@ string[] types = get_pack_sound_folders(env_root + "traps/*");
 string[] moves = get_pack_sound_folders(env_root + "transitions/*"); // doors, ladders, slides, switches, trampolines (the transitions plan, dev, 2026-11-13)
 string[] all_types = types;
 for (uint i = 0; i < moves.length(); i++) all_types.insert_last(moves[i]);
+all_types.insert_last("vehicles"); // its own category, beside traps and transitions (the vehicles plan, 2026-11-13)
 for (uint i = 0; i < all_types.length(); i++)
 {
-// Only types whose countdown folder has cues: traps' and transitions' together.
-if (get_pack_sound(env_root + type_category(all_types[i]) + "/" + all_types[i] + "/countdown/warn*") == "") continue;
+// Only types whose countdown folder has cues: traps', transitions' and vehicles' together.
+if (get_pack_sound(type_path(env_root, all_types[i]) + "countdown/warn*") == "") continue;
 cues.sounds.insert_last(learn_countdown(env_root, all_types[i]));
 }
 learn_sort_sounds(cues.sounds);
@@ -231,6 +232,8 @@ learn_category transitions("transitions"); // sorts before traps
 for (uint i = 0; i < moves.length(); i++) transitions.subs.insert_last(learn_folder_category(learn_type_name(moves[i]), env_root + "transitions/" + moves[i] + "/general", ""));
 learn_sort_categories(transitions.subs);
 if (transitions.subs.length() > 0) place.subs.insert_last(transitions);
+// Vehicles, a kind of its own per folder (cars), each kind's themes inside, like animals' birds and dogs.
+if (get_pack_sound_folders(env_root + "vehicles/general/*").length() > 0) place.subs.insert_last(learn_folder_category("vehicles", env_root + "vehicles/general", ""));
 learn_sort_categories(place.subs);
 return place;
 }
@@ -474,7 +477,7 @@ learn_sound s;
 s.label = learn_upper_first(learn_type_name(type) + " countdown");
 s.theme = learn_type_name(type); // sorted by the name players hear, so fake walls sit under F (dev, 2026-11-12)
 s.sound_name = "countdown";
-string folder = env_root + type_category(type) + "/" + type + "/countdown/";
+string folder = type_path(env_root, type) + "countdown/";
 bool layered = get_pack_sound(folder + "warn1-1*") != "";
 for (int note = 1; note <= countdown_length; note++)
 {

@@ -214,6 +214,8 @@ projectile_flight(); // every frame, so a flying projectile moves smoothly betwe
 bullet_flight(); // every frame: bullets move on their own 30 ms timing, not the step's
 barrier_sounds(); // every frame: a barrier follows your lane and its distance
 wind_flight(); // every frame: each wind's beat toward your lane and its place (wind.nvgt)
+vehicle_flight(); // every frame: each vehicle's lane move, its bursts and their shots (vehicle.nvgt)
+if (!running) break;
 trampoline_sounds(); // every frame: lane pads follow your lane (trampoline.nvgt)
 item_lane_sounds(); // every frame: items in their lanes (the lanes plan's Section 4)
 speedup_check();
@@ -264,6 +266,8 @@ if (!running) return;
 barrier_check();
 wind_check();
 if (!running) return;
+vehicle_check(); // vehicle.nvgt: a ram in your lane, a dodge in another
+if (!running) return;
 animal_check();
 if (!running) return;
 door_check();
@@ -291,6 +295,7 @@ ladder_countdown(); // ladder.nvgt
 floor_breaker_countdown(); // floor_breaker.nvgt
 barrier_countdown();
 wind_countdown();
+vehicle_countdown(); // vehicle.nvgt, only in your lane
 animal_countdown();
 door_countdown();
 }

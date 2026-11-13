@@ -97,6 +97,23 @@ const int ladder_wall_gap = 5;
 // Floor breakers (the floor breakers plan, dev, 2026-11-13): a random floor_pieces_min to floor_pieces_max pieces by level, easy to chaos.
 const int[] floor_pieces_min = {3, 4, 5, 6, 7};
 const int[] floor_pieces_max = {4, 5, 6, 7, 8}; // steps from a ladder to its real wall (dev, 2026-11-12, after testing)
+/* Vehicles (the vehicles plan, dev, 2026-11-13): closing vehicle_speed_factor times as fast as a still obstacle, a lane
+toward yours every vehicle_beat_time; in your lane, bursts of vehicle_burst_shots shots vehicle_shot_gap apart, then
+vehicle_burst_pause; each shot a tile every vehicle_shot_tile_time, vehicle_shot_damage if it reaches you in its lane; a
+ram of vehicle_ram_damage; hp half a fake wall's (wall_spawn_hp()). */
+const double vehicle_speed_factor = 1.5;
+const int vehicle_beat_time = 1000;
+const int vehicle_burst_shots = 5;
+const int vehicle_shot_gap = 50; // 200 at first, then 50 (dev, 2026-11-13: "50ms was way better")
+const int vehicle_aim_delay = 500; // lined up with you, it waits this long before a burst, so leaving its lane dodges it (dev, 2026-11-13)
+const int vehicle_burst_pause = 2000; // 2000 at first, 1000 for a while, then 2000 again to give shooting room (dev, 2026-11-13)
+const int vehicle_shot_tile_time = 50; // 30 at first, then 50 (dev, 2026-11-13)
+const float vehicle_shoot_fade = 0.25; // a shot's falloff along the belt, a quarter of the belt's, so bursts carry (dev, 2026-11-13)
+const int vehicle_shot_damage = 5;
+const int vehicle_ram_damage = 40;
+const double vehicle_ram_range = 2; // within this many tiles of you a vehicle stops firing and rams (dev, 2026-11-13)
+const int vehicle_min_hp = 25;
+const int vehicle_max_hp = 250;
 /* Trampolines (the trampolines plan, dev, 2026-11-11): like slides, one spawn in trampoline_chance and survival_roll();
 worn pads trampoline_worn_percent of the time, belt-wide ones trampoline_belt_percent; a good pad's flight lasts
 trampoline_air_time. */
@@ -112,8 +129,8 @@ const int[] difficulty_top_step_times = {200, 150, 100, 75, 50};
 belt reaches its speed, one obstacle type per 50 ms mark, in order of the action it needs. Anything not listed is in from
 the start: hazards, spikes and mines, health potions, life capsules and steel shields, and keys, which come before every
 real door outside the schedule. Chaos has everything from the first spawn. */
-const string[] schedule_types = {"projectiles", "force_fields", "animals", "walls", "ammo_packs", "fake_doors", "player_teleporters", "barriers", "powerups", "slides", "winds", "trampolines", "ladders", "floor_breakers"};
-const int[] schedule_join_times = {450, 400, 350, 300, 300, 250, 250, 200, 200, 300, 200, 300, 250, 250}; // floor breakers at 4 steps a second (the floor breakers plan, dev, 2026-11-13) // ladders at 4 steps a second, with fake doors (the ladders plan, dev, 2026-11-12) // trampolines with slides (the trampolines plan, dev, 2026-11-11) // slides at 3.3 steps a second (the slides plan), winds at 5 (the winds plan), dev, 2026-11-11
+const string[] schedule_types = {"projectiles", "force_fields", "animals", "walls", "ammo_packs", "fake_doors", "player_teleporters", "barriers", "powerups", "slides", "winds", "trampolines", "ladders", "floor_breakers", "vehicles"};
+const int[] schedule_join_times = {450, 400, 350, 300, 300, 250, 250, 200, 200, 300, 200, 300, 250, 250, 200}; // vehicles at 5 steps a second (the vehicles plan, dev, 2026-11-13) // floor breakers at 4 steps a second (the floor breakers plan, dev, 2026-11-13) // ladders at 4 steps a second, with fake doors (the ladders plan, dev, 2026-11-12) // trampolines with slides (the trampolines plan, dev, 2026-11-11) // slides at 3.3 steps a second (the slides plan), winds at 5 (the winds plan), dev, 2026-11-11
 const int chaos_level = 4; // difficulty_names' index of chaos, which ignores the schedule
 /* The locks (Section 6, dev, 2026-11-05: "5 runs per level, and a user is required to reach at least 1 door"): easy is
 always open, and each other level opens after this many counted runs on the level below. */

@@ -118,12 +118,14 @@ int weapon_reach()
 return int(max(1, ceil(double(weapon_reach_time) / current_step_time())));
 }
 /* The target hook. Damages the nearest target within weapon_reach() tiles ahead and returns its x, or -1 if there was
-nothing to hit. The targets are walls, fake doors and items; a new target type adds its own search here. */
+nothing to hit. The targets are walls, fake doors, vehicles in your lane and items; a new target type adds its own search here. */
 double weapon_strike(int damage)
 {
 int reach = weapon_reach();
 wall@ w = wall_in_reach(reach);
 door@ d = fake_door_in_reach(reach);
+vehicle@ vh = vehicle_in_reach(reach); // only one in your lane (vehicle.nvgt)
+double vhx = @vh != null ? vehicle_x(vh) : -1;
 ammopack@ a = ammopack_in_reach(reach);
 doorkey@ k = key_in_reach(reach);
 shield@ s = shield_in_reach(reach);
@@ -134,6 +136,7 @@ teleporter@ t = teleporter_in_reach(reach);
 double best = -1;
 if (@w != null) best = w.x;
 if (@d != null and (best < 0 or d.x < best)) best = d.x;
+if (@vh != null and (best < 0 or vhx < best)) best = vhx;
 if (@a != null and (best < 0 or a.x < best)) best = a.x;
 if (@k != null and (best < 0 or k.x < best)) best = k.x;
 if (@s != null and (best < 0 or s.x < best)) best = s.x;
@@ -143,6 +146,7 @@ if (@t != null and (best < 0 or t.x < best)) best = t.x;
 if (best < 0) return -1;
 if (@w != null and w.x == best) return strike_wall(w, damage);
 if (@d != null and d.x == best) return strike_door(d, damage);
+if (@vh != null and vhx == best) return strike_vehicle(vh, damage);
 if (@a != null and a.x == best) return strike_ammopack(a);
 if (@k != null and k.x == best) return strike_key(k);
 if (@s != null and s.x == best) return strike_shield(s);

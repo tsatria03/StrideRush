@@ -92,7 +92,12 @@ else
 {
 door@ d = fake_door_at(b.x);
 if (@d != null) target_x = strike_door(d, b.damage);
+else
+{
+vehicle@ vh = vehicle_at_bullet(b.x); // a vehicle in your lane the bullet has reached (vehicle.nvgt)
+if (@vh != null) target_x = strike_vehicle(vh, b.damage);
 else target_x = strike_item_at(b.x); // an item in the bullet's path breaks (dev, 2026-11-03)
+}
 }
 if (target_x < 0) return false;
 bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*hit*"), 0, me.x, 0, target_x, false);

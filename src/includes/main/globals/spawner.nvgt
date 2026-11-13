@@ -6,7 +6,7 @@ double next_spawn_x = 0;
 string next_type = "";
 int next_countdown = 0;
 // Every obstacle type the spawner knows; a new type is added here. The spawn debug option lists these too.
-string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles", "walls", "fake_doors", "animals", "barriers", "winds", "ladders", "floor_breakers"}; // ladders: a ladder and its real wall (ladder.nvgt); floor breakers (floor_breaker.nvgt)
+string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles", "walls", "fake_doors", "animals", "barriers", "winds", "ladders", "floor_breakers", "vehicles"}; // vehicles (vehicle.nvgt); ladders: a ladder and its real wall (ladder.nvgt); floor breakers (floor_breaker.nvgt)
 /* The next 50 ms speed mark that gets a real door (dev, 2026-11-03): the first mark below the run's starting speed,
 then door_section_ms lower each time one is placed, until it passes min_step_time. Real doors come at these marks in
 every normal run; a debug run limited to one type gets none (the "real doors" debug choice spawns only them). */
@@ -429,6 +429,7 @@ if (type == "hazards" or type == "spikes" or type == "mines" or type == "force_f
 else if (type == "trampolines") spawn_trampoline(x, theme, countdown); // trampoline.nvgt
 else if (type == "ladders") spawn_ladder(x, theme, countdown); // ladder.nvgt: the ladder at x, its real wall on the next tile
 else if (type == "floor_breakers") spawn_floor_breaker(x, theme, countdown); // floor_breaker.nvgt
+else if (type == "vehicles") spawn_vehicle(x, theme, countdown); // vehicle.nvgt: theme is a kind folder (cars), each an equal share
 }
 /* Where a hand can first act on something at x whose countdown starts at countdown_start: the countdown start, or
 switch_min_time before it at the current speed, whichever is earlier, so at top speed, where the countdown is a single
@@ -451,7 +452,7 @@ if (flying and ox < flight_land_x) return; // nor for anything a trampoline flig
 int steps_left = int(ox - me.x);
 if (steps_left < 1 or steps_left > 5 or me.x < countdown_start) return;
 int note = 6 - steps_left;
-string folder = env_root(env) + type_category(type) + "/" + type + "/countdown/"; // the obstacle's own environment, in traps or transitions (env.nvgt)
+string folder = type_path(env_root(env), type) + "countdown/"; // the obstacle's own environment, in traps, transitions or vehicles (env.nvgt)
 /* A layered set (dev, 2026-11-03) stacks octaves as warn<group>-<note>, such as the walls' warn1-3 (low) with warn2-3
 (high): every group's note for this step plays at once, for as many groups as exist. A plain set has warn<note>. */
 if (get_pack_sound(folder + "warn1-1*") != "")

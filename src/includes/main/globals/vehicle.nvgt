@@ -1,0 +1,323 @@
+/* Vehicles (the vehicles plan, dev, 2026-11-13; Section 1). A vehicle drives down a lane toward you, follows you across the
+lanes like a wind, fires bursts down its lane while it's in yours, and rams you if it reaches you there. Sounds from
+environments/<env>/vehicles (its own category, beside traps and transitions; type_path() in env.nvgt): each folder in
+vehicles/general is a kind (cars), each folder inside a kind a theme (small_car to small_car3) with loop, shoot (fire until
+the dev renamed it, 2026-11-13), hit (the ram), impact (a shot striking you, added by the dev,
+2026-11-13), hurt and death. Each spawn is a random kind, an equal share whatever its number of themes, then one of its themes. Its layered
+countdown (vehicles/countdown) plays only on steps when it's in your lane.
+- Moving: timed to a meeting tile, meet_x, like a wind, closing vehicle_speed_factor (1.5) times as fast as a still
+  obstacle; every vehicle_beat_time (1 s, on runtimer) it moves one lane toward yours, until it reaches you.
+- Firing: once it's been in your lane vehicle_aim_delay (500 ms), a burst of vehicle_burst_shots (5) shots vehicle_shot_gap (50 ms) apart, shoot playing
+  at the car with its gentler falloff (vehicle_shoot_fade, dev, 2026-11-13: the shots were lost at a distance), then a vehicle_burst_pause (2 s); leaving its lane ends a burst and starts the pause. Each shot flies down
+  the lane it was fired in, a tile every vehicle_shot_tile_time, unheard in flight; reaching you still in that lane it
+  does vehicle_shot_damage (5, scaled by level, a shield first), in another lane, or on a slide or a flight, it misses.
+- Breaking it: weapons hit it only while it's in your lane (vehicle_in_reach() for melee, vehicle_at_bullet() for a
+  bullet); its hp is wall_spawn_hp(vehicle_min_hp, vehicle_max_hp), half a fake wall's; hurt on each hit, death at 0, its
+  loop and its shots gone.
+- Within vehicle_ram_range (2 tiles) of you it stops firing, a burst cut short, and comes on to ram; shots already in the
+  air still fly.
+- On meet_x: in your lane, a ram of vehicle_ram_damage (40, scaled by level, a shield first), its hit playing like a
+  barrier's (dev, 2026-11-13: "Hit.ogg means the ram sound, like the barior"); in another lane, a dodge. Either way it drives on behind you. On a slide or a flight it passes harmlessly.
+Not in combinations. Same entity pattern as the other traps: null-slot removal, reused slots, and only
+destroy_all_vehicles() shrinks the arrays. */
+sound_pool vehiclepool;
+class vehicle
+{
+double meet_x;
+string kind; // its kind folder, "cars"
+string theme; // "cars/small_car2", below vehicles/general
+string env;
+int lane;
+int hp;
+double countdown_start;
+double next_beat; // on runtimer: its next lane move
+double next_shot = 0; // on runtimer: its next shot, or the end of its pause
+int burst_left = 0; // shots still to come in this burst
+bool aiming = false; // lined up with you: its aim delay has started
+bool spent = false; // reached meet_x: it can never hit again
+bool destroyed = false; // broken by weapons
+int loopslot = -1;
+}
+vehicle@[] vehicles(0);
+class vehicle_shot
+{
+double x;
+int lane;
+vehicle@ owner;
+double next_move; // on runtimer
+}
+vehicle_shot@[] vehicle_shots(0);
+
+string vehicle_folder(const string&in env)
+{
+return trap_folder(env, "vehicles"); // environments/<env>/vehicles/general/
+}
+// kind is the random kind folder the spawner picked; one of its themes is picked here.
+void spawn_vehicle(double mx, string kind, int countdown)
+{
+string[] themes = get_pack_sound_folders(vehicle_folder(current_env) + kind + "/*");
+if (themes.length() == 0) return;
+vehicle v;
+v.meet_x = mx;
+v.kind = kind;
+v.theme = kind + "/" + themes[random(0, themes.length() - 1)];
+v.env = current_env;
+v.lane = random(lane_left, lane_right);
+v.hp = wall_spawn_hp(vehicle_min_hp, vehicle_max_hp);
+v.countdown_start = mx - countdown;
+v.next_beat = runtimer.elapsed + vehicle_beat_time;
+v.loopslot = vehiclepool.play_2d(get_pack_sound(vehicle_folder(v.env) + v.theme + "/*loop*"), 0, me.x, 0, vehicle_x(v), true);
+place_lane_sound(vehiclepool, v.loopslot, v.lane, vehicle_x(v));
+for (uint i = 0; i < vehicles.length(); i++)
+{
+if (@vehicles[i] == null)
+{
+@vehicles[i] = v;
+return;
+}
+}
+vehicles.insert_last(v);
+}
+// Where you are along the belt right now, between steps.
+double vehicle_player_pos()
+{
+return me.x + min(1, double(steptimer.elapsed) / current_step_time());
+}
+// Where a vehicle is along the belt right now, as wind_x() but at vehicle_speed_factor.
+double vehicle_x(vehicle@ v)
+{
+return v.meet_x + (vehicle_speed_factor - 1) * (v.meet_x - vehicle_player_pos());
+}
+/* One of a vehicle's sounds, once, at the vehicle in its lane. fade scales its falloff along the belt: 1 for the belt's own,
+less to carry farther (the shots). */
+void vehicle_sound(vehicle@ v, const string&in name, float fade = 1)
+{
+int slot = vehiclepool.play_2d(get_pack_sound(vehicle_folder(v.env) + v.theme + "/*" + name + "*"), 0, me.x, 0, vehicle_x(v), false);
+place_lane_sound(vehiclepool, slot, v.lane, vehicle_x(v));
+if (fade == 1 or slot < 0 or slot >= int(vehiclepool.items.length())) return;
+vehiclepool.items[slot].volume_step *= fade;
+vehiclepool.items[slot].update(vehiclepool.last_listener_x, vehiclepool.last_listener_y, vehiclepool.last_listener_z, vehiclepool.last_listener_rotation, vehiclepool.max_distance);
+}
+// Still on the road ahead of you: not reached you, not broken.
+bool vehicle_active(vehicle@ v)
+{
+return !v.spent and !v.destroyed;
+}
+/* Every frame from run_loop(): each vehicle's lane move and burst, its loop placed, then each shot's flight. A shot can end
+the run, so the caller checks running after. */
+void vehicle_flight()
+{
+for (uint i = 0; i < vehicles.length(); i++)
+{
+if (@vehicles[i] == null) continue;
+vehicle@ v = vehicles[i];
+if (vehicle_active(v))
+{
+if (runtimer.elapsed >= v.next_beat)
+{
+v.next_beat += vehicle_beat_time;
+if (v.lane != current_lane) v.lane += current_lane > v.lane ? 1 : -1;
+}
+vehicle_fire(v);
+}
+if (v.loopslot < 0 or !vehiclepool.verify_slot(v.loopslot)) continue;
+place_lane_sound(vehiclepool, v.loopslot, v.lane, vehicle_x(v));
+}
+shot_flight();
+}
+/* A burst in your lane: lining up with you (it moved into yours, or you into its) starts vehicle_aim_delay before its first
+shot, so you can leave the lane before it fires (dev, 2026-11-13: "How do you even avoide a shot?"); then its shots when
+they're due. Out of your lane, the burst ends and the pause starts. */
+void vehicle_fire(vehicle@ v)
+{
+// Within vehicle_ram_range of you it stops firing and comes on to ram (dev, 2026-11-13: "It should ram into you instead").
+if (vehicle_x(v) - vehicle_player_pos() <= vehicle_ram_range)
+{
+v.burst_left = 0;
+return;
+}
+if (v.lane != current_lane)
+{
+v.aiming = false;
+if (v.burst_left > 0)
+{
+v.burst_left = 0;
+v.next_shot = runtimer.elapsed + vehicle_burst_pause;
+}
+return;
+}
+if (!v.aiming)
+{
+v.aiming = true;
+v.next_shot = max(v.next_shot, double(runtimer.elapsed + vehicle_aim_delay)); // a pause still running keeps its end
+}
+if (runtimer.elapsed < v.next_shot) return;
+if (v.burst_left <= 0) v.burst_left = vehicle_burst_shots;
+v.burst_left -= 1;
+v.next_shot = runtimer.elapsed + (v.burst_left > 0 ? vehicle_shot_gap : vehicle_burst_pause);
+vehicle_sound(v, "shoot", vehicle_shoot_fade); // heard clearly from anywhere it can be (dev, 2026-11-13)
+vehicle_shot s;
+s.x = vehicle_x(v);
+s.lane = v.lane;
+@s.owner = v;
+s.next_move = runtimer.elapsed + vehicle_shot_tile_time;
+for (uint i = 0; i < vehicle_shots.length(); i++)
+{
+if (@vehicle_shots[i] == null)
+{
+@vehicle_shots[i] = s;
+return;
+}
+}
+vehicle_shots.insert_last(s);
+}
+// Each shot a tile closer every vehicle_shot_tile_time; reaching you, it hits if you're still in its lane.
+void shot_flight()
+{
+for (uint i = 0; i < vehicle_shots.length(); i++)
+{
+if (@vehicle_shots[i] == null) continue;
+vehicle_shot@ s = vehicle_shots[i];
+while (runtimer.elapsed >= s.next_move)
+{
+s.next_move += vehicle_shot_tile_time;
+s.x -= 1;
+}
+if (s.x > vehicle_player_pos()) continue;
+@vehicle_shots[i] = null;
+if (s.lane != current_lane or carried()) continue; // it flies past you
+vehicle_shot_hit(s.owner);
+if (!running) return;
+}
+}
+/* A shot reaching you in its lane. last_caught is the vehicles, kind "shot", for the death line (Section 2 counts it). A
+fatal shot plays the player's death through end_run_hit(); in practice the vehicle and its shots go, so the retry is clear. */
+void vehicle_shot_hit(vehicle@ v)
+{
+string impact_clip = get_pack_sound(vehicle_folder(v.env) + v.theme + "/*impact*");
+last_caught = "vehicles";
+last_caught_kind = "shot";
+practice_hints_restart(); // a hit starts a practice run's hints over (practice_hints.nvgt)
+int blow = take_damage(vehicle_shot_damage);
+// Its impact at you, as a ram's hit: through p when fatal, since end_run_hit() silences the run.
+if (blow == blow_fatal)
+{
+p.play_stationary(impact_clip, false);
+if (practice_run) remove_vehicle_and_shots(v);
+end_run_hit();
+return;
+}
+vehiclepool.play_stationary(impact_clip, false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+}
+// Runs once per step, right after the move: on meet_x, a ram in your lane or a dodge in another.
+void vehicle_check()
+{
+for (uint i = 0; i < vehicles.length(); i++)
+{
+if (@vehicles[i] == null) continue;
+vehicle@ v = vehicles[i];
+if (me.x == v.meet_x and vehicle_active(v))
+{
+v.spent = true;
+if (!carried() and v.lane == current_lane) // on a slide or a flight it passes harmlessly
+{
+string hit_clip = get_pack_sound(vehicle_folder(v.env) + v.theme + "/*hit*");
+stat_caught("vehicles"); // what caught you, and what ended the run if it's fatal
+last_caught_kind = ""; // a ram, not a shot
+int blow = take_damage(vehicle_ram_damage);
+// As a barrier's: a fatal ram plays its hit through p, since end_run_hit() silences the run, and no player hit.
+if (blow == blow_fatal)
+{
+p.play_stationary(hit_clip, false);
+end_run_hit();
+return;
+}
+vehiclepool.play_stationary(hit_clip, false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+}
+}
+// It drives on behind you until it's as far behind as obstacles appear ahead; then dropped.
+if (me.x > v.meet_x + spawn_distance()) remove_vehicle(i);
+}
+}
+// The countdown: the layered vehicles cues, only on steps where it's in your lane. Runs once per step.
+void vehicle_countdown()
+{
+for (uint i = 0; i < vehicles.length(); i++)
+{
+if (@vehicles[i] == null or !vehicle_active(vehicles[i]) or vehicles[i].lane != current_lane) continue;
+play_countdown(vehiclepool, "vehicles", vehicles[i].meet_x, vehicles[i].countdown_start, vehicles[i].env);
+}
+}
+// The nearest vehicle in your lane from just ahead of you to reach tiles ahead, or null. weapon_strike() compares it.
+vehicle@ vehicle_in_reach(int reach)
+{
+vehicle@ target = null;
+for (uint i = 0; i < vehicles.length(); i++)
+{
+if (@vehicles[i] == null or !vehicle_active(vehicles[i]) or vehicles[i].lane != current_lane) continue;
+double ahead = vehicle_x(vehicles[i]) - me.x;
+if (ahead <= 0 or ahead > reach) continue;
+if (@target == null or vehicle_x(vehicles[i]) < vehicle_x(target)) @target = vehicles[i];
+}
+return target;
+}
+// A vehicle in your lane that a bullet on tile bx has reached, or null.
+vehicle@ vehicle_at_bullet(double bx)
+{
+for (uint i = 0; i < vehicles.length(); i++)
+{
+if (@vehicles[i] == null or !vehicle_active(vehicles[i]) or vehicles[i].lane != current_lane) continue;
+double vx = vehicle_x(vehicles[i]);
+if (vx > me.x and vx <= bx) return vehicles[i];
+}
+return null;
+}
+/* A weapon hit: hurt at the vehicle, or at 0 hp its death, its loop and its shots gone. Returns where it was, so the
+weapon's own hit plays there. */
+double strike_vehicle(vehicle@ v, int damage)
+{
+double vx = vehicle_x(v);
+v.hp -= damage;
+if (v.hp <= 0)
+{
+v.destroyed = true;
+vehicle_sound(v, "death");
+remove_vehicle_and_shots(v);
+}
+else vehicle_sound(v, "hurt");
+return vx;
+}
+// Its loop and every shot it still has in the air, gone (destroyed, or a fatal shot in practice).
+void remove_vehicle_and_shots(vehicle@ v)
+{
+v.destroyed = true;
+stop_vehicle(v);
+for (uint i = 0; i < vehicle_shots.length(); i++)
+{
+if (@vehicle_shots[i] != null and @vehicle_shots[i].owner == @v) @vehicle_shots[i] = null;
+}
+}
+void stop_vehicle(vehicle@ v)
+{
+if (v.loopslot > -1) vehiclepool.destroy_sound(v.loopslot);
+v.loopslot = -1;
+}
+void remove_vehicle(uint i)
+{
+if (i >= vehicles.length() or @vehicles[i] == null) return;
+stop_vehicle(vehicles[i]);
+@vehicles[i] = null;
+}
+// The only place allowed to shrink the arrays.
+void destroy_all_vehicles()
+{
+for (uint i = 0; i < vehicles.length(); i++)
+{
+if (@vehicles[i] == null) continue;
+stop_vehicle(vehicles[i]);
+}
+vehicles.resize(0);
+vehicle_shots.resize(0);
+}
