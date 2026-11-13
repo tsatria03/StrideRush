@@ -221,7 +221,7 @@ cues.sounds.insert_last(learn_countdown(env_root, types[i]));
 learn_sort_sounds(cues.sounds);
 place.subs.insert_last(cues);
 learn_category obstacles("traps"); // "obstacles" until 2026-11-05
-for (uint i = 0; i < types.length(); i++) obstacles.subs.insert_last(learn_folder_category(types[i].replace("_", " ", true), env_root + "traps/" + types[i] + "/general", ""));
+for (uint i = 0; i < types.length(); i++) obstacles.subs.insert_last(learn_folder_category(learn_type_name(types[i]), env_root + "traps/" + types[i] + "/general", ""));
 learn_sort_categories(obstacles.subs);
 place.subs.insert_last(obstacles);
 learn_sort_categories(place.subs);
@@ -453,12 +453,18 @@ if (base == "shell") return "shell casing";
 if (base == "empty") return "empty click";
 return base.replace("_", " ", true);
 }
+// A trap folder as players read it: "force fields", and "fake walls" for walls (the ladders plan, dev, 2026-11-12).
+string learn_type_name(const string&in type)
+{
+if (type == "walls") return "fake walls";
+return type.replace("_", " ", true);
+}
 /* One obstacle type's countdown, the way play_countdown() plays it: five steps, each with every layer of a layered set
 (warn<group>-<note>) or the plain warn<note>. */
 learn_sound@ learn_countdown(const string&in env_root, const string&in type)
 {
 learn_sound s;
-s.label = learn_upper_first(type.replace("_", " ", true) + " countdown");
+s.label = learn_upper_first(learn_type_name(type) + " countdown");
 s.theme = type;
 s.sound_name = "countdown";
 string folder = env_root + "traps/" + type + "/countdown/";

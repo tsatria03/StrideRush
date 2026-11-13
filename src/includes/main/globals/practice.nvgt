@@ -10,7 +10,7 @@ came after them (the combined obstacles plan, dev, 2026-11-11), when barriers go
 const string[] practice_goal_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "walls_broken", "fake_doors_broken", "real_doors_opened", "real_doors_opened", "barriers_dodged", "winds_dodged", "combinations_cleared", ""};
 const string[] practice_goal_stats2 = {"", "", "", "", "", "", "", "", "", "fake_doors_broken", "", "", "", ""}; // mixed doors: a real door opened or a fake door broken
 const string[] practice_goal_verbs = {"jump over", "jump over", "jump over", "duck under", "switch off", "scare off", "break", "break", "open", "get through", "dodge past", "dodge", "clear", ""};
-const string[] practice_goal_singulars = {"hazard", "spike", "mine", "projectile", "force field", "animal", "wall", "fake door", "real door", "mixed door", "barrier", "wind", "combination", "trampoline"};
+const string[] practice_goal_singulars = {"hazard", "spike", "mine", "projectile", "force field", "animal", "fake wall", "fake door", "real door", "mixed door", "barrier", "wind", "combination", "trampoline"};
 int[] practice_passes = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // trampolines last, after combinations (the trampolines plan, dev, 2026-11-11) // winds between barriers and combinations (the winds plan, dev, 2026-11-11) // one per practice_choices entry, saved as practice_passes_<choice>
 string practice_choice = ""; // the practice run's choice, such as "mixed_doors", set by play_game()
 bool practice_unlocks_checked = false; // the one-time returning player check has run for this save
@@ -37,10 +37,16 @@ bool endless_unlocked()
 {
 return practice_unlocked(1);
 }
-// "spikes" as the menu says it: "Spikes", "Mixed doors".
+// A choice as players read it: "force fields", and "fake walls" for walls (the ladders plan, dev, 2026-11-12).
+string practice_noun(int i)
+{
+if (practice_choices[i] == "walls") return "fake walls";
+return practice_choices[i].replace("_", " ", true);
+}
+// "spikes" as the menu says it: "Spikes", "Mixed doors", "Fake walls".
 string practice_display_name(int i)
 {
-return learn_upper_first(practice_choices[i].replace("_", " ", true));
+return learn_upper_first(practice_noun(i));
 }
 /* What still opens choice i, from the goal of the one before it, with no full stop: "after you jump over 5 hazards", or
 "after you jump over 2 more hazards" once that one is open and started ("1 more hazard" for 1). */
@@ -49,7 +55,7 @@ string practice_lock_reason(int i)
 int g = i - 1;
 bool started = practice_unlocked(g) and practice_passes[g] > 0;
 int left = started ? practice_unlock_count - practice_passes[g] : practice_unlock_count;
-string noun = left == 1 ? practice_goal_singulars[g] : practice_choices[g].replace("_", " ", true);
+string noun = left == 1 ? practice_goal_singulars[g] : practice_noun(g);
 return "after you " + practice_goal_verbs[g] + " " + left + (started ? " more " : " ") + noun;
 }
 /* A choice's line in the practice menu (Section 2, dev, 2026-11-10), as difficulty_line() puts a level's: "Hazards.

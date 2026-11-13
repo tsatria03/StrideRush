@@ -421,7 +421,7 @@ for (uint i = 0; i < obstacle_types.length(); i++)
 {
 if (obstacle_types[i] == "animals") continue; // listed by kind below instead (dev, 2026-11-04)
 if (obstacle_types[i] == "barriers") continue; // the three barrier choices below cover it (dev, 2026-11-05)
-add_spawn_choice(labels, ids, obstacle_types[i].replace("_", " ", true), obstacle_types[i]); // "force_fields" reads as "force fields"
+add_spawn_choice(labels, ids, learn_type_name(obstacle_types[i]), obstacle_types[i]); // "force_fields" reads as "force fields", "walls" as "fake walls"
 }
 // Debug options: animals of one kind only (dev, 2026-11-04); "all" still mixes every kind.
 add_spawn_choice(labels, ids, "animals, birds", "animals_birds");

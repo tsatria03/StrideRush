@@ -43,7 +43,7 @@ else if (last_caught == "mines") how = "A mine went off under you. Jump as its l
 else if (last_caught == "projectiles") how = "A projectile hit you. Crouch before it reaches you, and stay down until it passes.";
 else if (last_caught == "force_fields") how = "A force field hit you. Press either hand during its countdown to switch it off.";
 else if (last_caught == "animals") how = "A " + (last_caught_kind == "" ? "bird" : last_caught_kind) + " hit you. Clap with both hands to scare it away.";
-else if (last_caught == "walls") how = "You crashed into a wall. Break it with your weapons before you reach it.";
+else if (last_caught == "walls") how = "You crashed into a fake wall. Break it with your weapons before you reach it.";
 else if (last_caught == "doors" and last_caught_kind == "real") how = "You crashed into a real door. Use a key from your inventory to unlock it, then open it with a hand.";
 else if (last_caught == "doors") how = "You crashed into a fake door. It won't open, so break it with your weapons.";
 else if (last_caught == "barriers") how = "A barrier hit you. If you're in its lane, switch to another lane before it reaches you.";
@@ -76,7 +76,7 @@ if (kind == "mines") return "A mine has appeared. Jump as its last countdown cue
 if (kind == "projectiles") return "A projectile has appeared. Crouch before it reaches you, and stay down until it passes.";
 if (kind == "force_fields") return "A force field has appeared. Press either hand during its countdown to switch it off.";
 if (kind == "animals") return "A " + animal + " has appeared. Clap with both hands to scare it away.";
-if (kind == "walls") return "A wall has appeared. Break it with your weapons before you reach it.";
+if (kind == "walls") return "A fake wall has appeared. Break it with your weapons before you reach it.";
 if (kind == "fake_doors") return "A fake door has appeared. It won't open, so break it with your weapons.";
 if (kind == "real_doors") return "A real door has appeared. Use a key from your inventory to unlock it, then open it with a hand.";
 if (kind == "keys") return "A key has appeared" + where + ". Move into its lane and use a hand to grab it.";
