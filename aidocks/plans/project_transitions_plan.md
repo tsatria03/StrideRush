@@ -1,11 +1,11 @@
 ---
 name: project_transitions_plan
-description: SETTLED (2026-11-13, for 2.1; 2 sections) - the code follows the dev's new transitions folders (doors, ladders, trampolines, slides, switches), learn sounds gains transitions; Q&A log
+description: COMPLETE (2026-11-13, 2.1 at 9 of 10; 2 sections) - the code follows the dev's new transitions folders (doors, ladders, trampolines, slides, switches), learn sounds gains transitions; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-13), committed by the dev; building. 2.1 at 8 of 10; this is its ninth entry.
+Status: COMPLETE (2026-11-13, 2.1 at 9 of 10). 2.1 at 8 of 10; this is its ninth entry.
 
 Background:
 - The dev's commit 3525a70 (2026-11-13) and a follow-up: each environment has transitions/ beside traps/: doors (general/door to door4, countdown), ladders (general/metal, countdown), trampolines (general/tramp to tramp5), slides (general/plastic: loop, move, start, stop; were misc/game/slideground, slidemove, slidestart, slidestop) and switches (general/switch: press; was misc/game/switchpress). Also a new trap, traps/floor_breakers/general/air (spawn, loop, fall, fill, fix1-3), for 2.2.
@@ -30,3 +30,4 @@ Sections:
 - Section 1 built (2026-11-13): type_category() in env.nvgt behind trap_folder() and the countdown folders; slide.nvgt picks a theme per slide (slide_obj.theme, env; slide_folder_now for move and stop); forcefield.nvgt's press from switch_press_sound(); learn sounds' transitions list and both kinds' countdowns.
 - Test 2 of 3 passed (dev, 2026-11-13), with a bug: "why do other items appear in the real door debug run? ... I should only see keys". Older than this plan (since 2026-11-09, only practice's real doors had it): a key spawn's 50 percent paired second item (item_pair_percent) could be any kind. Fixed: set_spawn_only() gives the debug "real doors" and "real doors, spread" choices item_lane_mode random too, so keys come alone. Debug only, so no changelog entry.
 - Section 1 COMPLETE (dev, 2026-11-13): all 3 tests passed (doors, ladders and trampolines back; slides and the switch press; learn sounds' countdowns, transitions and traps, and real doors debug runs with keys only).
+- Section 2 (docks) done (2026-11-13): the readme's learn sounds paragraph (transitions; no longer "just the default one"), the 2.1 entry (9 of 10), CLAUDE.md, the version history, the index. Plan COMPLETE. The dev also asked for a check of every debug spawn choice for things that shouldn't appear: none found beyond the real doors fix (single-type choices filter obstacle_types and gate every item, slide, trampoline, combination and real door mark on spawn_only "all"; item choices place only their kind; slides and trampolines are the full game by design).
