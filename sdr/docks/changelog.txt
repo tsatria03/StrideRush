@@ -1,4 +1,7 @@
 New in 2.0.
+Added real walls and mixed walls to practice runs, between fake walls and fake doors, so you can practice climbing and telling the two apart.
+Added real walls, tall walls you can't break, each with a ladder in front that you grab and climb hand over hand, with their own statistics and twelve achievements.
+Made it so walls are now called fake walls, and play at a higher or lower pitch like fake doors, so you can tell them from real walls.
 Added a menu after a practice death, so you can retry practice or return to the game menu.
 Added spoken hints to practice runs, in their own practice buffer, saying what has appeared, which lane it's in and what to do, for the first 5 of each kind in every run, with a closing line once you've heard them all.
 Made it so dying in a practice run now tells you what caught you and how to get past it.

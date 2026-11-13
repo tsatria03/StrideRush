@@ -1,11 +1,11 @@
 ---
 name: project_ladders_plan
-description: SETTLED (2026-11-12, for 2.0; 4 sections) - real walls you climb by their ladder, hand over hand, and today's walls as fake walls at odd pitches; practice real and mixed walls; 12 achievements; Q&A log
+description: COMPLETE (2026-11-12, 2.0 FULL at 20 of 20; 4 sections) - real walls you climb by their ladder, hand over hand, and today's walls as fake walls at odd pitches; practice real and mixed walls; 12 achievements; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-12), waiting for the dev to commit it before Section 1. Started 2026-11-12 with 2.0 at 17 of 20 and no other plan open.
+Status: COMPLETE (2026-11-12, 2.0 FULL at 20 of 20). Started 2026-11-12 with 2.0 at 17 of 20 and no other plan open.
 
 Background:
 - Sounds (the dev, 2026-11-12, commits a651b4e to 9c41d3c), all in misc/game: ladderstep1 to ladderstep5, ladderland, ladderfall, ladderground, laddergrab1 and laddergrab2, ladderplace (first named ladderdrop), ladderbreak. They first came as environments/<env>/platforms/ladder, where surface.nvgt would have picked them as a ground; the dev moved them to misc/game ("I fixed the ladder."). The ladderground loop was the steel shield's old loop2.
@@ -83,3 +83,4 @@ Sections:
 - Damage split (dev, 2026-11-12, after asking which is worse; Claude: the collapse, and offered 50 and 40): "What about 60 40? 60=collapse, and 40=fall". Built: ladder_break_damage 60, ladder_fall_damage 40, each then the wall's 50 on reaching it (110 or 90 in all).
 - Section 3 built (2026-11-12): stat_keys real_walls_climbed, ladders_broken, ladder_falls (after walls_broken) and caught_real_walls (after caught_walls); ladder.nvgt counts a clean climb, a collapse or a fall, and sets last_caught to ladder_collapse or ladder_fall (so the death outcome and death line tell them apart without a kind); the statistics lines (real walls climbed, ladders broken, ladder falls, real walls crashed into) and death outcomes; achievements_menu's units; the twelve achievements (lifetime climbs before smash_and_dash, run climbs before ammo_packs_used_10, broken and falls at the end; 130 in all); practice_choices with real_walls and mixed_walls after walls (goals real_walls_climbed, and walls_broken or real_walls_climbed; verbs climb, get through; singulars real wall, mixed wall), practice_walls_check() (a save with fake walls' passes done gets both), practice_env_ok() needing ladders and walls, mixed walls keeping weapons, practice_spawn_id() to ladders and mixed_walls; the real wall hint (spawn_ladder() calls practice_hint("ladders")), the closing counts, and the three death lines.
 - Section 3 COMPLETE (dev, 2026-11-12): all 3 tests passed (the practice order and lock lines; real and mixed walls practice, hints, restarts and death lines; the four statistics, death outcomes and twelve achievements).
+- Section 4 (docks) done (2026-11-12): the readme (fake walls everywhere; seven exceptions; two real wall paragraphs after fake walls; countdowns, damage, weapons, the schedule, combinations; the practice list, a walls practice line, weapons, the unlock chain); the three 2.0 entries the dev approved (2.0 FULL at 20 of 20); the todo list's finished item; CLAUDE.md, the version history, the index. Plan COMPLETE.
