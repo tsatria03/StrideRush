@@ -6,6 +6,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Runner overview](general/project_runner_overview.md) — audio runner in legacy NVGT, first build COMPLETE and v1.0 playable (game 69dedf8, docks 0f0ccff), git repo tsatria03/StrideRush on main, assets in sdr/, CLAUDE.md written 2026-11-01 as a dispatcher
 - [Game design](general/project_game_design.md) — a lane runner (the dev's term) with three lanes, heard from behind, since 1.4 (2d side-scroller through 1.3), jump, duck or turn on cue or die, weapons/hands later, speed-up step timer with oneshot footsteps, ToyMania sound layout
 - [Version history](general/project_version_history.md) — every release newest first (2.0 V2.00 at 888ae95 down to 1.0), its entries in engine terms and plans; moved out of CLAUDE.md 2026-11-10; add each closed version here, not to CLAUDE.md
+- [Difficulty comparison](general/project_difficulty_comparison.md) — the five levels side by side (speed, obstacles, ladders, damage, survival items, expected outcomes) with the tuning constants behind each figure, plus per-obstacle difficulty ratings; worked out 2026-11-12 at 2.1
 - [Suggestions](general/project_suggestions.md) — Claude's ideas waiting on the dev (the 2.0 run mechanics, lane-changing barriers in detail) and the declined ones never to re-suggest; not the player-facing todo list
 - [Engine pinned to legacy nvgt](general/project_engine_pinned_nvgt.md) — target C:\nvgt (BASS), source in misc/Legacy-NVGT; C:\nvgt2 only for testing others' games
 - [Tech decisions](general/project_tech_decisions.md) — offline single player, no networking (updater HTTP excepted); form_menu not custom_menu; no map files for now; SimpleFighter sound glob functions; SimpleFighter updater later; no JAWS keyhook; deps copied from SimpleFighter
@@ -69,6 +70,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Don't flag indentation](general/feedback_dont_flag_indentation.md) — AngelScript ignores whitespace; don't reformat
 - [No CRLF normalization](general/feedback_no_crlf_normalization.md) — new files CRLF, preserve endings on edit, never a tree-wide normalizer
 - [Don't name others' games](general/feedback_dont_name_others_games.md) — in committed files, name only the dev's own games
+- [No key names in hints](general/feedback_no_key_names_in_hints.md) — practice lines and achievement hints name actions, never keys, since keys can be rebound (2026-11-12)
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
@@ -112,6 +114,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Trampolines plan](plans/project_trampolines_plan.md) — COMPLETE (2026-11-11, 2.0 at 11 of 20; globals/trampoline.nvgt): good or worn (pitch), lane or belt-wide trampolines; a 2.5 s flight over everything or a worn normal jump; jumping never avoids one; practice last; 9 achievements; Q&A log
 - [Practice guidance plan](plans/project_practice_guidance_plan.md) — COMPLETE (2026-11-12, 2.0 at 17 of 20; globals/practice_hints.nvgt): no weapons where none are needed, a death dialog saying how to get past, spoken hints as things appear (5 times), a try again menu; Q&A log
 - [Ladders plan](plans/project_ladders_plan.md) — COMPLETE (2026-11-12, 2.0 FULL at 20 of 20; globals/ladder.nvgt): real walls climbed hand over hand by their ladder, fake walls at odd pitches, practice real and mixed walls, 12 achievements; Q&A log
+- [Achievement hints plan](plans/project_achievement_hints_plan.md) — COMPLETE (2026-11-12, 2.1 at 2 of 10): four stale achievement hints and seven naming rebindable keys, reworded; Q&A log
 - [Door achievements plan](plans/project_door_achievements_plan.md) — COMPLETE (2026-11-12, 2.1 at 1 of 10): Every Door Open asks for 9 doors but no level has more than 6; its threshold and two hints; Q&A log
 - [Environments plan](plans/project_environments_plan.md) — COMPLETE (2026-11-11, 2.0 at 5 of 20; globals/env.nvgt): sounds/environments/<env>/{audio,platforms,traps}, chosen before a run or switched during one (zones folded in); 10 open questions; Q&A log
 - [Difficulty scaling plan](plans/project_difficulty_scaling_plan.md) — COMPLETE (2026-11-09, 1.8 at 4 of 10; 4 sections; level_percent() shared by level_damage() and wall_spawn_hp(); run_top_step_time(); level_damage() in difficulty.nvgt, called first in take_damage()): damage 60/70/80/90/100 percent from easy to chaos (practice and debug 100), top speed caps 200/150/100/75/50 ms (Rush Hour may pass the cap), two achievement hints; Q&A log

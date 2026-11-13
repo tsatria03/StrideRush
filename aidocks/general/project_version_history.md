@@ -9,7 +9,8 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.1 (open, 1 of 10)
+## 2.1 (open, 2 of 10)
+- Achievement hints ([[project_achievement_hints_plan]]): from the audit, four stale hints (Endurance, Smash and Dash, Potion Lover, Punching Bag) and seven naming keys (Doorman, Key Holder, Locked and Loaded, Shielded, Reloader, Heavy Hitter, Trigger Happy) reworded; achievement hints now name no keys, like practice lines.
 - Door achievements ([[project_door_achievements_plan]]): Every Door Open's threshold 9 to 6 (no level has more than 6 real doors since the 1.8 top speed caps: easy, medium and hard 6, insane and chaos 5), its hint and Master of Doors' hint reworded.
 
 ## 2.0: tagged V2.00 at 888ae95 (20 of 20; 2026-11-12)
