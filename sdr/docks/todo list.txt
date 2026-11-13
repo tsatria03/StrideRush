@@ -1,9 +1,10 @@
 ####These are the things that need to be finished for future versions of the game.
 
-****Unfinished. Add a practice mix that brings every obstacle you've unlocked at random, as a warm-up before an endless run.
+Nothing is waiting here right now. New bugs, planned changes and anything still to be decided will be listed here as they come up.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add a practice mix that brings every obstacle you've unlocked at random, as a warm-up before an endless run.
 **Finished. Add real walls with ladders you climb hand over hand, and make today's walls fake walls you can tell apart by their pitch.
 **Finished. Add a menu after a practice death, asking whether to retry practice or return to the game menu.
 **Finished. Add spoken hints in practice runs, in their own practice buffer, saying what has appeared and what to do, for the first 5 of each kind in every run.

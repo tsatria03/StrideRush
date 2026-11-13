@@ -1,11 +1,11 @@
 ---
 name: project_practice_mix_plan
-description: SETTLED (2026-11-12, for 2.1; 2 sections) - a practice choice bringing every obstacle you've unlocked at random, at your chosen speed, with practice's deaths, hints and retry; Q&A log
+description: COMPLETE (2026-11-12, 2.1 at 6 of 10; 2 sections) - a practice choice bringing every obstacle you've unlocked at random, at your chosen speed, with practice's deaths, hints and retry; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-12), waiting for the dev to commit it before Section 1. 2.1 at 5 of 10.
+Status: COMPLETE (2026-11-12, 2.1 at 6 of 10).
 
 Background:
 - Suggestion 20 in [[project_suggestions]] (2026-11-12): "A practice mix: a practice choice, once everything before it is open, bringing every obstacle you've unlocked at random, at the chosen speed, with the same deaths, hints and retry as other practice; a warm-up before an endless run." The dev: "I like this one the best. How would this work?" LIKED, copied to the todo list.
@@ -33,3 +33,4 @@ Sections:
 - Section 1 built (2026-11-12): practice.nvgt: mixed_obstacles last in practice_choices (17), trampolines' goal trampoline_flights with the verb take and the singular trampoline flight (practice_lock_reason() says "trampoline flights" for more than one), mixed obstacles keeping weapons, practice_env_ok() true for it; practice_spawn_id() to "practice_mixed"; spawner.nvgt: practice_mix_kinds() (the plain ten and trampolines if the environment has themes, ladders if ladders_ready(), real doors if doors and keys exist, combinations, choose_combo() finding a pair or the spawn skipped), an equal pick, a real door as its key then the door (practice_mix_door_next), keys one at a time in a random lane with no paired item; practice_hints.nvgt: one hint per kind, practice_mix_meet() marking kinds (trampolines as one, keys not a kind, a placed pair as combinations), the closing once all 14 are met and the last has passed you; restarts clear it too.
 - Section 1 Tests 1 and 2 of 3 passed (dev, 2026-11-12): the menu, the trampolines goal and its unlock; the mix itself.
 - Section 1 COMPLETE (dev, 2026-11-12): Test 3 of 3 passed too (one hint per kind, the closing line after all 14, restarts on a hit or missed key).
+- Section 2 (docks) done (2026-11-12): the readme (mixed obstacles in the practice list with a line on it, weapons, one hint per kind, the chain's last link); the 2.1 entry (6 of 10); the todo item to finished and the placeholder back; CLAUDE.md, the version history, the index. Plan COMPLETE.

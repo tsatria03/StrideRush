@@ -9,7 +9,8 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.1 (open, 5 of 10)
+## 2.1 (open, 6 of 10)
+- Mixed obstacles ([[project_practice_mix_plan]]): the last practice choice (17), opened by trampolines' new goal, 5 trampoline_flights; spawn_only practice_mixed, an equal pick among practice_mix_kinds() (14 at most: ten plain kinds, trampolines, ladders, real doors as key then door, combinations); one hint per kind, the closing line once all 14 are met (practice_mix_meet()); weapons drawn. Also after testing: the ladder's collapse (renamed from break) plays in 2d, fall and land stationary; climb renamed step.
 - Menu counts ([[project_menu_counts_plan]]): "Choose what to practice. N of 16 obstacles unlocked." and "Choose a difficulty level. N of 5 unlocked.", counted from practice_unlocked() and difficulty_unlocked().
 - Environment key and saved mutes ([[project_hints_setting_env_key_plan]], two entries): info_environment=V says "<env> environment." in the status buffer, as L; every buffer's mute (but all and alerts) saved in settings.srf as buffer_muted_<name> by writepreffs() and applied by load_buffer_mutes() after the buffers are made, reset_settings() unmuting all; a practice hints setting was dropped for it (muting the practice buffer does the same).
 - Achievement hints ([[project_achievement_hints_plan]]): from the audit, four stale hints (Endurance, Smash and Dash, Potion Lover, Punching Bag) and seven naming keys (Doorman, Key Holder, Locked and Loaded, Shielded, Reloader, Heavy Hitter, Trigger Happy) reworded; achievement hints now name no keys, like practice lines.

@@ -1,4 +1,5 @@
 New in 2.1.
+Added mixed obstacles to practice runs, opened after you take 5 trampoline flights, bringing every kind of obstacle at random as a warm-up before an endless run.
 Made it so the difficulty and practice menus now tell you how many choices you've unlocked.
 Added saved buffer mutes, so any speech buffer you mute, such as practice, powerups or items, stays muted the next time you play.
 Added the V key, which tells you which environment you're in.
