@@ -5,7 +5,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 ## Project
 - [Runner overview](general/project_runner_overview.md) — audio runner in legacy NVGT, first build COMPLETE and v1.0 playable (game 69dedf8, docks 0f0ccff), git repo tsatria03/StrideRush on main, assets in sdr/, CLAUDE.md written 2026-11-01 as a dispatcher
 - [Game design](general/project_game_design.md) — a lane runner (the dev's term) with three lanes, heard from behind, since 1.4 (2d side-scroller through 1.3), jump, duck or turn on cue or die, weapons/hands later, speed-up step timer with oneshot footsteps, ToyMania sound layout
-- [Version history](general/project_version_history.md) — every release newest first (1.9 V1.90 at 5ed3664 down to 1.0), its entries in engine terms and plans; moved out of CLAUDE.md 2026-11-10; add each closed version here, not to CLAUDE.md
+- [Version history](general/project_version_history.md) — every release newest first (2.0 V2.00 at 888ae95 down to 1.0), its entries in engine terms and plans; moved out of CLAUDE.md 2026-11-10; add each closed version here, not to CLAUDE.md
 - [Suggestions](general/project_suggestions.md) — Claude's ideas waiting on the dev (the 2.0 run mechanics, lane-changing barriers in detail) and the declined ones never to re-suggest; not the player-facing todo list
 - [Engine pinned to legacy nvgt](general/project_engine_pinned_nvgt.md) — target C:\nvgt (BASS), source in misc/Legacy-NVGT; C:\nvgt2 only for testing others' games
 - [Tech decisions](general/project_tech_decisions.md) — offline single player, no networking (updater HTTP excepted); form_menu not custom_menu; no map files for now; SimpleFighter sound glob functions; SimpleFighter updater later; no JAWS keyhook; deps copied from SimpleFighter
