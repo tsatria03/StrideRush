@@ -1,11 +1,11 @@
 ---
 name: project_vehicles_plan
-description: SETTLED (2026-11-13, for 2.2; 3 sections; building) - vehicles, from the dev's new environments/<env>/vehicles sounds, dodged and broken in your lane; ToyMania's car.nvgt as reference; Q&A log
+description: COMPLETE (2026-11-13, 2.2 at 4 of 10; 3 sections) - vehicles, from the dev's new environments/<env>/vehicles sounds, dodged and broken in your lane; ToyMania's car.nvgt as reference; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-13), for 2.2, not to be built yet.
+Status: COMPLETE (2026-11-13), 2.2 at 4 of 10.
 
 Background:
 - Sounds (the dev, commit 909b98b, 2026-11-13): a new top-level category in each environment, environments/<env>/vehicles/general/, themes small_car, small_car2, small_car3, each loop, fire, hurt and death (.ogg), in default and uncharted. No countdown folder.
@@ -69,3 +69,4 @@ Sections (2.2):
 - The dev: "Now the engine sounds a bit too close when I start." (2026-11-13). Built: the engine its own vehicle_engine_fade 0.5, half the belt's falloff; shots stay at vehicle_fade 0.25.
 - Engine at 0.5 confirmed (dev, 2026-11-13: "It works now. passed"). Section 2 tests next.
 - Section 2 COMPLETE (dev, 2026-11-13): all 3 tests passed (the practice order and lock lines; a vehicles practice run, its hint, death lines and unlock; an endless run's statistics, death outcomes and achievements).
+- Section 3 (docks) done (2026-11-13): the readme (nine exceptions; two paragraphs after winds; lane things; countdowns; damage; weapons; joining at 5; the practice list, weapons and unlock chain; learn sounds' vehicles); two 2.2 entries, "Added vehicles, cars that chase you across the lanes and fire bursts at you while they're in yours, which you can shoot down, dodge or get rammed by." and "Added vehicles to practice runs, between winds and combinations, opened after you dodge 5 winds." (4 of 10); CLAUDE.md, the version history, the sound layout, the index. Plan COMPLETE.

@@ -1,4 +1,6 @@
 New in 2.2.
+Added vehicles to practice runs, between winds and combinations, opened after you dodge 5 winds.
+Added vehicles, cars that chase you across the lanes and fire bursts at you while they're in yours, which you can shoot down, dodge or get rammed by.
 Added floor breakers to practice runs, between mixed doors and barriers, opened after you get through 5 mixed doors.
 Added floor breakers, holes in the belt you open a corridor to and rebuild piece by piece with alternating hands, or fall through and end your run.
 New in 2.1.
