@@ -1,11 +1,11 @@
 ---
 name: project_rising_practice_plan
-description: SETTLED (2026-11-12, for 2.1; 2 sections) - a "rising" practice speed that starts at 2 steps a second and climbs to 10, beside the fixed speeds; Q&A log
+description: COMPLETE (2026-11-12, 2.1 at 7 of 10; 2 sections) - a "rising" practice speed that starts at 2 steps a second and climbs to 10, beside the fixed speeds; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-12), waiting for the dev to commit it before Section 1. 2.1 at 6 of 10.
+Status: COMPLETE (2026-11-12, 2.1 at 7 of 10).
 
 Background:
 - The dev (2026-11-12): endless runs offer no speed choice; in practice, drop the speed menu and let the speed rise naturally up to 10 steps a second, or lock it at 5 (easy's top). Claude weighed both (rising: a real-run feel, but about 7 minutes from 2 to 10 at the endless rate, and no staying slow; locked at 5: simple, but too fast to learn on and too slow for hard or chaos; the menu's strength is drilling a weak spot) and suggested keeping the menu with a "rising" choice added.
@@ -28,3 +28,4 @@ Sections:
 2. Docks: the readme's practice section, the entry, CLAUDE.md, the version history, this plan COMPLETE.
 - Section 1 built (2026-11-12): choose_practice() adds "rising" after the speeds and sets practice_rising (practice.nvgt), starting at start_step_time; speedup_check() runs in a rising practice run every practice_rising_period (5000) down to practice_rising_top (100), tuning.nvgt; practice_death() never touches step_time, so retry keeps the speed; restart run reruns start_run() from 500 with practice_rising still set.
 - Section 1 COMPLETE (dev, 2026-11-12): both tests passed (rising from 2 to 10 by about 3 min 20 s and holding; retry keeps the speed, restart run starts from 2, fixed speeds stay fixed).
+- Section 2 (docks) done (2026-11-12): the readme ("or rising" in the speed list and a line on it), the 2.1 entry (7 of 10), CLAUDE.md, the version history, the index. Plan COMPLETE.
