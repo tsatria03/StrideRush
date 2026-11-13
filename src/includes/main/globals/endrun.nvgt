@@ -116,7 +116,7 @@ else
 dlgplay(get_pack_sound("misc/player/*death*"));
 wait_for_pool(p); // the blow's hit, if it's still going
 }
-dlgmessage_return(practice_death_text()); // practicehints.nvgt
+dlgmessage_return(practice_death_text()); // practice_hints.nvgt
 while (key_down(KEY_RETURN) or key_down(KEY_SPACE) or key_down(KEY_A) or key_down(KEY_ESCAPE)) wait(5);
 setupmenu();
 m.intro_text = "What would you like to do now?";

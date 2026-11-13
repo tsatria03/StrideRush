@@ -35,7 +35,7 @@ if (spawn_only == "animals_birds") kind = "birds";
 else if (spawn_only == "animals_dogs") kind = "dogs";
 string[] kinds_animals = get_pack_sound_folders(animal_folder(current_env) + kind + "/*");
 if (kinds_animals.length() == 0) return; // no animals of that kind
-practice_hint("animals", -1, bx, animal_singular(kind)); // "birds" says "A bird has appeared." (practicehints.nvgt)
+practice_hint("animals", -1, bx, animal_singular(kind)); // "birds" says "A bird has appeared." (practice_hints.nvgt)
 animal bd;
 bd.x = bx;
 bd.theme = kind + "/" + kinds_animals[random(0, kinds_animals.length() - 1)];
@@ -92,7 +92,7 @@ bd.spent = true;
 string hit_clip = get_pack_sound(animal_folder(bd.env) + bd.theme + "/*hit*");
 stop_animal(bd); // it ran into you: its call ends
 stat_caught("animals");
-last_caught_kind = animal_singular(bd.theme.substr(0, bd.theme.find_first("/"))); // "birds/bird3" is a bird, for a practice death (practicehints.nvgt)
+last_caught_kind = animal_singular(bd.theme.substr(0, bd.theme.find_first("/"))); // "birds/bird3" is a bird, for a practice death (practice_hints.nvgt)
 pair_part_hit(bd.pair); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(animal_damage); // a worn shield, else your health
 if (blow == blow_fatal)

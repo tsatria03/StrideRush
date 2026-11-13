@@ -35,7 +35,7 @@ w.theme = theme;
 w.env = current_env;
 w.pair = placing_pair;
 w.lane = random(lane_left, lane_right);
-practice_hint("winds", w.lane, mx); // practicehints.nvgt, a practice run only
+practice_hint("winds", w.lane, mx); // practice_hints.nvgt, a practice run only
 w.next_beat = runtimer.elapsed + wind_beat_time;
 w.countdown_start = mx - countdown;
 w.loopslot = windpool.play_2d(get_pack_sound(trap_folder(current_env, "winds") + theme + "/*loop*"), 0, me.x, 0, wind_x(w), true);

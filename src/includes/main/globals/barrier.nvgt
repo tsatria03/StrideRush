@@ -65,7 +65,7 @@ void spawn_barrier(double bx, string theme, int countdown, int lane)
 barrier b;
 b.x = bx;
 b.lane = lane;
-practice_hint("barriers", lane, bx); // practicehints.nvgt, a practice run only
+practice_hint("barriers", lane, bx); // practice_hints.nvgt, a practice run only
 b.theme = theme;
 b.env = current_env;
 b.pair = placing_pair;

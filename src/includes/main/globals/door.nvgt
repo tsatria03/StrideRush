@@ -238,7 +238,7 @@ d.crashed = true;
 stop_door(d);
 // A fatal crash plays the door's hit through p, at its pitch, and no player hit; end_run_hit() plays the death.
 stat_caught("doors");
-last_caught_kind = d.real ? "real" : "fake"; // a practice death names it (practicehints.nvgt)
+last_caught_kind = d.real ? "real" : "fake"; // a practice death names it (practice_hints.nvgt)
 pair_part_hit(d.pair); // the statistics: what caught you, and what ended the run if it's fatal
 int blow = take_damage(door_damage); // a worn shield, else your health
 if (blow == blow_fatal)
