@@ -1,3 +1,6 @@
+New in 2.2.
+Added floor breakers to practice runs, between mixed doors and barriers, opened after you get through 5 mixed doors.
+Added floor breakers, holes in the belt you open a corridor to and rebuild piece by piece with alternating hands, or fall through and end your run.
 New in 2.1.
 Added view session statuses to the pause menu, listing your health, shield, lane, environment, speed, distance, time and heart rate in one place.
 Made it so doors, ladders, trampolines, slides and force field switches now take their sounds from each environment, listed together under transitions in the learn sounds menu.

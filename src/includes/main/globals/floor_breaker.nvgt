@@ -12,7 +12,7 @@ stops once the corridor is open.
   at the edge.
 - Falling: reaching the hole without opening it, or a repair mistake (the same hand twice, too slow, too quick): fall, then
   your death, ending the run outright like a hazard; no shield or life saves you. In practice, a practice death set down
-  just past the hole.
+  just past the hole. Section 2: floor_breakers_repaired and caught_floor_breakers, and the practice hint.
 - On a slide or a good trampoline's flight it passes harmlessly (carried()). Not in combinations.
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_floor_breakers() shrinks
 the array. */
@@ -57,6 +57,7 @@ f.env = current_env;
 int level = run_difficulty < 0 ? 0 : run_difficulty; // practice and debug runs get easy's holes
 f.pieces = random(floor_pieces_min[level], floor_pieces_max[level]);
 f.countdown_start = x - countdown;
+practice_hint("floor_breakers", -1, x); // practice_hints.nvgt, a practice run only (Section 2)
 floorpool.play_2d(get_pack_sound(floor_folder(f) + "*spawn*"), 0, me.x, 0, x, false);
 f.loopslot = floorpool.play_2d(get_pack_sound(floor_folder(f) + "*loop*"), 0, me.x, 0, x, true);
 for (uint i = 0; i < floor_breakers.length(); i++)
@@ -102,7 +103,7 @@ continue;
 if (!f.spent and f.opened and me.x == f.x - 1 and !repairing) start_repair(f);
 else if (!f.spent and me.x == f.x)
 {
-fall_through(f); // never opened
+fall_through(f, false); // never opened
 return;
 }
 if (me.x > f.x + spawn_distance()) remove_floor_breaker(i);
@@ -125,7 +126,7 @@ if (left == right) return;
 int hand = left ? -1 : 1;
 if (hand == repair_last_hand or (repair_laid > 0 and runtimer.elapsed - repair_last_at < ladder_rung_min_time()))
 {
-fall_through(repair_floor);
+fall_through(repair_floor, true);
 return;
 }
 repair_last_hand = hand;
@@ -137,6 +138,7 @@ if (repair_laid >= repair_floor.pieces)
 // Whole again: repair, and you're on the mended floor, running on.
 floor_breaker@ f = repair_floor;
 reset_repair();
+stat_add("floor_breakers_repaired"); // Section 2: the statistics, the achievements and the practice goal
 f.spent = true;
 stop_floor_loop(f);
 floorpool.play_2d(get_pack_sound(floor_folder(f) + "*repair*"), 0, me.x, 0, f.x, false);
@@ -150,17 +152,20 @@ repair_deadline = runtimer.elapsed + ladder_rung_time();
 // Every frame from run_loop(): too long at the edge, or on a piece, and the patch gives way.
 void floor_breaker_update()
 {
-if (repairing and runtimer.elapsed >= repair_deadline) fall_through(repair_floor);
+if (repairing and runtimer.elapsed >= repair_deadline) fall_through(repair_floor, true);
 }
-/* Through the hole: its fall, then your death, ending the run outright like a hazard (no shield or life saves you). In a
-practice run, a practice death set down just past the hole. */
-void fall_through(floor_breaker@ f)
+/* Through the hole: its fall and your death together, ending the run outright like a hazard (no shield or life saves you).
+In a practice run, a practice death set down just past the hole. mistake is a repair that gave way, rather than a hole
+never opened: the practice death says which (last_caught_kind "repair"). In an endless run it counts caught_floor_breakers;
+a practice fall counts nothing, as a hazard's. */
+void fall_through(floor_breaker@ f, bool mistake)
 {
 reset_repair();
 f.spent = true;
 stop_floor_loop(f);
-last_caught = "floor_breakers"; // what ended the run (stats_menu.nvgt, practice_hints.nvgt)
-last_caught_kind = "";
+if (practice_run) last_caught = "floor_breakers"; // what caught you (practice_hints.nvgt)
+else stat_caught("floor_breakers"); // the statistics: times fell into floor breakers, and the death outcome
+last_caught_kind = mistake ? "repair" : "";
 string fall_clip = get_pack_sound(floor_folder(f) + "*fall*");
 if (practice_run)
 {

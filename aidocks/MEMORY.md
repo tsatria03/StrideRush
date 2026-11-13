@@ -115,7 +115,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Practice guidance plan](plans/project_practice_guidance_plan.md) — COMPLETE (2026-11-12, 2.0 at 17 of 20; globals/practice_hints.nvgt): no weapons where none are needed, a death dialog saying how to get past, spoken hints as things appear (5 times), a try again menu; Q&A log
 - [Ladders plan](plans/project_ladders_plan.md) — COMPLETE (2026-11-12, 2.0 FULL at 20 of 20; globals/ladder.nvgt): real walls climbed hand over hand by their ladder, fake walls at odd pitches, practice real and mixed walls, 12 achievements; Q&A log
 - [Pause status plan](plans/project_pause_status_plan.md) — BUILT (2026-11-13, 2.1 at 10 of 10): view session statuses in the pause menu; Q&A log
-- [Floor breakers plan](plans/project_floor_breakers_plan.md) — SETTLED (2026-11-13, for 2.2; 3 sections; not built yet): a hole in the belt you rebuild with your hands, or fall and die; Q&A log
+- [Floor breakers plan](plans/project_floor_breakers_plan.md) — COMPLETE (2026-11-13, 2.2 at 2 of 10): a hole in the belt you rebuild with your hands, or fall and die; Q&A log
 - [Vehicles plan](plans/project_vehicles_plan.md) — SETTLED (2026-11-13, for 2.2; 3 sections; not built yet): vehicles in a lane, dodged and broken; ToyMania's car.nvgt as reference; Q&A log
 - [Transitions plan](plans/project_transitions_plan.md) — COMPLETE (2026-11-13, 2.1 at 9 of 10): the code follows the new transitions folders; learn sounds gains transitions; Q&A log
 - [Timed run plan](plans/project_timed_run_plan.md) — SETTLED (2026-11-13, moved to 2.2; 3 sections): timed runs, a countdown fed by clean passes and a finish line; Q&A log

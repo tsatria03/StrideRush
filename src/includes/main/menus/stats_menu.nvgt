@@ -147,10 +147,11 @@ add_count_line(lines, stats, lifetime, "ladders broken", "ladders_broken");
 add_count_line(lines, stats, lifetime, "ladder falls", "ladder_falls");
 add_count_line(lines, stats, lifetime, "fake doors broken", "fake_doors_broken");
 add_count_line(lines, stats, lifetime, "real doors opened", "real_doors_opened");
+add_count_line(lines, stats, lifetime, "floor breakers repaired", "floor_breakers_repaired"); // the floor breakers plan, 2026-11-13
 add_count_line(lines, stats, lifetime, "damage taken", "damage_taken");
 add_count_line(lines, stats, lifetime, "lives lost", "lives_lost");
-string[] kinds = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "barriers", "walls", "real_walls", "doors"};
-string[] label = {"times fell into hazards", "times hit by spikes", "times hit by mines", "times hit by projectiles", "times hit by force fields", "times run into by animals", "times hit by barriers", "fake walls crashed into", "real walls crashed into", "doors crashed into"};
+string[] kinds = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "barriers", "walls", "real_walls", "doors", "floor_breakers"};
+string[] label = {"times fell into hazards", "times hit by spikes", "times hit by mines", "times hit by projectiles", "times hit by force fields", "times run into by animals", "times hit by barriers", "fake walls crashed into", "real walls crashed into", "doors crashed into", "times fell into floor breakers"};
 for (uint i = 0; i < kinds.length(); i++)
 {
 add_count_line(lines, stats, lifetime, label[i], "caught_" + kinds[i]);
@@ -190,6 +191,7 @@ if (cause == "real_walls") return "crashing into a real wall";
 if (cause == "ladder_collapse") return "a ladder collapsing on you";
 if (cause == "ladder_fall") return "falling off a ladder";
 if (cause == "doors") return "crashing into a door";
+if (cause == "floor_breakers") return "falling into a floor breaker";
 return "none";
 }
 // A whole number with a comma every three digits: 4000 reads "4,000".

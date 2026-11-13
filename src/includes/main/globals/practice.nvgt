@@ -3,15 +3,15 @@ practice menu's order. Hazards are always open; each of the others opens after p
 one before it, counted only in a practice run of that obstacle, through the same stat_add() hooks the statistics use, so
 a clean pass means the same thing here as in an endless run's statistics. Endless run opens together with spikes. The
 passes add up across runs and practice deaths, are saved in saves/game.srf, and clearing game progresses keeps them. */
-const string[] practice_choices = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "real_walls", "mixed_walls", "fake_doors", "real_doors", "mixed_doors", "barriers", "winds", "combinations", "trampolines", "mixed_obstacles"};
+const string[] practice_choices = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "real_walls", "mixed_walls", "fake_doors", "real_doors", "mixed_doors", "floor_breakers", "barriers", "winds", "combinations", "trampolines", "mixed_obstacles"};
 /* Each choice's goal: the stat key (or either of two) a clean pass adds to, and how the lock line says it. The last choice
 opens nothing, so it has no goal (dev, 2026-11-10: "No goal. It should just say available"): barriers until combinations
 came after them (the combined obstacles plan, dev, 2026-11-11), when barriers got "dodge past", the dev's earlier wording. */
-const string[] practice_goal_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "walls_broken", "real_walls_climbed", "walls_broken", "fake_doors_broken", "real_doors_opened", "real_doors_opened", "barriers_dodged", "winds_dodged", "combinations_cleared", "trampoline_flights", ""}; // trampolines open mixed obstacles (the practice mix plan, dev, 2026-11-12)
-const string[] practice_goal_stats2 = {"", "", "", "", "", "", "", "", "real_walls_climbed", "", "", "fake_doors_broken", "", "", "", "", ""}; // mixed walls: a fake wall broken or a real one climbed // mixed doors: a real door opened or a fake door broken
-const string[] practice_goal_verbs = {"jump over", "jump over", "jump over", "duck under", "switch off", "scare off", "break", "climb", "get through", "break", "open", "get through", "dodge past", "dodge", "clear", "take", ""};
-const string[] practice_goal_singulars = {"hazard", "spike", "mine", "projectile", "force field", "animal", "fake wall", "real wall", "mixed wall", "fake door", "real door", "mixed door", "barrier", "wind", "combination", "trampoline flight", "mixed obstacle"};
-int[] practice_passes = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // mixed obstacles last (the practice mix plan, dev, 2026-11-12) // real and mixed walls after fake walls (the ladders plan, dev, 2026-11-12) // trampolines last, after combinations (the trampolines plan, dev, 2026-11-11) // winds between barriers and combinations (the winds plan, dev, 2026-11-11) // one per practice_choices entry, saved as practice_passes_<choice>
+const string[] practice_goal_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "walls_broken", "real_walls_climbed", "walls_broken", "fake_doors_broken", "real_doors_opened", "real_doors_opened", "floor_breakers_repaired", "barriers_dodged", "winds_dodged", "combinations_cleared", "trampoline_flights", ""}; // trampolines open mixed obstacles (the practice mix plan, dev, 2026-11-12)
+const string[] practice_goal_stats2 = {"", "", "", "", "", "", "", "", "real_walls_climbed", "", "", "fake_doors_broken", "", "", "", "", "", ""}; // mixed walls: a fake wall broken or a real one climbed // mixed doors: a real door opened or a fake door broken
+const string[] practice_goal_verbs = {"jump over", "jump over", "jump over", "duck under", "switch off", "scare off", "break", "climb", "get through", "break", "open", "get through", "repair", "dodge past", "dodge", "clear", "take", ""};
+const string[] practice_goal_singulars = {"hazard", "spike", "mine", "projectile", "force field", "animal", "fake wall", "real wall", "mixed wall", "fake door", "real door", "mixed door", "floor breaker", "barrier", "wind", "combination", "trampoline flight", "mixed obstacle"};
+int[] practice_passes = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // floor breakers after mixed doors (the floor breakers plan, dev, 2026-11-13) // mixed obstacles last (the practice mix plan, dev, 2026-11-12) // real and mixed walls after fake walls (the ladders plan, dev, 2026-11-12) // trampolines last, after combinations (the trampolines plan, dev, 2026-11-11) // winds between barriers and combinations (the winds plan, dev, 2026-11-11) // one per practice_choices entry, saved as practice_passes_<choice>
 string practice_choice = ""; // the practice run's choice, such as "mixed_doors", set by play_game()
 bool practice_rising = false; // the speed menu's "rising": the belt speeds up from 2 to 10 steps a second (speedup_check())
 bool practice_unlocks_checked = false; // the one-time returning player check has run for this save
@@ -19,6 +19,7 @@ bool practice_combos_checked = false; // the one-time combinations check (practi
 bool practice_winds_checked = false; // the one-time winds check (practice_winds_check()) has run for this save
 bool practice_trampolines_checked = false; // the one-time trampolines check (practice_trampolines_check()) has run for this save
 bool practice_walls_checked = false; // the one-time real and mixed walls check (practice_walls_check()) has run for this save
+bool practice_floors_checked = false; // the one-time floor breakers check (practice_floors_check()) has run for this save
 
 /* The practice guidance plan's Section 1 (dev, 2026-11-12: "Weapons should not be available for obsticals that don't need
 them"): the choices that keep their weapons, the ones that can bring a wall or a fake door (combinations and trampolines can
@@ -173,6 +174,17 @@ if (w >= 0 and practice_passes[w] >= practice_unlock_count)
 practice_passes[practice_choices.find("real_walls")] = practice_unlock_count;
 practice_passes[practice_choices.find("mixed_walls")] = practice_unlock_count;
 }
+writegame();
+}
+/* Once per save (the floor breakers plan, dev, 2026-11-13): floor breakers came in between mixed doors and barriers, so a
+save that had barriers open (mixed doors' passes done) would find them locked again behind floor breakers. Such a save gets
+floor breakers' passes too, so nothing it had open closes; everyone else repairs 5. */
+void practice_floors_check()
+{
+if (practice_floors_checked) return;
+practice_floors_checked = true;
+int d = practice_choices.find("mixed_doors");
+if (d >= 0 and practice_passes[d] >= practice_unlock_count) practice_passes[practice_choices.find("floor_breakers")] = practice_unlock_count;
 writegame();
 }
 // Can a practice run of this choice be in this environment: its obstacle there, or for combinations, both of some pair's.

@@ -212,10 +212,10 @@ if (next_type != "" and spawn_only == "all" and random(1, 100) <= combo_percent(
 next_countdown = next_type == "" ? 0 : countdown_steps();
 }
 bool practice_mix_door_next = false; // mixed obstacles: the key was just placed, so its real door comes next
-// The kinds mixed obstacles picks from, each once, those the current environment has sounds for (14 at most).
+// The kinds mixed obstacles picks from, each once, those the current environment has sounds for (15 at most, with floor breakers).
 string[] practice_mix_kinds()
 {
-string[] plain = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "fake_doors", "barriers", "winds", "trampolines"};
+string[] plain = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "fake_doors", "barriers", "winds", "trampolines", "floor_breakers"};
 string[] kinds;
 for (uint i = 0; i < plain.length(); i++)
 {

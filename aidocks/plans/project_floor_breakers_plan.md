@@ -1,11 +1,11 @@
 ---
 name: project_floor_breakers_plan
-description: SETTLED (2026-11-13, for 2.2; 3 sections; not built yet) - floor breakers: a hole in the belt you rebuild with your hands, or fall and die; Q&A log
+description: COMPLETE (2026-11-13, 2.2 at 2 of 10; 3 sections) - floor breakers: a hole in the belt you rebuild with your hands, or fall and die; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-13), for 2.2, not to be built yet. The dev: "Let's plan floor breakers first, but not build it."
+Status: COMPLETE (2026-11-13), 2.2 at 2 of 10. (At planning, the dev: "Let's plan floor breakers first, but not build it.")
 
 Background:
 - Sounds (the dev, 2026-11-13): environments/<env>/traps/floor_breakers/general/air: spawn, loop, fall, fill, fix1, fix2, fix3, in default and uncharted; no countdown folder.
@@ -53,3 +53,6 @@ Sections (2.2):
 - Fix (dev, 2026-11-13: "The character's death sound is supposed to play at the same time as the floor breakers fall sound. Not after."): the death plays through p as the fall starts, in end_run_floor() (waiting for both) and before practice_death() in practice.
 - After building (2026-11-13): open plays stationary, like a door (dev); repair stays in 2d at the hole (dev confirmed).
 - Section 1 tested (2026-11-13): a clean repair, falling through unopened, and the three repair mistakes all passed.
+- Section 2 built (2026-11-13): stat_keys floor_breakers_repaired (after real_doors_opened) and caught_floor_breakers (after caught_doors); repair_hand() counts a repair; fall_through(f, mistake) counts caught_floor_breakers through stat_caught() in an endless run (a practice fall counts nothing, as a hazard's) and sets last_caught_kind "repair" for a repair that gave way; the statistics lines (floor breakers repaired, times fell into floor breakers), the death outcome, achievements_menu's units (floor breaker repaired, floor breaker fall); the nine achievements in achievements.ini (lifetime repairs after real_walls_250, run repairs after real_walls_run_10, falls at the end; 139 in all); practice: floor_breakers after mixed_doors (goal floor_breakers_repaired, verb repair, singular floor breaker), no shield (practice_shield_count()), no weapons, practice_floors_check() (a save with mixed doors' passes done gets floor breakers' too) saved as practice_floors_checked; the hint from spawn_floor_breaker(), the two death lines; mixed obstacles gains floor breakers (practice_mix_kinds(), practice_mix_count 15).
+- Section 3 (docks) done (2026-11-13, the dev asked for Sections 2 and 3 together, tests after): the readme (eight exceptions; two paragraphs after real walls; countdowns; falls end the run like hazards; joining at 4; the practice list, shields, practice deaths and the unlock chain); 2.2 opened with two entries, "Added floor breakers, holes in the belt you open a corridor to and rebuild piece by piece with alternating hands, or fall through and end your run." and "Added floor breakers to practice runs, between mixed doors and barriers, opened after you get through 5 mixed doors."; build/version.txt 2.2; CLAUDE.md, the version history, the index.
+- Section 2 tested (2026-11-13): the practice order and lock lines, a floor breakers practice run (hint, no shield or weapons, both death lines, retry, closing), and an endless run's statistics, death outcome and achievements all passed. Plan COMPLETE.

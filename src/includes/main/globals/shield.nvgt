@@ -54,7 +54,7 @@ practicing hazards, which shields can't stop (dev, 2026-11-11: "They should not 
 practice run had one since 2026-11-05). */
 int practice_shield_count()
 {
-return practice_choice == "hazards" ? 0 : practice_shields;
+return practice_choice == "hazards" or practice_choice == "floor_breakers" ? 0 : practice_shields; // nor floor breakers, a fall too (the floor breakers plan, 2026-11-13)
 }
 // countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.
 void spawn_shield(double sx, int countdown, int lane = -1)
