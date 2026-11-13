@@ -191,9 +191,9 @@ if (climb_rungs >= climb_ladder.rungs)
 // Over the top: down past the wall, running again.
 ladder@ l = climb_ladder;
 reset_climb();
-ladderpool.play_stationary(get_pack_sound(ladder_folder(l) + "*land*"), false);
 stat_add("real_walls_climbed"); // Section 3: a clean climb, the real walls practice goal
 past_ladder(l);
+ladderpool.play_stationary(get_pack_sound(ladder_folder(l) + "*land*"), false); // stationary (dev, 2026-11-12, after trying 2d)
 return;
 }
 climb_rung_deadline = runtimer.elapsed + ladder_rung_time();
@@ -223,11 +223,13 @@ int blow = take_damage(fall ? ladder_fall_damage : ladder_break_damage);
 if (blow == blow_fatal)
 {
 l.wall_spent = true;
-p.play_stationary(clip, false);
+if (fall) p.play_stationary(clip, false); // a fall stays stationary (dev, 2026-11-12, after trying 2d)
+else p.play_2d(clip, 0, me.x, 0, l.x, false); // the collapse at the ladder, in 2d (dev, 2026-11-12)
 end_run_hit();
 return;
 }
-ladderpool.play_stationary(clip, false);
+if (fall) ladderpool.play_stationary(clip, false); // a fall stays stationary (dev, 2026-11-12, after trying 2d)
+else ladderpool.play_2d(clip, 0, me.x, 0, l.x, false); // the collapse at the ladder, in 2d (dev, 2026-11-12)
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 steptimer.restart(); // off the ladder: the belt carries you on from here
 }

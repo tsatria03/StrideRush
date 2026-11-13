@@ -403,7 +403,8 @@ if (practice_type == "barriers") return "barriers_multiple";
 if (practice_type == "combinations") return "combinations_mixed"; // every spawn a pair, all 16 (combo.nvgt)
 if (practice_type == "real_walls") return "ladders"; // every spawn a real wall with its ladder (ladder.nvgt)
 if (practice_type == "mixed_walls") return "mixed_walls"; // fake and real walls, half and half
-if (practice_type == "trampolines") return "practice_trampolines"; // a trampoline every other spawn, obstacles between (spawner.nvgt)
+if (practice_type == "trampolines") return "practice_trampolines";
+if (practice_type == "mixed_obstacles") return "practice_mixed"; // every kind at random (spawner.nvgt) // a trampoline every other spawn, obstacles between (spawner.nvgt)
 return practice_type;
 }
 /* DEBUG OPTION: pick the starting step time, from start_step_time down in 100 ms steps: 500, 400, 300, 200, 100. The

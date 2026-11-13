@@ -32,6 +32,7 @@ next_key_door = next_door_mark;
 set_key_mark();
 key_before_door = true;
 practice_trampoline_turn = false; // a trampolines practice run starts with a trampoline
+practice_mix_door_next = false; // and a mixed obstacles run with no door waiting
 choose_next_obstacle();
 next_spawn_x = spawn_distance() + next_countdown + floor_tiles(run_min_floor_time);
 }
@@ -139,6 +140,30 @@ int shares = obstacle_types[i] == "barriers" ? barrier_weight : 1;
 for (int s = 0; s < shares; s++) available.insert_last(obstacle_types[i]);
 }
 }
+/* Practice only: "practice_mixed", mixed obstacles (the practice mix plan, dev, 2026-11-12): each spawn an equal pick
+among the kinds this environment has (practice_mix_kinds()); a real door comes as its key, then the door on the next
+spawn; a combination as a random pair; a trampoline as any of the four. */
+if (spawn_only == "practice_mixed")
+{
+if (practice_mix_door_next)
+{
+practice_mix_door_next = false;
+next_type = "real_doors";
+}
+else
+{
+string[] kinds = practice_mix_kinds();
+next_type = kinds.length() > 0 ? kinds[random(0, kinds.length() - 1)] : "";
+if (next_type == "combinations" and !choose_combo()) next_type = "";
+if (next_type == "real_doors")
+{
+next_type = "keys";
+practice_mix_door_next = true;
+}
+}
+next_countdown = next_type == "" ? 0 : countdown_steps();
+return;
+}
 /* Practice only: "practice_trampolines" (the trampolines plan, dev, 2026-11-11) makes every other spawn a trampoline of
 any of the four kinds, with an obstacle of any type between, and no items. */
 if (spawn_only == "practice_trampolines")
@@ -185,6 +210,21 @@ next_type = available.length() > 0 ? available[random(0, available.length() - 1)
 if (next_type != "" and spawn_only == "all" and random(1, 100) <= combo_percent() and choose_combo()) next_type = "combinations";
 }
 next_countdown = next_type == "" ? 0 : countdown_steps();
+}
+bool practice_mix_door_next = false; // mixed obstacles: the key was just placed, so its real door comes next
+// The kinds mixed obstacles picks from, each once, those the current environment has sounds for (14 at most).
+string[] practice_mix_kinds()
+{
+string[] plain = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "fake_doors", "barriers", "winds", "trampolines"};
+string[] kinds;
+for (uint i = 0; i < plain.length(); i++)
+{
+if (get_pack_sound_folders(type_folder(plain[i]) + "*").length() > 0) kinds.insert_last(plain[i]);
+}
+if (ladders_ready()) kinds.insert_last("ladders");
+if (doors_available() and keys_available()) kinds.insert_last("real_doors");
+kinds.insert_last("combinations"); // choose_combo() finds a pair the environment can make, or the spawn is skipped
+return kinds;
 }
 // A random point in the first half of the stretch before next_key_door: 50 ms sections give 475 to 500 before the 450 door.
 void set_key_mark()
@@ -269,7 +309,7 @@ trampolines_debug = only_type == "trampolines";
 if (trampolines_debug) spawn_only = "all";
 /* Practice doors' keys come one at a time in a random lane, as in the real game, but never with a pair's second item,
 which could be any kind, since a practice run has no items but keys (dev, 2026-11-05). */
-if (only_type == "practice_doors" or (practice_run and only_type == "real_doors")) // practice's real doors too (2026-11-09)
+if (only_type == "practice_doors" or only_type == "practice_mixed" or (practice_run and only_type == "real_doors")) // practice's real doors too (2026-11-09), and mixed obstacles' keys
 {
 item_lane_mode = "random";
 return;

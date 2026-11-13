@@ -6,7 +6,8 @@ key, since keys can be rebound (dev, 2026-11-12). A hint waits its turn instead 
 said in the same moment (two barriers side by side, a combination's two parts) or an unlock line in the last practice_unlock_hold.
 Once the practiced choice's fifth thing (the fifth pair, for combinations; the fifth door of either kind, for mixed
 doors; the fifth trampoline of any kind, for trampolines) has passed you, the closing line plays and the run's hints
-stop. A hit from anything but a hazard (a fall is a death), or a missed key, broken or left behind, starts the run's
+stop. Mixed obstacles (the practice mix plan, dev, 2026-11-12) gives each kind one hint, and its closing line comes once
+all 14 kinds (practice_mix_seen) have appeared. A hit from anything but a hazard (a fall is a death), or a missed key, broken or left behind, starts the run's
 hints over, every kind and the closing count, until the closing line has played; after it, nothing brings them back (dev, 2026-11-12: "it should reset the hints, and re-speak them"; "it should
 repeat if you miss an item, like a key"). Each spawn function calls practice_hint() with its kind, lane and tile; it does nothing outside a practice run. */
 dictionary practice_hint_counts; // hints said this run, by kind
@@ -15,6 +16,8 @@ double practice_closing_x = -1; // the tile of the fifth one, -1 until it's plac
 bool practice_hints_done = false; // the closing line has played: no more hints this run
 double practice_last_hint_at = -1000000; // on runtimer
 double practice_unlock_said_at = -1000000; // on runtimer, from practice_pass()
+dictionary practice_mix_seen; // mixed obstacles: the kinds met this run (practice_mix_count)
+const int practice_mix_count = 14;
 
 /* A hit (stat_caught() in stats.nvgt, hazards left out) or a missed key (key.nvgt) in a practice run: the hints start over,
 and the closing line comes again after five more. The timing guards stay, so a hint just after still waits its turn. */
@@ -22,9 +25,20 @@ void practice_hints_restart()
 {
 if (!practice_run or practice_hints_done) return; // after the closing line, the run stays quiet (dev, 2026-11-12)
 practice_hint_counts.delete_all();
+practice_mix_seen.delete_all();
 practice_goal_placed = 0;
 practice_closing_x = -1;
 practice_hints_done = false;
+}
+/* Mixed obstacles: a kind met this run at tile x (trampolines of any kind as one, keys not a kind of their own); once all
+practice_mix_count have been met, the closing line waits for that one to pass you. */
+void practice_mix_meet(const string&in kind, double x)
+{
+if (practice_choice != "mixed_obstacles" or practice_hints_done or practice_closing_x >= 0) return;
+string k = kind.find("trampoline") >= 0 ? "trampolines" : kind;
+if (k == "keys") return;
+practice_mix_seen.set(k, true);
+if (int(practice_mix_seen.get_keys().length()) >= practice_mix_count) practice_closing_x = x;
 }
 // An animal kind folder as one animal: "birds" is "bird".
 string animal_singular(const string&in kind)
@@ -57,6 +71,7 @@ return how == "" ? "You died." : "You died. " + how;
 void reset_practice_hints()
 {
 practice_hint_counts.delete_all();
+practice_mix_seen.delete_all();
 practice_goal_placed = 0;
 practice_closing_x = -1;
 practice_hints_done = false;
@@ -106,19 +121,31 @@ void practice_hint(const string&in kind, int lane, double x, const string&in ani
 if (!practice_run or practice_hints_done) return;
 int64 said = 0;
 practice_hint_counts.get(kind, said);
-if (said < practice_hint_limit)
+int limit = practice_choice == "mixed_obstacles" ? 1 : practice_hint_limit; // one per kind in mixed obstacles
+if (said < limit)
 {
 practice_hint_counts.set(kind, said + 1);
 bool interrupt = runtimer.elapsed - practice_last_hint_at >= practice_hint_together and runtimer.elapsed - practice_unlock_said_at >= practice_unlock_hold;
 practice_last_hint_at = runtimer.elapsed;
 speak_buffer(practice_hint_text(kind, lane, animal), "practice", interrupt);
 }
+if (practice_choice == "mixed_obstacles")
+{
+practice_mix_meet(kind, x);
+return;
+}
 if (practice_choice != "combinations" and practice_goal_kind(kind)) practice_goal_counted(x);
 }
 // From place_pair() (combo.nvgt): in a combinations practice run, each pair counts once, at its second part's tile.
 void practice_pair_placed(double second_x)
 {
-if (!practice_run or practice_hints_done or practice_choice != "combinations") return;
+if (!practice_run or practice_hints_done) return;
+if (practice_choice == "mixed_obstacles")
+{
+practice_mix_meet("combinations", second_x); // a pair is a kind of its own in mixed obstacles
+return;
+}
+if (practice_choice != "combinations") return;
 practice_goal_counted(second_x);
 }
 void practice_goal_counted(double x)
