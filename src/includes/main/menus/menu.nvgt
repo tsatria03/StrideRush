@@ -389,6 +389,8 @@ string practice_spawn_id(const string&in practice_type)
 if (practice_type == "mixed_doors") return "practice_doors";
 if (practice_type == "barriers") return "barriers_multiple";
 if (practice_type == "combinations") return "combinations_mixed"; // every spawn a pair, all 16 (combo.nvgt)
+if (practice_type == "real_walls") return "ladders"; // every spawn a real wall with its ladder (ladder.nvgt)
+if (practice_type == "mixed_walls") return "mixed_walls"; // fake and real walls, half and half
 if (practice_type == "trampolines") return "practice_trampolines"; // a trampoline every other spawn, obstacles between (spawner.nvgt)
 return practice_type;
 }

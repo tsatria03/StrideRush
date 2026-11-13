@@ -44,6 +44,9 @@ else if (last_caught == "projectiles") how = "A projectile hit you. Crouch befor
 else if (last_caught == "force_fields") how = "A force field hit you. Press either hand during its countdown to switch it off.";
 else if (last_caught == "animals") how = "A " + (last_caught_kind == "" ? "bird" : last_caught_kind) + " hit you. Clap with both hands to scare it away.";
 else if (last_caught == "walls") how = "You crashed into a fake wall. Break it with your weapons before you reach it.";
+else if (last_caught == "real_walls") how = "You crashed into a real wall. Grab its ladder with a hand as you reach it, then climb it hand over hand.";
+else if (last_caught == "ladder_collapse") how = "The ladder collapsed on you. Grab it with a hand as you reach it, then use the other hand on every rung without stopping.";
+else if (last_caught == "ladder_fall") how = "You fell off the ladder. Never switch lanes while you're climbing.";
 else if (last_caught == "doors" and last_caught_kind == "real") how = "You crashed into a real door. Use a key from your inventory to unlock it, then open it with a hand.";
 else if (last_caught == "doors") how = "You crashed into a fake door. It won't open, so break it with your weapons.";
 else if (last_caught == "barriers") how = "A barrier hit you. If you're in its lane, switch to another lane before it reaches you.";
@@ -77,6 +80,7 @@ if (kind == "projectiles") return "A projectile has appeared. Crouch before it r
 if (kind == "force_fields") return "A force field has appeared. Press either hand during its countdown to switch it off.";
 if (kind == "animals") return "A " + animal + " has appeared. Clap with both hands to scare it away.";
 if (kind == "walls") return "A fake wall has appeared. Break it with your weapons before you reach it.";
+if (kind == "ladders") return "A real wall has appeared. Grab its ladder with a hand as you reach it, then climb it hand over hand.";
 if (kind == "fake_doors") return "A fake door has appeared. It won't open, so break it with your weapons.";
 if (kind == "real_doors") return "A real door has appeared. Use a key from your inventory to unlock it, then open it with a hand.";
 if (kind == "keys") return "A key has appeared" + where + ". Move into its lane and use a hand to grab it.";
@@ -93,6 +97,8 @@ bool practice_goal_kind(const string&in kind)
 {
 if (practice_choice == "mixed_doors") return kind == "real_doors" or kind == "fake_doors";
 if (practice_choice == "trampolines") return kind.find("trampoline") >= 0;
+if (practice_choice == "real_walls") return kind == "ladders";
+if (practice_choice == "mixed_walls") return kind == "walls" or kind == "ladders";
 return kind == practice_choice;
 }
 void practice_hint(const string&in kind, int lane, double x, const string&in animal = "")

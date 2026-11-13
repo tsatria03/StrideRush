@@ -3,25 +3,26 @@ practice menu's order. Hazards are always open; each of the others opens after p
 one before it, counted only in a practice run of that obstacle, through the same stat_add() hooks the statistics use, so
 a clean pass means the same thing here as in an endless run's statistics. Endless run opens together with spikes. The
 passes add up across runs and practice deaths, are saved in saves/game.srf, and clearing game progresses keeps them. */
-const string[] practice_choices = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "fake_doors", "real_doors", "mixed_doors", "barriers", "winds", "combinations", "trampolines"};
+const string[] practice_choices = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "real_walls", "mixed_walls", "fake_doors", "real_doors", "mixed_doors", "barriers", "winds", "combinations", "trampolines"};
 /* Each choice's goal: the stat key (or either of two) a clean pass adds to, and how the lock line says it. The last choice
 opens nothing, so it has no goal (dev, 2026-11-10: "No goal. It should just say available"): barriers until combinations
 came after them (the combined obstacles plan, dev, 2026-11-11), when barriers got "dodge past", the dev's earlier wording. */
-const string[] practice_goal_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "walls_broken", "fake_doors_broken", "real_doors_opened", "real_doors_opened", "barriers_dodged", "winds_dodged", "combinations_cleared", ""};
-const string[] practice_goal_stats2 = {"", "", "", "", "", "", "", "", "", "fake_doors_broken", "", "", "", ""}; // mixed doors: a real door opened or a fake door broken
-const string[] practice_goal_verbs = {"jump over", "jump over", "jump over", "duck under", "switch off", "scare off", "break", "break", "open", "get through", "dodge past", "dodge", "clear", ""};
-const string[] practice_goal_singulars = {"hazard", "spike", "mine", "projectile", "force field", "animal", "fake wall", "fake door", "real door", "mixed door", "barrier", "wind", "combination", "trampoline"};
-int[] practice_passes = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // trampolines last, after combinations (the trampolines plan, dev, 2026-11-11) // winds between barriers and combinations (the winds plan, dev, 2026-11-11) // one per practice_choices entry, saved as practice_passes_<choice>
+const string[] practice_goal_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "walls_broken", "real_walls_climbed", "walls_broken", "fake_doors_broken", "real_doors_opened", "real_doors_opened", "barriers_dodged", "winds_dodged", "combinations_cleared", ""};
+const string[] practice_goal_stats2 = {"", "", "", "", "", "", "", "", "real_walls_climbed", "", "", "fake_doors_broken", "", "", "", ""}; // mixed walls: a fake wall broken or a real one climbed // mixed doors: a real door opened or a fake door broken
+const string[] practice_goal_verbs = {"jump over", "jump over", "jump over", "duck under", "switch off", "scare off", "break", "climb", "get through", "break", "open", "get through", "dodge past", "dodge", "clear", ""};
+const string[] practice_goal_singulars = {"hazard", "spike", "mine", "projectile", "force field", "animal", "fake wall", "real wall", "mixed wall", "fake door", "real door", "mixed door", "barrier", "wind", "combination", "trampoline"};
+int[] practice_passes = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // real and mixed walls after fake walls (the ladders plan, dev, 2026-11-12) // trampolines last, after combinations (the trampolines plan, dev, 2026-11-11) // winds between barriers and combinations (the winds plan, dev, 2026-11-11) // one per practice_choices entry, saved as practice_passes_<choice>
 string practice_choice = ""; // the practice run's choice, such as "mixed_doors", set by play_game()
 bool practice_unlocks_checked = false; // the one-time returning player check has run for this save
 bool practice_combos_checked = false; // the one-time combinations check (practice_combos_check()) has run for this save
 bool practice_winds_checked = false; // the one-time winds check (practice_winds_check()) has run for this save
 bool practice_trampolines_checked = false; // the one-time trampolines check (practice_trampolines_check()) has run for this save
+bool practice_walls_checked = false; // the one-time real and mixed walls check (practice_walls_check()) has run for this save
 
 /* The practice guidance plan's Section 1 (dev, 2026-11-12: "Weapons should not be available for obsticals that don't need
 them"): the choices that keep their weapons, the ones that can bring a wall or a fake door (combinations and trampolines can
 too). Every other practice run draws no weapon, and the number row, fire, reload and ammo check do nothing (weapons.nvgt). */
-const string[] practice_weapon_choices = {"walls", "fake_doors", "mixed_doors", "combinations", "trampolines"};
+const string[] practice_weapon_choices = {"walls", "mixed_walls", "fake_doors", "mixed_doors", "combinations", "trampolines"};
 bool practice_weapons_off()
 {
 return practice_run and practice_weapon_choices.find(practice_choice) < 0;
@@ -157,9 +158,25 @@ int c = practice_choices.find("combinations");
 if (c >= 0 and practice_unlocked(c)) practice_passes[c] = practice_unlock_count;
 writegame();
 }
+/* Once per save (the ladders plan, dev, 2026-11-12): real walls and mixed walls came in between fake walls and fake doors,
+so a save that had fake doors open (fake walls' passes done) would find them locked again behind the new two. Such a save
+gets both their passes, so nothing it had open closes; everyone else climbs and gets through them. */
+void practice_walls_check()
+{
+if (practice_walls_checked) return;
+practice_walls_checked = true;
+int w = practice_choices.find("walls");
+if (w >= 0 and practice_passes[w] >= practice_unlock_count)
+{
+practice_passes[practice_choices.find("real_walls")] = practice_unlock_count;
+practice_passes[practice_choices.find("mixed_walls")] = practice_unlock_count;
+}
+writegame();
+}
 // Can a practice run of this choice be in this environment: its obstacle there, or for combinations, both of some pair's.
 bool practice_env_ok(const string&in env, const string&in choice)
 {
+if (choice == "real_walls" or choice == "mixed_walls") return env_has_type(env, "ladders") and env_has_type(env, "walls"); // a real wall needs both
 if (choice != "combinations") return env_has_type(env, practice_trap_type(choice));
 for (uint i = 0; i < combo_firsts.length(); i++)
 {
