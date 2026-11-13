@@ -33,7 +33,7 @@ The dev asked: "Do you have suggestions for 2.1, non gameplay macanic related?" 
 13. (Replaced by saved buffer mutes, built: [[project_hints_setting_env_key_plan]].) A practice hints setting: a Game tab checkbox to turn the practice buffer's hints off, for players who know the obstacles and only want the drill (on by default).
 14. (Built as the V key: [[project_hints_setting_env_key_plan]].) An environment readout key: a status key that says which environment you're in, as L says your lane; today it's only announced when you enter one.
 15. What's new on first launch: the first time a new version runs, offer its changelog block once ("Stride Rush has been updated to 2.1. Would you like to hear what's new?"), Yes then No.
-16. Practice progress in the practice menu's intro: "6 of 16 obstacles open." before the list.
+16. (Built, with the difficulty menu too: [[project_menu_counts_plan]].) Practice progress in the practice menu's intro: "6 of 16 obstacles open." before the list.
 17. Achievements closest to done: a view in the achievements menu listing the few unearned ones you're nearest to, with progress, so long-term goals are easy to find.
 
 ## Lane-changing barriers in detail (as explained to the dev, 2026-11-10)

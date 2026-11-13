@@ -1,4 +1,5 @@
 New in 2.1.
+Made it so the difficulty and practice menus now tell you how many choices you've unlocked.
 Added saved buffer mutes, so any speech buffer you mute, such as practice, powerups or items, stays muted the next time you play.
 Added the V key, which tells you which environment you're in.
 Fixed a bug where some achievement hints were out of date, or named keys that may no longer be the ones you use.

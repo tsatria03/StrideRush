@@ -313,7 +313,13 @@ int focus = last_difficulty;
 while (true)
 {
 setupmenu();
-m.intro_text = "Choose a difficulty.";
+// With how many are open, as the achievements menu counts (dev, 2026-11-12): "Choose a difficulty level. 3 of 5 unlocked."
+int open_levels = 0;
+for (uint i = 0; i < difficulty_names.length(); i++)
+{
+if (difficulty_unlocked(i)) open_levels++;
+}
+m.intro_text = "Choose a difficulty level. " + open_levels + " of " + difficulty_names.length() + " unlocked.";
 for (uint i = 0; i < difficulty_names.length(); i++)
 {
 m.add_item(difficulty_line(i), "" + i);
@@ -346,7 +352,13 @@ int focus = last_practice_choice;
 while (true)
 {
 setupmenu();
-m.intro_text = "Choose an obstacle to practice.";
+// With how many are open (dev, 2026-11-12): "Choose what to practice. 6 of 16 obstacles unlocked."
+int open_choices = 0;
+for (uint i = 0; i < practice_choices.length(); i++)
+{
+if (practice_unlocked(i)) open_choices++;
+}
+m.intro_text = "Choose what to practice. " + open_choices + " of " + practice_choices.length() + " obstacles unlocked.";
 /* practice_choices (practice.nvgt), with three door choices (dev, 2026-11-09); each line says whether it's open or what
 opens it (the practice locks plan's Section 2, dev, 2026-11-10). */
 for (uint i = 0; i < practice_choices.length(); i++)
