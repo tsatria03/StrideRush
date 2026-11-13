@@ -42,6 +42,10 @@ The dev asked for five more after closing what's new and achievements closest to
 21. Progress backup and restore: game menu items to save all progress (statistics, achievements, unlocks, settings and key bindings) to a single file, and load it back, for moving to another computer or keeping a copy before reinstalling.
 22. Records by difficulty: in the statistics menu, the best run on each level (most steps, longest time, top speed reached), so progress on hard isn't hidden in totals. A menu only, never spoken during a run (unlike the declined personal best callout).
 
+## Waiting for 2.2 (the dev's ideas, 2026-11-13)
+- Floor breakers: a new trap from the dev's sounds, traps/floor_breakers/general/air (spawn, loop, fall, fill, fix1-3); not planned yet (dev, 2026-11-13: "We can also save floor breakers for 2.2 as well.").
+- Timed runs: settled, [[project_timed_run_plan]].
+
 ## Lane-changing barriers in detail (as explained to the dev, 2026-11-10)
 - In play: a barrier (a car, say) is heard coming in one lane, then plays a swerve cue (tyre squeal, horn) and its sound slides into a neighbouring lane; you track where it ends up and dodge that. The skill is listening for where it lands, not where it started.
 - Fairness: the drift is always announced by its own cue; it moves once, one lane, never at the last moment, finishing while there's still time to react; at least one lane always stays open, as with pairs today. Its countdown (which plays only in its own lane) picks up as it drifts into yours.
