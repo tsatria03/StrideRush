@@ -149,12 +149,14 @@ if (gs.d.exists("practice_winds_checked")) practice_winds_checked = gs.read_bool
 if (gs.d.exists("practice_trampolines_checked")) practice_trampolines_checked = gs.read_bool("practice_trampolines_checked");
 if (gs.d.exists("practice_walls_checked")) practice_walls_checked = gs.read_bool("practice_walls_checked");
 if (gs.d.exists("practice_floors_checked")) practice_floors_checked = gs.read_bool("practice_floors_checked");
+if (gs.d.exists("practice_vehicles_checked")) practice_vehicles_checked = gs.read_bool("practice_vehicles_checked");
 practice_returning_check(); // once per save, now that the difficulty runs and lifetime stats are read
 practice_combos_check(); // once per save, after it (practice.nvgt)
 practice_winds_check(); // and the winds check after that (practice.nvgt)
 practice_trampolines_check(); // then the trampolines check (practice.nvgt)
 practice_walls_check(); // and the real and mixed walls check (practice.nvgt)
 practice_floors_check(); // and the floor breakers check (practice.nvgt)
+practice_vehicles_check(); // and the vehicles check (practice.nvgt)
 }
 // Writes the game's progress to saves/game.srf; called the moment a run count changes.
 void writegame()
@@ -189,6 +191,7 @@ gs.add("practice_winds_checked", practice_winds_checked);
 gs.add("practice_trampolines_checked", practice_trampolines_checked);
 gs.add("practice_walls_checked", practice_walls_checked);
 gs.add("practice_floors_checked", practice_floors_checked);
+gs.add("practice_vehicles_checked", practice_vehicles_checked);
 gs.save();
 }
 /* Writes every setting to settings.srf. Called whenever one changes: the menu music volume (form_menu) and the run

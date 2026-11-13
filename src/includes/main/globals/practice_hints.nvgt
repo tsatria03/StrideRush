@@ -7,7 +7,7 @@ said in the same moment (two barriers side by side, a combination's two parts) o
 Once the practiced choice's fifth thing (the fifth pair, for combinations; the fifth door of either kind, for mixed
 doors; the fifth trampoline of any kind, for trampolines) has passed you, the closing line plays and the run's hints
 stop. Mixed obstacles (the practice mix plan, dev, 2026-11-12) gives each kind one hint, and its closing line comes once
-all 15 kinds (practice_mix_seen) have appeared. A hit from anything but a hazard (a fall is a death), or a missed key, broken or left behind, starts the run's
+all 16 kinds (practice_mix_seen) have appeared. A hit from anything but a hazard (a fall is a death), or a missed key, broken or left behind, starts the run's
 hints over, every kind and the closing count, until the closing line has played; after it, nothing brings them back (dev, 2026-11-12: "it should reset the hints, and re-speak them"; "it should
 repeat if you miss an item, like a key"). Each spawn function calls practice_hint() with its kind, lane and tile; it does nothing outside a practice run. */
 dictionary practice_hint_counts; // hints said this run, by kind
@@ -17,7 +17,7 @@ bool practice_hints_done = false; // the closing line has played: no more hints 
 double practice_last_hint_at = -1000000; // on runtimer
 double practice_unlock_said_at = -1000000; // on runtimer, from practice_pass()
 dictionary practice_mix_seen; // mixed obstacles: the kinds met this run (practice_mix_count)
-const int practice_mix_count = 15; // 14, and floor breakers (the floor breakers plan, 2026-11-13)
+const int practice_mix_count = 16; // 14, floor breakers and vehicles (the floor breakers and vehicles plans, 2026-11-13)
 
 /* A hit (stat_caught() in stats.nvgt, hazards left out) or a missed key (key.nvgt) in a practice run: the hints start over,
 and the closing line comes again after five more. The timing guards stay, so a hint just after still waits its turn. */
@@ -66,6 +66,8 @@ else if (last_caught == "doors") how = "You crashed into a fake door. It won't o
 else if (last_caught == "barriers") how = "A barrier hit you. If you're in its lane, switch to another lane before it reaches you.";
 else if (last_caught == "floor_breakers" and last_caught_kind == "repair") how = "The repair gave way and you fell. Use the other hand for every piece, at a steady pace.";
 else if (last_caught == "floor_breakers") how = "You fell into a floor breaker. Open the corridor with a hand before you reach it, then rebuild the hole with alternating hands.";
+else if (last_caught == "vehicles") how = "A " + (last_caught_kind == "" ? "car" : last_caught_kind) + " hit you. Shoot it while it's in your lane, or switch lanes after its last move so it drives past.";
+else if (last_caught == "vehicle_shots") how = "A " + (last_caught_kind == "" ? "car" : last_caught_kind) + " shot you. Step out of its lane when it fires, then shoot it while it's in yours.";
 else if (last_caught == "winds") how = "A wind hit you. Wait for its last move, then switch lanes so it can't follow.";
 return how == "" ? "You died." : "You died. " + how;
 }
@@ -86,7 +88,7 @@ if (lane == lane_left) return "left";
 if (lane == lane_middle) return "middle";
 return "right";
 }
-// The hint for a kind; lane is -1 for belt-wide things, animal the animal's singular name ("bird").
+// The hint for a kind; lane is -1 for belt-wide things, animal the animal's or vehicle's singular name ("bird", "car").
 string practice_hint_text(const string&in kind, int lane, const string&in animal)
 {
 string where = lane >= 0 ? " in the " + practice_lane_name(lane) + " lane" : "";
@@ -102,6 +104,7 @@ if (kind == "fake_doors") return "A fake door has appeared. It won't open, so br
 if (kind == "real_doors") return "A real door has appeared. Use a key from your inventory to unlock it, then open it with a hand.";
 if (kind == "keys") return "A key has appeared" + where + ". Move into its lane and use a hand to grab it.";
 if (kind == "floor_breakers") return "A floor breaker has appeared. Open the corridor with a hand before you reach it, then rebuild the hole with alternating hands.";
+if (kind == "vehicles") return "A " + animal + " has appeared" + where + ". Shoot it while it's in your lane, or switch lanes after its last move so it drives past.";
 if (kind == "barriers") return "A barrier has appeared" + where + ". If you're in that lane, switch to another lane before it reaches you.";
 if (kind == "winds") return "A wind has appeared" + where + ". Wait for its last move, then switch lanes so it can't follow.";
 if (kind == "good_lane_trampoline") return "A good trampoline has appeared" + where + ". Move into its lane to fly over what comes next.";
