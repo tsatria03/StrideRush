@@ -1,4 +1,5 @@
 New in 2.1.
+Made it so a powerup you miss by jumping over a ground one or running under an air one now breaks with its own sound instead of fading away.
 Added a rising speed to practice runs, which starts at 2 steps a second and speeds up to 10, twice as fast as an endless run.
 Added mixed obstacles to practice runs, opened after you take 5 trampoline flights, bringing every kind of obstacle at random as a warm-up before an endless run.
 Made it so the difficulty and practice menus now tell you how many choices you've unlocked.

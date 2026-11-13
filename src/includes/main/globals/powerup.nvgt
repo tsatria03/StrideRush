@@ -1,7 +1,7 @@
 /* Powerups (dev, 2026-11-03, built 2026-11-04 for 1.3): passive pickups with a good or bad event, never in the inventory.
 Each is a ground one (misc/game/powerground at its tile, replayed on a timer) or a flight one (powerflight), half and half. Arriving
 on a ground one's tile on the ground collects it, and a jump skips it; arriving on a flight one's tile in the air
-collects it, and running under it misses it. Weapons and bullets pass through them. On contact powerget plays centered
+collects it, and running under it misses it; a missed one breaks, with powerbreak (dev, 2026-11-13). Weapons and bullets pass through them. On contact powerget plays centered
 and the event is picked then, at random from what's possible right then (the shield pair only with a shield worn),
 and its name is spoken. A missed one keeps sounding and fades out behind you.
 Every event lasts powerup_time on runtimer (so pausing freezes it), one per kind: a new one of the same kind, or its
@@ -158,12 +158,21 @@ if (!pu.spent)
 if (me.x == pu.x)
 {
 if (pu.flight != is_grounded()) collect_powerup(pu);
-else pu.spent = true; // jumped over a ground one, or ran under a flight one
+else break_powerup(pu); // jumped over a ground one, or ran under a flight one: it breaks
 }
 else if (me.x > pu.x) pu.spent = true;
 }
 if (me.x > pu.x + spawn_distance()) remove_powerup(i);
 }
+}
+/* A powerup missed on its tile (dev, 2026-11-13): misc/game/powerbreak plays in 2d where it is, and it goes silent instead
+of fading behind you. One skipped some other way (a teleport past it) just goes quiet behind you as before. */
+void break_powerup(powerup@ pu)
+{
+pu.spent = true;
+pu.collected = true; // no more one-shots (powerup_sounds())
+stop_powerup(pu);
+poweruppool.play_2d(get_pack_sound(powerup_folder + "*powerbreak*"), 0, me.x, 0, pu.x, false);
 }
 void collect_powerup(powerup@ pu)
 {

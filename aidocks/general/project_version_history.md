@@ -9,7 +9,8 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.1 (open, 7 of 10)
+## 2.1 (open, 8 of 10)
+- Powerbreak (no plan, dev, 2026-11-13: "the first idea does not actually require a plan"): a powerup missed on its tile (a ground one jumped over, an air one run under) plays misc/game/powerbreak in 2d where it is and goes silent (break_powerup() in powerup.nvgt); skipped another way, it just goes quiet behind you. The dev first asked for it on missing a powerup in another lane; powerups are belt-wide, so both kinds of miss were chosen. Unused new sounds in misc/game (airspawn, airground, airfall, airfill, airfix1-3) wait for the dev's next idea.
 - Rising practice speed ([[project_rising_practice_plan]]): "rising" after the fixed speeds sets practice_rising; speedup_check() then runs every practice_rising_period (5 s) from 500 ms down to practice_rising_top (100 ms); retry keeps the speed, restart run starts from 2.
 - Mixed obstacles ([[project_practice_mix_plan]]): the last practice choice (17), opened by trampolines' new goal, 5 trampoline_flights; spawn_only practice_mixed, an equal pick among practice_mix_kinds() (14 at most: ten plain kinds, trampolines, ladders, real doors as key then door, combinations); one hint per kind, the closing line once all 14 are met (practice_mix_meet()); weapons drawn. Also after testing: the ladder's collapse (renamed from break) plays in 2d, fall and land stationary; climb renamed step.
 - Menu counts ([[project_menu_counts_plan]]): "Choose what to practice. N of 16 obstacles unlocked." and "Choose a difficulty level. N of 5 unlocked.", counted from practice_unlocked() and difficulty_unlocked().
