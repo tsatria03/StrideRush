@@ -29,6 +29,24 @@ else if (m.selected_item_id == "session") show_stat_lines("Session statistics me
 else show_stat_lines("Lifetime statistics menu. You can see your total stats across all of your endless runs here.", lifetime_stat_lines());
 }
 }
+/* The pause menu's session statuses (dev, 2026-11-13): what the status keys say, as "label, value" lines like the
+session results, in every kind of run. Session results are the run's statistics; these are where you stand right now. */
+string[] session_status_lines()
+{
+string[] lines;
+int percent = int(round(100.0 * player_health / player_hp, 0));
+lines.insert_last(stat_line("health", percent + " percent, " + (lives == 1 ? "1 life" : lives + " lives")));
+lines.insert_last(stat_line("shield", shield_worn ? int(round(100.0 * shield_hp_left / shield_hp, 0)) + " percent" : "none"));
+lines.insert_last(stat_line("lane", lane_names[current_lane].lower()));
+lines.insert_last(stat_line("environment", current_env.replace("_", " ", true)));
+if (run_difficulty < 0 and !practice_run) lines.insert_last(stat_line("speed", current_step_time() + " milliseconds per step"));
+else lines.insert_last(stat_line("speed", tenths_text(int(round(10000.0 / current_step_time(), 0))) + " steps a second"));
+int steps = int(me.x);
+lines.insert_last(stat_line("distance", thousands_text(steps) + (steps == 1 ? " step" : " steps")));
+lines.insert_last(stat_line("time", time_phrase(runtimer.elapsed)));
+lines.insert_last(stat_line("heart rate", heart_rate() + " beats per minute"));
+return lines;
+}
 /* One stat menu: the lines and back; enter on a line reopens it on that line (with its intro),
 and escape or back returns. */
 void show_stat_lines(const string&in intro, string[]@ lines)

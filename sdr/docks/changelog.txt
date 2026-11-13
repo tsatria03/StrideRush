@@ -1,4 +1,5 @@
 New in 2.1.
+Added view session statuses to the pause menu, listing your health, shield, lane, environment, speed, distance, time and heart rate in one place.
 Made it so doors, ladders, trampolines, slides and force field switches now take their sounds from each environment, listed together under transitions in the learn sounds menu.
 Made it so a powerup you miss by jumping over a ground one or running under an air one now breaks with its own sound instead of fading away.
 Added a rising speed to practice runs, which starts at 2 steps a second and speeds up to 10, twice as fast as an endless run.

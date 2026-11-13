@@ -51,6 +51,7 @@ while (true)
 setupmenu();
 m.intro_text = "Pause menu.";
 m.add_item("resume run", "resume");
+m.add_item("view session statuses", "statuses"); // every kind of run, the status readouts in one list (dev, 2026-11-13)
 m.add_item("restart run", "restart"); // right after resume run (dev, 2026-11-07)
 // Session results, in an endless run only (the session results plan, 2026-11-07); practice and debug runs count nothing.
 if (stats_counting)
@@ -63,6 +64,12 @@ m.add_item("quit run", "quit");
 int mres = m.run(focus, false, true);
 focus = mres;
 string choice = mres < 0 ? "" : m.selected_item_id;
+// Session statuses: the status readouts as lines, then back to the pause menu on that item, still paused (no copy or export).
+if (choice == "statuses")
+{
+show_stat_lines("Session statuses.", session_status_lines());
+continue;
+}
 // The results items come back to the pause menu on the item chosen, still paused.
 if (choice == "view" or choice == "copy" or choice == "export")
 {
