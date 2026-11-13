@@ -81,3 +81,5 @@ REORGANIZED by the dev (2026-11-04, after birds, on top of 307e802; this overrid
 DOGS ADDED and the animals folder REORGANIZED by the dev (2026-11-04, on top of 898fe5e): objects/traps/animals/<kind>/<animal>: birds/bird to bird24 (spawn, loop, scare1-2, hit) and dogs/dog (spawn1-2, loop, scare, hit) and dogs/dog2 (spawn1-2, loop1-2, scare, hit1-4). misc/trap/animals is shared. The code picks a kind, then an animal (theme "dogs/dog2"); see [[project_birds_plan]].
 
 Ladder sounds (the dev, 2026-11-12): environments/<env>/traps/ladders/general/metal/, default and custom (spawn, loop, step1-5 (were climb1-5), grab1-2, collapse (was break), fall, land), and traps/ladders/countdown in both (layered warn1-1 to warn2-5), for [[project_ladders_plan]]; first in platforms, then misc/game, then here. Same day, on purpose: steel_shield's loop1 renamed loop (one loop now), and electric3's off replaced in both environments.
+
+Environments renamed (the dev, 2026-11-12, commit d34a4f1): custom is now uncharted (sounds/environments/uncharted); default stays. No code names either one (current_env starts at "default"); earlier memories saying custom mean uncharted.
