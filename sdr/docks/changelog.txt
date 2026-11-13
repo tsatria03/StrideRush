@@ -1,3 +1,5 @@
+New in 2.1.
+Fixed a bug where the Every Door Open achievement asked for nine real doors in one run, more than any difficulty has, so it now asks for six.
 New in 2.0.
 Added real walls and mixed walls to practice runs, between fake walls and fake doors, so you can practice climbing and telling the two apart.
 Added real walls, tall walls you can't break, each with a ladder in front that you grab and climb hand over hand, with their own statistics and twelve achievements.
