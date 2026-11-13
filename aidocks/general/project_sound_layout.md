@@ -83,3 +83,5 @@ DOGS ADDED and the animals folder REORGANIZED by the dev (2026-11-04, on top of 
 Ladder sounds (the dev, 2026-11-12): environments/<env>/traps/ladders/general/metal/, default and custom (spawn, loop, step1-5 (were climb1-5), grab1-2, collapse (was break), fall, land), and traps/ladders/countdown in both (layered warn1-1 to warn2-5), for [[project_ladders_plan]]; first in platforms, then misc/game, then here. Same day, on purpose: steel_shield's loop1 renamed loop (one loop now), and electric3's off replaced in both environments.
 
 Environments renamed (the dev, 2026-11-12, commit d34a4f1): custom is now uncharted (sounds/environments/uncharted); default stays. No code names either one (current_env starts at "default"); earlier memories saying custom mean uncharted.
+
+Optional timed run sounds (2026-11-13, not added yet; [[project_timed_run_plan]]): misc/game/timewin (crossing the finish line), timelost (time's up), timewarn (the 30, 10 and 5 second warnings) (the dev's names, 2026-11-13); played if present, speech alone otherwise.
