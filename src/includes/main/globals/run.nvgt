@@ -220,6 +220,8 @@ speedup_check();
 powerup_timers(); // every frame, so a timed powerup ends on time
 powerup_sounds(); // every frame: powerups on the belt replay their sound on a timer
 slide_update(); // every frame: a slide's caught items and its end (slide.nvgt)
+ladder_update(); // every frame: too long on a rung and the ladder collapses (ladder.nvgt)
+if (!running) break;
 run_audio_check(); // every frame: the next track when one ends, and the ambience's switch and crossfade
 heartbeat_check(); // every frame: the heartbeat, faster as you speed up (heartbeat.nvgt)
 run_input();
@@ -227,6 +229,12 @@ run_input();
 }
 void step_check()
 {
+// A ladder holds you where you are while you climb (ladder.nvgt).
+if (climbing)
+{
+steptimer.restart();
+return;
+}
 if (steptimer.elapsed < current_step_time()) return; // Slow Motion and Rush Hour shift the normal step_time
 steptimer.restart();
 me.x += 1;
@@ -246,6 +254,8 @@ if (!running) return;
 projectile_check();
 if (!running) return;
 wall_check();
+if (!running) return;
+ladder_check(); // ladder.nvgt: on it if you grabbed it, into it if you didn't
 if (!running) return;
 barrier_check();
 wind_check();
@@ -273,6 +283,7 @@ mine_countdown();
 forcefield_countdown();
 projectile_countdown();
 wall_countdown();
+ladder_countdown(); // ladder.nvgt
 barrier_countdown();
 wind_countdown();
 animal_countdown();

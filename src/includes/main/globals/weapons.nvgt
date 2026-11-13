@@ -60,7 +60,7 @@ void weapon_input()
 {
 if (practice_weapons_off()) return; // silent: no weapons in this practice run (practice.nvgt)
 reload_check(); // a reload already under way still finishes
-if (door_moving or sliding) return; // no drawing, firing, reloading or ammo checks while a door carries you
+if (door_moving or sliding or climbing) return; // nor on a ladder; no drawing, firing, reloading or ammo checks while a door carries you
 for (int k = 1; k <= 10; k++)
 {
 if (controls.action_triggered("weapon_" + k)) draw_weapon(k - 1);

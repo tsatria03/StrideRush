@@ -23,6 +23,12 @@ current_lane = lane_middle;
 void lane_input()
 {
 if (controls.action_triggered("info_lane")) speak_buffer(lane_names[current_lane] + " lane.", "status");
+if (climbing)
+{
+// No lanes on a ladder: a lane key makes you fall off it (ladder.nvgt).
+if (controls.action_triggered("lane_left") or controls.action_triggered("lane_right")) ladder_lane_slip();
+return;
+}
 if (door_moving) return; // a door carries you straight through
 if (controls.action_triggered("lane_left")) move_lane(-1);
 else if (controls.action_triggered("lane_right")) move_lane(1);

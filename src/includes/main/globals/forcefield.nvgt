@@ -104,6 +104,13 @@ if (woosh_pending_side != 0 and wooshtimer.elapsed >= clap_window) play_pending_
 if (door_moving or sliding) return; // no hands while a door carries you or on a slide
 bool left = controls.action_triggered("hand_left"), right = controls.action_triggered("hand_right");
 if (!left and !right) return;
+// On a ladder your hands climb; a press in a ladder's window grabs it (ladder.nvgt).
+if (climbing)
+{
+climb_hand(left, right);
+return;
+}
+if (grab_ladder(left, right)) return;
 forcefield@ target = null;
 int target_steps = 0;
 for (uint i = 0; i < forcefields.length(); i++)

@@ -1,0 +1,270 @@
+/* Ladders and real walls (the ladders plan, dev, 2026-11-12; Section 2). A real wall is tall, can't be broken, and plays
+its environment's walls theme at pitch 100 (fake walls play at odd pitches, wall.nvgt); it always comes with a ladder
+ladder_wall_gap (5) steps before it (dev, after testing: the two loops were heard as one), so the two are one obstacle. Ladder sounds come from environments/<env>/traps/ladders/general/
+<theme> (metal so far): spawn as it's placed, loop at its tile as you near it, grab1 or grab2 at random
+and climb1 to climb5 as you climb, break if it collapses, fall if you fall off, land as you come down past the wall.
+A countdown since the dev added cues (2026-11-12: "Some times I never know when to grab it"): the layered
+traps/ladders/countdown set, ending on the step before the ladder, where the grab window closes; it stops once grabbed.
+- Getting on: a hand press in a key's window (hand_window_start()) grabs it. You run on to its tile, where the belt holds
+  you (step_check() waits while climbing) and a climb sound plays, the first rung.
+- Climbing: the rest of its rungs (a random height by level, ladder_rungs_min to ladder_rungs_max, so you listen for the
+  top instead of counting), each a press of the other hand from the last, a climb sound per rung (the grab plays only as you take hold, dev, 2026-11-12)
+  (any of climb1 to climb5, at random),
+  at your own pace, but within ladder_rung_time() of the last (on runtimer, so pausing freezes it). Both hands at once do
+  nothing. The same hand twice, or too long on a rung, collapses it; any lane key makes you fall off. Jumping,
+  crouching, weapons and inventory wait until you're down.
+- Reaching it without having grabbed it runs you into it: it collapses.
+- A collapse or a fall: its sound and ladder_damage, then you run on and crash into the real wall when you reach it
+  (wall_damage). After the fifth rung: land, and you're set down on the wall's tile, past it, running again.
+- On a slide or a good trampoline's flight, the ladder and its wall pass harmlessly (carried()).
+Not in combinations. Same entity pattern as the other traps: null-slot removal, reused slots, and only
+destroy_all_ladders() shrinks the array. */
+sound_pool ladderpool;
+class ladder
+{
+double x; // the ladder's tile
+double wall_x; // its real wall's, ladder_wall_gap further on
+bool wall_spent = false; // climbed over, or already crashed into (or a fatal ladder blow in practice, set down short of it)
+string theme;
+string walltheme;
+string env;
+int rungs; // its height, picked at spawn
+double countdown_start; // where the grab window starts counting from, as an item's
+bool grabbed = false;
+bool spent = false;
+int loopslot = -1;
+int wallslot = -1;
+}
+ladder@[] ladders(0);
+bool climbing = false;
+ladder@ climb_ladder = null;
+int climb_rungs = 0; // rungs climbed, 1 to 5
+int climb_last_hand = 0; // -1 left, 1 right
+double climb_rung_deadline = 0; // on runtimer
+
+// From reset_player() and cancel_movement(): off any ladder.
+void reset_climb()
+{
+climbing = false;
+@climb_ladder = null;
+climb_rungs = 0;
+climb_last_hand = 0;
+}
+string ladder_folder(ladder@ l)
+{
+return trap_folder(l.env, "ladders") + l.theme + "/";
+}
+// The time each rung allows by the run's level (the dev, 2026-11-12), easy's in practice and debug runs.
+double ladder_rung_time()
+{
+if (run_difficulty < 0) return ladder_rung_times[0];
+return ladder_rung_times[run_difficulty];
+}
+// A ladder needs its own theme and a walls theme for its real wall, in the current environment.
+bool ladders_ready()
+{
+return get_pack_sound_folders(type_folder("ladders") + "*").length() > 0 and get_pack_sound_folders(type_folder("walls") + "*").length() > 0;
+}
+void spawn_ladder(double x, string theme, int countdown)
+{
+string[] walls = get_pack_sound_folders(type_folder("walls") + "*");
+if (walls.length() == 0) return;
+ladder l;
+l.x = x;
+l.wall_x = x + ladder_wall_gap;
+l.theme = theme;
+l.walltheme = walls[random(0, walls.length() - 1)];
+l.env = current_env;
+int level = run_difficulty < 0 ? 0 : run_difficulty; // practice and debug runs climb easy's ladders
+l.rungs = random(ladder_rungs_min[level], ladder_rungs_max[level]);
+l.countdown_start = x - countdown;
+ladderpool.play_2d(get_pack_sound(ladder_folder(l) + "*spawn*"), 0, me.x, 0, x, false);
+l.loopslot = ladderpool.play_2d(get_pack_sound(ladder_folder(l) + "*loop*"), 0, me.x, 0, x, true);
+l.wallslot = ladderpool.play_2d(get_pack_sound(trap_folder(l.env, "walls") + l.walltheme + "/*loop*"), 0, me.x, 0, l.wall_x, true); // the real wall, at pitch 100
+for (uint i = 0; i < ladders.length(); i++)
+{
+if (@ladders[i] == null)
+{
+@ladders[i] = l;
+return;
+}
+}
+ladders.insert_last(l);
+}
+/* From hand_check(): a hand press in a ladder's window grabs it (the nearest, if ever two). True if one was grabbed, so the
+press does nothing else. */
+bool grab_ladder(bool left, bool right)
+{
+ladder@ target = null;
+for (uint i = 0; i < ladders.length(); i++)
+{
+if (@ladders[i] == null) continue;
+ladder@ l = ladders[i];
+if (l.spent or l.grabbed or me.x < hand_window_start(l.x, l.countdown_start) or l.x - me.x < 1) continue;
+if (@target == null or l.x < target.x) @target = l;
+}
+if (@target == null) return false;
+target.grabbed = true;
+ladderpool.play_stationary(get_pack_sound(ladder_folder(target) + "*grab*"), false); // grab1 or grab2 at random, whichever hand (dev, 2026-11-12)
+/* Straight onto it (dev, 2026-11-12, trying it after the run-up: ladder_grab_runup false): the climb starts at the grab,
+wherever you are in the window, and the ladder's tile no longer matters. With the run-up, you run on to its tile first. */
+if (!ladder_grab_runup)
+{
+target.spent = true;
+stop_ladder_loop(target);
+start_climb(target);
+}
+climb_last_hand = left ? -1 : 1; // after start_climb(), whose cancel_movement() clears it
+return true;
+}
+/* Runs once per step, right after the move: reaching a ladder puts you on it if you grabbed it, or runs you into it;
+reaching its real wall after a failed climb crashes you into it. */
+void ladder_check()
+{
+for (uint i = 0; i < ladders.length(); i++)
+{
+if (@ladders[i] == null) continue;
+ladder@ l = ladders[i];
+if (me.x == l.x and !l.spent)
+{
+l.spent = true;
+if (carried()) continue; // over it on a slide or a flight: it and its wall pass harmlessly
+stop_ladder_loop(l);
+if (!l.grabbed)
+{
+ladder_fail(l, false); // ran into it
+if (!running) return;
+}
+else start_climb(l);
+}
+if (me.x == l.wall_x and !l.wall_spent)
+{
+l.wall_spent = true;
+if (!carried()) wall_crash(l);
+if (!running) return;
+}
+if (me.x > l.wall_x + spawn_distance()) remove_ladder(i);
+}
+}
+void start_climb(ladder@ l)
+{
+int hand = climb_last_hand; // the grabbing hand, kept through cancel_movement()'s reset_climb()
+cancel_movement(); // off the ground or crouched, you're on the ladder now
+climb_last_hand = hand;
+climbing = true;
+@climb_ladder = l;
+climb_rungs = 1;
+climb_rung_deadline = runtimer.elapsed + ladder_rung_time();
+ladderpool.play_stationary(get_pack_sound(ladder_folder(l) + "*climb*"), false); // any of climb1 to climb5
+}
+// From hand_check() while climbing: the next rung, or a collapse for the same hand twice. Both hands at once do nothing.
+void climb_hand(bool left, bool right)
+{
+if (left == right) return;
+int hand = left ? -1 : 1;
+if (hand == climb_last_hand)
+{
+ladder_fail(climb_ladder, false);
+return;
+}
+climb_last_hand = hand;
+climb_rungs += 1;
+ladderpool.play_stationary(get_pack_sound(ladder_folder(climb_ladder) + "*climb*"), false); // any of climb1 to climb5, at random (dev, 2026-11-12)
+if (climb_rungs >= climb_ladder.rungs)
+{
+// Over the top: down past the wall, running again.
+ladder@ l = climb_ladder;
+reset_climb();
+ladderpool.play_stationary(get_pack_sound(ladder_folder(l) + "*land*"), false);
+past_ladder(l);
+return;
+}
+climb_rung_deadline = runtimer.elapsed + ladder_rung_time();
+}
+// Every frame from run_loop(): too long on one rung and your grip gives way.
+void ladder_update()
+{
+if (climbing and runtimer.elapsed >= climb_rung_deadline) ladder_fail(climb_ladder, false);
+}
+// From lane_input() while climbing: there are no lanes on a ladder, so you fall off.
+void ladder_lane_slip()
+{
+if (climbing) ladder_fail(climb_ladder, true);
+}
+/* A collapse (fall false) or a fall off the side (fall true): its sound and ladder_damage, then you run on toward the real
+wall, which you crash into when you reach it (wall_crash()). A fatal blow plays its sound through p, which end_run_hit()
+leaves alone; a practice death sets you down just past the ladder, so its wall is spent first. */
+void ladder_fail(ladder@ l, bool fall)
+{
+reset_climb();
+practice_hints_restart(); // a hit: a practice run's hints start over (practicehints.nvgt)
+last_caught = "ladders";
+last_caught_kind = fall ? "fall" : "collapse";
+string clip = get_pack_sound(ladder_folder(l) + (fall ? "*fall*" : "*break*"));
+int blow = take_damage(ladder_damage);
+if (blow == blow_fatal)
+{
+l.wall_spent = true;
+p.play_stationary(clip, false);
+end_run_hit();
+return;
+}
+ladderpool.play_stationary(clip, false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+steptimer.restart(); // off the ladder: the belt carries you on from here
+}
+// Reaching a real wall after a failed climb: its hit and wall_damage, as a fake wall crash, and you run on past it.
+void wall_crash(ladder@ l)
+{
+string hit_clip = get_pack_sound(trap_folder(l.env, "walls") + l.walltheme + "/*hit*");
+stat_caught("real_walls");
+int blow = take_damage(wall_damage);
+if (blow == blow_fatal)
+{
+p.play_stationary(hit_clip, false);
+end_run_hit();
+return;
+}
+ladderpool.play_2d(hit_clip, 0, me.x, 0, l.wall_x, false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+}
+// After a climb: set down on the real wall's tile, past it, with the step timer starting fresh.
+void past_ladder(ladder@ l)
+{
+l.wall_spent = true;
+me.x = l.wall_x;
+update_listeners();
+steptimer.restart();
+}
+// The countdown, once per step: until it's grabbed, ending as the grab window closes.
+void ladder_countdown()
+{
+for (uint i = 0; i < ladders.length(); i++)
+{
+if (@ladders[i] == null or ladders[i].spent or ladders[i].grabbed) continue;
+play_countdown(ladderpool, "ladders", ladders[i].x, ladders[i].countdown_start, ladders[i].env);
+}
+}
+void stop_ladder_loop(ladder@ l)
+{
+if (l.loopslot > -1) ladderpool.destroy_sound(l.loopslot);
+l.loopslot = -1;
+}
+void remove_ladder(uint i)
+{
+if (i >= ladders.length() or @ladders[i] == null) return;
+stop_ladder_loop(ladders[i]);
+if (ladders[i].wallslot > -1) ladderpool.destroy_sound(ladders[i].wallslot);
+@ladders[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_ladders()
+{
+for (uint i = 0; i < ladders.length(); i++)
+{
+if (@ladders[i] == null) continue;
+remove_ladder(i);
+}
+ladders.resize(0);
+reset_climb();
+}
