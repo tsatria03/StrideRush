@@ -11,6 +11,8 @@ sound_pool slidepool;
 class slide_obj
 {
 double x;
+string theme; // its theme in transitions/slides/general (the transitions plan, dev, 2026-11-13)
+string env;
 int ride_ms;
 double land_from, land_to; // the clear landing: where the ride should end, and where the next thing may go
 bool reached;
@@ -20,6 +22,7 @@ slide_obj@[] slides;
 bool sliding = false;
 double slide_end_at = 0; // on runtimer
 int slide_moveslot = -1;
+string slide_folder_now = ""; // the ridden slide's theme folder, for its move and stop
 bool slides_debug = false; // the debug spawn choice "slides": the full game, with a slide about every other spawn
 
 // Every run starts off a slide, with none on the belt.
@@ -32,7 +35,11 @@ slide_moveslot = -1;
 }
 bool slides_available()
 {
-return get_pack_sound("misc/game/*slideground*") != "";
+return get_pack_sound_folders(trap_folder(current_env, "slides") + "*").length() > 0;
+}
+string slide_folder(slide_obj@ s)
+{
+return trap_folder(s.env, "slides") + s.theme + "/";
 }
 /* Places a slide at x: its ride length is picked now, so the spawner knows where it'll end and can keep the landing
 clear. At double the current speed, ride_ms covers that many tiles. */
@@ -43,10 +50,13 @@ s.x = x;
 s.reached = false;
 s.loopslot = -1;
 s.ride_ms = random(slide_min_time, slide_max_time);
+string[] themes = get_pack_sound_folders(trap_folder(current_env, "slides") + "*");
+s.theme = themes.length() > 0 ? themes[random(0, themes.length() - 1)] : "";
+s.env = current_env;
 int tiles = int(ceil(double(s.ride_ms) / (current_step_time() / 2.0)));
 s.land_from = x + tiles;
 s.land_to = s.land_from + countdown_steps() + floor_tiles(run_min_floor_time);
-s.loopslot = slidepool.play_2d(get_pack_sound("misc/game/*slideground*"), 0, me.x, 0, x, true);
+s.loopslot = slidepool.play_2d(get_pack_sound(slide_folder(s) + "*loop*"), 0, me.x, 0, x, true);
 slides.insert_last(s);
 }
 // Runs once per step, right after the move: reaching a slide's tile puts you on it, in the air or on the ground.
@@ -71,8 +81,9 @@ void start_slide(slide_obj@ s)
 sliding = true;
 stat_add("slides_ridden"); // Section 2
 slide_end_at = runtimer.elapsed + s.ride_ms;
-slidepool.play_stationary(get_pack_sound("misc/game/*slidestart*"), false);
-slide_moveslot = slidepool.play_stationary(get_pack_sound("misc/game/*slidemove*"), true);
+slide_folder_now = slide_folder(s);
+slidepool.play_stationary(get_pack_sound(slide_folder_now + "*start*"), false);
+slide_moveslot = slidepool.play_stationary(get_pack_sound(slide_folder_now + "*move*"), true);
 }
 /* Every frame from run_loop(): on a slide, the items in your lane are caught (each pick-up takes the nearest one in your
 lane within reach, so they're caught as they arrive), and the ride ends on time with slidestop. */
@@ -90,7 +101,7 @@ if (runtimer.elapsed < slide_end_at) return;
 sliding = false;
 if (slide_moveslot > -1) slidepool.destroy_sound(slide_moveslot);
 slide_moveslot = -1;
-slidepool.play_stationary(get_pack_sound("misc/game/*slidestop*"), false);
+slidepool.play_stationary(get_pack_sound(slide_folder_now + "*stop*"), false);
 }
 // True while a slide is on its way, being ridden, or its landing is still ahead: no new slide, real door or key then.
 bool slide_holds()

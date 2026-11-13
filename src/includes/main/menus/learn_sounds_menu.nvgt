@@ -212,11 +212,14 @@ string env_root = "environments/" + env + "/";
 learn_category@ place = learn_category(env.replace("_", " ", true)); // just its name, "default" (dev, 2026-11-10: "not, default environment")
 learn_category cues("countdowns"); // "obstacle cues" until 2026-11-05 (dev: "countdowns and traps")
 string[] types = get_pack_sound_folders(env_root + "traps/*");
-for (uint i = 0; i < types.length(); i++)
+string[] moves = get_pack_sound_folders(env_root + "transitions/*"); // doors, ladders, slides, switches, trampolines (the transitions plan, dev, 2026-11-13)
+string[] all_types = types;
+for (uint i = 0; i < moves.length(); i++) all_types.insert_last(moves[i]);
+for (uint i = 0; i < all_types.length(); i++)
 {
-// Slides, trampolines and winds have empty countdown folders for now, so they're left out.
-if (get_pack_sound(env_root + "traps/" + types[i] + "/countdown/warn*") == "") continue;
-cues.sounds.insert_last(learn_countdown(env_root, types[i]));
+// Only types whose countdown folder has cues: traps' and transitions' together.
+if (get_pack_sound(env_root + type_category(all_types[i]) + "/" + all_types[i] + "/countdown/warn*") == "") continue;
+cues.sounds.insert_last(learn_countdown(env_root, all_types[i]));
 }
 learn_sort_sounds(cues.sounds);
 place.subs.insert_last(cues);
@@ -224,6 +227,10 @@ learn_category obstacles("traps"); // "obstacles" until 2026-11-05
 for (uint i = 0; i < types.length(); i++) obstacles.subs.insert_last(learn_folder_category(learn_type_name(types[i]), env_root + "traps/" + types[i] + "/general", ""));
 learn_sort_categories(obstacles.subs);
 place.subs.insert_last(obstacles);
+learn_category transitions("transitions"); // sorts before traps
+for (uint i = 0; i < moves.length(); i++) transitions.subs.insert_last(learn_folder_category(learn_type_name(moves[i]), env_root + "transitions/" + moves[i] + "/general", ""));
+learn_sort_categories(transitions.subs);
+if (transitions.subs.length() > 0) place.subs.insert_last(transitions);
 learn_sort_categories(place.subs);
 return place;
 }
@@ -467,7 +474,7 @@ learn_sound s;
 s.label = learn_upper_first(learn_type_name(type) + " countdown");
 s.theme = learn_type_name(type); // sorted by the name players hear, so fake walls sit under F (dev, 2026-11-12)
 s.sound_name = "countdown";
-string folder = env_root + "traps/" + type + "/countdown/";
+string folder = env_root + type_category(type) + "/" + type + "/countdown/";
 bool layered = get_pack_sound(folder + "warn1-1*") != "";
 for (int note = 1; note <= countdown_length; note++)
 {

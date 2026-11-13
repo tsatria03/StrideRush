@@ -309,7 +309,7 @@ trampolines_debug = only_type == "trampolines";
 if (trampolines_debug) spawn_only = "all";
 /* Practice doors' keys come one at a time in a random lane, as in the real game, but never with a pair's second item,
 which could be any kind, since a practice run has no items but keys (dev, 2026-11-05). */
-if (only_type == "practice_doors" or only_type == "practice_mixed" or (practice_run and only_type == "real_doors")) // practice's real doors too (2026-11-09), and mixed obstacles' keys
+if (only_type == "practice_doors" or only_type == "practice_mixed" or only_type == "real_doors" or only_type == "real_doors_spread") // practice's real doors too (2026-11-09), mixed obstacles' keys, and the debug real doors choices (dev, 2026-11-13: "I should only see keys")
 {
 item_lane_mode = "random";
 return;
@@ -450,7 +450,7 @@ if (flying and ox < flight_land_x) return; // nor for anything a trampoline flig
 int steps_left = int(ox - me.x);
 if (steps_left < 1 or steps_left > 5 or me.x < countdown_start) return;
 int note = 6 - steps_left;
-string folder = env_root(env) + "traps/" + type + "/countdown/"; // the obstacle's own environment (env.nvgt)
+string folder = env_root(env) + type_category(type) + "/" + type + "/countdown/"; // the obstacle's own environment, in traps or transitions (env.nvgt)
 /* A layered set (dev, 2026-11-03) stacks octaves as warn<group>-<note>, such as the walls' warn1-3 (low) with warn2-3
 (high): every group's note for this step plays at once, for as many groups as exist. A plain set has warn<note>. */
 if (get_pack_sound(folder + "warn1-1*") != "")

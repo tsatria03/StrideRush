@@ -95,6 +95,13 @@ to the side). It switches off the nearest active field that's counting down. */
 cleared a force field and an animal at once). That press was used on the field, so while it stays held it can't make
 the other hand's press a clap; let go, and it's free again. */
 bool left_used_on_field = false, right_used_on_field = false;
+// The switch press from the field's environment, a random switches theme (the transitions plan, dev, 2026-11-13).
+string switch_press_sound(const string&in env)
+{
+string[] themes = get_pack_sound_folders(trap_folder(env, "switches") + "*");
+if (themes.length() == 0) return "";
+return get_pack_sound(trap_folder(env, "switches") + themes[random(0, themes.length() - 1)] + "/*press*");
+}
 void hand_check()
 {
 if (left_used_on_field and !controls.action_down("hand_left")) left_used_on_field = false;
@@ -132,7 +139,7 @@ if (@target == null)
 if (!open_door() and !pick_up_ammopack() and !pick_up_key() and !pick_up_shield() and !pick_up_capsule() and !pick_up_potion() and !pick_up_teleporter()) empty_hand_sound(left, right);
 return;
 }
-forcefieldpool.play_stationary(get_pack_sound("misc/game/*switchpress*"), false);
+forcefieldpool.play_stationary(switch_press_sound(target.env), false);
 switch_off_forcefield(target);
 if (left) left_used_on_field = true;
 if (right) right_used_on_field = true;
