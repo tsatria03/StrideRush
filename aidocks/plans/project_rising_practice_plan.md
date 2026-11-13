@@ -26,3 +26,5 @@ Settled design (2026-11-12):
 Sections:
 1. The rising choice and its speed-up.
 2. Docks: the readme's practice section, the entry, CLAUDE.md, the version history, this plan COMPLETE.
+- Section 1 built (2026-11-12): choose_practice() adds "rising" after the speeds and sets practice_rising (practice.nvgt), starting at start_step_time; speedup_check() runs in a rising practice run every practice_rising_period (5000) down to practice_rising_top (100), tuning.nvgt; practice_death() never touches step_time, so retry keeps the speed; restart run reruns start_run() from 500 with practice_rising still set.
+- Section 1 COMPLETE (dev, 2026-11-12): both tests passed (rising from 2 to 10 by about 3 min 20 s and holding; retry keeps the speed, restart run starts from 2, fixed speeds stay fixed).

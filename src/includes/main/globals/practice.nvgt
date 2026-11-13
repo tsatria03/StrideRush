@@ -13,6 +13,7 @@ const string[] practice_goal_verbs = {"jump over", "jump over", "jump over", "du
 const string[] practice_goal_singulars = {"hazard", "spike", "mine", "projectile", "force field", "animal", "fake wall", "real wall", "mixed wall", "fake door", "real door", "mixed door", "barrier", "wind", "combination", "trampoline flight", "mixed obstacle"};
 int[] practice_passes = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // mixed obstacles last (the practice mix plan, dev, 2026-11-12) // real and mixed walls after fake walls (the ladders plan, dev, 2026-11-12) // trampolines last, after combinations (the trampolines plan, dev, 2026-11-11) // winds between barriers and combinations (the winds plan, dev, 2026-11-11) // one per practice_choices entry, saved as practice_passes_<choice>
 string practice_choice = ""; // the practice run's choice, such as "mixed_doors", set by play_game()
+bool practice_rising = false; // the speed menu's "rising": the belt speeds up from 2 to 10 steps a second (speedup_check())
 bool practice_unlocks_checked = false; // the one-time returning player check has run for this save
 bool practice_combos_checked = false; // the one-time combinations check (practice_combos_check()) has run for this save
 bool practice_winds_checked = false; // the one-time winds check (practice_winds_check()) has run for this save

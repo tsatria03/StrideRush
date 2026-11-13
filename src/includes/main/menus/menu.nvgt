@@ -384,10 +384,12 @@ for (int t = start_step_time; t >= 100; t -= 100)
 {
 m.add_item(tenths_text(int(round(10000.0 / t, 0))), "" + t); // steps a second as bare numbers, 2, 2.5, 3.3, 5, 10 (dev, 2026-11-08)
 }
+m.add_item("rising", "rising"); // from 2 up to 10, twice as fast as an endless run (the rising practice plan, dev, 2026-11-12)
 m.add_item("back", "back");
 mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") continue; // back to the obstacles
-practice_speed = int(parse_int(m.selected_item_id));
+practice_rising = m.selected_item_id == "rising";
+practice_speed = practice_rising ? start_step_time : int(parse_int(m.selected_item_id)); // rising starts at 2 steps a second
 return true;
 }
 return false;

@@ -291,10 +291,14 @@ door_countdown();
 }
 void speedup_check()
 {
-if (practice_run) return; // a practice run stays at its chosen speed all run (dev, 2026-11-05: "keep it as is")
-if (speeduptimer.elapsed < speedup_period) return;
+/* A practice run stays at its chosen speed all run (dev, 2026-11-05: "keep it as is"), except "rising" (the rising
+practice plan, dev, 2026-11-12): from 2 steps a second up to practice_rising_top, every practice_rising_period. A
+practice death leaves step_time alone, so retry practice keeps the speed reached; restart run starts from 2 again. */
+if (practice_run and !practice_rising) return;
+if (speeduptimer.elapsed < (practice_run ? practice_rising_period : speedup_period)) return;
 speeduptimer.restart();
-step_time = int(max(run_top_step_time(), step_time - speedup_amount)); // the level's top speed, so insane stops at 75 (difficulty.nvgt)
+int top = practice_run ? practice_rising_top : run_top_step_time(); // the level's top speed, so insane stops at 75 (difficulty.nvgt)
+step_time = int(max(top, step_time - speedup_amount));
 }
 void run_input()
 {
