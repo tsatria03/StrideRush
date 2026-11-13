@@ -9,7 +9,8 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.1 (open, 2 of 10)
+## 2.1 (open, 4 of 10)
+- Environment key and saved mutes ([[project_hints_setting_env_key_plan]], two entries): info_environment=V says "<env> environment." in the status buffer, as L; every buffer's mute (but all and alerts) saved in settings.srf as buffer_muted_<name> by writepreffs() and applied by load_buffer_mutes() after the buffers are made, reset_settings() unmuting all; a practice hints setting was dropped for it (muting the practice buffer does the same).
 - Achievement hints ([[project_achievement_hints_plan]]): from the audit, four stale hints (Endurance, Smash and Dash, Potion Lover, Punching Bag) and seven naming keys (Doorman, Key Holder, Locked and Loaded, Shielded, Reloader, Heavy Hitter, Trigger Happy) reworded; achievement hints now name no keys, like practice lines.
 - Door achievements ([[project_door_achievements_plan]]): Every Door Open's threshold 9 to 6 (no level has more than 6 real doors since the 1.8 top speed caps: easy, medium and hard 6, insane and chaos 5), its hint and Master of Doors' hint reworded.
 

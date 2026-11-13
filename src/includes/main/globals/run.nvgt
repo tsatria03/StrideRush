@@ -331,6 +331,7 @@ if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase(), 
 if (controls.action_triggered("info_speed")) speak_buffer(speed_phrase(), "status");
 if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".", "status");
 if (controls.action_triggered("info_heart")) speak_heart_rate(); // B: your heart rate (heartbeat.nvgt)
+if (controls.action_triggered("info_environment")) speak_buffer(current_env.replace("_", " ", true) + " environment.", "status"); // V: the environment you're in, as L says your lane (dev, 2026-11-12)
 weapon_input();
 inventory_input();
 lane_input();

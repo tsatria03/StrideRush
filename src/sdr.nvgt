@@ -39,6 +39,7 @@ if (!load_controls()) exit();
 bracket-key rotation until its first message (buffer_visible()); achievements waits for achievements. */
 string[] buffer_names = {"achievements", "doors", "items", "misc", "powerups", "practice", "status", "weapons"}; // practice: the practice hints (practice_hints.nvgt)
 for (uint i = 0; i < buffer_names.length(); i++) create_buffer(buffer_names[i]);
+load_buffer_mutes(); // the mutes saved last time (savefuncts.nvgt)
 // The quiet startup check (dev, 2026-11-05), from source too, so it can be tested; it only speaks up when there's an update.
 if (auto_check_updates) check_for_updates(version, update_project);
 while(true)

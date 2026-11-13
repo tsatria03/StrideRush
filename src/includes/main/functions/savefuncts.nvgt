@@ -189,8 +189,8 @@ gs.add("practice_walls_checked", practice_walls_checked);
 gs.save();
 }
 /* Writes every setting to settings.srf. Called whenever one changes: the menu music volume (form_menu) and the run
-volumes (Home, End, Page Up and Page Down). Muting a buffer calls it too; mutes aren't saved, so that just rewrites the
-same values. */
+volumes (Home, End, Page Up and Page Down). Muting a buffer calls it too, and each buffer's mute is saved as
+buffer_muted_<name> (dev, 2026-11-12, after CookieCraze's prefs; all and alerts can't be muted, so they're skipped). */
 void writepreffs()
 {
 st.add("menumusvolume",menumusvolume);
@@ -214,5 +214,21 @@ st.add("show_death_results",show_death_results);
 st.add("show_death_copy_export",show_death_copy_export);
 st.add("tts_config",tts_dump_config(tts, true));
 st.add("soundcard",soundcard);
+for (uint i = 0; i < buffers.length(); i++)
+{
+if (buffers[i].name == "all" or buffers[i].name == "alerts") continue;
+st.add("buffer_muted_" + buffers[i].name, buffers[i].muted);
+}
 st.save();
+}
+/* From main() in sdr.nvgt once the buffers exist (readpreffs() runs before they're made): each buffer muted last time is
+muted again. A buffer with no saved mute, a new one or an older file, stays unmuted. */
+void load_buffer_mutes()
+{
+for (uint i = 0; i < buffers.length(); i++)
+{
+if (buffers[i].name == "all" or buffers[i].name == "alerts") continue;
+string key = "buffer_muted_" + buffers[i].name;
+if (st.d.exists(key)) buffers[i].muted = st.read_bool(key);
+}
 }

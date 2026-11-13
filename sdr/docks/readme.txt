@@ -37,6 +37,7 @@ Letter Z: Announces how far you've run, in steps.
 Letter C: Announces your current speed, in steps a second.
 Letter T: Announces how long you've been running for.
 Letter B: Announces your heart rate, in beats per minute.
+Letter V: Announces which environment you're in.
 Page up or F4: Raises the in-game music volume by 1 decibel.
 Page down or F3: Lowers the in-game music volume by 1 decibel.
 Home or F6: Raises the in-game ambience volume by 1 decibel.
@@ -58,7 +59,7 @@ Left bracket: Moves to the previous buffer.
 Right bracket: Moves to the next buffer.
 Shift plus left bracket: Moves to the first buffer.
 Shift plus right bracket: Moves to the last buffer.
-Shift plus letter M: Mutes or unmutes the current buffer.
+Shift plus letter M: Mutes or unmutes the current buffer. A muted buffer stays muted the next time you play, until you unmute it.
 Shift plus letter C: Copies the current message to the clipboard.
 Alt plus shift plus letter C: Opens the current message in a box you can read with the arrow keys.
 Shift plus letter B: Brings up the buffer menu, where you can copy, export, mute or review a buffer or a message.

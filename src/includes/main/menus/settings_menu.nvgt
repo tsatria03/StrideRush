@@ -252,6 +252,7 @@ sound_global_hrtf = hrtf;
 loop_previews = true;
 variant_descriptions = true;
 auto_check_updates = false; // off by default (dev, 2026-11-10)
+for (uint i = 0; i < buffers.length(); i++) buffers[i].muted = false; // every buffer unmuted, saved below (dev, 2026-11-12)
 use_sr = true;
 tts.set_rate(0);
 tts.set_pitch(0);
