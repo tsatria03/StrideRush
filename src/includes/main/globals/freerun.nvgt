@@ -85,6 +85,7 @@ free_clear_queue(); // a new setup starts with nothing coming (freebelt.nvgt)
 free_kind_focus.delete_all(); // and the add lists start at their tops
 free_give_focus = -1; // and give items' list
 free_key_focus = -1;
+free_set_focus = -1; // and set items' list
 }
 /* A replay or restart (dev, 2026-11-13): the same free run again, standing still at the start, with the same speed,
 environment, death mode, hints and continuous rules, and every batch back at its full count (free_refill_queue()). */
@@ -526,10 +527,10 @@ give_item(type.substr(0, type.length() - 1), amount); // "health_potions" is the
 int free_key_focus = -1;
 /* Keys' color menu (dev, 2026-11-13: "I like the menu better."): each color, then all keys, then back. The color's
 folder ("red_key"), "keys" for all of them, or "" if backed out. */
-string free_choose_key()
+string free_choose_key(const string&in intro = "Choose the key you'd like to be given.")
 {
 setupmenu();
-m.intro_text = "Choose the key you'd like to be given.";
+m.intro_text = intro; // give items' wording, or set items' (Section 3 of the tools plan)
 string[] colors = get_pack_sound_folders(key_folder + "*");
 for (uint i = 0; i < colors.length(); i++) m.add_item(item_display_name(colors[i]), colors[i]);
 m.add_item("all keys", "keys");
@@ -630,11 +631,13 @@ while (true)
 setupmenu();
 m.intro_text = "Choose what you'd like to do with your inventory.";
 m.add_item("give items", "give");
+m.add_item("set items", "set"); // Section 3 of the tools plan
 m.add_item("take items", "take");
 m.add_item("back", "back");
 int mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") return false;
-if (m.selected_item_id == "give" ? free_give_items() : free_take_items()) return true;
+string way = m.selected_item_id;
+if (way == "give" ? free_give_items() : (way == "set" ? free_set_items() : free_take_items())) return true;
 }
 return false;
 }
@@ -655,5 +658,67 @@ int mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") return false;
 free_reserve_unlimited[w] = m.selected_item_id == "unlimited";
 speak_buffer(free_reserve_unlimited[w] ? "Your " + gun + " now has unlimited rounds." : "Your " + gun + " no longer has unlimited rounds.", "misc");
+return true;
+}
+/* Section 3: set items (the free run tools plan, dev, 2026-11-14): every item kind (not only what you carry), all items,
+back, keys through the color menu; "How many do you want?" 0 to 1000, then exactly that many, 0 removing it. All items
+(and all keys) set every kind, every key color, so 0 empties the inventory. True once set, with a line in misc. */
+int free_set_focus = -1;
+// Exactly amount of an inventory item, by give_item()'s difference.
+void free_set_item(const string&in item, int amount)
+{
+give_item(item, amount - item_count(item));
+}
+// One item kind (an add items id) to exactly amount; keys every color.
+void free_set_kind(const string&in type, int amount)
+{
+if (type == "keys")
+{
+string[] colors = get_pack_sound_folders(key_folder + "*");
+for (uint i = 0; i < colors.length(); i++) free_set_item(colors[i], amount);
+return;
+}
+free_set_item(type.substr(0, type.length() - 1), amount); // "health_potions" is the inventory's "health_potion"
+}
+bool free_set_items()
+{
+setupmenu();
+m.intro_text = "Choose the item you'd like to set.";
+string[] ids = free_ids("item");
+for (uint i = 0; i < ids.length(); i++) m.add_item(free_kind_name(ids[i], "item"), ids[i]);
+m.add_item("all items", "all");
+m.add_item("back", "back");
+int mres = m.run(free_set_focus, false, free_set_focus >= 0);
+if (mres < 0 or m.selected_item_id == "back") return false;
+free_set_focus = mres;
+string type = m.selected_item_id;
+string key = "";
+if (type == "keys")
+{
+key = free_choose_key("Choose the key you'd like to set.");
+if (key == "") return false; // back out of the colors to the console
+}
+int n = free_ask_number("Set items", "How many do you want?", 0, 1000);
+if (n < 0)
+{
+speak("canceled");
+return false;
+}
+if (type == "all")
+{
+for (uint i = 0; i < ids.length(); i++) free_set_kind(ids[i], n);
+speak_buffer("You now have " + n + " of each item.", "misc");
+return true;
+}
+if (key != "" and key != "keys")
+{
+free_set_item(key, n);
+string name = item_display_name(key); // "red key"
+speak_buffer("You now have " + n + " " + (n == 1 ? name : name + "s") + ".", "misc");
+return true;
+}
+free_set_kind(type, n);
+if (type == "keys") speak_buffer("You now have " + n + " of each key.", "misc");
+else speak_buffer("You now have " + n + " " + free_kind_name(type, "item", n) + ".", "misc");
 return true;
 }
