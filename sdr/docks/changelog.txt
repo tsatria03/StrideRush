@@ -1,3 +1,5 @@
+New in 2.3.
+Fixed a bug where getting on a slide soon after another one left the first slide's sound playing for the rest of the run.
 New in 2.2.
 Added a way to modify your inventory from a free run's console, giving yourself any number of any item to try it out, or taking it away again.
 Made it so replaying or restarting a free run brings back the same run, with your speed, environment, settings and everything you added still in place, instead of making you set it all up again.

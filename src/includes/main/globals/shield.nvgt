@@ -218,8 +218,8 @@ speak_buffer("You're not wearing a shield.", "status");
 return;
 }
 int percent = int(round(100.0 * shield_hp_left / shield_full(), 0));
-// A free run gives the amounts too (dev, 2026-11-13): "Shield strength, 50 percent, 400 of 800."
-if (free_run) speak_buffer("Shield strength, " + percent + " percent, " + shield_hp_left + " of " + shield_full() + ".", "status");
+// A free run gives the amounts too (dev, 2026-11-13; endurance remaining 2026-11-14): "Shield strength, 50 percent, 400 of 800 endurance remaining."
+if (free_run) speak_buffer("Shield strength, " + percent + " percent, " + shield_hp_left + " of " + shield_full() + " endurance remaining.", "status");
 else speak_buffer("Shield strength, " + percent + " percent.", "status");
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.

@@ -78,6 +78,10 @@ if (s.reached and !sliding and me.x >= s.land_to) slides.remove_at(i);
 }
 void start_slide(slide_obj@ s)
 {
+/* Reaching a slide while still riding one (back to back in a free run, or a faster speed covering the landing early;
+dev, 2026-11-14): the old ride's move loop stops here, or it would play for good once slide_moveslot is replaced. */
+if (slide_moveslot > -1) slidepool.destroy_sound(slide_moveslot);
+slide_moveslot = -1;
 sliding = true;
 stat_add("slides_ridden"); // Section 2
 slide_end_at = runtimer.elapsed + s.ride_ms;
