@@ -17,7 +17,7 @@ const int blow_fatal = 3; // your health ran out on your last life: the caller p
 so there's something to heal (dev, 2026-11-04). spawn_only is set before reset_run(). */
 void reset_health()
 {
-player_health = spawn_only == "health_potions" ? player_hp / 2 : player_hp;
+player_health = spawn_only == "health_potions" ? player_hp / 2 : max_health(); // a free run's set health (freerun.nvgt)
 }
 /* One blow of damage from anything but a hazard. On blow_fatal, lives is 0 and the caller plays the obstacle's hit
 through p and calls end_run_hit(), as a fatal hit always has. */
@@ -36,7 +36,7 @@ lives = 0;
 stat_add("lives_lost"); // the last one
 return blow_fatal;
 }
-player_health = player_hp; // the next life starts at full health
+player_health = max_health(); // the next life starts at full health, a free run's set amount
 /* A debug run with lives that can't end, on its last life: nothing is lost, so health just refills, with no life sound
 (bug found by the dev, 2026-11-04: it played life.ogg anyway). */
 if (lives <= 1) return blow_hurt;
@@ -48,6 +48,10 @@ return blow_life_lost;
 // H: "70 percent health remaining, 2 lives." (dev, 2026-11-03).
 void speak_health()
 {
-int percent = int(round(100.0 * player_health / player_hp, 0));
-speak_buffer(percent + " percent health remaining, " + (lives == 1 ? "1 life." : lives + " lives."), "status");
+int percent = int(round(100.0 * player_health / max_health(), 0));
+string life_text = lives == 1 ? "1 life." : lives + " lives.";
+/* A free run, where you can set your health, gives the amounts too, after SimpleFighter's fullest format (dev,
+2026-11-13): "60 percent, 300 of 500 health remaining, 3 lives." */
+if (free_run) speak_buffer(percent + " percent, " + player_health + " of " + max_health() + " health remaining, " + life_text, "status");
+else speak_buffer(percent + " percent health remaining, " + life_text, "status");
 }

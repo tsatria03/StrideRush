@@ -47,6 +47,7 @@ for (int w = 0; w < int(weapon_names.length()); w++)
 {
 weapon_loaded[w] = is_gun(w) ? gun_start_loaded : 0;
 weapon_reserve[w] = is_gun(w) ? gun_start_reserve : 0;
+if (free_run and !free_reserve_unlimited[w]) weapon_reserve[w] = free_reserve_set[w]; // a free run's set reserve, kept through replays (freerun.nvgt)
 }
 reloading = false;
 firetimer.restart();
@@ -193,7 +194,7 @@ stat_add("reloads"); // counted when the reload finishes
 int w = current_weapon;
 int amount = int(min(gun_start_loaded - weapon_loaded[w], weapon_reserve[w]));
 weapon_loaded[w] += amount;
-if (!reserve_unlimited()) weapon_reserve[w] -= amount; // a practice run's reserve never runs out (dev, 2026-11-05), nor a free run's (freerun.nvgt)
+if (!reserve_unlimited(w)) weapon_reserve[w] -= amount; // a practice run's reserve never runs out (dev, 2026-11-05), nor a free run's (freerun.nvgt)
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*ping*"), false);
 }
 // X: one sentence about the current weapon's ammo.
@@ -205,6 +206,6 @@ if (!is_gun(w))
 speak_buffer("This weapon doesn't take any ammo.", "weapons");
 return;
 }
-if (reserve_unlimited()) speak_buffer("You have " + weapon_loaded[w] + " out of " + gun_start_loaded + " rounds loaded, and unlimited rounds in reserve.", "weapons");
+if (reserve_unlimited(w)) speak_buffer("You have " + weapon_loaded[w] + " out of " + gun_start_loaded + " rounds loaded, and unlimited rounds in reserve.", "weapons");
 else speak_buffer("You have " + weapon_loaded[w] + " out of " + gun_start_loaded + " rounds loaded, and " + weapon_reserve[w] + " rounds in reserve.", "weapons");
 }

@@ -258,7 +258,7 @@ bool free_add(const string&in group)
 string what = free_group_name(group);
 string type = free_choose_kind(group);
 if (type == "") return false;
-int count = free_ask_number("Add " + what, "How many?", 1, 999);
+int count = free_ask_number("Add " + what, "How many?", 1, 1000);
 if (count < 0)
 {
 speak("canceled");
@@ -267,7 +267,7 @@ return false;
 int hp = 0;
 if (group == "obstacle" and free_breakable(type))
 {
-hp = free_ask_number("Add " + what, "How much health should each one have? Leave it empty for the normal health for your speed.", 1, 999, true);
+hp = free_ask_number("Add " + what, "How much health should each one have? Leave it empty for the normal health for your speed.", 1, 1000, true);
 if (hp < 0) hp = 0; // an empty answer and escape both mean the normal health
 }
 setupmenu();

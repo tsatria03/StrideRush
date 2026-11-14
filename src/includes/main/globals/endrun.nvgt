@@ -152,7 +152,7 @@ cancel_movement();
 me.x = past_x;
 update_listeners();
 spawner_catch_up(); // so what comes next still arrives with its full warning
-player_health = player_hp;
+player_health = max_health(); // a free run's set health (freerun.nvgt)
 lives = free_run ? free_lives : practice_lives; // a free run gets back the lives it's set to (freerun.nvgt)
 if (!free_run)
 {

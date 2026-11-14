@@ -187,6 +187,7 @@ return false;
 }
 shield_worn = true;
 shield_hp_left = shield_hp;
+free_shield_full = shield_hp; // a newly worn shield is at the normal strength (freerun.nvgt)
 p.play_stationary(get_pack_sound(shield_folder + "*use*"), false);
 speak_buffer("You put on the steel shield.", "items");
 return true;
@@ -216,7 +217,10 @@ if (!shield_worn)
 speak_buffer("You're not wearing a shield.", "status");
 return;
 }
-speak_buffer("Shield strength, " + int(round(100.0 * shield_hp_left / shield_hp, 0)) + " percent.", "status");
+int percent = int(round(100.0 * shield_hp_left / shield_full(), 0));
+// A free run gives the amounts too (dev, 2026-11-13): "Shield strength, 50 percent, 400 of 800."
+if (free_run) speak_buffer("Shield strength, " + percent + " percent, " + shield_hp_left + " of " + shield_full() + ".", "status");
+else speak_buffer("Shield strength, " + percent + " percent.", "status");
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.
 void shield_lane_sounds()

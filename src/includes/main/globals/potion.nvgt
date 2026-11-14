@@ -147,16 +147,16 @@ health_potion_min_percent to health_potion_max_percent of player_hp, never past 
 player's heal together. True if it was used. */
 bool use_potion()
 {
-if (player_health >= player_hp)
+if (player_health >= max_health())
 {
 speak_buffer("You're already at maximum health.", "items"); // the dev's wording (2026-11-04)
 return false;
 }
-int heal = player_hp * random(health_potion_min_percent, health_potion_max_percent) / 100;
-player_health = int(min(player_hp, player_health + heal)); // the game's min() works in doubles
+int heal = max_health() * random(health_potion_min_percent, health_potion_max_percent) / 100; // of a free run's set health too
+player_health = int(min(max_health(), player_health + heal)); // the game's min() works in doubles
 p.play_stationary(get_pack_sound(potion_folder + "*use*"), false);
 p.play_stationary(get_pack_sound("misc/player/*heal*"), false);
-speak_buffer("Healed to " + int(round(100.0 * player_health / player_hp, 0)) + " percent health.", "items");
+speak_buffer("Healed to " + int(round(100.0 * player_health / max_health(), 0)) + " percent health.", "items");
 return true;
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.

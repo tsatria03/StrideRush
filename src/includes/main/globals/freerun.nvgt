@@ -12,7 +12,7 @@ achievements, records or unlocks (run_difficulty stays -1, so stats_counting sta
 - Death mode: normal deaths (the start, dev, 2026-11-13) or practice deaths (practice_death(), set down past what caught you; normal: the run ends,
   and replay or restart brings the same run back, standing, with everything as it was: free_prepare_replay()). Practice hints: off to start; on, every kind gets practice_hint()'s
   lines, independent of the death mode.
-- The guns' reserve never runs out (reserve_unlimited()), as in practice. */
+- The guns start with a normal run's reserve, 50, which modify ammo reserves can set or make unlimited (Section 3, below). */
 bool free_run = false; // the mode's runs, set by play_game() and kept through replays
 bool free_moving = false; // start running sets it, clear belt clears it
 string free_speed_mode = "fixed"; // "fixed", "rising" or "normal"
@@ -48,10 +48,10 @@ bool practice_hints_on()
 {
 return practice_run or (free_run and free_hints);
 }
-// A gun's reserve never runs out in practice or in a free run (weapons.nvgt).
-bool reserve_unlimited()
+// A gun's reserve never runs out in practice, nor in a free run set to unlimited (weapons.nvgt; Section 3).
+bool reserve_unlimited(int w)
 {
-return practice_run or free_run;
+return practice_run or (free_run and free_reserve_unlimited[w]);
 }
 // From play_game(), each time a free run is set up: the console's settings back to how a free run starts.
 void reset_free_settings()
@@ -62,6 +62,13 @@ free_speed = start_step_time;
 free_practice_deaths = false; // normal deaths to start (dev, 2026-11-13)
 free_hints = false;
 free_lives = starting_lives;
+free_health = player_hp;
+free_shield_full = shield_hp;
+for (uint i = 0; i < free_reserve_unlimited.length(); i++)
+{
+free_reserve_unlimited[i] = false; // a normal run's 50 rounds, not practice's unlimited (dev, 2026-11-13)
+free_reserve_set[i] = gun_start_reserve;
+}
 free_console_focus = -1;
 free_clear_queue(); // a new setup starts with nothing coming (freebelt.nvgt)
 free_kind_focus.delete_all(); // and the add lists start at their tops
@@ -255,11 +262,18 @@ m.add_item("clear belt", "clear_belt");
 m.add_item("clear items", "clear_items");
 m.add_item("clear obstacles", "clear_obstacles");
 m.add_item("clear specials", "clear_specials");
+if (is_gun(current_weapon)) m.add_item("modify ammo reserves", "ammo"); // only with the machine gun or pistol drawn
 }
 m.add_item("modify death mode", "death");
 m.add_item("modify environment", "env");
+if (free_moving)
+{
+m.add_item("modify player health", "health");
+m.add_item("modify player lives", "lives");
+}
 m.add_item("modify practice hints", "hints");
 m.add_item("modify running speed", "speed");
+if (free_moving and shield_worn) m.add_item("modify shield strength", "shield"); // only while a shield is worn
 if (!free_moving) m.add_item("start running", "start");
 m.add_item("view current setup", "view");
 m.add_item("back", "back");
@@ -289,6 +303,10 @@ else if (id == "add_specials") done = free_add("special");
 else if (id == "clear_items") done = free_clear("item");
 else if (id == "clear_obstacles") done = free_clear("obstacle");
 else if (id == "clear_specials") done = free_clear("special");
+else if (id == "ammo") done = free_set_reserve();
+else if (id == "health") done = free_set_health();
+else if (id == "lives") done = free_set_lives();
+else if (id == "shield") done = free_set_shield();
 else if (id == "death") done = free_death_menu();
 else if (id == "env")
 {
@@ -309,4 +327,101 @@ break;
 }
 }
 resume_game();
+}
+/* Section 3: the player (the free run plan, dev, 2026-11-13), set from the running console. Each number box takes 1 to
+1000 (a reserve 0 to 1000); escape cancels. free_health is your full health, filled at once and on a new life;
+free_lives the lives you have and get back from a practice death, capsules adding up to the higher of max_lives or it;
+free_shield_full the worn shield's full strength (a newly worn shield starts at shield_hp); each gun's reserve a set number
+(gun_start_reserve, 50, to start, as a normal run: dev, 2026-11-13) or unlimited, kept through replays. */
+int free_health = player_hp;
+int free_shield_full = shield_hp;
+bool[] free_reserve_unlimited = {false, false, false, false, false, false, false, false, false, false}; // one per weapon_names entry; a normal run's reserve to start (dev, 2026-11-13)
+int[] free_reserve_set = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50}; // gun_start_reserve, as a normal run starts
+// Your full health: a free run's set amount, or player_hp.
+int max_health()
+{
+return free_run ? free_health : player_hp;
+}
+// The most lives a capsule can take you to: max_lives, or in a free run the higher of it and your set lives.
+int lives_cap()
+{
+if (free_run and free_lives > max_lives) return free_lives;
+return max_lives;
+}
+// The worn shield's full strength, for its percent (M).
+int shield_full()
+{
+return free_run ? free_shield_full : shield_hp;
+}
+// Modify player health: "How much health do you want?" True once set.
+bool free_set_health()
+{
+int n = free_ask_number("Modify player health", "How much health do you want?", 1, 1000);
+if (n < 0)
+{
+speak("canceled");
+return false;
+}
+free_health = n;
+player_health = n;
+speak_buffer("You now have " + n + " health.", "misc");
+return true;
+}
+// Modify player lives: "How many lives do you want?" True once set.
+bool free_set_lives()
+{
+int n = free_ask_number("Modify player lives", "How many lives do you want?", 1, 1000); // up to 1000 (dev, 2026-11-13)
+if (n < 0)
+{
+speak("canceled");
+return false;
+}
+free_lives = n;
+lives = n;
+speak_buffer("You now have " + (n == 1 ? "1 life." : n + " lives."), "misc");
+return true;
+}
+// Modify shield strength, while one is worn: "How strong should your shield be?" True once set.
+bool free_set_shield()
+{
+int n = free_ask_number("Modify shield strength", "How strong should your shield be?", 1, 1000);
+if (n < 0)
+{
+speak("canceled");
+return false;
+}
+free_shield_full = n;
+shield_hp_left = n;
+speak_buffer("Your shield's strength is now " + n + ".", "misc");
+return true;
+}
+// Modify ammo reserves, with a gun drawn: unlimited, or a set number from 0 to 1000. True once set.
+bool free_set_reserve()
+{
+int w = current_weapon;
+string gun = weapon_display_name(w);
+setupmenu();
+m.intro_text = "Choose your " + gun + "'s reserve.";
+m.add_item("unlimited", "unlimited");
+m.add_item("set a number", "number");
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+if (m.selected_item_id == "unlimited")
+{
+free_reserve_unlimited[w] = true;
+speak_buffer("Your " + gun + " now has unlimited rounds in reserve.", "misc");
+return true;
+}
+int n = free_ask_number("Modify ammo reserves", "How many rounds do you want in reserve?", 0, 1000);
+if (n < 0)
+{
+speak("canceled");
+return false;
+}
+free_reserve_unlimited[w] = false;
+free_reserve_set[w] = n;
+weapon_reserve[w] = n;
+speak_buffer("Your " + gun + " now has " + (n == 1 ? "1 round" : n + " rounds") + " in reserve.", "misc");
+return true;
 }
