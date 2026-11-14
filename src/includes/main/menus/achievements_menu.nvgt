@@ -30,7 +30,7 @@ setupmenu();
 achievement@[] shown;
 for (uint i = 0; i < achievements.length(); i++)
 {
-if (achievements[i].scope != scope) continue;
+if (!achievement_in_group(achievements[i], scope)) continue;
 shown.insert_last(achievements[i]);
 m.add_item(achievement_earned(achievements[i]) ? achievements[i].name : achievements[i].name + ", locked", "" + (shown.length() - 1));
 }
@@ -44,13 +44,20 @@ if (achievement_earned(a)) dlgmessage_return(achievement_description(a));
 else dlgmessage_return("This achievement is locked. " + a.hint);
 }
 }
-// How many achievements of a scope ("" for both) are earned.
+/* Which menu group an achievement sits in: the timed run ones (scope timed) go with session achievements, each earned in a
+single run (dev, 2026-11-13: "I thought they all have to do with the current game session as well"). */
+bool achievement_in_group(achievement@ a, const string&in group)
+{
+if (group == "session") return a.scope == "session" or a.scope == "timed";
+return a.scope == group;
+}
+// How many achievements of a group ("" for all) are earned.
 int earned_count(const string&in scope)
 {
 int count = 0;
 for (uint i = 0; i < achievements.length(); i++)
 {
-if (scope != "" and achievements[i].scope != scope) continue;
+if (scope != "" and !achievement_in_group(achievements[i], scope)) continue;
 if (achievement_earned(achievements[i])) count += 1;
 }
 return count;
@@ -65,13 +72,13 @@ string[] achievement_stat_lines()
 {
 string[] lines;
 lines.insert_last(stat_line("achievements unlocked", earned_count("") + " of " + achievements.length()));
-string[] scopes = {"session", "lifetime"};
+string[] scopes = {"session", "lifetime"}; // session takes the timed run ones too (achievement_in_group())
 for (uint s = 0; s < scopes.length(); s++)
 {
 for (uint i = 0; i < achievements.length(); i++)
 {
 achievement@ a = achievements[i];
-if (a.scope != scopes[s]) continue;
+if (!achievement_in_group(a, scopes[s])) continue;
 if (achievement_earned(a))
 {
 lines.insert_last(a.name.lower() + ", complete");
@@ -79,6 +86,7 @@ continue;
 }
 int64 value = 0;
 if (a.scope == "session") best_runs.get(a.stat, value);
+else if (a.scope == "timed") value = timed_stat_value(a.stat); // timed.nvgt
 else value = stat_value(lifetime_stats, a.stat);
 string amount = stat_amount_text(a.stat, value) + " of " + stat_threshold_text(a) + stat_unit(a.stat, a.threshold);
 if (a.scope == "session") amount = "best record, " + amount; // your best single run (dev, 2026-11-07: "best run," at first, then "I like best record better")
@@ -108,6 +116,8 @@ string[] one = {"step", "minute", "steps a second", "lane change", "hazard jumpe
 string[] many = {"steps", "minutes", "steps a second", "lane changes", "hazards jumped", "spikes jumped", "mines jumped", "projectiles ducked", "force fields switched off", "animals scared", "barriers dodged", "fake walls broken", "real walls climbed", "ladders broken", "ladder falls", "fake doors broken", "real doors opened", "floor breakers repaired", "vehicles destroyed", "vehicles dodged", "damage", "lives lost", "hazard falls", "spike hits", "mine hits", "projectile hits", "force field hits", "animal run-ins", "barrier hits", "fake wall crashes", "real wall crashes", "door crashes", "floor breaker falls", "vehicle hits", "vehicle shots taken", "ground powerups collected", "air powerups collected", "melee swings", "gunshots fired", "gun reloads"};
 int i = keys.find(stat);
 if (i >= 0) return " " + (amount == 1 ? one[i] : many[i]);
+// A timed run's wins on a level, "timed_wins_easy": "1 easy timed run won" (timed.nvgt).
+if (stat.length() > 11 and stat.substr(0, 11) == "timed_wins_") return " " + stat.substr(11) + (amount == 1 ? " timed run won" : " timed runs won");
 // The six items, "<item>_used": "1 ammo pack used", "10 ammo packs used".
 if (stat.length() > 5 and stat.substr(stat.length() - 5) == "_used")
 {
@@ -133,7 +143,7 @@ speak("canceled");
 return;
 }
 clear_session_stats();
-clear_lifetime_stats(); // the best records go with it
+clear_lifetime_stats(); // the best records and the timed run records go with it
 earned_achievements.delete_all();
 writegame();
 m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")

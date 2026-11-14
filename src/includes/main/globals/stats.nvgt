@@ -116,6 +116,7 @@ void clear_lifetime_stats()
 {
 lifetime_stats.delete_all();
 best_runs.delete_all(); // the best runs go with the lifetime (the achievements plan)
+clear_timed_records(); // and the timed run records, listed with it (dev, 2026-11-13); the timed level unlocks stay (timed.nvgt)
 last_played_date = "";
 last_played_time = "";
 }

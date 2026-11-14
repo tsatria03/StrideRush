@@ -10,7 +10,8 @@ on runtimer, so pausing freezes both.
 - A death ends it as in endless. A win, a time-out or a death counts toward the level's timed_level_runs (saved as
   timed_runs_<level>); quitting and restarting don't. Each level after easy opens after timed_unlock_runs (3) on the one
   below, apart from endless's difficulty_runs. The mode itself opens once easy endless has its difficulty_unlock_runs.
-- Timed runs keep out of the endless statistics and achievements (start_run_stats()).
+- Timed runs keep out of the endless statistics and achievements (start_run_stats()); Section 2 gives them their own
+  records, results after each run, and five achievements of scope timed in achievements.ini.
 - Optional sounds in misc/game, played if they're ever added: timewin (the finish line), timelost (time's up), timewarn
   (each warning). */
 bool timed_run = false; // the mode's runs, set by play_game() and kept through restarts and replays
@@ -105,11 +106,29 @@ string clip = get_pack_sound("misc/game/*" + (won ? "timewin" : "timelost") + "*
 if (clip != "") dlgplay(clip);
 finish_run();
 }
-// From finish_run(): a timed run's ending counts toward its level, whatever it was. A death sets its outcome here.
+/* From finish_run(): a timed run's ending counts toward its level, whatever it was, and goes into its records (Section 2),
+with the timed run achievements checked. A death sets its outcome here. */
 void count_timed_run()
 {
 if (timed_outcome == "") timed_outcome = "death";
-timed_level_runs[run_difficulty] += 1;
+int level = run_difficulty;
+timed_level_runs[level] += 1;
+timed_played[level] += 1;
+timed_end_time = runtimer.elapsed;
+timed_end_left = timed_left_ms() < 0 ? 0 : timed_left_ms();
+timed_new_best = false;
+if (timed_outcome == "win")
+{
+timed_wins[level] += 1;
+if (int(timed_end_left) > timed_best[level])
+{
+timed_best[level] = int(timed_end_left);
+timed_new_best = true;
+}
+}
+else if (timed_outcome == "timeout") timed_timeouts[level] += 1;
+else timed_deaths[level] += 1;
+check_timed_achievements();
 writegame();
 }
 // What after_death_menu() opens with for a timed run.
@@ -135,4 +154,83 @@ return seconds == 0 ? min_text : min_text + " " + sec_text;
 string timed_status_line()
 {
 return "You have " + timed_clock_phrase(timed_left_ms()) + " left on the clock, and " + timed_clock_phrase(timed_finish_ms() - runtimer.elapsed) + " until you reach the finish line.";
+}
+/* Section 2: the timed run records, per level, apart from the endless statistics (the timed run plan, dev, 2026-11-13: "I
+want them seprat if possible"): runs that ended (a win, a time-out or a death), wins, time-outs, deaths, and the best
+finish, the most clock left at the finish line in ms (0 for none yet). Saved as timed_<record>_<level>; cleared with game
+progress (clear_timed_records()), which never touches timed_level_runs, the unlocks. */
+int[] timed_played = {0, 0, 0, 0, 0};
+int[] timed_wins = {0, 0, 0, 0, 0};
+int[] timed_timeouts = {0, 0, 0, 0, 0};
+int[] timed_deaths = {0, 0, 0, 0, 0};
+int[] timed_best = {0, 0, 0, 0, 0};
+double timed_end_left = 0; // the clock left as the run ended, for its results
+double timed_end_time = 0; // how long it ran
+bool timed_new_best = false; // this win beat the level's best finish
+void clear_timed_records()
+{
+for (uint i = 0; i < timed_played.length(); i++)
+{
+timed_played[i] = 0;
+timed_wins[i] = 0;
+timed_timeouts[i] = 0;
+timed_deaths[i] = 0;
+timed_best[i] = 0;
+}
+}
+// An achievement's stat in a timed run's records: "timed_wins_easy" is easy's wins (achievements.nvgt).
+int64 timed_stat_value(const string&in stat)
+{
+if (stat.length() <= 11 or stat.substr(0, 11) != "timed_wins_") return 0;
+int level = difficulty_names.find(stat.substr(11));
+return level < 0 ? 0 : timed_wins[level];
+}
+// From count_timed_run(): the timed run achievements (scope timed), each earned by its level's first win.
+void check_timed_achievements()
+{
+for (uint i = 0; i < achievements.length(); i++)
+{
+achievement@ a = achievements[i];
+if (a.scope != "timed" or achievement_earned(a)) continue;
+if (timed_stat_value(a.stat) >= a.threshold) earn_achievement(a);
+}
+}
+string timed_outcome_text()
+{
+if (timed_outcome == "win") return "crossed the finish line";
+if (timed_outcome == "timeout") return "time's up";
+return "died";
+}
+// A level's best finish as a line's value: "1 minute 5 seconds left", or "none yet" before its first win.
+string timed_best_text(int level)
+{
+return timed_best[level] > 0 ? timed_clock_phrase(timed_best[level]) + " left" : "none yet";
+}
+/* The results after a timed run (Section 2), in the results menu's "label, value" lines: the level, the outcome, the clock
+left (a win) or the time survived, and the level's best finish, marked when this run set it. */
+string[] timed_result_lines()
+{
+string[] lines;
+int level = run_difficulty;
+lines.insert_last(stat_line("difficulty", difficulty_names[level]));
+lines.insert_last(stat_line("outcome", timed_outcome_text()));
+if (timed_outcome == "win") lines.insert_last(stat_line("time left on the clock", timed_clock_phrase(timed_end_left)));
+else lines.insert_last(stat_line("time survived", timed_clock_phrase(timed_end_time)));
+lines.insert_last(stat_line("best finish", timed_best_text(level) + (timed_new_best ? ", a new record" : "")));
+return lines;
+}
+// The statistics menu's timed run records: five lines for each level, easy to chaos.
+string[] timed_record_lines()
+{
+string[] lines;
+for (uint i = 0; i < difficulty_names.length(); i++)
+{
+string lv = difficulty_names[i];
+lines.insert_last(stat_line(lv + " timed runs played", thousands_text(timed_played[i])));
+lines.insert_last(stat_line(lv + " wins", thousands_text(timed_wins[i])));
+lines.insert_last(stat_line(lv + " time-outs", thousands_text(timed_timeouts[i])));
+lines.insert_last(stat_line(lv + " deaths", thousands_text(timed_deaths[i])));
+lines.insert_last(stat_line(lv + " best finish", timed_best_text(i)));
+}
+return lines;
 }

@@ -20,13 +20,16 @@ results menu, the other leaves copy and export out of the question menu, as a de
 bool copy_shown = endless and show_death_copy_export;
 bool results_shown = endless and show_death_results;
 if (results_shown) show_stat_lines("You have died. Here are your current results for this session.", session_stat_lines());
+// A timed run's own results (the timed run plan's Section 2), under the same setting: how it ended, its clock, the level's best.
+bool timed_results = timed_run and show_death_results;
+if (timed_results) show_stat_lines(timed_end_line() + " Here are your results for this timed run.", timed_result_lines());
 int focus = -1;
 while (true)
 {
 setupmenu();
 m.intro_text = copy_shown ? "What would you like to do now? You can copy or export your session results, replay the current run, or return to the game menu." : "What would you like to do now? You can replay the current run, or return to the game menu.";
 // Without the results menu first, say you died, only as it first opens (dev, 2026-11-08: "I want to know that I died.", but not again after a copy or export).
-if (!results_shown and focus < 0) m.intro_text = (timed_run ? timed_end_line() : "You have died.") + " " + m.intro_text; // a timed run: the finish line, time's up, or a death (timed.nvgt)
+if (!results_shown and !timed_results and focus < 0) m.intro_text = (timed_run ? timed_end_line() : "You have died.") + " " + m.intro_text; // a timed run: the finish line, time's up, or a death (timed.nvgt)
 if (copy_shown)
 {
 m.add_item("copy session results to clipboard", "copy");

@@ -37,7 +37,7 @@ a.shown = file_data.get_double(a.id, "threshold");
 if (a.stat == "time_running") a.threshold = int64(a.shown * 60000);
 else if (a.stat == "top_speed") a.threshold = int64(round(a.shown * 10, 0));
 else a.threshold = int64(a.shown);
-if (a.stat == "" or a.name == "" or (a.scope != "session" and a.scope != "lifetime")) continue; // a broken entry is skipped
+if (a.stat == "" or a.name == "" or (a.scope != "session" and a.scope != "lifetime" and a.scope != "timed")) continue; // a broken entry is skipped; timed: a timed run's, from its records (timed.nvgt)
 achievements.insert_last(a);
 }
 }
@@ -62,6 +62,7 @@ return stat_value(session_stats, stat);
 // What an achievement is measured against now: the run so far, or the lifetime with the run so far added in.
 int64 achievement_progress(achievement@ a)
 {
+if (a.scope == "timed") return timed_stat_value(a.stat); // a timed run's records (timed.nvgt)
 int64 run_value = live_session_value(a.stat);
 if (a.scope == "session") return run_value;
 int64 saved = stat_value(lifetime_stats, a.stat);
@@ -76,7 +77,7 @@ if (!stats_counting) return;
 for (uint i = 0; i < achievements.length(); i++)
 {
 achievement@ a = achievements[i];
-if (achievement_earned(a)) continue;
+if (achievement_earned(a) or a.scope == "timed") continue; // timed ones are checked as a timed run ends (check_timed_achievements())
 if (achievement_progress(a) >= a.threshold) earn_achievement(a);
 }
 }
@@ -84,7 +85,7 @@ if (achievement_progress(a) >= a.threshold) earn_achievement(a);
 void earn_achievement(achievement@ a)
 {
 earned_achievements.set(a.id, true);
-p.play_stationary(get_pack_sound("misc/game/" + (a.scope == "session" ? "*achsession*" : "*achlife*")), false);
+p.play_stationary(get_pack_sound("misc/game/" + (a.scope == "lifetime" ? "*achlife*" : "*achsession*")), false); // timed run ones are single-run, like session
 speak_buffer("Achievement unlocked: " + a.name + ". " + achievement_description(a), "achievements"); // how you got it too (dev, 2026-11-06)
 writegame();
 }

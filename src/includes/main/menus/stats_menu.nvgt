@@ -26,7 +26,7 @@ else if (m.selected_item_id == "clear") clear_stats_menu();
 else if (m.selected_item_id == "copy") copy_all_stats();
 else if (m.selected_item_id == "export") export_all_stats();
 else if (m.selected_item_id == "session") show_stat_lines("Session statistics menu. You can see the stats from your last endless run here.", session_stat_lines());
-else show_stat_lines("Lifetime statistics menu. You can see your total stats across all of your endless runs here.", lifetime_stat_lines());
+else show_stat_lines("Lifetime statistics menu. You can see your total stats across all of your endless runs here, then your timed run records.", lifetime_stat_lines());
 }
 }
 /* The pause menu's session statuses (dev, 2026-11-13): what the status keys say, as "label, value" lines like the
@@ -113,6 +113,9 @@ lines.insert_last(stat_line("total " + difficulty_names[i] + " runs", thousands_
 }
 add_running_lines(lines, lifetime_stats, true);
 add_obstacle_and_hit_lines(lines, lifetime_stats, true);
+// Then the timed run records, level by level (dev, 2026-11-13: "Put the records in the life stats menu"; timed.nvgt).
+string[] timed = timed_record_lines();
+for (uint i = 0; i < timed.length(); i++) lines.insert_last(timed[i]);
 return lines;
 }
 // A count stat's line: "total " first in the lifetime, then the label and the count.
