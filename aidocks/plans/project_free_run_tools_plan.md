@@ -1,11 +1,11 @@
 ---
 name: project_free_run_tools_plan
-description: SETTLED (2026-11-14, for 2.3; 4 sections) - free run console additions: give and take for health, lives and shield strength inside each modify menu, plus footsteps and lives running out as console choices like the debug questions; Q&A log
+description: COMPLETE (2026-11-14, 2.3 at 3 of 10; sections 1, 1B, 2, 3, 4) - free run console additions: give and take for health, lives and shield strength inside each modify menu, plus footsteps and lives running out as console choices like the debug questions; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-14), for 2.3, 4 sections, waiting for the dev's commit and go-ahead. Builds on [[project_free_run_plan]] (globals/freerun.nvgt, freebelt.nvgt).
+Status: COMPLETE (2026-11-14), 2.3 at 3 of 10. Builds on [[project_free_run_plan]] (globals/freerun.nvgt, freebelt.nvgt).
 
 Background (dev, 2026-11-14): "I have 2 more suggestions, but they need debug code lookups and one plan for both. Add options to give/take player related stats. Example, health, shield strength, lives. These will appear in each modify menu. In there, you have something like, give health, take health. Add options to modify footstep/lifecard behavior. Similar to the menu prompts in the debug menus."
 
@@ -56,3 +56,4 @@ Entries (shown to the dev, 2026-11-14), newest on top when added:
 - Section 2 test 3 (footsteps) passed (dev, 2026-11-14): silent while standing and running, landings still heard, kept through a restart, heard again in an endless run. Section 2 done.
 - Section 3 built (2026-11-14): freerun.nvgt's free_set_items() from "set items" between give items and take items: "Choose the item you'd like to set." every item kind, all items, back (remembering its place, free_set_focus); keys through free_choose_key("Choose the key you'd like to set."); "How many do you want?" 0 to 1000; free_set_item() by give_item()'s difference, 0 removing it; all items (and all keys) set every kind and key color; "You now have 5 health potions.", "You now have 3 red keys.", "You now have 5 of each key.", "You now have 5 of each item."
 - Section 3 test passed (dev, 2026-11-14): set items by kind, by key color, to 0, and all items to 0. Section 3 done; Section 4 (docks) next.
+- Section 4 (docks) done (2026-11-14): the two entries under New in 2.3 (give, set and take on top, then no deaths and footsteps); the readme's Free runs section (modify footsteps and modify ammo limits in the console lists, view current setup's lines, the death mode paragraph with no deaths and the named choices, a give, set and take paragraph, an ammo and inventory paragraph with set items); the version history (2.3 at 3 of 10), CLAUDE.md, the index. Plan COMPLETE.

@@ -1,4 +1,6 @@
 New in 2.3.
+Added a no deaths choice to a free run's death mode, where your last life is never lost and your health just refills, and a way to turn your footsteps on or off.
+Added give and take options for health, lives, shield strength and ammo reserves to a free run's console, alongside setting them, and a way to set exactly how many of an item you're carrying, so you can adjust any of them from where you are.
 Fixed a bug where getting on a slide soon after another one left the first slide's sound playing for the rest of the run.
 New in 2.2.
 Added a way to modify your inventory from a free run's console, giving yourself any number of any item to try it out, or taking it away again.
