@@ -37,6 +37,7 @@ double next_beat; // on runtimer: its next lane move
 double next_shot = 0; // on runtimer: its next shot, or the end of its pause
 int burst_left = 0; // shots still to come in this burst
 bool aiming = false; // lined up with you: its aim delay has started
+bool burst_charged = false; // this burst has already cost a timed run its hit (timed.nvgt)
 bool spent = false; // reached meet_x: it can never hit again
 bool destroyed = false; // broken by weapons
 int loopslot = -1;
@@ -161,7 +162,11 @@ v.aiming = true;
 v.next_shot = max(v.next_shot, double(runtimer.elapsed + vehicle_aim_delay)); // a pause still running keeps its end
 }
 if (runtimer.elapsed < v.next_shot) return;
-if (v.burst_left <= 0) v.burst_left = vehicle_burst_shots;
+if (v.burst_left <= 0)
+{
+v.burst_left = vehicle_burst_shots;
+v.burst_charged = false;
+}
 v.burst_left -= 1;
 v.next_shot = runtimer.elapsed + (v.burst_left > 0 ? vehicle_shot_gap : vehicle_burst_pause);
 vehicle_sound(v, "shoot", vehicle_fade); // heard clearly from anywhere it can be (dev, 2026-11-13)
@@ -208,6 +213,12 @@ stat_add("vehicle_shots_taken"); // Section 2: each shot that reaches you, a shi
 last_caught = "vehicle_shots"; // the death outcome and the practice death line tell a shot from a ram
 last_caught_kind = animal_singular(v.kind); // "car"
 practice_hints_restart(); // a hit starts a practice run's hints over (practice_hints.nvgt)
+// A timed run's clock counts a burst as one hit, however many of its shots land (dev, 2026-11-13).
+if (!v.burst_charged)
+{
+v.burst_charged = true;
+timed_hit();
+}
 int blow = take_damage(vehicle_shot_damage);
 // Its impact at you, as a ram's hit: through p when fatal, since end_run_hit() silences the run.
 if (blow == blow_fatal)

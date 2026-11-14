@@ -171,6 +171,7 @@ if (stage == 0)
 string mode = choose_game_mode();
 if (mode == "") return;
 practicing = false; // set again below, so backing out of practice into another mode never leaves it on
+timed_run = false; // likewise a timed run (timed.nvgt)
 level = -1; // likewise the difficulty, which only an endless run has
 debug_env = ""; // and the debug environment choice, which only a debug run has (env.nvgt)
 if (mode == "practice")
@@ -188,9 +189,11 @@ can_run_out = 0;
 steps = 1;
 stage = 6;
 }
-else if (mode == "endless")
+else if (mode == "endless" or mode == "timed")
 {
-// Escaping the difficulty menu stays on the mode menu (stage 0); otherwise straight to the run at the level's speed.
+/* Escaping the difficulty menu stays on the mode menu (stage 0); otherwise straight to the run at the level's speed. A
+timed run is an endless run with its clocks, and its difficulty menu reads its own counts (timed.nvgt). */
+timed_run = mode == "timed";
 level = choose_difficulty();
 if (level < 0) continue;
 /* The real game. Set every choice here, not just once above, since escaping back from a debug option leaves
@@ -252,6 +255,7 @@ start_run(speed, life_count, only_type, can_run_out == 1, practicing, level);
 if (run_died and !restart_run_requested and after_death_menu()) restart_run_requested = true;
 }
 while (restart_run_requested);
+timed_run = false; // back at the game menu, no run is timed
 }
 /* Restart game: starts a fresh copy of the game and closes this one. Compiled, it runs
 sdr.exe, the name nvgt -c gives sdr.nvgt's build; from source, the pinned engine's nvgtw.exe on
@@ -286,6 +290,9 @@ run is only its requirement, and open, just its description, with no "Available.
 practice locks plan's Section 2, dev, 2026-11-10). */
 if (endless_unlocked()) m.add_item("Endless run. This mode lets you run for as long as you can survive. The belt gets faster and more obstacles join as you go, and the run ends when you run out of lives or fall into a hazard.", "endless");
 else m.add_item("Endless run. Unlocked " + endless_lock_reason(), "endless");
+// Timed run (the timed run plan, dev, 2026-11-13): after endless run, open once medium is (timed.nvgt).
+if (timed_mode_unlocked()) m.add_item("Timed run. This mode gives you a countdown clock: clean passes add time, hits take it away, and you win by reaching the finish line before your time runs out.", "timed");
+else m.add_item("Timed run. Unlocked " + timed_mode_lock_reason(), "timed");
 m.add_item("Practice run. This mode lets you practice one kind of obstacle at a time, for as long as you like. If you die, you try again from just past what caught you, and nothing you do here counts toward your progress, apart from unlocking the next obstacle to practice.", "practice");
 m.add_item("back", "back");
 int mres = m.run(focus, false, focus >= 0); // back on a locked endless run, it's focused and spoken
@@ -293,6 +300,12 @@ if (mres < 0 or m.selected_item_id == "back") return "";
 if (m.selected_item_id == "endless" and !endless_unlocked())
 {
 dlgmessage_return("This mode is unlocked " + endless_lock_reason()); // say why, and stay in the menu
+focus = mres;
+continue;
+}
+if (m.selected_item_id == "timed" and !timed_mode_unlocked())
+{
+dlgmessage_return("This mode is unlocked " + timed_mode_lock_reason());
 focus = mres;
 continue;
 }

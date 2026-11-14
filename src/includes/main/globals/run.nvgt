@@ -50,6 +50,7 @@ set_spawn_only(only_type); // before reset_run(), whose reset_spawner() picks th
 pick_start_env(); // after practice_run and the difficulty are set, and before anything spawns or plays (env.nvgt)
 lives_can_end = can_run_out;
 reset_run(starting_step_time, starting_life_count);
+reset_timed(); // a timed run's clocks, once runtimer has restarted (timed.nvgt)
 start_run_stats(); // an endless run starts a fresh session (stats.nvgt)
 start_run_audio();
 running = true;
@@ -226,6 +227,8 @@ ladder_update(); // every frame: too long on a rung and the ladder collapses (la
 if (!running) break;
 floor_breaker_update(); // every frame: too long at a floor breaker's edge and you fall (floor_breaker.nvgt)
 if (!running) break;
+timed_update(); // every frame: a timed run's clocks, its warnings, time's up and the finish line (timed.nvgt)
+if (!running) break;
 run_audio_check(); // every frame: the next track when one ends, and the ambience's switch and crossfade
 heartbeat_check(); // every frame: the heartbeat, faster as you speed up (heartbeat.nvgt)
 run_input();
@@ -343,7 +346,7 @@ if (controls.action_triggered("info_lives")) speak_health(); // H: health percen
 if (controls.action_triggered("info_shield")) speak_shield_strength(); // key_config keeps a plain M quiet during Shift+M (buffer mute)
 if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase(), "status");
 if (controls.action_triggered("info_speed")) speak_buffer(speed_phrase(), "status");
-if (controls.action_triggered("info_time")) speak_buffer("You have been running for " + time_phrase(runtimer.elapsed) + ".", "status");
+if (controls.action_triggered("info_time")) speak_buffer(timed_run ? timed_status_line() : "You have been running for " + time_phrase(runtimer.elapsed) + ".", "status"); // a timed run's two clocks (timed.nvgt)
 if (controls.action_triggered("info_heart")) speak_heart_rate(); // B: your heart rate (heartbeat.nvgt)
 if (controls.action_triggered("info_environment")) speak_buffer(current_env.replace("_", " ", true) + " environment.", "status"); // V: the environment you're in, as L says your lane (dev, 2026-11-12)
 weapon_input();

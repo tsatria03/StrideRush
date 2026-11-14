@@ -136,6 +136,18 @@ const int chaos_level = 4; // difficulty_names' index of chaos, which ignores th
 /* The locks (Section 6, dev, 2026-11-05: "5 runs per level, and a user is required to reach at least 1 door"): easy is
 always open, and each other level opens after this many counted runs on the level below. */
 const int difficulty_unlock_runs = 5;
+/* Timed runs (the timed run plan, dev, 2026-11-13), by level, easy to chaos: the countdown's start and the finish line in
+seconds of running; each clean pass adds and each hit takes away (dev: "I want medium to be 6/5"); a level opens after
+timed_unlock_runs completed timed runs on the one below; warnings as the countdown drops past these. */
+const int[] timed_start_seconds = {60, 50, 40, 30, 20};
+const int[] timed_finish_seconds = {300, 270, 240, 210, 180};
+const int[] timed_pass_seconds = {7, 6, 5, 4, 4};
+const int[] timed_hit_seconds = {5, 5, 7, 8, 10};
+const int timed_unlock_runs = 3;
+const int[] timed_warn_seconds = {45, 30, 15, 10, 5};
+const int timed_warn_rearm_seconds = 10; // a warning plays again only after the clock climbs this far above it (dev, 2026-11-13) // highest first, so a drop past several says only the lowest (dev, 2026-11-13: "5, 10, 15, 30, 45")
+// The clean passes that feed the clock: every obstacle got past the right way (combinations_cleared left out, since each part counts).
+const string[] timed_pass_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "barriers_dodged", "winds_dodged", "walls_broken", "real_walls_climbed", "fake_doors_broken", "real_doors_opened", "floor_breakers_repaired", "vehicles_destroyed", "vehicles_dodged"};
 
 // Each spike swings on its own rhythm: a random swing time between these, picked when it appears (dev, 2026-11-02).
 const int spike_swing_min = 500;

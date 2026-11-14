@@ -35,6 +35,7 @@ practice locks plan, 2026-11-10), which counts them toward the next practice obs
 void stat_add(const string&in key, int64 amount = 1)
 {
 practice_pass(key);
+timed_pass(key); // a timed run's clean pass adds time (timed.nvgt)
 if (!stats_counting) return;
 session_stats.set(key, stat_value(session_stats, key) + amount);
 }
@@ -43,6 +44,7 @@ is fatal, for end_run_hit(). */
 void stat_caught(const string&in type)
 {
 stat_add("caught_" + type);
+timed_hit(); // a timed run's hit takes time (timed.nvgt)
 last_caught = type;
 last_caught_kind = ""; // a door or an animal sets its kind just after
 if (type != "hazards") practice_hints_restart(); // a practice run's hints start over after a hit (practice_hints.nvgt)
@@ -63,7 +65,7 @@ return keys;
 // From start_run(), once the run's difficulty is set: an endless run starts a fresh session.
 void start_run_stats()
 {
-stats_counting = run_difficulty >= 0;
+stats_counting = run_difficulty >= 0 and !timed_run; // endless only: timed runs keep their own records (the timed run plan)
 if (!stats_counting) return;
 session_stats.delete_all();
 last_caught = "";

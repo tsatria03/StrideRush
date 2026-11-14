@@ -14,7 +14,7 @@ menu. A debug death (no difficulty, nothing counted) skips the results and has o
 True to replay the run with the same choices. */
 bool after_death_menu()
 {
-bool endless = run_difficulty >= 0;
+bool endless = run_difficulty >= 0 and !timed_run; // a timed run has no endless results (the timed run plan)
 /* The Game tab's two death settings (the death settings plan, dev, 2026-11-08), each on by default: one skips the
 results menu, the other leaves copy and export out of the question menu, as a debug death has always done. */
 bool copy_shown = endless and show_death_copy_export;
@@ -26,7 +26,7 @@ while (true)
 setupmenu();
 m.intro_text = copy_shown ? "What would you like to do now? You can copy or export your session results, replay the current run, or return to the game menu." : "What would you like to do now? You can replay the current run, or return to the game menu.";
 // Without the results menu first, say you died, only as it first opens (dev, 2026-11-08: "I want to know that I died.", but not again after a copy or export).
-if (!results_shown and focus < 0) m.intro_text = "You have died. " + m.intro_text;
+if (!results_shown and focus < 0) m.intro_text = (timed_run ? timed_end_line() : "You have died.") + " " + m.intro_text; // a timed run: the finish line, time's up, or a death (timed.nvgt)
 if (copy_shown)
 {
 m.add_item("copy session results to clipboard", "copy");

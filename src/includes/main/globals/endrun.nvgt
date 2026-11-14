@@ -108,7 +108,8 @@ void finish_run()
 {
 p.destroy_all();
 run_died = true;
-count_difficulty_run(); // a death after passing a real door counts toward the level's lock (difficulty.nvgt)
+if (timed_run) count_timed_run(); // a timed run's ending, whatever it was, counts toward its level (timed.nvgt)
+else count_difficulty_run(); // a death after passing a real door counts toward the level's lock (difficulty.nvgt)
 running = false;
 }
 /* A practice death (the practice deaths plan, dev, 2026-11-09: "it will use up your 2 lives, then it will kill you like in

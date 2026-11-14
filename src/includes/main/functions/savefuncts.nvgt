@@ -112,6 +112,8 @@ for (uint i = 0; i < difficulty_names.length(); i++)
 {
 string name = "difficulty_runs_" + difficulty_names[i];
 if (gs.d.exists(name)) difficulty_runs[i] = gs.read_int(name);
+string timed_name = "timed_runs_" + difficulty_names[i]; // a timed run's own level counts (timed.nvgt)
+if (gs.d.exists(timed_name)) timed_level_runs[i] = gs.read_int(timed_name);
 }
 // The statistics (stats.nvgt): lifetime stats as "stat_<key>", the last run's as "session_<key>", then the strings.
 string[] keys = lifetime_stat_keys();
@@ -164,6 +166,7 @@ void writegame()
 for (uint i = 0; i < difficulty_names.length(); i++)
 {
 gs.add("difficulty_runs_" + difficulty_names[i], difficulty_runs[i]);
+gs.add("timed_runs_" + difficulty_names[i], timed_level_runs[i]);
 }
 string[] keys = lifetime_stat_keys();
 for (uint i = 0; i < keys.length(); i++) gs.add("stat_" + keys[i], stat_value(lifetime_stats, keys[i]));

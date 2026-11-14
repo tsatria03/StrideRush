@@ -1,0 +1,138 @@
+/* Timed runs (the timed run plan, dev, 2026-11-13; Section 1). A mode after endless run in the mode menu: an endless run
+on one of the five levels (its speed, schedule, spacing, items, doors, damage, 200 health and 1 life), plus two clocks
+on runtimer, so pausing freezes both.
+- The countdown starts at timed_start_seconds for the level; each clean pass (a stat in timed_pass_stats, so a
+  combination's parts each, not the pair) adds timed_pass_seconds, each hit (stat_caught(), a ladder's blow, a vehicle's
+  burst once however many of its shots land) takes timed_hit_seconds. At zero: "Time's up."
+- The finish line is timed_finish_seconds of running; reached with time left: "You crossed the finish line."
+- T says both clocks; the countdown warns at timed_warn_seconds (45, 30, 15, 10, 5) in the status buffer, once each as it drops
+  past, again only after it climbs timed_warn_rearm_seconds (10) above it.
+- A death ends it as in endless. A win, a time-out or a death counts toward the level's timed_level_runs (saved as
+  timed_runs_<level>); quitting and restarting don't. Each level after easy opens after timed_unlock_runs (3) on the one
+  below, apart from endless's difficulty_runs. The mode itself opens once easy endless has its difficulty_unlock_runs.
+- Timed runs keep out of the endless statistics and achievements (start_run_stats()).
+- Optional sounds in misc/game, played if they're ever added: timewin (the finish line), timelost (time's up), timewarn
+  (each warning). */
+bool timed_run = false; // the mode's runs, set by play_game() and kept through restarts and replays
+int[] timed_level_runs = {0, 0, 0, 0, 0}; // completed timed runs per level, as difficulty_runs is for endless
+double timed_bank = 0; // the countdown is timed_bank minus runtimer.elapsed, in ms
+string timed_outcome = ""; // "win", "timeout" or "death" once a timed run ends, "" while it runs or after a quit
+bool[] timed_warned = {false, false, false, false, false}; // one per timed_warn_seconds entry
+
+// The mode opens with medium in endless: once easy has its difficulty_unlock_runs counted runs.
+bool timed_mode_unlocked()
+{
+return difficulty_runs[0] >= difficulty_unlock_runs;
+}
+// "after completing 5 easy endless runs.", or "after completing 2 more easy endless runs." once started ("run" for 1).
+string timed_mode_lock_reason()
+{
+int left = difficulty_unlock_runs - difficulty_runs[0];
+bool started = difficulty_runs[0] > 0;
+return "after completing " + left + (started ? " more " : " ") + "easy endless " + (left == 1 ? "run." : "runs.");
+}
+// From start_run(), after reset_run() has restarted runtimer: the clocks for this level, nothing warned.
+void reset_timed()
+{
+timed_outcome = "";
+if (!timed_run or run_difficulty < 0) return;
+timed_bank = timed_start_seconds[run_difficulty] * 1000.0;
+// A level that starts at or under a warning has it marked until the countdown climbs clear of it; one just above still warns.
+for (uint i = 0; i < timed_warn_seconds.length(); i++) timed_warned[i] = timed_start_seconds[run_difficulty] <= timed_warn_seconds[i];
+}
+double timed_left_ms()
+{
+return timed_bank - runtimer.elapsed;
+}
+double timed_finish_ms()
+{
+return timed_finish_seconds[run_difficulty] * 1000.0;
+}
+// From stat_add(): a clean pass adds the level's time.
+void timed_pass(const string&in key)
+{
+if (!timed_run or !running or run_difficulty < 0) return;
+if (timed_pass_stats.find(key) < 0) return;
+timed_bank += timed_pass_seconds[run_difficulty] * 1000.0;
+}
+// From stat_caught(), ladder_fail() and a vehicle's burst: a hit takes the level's time.
+void timed_hit()
+{
+if (!timed_run or !running or run_difficulty < 0) return;
+timed_bank -= timed_hit_seconds[run_difficulty] * 1000.0;
+}
+// Every frame from run_loop(): time's up, the finish line, or a warning.
+void timed_update()
+{
+if (!timed_run or !running or run_difficulty < 0) return;
+double left = timed_left_ms();
+if (left <= 0)
+{
+end_run_timed(false);
+return;
+}
+if (runtimer.elapsed >= timed_finish_ms())
+{
+end_run_timed(true);
+return;
+}
+// Only the lowest newly crossed warning is said, so a big hit from above 30 says "5 seconds left." alone.
+int say = -1;
+for (uint i = 0; i < timed_warn_seconds.length(); i++)
+{
+if (left <= timed_warn_seconds[i] * 1000.0)
+{
+if (!timed_warned[i])
+{
+timed_warned[i] = true;
+say = timed_warn_seconds[i];
+}
+}
+else if (left > (timed_warn_seconds[i] + timed_warn_rearm_seconds) * 1000.0) timed_warned[i] = false; // re-armed only well clear of it, so hovering near it stays quiet (dev, 2026-11-13)
+}
+if (say < 0) return;
+string clip = get_pack_sound("misc/game/*timewarn*");
+if (clip != "") p.play_stationary(clip, false);
+speak_buffer(say + " seconds left.", "status");
+}
+/* The finish line (won) or time's up: the run goes quiet, the optional sound plays, and the run ends through finish_run(),
+which counts it toward the level. after_death_menu() says which it was. */
+void end_run_timed(bool won)
+{
+timed_outcome = won ? "win" : "timeout";
+silence_run();
+string clip = get_pack_sound("misc/game/*" + (won ? "timewin" : "timelost") + "*");
+if (clip != "") dlgplay(clip);
+finish_run();
+}
+// From finish_run(): a timed run's ending counts toward its level, whatever it was. A death sets its outcome here.
+void count_timed_run()
+{
+if (timed_outcome == "") timed_outcome = "death";
+timed_level_runs[run_difficulty] += 1;
+writegame();
+}
+// What after_death_menu() opens with for a timed run.
+string timed_end_line()
+{
+if (timed_outcome == "win") return "You crossed the finish line.";
+if (timed_outcome == "timeout") return "Time's up.";
+return "You have died.";
+}
+// "45 seconds", "1 minute 5 seconds", "2 minutes": T's wording, with no "and" (dev, 2026-11-13).
+string timed_clock_phrase(double ms)
+{
+int total = ms <= 0 ? 0 : int(ms / 1000);
+int minutes = total / 60;
+int seconds = total % 60;
+string sec_text = seconds == 1 ? "1 second" : seconds + " seconds";
+if (minutes == 0) return sec_text;
+string min_text = minutes == 1 ? "1 minute" : minutes + " minutes";
+return seconds == 0 ? min_text : min_text + " " + sec_text;
+}
+/* T in a timed run: "You have 45 seconds left on the clock, and 2 minutes 10 seconds until you reach the finish line." (dev,
+2026-11-13, after "to the finish line" sounded like a deadline: "on the clock" marks the one you can run out of). */
+string timed_status_line()
+{
+return "You have " + timed_clock_phrase(timed_left_ms()) + " left on the clock, and " + timed_clock_phrase(timed_finish_ms() - runtimer.elapsed) + " until you reach the finish line.";
+}
