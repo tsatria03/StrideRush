@@ -353,13 +353,30 @@ if (type == "all") speak_buffer("All " + free_group_name(group) + " have been cl
 else speak_buffer("The " + free_kind_name(type, group) + " have been cleared.", "misc");
 return true;
 }
-// View current setup's lines for the belt: each batch left, then each continuous kind's share of the mix.
+/* View current setup's lines for the belt: what's left in the batches, one line per kind (dev, 2026-11-14: several
+batches of one kind "should be condensed into one item"), in the order they come, a set health kept apart; then each
+continuous kind's share of the mix. */
 void free_add_belt_lines(string[]@ lines)
 {
+string[] keys; // type, group and health of each line
+int[] counts;
 for (uint i = 0; i < free_queue.length(); i++)
 {
 free_entry@ e = free_queue[i];
-lines.insert_last(stat_line("coming", e.count + " " + free_kind_name(e.type, e.group, e.count) + (e.hp > 0 ? ", " + e.hp + " health each" : "")));
+string key = e.type + "|" + e.group + "|" + e.hp;
+int at = keys.find(key);
+if (at < 0)
+{
+keys.insert_last(key);
+counts.insert_last(e.count);
+}
+else counts[at] += e.count;
+}
+for (uint i = 0; i < keys.length(); i++)
+{
+string[]@ part = keys[i].split("|");
+int hp = int(parse_int(part[2]));
+lines.insert_last(stat_line("coming", counts[i] + " " + free_kind_name(part[0], part[1], counts[i]) + (hp > 0 ? ", " + hp + " health each" : "")));
 }
 int total = 0;
 for (uint i = 0; i < free_rules.length(); i++) total += free_rules[i].count;
@@ -371,4 +388,20 @@ string name = e.type == "all" ? "every kind of " + e.group : free_kind_name(e.ty
 lines.insert_last(stat_line("continuous", name + ", " + percent + " percent of the mix" + (e.hp > 0 ? ", " + e.hp + " health each" : "")));
 }
 if (free_queue.length() == 0 and free_rules.length() == 0) lines.insert_last(stat_line("coming", "nothing"));
+}
+/* No deaths (the free run tools plan, dev, 2026-11-14: "you should land past it, then it will re-appear once or
+continiously based on the mode"): the hazard or floor breaker that caught you comes again. A continuous kind (or a
+continuous all obstacles) keeps coming anyway; otherwise one more of it goes to the front of the queue, next to come.
+It isn't added to free_batches, so a replay brings back only what you added. */
+void free_requeue(const string&in type)
+{
+for (uint i = 0; i < free_rules.length(); i++)
+{
+if (free_rules[i].type == type or (free_rules[i].type == "all" and free_rules[i].group == "obstacle")) return;
+}
+free_entry e;
+e.type = type;
+e.group = "obstacle";
+e.count = 1;
+free_queue.insert_at(0, e);
 }
