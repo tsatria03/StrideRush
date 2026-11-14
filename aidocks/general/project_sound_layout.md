@@ -92,3 +92,4 @@ Vehicles (the dev, 2026-11-13, commit 909b98b): environments/<env>/vehicles/gene
 
 Floor breakers (2026-11-13): air gained open (the corridor) and traps/floor_breakers/countdown (layered warn1-1 to warn2-5), in default and uncharted. For [[project_floor_breakers_plan]].
 Vehicles, as built (2026-11-13, the vehicles plan): environments/<env>/vehicles/general/<kind>/<theme> and vehicles/countdown (layered), at the environment's root beside traps and transitions; type_path() in env.nvgt finds them. Kinds: cars, with small_car, small_car2, small_car3, big_car, big_car2; each theme has loop, shoot, hit (the ram), impact (a shot striking you), hurt and death, some as numbered versions (loop1-6, hit1-5, hurt1-5) that the wildcards pick at random.
+Barriers (checked 2026-11-13): traps/barriers/general has boulder, firewall and powerline in default and uncharted; the car barrier is gone, cars now being vehicles (the dev). The readme's examples follow.
