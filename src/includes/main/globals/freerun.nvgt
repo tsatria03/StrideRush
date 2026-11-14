@@ -72,6 +72,8 @@ free_reserve_set[i] = gun_start_reserve;
 free_console_focus = -1;
 free_clear_queue(); // a new setup starts with nothing coming (freebelt.nvgt)
 free_kind_focus.delete_all(); // and the add lists start at their tops
+free_give_focus = -1; // and give items' list
+free_key_focus = -1;
 }
 /* A replay or restart (dev, 2026-11-13): the same free run again, standing still at the start, with the same speed,
 environment, death mode, hints and continuous rules, and every batch back at its full count (free_refill_queue()). */
@@ -185,14 +187,17 @@ free_moving = true;
 steptimer.restart();
 speeduptimer.restart();
 }
-/* Clear belt: everything on the belt and on its way gone, whatever you're in (a ladder, a repair, a slide, a flight, a
-door) let go, and you stand still again. Your settings stay. */
+/* Clear belt: everything on the belt and on its way gone, your inventory emptied, a worn shield off and your weapons as a run starts, whatever you're in (a ladder, a repair,
+a slide, a flight, a door) let go, and you stand still again. Your settings stay. */
 void free_clear_belt()
 {
 clear_run_objects();
 cancel_movement();
 reset_practice_hints();
 free_clear_queue(); // every batch and continuous rule (freebelt.nvgt)
+clear_inventory(); // and your inventory, empty as a free run starts (dev, 2026-11-13)
+reset_shield(); // and a worn shield comes off (dev, 2026-11-13)
+reset_weapons(); // and the guns refilled to their start, the fist drawn, as a run starts (dev, 2026-11-13; weapons.nvgt)
 free_moving = false;
 }
 string free_speed_text()
@@ -269,6 +274,7 @@ m.add_item("modify environment", "env");
 if (free_moving)
 {
 m.add_item("modify player health", "health");
+m.add_item("modify player inventory", "inventory"); // give items and take items (Section 3B; dev, 2026-11-13)
 m.add_item("modify player lives", "lives");
 }
 m.add_item("modify practice hints", "hints");
@@ -303,6 +309,7 @@ else if (id == "add_specials") done = free_add("special");
 else if (id == "clear_items") done = free_clear("item");
 else if (id == "clear_obstacles") done = free_clear("obstacle");
 else if (id == "clear_specials") done = free_clear("special");
+else if (id == "inventory") done = free_inventory_menu();
 else if (id == "ammo") done = free_set_reserve();
 else if (id == "health") done = free_set_health();
 else if (id == "lives") done = free_set_lives();
@@ -424,4 +431,135 @@ free_reserve_set[w] = n;
 weapon_reserve[w] = n;
 speak_buffer("Your " + gun + " now has " + (n == 1 ? "1 round" : n + " rounds") + " in reserve.", "misc");
 return true;
+}
+/* Section 3B: give items (the free run plan, dev, 2026-11-13): any number of an item kind, or of each with all items,
+straight into your inventory, to try what it does without picking it up. A key comes in a random color each, as one on
+the belt would. The list remembers its place for the run. */
+int free_give_focus = -1;
+// One item kind (an add items id) into the inventory, amount of them.
+void free_give_kind(const string&in type, int amount)
+{
+if (type == "keys")
+{
+// All keys: that many of every color (dev, 2026-11-13: the color menu).
+string[] colors = get_pack_sound_folders(key_folder + "*");
+for (uint i = 0; i < colors.length(); i++) give_item(colors[i], amount);
+return;
+}
+give_item(type.substr(0, type.length() - 1), amount); // "health_potions" is the inventory's "health_potion"
+}
+int free_key_focus = -1;
+/* Keys' color menu (dev, 2026-11-13: "I like the menu better."): each color, then all keys, then back. The color's
+folder ("red_key"), "keys" for all of them, or "" if backed out. */
+string free_choose_key()
+{
+setupmenu();
+m.intro_text = "Choose the key you'd like to be given.";
+string[] colors = get_pack_sound_folders(key_folder + "*");
+for (uint i = 0; i < colors.length(); i++) m.add_item(item_display_name(colors[i]), colors[i]);
+m.add_item("all keys", "keys");
+m.add_item("back", "back");
+int mres = m.run(free_key_focus, false, free_key_focus >= 0);
+if (mres < 0 or m.selected_item_id == "back") return "";
+free_key_focus = mres;
+return m.selected_item_id;
+}
+/* Give items: the kind (or all items; for keys a color or all keys), "How many?", then into your inventory. True once
+given, with a line in misc. All items and all keys give that many of every key color. */
+bool free_give_items()
+{
+setupmenu();
+m.intro_text = "Choose the item you'd like to be given.";
+string[] ids = free_ids("item");
+for (uint i = 0; i < ids.length(); i++) m.add_item(free_kind_name(ids[i], "item"), ids[i]);
+m.add_item("all items", "all");
+m.add_item("back", "back");
+int mres = m.run(free_give_focus, false, free_give_focus >= 0);
+if (mres < 0 or m.selected_item_id == "back") return false;
+free_give_focus = mres;
+string type = m.selected_item_id;
+string key = "";
+if (type == "keys")
+{
+key = free_choose_key();
+if (key == "") return false; // back out of the colors to the console
+}
+int n = free_ask_number("Give items", "How many?", 1, 1000);
+if (n < 0)
+{
+speak("canceled");
+return false;
+}
+if (type == "all")
+{
+for (uint i = 0; i < ids.length(); i++) free_give_kind(ids[i], n);
+speak_buffer(n + " of each item given.", "misc");
+return true;
+}
+if (key != "" and key != "keys")
+{
+give_item(key, n);
+string name = item_display_name(key); // "red key"
+speak_buffer(n + " " + (n == 1 ? name : name + "s") + " given.", "misc");
+return true;
+}
+free_give_kind(type, n);
+if (type == "keys") speak_buffer(n + " of each key given.", "misc");
+else speak_buffer(n + " " + free_kind_name(type, "item", n) + " given.", "misc");
+return true;
+}
+/* Take items (dev, 2026-11-13, part of Section 3B): only what's in your inventory, each with its count ("health potion,
+3"), then all items, then back; "How many?" 1 to 1000, more than you have taking them all; all items empties the
+inventory. True once taken, with a line in misc. An empty inventory just says so. */
+bool free_take_items()
+{
+string[] keys = inventory_keys();
+if (keys.length() == 0)
+{
+dlgmessage_return("Your inventory is empty."); // a dialog, so the inventory menu reopening doesn't cut it off (dev, 2026-11-13)
+return false;
+}
+setupmenu();
+m.intro_text = "Choose the item you'd like to take.";
+for (uint i = 0; i < keys.length(); i++) m.add_item(item_display_name(keys[i]) + ", " + item_count(keys[i]), keys[i]);
+m.add_item("all items", "all");
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+string item = m.selected_item_id;
+if (item == "all")
+{
+clear_inventory();
+speak_buffer("All items taken.", "misc");
+return true;
+}
+int n = free_ask_number("Take items", "How many?", 1, 1000);
+if (n < 0)
+{
+speak("canceled");
+return false;
+}
+int have = item_count(item);
+int taken = n > have ? have : n;
+give_item(item, -taken);
+string name = item_display_name(item); // "health potion"
+speak_buffer(taken + " " + (taken == 1 ? name : name + "s") + " taken.", "misc");
+return true;
+}
+/* Modify player inventory (dev, 2026-11-13: "What about putting them in a menu called modify player inventory?"): give
+items and take items, then back, which steps back to the console silently. True once something was given or taken. */
+bool free_inventory_menu()
+{
+while (true)
+{
+setupmenu();
+m.intro_text = "Choose what you'd like to do with your inventory.";
+m.add_item("give items", "give");
+m.add_item("take items", "take");
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+if (m.selected_item_id == "give" ? free_give_items() : free_take_items()) return true;
+}
+return false;
 }

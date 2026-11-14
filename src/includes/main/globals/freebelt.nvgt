@@ -314,6 +314,26 @@ if (found) kinds.insert_last(ids[i]);
 }
 return kinds;
 }
+/* How much of a kind is coming, for the clear lists, as take items gives counts (dev, 2026-11-13: "It should say that for
+things you clear as well"): "7 left" in its batches, "continuous", or "7 left, plus continuous"; for "all", the whole group
+together, or "" when nothing of it is coming. */
+string free_coming_text(const string&in type, const string&in group)
+{
+int left = 0;
+bool continuous = false;
+for (uint i = 0; i < free_queue.length(); i++)
+{
+if (free_queue[i].group == group and (type == "all" or free_queue[i].type == type)) left += free_queue[i].count;
+}
+for (uint i = 0; i < free_rules.length(); i++)
+{
+if (free_rules[i].group == group and (type == "all" or free_rules[i].type == type)) continuous = true;
+}
+if (left > 0 and continuous) return left + " left, plus continuous";
+if (continuous) return "continuous";
+if (left > 0) return left + " left";
+return "";
+}
 /* Clear obstacles, clear items or clear specials: each kind coming, then all of the group, then back. True once cleared,
 with a line in the misc buffer. */
 bool free_clear(const string&in group)
@@ -321,8 +341,9 @@ bool free_clear(const string&in group)
 setupmenu();
 m.intro_text = "Choose the " + free_group_name(group) + " you'd like to clear.";
 string[] kinds = free_kinds_coming(group);
-for (uint i = 0; i < kinds.length(); i++) m.add_item(free_kind_name(kinds[i], group), kinds[i]);
-m.add_item("all " + free_group_name(group), "all");
+for (uint i = 0; i < kinds.length(); i++) m.add_item(free_kind_name(kinds[i], group) + ", " + free_coming_text(kinds[i], group), kinds[i]); // "barriers, 7" (dev, 2026-11-13)
+string all_text = free_coming_text("all", group);
+m.add_item("all " + free_group_name(group) + (all_text == "" ? "" : ", " + all_text), "all"); // the whole group's count too (dev, 2026-11-13)
 m.add_item("back", "back");
 int mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") return false;
