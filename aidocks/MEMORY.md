@@ -67,6 +67,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Menus say canceled](general/feedback_menus_say_canceled.md) — every escape, Back or No path speaks "canceled", except nested menus stepping back to their parent (silent, even back to the main menu)
 - [Alphabetical menus](general/feedback_alphabetical_menus.md) — alphabetical only where the dev asked (kept sorted there); new menus use their natural order unless asked; numbered names sort naturally
 - [Yes/No menu labels](general/feedback_yes_no_menu_labels.md) — items exactly Yes then No; context in the prompt
+- [Named menu choices](general/feedback_named_menu_choices.md) — settings menus list named choices (silent hints, unlimited rounds), never bare off and on
 - [Multiline comment style](general/feedback_multiline_comment_style.md) — multi-line comments are one /* */ block
 - [Don't flag indentation](general/feedback_dont_flag_indentation.md) — AngelScript ignores whitespace; don't reformat
 - [No CRLF normalization](general/feedback_no_crlf_normalization.md) — new files CRLF, preserve endings on edit, never a tree-wide normalizer
