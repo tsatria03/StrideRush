@@ -1,11 +1,11 @@
 ---
 name: project_free_run_plan
-description: SETTLED (2026-11-13, for 2.2; 4 sections) - free run, a sandbox mode with no difficulty, instead of a cheats menu; CaveDefender's free play as reference; Q&A log
+description: COMPLETE (2026-11-13, 2.2 at 10 of 10; sections 1, 2, 3, 3B, 4) - free run, a sandbox mode with no difficulty, instead of a cheats menu; CaveDefender's free play as reference; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-13), for 2.2, building.
+Status: COMPLETE (2026-11-13), 2.2 at 10 of 10, full.
 
 Background:
 - The dev (2026-11-13): "I was thinking of a cheats menu for the game, but it's only available after achieveing something in the game, or doing anything else that can reward it's unlocking. We can discuss when it can be unlocked. Another alternitive approach is to make a deticated mode called free run, or something similar, and this will not have any difficulty choices in it. I much prefer the second option, but we can decide that too, and how and what that mode could look like." Pointed at user/CaveDefender-main as an example of free play.
@@ -118,3 +118,4 @@ Sections:
 - The fix confirmed (dev, 2026-11-13: "Perfect. It works now."). Then: "I love how it says how much you have when you click the take items button. Like \"player teleporter, 1000\". It should say that for things you clear as well, if possible." Built: the clear lists read each kind with what's coming (free_coming_text()): "barriers, 7", "vehicles, continuous", or "fake walls, 3 and continuous".
 - The dev offered "x once, x continuous"; Claude suggested "7 left", "continuous" and "3 left, plus continuous" (once can sound like one time; a continuous kind's number is a share, not a count). A: "Yes, for the most part, but the all option does not show counts." (dev, 2026-11-13). Built: that wording, and the all item with the whole group's count ("all obstacles, 23 left, plus continuous"), plain when nothing of the group is coming.
 - The clear list counts passed (dev, 2026-11-13). Sections 1 to 3B complete; Section 4 (docks) next.
+- Section 4 (docks) done (2026-11-13): the five entries under New in 2.2, newest first (inventory, replay, options, adding and clearing, the mode); the readme (a Free runs section of six paragraphs before Menus, the backspace or F7 key line after F2, play game's modes); CLAUDE.md (10 of 10, full), the version history, the index. Plan COMPLETE.

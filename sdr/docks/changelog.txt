@@ -1,4 +1,9 @@
 New in 2.2.
+Added a way to modify your inventory from a free run's console, giving yourself any number of any item to try it out, or taking it away again.
+Made it so replaying or restarting a free run brings back the same run, with your speed, environment, settings and everything you added still in place, instead of making you set it all up again.
+Added free run options to change your running speed, death mode, practice hints, environment, health, lives, shield strength and ammo reserves whenever you like.
+Added a way to add obstacles, items and specials to a free run in batches of any size or continuously, with your own choice of health for fake walls, fake doors and vehicles, and to clear them by kind or clear the whole belt.
+Added free run, a mode that opens after 5 hard endless runs, where you choose your speed and environment, then build your own run from a console you open with backspace or F7, with nothing counted toward your progress.
 Added timed runs, where clean passes add time to a countdown and hits take it away, and you win by reaching the finish line before it runs out, with their own levels to unlock, records and five achievements.
 Added vehicles to practice runs, between winds and combinations, opened after you dodge 5 winds.
 Added vehicles, cars that chase you across the lanes and fire bursts at you while they're in yours, which you can shoot down, dodge or get rammed by.
