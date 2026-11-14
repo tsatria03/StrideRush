@@ -11,7 +11,7 @@ class spike
 {
 double x;
 string theme;
-string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
 int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 int swing_time;
 int64 next_swing;

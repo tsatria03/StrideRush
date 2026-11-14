@@ -35,7 +35,7 @@ practice locks plan, 2026-11-10), which counts them toward the next practice obs
 void stat_add(const string&in key, int64 amount = 1)
 {
 practice_pass(key);
-timed_pass(key); // a timed run's clean pass adds time (timed.nvgt)
+timed_pass(key); // a timed run's clean pass adds time (timerun.nvgt)
 if (!stats_counting) return;
 session_stats.set(key, stat_value(session_stats, key) + amount);
 }
@@ -44,7 +44,7 @@ is fatal, for end_run_hit(). */
 void stat_caught(const string&in type)
 {
 stat_add("caught_" + type);
-timed_hit(); // a timed run's hit takes time (timed.nvgt)
+timed_hit(); // a timed run's hit takes time (timerun.nvgt)
 last_caught = type;
 last_caught_kind = ""; // a door or an animal sets its kind just after
 if (type != "hazards") practice_hints_restart(); // a practice run's hints start over after a hit (practice_hints.nvgt)
@@ -116,7 +116,7 @@ void clear_lifetime_stats()
 {
 lifetime_stats.delete_all();
 best_runs.delete_all(); // the best runs go with the lifetime (the achievements plan)
-clear_timed_records(); // and the timed run records, listed with it (dev, 2026-11-13); the timed level unlocks stay (timed.nvgt)
+clear_timed_records(); // and the timed run records, listed with it (dev, 2026-11-13); the timed level unlocks stay (timerun.nvgt)
 last_played_date = "";
 last_played_time = "";
 }

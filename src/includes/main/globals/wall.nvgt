@@ -16,7 +16,7 @@ class wall
 {
 double x;
 string theme;
-string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
 int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 int pitch = 100; // a fake wall's odd pitch, set at spawn
 int hp;
@@ -35,7 +35,7 @@ w.x = wx;
 w.theme = theme;
 w.env = current_env;
 w.pair = placing_pair;
-w.hp = wall_spawn_hp(wall_min_hp, wall_max_hp);
+w.hp = free_obstacle_hp(wall_spawn_hp(wall_min_hp, wall_max_hp)); // a free run's set health, if any (freebelt.nvgt)
 w.countdown_start = wx - countdown;
 w.pitch = fake_door_pitches[random(0, fake_door_pitches.length() - 1)]; // a fake wall, at an odd pitch like a fake door
 w.loopslot = wallpool.play_extended_2d(get_pack_sound(trap_folder(current_env, "walls") + theme + "/*loop*"), 0, me.x, 0, wx, 0, 0, 0, 0, true, 0, 0, 0, w.pitch);

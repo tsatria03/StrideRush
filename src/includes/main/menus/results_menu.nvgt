@@ -29,7 +29,7 @@ while (true)
 setupmenu();
 m.intro_text = copy_shown ? "What would you like to do now? You can copy or export your session results, replay the current run, or return to the game menu." : "What would you like to do now? You can replay the current run, or return to the game menu.";
 // Without the results menu first, say you died, only as it first opens (dev, 2026-11-08: "I want to know that I died.", but not again after a copy or export).
-if (!results_shown and !timed_results and focus < 0) m.intro_text = (timed_run ? timed_end_line() : "You have died.") + " " + m.intro_text; // a timed run: the finish line, time's up, or a death (timed.nvgt)
+if (!results_shown and !timed_results and focus < 0) m.intro_text = (timed_run ? timed_end_line() : "You have died.") + " " + m.intro_text; // a timed run: the finish line, time's up, or a death (timerun.nvgt)
 if (copy_shown)
 {
 m.add_item("copy session results to clipboard", "copy");

@@ -37,7 +37,7 @@ a.shown = file_data.get_double(a.id, "threshold");
 if (a.stat == "time_running") a.threshold = int64(a.shown * 60000);
 else if (a.stat == "top_speed") a.threshold = int64(round(a.shown * 10, 0));
 else a.threshold = int64(a.shown);
-if (a.stat == "" or a.name == "" or (a.scope != "session" and a.scope != "lifetime" and a.scope != "timed")) continue; // a broken entry is skipped; timed: a timed run's, from its records (timed.nvgt)
+if (a.stat == "" or a.name == "" or (a.scope != "session" and a.scope != "lifetime" and a.scope != "timed")) continue; // a broken entry is skipped; timed: a timed run's, from its records (timerun.nvgt)
 achievements.insert_last(a);
 }
 }
@@ -62,7 +62,7 @@ return stat_value(session_stats, stat);
 // What an achievement is measured against now: the run so far, or the lifetime with the run so far added in.
 int64 achievement_progress(achievement@ a)
 {
-if (a.scope == "timed") return timed_stat_value(a.stat); // a timed run's records (timed.nvgt)
+if (a.scope == "timed") return timed_stat_value(a.stat); // a timed run's records (timerun.nvgt)
 int64 run_value = live_session_value(a.stat);
 if (a.scope == "session") return run_value;
 int64 saved = stat_value(lifetime_stats, a.stat);

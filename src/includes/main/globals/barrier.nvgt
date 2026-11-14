@@ -14,7 +14,7 @@ Barriers are in obstacle_types, an equal pick in "all" and the real game, with t
 three barrier debug choices still pick one rule each.
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_barriers() shrinks the array. */
 sound_pool barrierpool;
-// Where an environment keeps its barriers themes (env.nvgt).
+// Where an environment keeps its barriers themes (environments.nvgt).
 string barrier_folder(const string&in env)
 {
 return trap_folder(env, "barriers");
@@ -24,7 +24,7 @@ class barrier
 double x;
 int lane;
 string theme;
-string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
 int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 double countdown_start;
 bool spent = false; // reached: it can never hit again

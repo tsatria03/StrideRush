@@ -171,10 +171,10 @@ if (stage == 0)
 string mode = choose_game_mode();
 if (mode == "") return;
 practicing = false; // set again below, so backing out of practice into another mode never leaves it on
-timed_run = false; // likewise a timed run (timed.nvgt)
-free_run = false; // and a free run (free.nvgt)
+timed_run = false; // likewise a timed run (timerun.nvgt)
+free_run = false; // and a free run (freerun.nvgt)
 level = -1; // likewise the difficulty, which only an endless run has
-debug_env = ""; // and the debug environment choice, which only a debug run has (env.nvgt)
+debug_env = ""; // and the debug environment choice, which only a debug run has (environments.nvgt)
 if (mode == "practice")
 {
 // Escaping the obstacle menu stays on the mode menu (stage 0); otherwise straight to the run.
@@ -192,12 +192,12 @@ stage = 6;
 }
 else if (mode == "free")
 {
-// A free run (free.nvgt): its setup (speed, environment), then standing on an empty belt; back out of it to the mode menu.
+// A free run (freerun.nvgt): its setup (speed, environment), then standing on an empty belt; back out of it to the mode menu.
 if (!choose_free_setup()) continue;
 free_run = true;
 practice_choice = ""; // so no practice choice's closing line runs in it (practice_hints.nvgt)
 speed = free_start_step_time();
-only_type = "nothing"; // nothing spawns on its own
+only_type = "free"; // only what you add from the console (freebelt.nvgt)
 can_run_out = 1;
 steps = 1;
 stage = 6;
@@ -205,7 +205,7 @@ stage = 6;
 else if (mode == "endless" or mode == "timed")
 {
 /* Escaping the difficulty menu stays on the mode menu (stage 0); otherwise straight to the run at the level's speed. A
-timed run is an endless run with its clocks, and its difficulty menu reads its own counts (timed.nvgt). */
+timed run is an endless run with its clocks, and its difficulty menu reads its own counts (timerun.nvgt). */
 timed_run = mode == "timed";
 level = choose_difficulty();
 if (level < 0) continue;
@@ -260,10 +260,10 @@ when the debug No answer turned a hazard death into a restart, or when you choos
 bool first_run = true;
 do
 {
-// A free run's replay or restart goes back through its setup (the free run plan); backing out returns to the game menu.
+// A free run's replay or restart is the same run again, with everything as it was (freerun.nvgt; dev, 2026-11-13).
 if (free_run and !first_run)
 {
-if (!choose_free_setup()) break;
+free_prepare_replay();
 speed = free_start_step_time();
 }
 first_run = false;
@@ -312,11 +312,11 @@ run is only its requirement, and open, just its description, with no "Available.
 practice locks plan's Section 2, dev, 2026-11-10). */
 if (endless_unlocked()) m.add_item("Endless run. This mode lets you run for as long as you can survive. The belt gets faster and more obstacles join as you go, and the run ends when you run out of lives or fall into a hazard.", "endless");
 else m.add_item("Endless run. Unlocked " + endless_lock_reason(), "endless");
-// Timed run (the timed run plan, dev, 2026-11-13): after endless run, open once medium is (timed.nvgt).
+// Timed run (the timed run plan, dev, 2026-11-13): after endless run, open once medium is (timerun.nvgt).
 if (timed_mode_unlocked()) m.add_item("Timed run. This mode gives you a countdown clock: clean passes add time, hits take it away, and you win by reaching the finish line before your time runs out.", "timed");
 else m.add_item("Timed run. Unlocked " + timed_mode_lock_reason(), "timed");
 m.add_item("Practice run. This mode lets you practice one kind of obstacle at a time, for as long as you like. If you die, you try again from just past what caught you, and nothing you do here counts toward your progress, apart from unlocking the next obstacle to practice.", "practice");
-// Free run (the free run plan, dev, 2026-11-13): last, open once insane is (free.nvgt).
+// Free run (the free run plan, dev, 2026-11-13): last, open once insane is (freerun.nvgt).
 if (free_mode_unlocked()) m.add_item("Free run. This mode lets you set up a run however you like, choosing the obstacles, the speed and more, and change it at any time from the free run console, with no difficulty and nothing counted toward your progress.", "free");
 else m.add_item("Free run. Unlocked " + free_mode_lock_reason(), "free");
 m.add_item("back", "back");

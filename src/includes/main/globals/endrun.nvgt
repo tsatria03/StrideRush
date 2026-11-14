@@ -37,7 +37,7 @@ just before this, which silence_run() leaves alone. Those and the player's death
 have finished does the tile's fall play, so nothing is cut off. Enter skips, as in dlgplay. */
 void end_run_hit()
 {
-// A practice run never ends: its last life lost is a practice death instead, set down just past what caught you (endrun.nvgt). Nor a free run on practice deaths (free.nvgt).
+// A practice run never ends: its last life lost is a practice death instead, set down just past what caught you (endrun.nvgt). Nor a free run on practice deaths (freerun.nvgt).
 if (practice_deaths())
 {
 practice_death(me.x + 1, "");
@@ -108,7 +108,7 @@ void finish_run()
 {
 p.destroy_all();
 run_died = true;
-if (timed_run) count_timed_run(); // a timed run's ending, whatever it was, counts toward its level (timed.nvgt)
+if (timed_run) count_timed_run(); // a timed run's ending, whatever it was, counts toward its level (timerun.nvgt)
 else count_difficulty_run(); // a death after passing a real door counts toward the level's lock (difficulty.nvgt)
 running = false;
 }
@@ -136,7 +136,7 @@ dlgmessage_return(practice_death_text()); // practice_hints.nvgt
 while (key_down(KEY_RETURN) or key_down(KEY_SPACE) or key_down(KEY_A) or key_down(KEY_ESCAPE)) wait(5);
 setupmenu();
 m.intro_text = "What would you like to do now?";
-m.add_item("retry practice", "retry");
+m.add_item(free_run ? "retry free run" : "retry practice", "retry"); // a free run on practice deaths isn't a practice run (dev, 2026-11-13)
 m.add_item("return to game menu", "return");
 int mres = m.run();
 if (mres < 0 or m.selected_item_id != "retry")
@@ -153,7 +153,7 @@ me.x = past_x;
 update_listeners();
 spawner_catch_up(); // so what comes next still arrives with its full warning
 player_health = player_hp;
-lives = free_run ? free_lives : practice_lives; // a free run gets back the lives it's set to (free.nvgt)
+lives = free_run ? free_lives : practice_lives; // a free run gets back the lives it's set to (freerun.nvgt)
 if (!free_run)
 {
 reset_shield(); // a worn shield comes off too, so you're back as a practice run starts (dev, 2026-11-10: it stayed on)

@@ -49,7 +49,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Ask one question at a time](general/feedback_ask_one_question_at_a_time.md) — one question per turn, with a recommendation
 - [Test steps one at a time](general/feedback_test_steps_one_at_a_time.md) — numbered "Test x of y" (2026-11-06); no tests in build summaries; ask "ready for the test steps?" first, then one numbered step per message with what to hear, ask if it passed, wait; tests use the debug run unless the mode itself is under test
 - [Describe, don't show code](general/feedback_describe_dont_show_code.md) — give all section plans up front, build per go-ahead, never paste code in chat
-- [List modified files](general/feedback_list_modified_files.md) — end editing turns with "Files changed:" plus a relaunch note
+- [List modified files](general/feedback_list_modified_files.md) — end editing turns with "Files changed:", the git change count since the last commit, and a relaunch note
 - [Don't run or build the game](general/feedback_dont_run_or_build_the_game.md) — never launch or compile; the dev verifies
 - [Verify code while fixing](general/feedback_verify_code_while_fixing.md) — locate by symbol, confirm the finding, flag adjacent bugs
 - [Check git log](general/feedback_check_git_log_for_commits.md) — always check the latest commit before each section; the dev commits between turns; never commit unless asked

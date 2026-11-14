@@ -15,7 +15,7 @@ class wind
 {
 double meet_x;
 string theme;
-string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
 int pair = 0; // never set: winds aren't in combinations, kept for the shared pair hooks
 int lane;
 int drift_dir = 0; // -1 it last moved left, 1 right, 0 it hasn't moved

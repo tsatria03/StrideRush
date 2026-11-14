@@ -7,7 +7,7 @@ metadata:
 
 The pattern to adapt for Stride Rush objects (hazards, pickups, platforms), taken from SimpleFighter's src/includes/builder/traps/hazard.nvgt ([[reference_simplefighter_readonly]]). BUILT in the first build (2026-11-02): globals/hazard.nvgt, spike.nvgt and mine.nvgt follow it. As built:
 - spawn_x() reuses the first null slot before appending, and returns nothing.
-- x_check() runs once per step from run.nvgt's step_check(), not every frame. spike_swing() is the one per-frame check.
+- x_check() runs once per step from game.nvgt's step_check(), not every frame. spike_swing() is the one per-frame check.
 - The single clear registry is clear_run_objects() in globals/endrun.nvgt. A new type's destroy_all_x() goes there, and its pool goes into all_pools ([[project_audio_model]]).
 - Its type name goes into spawner.nvgt's obstacle_types (which also feeds the testing spawn menu), and its spawn into place_obstacle(). spawn_x() takes the countdown length and stores countdown_start = x - countdown.
 - A x_countdown() that calls play_countdown(pool, "<type>", x, countdown_start) for each object, called from step_check() after the footstep. Its misc/trap/<type>/warn1-5 sounds must exist.

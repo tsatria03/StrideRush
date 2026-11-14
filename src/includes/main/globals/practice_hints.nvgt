@@ -19,7 +19,7 @@ double practice_unlock_said_at = -1000000; // on runtimer, from practice_pass()
 dictionary practice_mix_seen; // mixed obstacles: the kinds met this run (practice_mix_count)
 const int practice_mix_count = 16; // 14, floor breakers and vehicles (the floor breakers and vehicles plans, 2026-11-13)
 
-/* A hit (stat_caught() in stats.nvgt, hazards left out) or a missed key (key.nvgt) in a practice run: the hints start over,
+/* A hit (stat_caught() in stats.nvgt, hazards left out) or a missed key (keys.nvgt) in a practice run: the hints start over,
 and the closing line comes again after five more. The timing guards stay, so a hint just after still waits its turn. */
 void practice_hints_restart()
 {
@@ -124,7 +124,7 @@ return kind == practice_choice;
 }
 void practice_hint(const string&in kind, int lane, double x, const string&in animal = "")
 {
-if (!practice_hints_on() or practice_hints_done) return; // a practice run, or a free run with practice hints on (free.nvgt)
+if (!practice_hints_on() or practice_hints_done) return; // a practice run, or a free run with practice hints on (freerun.nvgt)
 int64 said = 0;
 practice_hint_counts.get(kind, said);
 int limit = practice_choice == "mixed_obstacles" ? 1 : practice_hint_limit; // one per kind in mixed obstacles

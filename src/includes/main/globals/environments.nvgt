@@ -111,7 +111,7 @@ speak_buffer("You've entered the " + current_env.replace("_", " ", true) + " env
 }
 /* Every frame, from run_audio_check(): at the switch time, a random different environment. Footsteps change at once (a
 new surface from the new platforms), new obstacles and countdowns come from it (obstacles already on the belt keep their
-own env), the ambience fades into one of its ambiences (begin_ambience_fade() in run.nvgt; none there means the old one
+own env), the ambience fades into one of its ambiences (begin_ambience_fade() in game.nvgt; none there means the old one
 just fades out), and the music finishes its song before taking the next from the new tracks (play_next_track()). */
 void env_check()
 {

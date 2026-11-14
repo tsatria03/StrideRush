@@ -64,6 +64,14 @@ return;
 }
 /* Debug option only: "nothing" spawns no obstacles, items, powerups or doors at all, for listening to the run's music,
 ambience and footsteps alone (dev, 2026-11-06: "That way it's much easier to test the ambience/music setup."). */
+// A free run: what you've added from its console, or nothing yet (freebelt.nvgt).
+if (spawn_only == "free")
+{
+next_type = free_next_type();
+if (next_type == "combinations" and !choose_combo()) next_type = "";
+next_countdown = next_type == "" ? 0 : countdown_steps();
+return;
+}
 if (spawn_only == "nothing")
 {
 next_type = "";
@@ -309,7 +317,7 @@ trampolines_debug = only_type == "trampolines";
 if (trampolines_debug) spawn_only = "all";
 /* Practice doors' keys come one at a time in a random lane, as in the real game, but never with a pair's second item,
 which could be any kind, since a practice run has no items but keys (dev, 2026-11-05). */
-if (only_type == "practice_doors" or only_type == "practice_mixed" or only_type == "real_doors" or only_type == "real_doors_spread") // practice's real doors too (2026-11-09), mixed obstacles' keys, and the debug real doors choices (dev, 2026-11-13: "I should only see keys")
+if (only_type == "practice_doors" or only_type == "practice_mixed" or only_type == "real_doors" or only_type == "real_doors_spread" or only_type == "free") // and a free run's items, one at a time (freebelt.nvgt) // practice's real doors too (2026-11-09), mixed obstacles' keys, and the debug real doors choices (dev, 2026-11-13: "I should only see keys")
 {
 item_lane_mode = "random";
 return;
@@ -452,7 +460,7 @@ if (flying and ox < flight_land_x) return; // nor for anything a trampoline flig
 int steps_left = int(ox - me.x);
 if (steps_left < 1 or steps_left > 5 or me.x < countdown_start) return;
 int note = 6 - steps_left;
-string folder = type_path(env_root(env), type) + "countdown/"; // the obstacle's own environment, in traps, transitions or vehicles (env.nvgt)
+string folder = type_path(env_root(env), type) + "countdown/"; // the obstacle's own environment, in traps, transitions or vehicles (environments.nvgt)
 /* A layered set (dev, 2026-11-03) stacks octaves as warn<group>-<note>, such as the walls' warn1-3 (low) with warn2-3
 (high): every group's note for this step plays at once, for as many groups as exist. A plain set has warn<note>. */
 if (get_pack_sound(folder + "warn1-1*") != "")

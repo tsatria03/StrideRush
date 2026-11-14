@@ -15,7 +15,7 @@ sound, doing door_damage (60) through take_damage(). On the last lives: its hit,
 door's section still begins, since the door only marks it.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_doors() shrinks the array. */
 sound_pool doorpool;
-// Where an environment keeps its doors themes (env.nvgt). // moved from objects/interaction by the dev (2026-11-04)
+// Where an environment keeps its doors themes (environments.nvgt). // moved from objects/interaction by the dev (2026-11-04)
 string door_folder(const string&in env)
 {
 return trap_folder(env, "doors");
@@ -24,7 +24,7 @@ class door
 {
 double x;
 string theme;
-string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
 int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 int pitch = 100;
 bool real = false;
@@ -63,7 +63,7 @@ d.pair = placing_pair;
 d.real = real;
 d.locked = real;
 d.pitch = real ? 100 : fake_door_pitches[random(0, fake_door_pitches.length() - 1)];
-d.hp = wall_spawn_hp(door_min_hp, door_max_hp); // speed-scaled like walls, but tougher (only fake doors can be broken)
+d.hp = free_obstacle_hp(wall_spawn_hp(door_min_hp, door_max_hp)); // or a free run's set health // speed-scaled like walls, but tougher (only fake doors can be broken)
 d.countdown_start = dx - countdown;
 d.loopslot = play_door(d, "loop", dx, true);
 for (uint i = 0; i < doors.length(); i++)

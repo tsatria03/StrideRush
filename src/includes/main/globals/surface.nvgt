@@ -1,4 +1,4 @@
-/* The ground under the belt. Surfaces are whatever folders exist in the current environment's platforms (env.nvgt), found at
+/* The ground under the belt. Surfaces are whatever folders exist in the current environment's platforms (environments.nvgt), found at
 runtime, so adding or removing a folder changes the pool with no code change. "ledge" is reserved for the edges
 around hazards and is never picked as a normal surface. */
 string current_surface = "";

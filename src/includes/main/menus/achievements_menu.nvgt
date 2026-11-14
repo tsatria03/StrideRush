@@ -86,7 +86,7 @@ continue;
 }
 int64 value = 0;
 if (a.scope == "session") best_runs.get(a.stat, value);
-else if (a.scope == "timed") value = timed_stat_value(a.stat); // timed.nvgt
+else if (a.scope == "timed") value = timed_stat_value(a.stat); // timerun.nvgt
 else value = stat_value(lifetime_stats, a.stat);
 string amount = stat_amount_text(a.stat, value) + " of " + stat_threshold_text(a) + stat_unit(a.stat, a.threshold);
 if (a.scope == "session") amount = "best record, " + amount; // your best single run (dev, 2026-11-07: "best run," at first, then "I like best record better")
@@ -116,7 +116,7 @@ string[] one = {"step", "minute", "steps a second", "lane change", "hazard jumpe
 string[] many = {"steps", "minutes", "steps a second", "lane changes", "hazards jumped", "spikes jumped", "mines jumped", "projectiles ducked", "force fields switched off", "animals scared", "barriers dodged", "fake walls broken", "real walls climbed", "ladders broken", "ladder falls", "fake doors broken", "real doors opened", "floor breakers repaired", "vehicles destroyed", "vehicles dodged", "damage", "lives lost", "hazard falls", "spike hits", "mine hits", "projectile hits", "force field hits", "animal run-ins", "barrier hits", "fake wall crashes", "real wall crashes", "door crashes", "floor breaker falls", "vehicle hits", "vehicle shots taken", "ground powerups collected", "air powerups collected", "melee swings", "gunshots fired", "gun reloads"};
 int i = keys.find(stat);
 if (i >= 0) return " " + (amount == 1 ? one[i] : many[i]);
-// A timed run's wins on a level, "timed_wins_easy": "1 easy timed run won" (timed.nvgt).
+// A timed run's wins on a level, "timed_wins_easy": "1 easy timed run won" (timerun.nvgt).
 if (stat.length() > 11 and stat.substr(0, 11) == "timed_wins_") return " " + stat.substr(11) + (amount == 1 ? " timed run won" : " timed runs won");
 // The six items, "<item>_used": "1 ammo pack used", "10 ammo packs used".
 if (stat.length() > 5 and stat.substr(stat.length() - 5) == "_used")

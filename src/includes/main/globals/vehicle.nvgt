@@ -1,6 +1,6 @@
 /* Vehicles (the vehicles plan, dev, 2026-11-13; Section 1). A vehicle drives down a lane toward you, follows you across the
 lanes like a wind, fires bursts down its lane while it's in yours, and rams you if it reaches you there. Sounds from
-environments/<env>/vehicles (its own category, beside traps and transitions; type_path() in env.nvgt): each folder in
+environments/<env>/vehicles (its own category, beside traps and transitions; type_path() in environments.nvgt): each folder in
 vehicles/general is a kind (cars), each folder inside a kind a theme (small_car to small_car3) with loop, shoot (fire until
 the dev renamed it, 2026-11-13), hit (the ram), impact (a shot striking you, added by the dev,
 2026-11-13), hurt and death. Each spawn is a random kind, an equal share whatever its number of themes, then one of its themes. Its layered
@@ -37,7 +37,7 @@ double next_beat; // on runtimer: its next lane move
 double next_shot = 0; // on runtimer: its next shot, or the end of its pause
 int burst_left = 0; // shots still to come in this burst
 bool aiming = false; // lined up with you: its aim delay has started
-bool burst_charged = false; // this burst has already cost a timed run its hit (timed.nvgt)
+bool burst_charged = false; // this burst has already cost a timed run its hit (timerun.nvgt)
 bool spent = false; // reached meet_x: it can never hit again
 bool destroyed = false; // broken by weapons
 int loopslot = -1;
@@ -68,7 +68,7 @@ v.theme = kind + "/" + themes[random(0, themes.length() - 1)];
 v.env = current_env;
 v.lane = random(lane_left, lane_right);
 practice_hint("vehicles", v.lane, mx, animal_singular(kind)); // "cars" says "A car has appeared in the left lane." (practice_hints.nvgt)
-v.hp = wall_spawn_hp(vehicle_min_hp, vehicle_max_hp);
+v.hp = free_obstacle_hp(wall_spawn_hp(vehicle_min_hp, vehicle_max_hp)); // or a free run's set health (freebelt.nvgt)
 v.countdown_start = mx - countdown;
 v.next_beat = runtimer.elapsed + vehicle_beat_time;
 v.loopslot = vehiclepool.play_2d(get_pack_sound(vehicle_folder(v.env) + v.theme + "/*loop*"), 0, me.x, 0, vehicle_x(v), true);

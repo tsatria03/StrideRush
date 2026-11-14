@@ -7,7 +7,7 @@ class hazard
 {
 double x;
 string theme;
-string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
 int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 int loopslot = -1;
 double ledge_start, ledge_end;
@@ -46,7 +46,7 @@ if (carried() and me.x == hazards[i].x) continue; // on a slide you pass over it
 if (me.x == hazards[i].x and is_grounded())
 {
 string fall_clip = get_pack_sound(trap_folder(hazards[i].env, "hazards") + hazards[i].theme + "/*fall*");
-if (practice_deaths()) // a practice run, or a free run on practice deaths (free.nvgt)
+if (practice_deaths()) // a practice run, or a free run on practice deaths (freerun.nvgt)
 {
 last_caught = "hazards"; // the practice death's line (practice_hints.nvgt); a practice fall counts nothing, so no stat_caught()
 practice_set_down(hazards[i], fall_clip);

@@ -112,7 +112,7 @@ for (uint i = 0; i < difficulty_names.length(); i++)
 {
 string name = "difficulty_runs_" + difficulty_names[i];
 if (gs.d.exists(name)) difficulty_runs[i] = gs.read_int(name);
-string timed_name = "timed_runs_" + difficulty_names[i]; // a timed run's own level counts (timed.nvgt)
+string timed_name = "timed_runs_" + difficulty_names[i]; // a timed run's own level counts (timerun.nvgt)
 if (gs.d.exists(timed_name)) timed_level_runs[i] = gs.read_int(timed_name);
 // The timed run records (Section 2), "timed_played_easy" and so on.
 string lv = difficulty_names[i];

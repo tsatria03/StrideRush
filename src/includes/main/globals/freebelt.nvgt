@@ -1,0 +1,353 @@
+/* Free run's belt (the free run plan, dev, 2026-11-13; Section 2): what you add from the console, in three groups:
+obstacles, items (what goes in your inventory) and specials (powerups and slides, neither: dev, 2026-11-13). spawn_only
+"free" sends the spawner here (free_next_type()) at each spawn: a real door's key's door first, then the queue's front
+batch, then a weighted pick among the continuous rules, else nothing. Batches arrive in the order added, at the usual
+spacing for your speed; a continuous kind keeps coming, its count its share against the other continuous kinds. "all" is
+a random kind of its group each time. Fake walls, fake doors and vehicles can carry a set health (free_hp_next, read by
+their spawn functions), or 0 for the normal health for your speed. A real door comes as its key, then the door. Clearing
+a kind takes its batches and rule, and its things on the belt; clear belt takes everything (free_clear_belt()). */
+class free_entry
+{
+string type; // a kind's id, or "all"
+string group; // "obstacle", "item" or "special"
+int count; // a batch: how many are left; a continuous rule: its share
+int full = 0; // a batch's count as added, for a replay
+int hp = 0; // a set health for breakable kinds, or 0
+}
+free_entry@[] free_queue; // the batches, front first
+free_entry@[] free_batches; // every batch added since the belt was last cleared, at its full count, for a replay
+free_entry@[] free_rules; // the continuous rules
+bool free_door_next = false; // a real door's key was just placed, so the door comes next
+int free_door_hp = 0;
+int free_hp_next = 0; // the next placed breakable obstacle's set health, or 0
+// Each group's kinds, alphabetical by their spoken names, with their singulars.
+const string[] free_obstacle_ids = {"animals", "barriers", "combinations", "fake_doors", "walls", "floor_breakers", "force_fields", "hazards", "mines", "projectiles", "real_doors", "ladders", "spikes", "trampolines", "vehicles", "winds"};
+const string[] free_obstacle_names = {"animals", "barriers", "combinations", "fake doors", "fake walls", "floor breakers", "force fields", "hazards", "mines", "projectiles", "real doors", "real walls", "spikes", "trampolines", "vehicles", "winds"};
+const string[] free_obstacle_singulars = {"animal", "barrier", "combination", "fake door", "fake wall", "floor breaker", "force field", "hazard", "mine", "projectile", "real door", "real wall", "spike", "trampoline", "vehicle", "wind"};
+const string[] free_item_ids = {"ammo_packs", "health_potions", "keys", "life_capsules", "player_teleporters", "steel_shields"};
+const string[] free_item_names = {"ammo packs", "health potions", "keys", "life capsules", "player teleporters", "steel shields"};
+const string[] free_item_singulars = {"ammo pack", "health potion", "key", "life capsule", "player teleporter", "steel shield"};
+const string[] free_special_ids = {"powerups", "slides"};
+const string[] free_special_names = {"powerups", "slides"};
+const string[] free_special_singulars = {"powerup", "slide"};
+
+// Copies of a group's ids, plural names and singulars.
+string[] free_ids(const string&in group)
+{
+if (group == "item") return free_item_ids;
+if (group == "special") return free_special_ids;
+return free_obstacle_ids;
+}
+string[] free_names(const string&in group, bool one)
+{
+if (group == "item")
+{
+if (one) return free_item_singulars;
+return free_item_names;
+}
+if (group == "special")
+{
+if (one) return free_special_singulars;
+return free_special_names;
+}
+if (one) return free_obstacle_singulars;
+return free_obstacle_names;
+}
+// "obstacles", "items", "specials".
+string free_group_name(const string&in group)
+{
+return group + "s";
+}
+bool free_breakable(const string&in type)
+{
+return type == "walls" or type == "fake_doors" or type == "vehicles";
+}
+string free_kind_name(const string&in type, const string&in group, int amount = 2)
+{
+if (type == "all") return amount == 1 ? group : free_group_name(group);
+int i = free_ids(group).find(type);
+if (i < 0) return type.replace("_", " ", true);
+return free_names(group, amount == 1)[i];
+}
+// Can this environment bring this kind now?
+bool free_kind_available(const string&in type, const string&in group)
+{
+if (group == "item") return item_kind_available(type);
+if (type == "powerups") return powerups_available();
+if (type == "slides") return slides_available();
+if (type == "combinations") return true; // choose_combo() finds a pair, or the spawn is skipped
+if (type == "ladders") return ladders_ready();
+if (type == "real_doors") return doors_available() and keys_available();
+if (type == "fake_doors") return doors_available();
+return get_pack_sound_folders(type_folder(type) + "*").length() > 0;
+}
+// "all": a random kind of the group this environment has.
+string free_pick_all(const string&in group)
+{
+string[] kinds;
+string[] ids = free_ids(group);
+for (uint i = 0; i < ids.length(); i++)
+{
+if (free_kind_available(ids[i], group)) kinds.insert_last(ids[i]);
+}
+return kinds.length() > 0 ? kinds[random(0, kinds.length() - 1)] : "";
+}
+// One entry's next thing: its kind (a random one for all), with its set health.
+string free_entry_type(free_entry@ e)
+{
+free_hp_next = e.hp;
+return e.type == "all" ? free_pick_all(e.group) : e.type;
+}
+/* From choose_next_obstacle() in a free run: what the next spawn is, or "" for nothing yet. A real door comes as its key,
+then the door. */
+string free_next_type()
+{
+free_hp_next = 0;
+if (free_door_next)
+{
+free_door_next = false;
+free_hp_next = free_door_hp;
+return "real_doors";
+}
+string type = "";
+if (free_queue.length() > 0)
+{
+free_entry@ e = free_queue[0];
+type = free_entry_type(e);
+e.count -= 1;
+if (e.count <= 0) free_queue.remove_at(0);
+}
+else if (free_rules.length() > 0)
+{
+int total = 0;
+for (uint i = 0; i < free_rules.length(); i++) total += free_rules[i].count;
+int r = random(1, total);
+for (uint i = 0; i < free_rules.length(); i++)
+{
+r -= free_rules[i].count;
+if (r > 0) continue;
+type = free_entry_type(free_rules[i]);
+break;
+}
+}
+if (type == "real_doors")
+{
+free_door_next = true;
+free_door_hp = free_hp_next;
+free_hp_next = 0;
+return "keys"; // its key first, in a random lane
+}
+return type;
+}
+/* A replay or restart (dev, 2026-11-13: everything back): every batch added since the last clear, refilled to its full
+count, in its order; the continuous rules and every setting stay as they were. */
+void free_refill_queue()
+{
+free_queue.resize(0);
+for (uint i = 0; i < free_batches.length(); i++)
+{
+free_entry e = free_batches[i];
+e.count = e.full;
+free_queue.insert_last(e);
+}
+free_door_next = false;
+}
+// A breakable obstacle's health as it's placed: the set health, or the normal one.
+int free_obstacle_hp(int normal)
+{
+return free_run and free_hp_next > 0 ? free_hp_next : normal;
+}
+// Clear belt: every batch and rule gone, and the spawner's pick waiting for the next.
+void free_clear_queue()
+{
+free_queue.resize(0);
+free_batches.resize(0);
+free_rules.resize(0);
+free_door_next = false;
+next_type = "";
+next_countdown = 0;
+}
+// A kind's things on the belt, gone.
+void free_destroy_kind(const string&in type)
+{
+if (type == "hazards") destroy_all_hazards();
+else if (type == "spikes") destroy_all_spikes();
+else if (type == "mines") destroy_all_mines();
+else if (type == "projectiles") destroy_all_projectiles();
+else if (type == "force_fields") destroy_all_forcefields();
+else if (type == "animals") destroy_all_animals();
+else if (type == "walls") destroy_all_walls();
+else if (type == "ladders") destroy_all_ladders();
+else if (type == "fake_doors" or type == "real_doors") destroy_all_doors(); // one list holds both kinds of door
+else if (type == "floor_breakers") destroy_all_floor_breakers();
+else if (type == "barriers") destroy_all_barriers();
+else if (type == "winds") destroy_all_winds();
+else if (type == "vehicles") destroy_all_vehicles();
+else if (type == "trampolines") destroy_all_trampolines();
+else if (type == "ammo_packs") destroy_all_ammopacks();
+else if (type == "keys") destroy_all_keys();
+else if (type == "steel_shields") destroy_all_shields();
+else if (type == "life_capsules") destroy_all_capsules();
+else if (type == "health_potions") destroy_all_potions();
+else if (type == "player_teleporters") destroy_all_teleporters();
+else if (type == "powerups") destroy_all_powerups();
+else if (type == "slides") reset_slides();
+}
+// Clears one kind (or "all") of a group: its batches, its rule, and its things on the belt.
+void free_clear_kind(const string&in type, const string&in group)
+{
+for (int i = int(free_queue.length()) - 1; i >= 0; i--)
+{
+if (free_queue[i].group == group and (type == "all" or free_queue[i].type == type)) free_queue.remove_at(i);
+}
+for (int i = int(free_batches.length()) - 1; i >= 0; i--)
+{
+if (free_batches[i].group == group and (type == "all" or free_batches[i].type == type)) free_batches.remove_at(i);
+}
+for (int i = int(free_rules.length()) - 1; i >= 0; i--)
+{
+if (free_rules[i].group == group and (type == "all" or free_rules[i].type == type)) free_rules.remove_at(i);
+}
+string[] ids = free_ids(group);
+for (uint i = 0; i < ids.length(); i++)
+{
+if (type == "all" or ids[i] == type) free_destroy_kind(ids[i]);
+}
+if (group == "obstacle" and (type == "all" or type == "real_doors")) free_door_next = false;
+next_type = ""; // the waiting pick might have been one of them
+next_countdown = 0;
+}
+/* A number from an input box, digits only: from low to high, or with allow_empty, -2 for an empty answer. -1 if canceled
+(escape). Out of range says so and asks again. */
+int free_ask_number(const string&in title, const string&in prompt, int low, int high, bool allow_empty = false)
+{
+while (true)
+{
+vd.set_disallowed_chars("0123456789", true, "This character is not allowed.");
+string answer = string_trim_sides(vd.input_box(title, prompt, ""));
+vd.set_disallowed_chars("");
+if (answer == "") return allow_empty ? -2 : -1;
+int value = answer.length() > 6 ? high + 1 : int(parse_int(answer));
+if (value >= low and value <= high) return value;
+dlgmessage_return("Please type a number from " + low + " to " + high + ".");
+}
+return -1;
+}
+/* A group's kind menu: every kind, alphabetical, then all of the group, then back. "" if backed out. Each group's list
+remembers where you were, for the run (dev, 2026-11-13: "make it remember your focus on long list selections"). */
+dictionary free_kind_focus; // group -> the last item picked in its add list
+string free_choose_kind(const string&in group)
+{
+setupmenu();
+m.intro_text = "Choose the " + group + " you'd like to add.";
+string[] ids = free_ids(group);
+for (uint i = 0; i < ids.length(); i++) m.add_item(free_kind_name(ids[i], group), ids[i]);
+m.add_item("all " + free_group_name(group), "all");
+m.add_item("back", "back");
+int64 focus = -1;
+free_kind_focus.get(group, focus);
+int mres = m.run(int(focus), false, focus >= 0);
+if (mres < 0 or m.selected_item_id == "back") return "";
+free_kind_focus.set(group, int64(mres));
+return m.selected_item_id;
+}
+/* Add obstacles, add items or add specials: the kind, "How many?", for a breakable obstacle its health, then whether they
+spawn continuously. True once added, with a line in the misc buffer; false if backed out or canceled. */
+bool free_add(const string&in group)
+{
+string what = free_group_name(group);
+string type = free_choose_kind(group);
+if (type == "") return false;
+int count = free_ask_number("Add " + what, "How many?", 1, 999);
+if (count < 0)
+{
+speak("canceled");
+return false;
+}
+int hp = 0;
+if (group == "obstacle" and free_breakable(type))
+{
+hp = free_ask_number("Add " + what, "How much health should each one have? Leave it empty for the normal health for your speed.", 1, 999, true);
+if (hp < 0) hp = 0; // an empty answer and escape both mean the normal health
+}
+setupmenu();
+m.intro_text = "Do you want these " + what + " to spawn continuously?";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int mres = m.run();
+if (mres < 0)
+{
+speak("canceled");
+return false;
+}
+free_entry e;
+e.type = type;
+e.group = group;
+e.count = count;
+e.hp = hp;
+string health = hp > 0 ? ", with " + hp + " health each" : "";
+if (m.selected_item_id == "yes")
+{
+free_rules.insert_last(e);
+if (type == "all") speak_buffer("Every kind of " + group + " will now keep coming" + health + ".", "misc");
+else speak_buffer(learn_upper_first(free_kind_name(type, group)) + " will now keep coming" + health + ".", "misc");
+return true;
+}
+e.full = count;
+free_queue.insert_last(e);
+free_entry kept = e; // a copy at its full count, for a replay
+free_batches.insert_last(kept);
+speak_buffer(count + " " + free_kind_name(type, group, count) + " added" + health + ".", "misc");
+return true;
+}
+// A group's kinds coming, queued or continuous, each once, in the kind list's order.
+string[] free_kinds_coming(const string&in group)
+{
+string[] kinds;
+string[] ids = free_ids(group);
+for (uint i = 0; i < ids.length(); i++)
+{
+bool found = false;
+for (uint q = 0; q < free_queue.length() and !found; q++) found = free_queue[q].group == group and free_queue[q].type == ids[i];
+for (uint q = 0; q < free_rules.length() and !found; q++) found = free_rules[q].group == group and free_rules[q].type == ids[i];
+if (found) kinds.insert_last(ids[i]);
+}
+return kinds;
+}
+/* Clear obstacles, clear items or clear specials: each kind coming, then all of the group, then back. True once cleared,
+with a line in the misc buffer. */
+bool free_clear(const string&in group)
+{
+setupmenu();
+m.intro_text = "Choose the " + free_group_name(group) + " you'd like to clear.";
+string[] kinds = free_kinds_coming(group);
+for (uint i = 0; i < kinds.length(); i++) m.add_item(free_kind_name(kinds[i], group), kinds[i]);
+m.add_item("all " + free_group_name(group), "all");
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+string type = m.selected_item_id;
+free_clear_kind(type, group);
+if (type == "all") speak_buffer("All " + free_group_name(group) + " have been cleared.", "misc");
+else speak_buffer("The " + free_kind_name(type, group) + " have been cleared.", "misc");
+return true;
+}
+// View current setup's lines for the belt: each batch left, then each continuous kind's share of the mix.
+void free_add_belt_lines(string[]@ lines)
+{
+for (uint i = 0; i < free_queue.length(); i++)
+{
+free_entry@ e = free_queue[i];
+lines.insert_last(stat_line("coming", e.count + " " + free_kind_name(e.type, e.group, e.count) + (e.hp > 0 ? ", " + e.hp + " health each" : "")));
+}
+int total = 0;
+for (uint i = 0; i < free_rules.length(); i++) total += free_rules[i].count;
+for (uint i = 0; i < free_rules.length(); i++)
+{
+free_entry@ e = free_rules[i];
+int percent = int(round(100.0 * e.count / total, 0));
+string name = e.type == "all" ? "every kind of " + e.group : free_kind_name(e.type, e.group);
+lines.insert_last(stat_line("continuous", name + ", " + percent + " percent of the mix" + (e.hp > 0 ? ", " + e.hp + " health each" : "")));
+}
+if (free_queue.length() == 0 and free_rules.length() == 0) lines.insert_last(stat_line("coming", "nothing"));
+}

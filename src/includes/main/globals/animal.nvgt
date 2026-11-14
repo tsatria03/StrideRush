@@ -8,7 +8,7 @@ loop stops. Reaching one you didn't scare is a blow of animal_damage (10) throug
 ducking don't help. Belt-wide on purpose, so turning can't dodge it and the clap stays its only answer (dev: "belt wide").
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_animals() shrinks the array. */
 sound_pool animalpool;
-// Where an environment keeps its animals themes (env.nvgt). // one folder per kind (birds, dogs), then one per animal (dev, 2026-11-04)
+// Where an environment keeps its animals themes (environments.nvgt). // one folder per kind (birds, dogs), then one per animal (dev, 2026-11-04)
 string animal_folder(const string&in env)
 {
 return trap_folder(env, "animals");
@@ -17,7 +17,7 @@ class animal
 {
 double x;
 string theme;
-string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
 int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 double countdown_start;
 bool spent = false; // scared off or reached: nothing more can happen to it

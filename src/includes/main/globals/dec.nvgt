@@ -8,7 +8,7 @@ bool auto_check_updates=false; // the General tab: check quietly for a newer ver
 const string APPDATA_DIR = DIRECTORY_APPDATA + "tsatria03/StrideRush/";
 /* The settings, all in one encrypted file (dev, 2026-11-04: "I still want settings.srf, not split"), read by
 readpreffs() and written by writepreffs() in savefuncts.nvgt. The menu options (menuwrap and the rest) live in
-form_menu, and the run volumes in run.nvgt. */
+form_menu, and the run volumes in game.nvgt. */
 savedata st(APPDATA_DIR + "preffs/settings.srf", "Ki4bG6X16S7VxcjHopWbaDrN9eNhvr4noO5Jl6DHceredubleqWvkVty3s6BLiz1YZwJGwnws4AkhGK1KZN0yj7t0jIREqVFZnCNRrv38zhVBsj0CwQM4akYncoJEResiAzTZeykM0ukesXOnrCZgVFmrC7m48iQlyd4KA0MGgSdDWqldG9zlA4DbExspzAWJ6UsNwQq8SOB1dh32XUfuSaiK1cDzToZvFNTIB4dQYC6PqaTgkzklsKTel40sbeXsD8");
 /* The game's progress, apart from the settings (the game menu refactor plan's Section 6, 2026-11-06): the difficulty
 run counts so far, and later the statistics plan's stats. Read by readgame() and written by writegame() in

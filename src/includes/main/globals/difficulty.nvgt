@@ -28,7 +28,7 @@ schedule_join_times entry, or always when it isn't in schedule_types. */
 bool difficulty_unlocked(int level)
 {
 if (level <= 0) return true;
-if (timed_run) return timed_level_runs[level - 1] >= timed_unlock_runs; // a timed run's own counts (timed.nvgt)
+if (timed_run) return timed_level_runs[level - 1] >= timed_unlock_runs; // a timed run's own counts (timerun.nvgt)
 return difficulty_runs[level - 1] >= difficulty_unlock_runs;
 }
 // Called by finish_run(), at a death: counts the run toward its level if it qualifies, and saves at once.
@@ -58,7 +58,7 @@ string difficulty_lock_reason(int level)
 {
 string below = difficulty_names[level - 1];
 bool below_open = difficulty_unlocked(level - 1);
-// In a timed run, its own counts and "timed runs": "after completing 2 more easy timed runs." (timed.nvgt)
+// In a timed run, its own counts and "timed runs": "after completing 2 more easy timed runs." (timerun.nvgt)
 int need = timed_run ? timed_unlock_runs : difficulty_unlock_runs;
 int have = timed_run ? timed_level_runs[level - 1] : difficulty_runs[level - 1];
 int left = below_open ? need - have : need;

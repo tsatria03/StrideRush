@@ -113,7 +113,7 @@ lines.insert_last(stat_line("total " + difficulty_names[i] + " runs", thousands_
 }
 add_running_lines(lines, lifetime_stats, true);
 add_obstacle_and_hit_lines(lines, lifetime_stats, true);
-// Then the timed run records, level by level (dev, 2026-11-13: "Put the records in the life stats menu"; timed.nvgt).
+// Then the timed run records, level by level (dev, 2026-11-13: "Put the records in the life stats menu"; timerun.nvgt).
 string[] timed = timed_record_lines();
 for (uint i = 0; i < timed.length(); i++) lines.insert_last(timed[i]);
 return lines;

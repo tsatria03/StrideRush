@@ -14,7 +14,7 @@ class forcefield
 {
 double x;
 string theme;
-string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
 int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 bool active = true; // on loop while true, off loop while false
 bool spent = false; // reached: it can never hit again

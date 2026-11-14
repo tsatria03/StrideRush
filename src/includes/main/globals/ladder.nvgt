@@ -215,7 +215,7 @@ void ladder_fail(ladder@ l, bool fall)
 {
 reset_climb();
 practice_hints_restart(); // a hit: a practice run's hints start over (practice_hints.nvgt)
-timed_hit(); // and a timed run's clock loses time (timed.nvgt)
+timed_hit(); // and a timed run's clock loses time (timerun.nvgt)
 last_caught = fall ? "ladder_fall" : "ladder_collapse"; // what ended the run, if it's fatal (stats_menu.nvgt, practice_hints.nvgt)
 last_caught_kind = "";
 stat_add(fall ? "ladder_falls" : "ladders_broken"); // Section 3

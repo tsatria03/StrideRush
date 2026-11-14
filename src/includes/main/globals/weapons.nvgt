@@ -193,7 +193,7 @@ stat_add("reloads"); // counted when the reload finishes
 int w = current_weapon;
 int amount = int(min(gun_start_loaded - weapon_loaded[w], weapon_reserve[w]));
 weapon_loaded[w] += amount;
-if (!reserve_unlimited()) weapon_reserve[w] -= amount; // a practice run's reserve never runs out (dev, 2026-11-05), nor a free run's (free.nvgt)
+if (!reserve_unlimited()) weapon_reserve[w] -= amount; // a practice run's reserve never runs out (dev, 2026-11-05), nor a free run's (freerun.nvgt)
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*ping*"), false);
 }
 // X: one sentence about the current weapon's ammo.

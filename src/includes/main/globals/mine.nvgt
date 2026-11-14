@@ -10,7 +10,7 @@ class mine
 {
 double x;
 string theme;
-string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
 int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 bool armed = false;
 bool spent = false; // passed or set off: it can never arm or hit again (a passed one keeps ticking until dropped)

@@ -10,7 +10,7 @@ class projectile
 {
 double meet_x;
 string theme;
-string env; // the environment it spawned in, for its sounds after a switch (env.nvgt)
+string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
 int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 bool spent = false; // reached meet_x: it can never hit again
 int loopslot = -1; // -1 once it has hit you
