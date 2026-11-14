@@ -1,11 +1,11 @@
 ---
 name: project_timed_run_plan
-description: SETTLED (2026-11-13, for 2.2; 3 sections) - timed runs: a countdown fed by clean passes, a finish line to win, own level unlocks, records and 5 achievements; Q&A log
+description: COMPLETE (2026-11-13, 2.2 at 5 of 10; 3 sections) - timed runs: a countdown fed by clean passes, a finish line to win, own level unlocks, records and 5 achievements; Q&A log
 metadata:
   type: project
 ---
 
-Status: SETTLED (2026-11-13), building. Moved to 2.2 (see the log's end).
+Status: COMPLETE (2026-11-13), 2.2 at 5 of 10. Moved to 2.2 (see the log's end).
 
 Background:
 - The dev (2026-11-13): "I was thinking of a new game mode, but I'm not sure how it would work. I was gonna call it timed run. Or something like that. Can you please look at how time trial works in toy mania? In this game it could work differently."
@@ -67,3 +67,4 @@ Sections:
 - Q: timed runs in session and lifetime statistics: counted as sessions (undoing the separation; endless achievements from timed runs), or the records only listed in lifetime statistics? A: "I think I want option 2. Put the records in the life stats menu." (dev, 2026-11-13). Built: the "timed run records" item gone; timed_record_lines() at the end of lifetime_stat_lines(), so copy and export carry them there; tracking unchanged.
 - Q: clearing lifetime stats clears the timed records too, now listed there? A: "yes. it should be cleared too" (dev, 2026-11-13). clear_lifetime_stats() calls clear_timed_records(), which clear game progresses reaches through it; the timed level unlocks stay.
 - Section 2 COMPLETE (dev, 2026-11-13): all 3 tests passed (the results after a run; the records in lifetime statistics, copy and clearing; the achievements in the session list and achievement statistics).
+- Section 3 (docks) done (2026-11-13): the readme (T; a Timed runs section of three paragraphs before practice runs; play game's modes; achievements; the records after lifetime statistics); the entry "Added timed runs, where clean passes add time to a countdown and hits take it away, and you win by reaching the finish line before it runs out, with their own levels to unlock, records and five achievements." (2.2 at 5 of 10); CLAUDE.md, the version history, the index. Plan COMPLETE.

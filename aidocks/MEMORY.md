@@ -118,7 +118,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Floor breakers plan](plans/project_floor_breakers_plan.md) — COMPLETE (2026-11-13, 2.2 at 2 of 10): a hole in the belt you rebuild with your hands, or fall and die; Q&A log
 - [Vehicles plan](plans/project_vehicles_plan.md) — COMPLETE (2026-11-13, 2.2 at 4 of 10): vehicles in a lane, dodged and broken; ToyMania's car.nvgt as reference; Q&A log
 - [Transitions plan](plans/project_transitions_plan.md) — COMPLETE (2026-11-13, 2.1 at 9 of 10): the code follows the new transitions folders; learn sounds gains transitions; Q&A log
-- [Timed run plan](plans/project_timed_run_plan.md) — SETTLED (2026-11-13, moved to 2.2; 3 sections): timed runs, a countdown fed by clean passes and a finish line; Q&A log
+- [Timed run plan](plans/project_timed_run_plan.md) — COMPLETE (2026-11-13, 2.2 at 5 of 10): timed runs, a countdown fed by clean passes and a finish line; Q&A log
 - [Rising practice plan](plans/project_rising_practice_plan.md) — COMPLETE (2026-11-12, 2.1 at 7 of 10): a rising practice speed, 2 up to 10 steps a second; Q&A log
 - [Practice mix plan](plans/project_practice_mix_plan.md) — COMPLETE (2026-11-12, 2.1 at 6 of 10): mixed obstacles, the last practice choice after 5 trampoline flights, every kind at random, one hint per kind; Q&A log
 - [Menu counts plan](plans/project_menu_counts_plan.md) — COMPLETE (2026-11-12, 2.1 at 5 of 10): the practice and difficulty menus say how many choices are unlocked; Q&A log

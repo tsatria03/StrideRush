@@ -1,4 +1,5 @@
 New in 2.2.
+Added timed runs, where clean passes add time to a countdown and hits take it away, and you win by reaching the finish line before it runs out, with their own levels to unlock, records and five achievements.
 Added vehicles to practice runs, between winds and combinations, opened after you dodge 5 winds.
 Added vehicles, cars that chase you across the lanes and fire bursts at you while they're in yours, which you can shoot down, dodge or get rammed by.
 Added floor breakers to practice runs, between mixed doors and barriers, opened after you get through 5 mixed doors.
