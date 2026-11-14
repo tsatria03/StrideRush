@@ -29,7 +29,7 @@ int dealt = powerup_damage(damage, "Tough Hide", "Soft Hide"); // halved or doub
 stat_add("damage_taken", dealt < player_health ? dealt : player_health); // only what your health had to lose, as damage past 0 is dropped
 player_health -= dealt;
 if (player_health > 0) return blow_hurt;
-if ((lives_can_end or practice_run) and lives <= 1) // a practice run's last life lost is a practice death (end_run_hit())
+if ((lives_can_end or practice_deaths()) and lives <= 1) // a practice run's last life lost is a practice death (end_run_hit()), as is a free run's on practice deaths
 {
 player_health = 0;
 lives = 0;

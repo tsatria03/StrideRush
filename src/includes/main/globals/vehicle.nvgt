@@ -224,7 +224,7 @@ int blow = take_damage(vehicle_shot_damage);
 if (blow == blow_fatal)
 {
 p.play_stationary(impact_clip, false);
-if (practice_run) remove_vehicle_and_shots(v);
+if (practice_deaths()) remove_vehicle_and_shots(v);
 end_run_hit();
 return;
 }

@@ -1,0 +1,284 @@
+/* Free run (the free run plan, dev, 2026-11-13; Section 1). A mode after practice run, open once hard endless has its
+difficulty_unlock_runs counted runs (when insane opens), with no difficulty and nothing counted: no statistics,
+achievements, records or unlocks (run_difficulty stays -1, so stats_counting stays off).
+- The setup: a running speed (a fixed 2 to 10 steps a second, rising, or normal, which speeds up as an endless run), then
+  an environment (one to stay in, or random). The run starts with you standing still on an empty belt (spawn_only
+  "nothing" for now): music and ambience only, no footsteps or heartbeat; every key works, jump, crouch and hands too, for
+  trying them in place (dev, 2026-11-13).
+- The console, on the free_console action (backspace and F7), freezes the run while it's open. Standing: modify death
+  mode, modify environment, modify practice hints, modify running speed, start running, view current setup, back.
+  Running: clear belt and the same modify items, view current setup, back. All alphabetical, back last.
+- Death mode: practice deaths (the start: practice_death(), set down past what caught you) or normal deaths (the run ends,
+  and replay or restart goes back through the setup). Practice hints: off to start; on, every kind gets practice_hint()'s
+  lines, independent of the death mode.
+- The guns' reserve never runs out (reserve_unlimited()), as in practice. */
+bool free_run = false; // the mode's runs, set by play_game() and kept through replays
+bool free_moving = false; // start running sets it, clear belt clears it
+string free_speed_mode = "fixed"; // "fixed", "rising" or "normal"
+int free_speed = start_step_time; // the fixed speed's step time
+bool free_practice_deaths = true;
+bool free_hints = false;
+int free_lives = starting_lives; // the lives a practice death gives back (Section 3 lets you set them)
+int free_console_focus = -1;
+
+// The mode opens with insane in endless: once hard has its difficulty_unlock_runs counted runs (dev, 2026-11-13).
+bool free_mode_unlocked()
+{
+return difficulty_runs[2] >= difficulty_unlock_runs;
+}
+// "after completing 5 hard endless runs.", or "after completing 2 more hard endless runs." once started ("run" for 1).
+string free_mode_lock_reason()
+{
+int left = difficulty_unlock_runs - difficulty_runs[2];
+bool started = difficulty_runs[2] > 0;
+return "after completing " + left + (started ? " more " : " ") + "hard endless " + (left == 1 ? "run." : "runs.");
+}
+bool free_standing()
+{
+return free_run and !free_moving;
+}
+// A practice run's deaths, or a free run's on practice deaths: the run never ends, you're set down past what caught you.
+bool practice_deaths()
+{
+return practice_run or (free_run and free_practice_deaths);
+}
+// A practice run's hints, or a free run's with practice hints on (practice_hints.nvgt).
+bool practice_hints_on()
+{
+return practice_run or (free_run and free_hints);
+}
+// A gun's reserve never runs out in practice or in a free run (weapons.nvgt).
+bool reserve_unlimited()
+{
+return practice_run or free_run;
+}
+// From play_game(), each time a free run is set up: the console's settings back to how a free run starts.
+void reset_free_settings()
+{
+free_moving = false;
+free_speed_mode = "fixed";
+free_speed = start_step_time;
+free_practice_deaths = true;
+free_hints = false;
+free_lives = starting_lives;
+free_console_focus = -1;
+}
+// The step time a free run starts at: the fixed speed, or 2 steps a second for rising and normal.
+int free_start_step_time()
+{
+return free_speed_mode == "fixed" ? free_speed : start_step_time;
+}
+/* The running speed menu, at setup and in the console: the fixed speeds (as practice offers them), rising, normal, back.
+True once one is chosen. */
+bool choose_free_speed()
+{
+setupmenu();
+m.intro_text = "Choose your running speed, in steps a second.";
+for (int t = start_step_time; t >= 100; t -= 100)
+{
+m.add_item(tenths_text(int(round(10000.0 / t, 0))), "" + t);
+}
+m.add_item("normal", "normal"); // speeds up as an endless run does, before rising (dev, 2026-11-13)
+m.add_item("rising", "rising"); // from 2 up to 10, as practice's rising
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+string id = m.selected_item_id;
+if (id == "rising" or id == "normal") free_speed_mode = id;
+else
+{
+free_speed_mode = "fixed";
+free_speed = int(parse_int(id));
+}
+return true;
+}
+// The environment menu, at setup and in the console: each environment to stay in, then random, then back.
+bool choose_free_env()
+{
+setupmenu();
+m.intro_text = "Choose the environment you'd like to run in.";
+string[] names = env_names();
+for (uint i = 0; i < names.length(); i++) m.add_item(names[i].replace("_", " ", true), names[i]);
+m.add_item("random", "random");
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+debug_env = m.selected_item_id == "random" ? "" : m.selected_item_id; // env.nvgt holds a run with no difficulty in debug_env
+return true;
+}
+// The setup: speed, then environment; back from the environment returns to the speed. False if backed out of entirely.
+bool choose_free_setup()
+{
+reset_free_settings();
+debug_env = "";
+while (true)
+{
+if (!choose_free_speed()) return false;
+if (choose_free_env()) return true;
+}
+return false;
+}
+/* A mid-run environment choice: held in one, it moves you there at once ("You've entered ..."), or says you'll stay;
+random, switching resumes, and it says so (dev, 2026-11-13). */
+void free_apply_env()
+{
+if (debug_env != "")
+{
+env_switch_at = -1;
+if (debug_env == current_env)
+{
+speak_buffer("You'll stay in the " + current_env.replace("_", " ", true) + " environment.", "misc");
+return;
+}
+current_env = debug_env;
+announce_env(true);
+current_surface = "";
+pick_surface();
+begin_ambience_fade(pick_ambience());
+return;
+}
+env_switch_at = env_switch_choices().length() > 0 ? runtimer.elapsed + random(env_switch_min_time, env_switch_max_time) : -1;
+speak_buffer("The environment will now change every 1 to 2 minutes.", "misc");
+}
+// A mid-run speed choice: a fixed speed at once; rising and normal carry on from the speed you're at.
+void free_apply_speed()
+{
+if (free_speed_mode == "fixed") step_time = free_speed;
+speeduptimer.restart();
+// Said every time (dev, 2026-11-13): a fixed speed as C says it, or how it will rise.
+if (free_speed_mode == "normal") speak_buffer("Your speed now rises as in an endless run.", "misc");
+else if (free_speed_mode == "rising") speak_buffer("Your speed now rises up to 10 steps a second.", "misc");
+else speak_buffer(speed_phrase(), "misc"); // "You are running 3.3 steps a second."
+}
+// From speedup_check(): a free run speeds up only while moving, and only on rising or normal. True if it handled it.
+bool free_speedup()
+{
+if (!free_run) return false;
+if (!free_moving or free_speed_mode == "fixed") return true;
+bool rising = free_speed_mode == "rising";
+if (speeduptimer.elapsed < (rising ? practice_rising_period : speedup_period)) return true;
+speeduptimer.restart();
+step_time = int(max(rising ? practice_rising_top : min_step_time, step_time - speedup_amount));
+return true;
+}
+void free_start_running()
+{
+free_moving = true;
+steptimer.restart();
+speeduptimer.restart();
+}
+/* Clear belt: everything on the belt and on its way gone, whatever you're in (a ladder, a repair, a slide, a flight, a
+door) let go, and you stand still again. Your settings stay. */
+void free_clear_belt()
+{
+clear_run_objects();
+cancel_movement();
+reset_practice_hints();
+free_moving = false;
+}
+string free_speed_text()
+{
+if (free_speed_mode == "rising") return "rising, now " + tenths_text(int(round(10000.0 / current_step_time(), 0))) + " steps a second";
+if (free_speed_mode == "normal") return "normal, now " + tenths_text(int(round(10000.0 / current_step_time(), 0))) + " steps a second";
+return tenths_text(int(round(10000.0 / free_speed, 0))) + " steps a second";
+}
+// View current setup's lines.
+string[] free_setup_lines()
+{
+string[] lines;
+lines.insert_last(stat_line("belt", free_moving ? "running" : "standing still"));
+lines.insert_last(stat_line("running speed", free_speed_text()));
+lines.insert_last(stat_line("death mode", free_practice_deaths ? "practice deaths" : "normal deaths"));
+lines.insert_last(stat_line("practice hints", free_hints ? "on" : "off"));
+lines.insert_last(stat_line("environment", (debug_env == "" ? "random, now " : "") + current_env.replace("_", " ", true)));
+return lines;
+}
+// Modify death mode: "Choose what happens when you die." True once one is chosen, said in the misc buffer.
+bool free_death_menu()
+{
+setupmenu();
+m.intro_text = "Choose what happens when you die.";
+m.add_item("normal deaths", "normal");
+m.add_item("practice deaths", "practice");
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+free_practice_deaths = m.selected_item_id == "practice";
+speak_buffer(free_practice_deaths ? "You now have practice deaths." : "You now have normal deaths.", "misc");
+return true;
+}
+// Modify practice hints: on or off; turning them on starts every kind's count fresh. True once one is chosen.
+bool free_hints_menu()
+{
+setupmenu();
+m.intro_text = "Choose whether practice hints are spoken.";
+m.add_item("off", "off");
+m.add_item("on", "on");
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+bool was = free_hints;
+free_hints = m.selected_item_id == "on";
+if (free_hints and !was) reset_practice_hints();
+speak_buffer(free_hints ? "Practice hints are now on." : "Practice hints are now off.", "misc");
+return true;
+}
+/* The console (backspace or F7), from run_input() in a free run: the run frozen while it's open, its items in alphabetical
+order with back last, standing or running. Every change closes it with a line in the misc buffer; view current setup and backing out of a menu return to it. Escape or back
+closes it silently, as a nested menu. */
+void free_console()
+{
+pause_game();
+while (running)
+{
+setupmenu();
+m.intro_text = free_moving ? "Free run console. You're running." : "Free run console. You're standing still.";
+if (free_moving) m.add_item("clear belt", "clear_belt");
+m.add_item("modify death mode", "death");
+m.add_item("modify environment", "env");
+m.add_item("modify practice hints", "hints");
+m.add_item("modify running speed", "speed");
+if (!free_moving) m.add_item("start running", "start");
+m.add_item("view current setup", "view");
+m.add_item("back", "back");
+int focus = free_console_focus; // where you last were, or the first item (dev, 2026-11-13: no focus on start running)
+int mres = m.run(focus, false, focus >= 0);
+if (mres < 0 or m.selected_item_id == "back") break;
+free_console_focus = mres;
+string id = m.selected_item_id;
+/* Every change closes the console and says what it did in the misc buffer, as CaveDefender's console does (dev,
+2026-11-13: "It should be consistent if possible"); only view current setup and backing out of a menu stay in it. */
+bool done = false;
+if (id == "start")
+{
+free_start_running();
+speak_buffer("You've started running.", "misc");
+done = true;
+}
+else if (id == "clear_belt")
+{
+free_clear_belt();
+speak_buffer("The belt has been cleared.", "misc");
+done = true;
+}
+else if (id == "death") done = free_death_menu();
+else if (id == "env")
+{
+done = choose_free_env();
+if (done) free_apply_env();
+}
+else if (id == "hints") done = free_hints_menu();
+else if (id == "speed")
+{
+done = choose_free_speed();
+if (done) free_apply_speed();
+}
+else show_stat_lines("Free run setup. Here's how your run is set up right now.", free_setup_lines());
+if (done)
+{
+free_console_focus = -1; // the next time, the first item
+break;
+}
+}
+resume_game();
+}

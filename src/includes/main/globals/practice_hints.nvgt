@@ -23,7 +23,7 @@ const int practice_mix_count = 16; // 14, floor breakers and vehicles (the floor
 and the closing line comes again after five more. The timing guards stay, so a hint just after still waits its turn. */
 void practice_hints_restart()
 {
-if (!practice_run or practice_hints_done) return; // after the closing line, the run stays quiet (dev, 2026-11-12)
+if (!practice_hints_on() or practice_hints_done) return; // after the closing line, the run stays quiet (dev, 2026-11-12)
 practice_hint_counts.delete_all();
 practice_mix_seen.delete_all();
 practice_goal_placed = 0;
@@ -124,7 +124,7 @@ return kind == practice_choice;
 }
 void practice_hint(const string&in kind, int lane, double x, const string&in animal = "")
 {
-if (!practice_run or practice_hints_done) return;
+if (!practice_hints_on() or practice_hints_done) return; // a practice run, or a free run with practice hints on (free.nvgt)
 int64 said = 0;
 practice_hint_counts.get(kind, said);
 int limit = practice_choice == "mixed_obstacles" ? 1 : practice_hint_limit; // one per kind in mixed obstacles

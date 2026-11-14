@@ -163,11 +163,11 @@ void fall_through(floor_breaker@ f, bool mistake)
 reset_repair();
 f.spent = true;
 stop_floor_loop(f);
-if (practice_run) last_caught = "floor_breakers"; // what caught you (practice_hints.nvgt)
+if (practice_deaths()) last_caught = "floor_breakers"; // what caught you (practice_hints.nvgt)
 else stat_caught("floor_breakers"); // the statistics: times fell into floor breakers, and the death outcome
 last_caught_kind = mistake ? "repair" : "";
 string fall_clip = get_pack_sound(floor_folder(f) + "*fall*");
-if (practice_run)
+if (practice_deaths()) // a practice run, or a free run on practice deaths (free.nvgt)
 {
 p.play_stationary(get_pack_sound("misc/player/*death*"), false); // with the fall, at the same time (dev, 2026-11-13); practice_death() keeps p playing
 practice_death(f.x + 1, fall_clip);

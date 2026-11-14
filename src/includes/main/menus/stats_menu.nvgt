@@ -39,7 +39,7 @@ lines.insert_last(stat_line("health", percent + " percent, " + (lives == 1 ? "1 
 lines.insert_last(stat_line("shield", shield_worn ? int(round(100.0 * shield_hp_left / shield_hp, 0)) + " percent" : "none"));
 lines.insert_last(stat_line("lane", lane_names[current_lane].lower()));
 lines.insert_last(stat_line("environment", current_env.replace("_", " ", true)));
-if (run_difficulty < 0 and !practice_run) lines.insert_last(stat_line("speed", current_step_time() + " milliseconds per step"));
+if (run_difficulty < 0 and !practice_run and !free_run) lines.insert_last(stat_line("speed", current_step_time() + " milliseconds per step"));
 else lines.insert_last(stat_line("speed", tenths_text(int(round(10000.0 / current_step_time(), 0))) + " steps a second"));
 int steps = int(me.x);
 lines.insert_last(stat_line("distance", thousands_text(steps) + (steps == 1 ? " step" : " steps")));

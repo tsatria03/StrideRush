@@ -172,6 +172,7 @@ string mode = choose_game_mode();
 if (mode == "") return;
 practicing = false; // set again below, so backing out of practice into another mode never leaves it on
 timed_run = false; // likewise a timed run (timed.nvgt)
+free_run = false; // and a free run (free.nvgt)
 level = -1; // likewise the difficulty, which only an endless run has
 debug_env = ""; // and the debug environment choice, which only a debug run has (env.nvgt)
 if (mode == "practice")
@@ -186,6 +187,18 @@ practice_choice = practice_type; // what the run's clean passes count toward (pr
 speed = practice_speed;
 only_type = practice_spawn_id(practice_type);
 can_run_out = 0;
+steps = 1;
+stage = 6;
+}
+else if (mode == "free")
+{
+// A free run (free.nvgt): its setup (speed, environment), then standing on an empty belt; back out of it to the mode menu.
+if (!choose_free_setup()) continue;
+free_run = true;
+practice_choice = ""; // so no practice choice's closing line runs in it (practice_hints.nvgt)
+speed = free_start_step_time();
+only_type = "nothing"; // nothing spawns on its own
+can_run_out = 1;
 steps = 1;
 stage = 6;
 }
@@ -244,18 +257,27 @@ m.fade_music();
 /* Returns when the run ends, back to the game menu. A run starts over with the same choices when restart run was picked,
 when the debug No answer turned a hazard death into a restart, or when you choose replay run after a death (after_death_menu(), results_menu.nvgt)
 (dev, 2026-11-03, in releases too). Quitting from the pause menu or the Escape question just returns here. */
+bool first_run = true;
 do
 {
+// A free run's replay or restart goes back through its setup (the free run plan); backing out returns to the game menu.
+if (free_run and !first_run)
+{
+if (!choose_free_setup()) break;
+speed = free_start_step_time();
+}
+first_run = false;
 restart_run_requested = false;
 run_died = false;
 /* A practice run starts with practice_lives; a single-type debug run with debug_lives (dev, 2026-11-03); "all" plays
 like the real game. A practice run can't die, so it never reaches the after death menu. */
-int life_count = practicing ? practice_lives : (only_type == "all" ? starting_lives : debug_lives);
+int life_count = practicing ? practice_lives : (free_run ? free_lives : (only_type == "all" ? starting_lives : debug_lives));
 start_run(speed, life_count, only_type, can_run_out == 1, practicing, level);
 if (run_died and !restart_run_requested and after_death_menu()) restart_run_requested = true;
 }
 while (restart_run_requested);
 timed_run = false; // back at the game menu, no run is timed
+free_run = false; // or free
 }
 /* Restart game: starts a fresh copy of the game and closes this one. Compiled, it runs
 sdr.exe, the name nvgt -c gives sdr.nvgt's build; from source, the pinned engine's nvgtw.exe on
@@ -294,12 +316,21 @@ else m.add_item("Endless run. Unlocked " + endless_lock_reason(), "endless");
 if (timed_mode_unlocked()) m.add_item("Timed run. This mode gives you a countdown clock: clean passes add time, hits take it away, and you win by reaching the finish line before your time runs out.", "timed");
 else m.add_item("Timed run. Unlocked " + timed_mode_lock_reason(), "timed");
 m.add_item("Practice run. This mode lets you practice one kind of obstacle at a time, for as long as you like. If you die, you try again from just past what caught you, and nothing you do here counts toward your progress, apart from unlocking the next obstacle to practice.", "practice");
+// Free run (the free run plan, dev, 2026-11-13): last, open once insane is (free.nvgt).
+if (free_mode_unlocked()) m.add_item("Free run. This mode lets you set up a run however you like, choosing the obstacles, the speed and more, and change it at any time from the free run console, with no difficulty and nothing counted toward your progress.", "free");
+else m.add_item("Free run. Unlocked " + free_mode_lock_reason(), "free");
 m.add_item("back", "back");
 int mres = m.run(focus, false, focus >= 0); // back on a locked endless run, it's focused and spoken
 if (mres < 0 or m.selected_item_id == "back") return "";
 if (m.selected_item_id == "endless" and !endless_unlocked())
 {
 dlgmessage_return("This mode is unlocked " + endless_lock_reason()); // say why, and stay in the menu
+focus = mres;
+continue;
+}
+if (m.selected_item_id == "free" and !free_mode_unlocked())
+{
+dlgmessage_return("This mode is unlocked " + free_mode_lock_reason());
 focus = mres;
 continue;
 }

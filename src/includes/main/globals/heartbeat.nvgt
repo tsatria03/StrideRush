@@ -36,7 +36,7 @@ heart_beat_now = true;
 // Every frame from run_loop(): a beat whenever the gap for the heart rate has passed.
 void heartbeat_check()
 {
-if (door_moving or sliding) // quiet on a slide too (dev, 2026-11-11)
+if (door_moving or sliding or free_standing()) // quiet on a slide too (dev, 2026-11-11), and standing in a free run (dev, 2026-11-13)
 {
 heart_beat_now = true; // silent while the door carries you, then straight back once it sets you down
 return;

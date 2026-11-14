@@ -236,8 +236,8 @@ run_input();
 }
 void step_check()
 {
-// A ladder holds you where you are while you climb (ladder.nvgt), and a floor breaker's edge while you repair it.
-if (climbing or repairing)
+// A ladder holds you where you are while you climb (ladder.nvgt), and a floor breaker's edge while you repair it, and a free run until you start running (free.nvgt).
+if (climbing or repairing or free_standing())
 {
 steptimer.restart();
 return;
@@ -304,6 +304,7 @@ door_countdown();
 }
 void speedup_check()
 {
+if (free_speedup()) return; // a free run's own speeds (free.nvgt)
 /* A practice run stays at its chosen speed all run (dev, 2026-11-05: "keep it as is"), except "rising" (the rising
 practice plan, dev, 2026-11-12): from 2 steps a second up to practice_rising_top, every practice_rising_period. A
 practice death leaves step_time alone, so retry practice keeps the speed reached; restart run starts from 2 again. */
@@ -342,6 +343,12 @@ settingsmenu(true);
 resume_game();
 return;
 }
+// Backspace or F7: a free run's console (free.nvgt); nothing in any other run.
+if (controls.action_triggered("free_console") and free_run)
+{
+free_console();
+return;
+}
 if (controls.action_triggered("info_lives")) speak_health(); // H: health percent and lives
 if (controls.action_triggered("info_shield")) speak_shield_strength(); // key_config keeps a plain M quiet during Shift+M (buffer mute)
 if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase(), "status");
@@ -368,7 +375,7 @@ of debug, please make the C key read in milliseconds"), the debug speed menu's o
 difficulty that isn't practice. */
 string speed_phrase()
 {
-if (run_difficulty < 0 and !practice_run) return "You are running " + current_step_time() + " milliseconds per step.";
+if (run_difficulty < 0 and !practice_run and !free_run) return "You are running " + current_step_time() + " milliseconds per step."; // a free run has no level either, but isn't a debug run
 int tenths = int(round(10000.0 / current_step_time(), 0));
 return "You are running " + tenths_text(tenths) + " steps a second.";
 }
