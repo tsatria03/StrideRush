@@ -36,19 +36,11 @@ practice_mix_door_next = false; // and a mixed obstacles run with no door waitin
 choose_next_obstacle();
 next_spawn_x = spawn_distance() + next_countdown + floor_tiles(run_min_floor_time);
 }
-/* Picks the next obstacle's type at random among the trap folders that have themes (only spawn_only's type, unless it's
-"all"), and its countdown length. */
+/* Picks the next spawn's type and its countdown length: the debug choices first (choose_debug_spawn()), then the real
+game (choose_real_game()), then practice and free run. */
 void choose_next_obstacle()
 {
-// Debug option only: "real doors" in the spawn menu makes the spawns a key, then a real door, in turn, so opening one needn't wait for a mark.
-if (spawn_only == "real_doors")
-{
-if (key_before_door and keys_available()) next_type = "keys";
-else next_type = doors_available() ? "real_doors" : "";
-key_before_door = next_type != "keys";
-next_countdown = countdown_steps();
-return;
-}
+if (choose_debug_spawn()) return;
 /* Practice only: "practice_doors" mixes real and fake doors at random (dev, 2026-11-05), half and half, so telling them
 apart is practiced, with a key always placed just before each real door, so unlocking is practiced too. It doesn't wait
 for the speed marks, which a fixed-speed practice run never reaches. */
@@ -62,8 +54,6 @@ if (!doors_available()) next_type = "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
-/* Debug option only: "nothing" spawns no obstacles, items, powerups or doors at all, for listening to the run's music,
-ambience and footsteps alone (dev, 2026-11-06: "That way it's much easier to test the ambience/music setup."). */
 // A free run: what you've added from its console, or nothing yet (freebelt.nvgt).
 if (spawn_only == "free")
 {
@@ -72,52 +62,10 @@ if (next_type == "combinations" and !choose_combo()) next_type = "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
-if (spawn_only == "nothing")
-{
-next_type = "";
-next_countdown = 0;
-return;
-}
-// Debug option only: "keys" makes every spawn a key.
-if (spawn_only == "keys")
-{
-next_type = keys_available() ? "keys" : "";
-next_countdown = next_type == "" ? 0 : countdown_steps();
-return;
-}
-// Debug options only: "animals, birds" and "animals, dogs" make every spawn an animal of that kind (spawn_animal() picks it).
-if (spawn_only == "animals_birds" or spawn_only == "animals_dogs")
-{
-next_type = "animals";
-next_countdown = countdown_steps();
-return;
-}
-/* Debug options only: the three barrier choices make every spawn a barrier, with their own lane rule (spawn_barriers()).
-In "all" and the real game barriers are an ordinary pick from obstacle_types (dev, 2026-11-05). */
-if (spawn_only == "barriers" or spawn_only == "barriers_random" or spawn_only == "barriers_multiple")
-{
-next_type = barriers_available() ? "barriers" : "";
-next_countdown = next_type == "" ? 0 : countdown_steps();
-return;
-}
 // The real game.
 if (spawn_only == "all")
 {
 next_type = choose_real_game();
-next_countdown = next_type == "" ? 0 : countdown_steps();
-return;
-}
-// Debug option only: "real doors, spread" spawns the real doors at the speed marks and nothing in between.
-if (spawn_only == "real_doors_spread")
-{
-next_type = door_mark_type();
-next_countdown = next_type == "" ? 0 : countdown_steps();
-return;
-}
-// Debug options only: "combinations" and "combinations, reverse" make every spawn a pair (combo.nvgt).
-if (combo_debug_only())
-{
-next_type = choose_combo() ? "combinations" : "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
@@ -158,6 +106,74 @@ return;
 }
 next_type = roll_item_or_obstacle(available);
 next_countdown = next_type == "" ? 0 : countdown_steps();
+}
+// The debug spawn choices that make every spawn one item kind (keys have their own choice).
+string[] debug_item_choices = {"ammo_packs", "steel_shields", "life_capsules", "health_potions", "player_teleporters", "powerups"};
+/* The debug spawn choices: sets next_type and next_countdown and returns true when spawn_only is one of them, false
+otherwise. Practice reuses three: its real doors ("real_doors"), barriers ("barriers_multiple") and combinations
+("combinations_mixed"). */
+bool choose_debug_spawn()
+{
+// "real doors": a key, then a real door, in turn, so opening one needn't wait for a speed mark.
+if (spawn_only == "real_doors")
+{
+if (key_before_door and keys_available()) next_type = "keys";
+else next_type = doors_available() ? "real_doors" : "";
+key_before_door = next_type != "keys";
+next_countdown = countdown_steps(); // even when no door is available, unlike every other choice
+return true;
+}
+// "real doors, spread": the real doors at the speed marks and nothing in between.
+if (spawn_only == "real_doors_spread")
+{
+next_type = door_mark_type();
+next_countdown = next_type == "" ? 0 : countdown_steps();
+return true;
+}
+// "nothing": no spawns at all, for listening to the music, ambience and footsteps alone.
+if (spawn_only == "nothing")
+{
+next_type = "";
+next_countdown = 0;
+return true;
+}
+// "keys": every spawn a key.
+if (spawn_only == "keys")
+{
+next_type = keys_available() ? "keys" : "";
+next_countdown = next_type == "" ? 0 : countdown_steps();
+return true;
+}
+// "animals, birds" and "animals, dogs": every spawn an animal of that kind (spawn_animal() picks it).
+if (spawn_only == "animals_birds" or spawn_only == "animals_dogs")
+{
+next_type = "animals";
+next_countdown = countdown_steps();
+return true;
+}
+// The three barrier choices: every spawn a barrier, each with its own lane rule (spawn_barriers()).
+if (spawn_only == "barriers" or spawn_only == "barriers_random" or spawn_only == "barriers_multiple")
+{
+next_type = barriers_available() ? "barriers" : "";
+next_countdown = next_type == "" ? 0 : countdown_steps();
+return true;
+}
+// The combination choices: every spawn a pair (combo.nvgt).
+if (combo_debug_only())
+{
+next_type = choose_combo() ? "combinations" : "";
+next_countdown = next_type == "" ? 0 : countdown_steps();
+return true;
+}
+// One item kind: every spawn that item, once its sounds exist; set_spawn_only() has already turned its lane choice into item_lane_mode.
+if (debug_item_choices.find(spawn_only) >= 0)
+{
+bool ok = (spawn_only == "powerups" ? powerups_available() : item_kind_available(spawn_only)) and has_joined(spawn_only);
+next_type = ok ? spawn_only : "";
+next_countdown = next_type == "" ? 0 : countdown_steps();
+return true;
+}
+return false;
 }
 // The real game's next spawn: a real door's key or the door at its speed mark first, then an item or a random obstacle.
 string choose_real_game()
@@ -210,26 +226,18 @@ string roll_item_or_obstacle(const string[]&in available)
 string type = "";
 /* Items follow the schedule too: each one rolls its chance only once it has joined (has_joined()), so ammo packs,
 teleporters and powerups wait for their speeds on easy to insane. */
-// About one spawn in ammo_pack_chance is an ammo pack instead, or every one when the debug options picked packs only.
-bool packs_ok = ammopacks_available() and has_joined("ammo_packs") and (spawn_only == "all" or spawn_only == "ammo_packs");
-// About one in shield_chance is a steel shield, rolled first, or every one when the debug options picked shields only.
-bool shields_ok = shields_available() and has_joined("steel_shields") and (spawn_only == "all" or spawn_only == "steel_shields");
-// Capsules and teleporters the same way, rolled before the shield.
-bool capsules_ok = capsules_available() and has_joined("life_capsules") and (spawn_only == "all" or spawn_only == "life_capsules");
-bool potions_ok = potions_available() and has_joined("health_potions") and (spawn_only == "all" or spawn_only == "health_potions");
-bool teleporters_ok = teleporters_available() and has_joined("player_teleporters") and (spawn_only == "all" or spawn_only == "player_teleporters");
-bool powerups_ok = powerups_available() and has_joined("powerups") and (spawn_only == "all" or spawn_only == "powerups");
+// Each item only in the real game; the debug item choices are choose_debug_spawn()'s.
+bool packs_ok = ammopacks_available() and has_joined("ammo_packs") and spawn_only == "all";
+bool shields_ok = shields_available() and has_joined("steel_shields") and spawn_only == "all";
+bool capsules_ok = capsules_available() and has_joined("life_capsules") and spawn_only == "all";
+bool potions_ok = potions_available() and has_joined("health_potions") and spawn_only == "all";
+bool teleporters_ok = teleporters_available() and has_joined("player_teleporters") and spawn_only == "all";
+bool powerups_ok = powerups_available() and has_joined("powerups") and spawn_only == "all";
 // Slides: normal runs only, never in practice, one at a time (slide.nvgt).
 bool slides_ok = slides_available() and has_joined("slides") and spawn_only == "all" and !practice_run and !slide_holds();
 // Trampolines: normal runs only here; a pad of any kind (trampoline.nvgt).
 bool trampolines_ok = has_joined("trampolines") and spawn_only == "all" and !practice_run and get_pack_sound_folders(type_folder("trampolines") + "*").length() > 0;
-if (spawn_only == "ammo_packs") type = packs_ok ? "ammo_packs" : "";
-else if (spawn_only == "steel_shields") type = shields_ok ? "steel_shields" : "";
-else if (spawn_only == "life_capsules") type = capsules_ok ? "life_capsules" : "";
-else if (spawn_only == "health_potions") type = potions_ok ? "health_potions" : "";
-else if (spawn_only == "player_teleporters") type = teleporters_ok ? "player_teleporters" : "";
-else if (spawn_only == "powerups") type = powerups_ok ? "powerups" : "";
-else if (slides_ok and random(1, slides_debug ? 2 : slide_chance) == 1 and (slides_debug or survival_roll())) type = "slides";
+if (slides_ok and random(1, slides_debug ? 2 : slide_chance) == 1 and (slides_debug or survival_roll())) type = "slides";
 else if (trampolines_ok and random(1, trampolines_debug ? 2 : trampoline_chance) == 1 and (trampolines_debug or survival_roll())) type = "trampolines";
 else if (capsules_ok and random(1, life_capsule_chance) == 1 and survival_roll()) type = "life_capsules";
 else if (potions_ok and random(1, health_potion_chance) == 1 and survival_roll()) type = "health_potions";
