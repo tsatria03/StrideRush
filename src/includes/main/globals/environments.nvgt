@@ -1,7 +1,7 @@
-/* Environments (the environments plan, dev, 2026-11-10; Section 1). Each folder in sounds/environments is a place with its
-own audio (tracks, ambiences), platforms (surfaces, its ledge) and traps (<type>/countdown and <type>/general/<theme>);
-equipments, misc and ui stay shared. A run plays in current_env, picked at random when it starts (Section 2 adds the
-switch every 1 to 2 minutes). Every obstacle remembers the environment it spawned in (its env field), so one still on the
+/* Environments. Each folder in sounds/environments is a place with its own audio (tracks, ambiences), platforms
+(surfaces, its ledge) and traps (<type>/countdown and <type>/general/<theme>); equipments, misc and ui stay shared. A
+run plays in current_env, picked at random when it starts and switched every env_switch_min_time to
+env_switch_max_time. Every obstacle remembers the environment it spawned in (its env field), so one still on the
 belt after a switch keeps its own sounds. Nothing ever falls back to another environment: a type with no folder there
 doesn't spawn there, and a missing clip just doesn't play. */
 string current_env = "default";
@@ -14,7 +14,7 @@ string env_root(const string&in env)
 {
 return "environments/" + env + "/";
 }
-/* Which of an environment's two folders a type lives in (the transitions plan, dev, 2026-11-13): doors, ladders,
+/* Which of an environment's two folders a type lives in: doors, ladders,
 trampolines, slides and switches are transitions, things that move you or that you move through; every other type is
 a trap. */
 string type_category(const string&in type)
@@ -23,7 +23,7 @@ if (type == "doors" or type == "ladders" or type == "trampolines" or type == "sl
 return "traps";
 }
 /* A type's folder under an environment's root (the root as env_root() gives it): "traps/hazards/", "transitions/doors/",
-or for vehicles, a category of their own beside traps and transitions, just "vehicles/" (the vehicles plan, 2026-11-13).
+or for vehicles, a category of their own beside traps and transitions, just "vehicles/".
 Its themes are in general/ below it, its warning cues in countdown/. */
 string type_path(const string&in root, const string&in type)
 {
@@ -51,7 +51,7 @@ string practice_trap_type(const string&in choice)
 if (choice == "fake_doors" or choice == "real_doors" or choice == "mixed_doors") return "doors";
 return choice;
 }
-/* The environment a run starts in (dev, 2026-11-10: random order, automatic only): a debug run's chosen one if the debug
+/* The environment a run starts in: a debug run's chosen one if the debug
 option picked one; otherwise a random one, and for a practice run only among those that have the practiced obstacle. If
 nothing qualifies, the run stays where it was (default at first). */
 void pick_start_env()
@@ -70,7 +70,7 @@ candidates.insert_last(names[i]);
 }
 if (candidates.length() > 0) current_env = candidates[random(0, candidates.length() - 1)];
 }
-/* Section 2: switching. A run can move between environments unless a debug run is held in one; a practice run only
+/* Switching. A run can move between environments unless a debug run is held in one; a practice run only
 among environments that have its obstacle. env_switch_at is the runtimer time of the next switch, or -1 when this run
 doesn't switch (one environment to go to, or held in one). */
 double env_switch_at = -1;
@@ -96,15 +96,14 @@ bool env_switching()
 return env_switch_at >= 0;
 }
 /* From start_run_audio(): the first switch's time, if this run switches at all, and the starting announcement, which is
-only made when there's more than one environment (dev, 2026-11-10). It interrupts the weapon draw's "fist equipped."
-(dev, 2026-11-11: "the env switch should be interupted when you start a turn. RIght now the weapon equip speaks first"),
-which is still in the weapons buffer. */
+only made when there's more than one environment. It interrupts the weapon draw's "fist equipped.", which is still in
+the weapons buffer, so the environment is heard first. */
 void start_env()
 {
 env_switch_at = env_switch_choices().length() > 0 ? runtimer.elapsed + random(env_switch_min_time, env_switch_max_time) : -1;
 if (env_names().length() > 1) announce_env(true);
 }
-// "You've entered the custom environment." in the misc buffer, no sound (dev, 2026-11-10).
+// "You've entered the custom environment." in the misc buffer, no sound.
 void announce_env(bool interrupt)
 {
 speak_buffer("You've entered the " + current_env.replace("_", " ", true) + " environment.", "misc", interrupt ? tts_default_interrupt : false);

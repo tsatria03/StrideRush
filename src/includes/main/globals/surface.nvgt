@@ -1,6 +1,6 @@
-/* The ground under the belt. Surfaces are whatever folders exist in the current environment's platforms (environments.nvgt), found at
-runtime, so adding or removing a folder changes the pool with no code change. "ledge" is reserved for the edges
-around hazards and is never picked as a normal surface. */
+/* The ground under the belt. Surfaces are whatever folders exist in the current environment's platforms
+(environments.nvgt), found at runtime, so adding or removing a folder changes the pool with no code change. "ledge" is
+reserved for the edges around hazards and is never picked as a normal surface. */
 string current_surface = "";
 int64 surface_end_time = 0; // on runtimer, which pauses with the game, so a pause doesn't use up a stretch
 
@@ -33,16 +33,16 @@ string tile_at(double x)
 if (on_ledge(x)) return "ledge";
 return current_surface;
 }
-// A oneshot footstep on every step, never thinned, at any speed. Silent in the air and while crouched.
-// False only from the source-only debug option "Do you want to hear your footsteps while running?" (dev, 2026-11-04).
+/* A oneshot footstep on every step, never thinned, at any speed. Silent in the air and while crouched. footsteps_on is
+false only from the source-only debug footsteps option or a free run's footsteps setting. */
 bool footsteps_on = true;
-/* The step sounds' volume in dB, -100 to 0 (the footstep volume plan, dev, 2026-11-10): the Game tab's "Game footsteps
-volume," slider, saved in settings.srf. Only the steps use it (ledges too); landings and falls stay at full volume. */
+/* The step sounds' volume in dB, -100 to 0: the Game tab's "Game footsteps volume," slider, saved in settings.srf. Only
+the steps use it (ledges too); landings and falls stay at full volume. */
 int footstep_volume = 0;
 void play_step()
 {
 if (!footsteps_on) return;
-if (!is_grounded() or is_ducked() or door_moving or sliding) return; // slidemove plays on a slide // silent while a real door carries you through
+if (!is_grounded() or is_ducked() or door_moving or sliding) return; // a door ride is silent, and slidemove plays on a slide
 string tile = tile_at(me.x);
 if (tile == "") return;
 p.play_stationary_extended(get_pack_sound(env_root(current_env) + "platforms/" + tile + "/*step*"), false, 0, 0, footstep_volume, 100, false);

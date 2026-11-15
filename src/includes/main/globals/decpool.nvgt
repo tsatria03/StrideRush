@@ -1,4 +1,4 @@
-/* Every game pool goes in all_pools, so setup, pausing, resuming (and later listener updates) reach all of them at once.
+/* Every game pool goes in all_pools, so setup, pausing, resuming and listener updates reach all of them at once.
 temp (dialogs), spool (speech buffer), menupool (form_menu) and formpool (form) are UI pools and stay out of it, so
 menu, dialog and buffer sounds still play while the run is paused. */
 sound_pool@[] all_pools(0);
@@ -12,7 +12,7 @@ for (uint i = 0; i < all_pools.length(); i++)
 all_pools[i].max_distance = 0;
 all_pools[i].pan_step = lane_pan_step; // one lane across = the stationary pan of lane_pan_amount (barriers; belt-wide sounds sit at x 0)
 all_pools[i].volume_step = 2.5; // retuned from the speed every step (update_listeners())
-all_pools[i].behind_pitch_decrease = behind_pitch ? 5 : 0; // 5 for anything you've passed, or 0 with the Game tab's setting off (dev, 2026-11-04 and 5)
+all_pools[i].behind_pitch_decrease = behind_pitch ? 5 : 0; // 5 for anything you've passed, or 0 with the Game tab's setting off
 }
 }
 // The Game tab's behind pitch setting, saved mid-run too: every pool, and every sound already playing, takes it at once.
@@ -28,7 +28,7 @@ all_pools[h].items[i].behind_pitch_decrease = drop;
 }
 }
 }
-/* The belt runs forward (dev, 2026-11-04, the lanes plan's Section 3): x is across the belt and y along it, so the
+/* The belt runs forward: x is across the belt and y along it, so the
 listener sits at x 0 and y me.x, and every belt sound at x 0 (straight ahead, whatever lane you're in) and y its tile.
 Ahead is in front of you and gets louder as it nears; passed things fall behind you and drop in pitch. Before every
 listener move the fade per tile is retuned from the current speed (retune_belt_falloff()). */
@@ -59,8 +59,8 @@ all_pools[h].update_sound_positioning_values(i, -1, step, false);
 }
 }
 /* Pauses only sounds that are playing, so resume_pools() can't wake one that had already finished. The ambience keeps
-playing, so a paused run is never dead silent (dev, 2026-11-08: "every sound should be paused, excluding the ambience"). */
-// keep_player leaves p playing too, so a practice death's hit can play out while everything else is frozen (endrun.nvgt).
+playing, so a paused run is never dead silent. keep_player leaves p playing too, so a practice death's hit can play out
+while everything else is frozen (endrun.nvgt). */
 void pause_pools(bool keep_player = false)
 {
 for (uint h = 0; h < all_pools.length(); h++)

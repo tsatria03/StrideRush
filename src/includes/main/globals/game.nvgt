@@ -1,15 +1,14 @@
 /* The run: the belt carries the player one tile per step, the step interval shrinks over time, and the run ends when
-running goes false (quitting from the pause menu now; dying in later sections). start_run() always returns to its
-caller, so main()'s loop reopens the main menu without stacking menu calls. */
-/* The player (dev, 2026-11-04, the lanes plan's Section 3, "vector me"): me.x is the
-distance along the belt in tiles and me.y the jump height (0 is the ground), the meanings me_x and me_y had; the lane
-stays in current_lane (lane.nvgt). The engine's vector holds floats. */
+running goes false (quitting, dying or finishing). start_run() always returns to its caller, so main()'s loop reopens
+the main menu without stacking menu calls. */
+/* The player: me.x is the distance along the belt in tiles and me.y the jump height (0 is the ground); the lane stays in
+current_lane (lane.nvgt). The engine's vector holds floats. */
 vector me;
 int step_time = start_step_time;
 int lives = starting_lives;
 bool running = false;
-/* A practice run (the game menu refactor plan's Section 3, dev, 2026-11-05): one obstacle at a fixed speed, and you
-can't lose. Set by start_run() before reset_run(), so give_debug_shield() and the spawner see it. */
+/* A practice run: one obstacle at a chosen speed. Set by start_run() before reset_run(), so give_debug_shield() and the
+spawner see it. */
 bool practice_run = false;
 timer steptimer, speeduptimer, runtimer;
 sound_pool muspool, ambpool;
@@ -35,13 +34,13 @@ reset_powerups();
 reset_lane();
 give_debug_shield(); // after clear_inventory(), so the debug shield isn't wiped
 reset_spawner();
-reset_heartbeat(); // the heartbeat plan: a fresh heart, its first beat on the run's first frame
+reset_heartbeat(); // a fresh heart, its first beat on the run's first frame
 update_listeners();
 }
 /* Normally start_step_time, starting_lives, every obstacle type, and a run that ends when lives run out; the source-only
 debug options can start faster, with more lives, with only one obstacle type, or with lives that never run out; a
-practice run is a single type at a fixed speed with lives that never run out. difficulty is the endless run's level
-(an index into difficulty_names), or -1 for debug and practice runs. */
+practice run is a single type at a chosen speed. difficulty is the endless or timed run's level (an index into
+difficulty_names), or -1 for debug, practice and free runs. */
 void start_run(int starting_step_time = start_step_time, int starting_life_count = starting_lives, string only_type = "all", bool can_run_out = true, bool practice = false, int difficulty = -1)
 {
 practice_run = practice;
@@ -61,11 +60,10 @@ stop_run_audio();
 clear_run_objects();
 p.destroy_all();
 }
-/* The run's music and ambience (the music and ambience plan, dev, 2026-11-06), from the current environment's audio/tracks and
-audio/ambiences (environments.nvgt) (repointed that day from the old, empty musics and sources folders); an empty folder just stays
-silent. Every run, restarts and replays included, starts a fresh shuffle and a new random ambience.
-- Music is a shuffle (dev: "a playlist behavior that shuffles a track, then plays another one when it ends"): every
-  track once, not looping, in a random order, then a fresh order that never opens with the track just played.
+/* The run's music and ambience, from the current environment's audio/tracks and audio/ambiences (environments.nvgt); an
+empty folder just stays silent. Every run, restarts and replays included, starts a fresh shuffle and a new random ambience.
+- Music is a shuffle: every track once, not looping, in a random order, then a fresh order that never opens with the
+  track just played.
 - The ambience loops, and every random ambience_min_time to ambience_max_time on runtimer (so pausing freezes it) it
   crossfades over ambience_fade_time to another random one, never the same twice in a row.
 musslot and ambslot always hold what's playing now, so the volume keys reach it; a fading-out ambience is amb_old_slot. */
@@ -114,8 +112,8 @@ void run_audio_check()
 {
 env_check();
 /* The run loop doesn't run while the pause menu, F1 or F2 has the music paused, so a paused track never counts as ended.
-After a switch the track playing finishes first (dev, 2026-11-10: "I want to finish the song"), then the next comes from
-the new environment, even if the old shuffle had run dry or the old environment had no tracks. */
+After a switch the track playing finishes first, then the next comes from the new environment, even if the old shuffle
+had run dry or the old environment had no tracks. */
 if (!muspool.sound_is_playing(musslot) and (track_order.length() > 0 or track_env != current_env)) play_next_track();
 ambience_check();
 }
@@ -218,7 +216,7 @@ wind_flight(); // every frame: each wind's beat toward your lane and its place (
 vehicle_flight(); // every frame: each vehicle's lane move, its bursts and their shots (vehicle.nvgt)
 if (!running) break;
 trampoline_sounds(); // every frame: lane pads follow your lane (trampoline.nvgt)
-item_lane_sounds(); // every frame: items in their lanes (the lanes plan's Section 4)
+item_lane_sounds(); // every frame: items in their lanes
 speedup_check();
 powerup_timers(); // every frame, so a timed powerup ends on time
 powerup_sounds(); // every frame: powerups on the belt replay their sound on a timer
@@ -285,7 +283,7 @@ potion_check();
 teleporter_check();
 powerup_check();
 surface_check(); // before the footstep, so a new surface is heard on its first step
-// A throw lands with the tile's landing sound instead of a footstep, without the player's own land sound (dev).
+// A throw lands with the tile's landing sound instead of a footstep, without the player's own land sound.
 if (thrown) play_landing(false);
 else play_step();
 hazard_countdown();
@@ -305,9 +303,9 @@ door_countdown();
 void speedup_check()
 {
 if (free_speedup()) return; // a free run's own speeds (freerun.nvgt)
-/* A practice run stays at its chosen speed all run (dev, 2026-11-05: "keep it as is"), except "rising" (the rising
-practice plan, dev, 2026-11-12): from 2 steps a second up to practice_rising_top, every practice_rising_period. A
-practice death leaves step_time alone, so retry practice keeps the speed reached; restart run starts from 2 again. */
+/* A practice run stays at its chosen speed all run, except "rising": from 2 steps a second up to practice_rising_top,
+every practice_rising_period. A practice death leaves step_time alone, so retry practice keeps the speed reached;
+restart run starts from 2 again. */
 if (practice_run and !practice_rising) return;
 if (speeduptimer.elapsed < (practice_run ? practice_rising_period : speedup_period)) return;
 speeduptimer.restart();
@@ -316,7 +314,7 @@ step_time = int(max(top, step_time - speedup_amount));
 }
 void run_input()
 {
-// P is the pause menu only, and Escape goes straight to the quit run question (dev, 2026-11-03).
+// P is the pause menu only, and Escape goes straight to the quit run question.
 if (controls.action_triggered("quit_run"))
 {
 quit_run_prompt();
@@ -327,8 +325,8 @@ if (controls.action_triggered("pause"))
 pause_menu();
 return;
 }
-/* F1 views the key bindings and F2 opens the settings with only the Game, Menu and Speech tabs (dev, 2026-11-01 and
-2026-11-04). Each pauses the run like the pause menu and resumes it silently when closed. */
+/* F1 views the key bindings and F2 opens the settings with only the Game, Menu and Speech tabs. Each pauses the run like
+the pause menu and resumes it silently when closed. */
 if (controls.action_triggered("view_bindings"))
 {
 pause_game();
@@ -355,7 +353,7 @@ if (controls.action_triggered("info_distance")) speak_buffer(distance_phrase(), 
 if (controls.action_triggered("info_speed")) speak_buffer(speed_phrase(), "status");
 if (controls.action_triggered("info_time")) speak_buffer(timed_run ? timed_status_line() : "You have been running for " + time_phrase(runtimer.elapsed) + ".", "status"); // a timed run's two clocks (timerun.nvgt)
 if (controls.action_triggered("info_heart")) speak_heart_rate(); // B: your heart rate (heartbeat.nvgt)
-if (controls.action_triggered("info_environment")) speak_buffer(current_env.replace("_", " ", true) + " environment.", "status"); // V: the environment you're in, as L says your lane (dev, 2026-11-12)
+if (controls.action_triggered("info_environment")) speak_buffer(current_env.replace("_", " ", true) + " environment.", "status"); // V: the environment you're in, as L says your lane
 weapon_input();
 inventory_input();
 lane_input();
@@ -365,14 +363,9 @@ if (controls.action_triggered("ambience_up")) change_ambience_volume(volume_chan
 if (controls.action_triggered("ambience_down")) change_ambience_volume(-volume_change);
 buffercheck();
 }
-/* C: the speed in steps a second, to one decimal place (dev, 2026-11-06: steps a second instead of "Your speed is 470 ms.",
-first rounded down to whole steps, then "I meant switch it to 1 dessimal place, so it says 2.1, 2.2, etc.", since whole
-steps read 2 all the way from 500 to 334 ms). current_step_time() keeps it between 500 and 50 ms, so it reads 2.0 to 20.0,
-and the speed powerups count. Built from tenths; a whole number reads without its ".0" (dev, 2026-11-06: "I want it to
-say 2, unless the speed increases"), so 500 ms is "2" and 470 ms "2.1". */
-/* C: steps a second in endless and practice runs, but milliseconds per step in a debug run (dev, 2026-11-08: "speaking
-of debug, please make the C key read in milliseconds"), the debug speed menu's own units. A debug run is the one with no
-difficulty that isn't practice. */
+/* C: the speed in steps a second, to one decimal place, built from tenths, so 500 ms is "2" and 470 ms "2.1" (a whole
+number reads without its ".0"); the speed powerups count. A debug run reads milliseconds per step instead, the debug
+speed menu's own units; a debug run is the one with no difficulty that isn't practice or free run. */
 string speed_phrase()
 {
 if (run_difficulty < 0 and !practice_run and !free_run) return "You are running " + current_step_time() + " milliseconds per step."; // a free run has no level either, but isn't a debug run
@@ -386,7 +379,7 @@ string amount = "" + (tenths / 10);
 if (tenths % 10 != 0) amount += "." + (tenths % 10);
 return amount;
 }
-// Z: the distance in steps, one per tile the belt has carried you (dev, 2026-11-06: "say x steps, not x tiles").
+// Z: the distance in steps, one per tile the belt has carried you.
 string distance_phrase()
 {
 int steps = int(me.x);
@@ -403,9 +396,8 @@ if (minutes == 0) return sec_text;
 string min_text = minutes == 1 ? "1 minute" : minutes + " minutes";
 return min_text + " and " + sec_text;
 }
-// Spoken as "track" plus the music volume and "source" plus the ambience volume, in decibels (for example "track -10").
-/* At either end of the range a press does nothing at all, with no speech (dev, 2026-11-06: "When you reach the top and
-bottum of a value, it should stop repeating it. Example, pressing home passed 0 keeps saying source 0."). */
+/* Spoken as "track" plus the music volume and "source" plus the ambience volume, in decibels (for example "track -10").
+At either end of the range a press does nothing at all, with no speech. */
 void change_music_volume(int delta)
 {
 int volume = int(max(min_volume, min(0, music_volume + delta)));
@@ -413,7 +405,7 @@ if (volume == music_volume) return;
 music_volume = volume;
 if (musslot > -1) muspool.update_sound_start_values(musslot, 0, music_volume, 100);
 speak_buffer("track " + music_volume);
-writepreffs(); // remembered for the next launch (dev, 2026-11-04)
+writepreffs(); // remembered for the next launch
 }
 void change_ambience_volume(int delta)
 {

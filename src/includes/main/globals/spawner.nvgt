@@ -1,25 +1,25 @@
-/* Places obstacles ahead of the player as the run goes. The type (hazards, spikes, mines, force fields, projectiles, walls or fake doors) and its theme are random, real doors come at each speed mark,
-from whatever folders exist at runtime. The next obstacle's type and countdown length are decided together with the
-gap to it, so the floor before its countdown is always there however the speed changes. Every type counts down; only
-hazards turn their countdown steps into ledge tiles. */
+/* Places obstacles and items ahead of the player as the run goes. The type and its theme are random, from whatever
+folders exist at runtime, and real doors come at each speed mark. The next spawn's type and countdown length are decided
+together with the gap to it, so the floor before its countdown is always there however the speed changes. Every type
+counts down; only hazards turn their countdown steps into ledge tiles. */
 double next_spawn_x = 0;
 string next_type = "";
 int next_countdown = 0;
 // Every obstacle type the spawner knows; a new type is added here. The spawn debug option lists these too.
 string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles", "walls", "fake_doors", "animals", "barriers", "winds", "ladders", "floor_breakers", "vehicles"}; // vehicles (vehicle.nvgt); ladders: a ladder and its real wall (ladder.nvgt); floor breakers (floor_breaker.nvgt)
-/* The next 50 ms speed mark that gets a real door (dev, 2026-11-03): the first mark below the run's starting speed,
+/* The next 50 ms speed mark that gets a real door: the first mark below the run's starting speed,
 then door_section_ms lower each time one is placed, until it passes min_step_time. Real doors come at these marks in
 every normal run; a debug run limited to one type gets none (the "real doors" debug choice spawns only them). */
 int next_door_mark = 0;
-/* One key before each real door (dev, 2026-11-03). next_key_door is the door mark the next key belongs to, and the key
+/* One key before each real door. next_key_door is the door mark the next key belongs to, and the key
 comes once step_time reaches next_key_mark, a random point in the first half of the stretch before that door. */
 int next_key_door = 0;
 int next_key_mark = 0;
-// Debug option only: "real doors" alternates a key and a door, so every door has its key.
+// The "real doors" choice and practice's mixed doors: true while the next door still needs its key placed first.
 bool key_before_door = true;
-// Items the spawner places too: ammo packs, shields, capsules, teleporters and powerups at lower chances (their _chance values), keys before each real door; listed after the obstacles in the spawn debug option.
+// Items the spawner places too: ammo packs, shields, capsules, potions, teleporters and powerups at their _chance rates, keys before each real door; listed after the obstacles in the spawn debug option.
 string[] item_types = {"ammo_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters", "powerups"};
-// "all", or one type from obstacle_types or item_types; set by start_run(). Only the source-only debug options pick anything but all.
+// "all" for the real game, or a debug, practice or free run choice; set by start_run() through set_spawn_only().
 string spawn_only = "all";
 
 // The first obstacle sits a full spawn distance, its countdown and a minimum stretch of floor into the run.
@@ -200,7 +200,7 @@ string[] available_obstacles()
 string[] available;
 for (uint i = 0; i < obstacle_types.length(); i++)
 {
-// "mixed_walls" (the ladders plan's debug choice, and practice's mixed walls) picks fake walls and ladders, half and half.
+// "mixed_walls" (a debug choice, and practice's mixed walls) picks fake walls and ladders, half and half.
 bool mixed_wall = spawn_only == "mixed_walls" and (obstacle_types[i] == "walls" or obstacle_types[i] == "ladders");
 if (spawn_only != "all" and spawn_only != "practice_trampolines" and !mixed_wall and obstacle_types[i] != spawn_only) continue;
 if (obstacle_types[i] == "ladders" and !ladders_ready()) continue; // its real wall needs a walls theme too
@@ -272,9 +272,9 @@ bool key_due()
 {
 return keys_available() and next_key_door >= run_top_step_time() and step_time <= next_key_mark;
 }
-/* Where a type's theme folders live in the current environment: doors in door_folder(), everything else (animals
-included) in environments/<env>/traps/<type>/general (dev, 2026-11-10: each type's themes moved into general, beside its
-countdown). A type with no themes there just isn't available there, never borrowed from another environment. */
+/* Where a type's theme folders live in the current environment: doors in door_folder(), everything else in its
+general folder beside its countdown (trap_folder(), environments.nvgt). A type with no themes there just isn't
+available there, never borrowed from another environment. */
 string type_folder(string type)
 {
 if (type == "fake_doors" or type == "real_doors") return door_folder(current_env);
@@ -324,13 +324,12 @@ next_spawn_x += span + next_gap(next_countdown);
 // A force field's throw needs room after it, so the gap after one gets that many extra tiles.
 if (last_part == "force_fields") next_spawn_x += forcefield_knockback_tiles;
 }
-/* The six inventory items that sit in lanes (dev, 2026-11-05, the lanes plan's Section 4); powerups stay belt-wide. In
-"all" and the real game, each item spawn takes a random lane, and item_pair_percent of the time a second item of a
-random kind (any of the six, keys too, since any key opens any real door) appears beside it in a different lane.
-Each item has three debug choices, like barriers (dev, 2026-11-05: "I want to do some further testing to see if what I
-discovered was an actual bug, or if my ears were playing a trick on me"): "ammo packs" puts each one in your lane,
-"ammo packs, random lanes" one at a time in any lane, and "ammo packs, multiple lanes" the real game's pairs, of that
-kind only. set_spawn_only() turns the choice into spawn_only (the item's own type) and item_lane_mode. */
+/* The six inventory items that sit in lanes; powerups stay belt-wide. In the real game, each item spawn takes a random
+lane, and item_pair_percent of the time a second item of a random kind (any of the six, keys too, since any key opens
+any real door) appears beside it in a different lane. Each item has three debug choices, like barriers: "ammo packs"
+puts each one in your lane, "ammo packs, random lanes" one at a time in any lane, and "ammo packs, multiple lanes" the
+real game's pairs, of that kind only. set_spawn_only() turns the choice into spawn_only (the item's own type) and
+item_lane_mode. */
 string[] item_lane_types = {"ammo_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters"};
 string item_lane_mode = ""; // "" all and the real game, "own" your lane, "random" one in any lane, "multiple" same-kind pairs
 void set_spawn_only(string only_type)
@@ -343,9 +342,9 @@ if (slides_debug) spawn_only = "all";
 // And "trampolines", the full game with a pad about every other spawn (trampoline.nvgt).
 trampolines_debug = only_type == "trampolines";
 if (trampolines_debug) spawn_only = "all";
-/* Practice doors' keys come one at a time in a random lane, as in the real game, but never with a pair's second item,
-which could be any kind, since a practice run has no items but keys (dev, 2026-11-05). */
-if (only_type == "practice_doors" or only_type == "practice_mixed" or only_type == "real_doors" or only_type == "real_doors_spread" or only_type == "free") // and a free run's items, one at a time (freebelt.nvgt) // practice's real doors too (2026-11-09), mixed obstacles' keys, and the debug real doors choices (dev, 2026-11-13: "I should only see keys")
+/* Keys for practice's doors and mixed obstacles, the debug real doors choices, and a free run's items come one at a time
+in a random lane, never with a pair's second item, which could be any kind. */
+if (only_type == "practice_doors" or only_type == "practice_mixed" or only_type == "real_doors" or only_type == "real_doors_spread" or only_type == "free")
 {
 item_lane_mode = "random";
 return;
@@ -386,10 +385,10 @@ if (item_kind_available(item_lane_types[i]) and has_joined(item_lane_types[i])) 
 }
 if (kinds.length() == 0) return;
 string kind = kinds[random(0, kinds.length() - 1)];
-if (is_survival_item(kind) and !survival_roll()) return; // a survival item that misses the level's percent: no second item (dev, 2026-11-10)
+if (is_survival_item(kind) and !survival_roll()) return; // a survival item that misses the level's percent: no second item
 spawn_item(kind, x, countdown, second);
 }
-/* The item balance plan (dev, 2026-11-10): life capsules, steel shields and health potions are the survival items, and
+/* Life capsules, steel shields and health potions are the survival items, and
 each one that comes up must also pass the level's item_percent(), so they get rarer on harder levels. */
 bool is_survival_item(const string&in type)
 {
@@ -468,28 +467,27 @@ else if (type == "vehicles") spawn_vehicle(x, theme, countdown); // vehicle.nvgt
 if (type == "hazards" or type == "spikes" or type == "mines" or type == "force_fields" or type == "projectiles" or type == "walls") practice_hint(type, -1, x);
 }
 /* Where a hand can first act on something at x whose countdown starts at countdown_start: the countdown start, or
-switch_min_time before it at the current speed, whichever is earlier, so at top speed, where the countdown is a single
-step, a hand still works for the last half second. Shared by the force field switch and item pickups (dev's items
-rule, 2026-11-02). */
+switch_min_time before it at the current speed, whichever is earlier, so at top speed, where five countdown steps last
+only a quarter second, a hand still works for the last half second. Shared by the force field switch and item pickups. */
 double hand_window_start(double x, double countdown_start)
 {
 return min(countdown_start, x - ceil(double(switch_min_time) / current_step_time()));
 }
 /* One countdown cue for an obstacle of this type at ox, whose countdown starts at countdown_start: the LAST ones of
-environments/<env>/traps/<type>/countdown/warn1 to warn5, in the obstacle's own environment (misc/trap/<type> until 2026-11-10), so the step before the obstacle always plays warn5 ("act now"). Five countdown steps
-hear 1 to 5; three hear 3 to 5; one hears only 5. Each cue plays in 2d (never stationary) at the tile you've just
-stepped onto, not at the obstacle. Each type's countdown function calls this once per step for each of its obstacles.
-A cue is exempt from the behind-pitch drop (dev, 2026-11-04): at high speeds the next step comes while it's still
-playing, which would put it behind you and lower its pitch partway through (play_cue()). */
+the type's countdown/warn1 to warn5, in the obstacle's own environment, so the step before the obstacle always plays
+warn5 ("act now"). Five countdown steps hear 1 to 5; three hear 3 to 5; one hears only 5. Each cue plays in 2d (never
+stationary) at the tile you've just stepped onto, not at the obstacle. Each type's countdown function calls this once
+per step for each of its obstacles. A cue is exempt from the behind-pitch drop: at high speeds the next step comes while
+it's still playing, which would put it behind you and lower its pitch partway through (play_cue()). */
 void play_countdown(sound_pool@ pool, string type, double ox, double countdown_start, const string&in env)
 {
-if (sliding) return; // no warnings on a slide: everything passes through you harmlessly (the slides plan, dev, 2026-11-11)
+if (sliding) return; // no warnings on a slide: everything passes through you harmlessly
 if (flying and ox < flight_land_x) return; // nor for anything a trampoline flight carries you over; past the landing they count down (trampoline.nvgt)
 int steps_left = int(ox - me.x);
 if (steps_left < 1 or steps_left > 5 or me.x < countdown_start) return;
 int note = 6 - steps_left;
 string folder = type_path(env_root(env), type) + "countdown/"; // the obstacle's own environment, in traps, transitions or vehicles (environments.nvgt)
-/* A layered set (dev, 2026-11-03) stacks octaves as warn<group>-<note>, such as the walls' warn1-3 (low) with warn2-3
+/* A layered set stacks octaves as warn<group>-<note>, such as the walls' warn1-3 (low) with warn2-3
 (high): every group's note for this step plays at once, for as many groups as exist. A plain set has warn<note>. */
 if (get_pack_sound(folder + "warn1-1*") != "")
 {
