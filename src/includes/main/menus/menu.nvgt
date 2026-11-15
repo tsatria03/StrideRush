@@ -297,8 +297,8 @@ exit();
 }
 /* The mode menu (the practice plan, dev, 2026-11-06): the foundation every way to play lands on. Debug run comes first
 and only from source (SCRIPT_COMPILED hides it), then endless run; each item is followed by a
-description; practice run follows endless run (Section 2). Returns "debug", "endless", "practice", or "" for escape or
-back, which step back to the game menu silently. */
+description; then timed run, free run and practice run, in that order. Returns "debug", "endless", "timed", "free",
+"practice", or "" for escape or back, which step back to the game menu silently. */
 string choose_game_mode()
 {
 int focus = -1;
@@ -315,10 +315,11 @@ else m.add_item("Endless run. Unlocked " + endless_lock_reason(), "endless");
 // Timed run (the timed run plan, dev, 2026-11-13): after endless run, open once medium is (timerun.nvgt).
 if (timed_mode_unlocked()) m.add_item("Timed run. This mode gives you a countdown clock: clean passes add time, hits take it away, and you win by reaching the finish line before your time runs out.", "timed");
 else m.add_item("Timed run. Unlocked " + timed_mode_lock_reason(), "timed");
-m.add_item("Practice run. This mode lets you practice one kind of obstacle at a time, for as long as you like. If you die, you try again from just past what caught you, and nothing you do here counts toward your progress, apart from unlocking the next obstacle to practice.", "practice");
-// Free run (the free run plan, dev, 2026-11-13): last, open once insane is (freerun.nvgt).
+// Free run, open once insane is (freerun.nvgt).
 if (free_mode_unlocked()) m.add_item("Free run. This mode lets you set up a run however you like, choosing the obstacles, the speed and more, and change it at any time from the free run console, with no difficulty and nothing counted toward your progress.", "free");
 else m.add_item("Free run. Unlocked " + free_mode_lock_reason(), "free");
+// Practice run, last.
+m.add_item("Practice run. This mode lets you practice one kind of obstacle at a time, for as long as you like. If you die, you try again from just past what caught you, and nothing you do here counts toward your progress, apart from unlocking the next obstacle to practice.", "practice");
 m.add_item("back", "back");
 int mres = m.run(focus, false, focus >= 0); // back on a locked endless run, it's focused and spoken
 if (mres < 0 or m.selected_item_id == "back") return "";
