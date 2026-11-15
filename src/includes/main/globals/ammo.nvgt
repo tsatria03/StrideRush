@@ -1,16 +1,16 @@
-/* Ammo packs (dev, 2026-11-02): the first item, and the model for later ones such as keys. A pack plays its spawn clip
-when it appears, then its loop at its tile. Either hand picks it up within the same window as the force field switch
-(hand_window_start()): get plays centered (stationary, not panned; dev, 2026-11-02) and the pack goes into the inventory, to be opened later with U.
-Arriving on its tile on the ground (standing or crouched), or landing on it from a jump, breaks it: break plays and
-it's lost. A clean jump that's still in the air across its tile misses it, and its loop fades out behind you.
-There are no countdown cues for packs (no countdown warn set); their loop is the guide.
+/* Ammo packs: the first item, and the model for later ones such as keys. A pack plays its spawn clip when it appears,
+then its loop at its tile, in its lane. Either hand picks it up within the same window as the force field switch
+(hand_window_start()): get plays centered (stationary, not panned) and the pack goes into the inventory, to be opened
+later with U. Arriving on its tile on the ground (standing or crouched), or landing on it from a jump, breaks it: break
+plays and it's lost. A clean jump that's still in the air across its tile misses it, and its loop fades out behind you.
+There are no countdown cues for packs; their loop is the guide.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_ammopacks() shrinks the array. */
 sound_pool ammopackpool;
 const string ammopack_folder = "equipments/items/common/ammo_pack/";
 class ammopack
 {
 double x;
-int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
+int lane = 1; // lane_middle until spawned, then the spawner's lane
 double countdown_start;
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
 int loopslot = -1;
@@ -62,11 +62,11 @@ if (@target == null) return false; // nothing in reach: the press can still pick
 target.spent = true;
 stop_ammopack(target);
 ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*get*"), false);
-// The player's give sound as it goes into the inventory, together with get (dev).
+// The player's give sound as it goes into the inventory, together with get.
 p.play_stationary(get_pack_sound("misc/player/*give*"), false);
 give_item("ammo_pack", 1);
 stat_add("ammo_packs_picked_up");
-speak_buffer(item_display_name("ammo_pack"), "items"); // just the item's name (dev)
+speak_buffer(item_display_name("ammo_pack"), "items"); // just the item's name
 return true;
 }
 /* Runs once per step, right after the move. Arriving on a pack's tile on the ground breaks it; arriving in the air
@@ -95,8 +95,8 @@ if (@ammopacks[i] == null) continue;
 if (!ammopacks[i].spent and me.x == ammopacks[i].x and ammopacks[i].lane == current_lane) break_ammopack(ammopacks[i]);
 }
 }
-/* Weapons break items too (dev, 2026-11-03): a melee swing breaks a pack that's the nearest thing in reach, and a
-bullet breaks one it reaches. These find it; break_ammopack() does the breaking. */
+/* Weapons break items too: a melee swing breaks a pack that's the nearest thing in reach, and a bullet breaks one it
+reaches. These find it; break_ammopack() does the breaking. */
 ammopack@ ammopack_at(double x)
 {
 for (uint i = 0; i < ammopacks.length(); i++)
@@ -128,7 +128,7 @@ void break_ammopack(ammopack@ a)
 stat_add("ammo_packs_broken");
 a.spent = true;
 stop_ammopack(a);
-ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
+ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*break*"), false); // stationary, so the pitch never drops behind you
 }
 void stop_ammopack(ammopack@ a)
 {
@@ -151,9 +151,9 @@ stop_ammopack(ammopacks[i]);
 }
 ammopacks.resize(0);
 }
-/* U on an ammo pack: adds a random ammo_pack_min to ammo_pack_max rounds to the
-reserve of the gun you're HOLDING only (dev, 2026-11-03), never above gun_max_reserve, and says how many. Refused,
-keeping the pack, with a melee weapon out or when that gun's reserve is already full. Returns true if it was used. */
+/* U on an ammo pack: adds a random ammo_pack_min to ammo_pack_max rounds to the reserve of the gun you're holding only,
+never above gun_max_reserve, and says how many. Refused, keeping the pack, with a melee weapon out or when that gun's
+reserve is already full. Returns true if it was used. */
 bool use_ammopack()
 {
 int w = current_weapon;

@@ -1,18 +1,16 @@
-/* The heartbeat (the heartbeat plan, dev, 2026-11-08). Your heart rate
-follows your actual speed, speed powerups included (current_step_time(), which already stays between min_step_time and
-start_step_time), as a whole number from heart_start_bpm to heart_max_bpm (tuning.nvgt). One timer plays the heartbeat, faster as
-the heart rate climbs (the breathing was taken out, dev, 2026-11-08: "I didn't like them"). Every kind of run has it. It lives in heartpool, one of
+/* The heartbeat. Your heart rate follows your actual speed, speed powerups included (current_step_time(), which already
+stays between min_step_time and start_step_time), as a whole number from heart_start_bpm to heart_max_bpm (tuning.nvgt).
+One timer plays the heartbeat, faster as the heart rate climbs. Every kind of run has it. It lives in heartpool, one of
 all_pools, so the pause menu and the quit question pause it (only the ambience plays on) and leaving a run fades it.
-While a door carries you there's no beat, as there are no footsteps, and the next beat comes the moment you're set down.
-clear_run_objects() stops it, so a death silences it with everything else. */
+While a door carries you, on a slide and standing in a free run there's no beat, and the next beat comes the moment that
+ends. clear_run_objects() stops it, so a death silences it with everything else. */
 sound_pool heartpool;
 timer heartbeat_timer; // paused and resumed with the run's other timers (pause_menu.nvgt)
 bool heart_beat_now = true; // the next beat plays at once: a run's first, or the first after a door sets you down
-int heartbeat_volume = 0; // in dB, -100 to 0: only the Game tab's "Game heartbeat volume," (its F7 and F8 keys removed, the footstep volume plan, dev, 2026-11-10)
+int heartbeat_volume = 0; // in dB, -100 to 0, set only by the Game tab's "Game heartbeat volume," slider
 
-/* A straight line from heart_start_bpm at start_step_time to heart_max_bpm at heart_full_speed_ms, rounded: 5 at the
-start, about 134 at 200 ms, 155 at 150 ms, and held at 155 at any faster speed, powerups included (dev, 2026-11-08:
-"5=500, and 150=200", then "Put the max heart rate to 155 at 150ms", one straight line). */
+/* A straight line from heart_start_bpm at start_step_time to heart_max_bpm at heart_full_speed_ms, rounded, and held at
+heart_max_bpm at any faster speed, powerups included. */
 int heart_rate()
 {
 double exact = heart_start_bpm + (start_step_time - current_step_time()) * double(heart_max_bpm - heart_start_bpm) / double(start_step_time - heart_full_speed_ms);
@@ -36,9 +34,9 @@ heart_beat_now = true;
 // Every frame from run_loop(): a beat whenever the gap for the heart rate has passed.
 void heartbeat_check()
 {
-if (door_moving or sliding or free_standing()) // quiet on a slide too (dev, 2026-11-11), and standing in a free run (dev, 2026-11-13)
+if (door_moving or sliding or free_standing())
 {
-heart_beat_now = true; // silent while the door carries you, then straight back once it sets you down
+heart_beat_now = true; // silent until then, and straight back once it ends
 return;
 }
 int bpm = heart_rate();
@@ -47,7 +45,7 @@ heart_beat_now = false;
 heartbeat_timer.restart();
 heartpool.play_stationary_extended(get_pack_sound("misc/player/*heartbeat*"), false, 0, 0, heartbeat_volume, 100, false);
 }
-// B: "Your heart rate is 100 beats per minute." into the status buffer (dev, 2026-11-08), like the other readouts.
+// B: "Your heart rate is 100 beats per minute." into the status buffer, like the other readouts.
 void speak_heart_rate()
 {
 speak_buffer("Your heart rate is " + heart_rate() + " beats per minute.", "status");

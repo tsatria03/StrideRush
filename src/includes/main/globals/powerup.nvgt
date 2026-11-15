@@ -1,23 +1,22 @@
-/* Powerups (dev, 2026-11-03, built 2026-11-04 for 1.3): passive pickups with a good or bad event, never in the inventory.
-Each is a ground one (misc/game/powerground at its tile, replayed on a timer) or a flight one (powerflight), half and half. Arriving
-on a ground one's tile on the ground collects it, and a jump skips it; arriving on a flight one's tile in the air
-collects it, and running under it misses it; a missed one breaks, with powerbreak (dev, 2026-11-13). Weapons and bullets pass through them. On contact powerget plays centered
-and the event is picked then, at random from what's possible right then (the shield pair only with a shield worn),
-and its name is spoken. A missed one keeps sounding and fades out behind you.
-Every event lasts powerup_time on runtimer (so pausing freezes it), one per kind: a new one of the same kind, or its
-opposite, replaces it and restarts the time (dev: "I do not want the same type of powerup to stack up"). Different
-kinds run together. Their effects come through the current_ helpers and powerup_damage() below.
+/* Powerups: passive pickups with a good or bad event, never in the inventory. Each is a ground one (misc/game/powerground
+at its tile, replayed on a timer) or a flight one (powerflight), half and half. Arriving on a ground one's tile on the
+ground collects it, and arriving on a flight one's tile in the air; the wrong way on its tile (a jump over a ground one,
+running under a flight one) breaks it, with powerbreak. Weapons and bullets pass through them. On contact powerget plays
+centered and the event is picked then, at random from what's possible right then (the shield pair only with a shield
+worn), and its name is spoken. Every event lasts powerup_time on runtimer (so pausing freezes it), one per kind: a new
+one of the same kind, or its opposite, replaces it and restarts the time, so a kind never stacks. Different kinds run
+together. Their effects come through the current_ helpers and powerup_damage() below.
 Same entity pattern as the items: null-slot removal, reused slots, and only destroy_all_powerups() shrinks the array. */
 sound_pool poweruppool;
 const string powerup_folder = "misc/game/";
-/* Not looped (dev, 2026-11-04): a powerup replays its sound as a
-one-shot every powerup_ground_sound_time or powerup_flight_sound_time, on runtimer so pausing stops it. soundslot is the latest one-shot. */
+/* Not looped: a powerup replays its sound as a one-shot every powerup_ground_sound_time or powerup_flight_sound_time, on
+runtimer so pausing stops it. soundslot is the latest one-shot. */
 class powerup
 {
 double x;
 bool flight = false; // in the air (collected by a jump) rather than on the belt
 bool spent = false; // collected, or passed without collecting
-bool collected = false; // collected: its sound stops; a missed one keeps sounding as it fades behind you
+bool collected = false; // collected or broken: no more one-shots; one skipped some other way keeps sounding as it fades behind you
 double next_sound = 0; // when, on runtimer, its next one-shot plays
 int soundslot = -1;
 }
@@ -32,9 +31,7 @@ const int powerup_kind_guns = 4;
 const int powerup_kind_shield = 5;
 const int powerup_kind_health = 6;
 const int powerup_kinds = 7;
-/* The 14, in 7 pairs with the good one first, by their friendly names, which are spoken as they are (dev, 2026-11-04:
-the shield pair was Shield Boost and Shield Crack, made timed and renamed; Tough Hide and Soft Hide added; Muffled
-Steps dropped). All of them last powerup_time. */
+// The 14, in 7 pairs with the good one first, by their friendly names, which are spoken as they are. All of them last powerup_time.
 string[] powerup_names = {"Slow Motion", "Rush Hour", "Moon Jump", "Short Hop", "Long Crouch", "Stiff Knees", "Quick Swings", "Clumsy Swings", "Rapid Fire", "Sticky Trigger", "Sturdy Shield", "Brittle Shield", "Tough Hide", "Soft Hide"};
 int[] powerup_name_kinds = {powerup_kind_speed, powerup_kind_speed, powerup_kind_jumps, powerup_kind_jumps, powerup_kind_crouches, powerup_kind_crouches, powerup_kind_melee, powerup_kind_melee, powerup_kind_guns, powerup_kind_guns, powerup_kind_shield, powerup_kind_shield, powerup_kind_health, powerup_kind_health};
 // The running timed powerup of each kind ("" for none), and when it ends on runtimer.
@@ -64,7 +61,7 @@ if (active_powerups[k] == name) return true;
 }
 return false;
 }
-/* The effects (dev, 2026-11-03 and 4). Each helper turns a normal value into the one the running powerups give.
+/* The effects. Each helper turns a normal value into the one the running powerups give.
 The step interval you actually run at: Slow Motion and Rush Hour shift the normal speed (step_time, which keeps speeding
 up underneath and still sets the door marks) by powerup_speed_ms, never slower than start_step_time or faster than
 min_step_time. */
@@ -74,7 +71,7 @@ int t = step_time;
 if (powerup_active("Slow Motion")) t += powerup_speed_ms;
 else if (powerup_active("Rush Hour")) t -= powerup_speed_ms;
 t = int(max(min_step_time, min(start_step_time, t)));
-if (sliding) t /= 2; // a slide doubles your current speed, powerups included (the slides plan, dev, 2026-11-11)
+if (sliding) t /= 2; // a slide doubles your current speed, powerups included
 return int(max(min_step_time, t));
 }
 // A jump's time per height: Moon Jump makes jumps longer, Short Hop shorter.
@@ -118,7 +115,7 @@ void spawn_powerup(double px, int countdown)
 {
 powerup pu;
 pu.x = px;
-pu.flight = random(0, 1) == 1 and !slide_covers(px); // no air powerups along a slide, where you can't jump (dev, 2026-11-11)
+pu.flight = random(0, 1) == 1 and !slide_covers(px); // no air powerups along a slide, where you can't jump
 play_powerup_sound(pu); // the first one-shot at once, then on its kind's timer
 for (uint i = 0; i < powerups.length(); i++)
 {
@@ -165,8 +162,8 @@ else if (me.x > pu.x) pu.spent = true;
 if (me.x > pu.x + spawn_distance()) remove_powerup(i);
 }
 }
-/* A powerup missed on its tile (dev, 2026-11-13): misc/game/powerbreak plays in 2d where it is, and it goes silent instead
-of fading behind you. One skipped some other way (a teleport past it) just goes quiet behind you as before. */
+/* A powerup missed on its tile: misc/game/powerbreak plays in 2d where it is, and it goes silent instead of fading behind
+you. One skipped some other way (a teleport past it) just fades behind you. */
 void break_powerup(powerup@ pu)
 {
 pu.spent = true;

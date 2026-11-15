@@ -1,28 +1,28 @@
-/* Free run (the free run plan, dev, 2026-11-13; Section 1). A mode after practice run, open once hard endless has its
-difficulty_unlock_runs counted runs (when insane opens), with no difficulty and nothing counted: no statistics,
-achievements, records or unlocks (run_difficulty stays -1, so stats_counting stays off).
+/* Free run: a mode in play game, open once hard endless has its difficulty_unlock_runs counted runs (when insane opens),
+with no difficulty and nothing counted: no statistics, achievements, records or unlocks (run_difficulty stays -1, so
+stats_counting stays off).
 - The setup: a running speed (a fixed 2 to 10 steps a second, rising, or normal, which speeds up as an endless run), then
   an environment (one to stay in, or random). The run starts with you standing still on an empty belt (spawn_only
-  "free", which brings only what you add: freebelt.nvgt, Section 2): music and ambience only, no footsteps or heartbeat; every key works, jump, crouch and hands too, for
-  trying them in place (dev, 2026-11-13).
-- The console, on the free_console action (backspace and F7), freezes the run while it's open. Standing: modify death
-  mode, modify environment, modify practice hints, modify running speed, start running, view current setup, back.
-  Running: add items, add obstacles, add specials, clear belt, clear items, clear obstacles, clear specials, the same
-  modify items, view current setup, back. All alphabetical, back last.
-- Death mode: normal deaths (the start, dev, 2026-11-13) or practice deaths (practice_death(), set down past what caught you; normal: the run ends,
-  and replay or restart brings the same run back, standing, with everything as it was: free_prepare_replay()). Practice hints: off to start; on, every kind gets practice_hint()'s
-  lines, independent of the death mode.
-- The guns start with a normal run's reserve, 50, which modify ammo reserves can change and modify ammo limits can make unlimited (Section 3, below; the tools plan). */
+  "free", which brings only what you add: freebelt.nvgt): music and ambience only, no footsteps or heartbeat; every key
+  works, jump, crouch and hands too, for trying them in place.
+- The console, on the free_console action (backspace and F7), freezes the run while it's open. Its items, alphabetical
+  with back last, depend on whether you're standing or running (free_console()).
+- Death mode: no deaths (your last life is never lost), normal deaths (the run ends, and replay or restart brings the
+  same run back, standing, with everything as it was: free_prepare_replay()) or practice deaths (practice_death(), set
+  down past what caught you). Practice hints: off to start; on, every kind gets practice_hint()'s lines, whatever the
+  death mode.
+- The guns start with a normal run's reserve, gun_start_reserve, which modify ammo reserves can change and modify ammo
+  limits can make unlimited. */
 bool free_run = false; // the mode's runs, set by play_game() and kept through replays
 bool free_moving = false; // start running sets it, clear belt clears it
 string free_speed_mode = "fixed"; // "fixed", "rising" or "normal"
 int free_speed = start_step_time; // the fixed speed's step time
-string free_death_mode = "normal"; // normal, no or practice deaths; normal to start (dev, 2026-11-13; no deaths, the tools plan, 2026-11-14)
+string free_death_mode = "normal"; // "normal", "no" or "practice" deaths; normal to start
 bool free_hints = false;
-int free_lives = starting_lives; // the lives a practice death gives back (Section 3 lets you set them)
+int free_lives = starting_lives; // the lives a practice death gives back (modify player lives sets them)
 int free_console_focus = -1;
 
-// The mode opens with insane in endless: once hard has its difficulty_unlock_runs counted runs (dev, 2026-11-13).
+// The mode opens with insane in endless: once hard has its difficulty_unlock_runs counted runs.
 bool free_mode_unlocked()
 {
 return difficulty_runs[2] >= difficulty_unlock_runs;
@@ -43,13 +43,13 @@ bool practice_deaths()
 {
 return practice_run or (free_run and free_death_mode == "practice");
 }
-// A free run on no deaths (the tools plan, Section 2): your last life is never lost (lives.nvgt).
+// A free run on no deaths: your last life is never lost (lives.nvgt).
 bool free_no_deaths()
 {
 return free_run and free_death_mode == "no";
 }
 /* Hazards and floor breakers, which no refill can survive: a practice death sets you down past them, in a practice run,
-on practice deaths, and on no deaths (dev, 2026-11-14). */
+on practice deaths, and on no deaths. */
 bool set_down_deaths()
 {
 return practice_deaths() or free_no_deaths();
@@ -59,7 +59,7 @@ bool practice_hints_on()
 {
 return practice_run or (free_run and free_hints);
 }
-// A gun's reserve never runs out in practice, nor in a free run set to unlimited (weapons.nvgt; Section 3).
+// A gun's reserve never runs out in practice, nor in a free run set to unlimited (weapons.nvgt).
 bool reserve_unlimited(int w)
 {
 return practice_run or (free_run and free_reserve_unlimited[w]);
@@ -70,14 +70,14 @@ void reset_free_settings()
 free_moving = false;
 free_speed_mode = "fixed";
 free_speed = start_step_time;
-free_death_mode = "normal"; // normal deaths to start (dev, 2026-11-13)
+free_death_mode = "normal";
 free_hints = false;
 free_lives = starting_lives;
 free_health = player_hp;
 free_shield_full = shield_hp;
 for (uint i = 0; i < free_reserve_unlimited.length(); i++)
 {
-free_reserve_unlimited[i] = false; // a normal run's 50 rounds, not practice's unlimited (dev, 2026-11-13)
+free_reserve_unlimited[i] = false; // a normal run's reserve, not practice's unlimited
 free_reserve_set[i] = gun_start_reserve;
 }
 free_console_focus = -1;
@@ -87,7 +87,7 @@ free_give_focus = -1; // and give items' list
 free_key_focus = -1;
 free_set_focus = -1; // and set items' list
 }
-/* A replay or restart (dev, 2026-11-13): the same free run again, standing still at the start, with the same speed,
+/* A replay or restart: the same free run again, standing still at the start, with the same speed,
 environment, death mode, hints and continuous rules, and every batch back at its full count (free_refill_queue()). */
 void free_prepare_replay()
 {
@@ -110,7 +110,7 @@ for (int t = start_step_time; t >= 100; t -= 100)
 {
 m.add_item(tenths_text(int(round(10000.0 / t, 0))), "" + t);
 }
-m.add_item("normal", "normal"); // speeds up as an endless run does, before rising (dev, 2026-11-13)
+m.add_item("normal", "normal"); // speeds up as an endless run does
 m.add_item("rising", "rising"); // from 2 up to 10, as practice's rising
 m.add_item("back", "back");
 int mres = m.run();
@@ -151,7 +151,7 @@ if (choose_free_env()) return true;
 return false;
 }
 /* A mid-run environment choice: held in one, it moves you there at once ("You've entered ..."), or says you'll stay;
-random, switching resumes, and it says so (dev, 2026-11-13). */
+random, switching resumes, and it says so. */
 void free_apply_env()
 {
 if (debug_env != "")
@@ -177,7 +177,7 @@ void free_apply_speed()
 {
 if (free_speed_mode == "fixed") step_time = free_speed;
 speeduptimer.restart();
-// Said every time (dev, 2026-11-13): a fixed speed as C says it, or how it will rise.
+// Said every time: a fixed speed as C says it, or how it will rise.
 if (free_speed_mode == "normal") speak_buffer("Your speed now rises as in an endless run.", "misc");
 else if (free_speed_mode == "rising") speak_buffer("Your speed now rises up to 10 steps a second.", "misc");
 else speak_buffer(speed_phrase(), "misc"); // "You are running 3.3 steps a second."
@@ -199,17 +199,18 @@ free_moving = true;
 steptimer.restart();
 speeduptimer.restart();
 }
-/* Clear belt: everything on the belt and on its way gone, your inventory emptied, a worn shield off and your weapons as a run starts, whatever you're in (a ladder, a repair,
-a slide, a flight, a door) let go, and you stand still again. Your settings stay. */
+/* Clear belt: everything on the belt and on its way gone, your inventory emptied, a worn shield off and your weapons as
+a run starts, whatever you're in (a ladder, a repair, a slide, a flight, a door) let go, and you stand still again.
+Your settings stay. */
 void free_clear_belt()
 {
 clear_run_objects();
 cancel_movement();
 reset_practice_hints();
 free_clear_queue(); // every batch and continuous rule (freebelt.nvgt)
-clear_inventory(); // and your inventory, empty as a free run starts (dev, 2026-11-13)
-reset_shield(); // and a worn shield comes off (dev, 2026-11-13)
-reset_weapons(); // and the guns refilled to their start, the fist drawn, as a run starts (dev, 2026-11-13; weapons.nvgt)
+clear_inventory();
+reset_shield();
+reset_weapons(); // the guns refilled to their start, the fist drawn (weapons.nvgt)
 free_moving = false;
 }
 string free_speed_text()
@@ -226,7 +227,7 @@ lines.insert_last(stat_line("belt", free_moving ? "running" : "standing still"))
 lines.insert_last(stat_line("running speed", free_speed_text()));
 lines.insert_last(stat_line("death mode", free_death_mode + " deaths"));
 lines.insert_last(stat_line("footsteps", footsteps_on ? "heard" : "silent"));
-lines.insert_last(stat_line("practice hints", free_hints ? "spoken" : "silent")); // as the menu names them (dev, 2026-11-14)
+lines.insert_last(stat_line("practice hints", free_hints ? "spoken" : "silent")); // as the menu names them
 lines.insert_last(stat_line("environment", (debug_env == "" ? "random, now " : "") + current_env.replace("_", " ", true)));
 free_add_belt_lines(lines); // what's coming (freebelt.nvgt)
 return lines;
@@ -236,7 +237,7 @@ bool free_death_menu()
 {
 setupmenu();
 m.intro_text = "Choose what happens when you die.";
-m.add_item("no deaths", "no"); // Section 2 of the tools plan
+m.add_item("no deaths", "no");
 m.add_item("normal deaths", "normal");
 m.add_item("practice deaths", "practice");
 m.add_item("back", "back");
@@ -246,8 +247,7 @@ free_death_mode = m.selected_item_id;
 speak_buffer("You now have " + free_death_mode + " deaths.", "misc");
 return true;
 }
-/* Modify footsteps (the tools plan, Section 2): heard or silent, as the debug footsteps question (footsteps_on, surface.nvgt;
-landings still play). play_game() sets footsteps_on for every new setup and every other mode, so a replay keeps your
+/* Modify footsteps: heard or silent, as the debug footsteps question (footsteps_on, surface.nvgt; landings still play). play_game() sets footsteps_on for every new setup and every other mode, so a replay keeps your
 choice and nothing else is touched. True once chosen. */
 bool free_footsteps_menu()
 {
@@ -267,7 +267,7 @@ bool free_hints_menu()
 {
 setupmenu();
 m.intro_text = "Choose your practice hints.";
-m.add_item("silent hints", "off"); // named choices, not on and off (dev, 2026-11-14)
+m.add_item("silent hints", "off"); // named choices, not on and off
 m.add_item("spoken hints", "on");
 m.add_item("back", "back");
 int mres = m.run();
@@ -279,8 +279,7 @@ speak_buffer(free_hints ? "Practice hints are now on." : "Practice hints are now
 return true;
 }
 /* The console (backspace or F7), from run_input() in a free run: the run frozen while it's open, its items in alphabetical
-order with back last, standing or running. Every change closes it with a line in the misc buffer; view current setup and backing out of a menu return to it. Escape or back
-closes it silently, as a nested menu. */
+order with back last, standing or running. Escape or back closes it silently, as a nested menu. */
 void free_console()
 {
 pause_game();
@@ -292,21 +291,21 @@ if (free_moving)
 {
 m.add_item("add items", "add_items");
 m.add_item("add obstacles", "add_obstacles");
-m.add_item("add specials", "add_specials"); // powerups and slides (dev, 2026-11-13)
+m.add_item("add specials", "add_specials"); // powerups and slides
 m.add_item("clear belt", "clear_belt");
 m.add_item("clear items", "clear_items");
 m.add_item("clear obstacles", "clear_obstacles");
 m.add_item("clear specials", "clear_specials");
-if (is_gun(current_weapon)) m.add_item("modify ammo limits", "unlimited"); // the drawn gun's unlimited rounds toggle (Section 1B; dev, 2026-11-14: "modify ammo limmits")
-if (is_gun(current_weapon) and !free_reserve_unlimited[current_weapon]) m.add_item("modify ammo reserves", "ammo"); // only with the machine gun or pistol drawn, and hidden while it has unlimited rounds (dev, 2026-11-14)
+if (is_gun(current_weapon)) m.add_item("modify ammo limits", "unlimited"); // the drawn gun's limited or unlimited rounds
+if (is_gun(current_weapon) and !free_reserve_unlimited[current_weapon]) m.add_item("modify ammo reserves", "ammo"); // only with a gun drawn, and hidden while it has unlimited rounds
 }
 m.add_item("modify death mode", "death");
 m.add_item("modify environment", "env");
-m.add_item("modify footsteps", "footsteps"); // standing or running (Section 2)
+m.add_item("modify footsteps", "footsteps"); // standing or running
 if (free_moving)
 {
 m.add_item("modify player health", "health");
-m.add_item("modify player inventory", "inventory"); // give items and take items (Section 3B; dev, 2026-11-13)
+m.add_item("modify player inventory", "inventory"); // give, set and take items
 m.add_item("modify player lives", "lives");
 }
 m.add_item("modify practice hints", "hints");
@@ -315,13 +314,12 @@ if (free_moving and shield_worn) m.add_item("modify shield strength", "shield");
 if (!free_moving) m.add_item("start running", "start");
 m.add_item("view current setup", "view");
 m.add_item("back", "back");
-int focus = free_console_focus; // where you last were, or the first item (dev, 2026-11-13: no focus on start running)
+int focus = free_console_focus; // where you last were, or the first item
 int mres = m.run(focus, false, focus >= 0);
 if (mres < 0 or m.selected_item_id == "back") break;
 free_console_focus = mres;
 string id = m.selected_item_id;
-/* Every change closes the console and says what it did in the misc buffer, as the reference console does (dev,
-2026-11-13: "It should be consistent if possible"); only view current setup and backing out of a menu stay in it. */
+// Every change closes the console and says what it did in the misc buffer; only view current setup and backing out of a menu stay in it.
 bool done = false;
 if (id == "start")
 {
@@ -369,15 +367,15 @@ break;
 }
 resume_game();
 }
-/* Section 3: the player (the free run plan, dev, 2026-11-13), set from the running console. Each number box takes 1 to
-1000 (a reserve 0 to 1000); escape cancels. free_health is your full health, filled at once and on a new life;
-free_lives the lives you have and get back from a practice death, capsules adding up to the higher of max_lives or it;
-free_shield_full the worn shield's full strength (a newly worn shield starts at shield_hp); each gun's reserve a set number
-(gun_start_reserve, 50, to start, as a normal run: dev, 2026-11-13) or unlimited, kept through replays. */
+/* The player, set from the running console. Each number box takes 1 to 1000 (a reserve 0 to 1000); escape cancels.
+free_health is your full health, filled at once and on a new life; free_lives the lives you have and get back from a
+practice death, capsules adding up to the higher of max_lives or it; free_shield_full the worn shield's full strength (a
+newly worn shield starts at shield_hp); each gun's reserve a set number (gun_start_reserve to start, as a normal run) or
+unlimited, kept through replays. */
 int free_health = player_hp;
 int free_shield_full = shield_hp;
-bool[] free_reserve_unlimited = {false, false, false, false, false, false, false, false, false, false}; // one per weapon_names entry; a normal run's reserve to start (dev, 2026-11-13)
-int[] free_reserve_set = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50}; // gun_start_reserve, as a normal run starts
+bool[] free_reserve_unlimited = {false, false, false, false, false, false, false, false, false, false}; // one per weapon_names entry; a normal run's reserve to start
+int[] free_reserve_set = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50}; // gun_start_reserve, as a normal run starts; reset_free_settings() sets them from it
 // Your full health: a free run's set amount, or player_hp.
 int max_health()
 {
@@ -394,11 +392,10 @@ int shield_full()
 {
 return free_run ? free_shield_full : shield_hp;
 }
-/* Give, set and take (the free run tools plan, dev, 2026-11-14; Section 1): each modify choice opens "Choose how you'd
-like to change your <what>." with give, set and take, then back (escape or back steps out silently). Give adds to what
-you have now, stopping at full (lives and rounds at 1000); set is the full amount itself, filled (as before); take removes
-from what you have now, stopping at 1 (rounds at 0), never costing a life, the run or the shield. Returns "give", "set"
-or "take", or "" if backed out. */
+/* Give, set and take: each modify choice opens "Choose how you'd like to change your <what>." with give, set and take,
+then back (escape or back steps out silently). Give adds to what you have now, stopping at full (lives and rounds at
+1000); set is the full amount itself, filled; take removes from what you have now, stopping at 1 (rounds at 0), never
+costing a life, the run or the shield. Returns "give", "set" or "take", or "" if backed out. */
 string free_change_choice(const string&in intro, const string&in what)
 {
 setupmenu();
@@ -446,7 +443,7 @@ bool free_set_lives()
 {
 string way = free_change_choice("Choose how you'd like to change your lives.", "lives");
 if (way == "") return false;
-int n = way == "set" ? free_ask_number("Modify player lives", "How many lives do you want?", 1, 1000) : free_change_amount("Modify player lives", "How many", "lives", way); // up to 1000 (dev, 2026-11-13)
+int n = way == "set" ? free_ask_number("Modify player lives", "How many lives do you want?", 1, 1000) : free_change_amount("Modify player lives", "How many", "lives", way); // up to 1000
 if (n < 0)
 {
 speak("canceled");
@@ -508,8 +505,8 @@ weapon_reserve[w] = now;
 speak_buffer("Your " + gun + " now has " + (now == 1 ? "1 round" : now + " rounds") + " in reserve.", "misc");
 return true;
 }
-/* Section 3B: give items (the free run plan, dev, 2026-11-13): any number of an item kind, or of each with all items,
-straight into your inventory, to try what it does without picking it up. A key comes in a random color each, as one on
+/* Give items: any number of an item kind, or of each with all items, straight into your inventory, to try what it does
+without picking it up. A key comes in a random color each, as one on
 the belt would. The list remembers its place for the run. */
 int free_give_focus = -1;
 // One item kind (an add items id) into the inventory, amount of them.
@@ -517,7 +514,7 @@ void free_give_kind(const string&in type, int amount)
 {
 if (type == "keys")
 {
-// All keys: that many of every color (dev, 2026-11-13: the color menu).
+// All keys: that many of every color.
 string[] colors = get_pack_sound_folders(key_folder + "*");
 for (uint i = 0; i < colors.length(); i++) give_item(colors[i], amount);
 return;
@@ -525,12 +522,12 @@ return;
 give_item(type.substr(0, type.length() - 1), amount); // "health_potions" is the inventory's "health_potion"
 }
 int free_key_focus = -1;
-/* Keys' color menu (dev, 2026-11-13: "I like the menu better."): each color, then all keys, then back. The color's
-folder ("red_key"), "keys" for all of them, or "" if backed out. */
+/* Keys' color menu: each color, then all keys, then back. The color's folder ("red_key"), "keys" for all of them, or ""
+if backed out. */
 string free_choose_key(const string&in intro = "Choose the key you'd like to be given.")
 {
 setupmenu();
-m.intro_text = intro; // give items' wording, or set items' (Section 3 of the tools plan)
+m.intro_text = intro; // give items' wording, or set items'
 string[] colors = get_pack_sound_folders(key_folder + "*");
 for (uint i = 0; i < colors.length(); i++) m.add_item(item_display_name(colors[i]), colors[i]);
 m.add_item("all keys", "keys");
@@ -584,7 +581,7 @@ if (type == "keys") speak_buffer(n + " of each key given.", "misc");
 else speak_buffer(n + " " + free_kind_name(type, "item", n) + " given.", "misc");
 return true;
 }
-/* Take items (dev, 2026-11-13, part of Section 3B): only what's in your inventory, each with its count ("health potion,
+/* Take items: only what's in your inventory, each with its count ("health potion,
 3"), then all items, then back; "How many?" 1 to 1000, more than you have taking them all; all items empties the
 inventory. True once taken, with a line in misc. An empty inventory just says so. */
 bool free_take_items()
@@ -592,7 +589,7 @@ bool free_take_items()
 string[] keys = inventory_keys();
 if (keys.length() == 0)
 {
-dlgmessage_return("Your inventory is empty."); // a dialog, so the inventory menu reopening doesn't cut it off (dev, 2026-11-13)
+dlgmessage_return("Your inventory is empty."); // a dialog, so the inventory menu reopening doesn't cut it off
 return false;
 }
 setupmenu();
@@ -622,8 +619,8 @@ string name = item_display_name(item); // "health potion"
 speak_buffer(taken + " " + (taken == 1 ? name : name + "s") + " taken.", "misc");
 return true;
 }
-/* Modify player inventory (dev, 2026-11-13: "What about putting them in a menu called modify player inventory?"): give
-items and take items, then back, which steps back to the console silently. True once something was given or taken. */
+/* Modify player inventory: give items, set items and take items, then back, which steps back to the console silently.
+True once something was given, set or taken. */
 bool free_inventory_menu()
 {
 while (true)
@@ -631,7 +628,7 @@ while (true)
 setupmenu();
 m.intro_text = "Choose what you'd like to do with your inventory.";
 m.add_item("give items", "give");
-m.add_item("set items", "set"); // Section 3 of the tools plan
+m.add_item("set items", "set");
 m.add_item("take items", "take");
 m.add_item("back", "back");
 int mres = m.run();
@@ -641,9 +638,8 @@ if (way == "give" ? free_give_items() : (way == "set" ? free_set_items() : free_
 }
 return false;
 }
-/* Section 1B (the free run tools plan, dev, 2026-11-14: "Can't unlimmited ammo be a toggle, like the other on/off
-choices?"): modify ammo limits (named by the dev, 2026-11-14), with a gun drawn, sets that gun's ammo limits: limited rounds, unlimited rounds, back. While on,
-modify ammo reserves is hidden for it; off again, the gun keeps the reserve it had, as an unlimited reserve never
+/* Modify ammo limits, with a gun drawn: that gun's limited rounds or unlimited rounds, then back. While unlimited,
+modify ammo reserves is hidden for it; limited again, the gun keeps the reserve it had, as an unlimited reserve never
 drops. True once chosen. */
 bool free_unlimited_menu()
 {
@@ -651,7 +647,7 @@ int w = current_weapon;
 string gun = weapon_display_name(w);
 setupmenu();
 m.intro_text = "Choose your " + gun + "'s ammo limits.";
-m.add_item("limited rounds", "limited"); // dev, 2026-11-14: "It doesn't have to be simple on/off"
+m.add_item("limited rounds", "limited");
 m.add_item("unlimited rounds", "unlimited");
 m.add_item("back", "back");
 int mres = m.run();
@@ -660,8 +656,7 @@ free_reserve_unlimited[w] = m.selected_item_id == "unlimited";
 speak_buffer(free_reserve_unlimited[w] ? "Your " + gun + " now has unlimited rounds." : "Your " + gun + " no longer has unlimited rounds.", "misc");
 return true;
 }
-/* Section 3: set items (the free run tools plan, dev, 2026-11-14): every item kind (not only what you carry), all items,
-back, keys through the color menu; "How many do you want?" 0 to 1000, then exactly that many, 0 removing it. All items
+/* Set items: every item kind (not only what you carry), all items, back, keys through the color menu; "How many do you want?" 0 to 1000, then exactly that many, 0 removing it. All items
 (and all keys) set every kind, every key color, so 0 empties the inventory. True once set, with a line in misc. */
 int free_set_focus = -1;
 // Exactly amount of an inventory item, by give_item()'s difference.

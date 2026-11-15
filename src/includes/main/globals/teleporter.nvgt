@@ -1,15 +1,15 @@
-/* Player teleporters (dev, 2026-11-03, for 1.2): a risky item that moves you a random way along the belt. On the belt
-it works like an ammo pack: its spawn clip, then its loop at its tile; either hand picks it up within
-hand_window_start() (get and the player's give, centered) and it goes into the inventory as "player_teleporter".
-Arriving on its tile on the ground, landing on it, or a weapon hit breaks it (break) and it's lost; a clean jump over
-it misses it. U uses it (use_teleporter()).
+/* Player teleporters: a risky item that moves you a random way along the belt. On the belt it works like an ammo pack:
+its spawn clip, then its loop at its tile, in its lane; either hand picks it up within hand_window_start() (get and the
+player's give, centered) and it goes into the inventory as "player_teleporter". Arriving on its tile on the ground,
+landing on it, or a weapon hit breaks it (break) and it's lost; a clean jump over it misses it. The use key uses it
+(use_teleporter()).
 Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_teleporters() shrinks the array. */
 sound_pool teleporterpool;
 const string teleporter_folder = "equipments/items/common/player_teleporter/";
 class teleporter
 {
 double x;
-int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
+int lane = 1; // lane_middle until spawned, then the lane the spawner gives it
 double countdown_start;
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
 int loopslot = -1;
@@ -119,7 +119,7 @@ void break_teleporter(teleporter@ t)
 stat_add("player_teleporters_broken");
 t.spent = true;
 stop_teleporter(t);
-teleporterpool.play_stationary(get_pack_sound(teleporter_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
+teleporterpool.play_stationary(get_pack_sound(teleporter_folder + "*break*"), false); // stationary, so the pitch never drops behind you
 }
 void stop_teleporter(teleporter@ t)
 {
@@ -132,8 +132,7 @@ if (i >= teleporters.length() or @teleporters[i] == null) return;
 stop_teleporter(teleporters[i]);
 @teleporters[i] = null;
 }
-/* True if a standing obstacle sits exactly on tile x, so a teleport can't land there (dev, 2026-11-03: "It can never
-land you exactly on the obstacle, like on top of a hazard."). Things already dealt with (a passed mine, a broken or
+/* True if a standing obstacle sits exactly on tile x, so a teleport can't land there. Things already dealt with (a passed mine, a broken or
 crashed wall, an opened or crashed door, a reached force field) don't count; a projectile counts at its meeting tile. */
 bool obstacle_on_tile(double x)
 {
@@ -171,7 +170,7 @@ if (@doors[i] != null and doors[i].x == x and door_standing(doors[i])) return tr
 }
 return false;
 }
-/* U on a teleporter (dev, 2026-11-03): moves you a random teleport_min_time to teleport_max_time of belt, in tiles at the
+/* Using a teleporter: moves you a random teleport_min_time to teleport_max_time of belt, in tiles at the
 current speed, forward or back half and half, never before tile 0. It's risky by design, so it can drop you right in
 front of danger, but a tile holding an obstacle moves on a step the same way until it's clear. Going back, anything
 still waiting behind you counts again. Always used, so returns true. */
@@ -199,7 +198,7 @@ cancel_movement();
 me.x = target;
 update_listeners();
 if (dir > 0) spawner_catch_up(); // so what comes next still arrives with its full warning
-play_landing(false); // the tile's landing only, like a force field's throw (dev, 2026-11-03)
+play_landing(false); // the tile's landing only, like a force field's throw
 string where = dir > 0 ? "forward" : "back";
 speak_buffer(moved == 1 ? "You were moved " + where + " 1 step." : "You were moved " + where + " " + moved + " steps.", "items");
 return true;

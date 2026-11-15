@@ -1,7 +1,5 @@
-/* Life capsules (dev, 2026-11-03, for 1.2, as life potions; renamed to life capsules with new sounds on 2026-11-04,
-where the old potion sounds became health_potion for a later item): an item that gives exactly 1 life. On the belt it
-works like an ammo pack:
-its spawn clip, then its loop at its tile; either hand picks it up within hand_window_start() (get and the player's
+/* Life capsules: an item that gives more lives. On the belt it works like an ammo pack: its spawn clip, then its loop at
+its tile, in its lane; either hand picks it up within hand_window_start() (get and the player's
 give, centered) and it goes into the inventory as "life_capsule". Arriving on its tile on the ground, landing on it, or
 a weapon hit breaks it (break) and it's lost; a clean jump over it misses it. U uses it (use_capsule()).
 Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_capsules() shrinks the array. */
@@ -10,7 +8,7 @@ const string capsule_folder = "equipments/items/common/life_capsule/";
 class lifecapsule
 {
 double x;
-int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
+int lane = 1; // lane_middle until spawned, then the spawner's lane
 double countdown_start;
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
 int loopslot = -1;
@@ -120,7 +118,7 @@ void break_capsule(lifecapsule@ lc)
 stat_add("life_capsules_broken");
 lc.spent = true;
 stop_capsule(lc);
-capsulepool.play_stationary(get_pack_sound(capsule_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
+capsulepool.play_stationary(get_pack_sound(capsule_folder + "*break*"), false); // stationary, so the pitch never drops behind you
 }
 void stop_capsule(lifecapsule@ lc)
 {
@@ -143,10 +141,9 @@ stop_capsule(capsules[i]);
 }
 capsules.resize(0);
 }
-/* U on a life capsule: a random life_capsule_min_lives to life_capsule_max_lives more lives (dev, 2026-11-04: "between 1
-to 2 lives"; it was exactly 1), never past max_lives (dev: "You can have unlimited life capsules, but limited lives"),
-so at 19 lives a roll of 2 gains 1. At the cap it's refused and kept for later, like a health potion at full health.
-True if it was used. */
+/* U on a life capsule: a random life_capsule_min_lives to life_capsule_max_lives more lives, never past lives_cap(), so
+one below the cap a roll of 2 gains 1. Capsules themselves are unlimited. At the cap it's refused and kept for later,
+like a health potion at full health. True if it was used. */
 bool use_capsule()
 {
 if (lives >= lives_cap()) // max_lives, or a free run's higher set lives (freerun.nvgt)
@@ -156,8 +153,8 @@ return false;
 }
 int gained = int(min(random(life_capsule_min_lives, life_capsule_max_lives), lives_cap() - lives));
 lives += gained;
-p.play_stationary(get_pack_sound(capsule_folder + "*use*"), false); // its use sound only, not the life sound (dev)
-speak_buffer("Gained " + gained + (gained == 1 ? " life." : " lives."), "items"); // the dev's wording (2026-11-04)
+p.play_stationary(get_pack_sound(capsule_folder + "*use*"), false); // its use sound only, not the life sound
+speak_buffer("Gained " + gained + (gained == 1 ? " life." : " lives."), "items");
 return true;
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.

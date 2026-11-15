@@ -1,7 +1,6 @@
-/* The inventory (dev, 2026-11-02): item counts with a cursor, I and Shift+I to cycle and U to
-use the focused item. There's no inventory menu. It starts empty every run.
-The cursor is corrected whenever an item runs out, names are spoken with spaces, and each item's
-use goes to that item's own function instead of one long branch. */
+/* The inventory: item counts with a cursor, the previous and next keys to cycle and the use key for the focused item.
+There's no inventory menu. It starts empty every run. The cursor is corrected whenever an item runs out, names are
+spoken with spaces, and each item's use goes to that item's own function instead of one long branch. */
 dictionary inventory;
 int invpos = 0;
 
@@ -39,10 +38,10 @@ string item_display_name(string item)
 {
 return item.replace("_", " ", true);
 }
-// Runs every frame from run_input(): I, Shift+I and U. Silent while a door carries you, like hands and weapons (dev).
+// Runs every frame from run_input(): the inventory keys, silent like hands and weapons while a door carries you, on a slide, a ladder or a floor breaker's edge.
 void inventory_input()
 {
-if (door_moving or sliding or climbing or repairing) return; // nor on a slide, a ladder or a floor breaker's edge
+if (door_moving or sliding or climbing or repairing) return;
 if (controls.action_triggered("inventory_previous")) cycle_inventory(-1);
 else if (controls.action_triggered("inventory_next")) cycle_inventory(1);
 if (controls.action_triggered("item_use")) use_item();
@@ -68,7 +67,7 @@ string name = item_display_name(item);
 string position = "Item " + (invpos + 1) + " of " + keys.length() + ".";
 speak_buffer(count == 1 ? name + ". " + position : name + "s, " + count + ". " + position, "items");
 }
-// U: uses the focused item through that item's own function, which removes it only if it was used.
+// The use key: uses the focused item through that item's own function, which removes it only if it was used.
 void use_item()
 {
 string[] keys = inventory_keys();
@@ -103,7 +102,7 @@ else if (item == "player_teleporter")
 if (use_teleporter()) item_used(item);
 }
 }
-// A used item leaves the inventory and counts toward the statistics (Section 4), keys all as "keys".
+// A used item leaves the inventory and counts toward the statistics, keys all as "keys".
 void item_used(const string&in item)
 {
 give_item(item, -1);

@@ -1,15 +1,11 @@
-/* The weapons (dev, 2026-11-02): one damage table,
-separate ammo per gun, reloading any time a gun isn't full, and one generic target hook
-instead of a copy of the firing code per enemy type.
-All ten are available from the start of every run on 1 to 0, in this order, and a run starts with the fist drawn.
-Space swings or fires; the machine gun keeps firing while Space is held. Melee hits at once; a gun fires a bullet that
-travels (bullet.nvgt). A gun with nothing loaded, or mid-reload,
-plays empty instead. R reloads, timed by the length of the gun's reload sound, and ping plays when
-it's done. X speaks the ammo. weapon_strike() is the target hook: walls, fake doors and items (dev, 2026-11-03, for 1.1).
-Every weapon reaches the same weapon_reach_time ahead, so weapons differ
-only by damage. */
-/* Alphabetical, the guns last on 9 and 0 (dev, 2026-11-06, the weapon lineup plan: the boot and laser sounds went, the axe
-and sword came; "Keep it alphabetical, and remap the damages to it"; later that day the boot came back and the axe went). */
+/* The weapons: one damage table, separate ammo per gun, reloading any time a gun isn't full, and one generic target hook
+instead of a copy of the firing code per target type. All ten are available from the start of every run on 1 to 0, in
+this order, and a run starts with the fist drawn. Space swings or fires; the machine gun keeps firing while Space is
+held. Melee hits at once; a gun fires a bullet that travels (bullet.nvgt). A gun with nothing loaded, or mid-reload,
+plays empty instead. R reloads, timed by the length of the gun's reload sound, and ping plays when it's done. X speaks
+the ammo. weapon_strike() is the target hook: walls, fake doors, vehicles in your lane and items. Every weapon reaches
+the same weapon_reach_time ahead, so weapons differ only by damage. */
+// Alphabetical, the guns last on 9 and 0; weapon_damage follows the same order.
 string[] weapon_names = {"bat", "boot", "club", "dagger", "fist", "hammer", "knife", "sword", "machine_gun", "pistol"};
 // Base damage by key: the bat (1) 3 up to the pistol (0) 30; every hit is this times weapon_damage_multiplier.
 int[] weapon_damage = {3, 6, 9, 12, 15, 18, 21, 24, 27, 30};
@@ -18,7 +14,7 @@ int[] weapon_loaded(10);
 int[] weapon_reserve(10);
 
 int current_weapon = -1;
-sound draw_sound; // its own sound, so drawing another weapon cuts the last draw off (dev, 2026-11-09), with no pool slot to go stale
+sound draw_sound; // its own sound, so drawing another weapon cuts the last draw off, with no pool slot to go stale
 bool reloading = false;
 int reload_length = 0;
 timer firetimer, reloadtimer;
@@ -39,8 +35,8 @@ string weapon_display_name(int w)
 return weapon_names[w].replace("_", " ", true);
 }
 /* Every run starts fresh: the guns full, nothing reloading, and the fist drawn the normal way, with its draw sound and
-"fist equipped." (dev, 2026-11-10; the bat from 2026-11-02, the axe for part of 2026-11-06). The fist is found by name, so
-a reordered lineup still starts with it. current_weapon is cleared first so draw_weapon() doesn't skip it as already held. */
+"fist equipped." The fist is found by name, so a reordered lineup still starts with it. current_weapon is cleared first
+so draw_weapon() doesn't skip it as already held. */
 void reset_weapons()
 {
 for (int w = 0; w < int(weapon_names.length()); w++)
@@ -61,7 +57,7 @@ void weapon_input()
 {
 if (practice_weapons_off()) return; // silent: no weapons in this practice run (practice.nvgt)
 reload_check(); // a reload already under way still finishes
-if (door_moving or sliding or climbing or repairing) return; // nor on a ladder or at a floor breaker's edge; no drawing, firing, reloading or ammo checks while a door carries you
+if (door_moving or sliding or climbing or repairing) return; // no drawing, firing, reloading or ammo checks while a door carries you, on a slide, on a ladder or at a floor breaker's edge
 for (int k = 1; k <= 10; k++)
 {
 if (controls.action_triggered("weapon_" + k)) draw_weapon(k - 1);
@@ -81,7 +77,7 @@ void draw_weapon(int w)
 if (w == current_weapon) return;
 current_weapon = w;
 reloading = false;
-// A new draw cuts off the one still playing, so quick swaps never stack (dev, 2026-11-09).
+// A new draw cuts off the one still playing, so quick swaps never stack.
 draw_sound.close();
 if (draw_sound.load(get_pack_sound(weapon_folder(w) + "*draw*"))) draw_sound.play();
 speak_buffer(weapon_display_name(w) + " equipped.", "weapons");
@@ -98,8 +94,8 @@ p.play_stationary(get_pack_sound(weapon_folder(w) + "*empty*"), false);
 return;
 }
 weapon_loaded[w]--;
-/* A gun fires a bullet that travels (dev, 2026-11-03; bullet.nvgt): fire plays at you, and the bullet carries the
-damage to whatever it reaches, playing the gun's hit and shell there (the dev: shell plays on hitting the object). */
+/* A gun fires a bullet that travels (bullet.nvgt): fire plays at you, and the bullet carries the damage to whatever it
+reaches, playing the gun's hit and shell there. */
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*fire*"), false);
 stat_add("shots_fired");
 spawn_bullet(w, weapon_damage[w] * weapon_damage_multiplier);
@@ -133,7 +129,7 @@ shield@ s = shield_in_reach(reach);
 lifecapsule@ lc = capsule_in_reach(reach);
 healthpotion@ pot = potion_in_reach(reach);
 teleporter@ t = teleporter_in_reach(reach);
-// Whichever target is nearest takes the hit: a wall, a fake door (real doors can't be hit) or an item, which breaks.
+// Whichever target is nearest takes the hit: a wall, a fake door (real doors can't be hit), a vehicle or an item, which breaks.
 double best = -1;
 if (@w != null) best = w.x;
 if (@d != null and (best < 0 or d.x < best)) best = d.x;
@@ -194,7 +190,7 @@ stat_add("reloads"); // counted when the reload finishes
 int w = current_weapon;
 int amount = int(min(gun_start_loaded - weapon_loaded[w], weapon_reserve[w]));
 weapon_loaded[w] += amount;
-if (!reserve_unlimited(w)) weapon_reserve[w] -= amount; // a practice run's reserve never runs out (dev, 2026-11-05), nor a free run's (freerun.nvgt)
+if (!reserve_unlimited(w)) weapon_reserve[w] -= amount; // a practice run's reserve never runs out, nor an unlimited free run reserve (freerun.nvgt)
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*ping*"), false);
 }
 // X: one sentence about the current weapon's ammo.

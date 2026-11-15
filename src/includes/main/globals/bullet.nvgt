@@ -1,7 +1,7 @@
-/* Bullets (dev, 2026-11-03, for 1.1): the guns fire bullets that travel, instead of hitting at once like melee. A bullet
-starts at your tile and moves one tile every bullet_tile_time, playing its gun's loop at the bullet the whole way.
-On each new tile it checks for a standing wall, fake door or item there; the
-first it reaches takes the gun's damage, the gun's hit and shell play at it, and the target plays its own hurt or death. A
+/* Bullets: the guns fire bullets that travel, instead of hitting at once like melee. A bullet starts at your tile and
+moves one tile every bullet_tile_time, playing its gun's loop at the bullet the whole way. On each new tile it checks
+for a standing wall, fake door, vehicle in your lane or item there; the first it reaches takes the gun's damage, the
+gun's hit and shell play at it, and the target plays its own hurt or death. A
 bullet that has gone weapon_reach() tiles from where it was fired (counted when it was fired) just vanishes, so firing
 at something still out of reach wastes the round. Real doors and the other traps don't stop it.
 Moves are timed off runtimer, which pauses with the game, so a pause freezes bullets in the air.
@@ -82,7 +82,7 @@ teleporter@ t = teleporter_at(x);
 if (@t != null) return strike_teleporter(t);
 return -1;
 }
-// The first standing wall or fake door on the bullet's tile takes the hit. Returns true if it hit something.
+// The first standing wall, fake door, vehicle or item on the bullet's tile takes the hit. Returns true if it hit something.
 bool bullet_hits(bullet@ b)
 {
 double target_x = -1;
@@ -96,12 +96,12 @@ else
 {
 vehicle@ vh = vehicle_at_bullet(b.x); // a vehicle in your lane the bullet has reached (vehicle.nvgt)
 if (@vh != null) target_x = strike_vehicle(vh, b.damage);
-else target_x = strike_item_at(b.x); // an item in the bullet's path breaks (dev, 2026-11-03)
+else target_x = strike_item_at(b.x); // an item in the bullet's path breaks
 }
 }
 if (target_x < 0) return false;
 bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*hit*"), 0, me.x, 0, target_x, false);
-bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*shell*"), 0, me.x, 0, target_x, false); // at the target (dev)
+bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*shell*"), 0, me.x, 0, target_x, false); // at the target
 return true;
 }
 void remove_bullet(uint i)

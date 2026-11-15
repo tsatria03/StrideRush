@@ -1,6 +1,6 @@
-/* Health potions (dev, 2026-11-04, for 1.4, with the old life potion sounds): an item that heals a random 5 to 10
-percent of your health, small on purpose so you collect a few (dev: "I don't want those to be too strong").
-On the belt it works exactly like a life capsule: its spawn clip, then its loop at its tile; either hand picks it up within hand_window_start() (get and the player's
+/* Health potions: an item that heals a random health_potion_min_percent to health_potion_max_percent of your health,
+small on purpose so you collect a few. On the belt it works exactly like a life capsule: its spawn clip, then its loop
+at its tile, in its lane; either hand picks it up within hand_window_start() (get and the player's
 give, centered) and it goes into the inventory as "health_potion". Arriving on its tile on the ground, landing on it, or
 a weapon hit breaks it (break) and it's lost; a clean jump over it misses it. U uses it (use_potion()).
 Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_potions() shrinks the array. */
@@ -9,7 +9,7 @@ const string potion_folder = "equipments/items/common/health_potion/";
 class healthpotion
 {
 double x;
-int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
+int lane = 1; // lane_middle until spawned, then the spawner's lane
 double countdown_start;
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
 int loopslot = -1;
@@ -119,7 +119,7 @@ void break_potion(healthpotion@ pot)
 stat_add("health_potions_broken");
 pot.spent = true;
 stop_potion(pot);
-potionpool.play_stationary(get_pack_sound(potion_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
+potionpool.play_stationary(get_pack_sound(potion_folder + "*break*"), false); // stationary, so the pitch never drops behind you
 }
 void stop_potion(healthpotion@ pot)
 {
@@ -143,13 +143,13 @@ stop_potion(potions[i]);
 potions.resize(0);
 }
 /* U on a health potion: refused at full health, keeping the potion; otherwise it heals a random
-health_potion_min_percent to health_potion_max_percent of player_hp, never past full, with its use sound and the
+health_potion_min_percent to health_potion_max_percent of max_health(), never past full, with its use sound and the
 player's heal together. True if it was used. */
 bool use_potion()
 {
 if (player_health >= max_health())
 {
-speak_buffer("You're already at maximum health.", "items"); // the dev's wording (2026-11-04)
+speak_buffer("You're already at maximum health.", "items");
 return false;
 }
 int heal = max_health() * random(health_potion_min_percent, health_potion_max_percent) / 100; // of a free run's set health too

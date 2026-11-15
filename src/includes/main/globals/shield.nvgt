@@ -1,5 +1,5 @@
-/* Shields (dev, 2026-11-03, for 1.2): an item you wear like armor. On the belt a shield works like an ammo pack: its
-spawn clip, then its loop at its tile; either hand picks it up within hand_window_start() (get and the player's give,
+/* Shields: an item you wear like armor. On the belt a shield works like an ammo pack: its spawn clip, then its loop at
+its tile, in its lane; either hand picks it up within hand_window_start() (get and the player's give,
 centered) and it goes into the inventory as "steel_shield". Arriving on its tile on the ground, landing on it, or a
 weapon hit breaks it (break) and it's lost; a clean jump over it misses it.
 U wears one (use_shield()): its use plays centered and it's on, with shield_hp hp. Only one can be worn at a time, so
@@ -10,13 +10,13 @@ const string shield_folder = "equipments/items/common/steel_shield/";
 class shield
 {
 double x;
-int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
+int lane = 1; // lane_middle until spawned, then the spawner's lane
 double countdown_start;
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
 int loopslot = -1;
 }
 shield@[] shields(0);
-// The worn shield: whether one is on, and the hp it has left out of shield_hp.
+// The worn shield: whether one is on, and the hp it has left out of shield_full().
 bool shield_worn = false;
 int shield_hp_left = 0;
 
@@ -31,11 +31,12 @@ void reset_shield()
 shield_worn = false;
 shield_hp_left = 0;
 }
-/* Debug options only (dev, 2026-11-03): a single-type debug run of something a shield protects from starts with two steel
-shields in the inventory (one until 2026-11-05), to be worn with U, since shields never spawn in those runs. Called from reset_run(). */
+/* The shields a run starts with in its inventory, to be worn with U, since shields never spawn in these runs: a practice
+run gets practice_shield_count(), and a single-type debug run of something a shield protects from gets two. Called
+from reset_run(), after clear_inventory(). */
 void give_debug_shield()
 {
-// Every practice run starts with its practice shields (practice_shield_count()), none for hazards.
+// Every practice run starts with its practice shields, none for hazards or floor breakers.
 if (practice_run)
 {
 if (practice_shield_count() > 0) give_item("steel_shield", practice_shield_count());
@@ -43,18 +44,17 @@ return;
 }
 if (slides_debug or trampolines_debug)
 {
-give_item("steel_shield", 2); // the debug choice "slides" plays like "all" but gets the debug shields (dev, 2026-11-11)
+give_item("steel_shield", 2); // the debug choices "slides" and "trampolines" play like "all" but get the debug shields
 return;
 }
-string[] shielded_types = {"spikes", "mines", "force_fields", "projectiles", "walls", "animals", "animals_birds", "animals_dogs", "fake_doors", "real_doors", "real_doors_spread", "powerups", "barriers", "barriers_random", "barriers_multiple", "winds", "combinations", "combinations_reverse", "combinations_mixed", "ladders", "mixed_walls", "vehicles"}; // never "all", which plays like the real game (dev); the combination choices since 2026-11-11 (dev)
-if (shielded_types.find(spawn_only) >= 0) give_item("steel_shield", 2); // 2 since 2026-11-05 (dev: "in debug, you'll have 2 shields in your inv"), was 1
+string[] shielded_types = {"spikes", "mines", "force_fields", "projectiles", "walls", "animals", "animals_birds", "animals_dogs", "fake_doors", "real_doors", "real_doors_spread", "powerups", "barriers", "barriers_random", "barriers_multiple", "winds", "combinations", "combinations_reverse", "combinations_mixed", "ladders", "mixed_walls", "vehicles"}; // never "all", which plays like the real game
+if (shielded_types.find(spawn_only) >= 0) give_item("steel_shield", 2);
 }
 /* The steel shields a practice run starts with and gets back after each practice death: practice_shields, but none when
-practicing hazards, which shields can't stop (dev, 2026-11-11: "They should not come with a shield for hazards"; every
-practice run had one since 2026-11-05). */
+practicing hazards or floor breakers, falls that shields can't stop. */
 int practice_shield_count()
 {
-return practice_choice == "hazards" or practice_choice == "floor_breakers" ? 0 : practice_shields; // nor floor breakers, a fall too (the floor breakers plan, 2026-11-13)
+return practice_choice == "hazards" or practice_choice == "floor_breakers" ? 0 : practice_shields;
 }
 // countdown comes from the spawner like a pack's; it sets the pickup window and the spacing.
 void spawn_shield(double sx, int countdown, int lane = -1)
@@ -154,7 +154,7 @@ void break_shield(shield@ s)
 stat_add("steel_shields_broken");
 s.spent = true;
 stop_shield(s);
-shieldpool.play_stationary(get_pack_sound(shield_folder + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
+shieldpool.play_stationary(get_pack_sound(shield_folder + "*break*"), false); // stationary, so the pitch never drops behind you
 }
 void stop_shield(shield@ s)
 {
@@ -192,9 +192,9 @@ p.play_stationary(get_pack_sound(shield_folder + "*use*"), false);
 speak_buffer("You put on the steel shield.", "items");
 return true;
 }
-/* A blow that would cost lives, from anything but a hazard. With a shield worn it takes damage instead and this
-returns true, so the caller plays only the obstacle's own hit, layered with the shield's (dev, 2026-11-03), and no
-player hit, life sound or life loss. The blow that empties it is absorbed in full: death plays, with no speech, and it's gone. */
+/* A blow from anything but a hazard. With a shield worn it takes the damage instead and this returns true, so the caller
+plays only the obstacle's own hit, layered with the shield's, and your health is untouched. The blow that empties it is
+absorbed in full: death plays, with no speech, and it's gone. */
 bool shield_absorb(int damage)
 {
 if (!shield_worn) return false;
@@ -204,12 +204,12 @@ if (shield_hp_left <= 0)
 shield_worn = false;
 shield_hp_left = 0;
 end_shield_powerup(); // a Sturdy or Brittle Shield ends with it
-p.play_stationary(get_pack_sound(shield_folder + "*death*"), false); // the sound alone, no speech (dev, 2026-11-03)
+p.play_stationary(get_pack_sound(shield_folder + "*death*"), false); // the sound alone, no speech
 }
 else p.play_stationary(get_pack_sound(shield_folder + "*hit*"), false);
 return true;
 }
-// M: the worn shield's strength as a percent of shield_hp.
+// M: the worn shield's strength as a percent of shield_full().
 void speak_shield_strength()
 {
 if (!shield_worn)
@@ -218,7 +218,7 @@ speak_buffer("You're not wearing a shield.", "status");
 return;
 }
 int percent = int(round(100.0 * shield_hp_left / shield_full(), 0));
-// A free run gives the amounts too (dev, 2026-11-13; endurance remaining 2026-11-14): "Shield strength, 50 percent, 400 of 800 endurance remaining."
+// A free run gives the amounts too: "Shield strength, 50 percent, 400 of 800 endurance remaining."
 if (free_run) speak_buffer("Shield strength, " + percent + " percent, " + shield_hp_left + " of " + shield_full() + " endurance remaining.", "status");
 else speak_buffer("Shield strength, " + percent + " percent.", "status");
 }

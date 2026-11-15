@@ -1,11 +1,11 @@
-/* The updater (dev, 2026-11-05), offering the installer or the portable copy, on the dev's deps/downloader.nvgt dl_file() and functions/downloaderfuncts.nvgt, with
-progress beeps from the tone_synth only. Run quietly at startup when auto_check_updates is on (from source too, so it
-can be tested), and with precheck from the main menu's check for updates.
-The latest version is the site's projects/games/StrideRush/version.txt; the files come from the GitHub release tagged
-V<version>0 (1.6 is V1.60), as build/tools.py names them. Cancel in the version menu
-really cancels, nothing calls mainmenu() (every step returns, and main()'s loop
-reopens the main menu), the quiet startup check stays silent when it can't reach the site, and the message after
-extracting says where the new copy is. */
+/* The updater, offering the installer or the portable copy, on deps/downloader.nvgt's dl_file() and
+functions/downloaderfuncts.nvgt, with progress beeps from the tone_synth only. Run quietly at startup when
+auto_check_updates is on (from source too, so it can be tested), and with precheck from the main menu's check for
+updates. The latest version is the site's projects/games/StrideRush/version.txt; the files come from the GitHub release
+tagged V<version>0 (1.6 is V1.60), as build/tools.py names them, so the repository must stay public. Cancel in the
+version menu really cancels, nothing calls mainmenu() (every step returns, and main()'s loop reopens the main menu), the
+quiet startup check stays silent when it can't reach the site, and the message after extracting says where the new copy
+is. */
 const string update_project = "StrideRush";
 const string update_password = "FluentSprinter"; // build/tools.ini's archive password
 const string update_extracted_exe = "sdr/sdr.exe"; // where the portable archive's game lands, from the current folder
@@ -84,8 +84,8 @@ if (result == "canceled" && file_exists(filename)) file_delete(filename);
 alert("Download Failed", "The update could not be downloaded.");
 return false;
 }
-/* A "finished" download can still be an error page saved in its place (2026-11-05: GitHub's "Not Found" for a
-private repository's release), so the file has to really be an installer or an archive. */
+/* A "finished" download can still be an error page saved in its place (GitHub's "Not Found" for a private
+repository's release), so the file has to really be an installer or an archive. */
 if (!update_file_valid(filename))
 {
 if (file_exists(filename)) file_delete(filename);
@@ -126,8 +126,7 @@ return true;
 wait(500);
 speak("Extracting update...");
 wait(1000);
-/* Into the current folder (dev, 2026-11-05): the archive holds the sdr folder, so the new copy
-lands at sdr\sdr, inside this one. From source that's the repo's sdr\sdr, which .gitignore leaves out.
+/* Into the current folder: the archive holds the sdr folder, so the new copy lands at sdr\sdr, inside this one. From source that's the repo's sdr\sdr, which .gitignore leaves out.
 run() is true as soon as 7zr starts, even if it then fails, so success means the new sdr.exe is really there. A copy
 left by an earlier update is removed first, so it can't pass for this one. On a failure the archive is kept. */
 if (file_exists(update_extracted_exe)) file_delete(update_extracted_exe);

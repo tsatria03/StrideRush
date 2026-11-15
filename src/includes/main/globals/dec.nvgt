@@ -1,24 +1,22 @@
-bool hrtf=true; // on by default (dev, 2026-11-05); the Sound tab's HRTF checkbox, saved in settings.srf and applied at startup
-bool behind_pitch=true; // on by default (dev, 2026-11-05): anything behind you is lowered by 5 in pitch; the Game tab's checkbox
-// The learn sounds menu's two settings (dev, 2026-11-05), both on by default and saved in settings.srf.
+bool hrtf=true; // the Sound tab's HRTF checkbox, saved in settings.srf and applied at startup
+bool behind_pitch=true; // the Game tab's checkbox: anything behind you is lowered by 5 in pitch
+// The learn sounds menu's two settings, both on by default and saved in settings.srf.
 bool loop_previews=true; // the Sound tab: a previewed sound (or countdown) repeats until you move to another or leave
 bool variant_descriptions=true; // the Menu tab: a sound with numbered variants adds ". This sound has multiple variants." to its label
-bool auto_check_updates=false; // the General tab: check quietly for a newer version at startup (dev, 2026-11-05; off by default since 2026-11-10)
-// Everything Stride Rush keeps on the player's machine goes under here (dev, 2026-11-04).
+bool auto_check_updates=false; // the General tab: check quietly for a newer version at startup
+// Everything Stride Rush keeps on the player's machine goes under here.
 const string APPDATA_DIR = DIRECTORY_APPDATA + "tsatria03/StrideRush/";
-/* The settings, all in one encrypted file (dev, 2026-11-04: "I still want settings.srf, not split"), read by
-readpreffs() and written by writepreffs() in savefuncts.nvgt. The menu options (menuwrap and the rest) live in
-form_menu, and the run volumes in game.nvgt. */
+/* The settings, all in one encrypted file, read by readpreffs() and written by writepreffs() in savefuncts.nvgt. The menu
+options (menuwrap and the rest) live in form_menu, and the run volumes in game.nvgt. */
 savedata st(APPDATA_DIR + "preffs/settings.srf", "Ki4bG6X16S7VxcjHopWbaDrN9eNhvr4noO5Jl6DHceredubleqWvkVty3s6BLiz1YZwJGwnws4AkhGK1KZN0yj7t0jIREqVFZnCNRrv38zhVBsj0CwQM4akYncoJEResiAzTZeykM0ukesXOnrCZgVFmrC7m48iQlyd4KA0MGgSdDWqldG9zlA4DbExspzAWJ6UsNwQq8SOB1dh32XUfuSaiK1cDzToZvFNTIB4dQYC6PqaTgkzklsKTel40sbeXsD8");
-/* The game's progress, apart from the settings (the game menu refactor plan's Section 6, 2026-11-06): the difficulty
-run counts so far, and later the statistics plan's stats. Read by readgame() and written by writegame() in
-savefuncts.nvgt, with its own key (dev, 2026-11-06). */
+/* The game's progress, apart from the settings: run counts, unlocks, statistics and achievements. Read by readgame() and
+written by writegame() in savefuncts.nvgt, with its own key. */
 savedata gs(APPDATA_DIR + "saves/game.srf", "w9vxiXkaVVDnkJWUFz4tFENQsUmxHXMadxtYP7kA6YGIGdMQvgG5V6QEcZgBSZ9MsWOXa9Uhj7st4xthfmI0d7n8YS7GjR5yFctG8NAKt1FsTb51sfd0FFptgOnnFrUKeHMgnR4YqlCF62ZK4ehtB4PWdHrUQAZsGwuCwZrBd6koOAYNkduCmxykdD5ag1M0gPLWLjhg9arHpdWZXW4kmgL2g9bUFGrhPXl75r7xHfIorNfSuT6f0K7jsZIocJsjfvQBv6BDun24STk6H0wnkbxf5yZRljJzWoJE7SjUTQe7336Au3DDXCdCoa5dh31DgHJ2Gfi7hasYfGOWPI4Lu9CpeoDHL");
-int fademode = 1; // how leaving a run fades every pool: 1 the volume fade (default, dev, 2026-11-04), 0 the pitch wind-down
+int fademode = 1; // how leaving a run fades every pool: 1 the volume fade (the default), 0 the pitch wind-down
 bool ask_quit_on_escape = true; // false: Escape leaves the run at once, without the quit run question
-bool show_death_results = true; // false: a death skips the results menu (the death settings plan, 2026-11-08)
+bool show_death_results = true; // false: a death skips the results menu
 bool show_death_copy_export = true; // false: the after death menu leaves out copy and export
-int master_volume = 0; // the master game volume in dB, -100 to 0, through sound_master_volume (the volume sliders plan, 2026-11-08)
+int master_volume = 0; // the master game volume in dB, -100 to 0, through sound_master_volume
 string soundcard = "Default"; // the chosen sound device by name, matched to sound_output_device when the settings load
 form_menu m;
 virtual_dialogs vd; // the speech buffer's review boxes use vd.info_box

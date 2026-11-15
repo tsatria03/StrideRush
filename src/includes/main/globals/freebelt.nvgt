@@ -1,6 +1,6 @@
-/* Free run's belt (the free run plan, dev, 2026-11-13; Section 2): what you add from the console, in three groups:
-obstacles, items (what goes in your inventory) and specials (powerups and slides, neither: dev, 2026-11-13). spawn_only
-"free" sends the spawner here (free_next_type()) at each spawn: a real door's key's door first, then the queue's front
+/* Free run's belt: what you add from the console, in three groups: obstacles, items (what goes in your inventory) and
+specials (powerups and slides, which are neither). spawn_only "free" sends the spawner here (free_next_type(), from
+choose_free_run()) at each spawn: a real door's key's door first, then the queue's front
 batch, then a weighted pick among the continuous rules, else nothing. Batches arrive in the order added, at the usual
 spacing for your speed; a continuous kind keeps coming, its count its share against the other continuous kinds. "all" is
 a random kind of its group each time. Fake walls, fake doors and vehicles can carry a set health (free_hp_next, read by
@@ -98,7 +98,7 @@ string free_entry_type(free_entry@ e)
 free_hp_next = e.hp;
 return e.type == "all" ? free_pick_all(e.group) : e.type;
 }
-/* From choose_next_obstacle() in a free run: what the next spawn is, or "" for nothing yet. A real door comes as its key,
+/* From choose_free_run() in spawner.nvgt: what the next spawn is, or "" for nothing yet. A real door comes as its key,
 then the door. */
 string free_next_type()
 {
@@ -139,7 +139,7 @@ return "keys"; // its key first, in a random lane
 }
 return type;
 }
-/* A replay or restart (dev, 2026-11-13: everything back): every batch added since the last clear, refilled to its full
+/* A replay or restart: every batch added since the last clear, refilled to its full
 count, in its order; the continuous rules and every setting stay as they were. */
 void free_refill_queue()
 {
@@ -234,7 +234,7 @@ dlgmessage_return("Please type a number from " + low + " to " + high + ".");
 return -1;
 }
 /* A group's kind menu: every kind, alphabetical, then all of the group, then back. "" if backed out. Each group's list
-remembers where you were, for the run (dev, 2026-11-13: "make it remember your focus on long list selections"). */
+remembers where you were, for the run, since the lists are long. */
 dictionary free_kind_focus; // group -> the last item picked in its add list
 string free_choose_kind(const string&in group)
 {
@@ -314,8 +314,7 @@ if (found) kinds.insert_last(ids[i]);
 }
 return kinds;
 }
-/* How much of a kind is coming, for the clear lists, as take items gives counts (dev, 2026-11-13: "It should say that for
-things you clear as well"): "7 left" in its batches, "continuous", or "7 left, plus continuous"; for "all", the whole group
+/* How much of a kind is coming, for the clear lists, as take items gives counts: "7 left" in its batches, "continuous", or "7 left, plus continuous"; for "all", the whole group
 together, or "" when nothing of it is coming. */
 string free_coming_text(const string&in type, const string&in group)
 {
@@ -341,9 +340,9 @@ bool free_clear(const string&in group)
 setupmenu();
 m.intro_text = "Choose the " + free_group_name(group) + " you'd like to clear.";
 string[] kinds = free_kinds_coming(group);
-for (uint i = 0; i < kinds.length(); i++) m.add_item(free_kind_name(kinds[i], group) + ", " + free_coming_text(kinds[i], group), kinds[i]); // "barriers, 7" (dev, 2026-11-13)
+for (uint i = 0; i < kinds.length(); i++) m.add_item(free_kind_name(kinds[i], group) + ", " + free_coming_text(kinds[i], group), kinds[i]); // "barriers, 7 left"
 string all_text = free_coming_text("all", group);
-m.add_item("all " + free_group_name(group) + (all_text == "" ? "" : ", " + all_text), "all"); // the whole group's count too (dev, 2026-11-13)
+m.add_item("all " + free_group_name(group) + (all_text == "" ? "" : ", " + all_text), "all"); // the whole group's count too
 m.add_item("back", "back");
 int mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") return false;
@@ -353,9 +352,8 @@ if (type == "all") speak_buffer("All " + free_group_name(group) + " have been cl
 else speak_buffer("The " + free_kind_name(type, group) + " have been cleared.", "misc");
 return true;
 }
-/* View current setup's lines for the belt: what's left in the batches, one line per kind (dev, 2026-11-14: several
-batches of one kind "should be condensed into one item"), in the order they come, a set health kept apart; then each
-continuous kind's share of the mix. */
+/* View current setup's lines for the belt: what's left in the batches, one line per kind however many batches it has, in
+the order they come, a set health kept apart; then each continuous kind's share of the mix. */
 void free_add_belt_lines(string[]@ lines)
 {
 string[] keys; // type, group and health of each line
@@ -389,8 +387,7 @@ lines.insert_last(stat_line("continuous", name + ", " + percent + " percent of t
 }
 if (free_queue.length() == 0 and free_rules.length() == 0) lines.insert_last(stat_line("coming", "nothing"));
 }
-/* No deaths (the free run tools plan, dev, 2026-11-14: "you should land past it, then it will re-appear once or
-continiously based on the mode"): the hazard or floor breaker that caught you comes again. A continuous kind (or a
+/* No deaths: the hazard or floor breaker that caught you comes again. A continuous kind (or a
 continuous all obstacles) keeps coming anyway; otherwise one more of it goes to the front of the queue, next to come.
 It isn't added to free_batches, so a replay brings back only what you added. */
 void free_requeue(const string&in type)

@@ -1,9 +1,9 @@
-/* Keys (dev, 2026-11-03): the item that unlocks real doors. Built like ammo packs: a key plays its spawn clip when it
-appears, then one of its loops at its tile. Either hand picks it up within the same window as a pack
+/* Keys: the item that unlocks real doors. Built like ammo packs: a key plays its spawn clip when it appears, then one of
+its loops at its tile, in its lane. Either hand picks it up within the same window as a pack
 (hand_window_start()): get and the player's give play centered (stationary) and the key goes into the inventory under
 its color, such as "red_key". Arriving on its tile on the ground, or landing on it from a jump, breaks it, and weapons
 break it when it's the nearest target. A clean jump over it misses it, and its loop fades out behind you.
-The color doesn't matter (dev): any key opens any real door. Each color is a folder under key_folder, so a new key is
+The color doesn't matter: any key opens any real door. Each color is a folder under key_folder, so a new key is
 just a new folder. One key is due before each real door; the spawner decides when (key_due()).
 Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_keys() shrinks the array. */
 sound_pool keypool;
@@ -11,7 +11,7 @@ const string key_folder = "equipments/items/other/";
 class doorkey
 {
 double x;
-int lane = 1; // lane_middle until spawned; a random lane since the lanes plan's Section 4 (dev, 2026-11-05)
+int lane = 1; // lane_middle until spawned, then the spawner's lane
 double countdown_start;
 string color; // its folder, such as "red_key", which is also its inventory name
 bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
@@ -103,7 +103,7 @@ if (@doorkeys[i] == null) continue;
 if (!doorkeys[i].spent and me.x == doorkeys[i].x and doorkeys[i].lane == current_lane) break_key(doorkeys[i]);
 }
 }
-// Weapons break keys like packs (dev, 2026-11-03): a bullet on its tile, or a swing when it's the nearest target.
+// Weapons break keys like packs: a bullet on its tile, or a swing when it's the nearest target.
 doorkey@ key_at(double x)
 {
 for (uint i = 0; i < doorkeys.length(); i++)
@@ -136,7 +136,7 @@ stat_add("keys_broken");
 k.spent = true;
 practice_hints_restart(); // a broken key is a missed key: a practice run's hints start over (practice_hints.nvgt)
 stop_key(k);
-keypool.play_stationary(get_pack_sound(key_sound_folder(k) + "*break*"), false); // stationary, so the pitch never drops behind you (dev, 2026-11-05)
+keypool.play_stationary(get_pack_sound(key_sound_folder(k) + "*break*"), false); // stationary, so the pitch never drops behind you
 }
 void stop_key(doorkey@ k)
 {

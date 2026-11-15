@@ -1,10 +1,9 @@
-/* Game statistics (the statistics plan, dev, 2026-11-05, built from 2026-11-06). Every stat is kept twice:
-the session (the current run, then kept as your last run) and the lifetime (every run added up). Only
-endless runs count (run_difficulty 0 or more): practice and debug runs never touch them. The session is cleared when an
-endless run starts, counted through it, and at the run's end, however it ends (a death, quit run, restart run, the
-Escape question), it's added to the lifetime and both are saved to saves/game.srf with the last played date and
-time (writegame()). There's no autosave. One set covers every difficulty (dev, 2026-11-06); the session remembers its
-difficulty, and the lifetime counts runs per difficulty. The difficulty_runs unlock counts are separate (difficulty.nvgt).
+/* Game statistics. Every stat is kept twice: the session (the current run, then kept as your last run) and the lifetime
+(every run added up). Only endless runs count: practice, debug, timed and free runs never touch them (timed runs keep
+their own records). The session is cleared when an endless run starts, counted through it, and at the run's end,
+however it ends (a death, quit run, restart run, the Escape question), it's added to the lifetime and both are saved
+to saves/game.srf with the last played date and time (writegame()). There's no autosave. One set covers every
+difficulty; the session remembers its difficulty, and the lifetime counts runs per difficulty. The difficulty_runs unlock counts are separate (difficulty.nvgt).
 A new stat is one more name in stat_keys plus a stat_add() where it happens; readgame() and writegame() pick it up. */
 const string[] stat_keys = {"steps", "time_running", "top_speed", "lane_changes",
 "hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "barriers_dodged", "winds_dodged", "walls_broken", "real_walls_climbed", "ladders_broken", "ladder_falls", "fake_doors_broken", "real_doors_opened", "floor_breakers_repaired", "vehicles_destroyed", "vehicles_dodged", "combinations_cleared", "slides_ridden", "slide_items_caught", "trampoline_flights", "worn_bounces",
@@ -18,10 +17,10 @@ bool stats_counting = false; // true only during an endless run
 bool has_session = false; // false until the first endless run, so session statistics can say there's none yet
 string last_run_difficulty = ""; // the session's difficulty, such as "easy"
 string last_played_date = "", last_played_time = ""; // when the last endless run ended (get_date() and get_time())
-/* What ended the run (Section 3): last_caught is the obstacle whose blow came last (stat_caught()), run_end_cause what
+/* What ended the run: last_caught is the obstacle whose blow came last (stat_caught()), run_end_cause what
 ended this run ("hazards", an obstacle type, or "" for a quit or restart), and session_end_cause the last run's, saved. */
 string last_caught = "", run_end_cause = "", session_end_cause = "";
-// Which kind caught you, where a type has kinds: "real" or "fake" for doors, "bird" or "dog" for animals (the practice guidance plan's Section 3).
+// Which kind caught you, where a type has kinds: "real" or "fake" for doors, "bird" or "dog" for animals, for the practice death dialog.
 string last_caught_kind = "";
 
 int64 stat_value(dictionary@ stats, const string&in key)
@@ -30,8 +29,8 @@ int64 value = 0;
 stats.get(key, value);
 return value;
 }
-/* Adds to a session stat, only during an endless run. A practice run's clean passes go to practice_pass() first (the
-practice locks plan, 2026-11-10), which counts them toward the next practice obstacle and never touches the stats. */
+/* Adds to a session stat, only during an endless run. Every call goes to practice_pass() and timed_pass() first, which
+count clean passes toward the next practice obstacle and a timed run's clock, and never touch the stats. */
 void stat_add(const string&in key, int64 amount = 1)
 {
 practice_pass(key);
@@ -65,7 +64,7 @@ return keys;
 // From start_run(), once the run's difficulty is set: an endless run starts a fresh session.
 void start_run_stats()
 {
-stats_counting = run_difficulty >= 0 and !timed_run; // endless only: timed runs keep their own records (the timed run plan)
+stats_counting = run_difficulty >= 0 and !timed_run; // endless only: timed runs keep their own records
 if (!stats_counting) return;
 session_stats.delete_all();
 last_caught = "";
@@ -103,7 +102,7 @@ last_played_date = get_date(true, false); // "Friday, November 6, 2026"
 last_played_time = get_time(true, false); // "3:07 PM"
 writegame();
 }
-// Clear game statistics (Section 5): the last run, as if no endless run had been played yet.
+// Clear game statistics: the last run, as if no endless run had been played yet.
 void clear_session_stats()
 {
 session_stats.delete_all();
@@ -115,8 +114,8 @@ session_end_cause = "";
 void clear_lifetime_stats()
 {
 lifetime_stats.delete_all();
-best_runs.delete_all(); // the best runs go with the lifetime (the achievements plan)
-clear_timed_records(); // and the timed run records, listed with it (dev, 2026-11-13); the timed level unlocks stay (timerun.nvgt)
+best_runs.delete_all(); // the best runs go with the lifetime
+clear_timed_records(); // and the timed run records, listed with it; the timed level unlocks stay (timerun.nvgt)
 last_played_date = "";
 last_played_time = "";
 }
