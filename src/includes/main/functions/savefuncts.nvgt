@@ -1,5 +1,5 @@
 /* Loads the settings from settings.srf at startup: each value is read only if the file holds it, so a
-setting added in a later version keeps its default for players whose file is older (dev, 2026-11-04). A missing file
+setting added in a later version keeps its default for players whose file is older. A missing file
 loads as empty, leaving every default. */
 void readpreffs()
 {
@@ -104,7 +104,7 @@ break;
 }
 /* Loads the game's progress from saves/game.srf at startup, the settings' way: each value only if the file holds it, so
 a missing file or an older one leaves the rest at 0: a run count per difficulty level, under
-"difficulty_runs_<level>" (the game menu refactor plan's Section 6), and the statistics (stats.nvgt, 2026-11-06). */
+"difficulty_runs_<level>", the unlocks, and the statistics (stats.nvgt). */
 void readgame()
 {
 gs.load();
@@ -211,7 +211,7 @@ gs.save();
 }
 /* Writes every setting to settings.srf. Called whenever one changes: the menu music volume (form_menu) and the run
 volumes (Home, End, Page Up and Page Down). Muting a buffer calls it too, and each buffer's mute is saved as
-buffer_muted_<name> (dev, 2026-11-12, after CookieCraze's prefs; all and alerts can't be muted, so they're skipped). */
+buffer_muted_<name> (all and alerts can't be muted, so they're skipped). */
 void writepreffs()
 {
 st.add("menumusvolume",menumusvolume);

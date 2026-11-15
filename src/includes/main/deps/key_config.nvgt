@@ -250,7 +250,7 @@ class key_config {
 		if (kb.exists(a)) kb.set(a, array<kc_combo@>());
 		invalidate_cache();
 	}
-	/* The binder's replace question (the rebinding plan, dev, 2026-11-09): every action but except_action with a keyboard
+	/* The binder's replace question: every action but except_action with a keyboard
 	binding that uses the same keys as one of combo_str's side variants (SHIFT+TAB overlaps LSHIFT+TAB), whatever its trigger. */
 	string[]@ actions_using(const string&in combo_str, const string&in except_action) {
 		string[] found;
@@ -474,8 +474,7 @@ class key_config {
 			cfg.set_string("keyboard", actions[i], get_keyboard_action_string(actions[i]));
 	}
 
-	/* One action's bindings as an ini string, in the compact form keyboard.ini is written in by hand (the rebinding plan's
-	Section 2, dev, 2026-11-09): bindings that differ only in one modifier's side are joined back into its side-agnostic
+	/* One action's bindings as an ini string, in the compact form keyboard.ini is written in by hand: bindings that differ only in one modifier's side are joined back into its side-agnostic
 	name, so the LSHIFT and RSHIFT halves of SHIFT+HOME are written "SHIFT+HOME" again, and a press has no ":press"
 	("jump=W"). Modifiers come first, CTRL, ALT, SHIFT then GUI, as "ALT+SHIFT+C" is written. Saving, F1 and the rebind
 	list all use this. Empty string if no bindings. */
@@ -858,9 +857,9 @@ bool kc_save_preserving(key_config@ kc, const string&in path) {
 }
 
 /* Interactive: capture a key combo from the user, as a string like "LSHIFT+A", or "" if the user cancels. It reads the
-keys itself, not through a form, so Tab, Shift plus Tab and the like reach it (the rebinding plan, dev, 2026-11-09);
-the form passed in is left alone. A modifier held on both sides captures its side-agnostic name (SHIFT, CTRL, ALT), one
-side captures that side (LSHIFT, RSHIFT, ...), and they mix (dev: "only if they pressed both ... together").
+keys itself, not through a form, so Tab, Shift plus Tab and the like reach it; the form passed in is left alone. A
+modifier held on both sides captures its side-agnostic name (SHIFT, CTRL, ALT), one side captures that side (LSHIFT,
+RSHIFT, ...), and they mix.
 Escape is treated specially: pops a menu (the global `m` and `setupmenu`) asking whether to bind it or cancel. */
 string kc_capture_combo(audio_form@ form, const string&in prompt) {
 	speak(prompt);

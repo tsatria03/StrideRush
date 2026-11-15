@@ -40,9 +40,8 @@ void sort_naturally(array<string>& inout arr)
 {
 arr.sort(natural_number_sort);
 }
-/* A string without spaces, tabs or line breaks at either end, for the updater (2026-11-05: missing
-here, it stopped the launch). The version read from the site ends in a line break, so both sides are trimmed before
-comparing. string_trim_left() and string_trim_right() come from deps/bgt_compat.nvgt. */
+/* A string without spaces, tabs or line breaks at either end, for the updater. The version read from the site ends in
+a line break, so both sides are trimmed before comparing. string_trim_left() and string_trim_right() come from deps/bgt_compat.nvgt. */
 string string_trim_sides(const string& in str)
 {
 string result=str;
@@ -56,7 +55,7 @@ result=string_trim_right(result,1);
 }
 return result;
 }
-// A file name without its extension, and a path without its folders, for the updater (2026-11-05).
+// A file name without its extension, and a path without its folders, for the updater.
 string strip_extension(string filename)
 {
 int dotIndex = filename.rfind(".");

@@ -418,8 +418,7 @@ class audio_form {
 			return true;
 		}
 		update_tab_visibility();
-		// Coming from another control, the panel is announced in full, "Category Tab panel, Game tab", as tabbing to it does
-		// (dev, 2026-11-10); already on it, only the new tab.
+		// Coming from another control, the panel is announced in full, "Category Tab panel, Game tab", as tabbing to it does; already on it, only the new tab.
 		if (args.exists("silent")) focus_silently(panel);
 		else if (control_focus != panel) focus_interrupt(panel);
 		else c_form[panel].speak_list_item();
@@ -696,7 +695,7 @@ class audio_form {
 		int autotab = 0;
 		if (focused > -1 && focused <= control_counter && c_form[focused].type == ct_form && @c_form[focused].subform != null && c_form[focused].subform.get_control_count() > 0)
 			autotab = c_form[focused].subform.monitor();
-		/* Control plus tab and control plus shift plus tab switch the form's tab panel from anywhere (dev, 2026-11-10). Tab is
+		/* Control plus tab and control plus shift plus tab switch the form's tab panel from anywhere. Tab is
 		read once into tab_hit, since a second key_repeating() of the same key in a frame comes back false. It comes after a focused subform's
 		monitor(), which reads Tab first, as it always has. */
 		bool tab_hit = key_repeating(KEY_TAB);

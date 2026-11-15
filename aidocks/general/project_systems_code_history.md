@@ -104,3 +104,12 @@ Moved here from the comments of nineteen files in src/includes/main/globals/ on 
 - The clear lists show what's coming, like take items' counts (2026-11-13: "It should say that for things you clear as well"), the all item with the whole group's count (2026-11-13).
 - View current setup condenses several batches of one kind into one line (2026-11-14: "should be condensed into one item").
 - On no deaths, what caught you comes again (2026-11-14: "you should land past it, then it will re-appear once or continiously based on the mode").
+
+## src/sdr.nvgt, functions and deps (Section 5)
+- The speech buffers (2026-11-05, [[project_buffers_plan]]). The quiet startup update check runs from source too, so it can be tested (2026-11-05).
+- extrafuncts.nvgt's string_trim_sides(): missing, it stopped the launch (2026-11-05). strip_extension() and its partner for the updater (2026-11-05).
+- savefuncts.nvgt: each setting is read only if the file holds it, so a newer setting keeps its default for older files (2026-11-04). Buffer mutes saved as buffer_muted_<name> (2026-11-12, after CookieCraze's prefs, [[project_hints_setting_env_key_plan]]).
+- form.nvgt: the tab panel announced in full when coming from another control, and Control plus Tab switching tabs from anywhere (2026-11-10).
+- form_menu.nvgt: menu music starts at 80 percent (2026-11-09).
+- key_config.nvgt: the rebinding plan (2026-11-09, [[project_rebinding_plan]]): the replace question; the compact binding strings (Section 2); capturing combos, a modifier held on both sides captured side-agnostic ("only if they pressed both ... together").
+- setupmenu.nvgt: menu music carries on through menus without their own (2026-11-07, [[project_menu_music_rule]]); the menu sound cache (2026-11-08: "You'll never know when I'll need it").

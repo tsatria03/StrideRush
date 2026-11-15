@@ -5,7 +5,7 @@ if (music_added) {
 m.add_music(musicpath != "" ? musicpath : menu_sound("music"));
 m.play_music();
 }
-/* A menu without music of its own leaves playing menu music alone (dev, 2026-11-07), so it carries on through every menu
+/* A menu without music of its own leaves playing menu music alone, so it carries on through every menu
 reached from the main menu; it only closes music that has already faded or stopped, as in a run's menus. */
 else if (!m.music.playing) m.add_music("");
 
@@ -21,7 +21,7 @@ m.enter_sound = entersound != "" ? entersound : menu_sound("enter");
 m.open_sound = opensound != "" ? opensound : menu_sound("open");
 m.wrap_sound = wrapsound != "" ? wrapsound : menu_sound("wrap");
 }
-/* The menu sounds, cached (dev, 2026-11-08: "You'll never know when I'll need it"): each ui/menu name is searched on disk
+/* The menu sounds, cached: each ui/menu name is searched on disk
 once per launch, the first time a menu needs it, instead of every time a menu opens, which was slow on a busy disk.
 The cache keeps every file that matches, and a random one is still picked each time, as get_pack_sound() does, so
 variants such as click2.ogg keep working. A name with no files caches an empty list and plays nothing, as before. */
