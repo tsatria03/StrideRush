@@ -100,30 +100,18 @@ next_type = barriers_available() ? "barriers" : "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
-/* A new speed section has started: its real door comes next, ahead of anything else. Only in a normal run ("all"): a
-single-type debug run spawns strictly that type (dev, 2026-11-03), except "real doors, spread", which is the marks alone. */
-bool marks_on = spawn_only == "all" or spawn_only == "real_doors_spread";
-// The key for the next real door comes first, so it's always on the belt before its door.
-if (marks_on and !slide_holds() and key_due()) // a slide holds the next key and door back (slide.nvgt)
+// The real game.
+if (spawn_only == "all")
 {
-next_type = "keys";
-next_key_door -= door_section_ms;
-set_key_mark();
-next_countdown = countdown_steps();
+next_type = choose_real_game();
+next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
-if (marks_on and !slide_holds() and next_door_mark >= run_top_step_time() and step_time <= next_door_mark and doors_available())
-{
-next_type = "real_doors";
-next_door_mark -= door_section_ms;
-next_countdown = countdown_steps();
-return;
-}
-// Debug option only: "real doors, spread" spawns nothing but the real doors at the marks, so the slots in between stay empty.
+// Debug option only: "real doors, spread" spawns the real doors at the speed marks and nothing in between.
 if (spawn_only == "real_doors_spread")
 {
-next_type = "";
-next_countdown = 0;
+next_type = door_mark_type();
+next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
 // Debug options only: "combinations" and "combinations, reverse" make every spawn a pair (combo.nvgt).
@@ -133,21 +121,7 @@ next_type = choose_combo() ? "combinations" : "";
 next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
-string[] available;
-for (uint i = 0; i < obstacle_types.length(); i++)
-{
-// "mixed_walls" (the ladders plan's debug choice, and practice's mixed walls) picks fake walls and ladders, half and half.
-bool mixed_wall = spawn_only == "mixed_walls" and (obstacle_types[i] == "walls" or obstacle_types[i] == "ladders");
-if (spawn_only != "all" and spawn_only != "practice_trampolines" and !mixed_wall and obstacle_types[i] != spawn_only) continue;
-if (obstacle_types[i] == "ladders" and !ladders_ready()) continue; // its real wall needs a walls theme too
-if (!has_joined(obstacle_types[i])) continue; // the difficulty schedule (difficulty.nvgt); a new type is an equal pick once in
-if (get_pack_sound_folders(type_folder(obstacle_types[i]) + "*").length() > 0)
-{
-// Barriers go in barrier_weight times, so the pick below finds them that much more often (dev, 2026-11-10).
-int shares = obstacle_types[i] == "barriers" ? barrier_weight : 1;
-for (int s = 0; s < shares; s++) available.insert_last(obstacle_types[i]);
-}
-}
+string[] available = available_obstacles();
 /* Practice only: "practice_mixed", mixed obstacles (the practice mix plan, dev, 2026-11-12): each spawn an equal pick
 among the kinds this environment has (practice_mix_kinds()); a real door comes as its key, then the door on the next
 spawn; a combination as a random pair; a trampoline as any of the four. */
@@ -182,6 +156,58 @@ else next_type = available.length() > 0 ? available[random(0, available.length()
 next_countdown = next_type == "" ? 0 : countdown_steps();
 return;
 }
+next_type = roll_item_or_obstacle(available);
+next_countdown = next_type == "" ? 0 : countdown_steps();
+}
+// The real game's next spawn: a real door's key or the door at its speed mark first, then an item or a random obstacle.
+string choose_real_game()
+{
+string door = door_mark_type();
+if (door != "") return door;
+return roll_item_or_obstacle(available_obstacles());
+}
+/* The next real door's key once it's due, so it's always on the belt before its door, then the door at its speed mark.
+Empty when neither is due, or while a slide holds them back (slide.nvgt). */
+string door_mark_type()
+{
+if (slide_holds()) return "";
+if (key_due())
+{
+next_key_door -= door_section_ms;
+set_key_mark();
+return "keys";
+}
+if (next_door_mark >= run_top_step_time() and step_time <= next_door_mark and doors_available())
+{
+next_door_mark -= door_section_ms;
+return "real_doors";
+}
+return "";
+}
+// The obstacle types a random pick can choose from right now, each once, barriers barrier_weight times.
+string[] available_obstacles()
+{
+string[] available;
+for (uint i = 0; i < obstacle_types.length(); i++)
+{
+// "mixed_walls" (the ladders plan's debug choice, and practice's mixed walls) picks fake walls and ladders, half and half.
+bool mixed_wall = spawn_only == "mixed_walls" and (obstacle_types[i] == "walls" or obstacle_types[i] == "ladders");
+if (spawn_only != "all" and spawn_only != "practice_trampolines" and !mixed_wall and obstacle_types[i] != spawn_only) continue;
+if (obstacle_types[i] == "ladders" and !ladders_ready()) continue; // its real wall needs a walls theme too
+if (!has_joined(obstacle_types[i])) continue; // the difficulty schedule (difficulty.nvgt); a new type is an equal pick once in
+if (get_pack_sound_folders(type_folder(obstacle_types[i]) + "*").length() > 0)
+{
+int shares = obstacle_types[i] == "barriers" ? barrier_weight : 1;
+for (int s = 0; s < shares; s++) available.insert_last(obstacle_types[i]);
+}
+}
+return available;
+}
+/* An item, a slide or a trampoline at their chances, otherwise a random obstacle from available. Empty when there's
+nothing to pick. */
+string roll_item_or_obstacle(const string[]&in available)
+{
+string type = "";
 /* Items follow the schedule too: each one rolls its chance only once it has joined (has_joined()), so ammo packs,
 teleporters and powerups wait for their speeds on easy to insane. */
 // About one spawn in ammo_pack_chance is an ammo pack instead, or every one when the debug options picked packs only.
@@ -197,27 +223,27 @@ bool powerups_ok = powerups_available() and has_joined("powerups") and (spawn_on
 bool slides_ok = slides_available() and has_joined("slides") and spawn_only == "all" and !practice_run and !slide_holds();
 // Trampolines: normal runs only here; a pad of any kind (trampoline.nvgt).
 bool trampolines_ok = has_joined("trampolines") and spawn_only == "all" and !practice_run and get_pack_sound_folders(type_folder("trampolines") + "*").length() > 0;
-if (spawn_only == "ammo_packs") next_type = packs_ok ? "ammo_packs" : "";
-else if (spawn_only == "steel_shields") next_type = shields_ok ? "steel_shields" : "";
-else if (spawn_only == "life_capsules") next_type = capsules_ok ? "life_capsules" : "";
-else if (spawn_only == "health_potions") next_type = potions_ok ? "health_potions" : "";
-else if (spawn_only == "player_teleporters") next_type = teleporters_ok ? "player_teleporters" : "";
-else if (spawn_only == "powerups") next_type = powerups_ok ? "powerups" : "";
-else if (slides_ok and random(1, slides_debug ? 2 : slide_chance) == 1 and (slides_debug or survival_roll())) next_type = "slides";
-else if (trampolines_ok and random(1, trampolines_debug ? 2 : trampoline_chance) == 1 and (trampolines_debug or survival_roll())) next_type = "trampolines";
-else if (capsules_ok and random(1, life_capsule_chance) == 1 and survival_roll()) next_type = "life_capsules";
-else if (potions_ok and random(1, health_potion_chance) == 1 and survival_roll()) next_type = "health_potions";
-else if (teleporters_ok and random(1, teleporter_chance) == 1) next_type = "player_teleporters";
-else if (powerups_ok and random(1, powerup_chance) == 1) next_type = "powerups";
-else if (shields_ok and random(1, shield_chance) == 1 and survival_roll()) next_type = "steel_shields";
-else if (packs_ok and random(1, ammo_pack_chance) == 1) next_type = "ammo_packs";
+if (spawn_only == "ammo_packs") type = packs_ok ? "ammo_packs" : "";
+else if (spawn_only == "steel_shields") type = shields_ok ? "steel_shields" : "";
+else if (spawn_only == "life_capsules") type = capsules_ok ? "life_capsules" : "";
+else if (spawn_only == "health_potions") type = potions_ok ? "health_potions" : "";
+else if (spawn_only == "player_teleporters") type = teleporters_ok ? "player_teleporters" : "";
+else if (spawn_only == "powerups") type = powerups_ok ? "powerups" : "";
+else if (slides_ok and random(1, slides_debug ? 2 : slide_chance) == 1 and (slides_debug or survival_roll())) type = "slides";
+else if (trampolines_ok and random(1, trampolines_debug ? 2 : trampoline_chance) == 1 and (trampolines_debug or survival_roll())) type = "trampolines";
+else if (capsules_ok and random(1, life_capsule_chance) == 1 and survival_roll()) type = "life_capsules";
+else if (potions_ok and random(1, health_potion_chance) == 1 and survival_roll()) type = "health_potions";
+else if (teleporters_ok and random(1, teleporter_chance) == 1) type = "player_teleporters";
+else if (powerups_ok and random(1, powerup_chance) == 1) type = "powerups";
+else if (shields_ok and random(1, shield_chance) == 1 and survival_roll()) type = "steel_shields";
+else if (packs_ok and random(1, ammo_pack_chance) == 1) type = "ammo_packs";
 else
 {
-next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
+type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
 // Sometimes a pair takes the obstacle's place (combo.nvgt), in a normal run only.
-if (next_type != "" and spawn_only == "all" and random(1, 100) <= combo_percent() and choose_combo()) next_type = "combinations";
+if (type != "" and spawn_only == "all" and random(1, 100) <= combo_percent() and choose_combo()) type = "combinations";
 }
-next_countdown = next_type == "" ? 0 : countdown_steps();
+return type;
 }
 bool practice_mix_door_next = false; // mixed obstacles: the key was just placed, so its real door comes next
 // The kinds mixed obstacles picks from, each once, those the current environment has sounds for (16 at most, with floor breakers and vehicles).
@@ -432,12 +458,12 @@ else if (type == "walls") spawn_wall(x, theme, countdown);
 else if (type == "animals") spawn_animal(x, theme, countdown);
 else if (type == "barriers") spawn_barriers(x, theme, countdown); // one or two, lanes per spawn_barriers()
 else if (type == "winds") spawn_wind(x, theme, countdown); // wind.nvgt
-// The belt-wide obstacles' practice hints; lane things, animals and trampolines give theirs in their own spawn functions (practice_hints.nvgt).
-if (type == "hazards" or type == "spikes" or type == "mines" or type == "force_fields" or type == "projectiles" or type == "walls") practice_hint(type, -1, x);
 else if (type == "trampolines") spawn_trampoline(x, theme, countdown); // trampoline.nvgt
 else if (type == "ladders") spawn_ladder(x, theme, countdown); // ladder.nvgt: the ladder at x, its real wall on the next tile
 else if (type == "floor_breakers") spawn_floor_breaker(x, theme, countdown); // floor_breaker.nvgt
 else if (type == "vehicles") spawn_vehicle(x, theme, countdown); // vehicle.nvgt: theme is a kind folder (cars), each an equal share
+// The belt-wide obstacles' practice hints; lane things, animals and trampolines give theirs in their own spawn functions (practice_hints.nvgt).
+if (type == "hazards" or type == "spikes" or type == "mines" or type == "force_fields" or type == "projectiles" or type == "walls") practice_hint(type, -1, x);
 }
 /* Where a hand can first act on something at x whose countdown starts at countdown_start: the countdown start, or
 switch_min_time before it at the current speed, whichever is earlier, so at top speed, where the countdown is a single

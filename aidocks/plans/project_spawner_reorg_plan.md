@@ -1,6 +1,6 @@
 ---
 name: project_spawner_reorg_plan
-description: SETTLED, NOT BUILT (2026-11-15, the dev: "write, but not build"): split choose_next_obstacle() in spawner.nvgt into a dispatcher with one function per kind of run (real game, debug, practice, free run), plus the quick fix for place_obstacle()'s if/else; three sections, behavior unchanged; Q&A log
+description: SECTION 1 BUILT AND TESTED (2026-11-15, all 4 passed); Sections 2 and 3 not built: split choose_next_obstacle() in spawner.nvgt into a dispatcher with one function per kind of run (real game, debug, practice, free run), plus the quick fix for place_obstacle()'s if/else; three sections, behavior unchanged; Q&A log
 metadata:
   type: project
 ---
@@ -29,7 +29,7 @@ The order of the cases is part of the game's rules; every section checks the new
 13. practice_mixed: a random kind from practice_mix_kinds(), a real door as its key then the door.
 14. practice_trampolines: every other spawn a trampoline, otherwise from the available list.
 15. The item roll, in this order: the single-item debug choices, slides, trampolines, life capsules, health potions, teleporters, powerups, steel shields, ammo packs (survival items also pass survival_roll()); otherwise a random obstacle from the available list, which in "all" becomes a combination combo_percent() of the time.
-next_countdown is set the same way at every exit: countdown_steps(), or 0 when nothing spawns.
+next_countdown is countdown_steps(), or 0 when nothing spawns, at every exit but one: case 1 sets countdown_steps() even when no door is available. Keep that exception when Section 2 moves it.
 
 ## Sections
 1. The quick fix and the real game. place_obstacle(): every type's spawn call in one if/else-if chain, the practice_hint() call for the belt-wide types on its own after it. choose_next_obstacle() becomes a short dispatcher, and the real game's path (cases 8, 9, 12 and 15 for "all") moves into its own function, untouched in order. Tests: an endless run on easy and on a higher level (doors, keys, items, combinations, slides and trampolines still come), and one single-obstacle practice run.
@@ -46,3 +46,4 @@ next_countdown is set the same way at every exit: countdown_steps(), or 0 when n
 ## Q&A log
 - Q (Claude, 2026-11-15): how big is this change? A: two levels. The quick fix is about five lines in one file; the reorganization is medium, about 200 of spawner.nvgt's 485 lines moving, mostly in one file; the real cost is testing every path by ear. Three sections proposed.
 - A (dev, 2026-11-15): "I agree with all 3 sections, and yes, write, but not build." Settled; waiting for the dev's go-ahead to build Section 1.
+- Section 1 BUILT (2026-11-15, the dev: "Let's do the first section of the game spawner plan first."; built on 8903d7a). place_obstacle(): trampolines, ladders, floor breakers and vehicles joined the spawn chain, the practice_hint() check now last and on its own. choose_next_obstacle(): cases 1 to 7 untouched; then "all" returns through choose_real_game(), real_doors_spread through door_mark_type() alone, and the rest falls through to combo debug, practice_mixed, practice_trampolines and roll_item_or_obstacle(). Four new functions: choose_real_game() (door_mark_type(), else roll_item_or_obstacle(available_obstacles())), door_mark_type() (cases 8 and 9: slide_holds() once, then key_due(), then the door mark), available_obstacles() (case 12), roll_item_or_obstacle(const string[]&in) (case 15, returning the type in a local instead of setting next_type; nothing outside the spawner reads next_type mid-pick). Call order and random() order unchanged. Moved code keeps its comments, except the barrier weight comment's dated quote (already in [[project_item_balance_plan]]). All 4 tests passed (dev, 2026-11-15): it compiled and an easy endless run brought obstacles, items and a key before the first real door; debug vehicles, floor breakers and real walls each spawned only that type; debug trampolines brought pads, obstacles, items and combinations; hazards practice spoke its 5 hints and the closing line. Section 2 (the debug choices) is next, on the dev's go-ahead.

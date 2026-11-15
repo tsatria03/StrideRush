@@ -24,7 +24,7 @@ if (key_repeating(KEY_ESCAPE))
 temp.destroy_all();
 return true;
 }
-if(key_repeating(KEY_RETURN) or key_down(KEY_A))
+if(key_repeating(KEY_RETURN))
 {
 temp.destroy_all();
 break;
