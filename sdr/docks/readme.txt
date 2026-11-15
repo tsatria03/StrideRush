@@ -26,7 +26,7 @@ Both hand keys together, A and D: Claps, to scare away an animal. With nothing f
 Shift plus tab or letter I: Moves to the previous item in your inventory.
 Tab or letter O: Moves to the next item in your inventory.
 Enter or letter U: Uses the item you're on in your inventory, such as opening an ammo pack, unlocking a door with a key, putting on a shield, using a life capsule, a health potion or a teleporter.
-Numbers 1 through 0: Draws the bat, boot, club, feat, fist, hammer, knife, sword, machine gun or pistol.
+Numbers 1 through 0: Draws the bat, boot, club, dagger, fist, hammer, knife, sword, machine gun or pistol.
 Space: Swings or fires your weapon. With the machine gun, it keeps firing.
 Letter R: Reloads your gun.
 Letter X: Announces how much ammo your gun has loaded and in reserve.
@@ -117,7 +117,7 @@ You can crouch by holding down the crouch key. Your footsteps go quiet while you
 
 Weapons.
 
-You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, feat, fist, hammer, knife, sword, machine gun and pistol. Each run starts with the fist in your hands, and each weapon is stronger than the one before it. Press the space bar to swing a melee weapon or fire a gun. A melee weapon can swing up to five times a second and the pistol fire up to ten times a second, one swing or shot per press, while the machine gun keeps firing ten times a second for as long as you hold the space bar. A melee weapon hits straight away, while a gun fires a bullet that you'll hear flying off ahead of you until it lands. A bullet only flies as far as your weapons reach, so a shot fired at something still too far away falls short and wastes the round.
+You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, dagger, fist, hammer, knife, sword, machine gun and pistol. Each run starts with the fist in your hands, and each weapon is stronger than the one before it. Press the space bar to swing a melee weapon or fire a gun. A melee weapon can swing up to five times a second and the pistol fire up to ten times a second, one swing or shot per press, while the machine gun keeps firing ten times a second for as long as you hold the space bar. A melee weapon hits straight away, while a gun fires a bullet that you'll hear flying off ahead of you until it lands. A bullet only flies as far as your weapons reach, so a shot fired at something still too far away falls short and wastes the round.
 The machine gun and pistol use ammo. Each starts every run with 50 rounds loaded and 50 in reserve, and they keep their own ammo separately. A reserve can hold up to 200 rounds. Once a gun is empty you'll hear it click instead of firing. You can reload any time a gun isn't full, and you'll hear a ping when it's ready. When the reserve runs out, that gun is empty until you open an ammo pack.
 Your weapons are for breaking fake walls, fake doors and vehicles, and they all reach the same distance ahead of you. A vehicle can only be hit while it's in your lane. Real doors and real walls can't be harmed. The stronger the weapon, the fewer hits a fake wall takes. Your weapons always hit the nearest thing ahead of you, and that includes any item lying ahead of you in your lane, such as an ammo pack, key or shield, which breaks if you hit it. Items in other lanes are safe from your weapons.
 
