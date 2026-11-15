@@ -1,17 +1,16 @@
 /* Every tunable number in one place, so playtesting changes are a one-line edit and a relaunch. Times are in
-milliseconds and distances in tiles. Later sections add their own values here (surfaces, ledges, gaps, jump, duck,
-mines and life costs). */
+milliseconds and distances in tiles unless a name says otherwise. Arrays with five entries are by level, easy to chaos.
+How each value came to be is in aidocks (project_tuning_history and the plans). */
 
 // The belt: the step interval starts here and shrinks by speedup_amount every speedup_period, never below min_step_time.
 const int start_step_time = 500;
 const int speedup_period = 10000;
 const int speedup_amount = 10;
-const int min_step_time = 50; // the top speed cap (dev, 2026-11-02: was 50, then 100, now back to 50)
+const int min_step_time = 50; // the top speed cap
 
-/* Surfaces: the ground switches to a new random platform after a random stretch of running between these times, at any
-speed (dev, 2026-11-03, for 1.1; it used to be 50 to 200 tiles, which took 25 to 100 s at 500 ms). */
+// Surfaces: the ground switches to a new random platform after a random stretch of running between these times, at any speed.
 const int surface_min_time = 10000;
-const int surface_max_time = 20000; // 10 to 20 s (dev, 2026-11-03; first 30 s)
+const int surface_max_time = 20000;
 
 // Jumping: rise one height every jump_tick up to jump_height, then fall back the same way (about a second in the air).
 const int jump_height = 5;
@@ -19,7 +18,7 @@ const int jump_tick = 100;
 
 // Crouching: holding Down crouches, and it stands up on its own after duck_time even if Down is still held.
 const int duck_time = 1500;
-// After standing up, crouching is blocked for duck_cooldown, so Down can't be spammed (dev, 2026-11-03, for 1.1; was 1000).
+// After standing up, crouching is blocked for duck_cooldown, so Down can't be spammed.
 const int duck_cooldown = 500;
 
 /* Obstacle placement. An obstacle appears spawn_ahead_time before its countdown starts, at the current speed, so you
@@ -27,42 +26,38 @@ always hear it that long before its countdown begins. Spacing is built from a ra
 one obstacle's ledge after and the next one's countdown (min_floor_time to max_floor_time below), never under
 min_gap_tiles. */
 const int spawn_ahead_time = 3000;
-// The forward belt (dev, 2026-11-04): every belt sound drops a decibel for each belt_fade_ms of running away from you, at any speed.
+// Every belt sound drops a decibel for each belt_fade_ms of running away from you, at any speed.
 const int belt_fade_ms = 150;
 const int min_gap_tiles = 6;
 
-/* The warning countdown before every trap: always countdown_length steps, warn1 to warn5, one cue per step, at any
-speed (dev, 2026-11-03, for 1.1; it used to shrink with speed, 5 at 500 ms down to 1 at 100 ms). A jump lasts about
-1 s, so at slow speeds you still jump on the last cues. A hazard's ledge before covers exactly the countdown; the
-other traps count down on normal floor. A hazard's ledge after is a fixed ledge_after_tiles. */
+/* The warning countdown before every trap: always countdown_length steps, warn1 to warn5, one cue per step, at any speed.
+A jump lasts about 1 s, so at slow speeds you still jump on the last cues. A hazard's ledge before covers exactly the
+countdown; the other traps count down on normal floor. A hazard's ledge after is a fixed ledge_after_tiles. */
 const int countdown_length = 5;
 const int ledge_after_tiles = 2;
 // Normal floor between one obstacle and the next one's countdown: a random min_floor_time to max_floor_time at the current speed, never under min_floor_tiles.
 const int min_floor_time = 1000;
 const int max_floor_time = 4000;
 const int min_floor_tiles = 2;
-/* Difficulty (the game menu refactor plan, dev, 2026-11-05), one entry per level in difficulty_names' order: the
-starting step time (the speed-up is the same for everyone), and the floor between obstacles, which stays fixed all run.
-Chaos's floor is the min_floor_time to max_floor_time above, which debug and practice runs keep. */
+/* Difficulty, one entry per level in difficulty_names' order: the starting step time (the speed-up is the same for
+everyone), and the floor between obstacles, which stays fixed all run. Chaos's floor is the min_floor_time to
+max_floor_time above, which debug and practice runs keep. */
 const string[] difficulty_names = {"easy", "medium", "hard", "insane", "chaos"};
 const int[] difficulty_start_times = {500, 450, 400, 350, 300};
 const int[] difficulty_min_floor_times = {2000, 1750, 1500, 1250, 1000};
 const int[] difficulty_max_floor_times = {5000, 4750, 4500, 4250, 4000};
-/* Damage by level (the difficulty scaling plan, dev, 2026-11-09: "I like option 2 much better"): the percent of every
-obstacle's damage a blow does, so easy takes 60 percent and chaos the full amount. Practice and debug runs, which have no
-level, take 100. Every result is a whole number with today's damages (animals 6 on easy, barriers 48). */
+/* Damage by level: the percent of every obstacle's damage a blow does. Practice and debug runs, which have no level,
+take 100. Every result is a whole number with today's damages (animals 6 on easy, barriers 48). */
 const int[] difficulty_damage_percents = {60, 70, 80, 90, 100};
-/* Survival items by level (the item balance plan, dev, 2026-11-10, after a player ran an hour taking every hit): life
-capsules, steel shields and health potions spawn at this percent of their _chance rates, easy to chaos, pairs' second
-items too; debug runs at 100. Below these, taking every hit costs more than the items give back, at every level. */
+/* Survival items by level: life capsules, steel shields and health potions spawn at this percent of their _chance rates,
+pairs' second items too; debug runs at 100. Below these, taking every hit costs more than the items give back. */
 const int[] difficulty_item_percents = {25, 20, 15, 10, 5};
-/* How many shares barriers get in the obstacle pick, where every other type has 1 (the item balance plan, dev,
-2026-11-10): half of them pass in other lanes, where their countdown doesn't play, so they come twice as often. */
+/* How many shares barriers get in the obstacle pick, where every other type has 1: half of them pass in other lanes,
+where their countdown doesn't play, so they come twice as often. */
 const int barrier_weight = 2;
-/* Combined obstacles (the combined obstacles plan, dev, 2026-11-11): a pair replaces this percent of obstacle spawns,
-easy to chaos (debug runs at chaos's). The pairs, each also coming reversed (combo.nvgt), and the gap after a pair's
-first part by its action, in ms: a jump, a crouch, a quick action (a lane switch, firing or one hand), and the wider gap
-between a force field and an animal either way. */
+/* Combined obstacles: a pair replaces this percent of obstacle spawns (debug runs at chaos's). The pairs, each also coming
+reversed (combo.nvgt), and the gap after a pair's first part by its action, in ms: a jump, a crouch, a quick action (a
+lane switch, firing or one hand), and the wider gap between a force field and an animal either way. */
 const int[] difficulty_combo_percents = {5, 10, 15, 20, 25};
 const string[] combo_firsts = {"projectiles", "force_fields", "force_fields", "mines", "barriers", "walls", "animals", "fake_doors"};
 const string[] combo_seconds = {"spikes", "walls", "animals", "barriers", "projectiles", "barriers", "hazards", "mines"};
@@ -70,112 +65,107 @@ const int combo_gap_jump = 1200;
 const int combo_gap_crouch = 600;
 const int combo_gap_quick = 500;
 const int combo_gap_hands = 1000;
-/* Slides (the slides plan, dev, 2026-11-11): about one spawn in slide_chance is a slide, and it must also pass the
-level's item_percent() (survival_roll()), so about 1 in 24 on easy to 1 in 120 on chaos; the debug choice "slides" makes
-it 1 in 2 instead. A ride lasts a random slide_min_time to slide_max_time. */
+/* Slides: about one spawn in slide_chance is a slide, and it must also pass the level's item_percent() (survival_roll()),
+so about 1 in 24 on easy to 1 in 120 on chaos; the debug choice "slides" makes it 1 in 2 instead. A ride lasts a random
+slide_min_time to slide_max_time. */
 const int slide_chance = 6;
 const int slide_min_time = 2000;
 const int slide_max_time = 4000;
-/* Winds (the winds plan, dev, 2026-11-10 and 11): a wind closes in wind_speed_factor times as fast as a still obstacle
-(moving toward you at half the belt's speed), moves one lane toward yours every wind_beat_time ms, and does wind_damage. */
+/* Winds: a wind closes in wind_speed_factor times as fast as a still obstacle (moving toward you at half the belt's
+speed), moves one lane toward yours every wind_beat_time ms, and does wind_damage. */
 const double wind_speed_factor = 1.5;
 const int wind_beat_time = 750;
 const int wind_damage = 5;
-/* Ladders (the ladders plan, dev, 2026-11-12): each ladder has a random ladder_rungs_min to ladder_rungs_max rungs by level
-(dev, after testing: 5 felt too short; 6 to 8 on easy up to 10 to 12 on chaos), the first taken as you step on; each
-must come within ladder_rung_times of the last, by level from easy to chaos (practice and debug use easy's); a collapse
-costs ladder_break_damage and a fall ladder_fall_damage, then the real wall's crash wall_damage. */
+/* Ladders: each ladder has a random ladder_rungs_min to ladder_rungs_max rungs, the first taken as you step on; each must
+come within ladder_rung_times of the last (practice and debug use easy's); a collapse costs ladder_break_damage and a
+fall ladder_fall_damage, then the real wall's crash wall_damage. */
 const int[] ladder_rungs_min = {6, 7, 8, 9, 10};
 const int[] ladder_rungs_max = {8, 9, 10, 11, 12};
 const double[] ladder_rung_times = {2000, 1750, 1500, 1250, 1000};
-const int ladder_break_damage = 60; // a collapse (dev, 2026-11-12: 60 for a collapse, 40 for a fall)
+const int ladder_break_damage = 60;
 const int ladder_fall_damage = 40;
-// The least time between rungs by level (dev, 2026-11-12): sooner is rushing it, and you fall off.
+// The least time between rungs: sooner is rushing it, and you fall off.
 const double[] ladder_rung_min_times = {200, 250, 300, 350, 400};
-const bool ladder_grab_runup = true; // true: after a grab you run on to the ladder before climbing (the dev's choice, 2026-11-12, after trying both); false: the climb starts at the grab
-const int ladder_wall_gap = 5;
-// Floor breakers (the floor breakers plan, dev, 2026-11-13): a random floor_pieces_min to floor_pieces_max pieces by level, easy to chaos.
+const bool ladder_grab_runup = true; // true: after a grab you run on to the ladder before climbing; false: the climb starts at the grab
+const int ladder_wall_gap = 5; // steps from a ladder to its real wall
+// Floor breakers: a random floor_pieces_min to floor_pieces_max pieces to rebuild.
 const int[] floor_pieces_min = {3, 4, 5, 6, 7};
-const int[] floor_pieces_max = {4, 5, 6, 7, 8}; // steps from a ladder to its real wall (dev, 2026-11-12, after testing)
-/* Vehicles (the vehicles plan, dev, 2026-11-13): closing vehicle_speed_factor times as fast as a still obstacle, a lane
-toward yours every vehicle_beat_time; in your lane, bursts of vehicle_burst_shots shots vehicle_shot_gap apart, then
-vehicle_burst_pause; each shot a tile every vehicle_shot_tile_time, vehicle_shot_damage if it reaches you in its lane; a
-ram of vehicle_ram_damage; hp half a fake wall's (wall_spawn_hp()). */
+const int[] floor_pieces_max = {4, 5, 6, 7, 8};
+/* Vehicles: closing vehicle_speed_factor times as fast as a still obstacle, a lane toward yours every vehicle_beat_time;
+in your lane, bursts of vehicle_burst_shots shots vehicle_shot_gap apart, then vehicle_burst_pause; each shot a tile
+every vehicle_shot_tile_time, vehicle_shot_damage if it reaches you in its lane; a ram of vehicle_ram_damage; hp half a
+fake wall's (wall_spawn_hp()). */
 const double vehicle_speed_factor = 1.5;
 const int vehicle_beat_time = 1000;
 const int vehicle_burst_shots = 5;
-const int vehicle_shot_gap = 50; // 200 at first, then 50 (dev, 2026-11-13: "50ms was way better")
-const int vehicle_aim_delay = 500; // lined up with you, it waits this long before a burst, so leaving its lane dodges it (dev, 2026-11-13)
-const int vehicle_burst_pause = 2000; // 2000 at first, 1000 for a while, then 2000 again to give shooting room (dev, 2026-11-13)
-const int vehicle_shot_tile_time = 50; // 30 at first, then 50 (dev, 2026-11-13)
-const float vehicle_fade = 0.25; // a vehicle's shots fall off along the belt at a quarter of the belt's rate, so they carry (dev, 2026-11-13)
-const float vehicle_engine_fade = 0.5; // its engine at half the belt's rate: 0.25 sounded too close as it appeared (dev, 2026-11-13)
+const int vehicle_shot_gap = 50;
+const int vehicle_aim_delay = 500; // lined up with you, it waits this long before a burst, so leaving its lane dodges it
+const int vehicle_burst_pause = 2000; // long enough to leave room for shooting back
+const int vehicle_shot_tile_time = 50;
+const float vehicle_fade = 0.25; // a vehicle's shots fall off along the belt at a quarter of the belt's rate, so they carry
+const float vehicle_engine_fade = 0.5; // its engine at half the belt's rate
 const int vehicle_shot_damage = 5;
 const int vehicle_ram_damage = 40;
-const double vehicle_ram_range = 2; // within this many tiles of you a vehicle stops firing and rams (dev, 2026-11-13)
+const double vehicle_ram_range = 2; // within this many tiles of you a vehicle stops firing and rams
 const int vehicle_min_hp = 25;
 const int vehicle_max_hp = 250;
-/* Trampolines (the trampolines plan, dev, 2026-11-11): like slides, one spawn in trampoline_chance and survival_roll();
-worn pads trampoline_worn_percent of the time, belt-wide ones trampoline_belt_percent; a good pad's flight lasts
-trampoline_air_time. */
+/* Trampolines: like slides, one spawn in trampoline_chance and survival_roll(); worn pads trampoline_worn_percent of the
+time, belt-wide ones trampoline_belt_percent; a good pad's flight lasts trampoline_air_time. */
 const int trampoline_chance = 6;
 const int trampoline_worn_percent = 50;
 const int trampoline_belt_percent = 25;
 const int trampoline_air_time = 2500;
-/* Top speed by level (the difficulty scaling plan, dev, 2026-11-09): the step time where an endless run's belt stops
-speeding up, 5, 6.7, 10, 13.3 and 20 steps a second. Every obstacle and item has joined by easy's 200. Debug runs keep
-min_step_time, and Rush Hour can still go speedup_amount past the cap, never past min_step_time. */
+/* Top speed by level: the step time where an endless run's belt stops speeding up, 5, 6.7, 10, 13.3 and 20 steps a
+second. Every obstacle and item has joined by easy's 200. Debug runs keep min_step_time, and Rush Hour can still go
+speedup_amount past the cap, never past min_step_time. */
 const int[] difficulty_top_step_times = {200, 150, 100, 75, 50};
-/* The schedule (Section 5, dev, 2026-11-05): on easy to insane, each of these types and items joins the mix once the
-belt reaches its speed, one obstacle type per 50 ms mark, in order of the action it needs. Anything not listed is in from
-the start: hazards, spikes and mines, health potions, life capsules and steel shields, and keys, which come before every
-real door outside the schedule. Chaos has everything from the first spawn. */
+/* The schedule: on easy to insane, each of these types and items joins the mix once the belt reaches its step time, in
+the same order as schedule_types. Anything not listed is in from the start: hazards, spikes and mines, health potions,
+life capsules and steel shields, and keys, which come before every real door outside the schedule. Chaos has everything
+from the first spawn. */
 const string[] schedule_types = {"projectiles", "force_fields", "animals", "walls", "ammo_packs", "fake_doors", "player_teleporters", "barriers", "powerups", "slides", "winds", "trampolines", "ladders", "floor_breakers", "vehicles"};
-const int[] schedule_join_times = {450, 400, 350, 300, 300, 250, 250, 200, 200, 300, 200, 300, 250, 250, 200}; // vehicles at 5 steps a second (the vehicles plan, dev, 2026-11-13) // floor breakers at 4 steps a second (the floor breakers plan, dev, 2026-11-13) // ladders at 4 steps a second, with fake doors (the ladders plan, dev, 2026-11-12) // trampolines with slides (the trampolines plan, dev, 2026-11-11) // slides at 3.3 steps a second (the slides plan), winds at 5 (the winds plan), dev, 2026-11-11
+const int[] schedule_join_times = {450, 400, 350, 300, 300, 250, 250, 200, 200, 300, 200, 300, 250, 250, 200};
 const int chaos_level = 4; // difficulty_names' index of chaos, which ignores the schedule
-/* The locks (Section 6, dev, 2026-11-05: "5 runs per level, and a user is required to reach at least 1 door"): easy is
-always open, and each other level opens after this many counted runs on the level below. */
+// The locks: easy is always open, and each other level opens after this many counted runs on the level below.
 const int difficulty_unlock_runs = 5;
-/* Timed runs (the timed run plan, dev, 2026-11-13), by level, easy to chaos: the countdown's start and the finish line in
-seconds of running; each clean pass adds and each hit takes away (dev: "I want medium to be 6/5"); a level opens after
-timed_unlock_runs completed timed runs on the one below; warnings as the countdown drops past these. */
+/* Timed runs: the countdown's start and the finish line in seconds of running; each clean pass adds and each hit takes
+away; a level opens after timed_unlock_runs completed timed runs on the one below; warnings as the countdown drops past
+timed_warn_seconds, highest first, so a drop past several says only the lowest. */
 const int[] timed_start_seconds = {60, 50, 40, 30, 20};
 const int[] timed_finish_seconds = {300, 270, 240, 210, 180};
 const int[] timed_pass_seconds = {7, 6, 5, 4, 4};
 const int[] timed_hit_seconds = {5, 5, 7, 8, 10};
 const int timed_unlock_runs = 3;
 const int[] timed_warn_seconds = {45, 30, 15, 10, 5};
-const int timed_warn_rearm_seconds = 10; // a warning plays again only after the clock climbs this far above it (dev, 2026-11-13) // highest first, so a drop past several says only the lowest (dev, 2026-11-13: "5, 10, 15, 30, 45")
+const int timed_warn_rearm_seconds = 10; // a warning plays again only after the clock climbs this far above it
 // The clean passes that feed the clock: every obstacle got past the right way (combinations_cleared left out, since each part counts).
 const string[] timed_pass_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "barriers_dodged", "winds_dodged", "walls_broken", "real_walls_climbed", "fake_doors_broken", "real_doors_opened", "floor_breakers_repaired", "vehicles_destroyed", "vehicles_dodged"};
 
-// Each spike swings on its own rhythm: a random swing time between these, picked when it appears (dev, 2026-11-02).
+// Each spike swings on its own rhythm: a random swing time between these, picked when it appears.
 const int spike_swing_min = 500;
 const int spike_swing_max = 1000;
 
 /* A mine arms (light, then its ticking loop) mine_arm_lead_time before its countdown starts, at the current speed, never
-under mine_arm_lead_min_tiles, so light always comes first and the countdown follows (dev, 2026-11-02): 1 tile ahead of
-the countdown at 500 ms, 5 at 100 ms, 10 at 50 ms, giving light the same half second to finish at any speed. */
+under mine_arm_lead_min_tiles, so light always comes first and has the same half second to finish at any speed. */
 const int mine_arm_lead_time = 500;
 const int mine_arm_lead_min_tiles = 1;
 
-/* Lives and health (dev, 2026-11-03). Every run starts with starting_lives and player_hp health. Each blow (anything but
-a hazard, which ends the run) does its obstacle's damage, to a worn shield first, otherwise to your health; at 0 health
-you lose a life and start the next at full health, or the run ends on your last life. Extra damage past 0 is dropped.
-These damages replaced the fixed life costs (spikes 1, mines 2, doors 3) and the shield-only damages. */
+/* Lives and health. Every run starts with starting_lives and player_hp health. Each blow (anything but a hazard, which
+ends the run) does its obstacle's damage, to a worn shield first, otherwise to your health; at 0 health you lose a life
+and start the next at full health, or the run ends on your last life. Extra damage past 0 is dropped. */
 const int starting_lives = 1;
-const int max_lives = 20; // a life capsule can't take you past this; capsules themselves are unlimited (dev, 2026-11-04)
-const int life_capsule_min_lives = 1; // a life capsule gives a random min to max lives (dev, 2026-11-04: "between 1 to 2")
+const int max_lives = 20; // a life capsule can't take you past this; capsules themselves are unlimited
+const int life_capsule_min_lives = 1; // a life capsule gives a random min to max lives
 const int life_capsule_max_lives = 2;
-const int debug_lives = 2; // source-only debug runs of a single type start with these; "all" uses starting_lives (3 until 2026-11-04)
-const int practice_unlock_count = 5; // clean passes of a practice obstacle that open the next one; hazards open endless run too (the practice locks plan, dev, 2026-11-10: "just like the diff modes")
-const int practice_hint_limit = 5; // hints per kind in each practice run, and the practiced choice's things before the closing line (the practice guidance plan, dev, 2026-11-12)
+const int debug_lives = 2; // source-only debug runs of a single type start with these; "all" uses starting_lives
+const int practice_unlock_count = 5; // clean passes of a practice obstacle that open the next one; hazards open endless run too
+const int practice_hint_limit = 5; // hints per kind in each practice run, and the practiced choice's things before the closing line
 const int practice_unlock_hold = 3000; // a hint this soon after an unlock line waits its turn instead of cutting it off (ms, on runtimer)
 const int practice_hint_together = 100; // hints this close together (ms, on runtimer: placed in the same moment) queue instead of cutting each other off
-const int practice_rising_period = 5000; // a rising practice run speeds up every this many ms, twice an endless run's rate (the rising practice plan, dev, 2026-11-12)
+const int practice_rising_period = 5000; // a rising practice run speeds up every this many ms, twice an endless run's rate
 const int practice_rising_top = 100; // and stops at 10 steps a second, the fastest practice speed
-const int practice_lives = 1; // every practice run starts with this, and gets it back after each practice death (dev, 2026-11-09: 1, not 2; only debug runs get 2)
-const int practice_shields = 1; // and with this steel shield in the inventory, none on the belt (dev, 2026-11-09: 1, not 2)
+const int practice_lives = 1; // every practice run starts with this, and gets it back after each practice death
+const int practice_shields = 1; // and with this steel shield in the inventory, none on the belt
 const int player_hp = 200;
 const int spike_damage = 20;
 const int mine_damage = 60;
@@ -184,76 +174,69 @@ const int projectile_damage = 40;
 const int wall_damage = 50; // crashing into a wall you didn't destroy
 const int door_damage = 70; // crashing into any door, real or fake
 
-/* Doors (dev, 2026-11-03). A real door marks each new door_section_ms of speed (450, 400 ... 50) and plays at pitch
-100. A fake door plays at one of these pitches, never near 100, so it always sounds off. */
+/* Doors. A real door marks each new door_section_ms of speed (450, 400 ... 50) and plays at pitch 100. A fake door plays
+at one of these pitches, never near 100, so it always sounds off. */
 const int door_section_ms = 50;
 int[] fake_door_pitches = {80, 90, 110, 120};
-/* Wall hp scales with speed (dev, 2026-11-03): its center runs from wall_min_hp at start_step_time (500 ms) up to
-wall_max_hp at min_step_time (50 ms), and each wall rolls a random hp within wall_hp_spread percent either side of
-that center, never below wall_min_hp or above wall_max_hp. So 50 to 60 at the start, about 200 to 300 at 300 ms, and
-400 to 500 at top speed. (It was a flat random 100 to 500, then 200 to 2000, then 20 to 2000; 50 to 500 since
-2026-11-05, when guns couldn't break the fastest walls in time.) */
+/* Wall hp scales with speed: its center runs from wall_min_hp at start_step_time (500 ms) up to wall_max_hp at
+min_step_time (50 ms), and each wall rolls a random hp within wall_hp_spread percent either side of that center, never
+below wall_min_hp or above wall_max_hp. So 50 to 60 at the start, about 200 to 300 at 300 ms, and 400 to 500 at top
+speed. */
 const int wall_min_hp = 50;
 const int wall_max_hp = 500;
 const int wall_hp_spread = 20;
-/* Fake doors scale the same way with their own, tougher range (dev, 2026-11-05: "Doors are meant to be much stronger than
-walls"; they shared the walls' hp until then): 100 to 120 at the start, about 400 to 600 at 300 ms, 800 to 1000 at top speed. */
+/* Fake doors scale the same way with their own, tougher range: 100 to 120 at the start, about 400 to 600 at 300 ms, 800
+to 1000 at top speed. */
 const int door_min_hp = 100;
 const int door_max_hp = 1000;
 
-/* A projectile closes in this many times as fast as a still obstacle seems to, scaled with the belt's speed (dev,
-2026-11-02): at 2 it starts as far beyond its meeting tile as you are before it, and flies at your own speed. */
+/* A projectile closes in this many times as fast as a still obstacle seems to, scaled with the belt's speed: at 2 it
+starts as far beyond its meeting tile as you are before it, and flies at your own speed. */
 const int projectile_speed_factor = 2;
 
-/* Running into an active force field throws you this many tiles forward past it (dev, 2026-11-02). The gap after every
-force field gets the same number of extra tiles, so the throw always lands on clear floor before the next countdown. */
+/* Running into an active force field throws you this many tiles forward past it. The gap after every force field gets the
+same number of extra tiles, so the throw always lands on clear floor before the next countdown. */
 const int forcefield_knockback_tiles = 5;
 
 /* A force field can always be switched off within this long before it, at the current speed, even when its countdown is
-shorter (dev, 2026-11-02, so top speed doesn't need mashing). At 50 ms that's the last 10 steps, at 100 ms the last 5,
-at 200 ms the last 3; above 200 ms the countdown already lasts at least this long, so this changes nothing there. */
+shorter, so top speed doesn't need mashing. At 50 ms that's the last 10 steps, at 100 ms the last 5, at 200 ms the last
+3; above 200 ms the countdown already lasts at least this long, so this changes nothing there. */
 const int switch_min_time = 500;
 
-/* Weapons (dev, 2026-11-02). Every hit's damage is the weapon's base damage (weapons.nvgt) times this, for all ten
-weapons at once: 4 makes the bat 12 and the pistol 120 (dev, 2026-11-03, while testing walls; it was 2). */
+// Weapons: every hit's damage is the weapon's base damage (weapons.nvgt) times this, for all ten weapons at once.
 const int weapon_damage_multiplier = 4;
 // Each gun starts every run with this much loaded and in reserve; ammo packs refill the reserve.
 const int gun_start_loaded = 50;
-const int gun_start_reserve = 50; // was 250; lowered so ammo packs matter (dev, 2026-11-03)
-/* The shortest gap between two swings (melee) or two pistol shots per Space press, and the machine gun's rate while Space
-is held. Both press gaps were one shared 50 ms, too short for the weapon powerups to be heard (dev, 2026-11-04). */
+const int gun_start_reserve = 50;
+// The shortest gap between two swings (melee) or two pistol shots per Space press, and the machine gun's rate while Space is held.
 const int melee_fire_gap = 200;
 const int pistol_fire_gap = 100;
 const int machine_gun_fire_gap = 100;
-// Every weapon reaches this far ahead, turned into tiles at the current speed (dev, 2026-11-03).
+// Every weapon reaches this far ahead, turned into tiles at the current speed.
 const int weapon_reach_time = 2000;
-// A gun's bullet moves one tile every this many ms, at any speed (dev, 2026-11-03); it travels weapon_reach() tiles.
-const int bullet_tile_time = 30; // first 30, tried at 50, settled on 40 (dev, 2026-11-03), back to 30 (dev, 2026-11-05), so bullets stay ahead of you even at 50 ms steps
+// A gun's bullet moves one tile every this many ms, at any speed, fast enough to stay ahead of you at 50 ms steps; it travels weapon_reach() tiles.
+const int bullet_tile_time = 30;
 
-/* Ammo packs (dev, 2026-11-02). About one spawn in ammo_pack_chance is a pack instead of an obstacle. Opening one adds
-a random ammo_pack_min to ammo_pack_max rounds to the reserve of the gun you're holding (dev, 2026-11-03; it was a
-flat 50 to both guns), never above gun_max_reserve. */
+/* Ammo packs. About one spawn in ammo_pack_chance is a pack instead of an obstacle. Opening one adds a random
+ammo_pack_min to ammo_pack_max rounds to the reserve of the gun you're holding, never above gun_max_reserve. */
 const int ammo_pack_chance = 8;
 const int ammo_pack_min = 5;
 const int ammo_pack_max = 10;
-const int gun_max_reserve = 200; // was 250 (dev, 2026-11-03); a reload still loads at most gun_start_loaded (50)
+const int gun_max_reserve = 200; // a reload still loads at most gun_start_loaded
 
-/* Shields (dev, 2026-11-03). About one spawn in shield_chance is a steel shield. A worn one starts at shield_hp and
-takes each blow's damage (the <type>_damage values above) instead of your health; hazards ignore it. */
-const int shield_chance = 16; // first proposed as 20 (dev chose 16)
-const int shield_hp = 400; // first proposed as 100, then 200; 400 since 2026-11-04 (dev: "armor is twice as strong as you")
+/* Shields. About one spawn in shield_chance is a steel shield. A worn one starts at shield_hp and takes each blow's
+damage (the <type>_damage values above) instead of your health; hazards ignore it. */
+const int shield_chance = 16;
+const int shield_hp = 400; // twice your own health
 
-/* Life capsules and player teleporters (dev, 2026-11-03). About one spawn in life_capsule_chance is a capsule and one in
-teleporter_chance a teleporter. A teleport moves you a random teleport_min_time to teleport_max_time of belt (in tiles
-at the current speed), forward or back. */
-/* Powerups (dev, 2026-11-03 and 4). About one spawn in powerup_chance is a powerup, and each lasts powerup_time. Their
-effects: Slow Motion and Rush Hour shift the step by powerup_speed_ms; Moon Jump and Short Hop scale each jump height's
-time; Long Crouch and Stiff Knees scale duck_time; Quick Swings and Rapid Fire scale a fire gap by powerup_fire_faster,
-Clumsy Swings and Sticky Trigger by powerup_fire_slower; Sturdy Shield and Tough Hide scale damage to your shield or
-health by powerup_damage_less, Brittle Shield and Soft Hide by powerup_damage_more. */
+/* Powerups. About one spawn in powerup_chance is a powerup, and each lasts powerup_time. Their effects: Slow Motion and
+Rush Hour shift the step by powerup_speed_ms; Moon Jump and Short Hop scale each jump height's time; Long Crouch and
+Stiff Knees scale duck_time; Quick Swings and Rapid Fire scale a fire gap by powerup_fire_faster, Clumsy Swings and
+Sticky Trigger by powerup_fire_slower; Sturdy Shield and Tough Hide scale damage to your shield or health by
+powerup_damage_less, Brittle Shield and Soft Hide by powerup_damage_more. */
 const int powerup_chance = 10;
-const int powerup_time = 15000; // first 20000 (dev, 2026-11-04)
-const int powerup_speed_ms = 50; // first proposed as 100 (dev chose 50)
+const int powerup_time = 15000;
+const int powerup_speed_ms = 50;
 const double moon_jump_factor = 1.5;
 const double short_hop_factor = 2.0 / 3.0;
 const double long_crouch_factor = 2.0;
@@ -262,62 +245,62 @@ const double powerup_fire_faster = 0.5;
 const double powerup_fire_slower = 2.0;
 const double powerup_damage_less = 0.5;
 const double powerup_damage_more = 2.0;
-// A powerup on the belt replays its sound this often, not looped (dev, 2026-11-04): ground ones every 300 ms, flight ones every 400 (the dev's final choice, after trying 500, 350, 250 and 500 for flight).
+// A powerup on the belt replays its sound this often, not looped: ground ones every 300 ms, flight ones every 400.
 const int powerup_ground_sound_time = 300;
 const int powerup_flight_sound_time = 400;
+// Life capsules and player teleporters: about one spawn in life_capsule_chance is a capsule and one in teleporter_chance a teleporter.
 const int life_capsule_chance = 20;
 const int teleporter_chance = 16;
-/* Health potions (dev, 2026-11-04). About one spawn in health_potion_chance is a health potion, which heals a random
+/* Health potions. About one spawn in health_potion_chance is a health potion, which heals a random
 health_potion_min_percent to health_potion_max_percent of player_hp (10 to 20 of 200), never past full. */
 const int health_potion_chance = 10;
 const int health_potion_min_percent = 5;
 const int health_potion_max_percent = 10;
-// Lanes (dev, 2026-11-04): how far to the side the next lane over is heard, as a pan (100 is fully to one side).
+// Lanes: how far to the side the next lane over is heard, as a pan (100 is fully to one side).
 const float lane_pan_amount = 50;
-// The forward belt's pan per lane: the engine pans by x * pan_step / 125, so this makes one lane across lane_pan_amount (2026-11-05).
+// The forward belt's pan per lane: the engine pans by x * pan_step / 125, so this makes one lane across lane_pan_amount.
 const float lane_pan_step = lane_pan_amount * 1.25;
-// With HRTF on, a barrier one lane over sits this many units across per tile ahead: 1 is about 45 degrees to the side, two lanes about 63 (dev, 2026-11-05).
+// With HRTF on, a barrier one lane over sits this many units across per tile ahead: 1 is about 45 degrees to the side, two lanes about 63.
 const float barrier_hrtf_spread = 1.0;
-// A barrier in your lane does barrier_damage (dev: 80, the hardest blow).
+// A barrier in your lane does barrier_damage, the hardest blow.
 const int barrier_damage = 80;
-// How often, in percent, a barrier spawn is a pair in two different lanes instead of one (dev, 2026-11-04: "half the time").
+// How often, in percent, a barrier spawn is a pair in two different lanes instead of one.
 const int barrier_pair_percent = 50;
-// How often, in percent, an item spawn adds a second item of a random kind in a different lane (dev, 2026-11-05: the barriers' rule for items).
+// How often, in percent, an item spawn adds a second item of a random kind in a different lane.
 const int item_pair_percent = 50;
-// Animals (dev, 2026-11-04; birds so far): an unscared animal that reaches you does animal_damage.
+// Animals: an unscared animal that reaches you does animal_damage.
 const int animal_damage = 10;
-// Hands (dev, 2026-11-04): the second hand within this many ms of the first makes a clap instead of a woosh.
+// Hands: the second hand within this many ms of the first makes a clap instead of a woosh.
 const int clap_window = 100;
+// A teleport moves you a random teleport_min_time to teleport_max_time of belt (in tiles at the current speed), forward or back.
 const int teleport_min_time = 2000;
 const int teleport_max_time = 5000;
 
 // Music and ambience volume, in decibels: min_volume is silent-ish, 0 is full. The settings sliders show it as 0 to 100 percent. Home/End and Page Up/Down move by volume_change.
-const int min_volume = -100; // -50 until 2026-11-08 (the volume sliders plan: "the ambience/music volumes should be able to go to -100")
-const int learn_min_volume = -50; // the learn sounds menu's floor, unchanged
-const int volume_change = 1; // 1 per press (dev, 2026-11-02)
-const int music_start_volume = -20; // 80 percent at the start and after a settings reset (dev, 2026-11-09; full volume until then)
+const int min_volume = -100;
+const int learn_min_volume = -50; // the learn sounds menu's floor
+const int volume_change = 1;
+const int music_start_volume = -20; // 80 percent at the start and after a settings reset
 const int ambience_start_volume = -20; // 80 percent, the same
 const int menu_music_start_volume = -20; // 80 percent, the same (form_menu.nvgt starts menumusvolume at it)
-/* The ambience changes the way the ground does (the music and ambience plan, dev, 2026-11-06: "I like the 1 to 2minute
-switch"): after a random ambience_min_time to ambience_max_time on runtimer, it crossfades over ambience_fade_time to
-another random one, the old fading down to ambience_fade_floor decibels below your ambience volume as the new one rises. */
+/* The ambience changes the way the ground does: after a random ambience_min_time to ambience_max_time on runtimer, it
+crossfades over ambience_fade_time to another random one, the old fading down to ambience_fade_floor decibels below
+your ambience volume as the new one rises. */
 const int ambience_min_time = 60000;
 const int ambience_max_time = 120000;
 const int ambience_fade_time = 2000;
 const int ambience_fade_floor = 40;
-/* Environments (the environments plan's Section 2, dev, 2026-11-10: "I'd say 1 to 2 minutes"): with more than one
-environment to go to, a run moves to a random different one every random env_switch_min_time to env_switch_max_time of
-running time (runtimer, so pausing freezes it). The switch brings the new ambience, so the ambience timer above only
-runs when there's nothing to switch to. */
+/* Environments: with more than one environment to go to, a run moves to a random different one every random
+env_switch_min_time to env_switch_max_time of running time (runtimer, so pausing freezes it). The switch brings the new
+ambience, so the ambience timer above only runs when there's nothing to switch to. */
 const int env_switch_min_time = 60000;
 const int env_switch_max_time = 120000;
 
-/* The heartbeat (the heartbeat plan, dev, 2026-11-08): heart_start_bpm at start_step_time, rising in a straight line to
-heart_max_bpm at heart_full_speed_ms: 5 + (500 - step time) x 150 / 350, about 4.3 bpm per 10 ms, so 155 at 150 ms, held there at any faster speed. A beat comes every
-heart_gap_base - heart_gap_per_bpm x bpm ms (1950 ms at 5 bpm, 450 at 155).
-(The breathing bands were taken out with the breath sounds, dev, 2026-11-08.) */
-const int heart_start_bpm = 5; // 50 for a test on 2026-11-08, then back to 5 (dev: "5=500, and 150=200")
-const int heart_max_bpm = 155; // reached at heart_full_speed_ms and held at any faster speed, powerups included (150 at 200 ms until 2026-11-08)
+/* The heartbeat: heart_start_bpm at start_step_time, rising in a straight line to heart_max_bpm at heart_full_speed_ms:
+5 + (500 - step time) x 150 / 350, about 4.3 bpm per 10 ms, so 155 at 150 ms, held there at any faster speed. A beat
+comes every heart_gap_base - heart_gap_per_bpm x bpm ms (1950 ms at 5 bpm, 450 at 155). */
+const int heart_start_bpm = 5;
+const int heart_max_bpm = 155; // reached at heart_full_speed_ms and held at any faster speed, powerups included
 const int heart_full_speed_ms = 150; // the step time where the heart rate reaches heart_max_bpm
 const int heart_gap_base = 2000;
 const int heart_gap_per_bpm = 10;
