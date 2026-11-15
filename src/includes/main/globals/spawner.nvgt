@@ -36,76 +36,70 @@ practice_mix_door_next = false; // and a mixed obstacles run with no door waitin
 choose_next_obstacle();
 next_spawn_x = spawn_distance() + next_countdown + floor_tiles(run_min_floor_time);
 }
-/* Picks the next spawn's type and its countdown length: the debug choices first (choose_debug_spawn()), then the real
-game (choose_real_game()), then practice and free run. */
+/* Picks the next spawn's type and its countdown length: a debug choice (which sets its own countdown), a free run, the
+real game, or otherwise practice and the single-type runs. */
 void choose_next_obstacle()
 {
 if (choose_debug_spawn()) return;
-/* Practice only: "practice_doors" mixes real and fake doors at random (dev, 2026-11-05), half and half, so telling them
-apart is practiced, with a key always placed just before each real door, so unlocking is practiced too. It doesn't wait
-for the speed marks, which a fixed-speed practice run never reaches. */
-if (spawn_only == "practice_doors")
-{
-if (!key_before_door) next_type = "real_doors"; // the key was just placed: its door comes next
-else if (keys_available() and random(1, 2) == 1) next_type = "keys";
-else next_type = "fake_doors";
-key_before_door = next_type != "keys";
-if (!doors_available()) next_type = "";
+if (spawn_only == "free") next_type = choose_free_run();
+else if (spawn_only == "all") next_type = choose_real_game();
+else next_type = choose_practice_spawn();
 next_countdown = next_type == "" ? 0 : countdown_steps();
-return;
 }
 // A free run: what you've added from its console, or nothing yet (freebelt.nvgt).
-if (spawn_only == "free")
+string choose_free_run()
 {
-next_type = free_next_type();
-if (next_type == "combinations" and !choose_combo()) next_type = "";
-next_countdown = next_type == "" ? 0 : countdown_steps();
-return;
+string type = free_next_type();
+if (type == "combinations" and !choose_combo()) type = "";
+return type;
 }
-// The real game.
-if (spawn_only == "all")
+/* Practice's own choices (doors, mixed obstacles, trampolines), otherwise one obstacle type from available_obstacles():
+a single-type practice or debug run, and mixed walls. */
+string choose_practice_spawn()
 {
-next_type = choose_real_game();
-next_countdown = next_type == "" ? 0 : countdown_steps();
-return;
-}
+if (spawn_only == "practice_doors") return practice_doors_type();
 string[] available = available_obstacles();
-/* Practice only: "practice_mixed", mixed obstacles (the practice mix plan, dev, 2026-11-12): each spawn an equal pick
-among the kinds this environment has (practice_mix_kinds()); a real door comes as its key, then the door on the next
-spawn; a combination as a random pair; a trampoline as any of the four. */
-if (spawn_only == "practice_mixed")
+if (spawn_only == "practice_mixed") return practice_mixed_type();
+if (spawn_only == "practice_trampolines") return practice_trampolines_type(available);
+return roll_item_or_obstacle(available);
+}
+/* Mixed doors: real and fake doors half and half, with a key always placed just before each real door. It doesn't wait
+for the speed marks, which a fixed-speed practice run never reaches. */
+string practice_doors_type()
+{
+string type;
+if (!key_before_door) type = "real_doors"; // the key was just placed: its door comes next
+else if (keys_available() and random(1, 2) == 1) type = "keys";
+else type = "fake_doors";
+key_before_door = type != "keys";
+if (!doors_available()) type = "";
+return type;
+}
+/* Mixed obstacles: an equal pick among the kinds this environment has (practice_mix_kinds()); a real door comes as its
+key, then the door on the next spawn; a combination as a random pair; a trampoline as any of the four. */
+string practice_mixed_type()
 {
 if (practice_mix_door_next)
 {
 practice_mix_door_next = false;
-next_type = "real_doors";
+return "real_doors";
 }
-else
-{
 string[] kinds = practice_mix_kinds();
-next_type = kinds.length() > 0 ? kinds[random(0, kinds.length() - 1)] : "";
-if (next_type == "combinations" and !choose_combo()) next_type = "";
-if (next_type == "real_doors")
+string type = kinds.length() > 0 ? kinds[random(0, kinds.length() - 1)] : "";
+if (type == "combinations" and !choose_combo()) type = "";
+if (type == "real_doors")
 {
-next_type = "keys";
+type = "keys";
 practice_mix_door_next = true;
 }
+return type;
 }
-next_countdown = next_type == "" ? 0 : countdown_steps();
-return;
-}
-/* Practice only: "practice_trampolines" (the trampolines plan, dev, 2026-11-11) makes every other spawn a trampoline of
-any of the four kinds, with an obstacle of any type between, and no items. */
-if (spawn_only == "practice_trampolines")
+// Trampolines: every other spawn a trampoline of any of the four kinds, an obstacle of any type between, and no items.
+string practice_trampolines_type(const string[]&in available)
 {
 practice_trampoline_turn = !practice_trampoline_turn;
-if (practice_trampoline_turn and get_pack_sound_folders(type_folder("trampolines") + "*").length() > 0) next_type = "trampolines";
-else next_type = available.length() > 0 ? available[random(0, available.length() - 1)] : "";
-next_countdown = next_type == "" ? 0 : countdown_steps();
-return;
-}
-next_type = roll_item_or_obstacle(available);
-next_countdown = next_type == "" ? 0 : countdown_steps();
+if (practice_trampoline_turn and get_pack_sound_folders(type_folder("trampolines") + "*").length() > 0) return "trampolines";
+return available.length() > 0 ? available[random(0, available.length() - 1)] : "";
 }
 // The debug spawn choices that make every spawn one item kind (keys have their own choice).
 string[] debug_item_choices = {"ammo_packs", "steel_shields", "life_capsules", "health_potions", "player_teleporters", "powerups"};
