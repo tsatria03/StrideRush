@@ -47,6 +47,12 @@ The dev asked for five more after closing what's new and achievements closest to
 - Timed runs: settled, [[project_timed_run_plan]].
 - Vehicles: settled, [[project_vehicles_plan]] (moved from 2.1, 2026-11-13).
 
+## Waiting on the dev (from Claude's whole-game evaluation, 2026-11-15, at 2.3)
+The dev asked for an evaluation of the game; these came out of it. None repeat the declined list.
+23. Weapons that differ by more than damage. Today every weapon shares weapon_reach_time and the melee ones share melee_fire_gap, so within melee only damage differs (bat 3 to sword 24) and the sword makes the other seven melee weapons pointless. Give each a trade-off: slow heavy hits against fast light ones, short against long reach.
+24. A source-only sound check: on launch in the source build, confirm every weapon in weapon_names and every obstacle type has its sound folder, and write the missing ones to a log, since a renamed folder (feat to dagger, 2026-11-15) otherwise goes silent with no error.
+25. An obstacle registry: one shared interface (check, countdown, update, clear) that each type registers into, so step_check(), run_loop(), clear_run_objects() and weapon_strike() loop over a list instead of naming every type; cuts the five places a new type touches. Only if the dev feels that pain ([[feedback_presets_need_driving_need]]).
+
 ## Lane-changing barriers in detail (as explained to the dev, 2026-11-10)
 - In play: a barrier (a car, say) is heard coming in one lane, then plays a swerve cue (tyre squeal, horn) and its sound slides into a neighbouring lane; you track where it ends up and dodge that. The skill is listening for where it lands, not where it started.
 - Fairness: the drift is always announced by its own cue; it moves once, one lane, never at the last moment, finishing while there's still time to react; at least one lane always stays open, as with pairs today. Its countdown (which plays only in its own lane) picks up as it drifts into yours.
