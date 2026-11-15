@@ -1,8 +1,8 @@
-/* Slides (the slides plan, dev, 2026-11-11; Section 1). A slide covers the whole belt, so you always go onto it. Its
-sounds are shared, beside the powerups': misc/game/slideground loops at its tile as you run toward it, slidestart plays
-as you get on, slidemove loops while it carries you, and slidestop plays as you come off. No countdown for now.
-On a slide, for its ride_ms (slide_min_time to slide_max_time, on runtimer so pausing freezes it): your current speed is
-halved (current_step_time(), powerups included); there are no footsteps and no heartbeat; jumping, crouching, hands,
+/* Slides. A slide covers the whole belt, so you always go onto it. Each slide picks a theme in the environment's
+transitions/slides/general: its loop plays at its tile as you run toward it, start as you get on, move loops while it
+carries you, and stop as you come off. No countdown.
+On a slide, for its ride_ms (slide_min_time to slide_max_time, on runtimer so pausing freezes it): your step time is
+halved, so you go twice as fast (current_step_time(), powerups included); there are no footsteps and no heartbeat; jumping, crouching, hands,
 inventory and weapons are blocked like a door carry, but lane switches work. Obstacles keep coming with no countdown and
 you pass through them harmlessly, counting toward nothing. Items in whatever lane you're in are collected automatically
 (slide_update()). Air powerups never come during a slide, and real doors and their keys wait until it's over. The landing
@@ -11,7 +11,7 @@ sound_pool slidepool;
 class slide_obj
 {
 double x;
-string theme; // its theme in transitions/slides/general (the transitions plan, dev, 2026-11-13)
+string theme; // its theme in transitions/slides/general
 string env;
 int ride_ms;
 double land_from, land_to; // the clear landing: where the ride should end, and where the next thing may go
@@ -78,23 +78,23 @@ if (s.reached and !sliding and me.x >= s.land_to) slides.remove_at(i);
 }
 void start_slide(slide_obj@ s)
 {
-/* Reaching a slide while still riding one (back to back in a free run, or a faster speed covering the landing early;
-dev, 2026-11-14): the old ride's move loop stops here, or it would play for good once slide_moveslot is replaced. */
+/* Reaching a slide while still riding one (back to back in a free run, or a faster speed covering the landing early):
+the old ride's move loop stops here, or it would play for good once slide_moveslot is replaced. */
 if (slide_moveslot > -1) slidepool.destroy_sound(slide_moveslot);
 slide_moveslot = -1;
 sliding = true;
-stat_add("slides_ridden"); // Section 2
+stat_add("slides_ridden");
 slide_end_at = runtimer.elapsed + s.ride_ms;
 slide_folder_now = slide_folder(s);
 slidepool.play_stationary(get_pack_sound(slide_folder_now + "*start*"), false);
 slide_moveslot = slidepool.play_stationary(get_pack_sound(slide_folder_now + "*move*"), true);
 }
 /* Every frame from run_loop(): on a slide, the items in your lane are caught (each pick-up takes the nearest one in your
-lane within reach, so they're caught as they arrive), and the ride ends on time with slidestop. */
+lane within reach, so they're caught as they arrive), and the ride ends on time with its stop sound. */
 void slide_update()
 {
 if (!sliding) return;
-// Each item caught counts in its own pick-up statistic and, here, as an item caught on a slide (Section 2).
+// Each item caught counts in its own pick-up statistic and, here, as an item caught on a slide.
 if (pick_up_ammopack()) stat_add("slide_items_caught");
 if (pick_up_key()) stat_add("slide_items_caught");
 if (pick_up_shield()) stat_add("slide_items_caught");

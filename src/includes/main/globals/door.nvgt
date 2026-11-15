@@ -1,21 +1,20 @@
-/* Doors (dev, 2026-11-03, for 1.1): full-height. They first had no countdown cues; since 2026-11-04 (the dev moved them
-into environments/default/traps and added doors countdown) every standing door, real or fake, counts down like a trap, with a
-four-layer warn set (door_countdown()). Each door picks one of the four door sets, and every sound it makes plays at its pitch. Weapons
-break FAKE doors only (strike_door(), through weapon_strike()): hurt on each hit, death at 0 hp.
+/* Doors: full-height. Every standing door, real or fake, counts down like a trap, with a four-layer warn set
+(door_countdown()). Each door picks one of the door themes, and every sound it makes plays at its pitch. Weapons break
+FAKE doors only (strike_door(), through weapon_strike()): hurt on each hit, death at 0 hp.
 - A REAL door (pitch 100) marks each new 50 ms speed section: the spawner forces one when the step time reaches a new
-  mark, 450 down to 50, and none come after that. It starts locked (1.2): U on a key unlocks it from within
-  weapon_reach() (use_key()), then either hand opens it within hand_window_start(); a hand on a locked one plays deny.
-  Open plays and the door's loop stops, then its move sound LOOPS while the door carries you through. While it
-  carries you (door_moving) there are no footsteps, and you can't jump, crouch, use a hand or use weapons. Once you're
-  past its tile, the move loop stops and close plays behind you, fading as you run on (dev, 2026-11-03).
-- A FAKE door (pitch 80, 90, 110 or 120) is in the random mix at every speed. A hand or a key on it only plays jam ("This door is jammed."); it has to be
-  broken with weapons, with the walls' speed-scaled hp.
-Arriving on a standing door's tile, at any height, is a CRASH: its hit, the player's hit and the life sound, no death
-sound, doing door_damage (60) through take_damage(). On the last lives: its hit, the player's death, then the tile's fall. A missed real
-door's section still begins, since the door only marks it.
+  mark, and none come past the level's top speed. It starts locked: U on a key unlocks it from within weapon_reach()
+  (use_key()), then either hand opens it within hand_window_start(); a hand on a locked one plays deny. Open plays and
+  the door's loop stops, then its move sound LOOPS while the door carries you through. While it carries you
+  (door_moving) there are no footsteps, and you can't jump, crouch, use a hand or use weapons. Once you're past its
+  tile, the move loop stops and close plays behind you, fading as you run on.
+- A FAKE door (pitch 80, 90, 110 or 120) is in the random mix at every speed. A hand or a key on it only plays jam
+  ("This door is jammed."); it has to be broken with weapons, with its own speed-scaled hp (wall_spawn_hp()).
+Arriving on a standing door's tile, at any height, is a CRASH: its hit and the player's hit, no death sound, doing
+door_damage through take_damage(). A fatal crash: its hit, then end_run_hit(). A missed real door's section still
+begins, since the door only marks it.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_doors() shrinks the array. */
 sound_pool doorpool;
-// Where an environment keeps its doors themes (environments.nvgt). // moved from objects/interaction by the dev (2026-11-04)
+// Where an environment keeps its doors themes (environments.nvgt).
 string door_folder(const string&in env)
 {
 return trap_folder(env, "doors");
@@ -63,7 +62,7 @@ d.pair = placing_pair;
 d.real = real;
 d.locked = real;
 d.pitch = real ? 100 : fake_door_pitches[random(0, fake_door_pitches.length() - 1)];
-d.hp = free_obstacle_hp(wall_spawn_hp(door_min_hp, door_max_hp)); // or a free run's set health // speed-scaled like walls, but tougher (only fake doors can be broken)
+d.hp = free_obstacle_hp(wall_spawn_hp(door_min_hp, door_max_hp)); // speed-scaled like walls but tougher, or a free run's set health (only fake doors can be broken)
 d.countdown_start = dx - countdown;
 d.loopslot = play_door(d, "loop", dx, true);
 for (uint i = 0; i < doors.length(); i++)
@@ -92,7 +91,7 @@ bool door_standing(door@ d)
 return !d.opened and !d.destroyed and !d.crashed;
 }
 /* Called from hand_check() when no force field took the press. Acts on the nearest standing door in its hand window:
-an unlocked real door opens, a locked one plays deny, and a fake door plays jam (dev, 2026-11-03). Returns true if a
+an unlocked real door opens, a locked one plays deny, and a fake door plays jam. Returns true if a
 door took the press, so it goes no further. */
 bool open_door()
 {
@@ -120,7 +119,7 @@ target.opened = true;
 stat_add("real_doors_opened");
 stop_door(target);
 cancel_movement(); // any jump or crouch ends silently: the door carries you from here
-doorpool.play_stationary_extended(get_pack_sound(door_folder(target.env) + target.theme + "/*open*"), false, 0, 0, 0, target.pitch, false); // stationary (dev)
+doorpool.play_stationary_extended(get_pack_sound(door_folder(target.env) + target.theme + "/*open*"), false, 0, 0, 0, target.pitch, false); // stationary, centered on you
 door_moveslot = doorpool.play_stationary_extended(get_pack_sound(door_folder(target.env) + target.theme + "/*move*"), true, 0, 0, 0, target.pitch, false);
 door_moving = true;
 return true;
@@ -131,7 +130,7 @@ void jam_door(door@ d)
 doorpool.play_stationary_extended(get_pack_sound(door_folder(d.env) + d.theme + "/*jam*"), false, 0, 0, 0, d.pitch, false);
 speak_buffer("This door is jammed.", "doors");
 }
-/* U on a key (dev, 2026-11-03): the first half of opening a real door. Unlocks the nearest locked real door within
+/* U on a key: the first half of opening a real door. Unlocks the nearest locked real door within
 weapon_reach(): the key's use and the door's grant play centered. Refused, keeping the key: a fake door in reach jams,
 an unlocked real door says so, and nothing in reach says there's no door. Returns true if the key was used. */
 bool use_key(string color)
@@ -237,9 +236,9 @@ if (door_standing(d))
 d.crashed = true;
 stop_door(d);
 // A fatal crash plays the door's hit through p, at its pitch, and no player hit; end_run_hit() plays the death.
-stat_caught("doors");
+stat_caught("doors"); // the statistics: what caught you, and what ended the run if it's fatal
 last_caught_kind = d.real ? "real" : "fake"; // a practice death names it (practice_hints.nvgt)
-pair_part_hit(d.pair); // the statistics: what caught you, and what ended the run if it's fatal
+pair_part_hit(d.pair);
 int blow = take_damage(door_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {

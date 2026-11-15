@@ -1,5 +1,5 @@
-/* Spikes: jump-over obstacles that do spike_damage (20) through take_damage() if you're on the ground when you step onto their tile.
-Sounds (dev, 2026-11-02): the theme's loop clip is one SWING, played once per swing on the spike's own rhythm, a random
+/* Spikes: jump-over obstacles that do spike_damage through take_damage() if you're on the ground when you step onto their tile.
+Sounds: the theme's loop clip is one SWING, played once per swing on the spike's own rhythm, a random
 swing time between spike_swing_min and spike_swing_max picked when it appears, so some spikes are fast and others slow.
 The hit clip is the spike hitting you, played together with the player's hit; with lives left the run carries on,
 otherwise it ends with the player's death and the tile's fall. Swings are positioned oneshots at the spike's tile and
@@ -51,7 +51,7 @@ spikepool.play_2d(get_pack_sound(trap_folder(spikes[i].env, "spikes") + spikes[i
 spikes[i].next_swing = runtimer.elapsed + spikes[i].swing_time;
 }
 }
-// Runs once per step, right after the move: stepping onto a spike's tile while grounded costs lives.
+// Runs once per step, right after the move: stepping onto a spike's tile while grounded does its damage.
 void spike_check()
 {
 for (uint i = 0; i < spikes.length(); i++)

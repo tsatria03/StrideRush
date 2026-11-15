@@ -1,14 +1,13 @@
-/* Animals (dev, 2026-11-04, for 1.4; the birds plan): a belt-wide trap that only a clap clears. The type is "animals"
-(dev: "in the future, you'll be able to scare off other types of animals, such as dogs"); each theme folder in
-environments/<env>/traps/animals/general is a kind (birds, dogs), and each folder inside a kind is one animal (bird to bird24, dog and dog2). An animal plays its spawn clip at its
-tile, then its loop (every theme has its own call), with the layered animals countdown countdown. Clapping (both hands
-together, with nothing else for the hands to do) inside its hand window, the same window as a force field's switch,
-scares the nearest animal away: a random scare clip at its tile (dev, 2026-11-04: named scare, not flight, since "dogs cannot fly"), and its
-loop stops. Reaching one you didn't scare is a blow of animal_damage (10) through take_damage(), with its hit; jumping and
-ducking don't help. Belt-wide on purpose, so turning can't dodge it and the clap stays its only answer (dev: "belt wide").
+/* Animals: a belt-wide trap that only a clap clears. Each theme folder in environments/<env>/traps/animals/general is a
+kind (birds, dogs), and each folder inside a kind is one animal. An animal plays its spawn clip at its tile, then its
+loop (every theme has its own call), with the layered animals countdown. Clapping (both hands together, with nothing
+else for the hands to do) inside its hand window, the same window as a force field's switch, scares the nearest animal
+away: a random scare clip at its tile (scare, not flight, since not every animal flies), and its loop stops. Reaching
+one you didn't scare is a blow of animal_damage through take_damage(), with its hit; jumping and ducking don't help.
+Belt-wide on purpose, so changing lanes can't dodge it and the clap stays its only answer.
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_animals() shrinks the array. */
 sound_pool animalpool;
-// Where an environment keeps its animals themes (environments.nvgt). // one folder per kind (birds, dogs), then one per animal (dev, 2026-11-04)
+// Where an environment keeps its animals themes (environments.nvgt): one folder per kind, then one per animal.
 string animal_folder(const string&in env)
 {
 return trap_folder(env, "animals");
@@ -26,8 +25,8 @@ int loopslot = -1;
 animal@[] animals(0);
 
 /* countdown comes from the spawner like any trap's; it sets the countdown and the clap window. kind is the random kind
-folder the spawner picked (birds, dogs and so on), so every kind gets an equal share however many animals it has (dev,
-2026-11-04: "I'd rather go based off the animal kind"); the "animals, birds" and "animals, dogs" debug options force
+folder the spawner picked (birds, dogs and so on), so every kind gets an equal share however many animals it has; the
+"animals, birds" and "animals, dogs" debug options force
 theirs. Then one animal of that kind is picked, and its theme is the path below the animal folder ("dogs/dog2"). */
 void spawn_animal(double bx, string kind, int countdown)
 {
@@ -91,9 +90,9 @@ if (me.x == bd.x and !bd.spent)
 bd.spent = true;
 string hit_clip = get_pack_sound(animal_folder(bd.env) + bd.theme + "/*hit*");
 stop_animal(bd); // it ran into you: its call ends
-stat_caught("animals");
+stat_caught("animals"); // the statistics: what caught you, and what ended the run if it's fatal
 last_caught_kind = animal_singular(bd.theme.substr(0, bd.theme.find_first("/"))); // "birds/bird3" is a bird, for a practice death (practice_hints.nvgt)
-pair_part_hit(bd.pair); // the statistics: what caught you, and what ended the run if it's fatal
+pair_part_hit(bd.pair);
 int blow = take_damage(animal_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {

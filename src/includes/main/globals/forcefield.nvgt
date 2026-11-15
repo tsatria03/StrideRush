@@ -1,13 +1,12 @@
-/* Force fields: full-height obstacles (dev, 2026-11-02). A field plays its theme's on loop at its tile while active
-and its off loop while inactive. Jumping or crouching doesn't get you past one: stepping onto an active field hits you
-at any height, does forcefield_damage (20) through take_damage(), cancels any jump or crouch, and throws you forcefield_knockback_tiles
-forward past it, landing with the landing sounds. On the last life there's no throw: its hit, the player's death,
-then the tile's fall. A field counts down like the other obstacles, with its own warn cues and no ledges. Passed, it
-keeps its loop and fades out behind you until it's dropped a spawn distance behind.
-The switch: either hand turns a field off on any step of its countdown (dev, 2026-11-02), and always within the last
-switch_min_time before it, even where the countdown is shorter. The press plays centered
-(not panned to the hand; dev, 2026-11-02), and the field swaps its on loop for its off loop, so you pass it safely. With no field counting down, a
-hand press does nothing.
+/* Force fields: full-height obstacles. A field plays its theme's on loop at its tile while active and its off loop
+while inactive. Jumping or crouching doesn't get you past one: stepping onto an active field hits you at any height,
+does forcefield_damage through take_damage(), cancels any jump or crouch, and throws you forcefield_knockback_tiles
+forward past it, landing with the landing sounds. A fatal blow has no throw: its hit, the player's death, then the
+tile's fall. A field counts down like the other obstacles, with its own warn cues and no ledges. Passed, it keeps its
+loop and fades out behind you until it's dropped a spawn distance behind.
+The switch: either hand turns a field off on any step of its countdown, and always within the last switch_min_time
+before it. The press plays centered, not panned to the hand, and the field swaps its on loop for its off loop, so you
+pass it safely. With no field counting down, the press goes on to doors, items or an empty hand (hand_check()).
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_forcefields() shrinks the array. */
 sound_pool forcefieldpool;
 class forcefield
@@ -74,7 +73,7 @@ p.play_stationary(hit_clip, false);
 end_run_hit();
 return false;
 }
-// Shielded or not, the field still throws you past it (dev, 2026-11-03).
+// Shielded or not, the field still throws you past it.
 p.play_stationary(hit_clip, false);
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 cancel_movement();
@@ -88,20 +87,20 @@ if (me.x > f.x + spawn_distance()) remove_forcefield(i);
 }
 return false;
 }
-/* Runs every frame, before step_check(), so a press on the same frame as the step onto the field still counts on the
-warn5 step. Either hand works the same, and every hand sound that acts on something plays centered (dev, 2026-11-02: panning sounded too far
-to the side). It switches off the nearest active field that's counting down. */
-/* A hand held down after switching off a field (dev, 2026-11-11, in the combined obstacles plan's testing: one clap
-cleared a force field and an animal at once). That press was used on the field, so while it stays held it can't make
-the other hand's press a clap; let go, and it's free again. */
+/* A hand held down after switching off a field: that press was used on the field, so while it stays held it can't make
+the other hand's press a clap (otherwise one clap could clear a force field and an animal at once); let go, and it's
+free again. */
 bool left_used_on_field = false, right_used_on_field = false;
-// The switch press from the field's environment, a random switches theme (the transitions plan, dev, 2026-11-13).
+// The switch press from the field's environment, a random switches theme.
 string switch_press_sound(const string&in env)
 {
 string[] themes = get_pack_sound_folders(trap_folder(env, "switches") + "*");
 if (themes.length() == 0) return "";
 return get_pack_sound(trap_folder(env, "switches") + themes[random(0, themes.length() - 1)] + "/*press*");
 }
+/* Runs every frame, before step_check(), so a press on the same frame as the step onto the field still counts on the
+warn5 step. Either hand works the same, and every hand sound that acts on something plays centered. It switches off the
+nearest active field that's counting down. */
 void hand_check()
 {
 if (left_used_on_field and !controls.action_down("hand_left")) left_used_on_field = false;
@@ -151,12 +150,10 @@ switch_off_forcefield(target);
 if (left) left_used_on_field = true;
 if (right) right_used_on_field = true;
 }
-/* A hand press that grabbed, opened or switched nothing (dev, 2026-11-04): both hands together clap (misc/player
-clap1-3, centred); one hand alone plays woosh, centred too (dev, 2026-11-04; at first the left hand panned 50 left and
-the right 50 right). A clap also scares away the nearest animal in reach (animal.nvgt, the dev's use for claps, 2026-11-04).
+/* A hand press that grabbed, opened or switched nothing: both hands together clap (misc/player clap1-3, centred); one
+hand alone plays woosh, centred too. A clap also scares away the nearest animal in reach (animal.nvgt).
 "Together" is the same frame, one pressed while the other is held, or the other hand within clap_window ms. A lone
-press's woosh waits that long first, so a clap never comes with a woosh in front of it (dev: "I don't like how it plays
-the clap and woosh at the same time"). */
+press's woosh waits that long first, so a clap never comes with a woosh in front of it. */
 int woosh_pending_side = 0; // -1 a left-hand woosh is waiting, 1 a right-hand one, 0 none
 timer wooshtimer;
 void empty_hand_sound(bool left, bool right)
@@ -168,7 +165,7 @@ if (both)
 {
 woosh_pending_side = 0; // the waiting woosh becomes this clap
 p.play_stationary(get_pack_sound("misc/player/*clap*"), false);
-scare_animal(); // a clap scares off the nearest animal in reach, if there is one (the birds plan)
+scare_animal(); // a clap scares off the nearest animal in reach, if there is one
 return;
 }
 if (woosh_pending_side == side) play_pending_woosh(); // the same hand twice: the first woosh plays now
@@ -177,7 +174,7 @@ wooshtimer.restart();
 }
 void play_pending_woosh()
 {
-p.play_stationary(get_pack_sound("misc/player/*woosh*"), false); // centred (dev, 2026-11-04; it was panned 50 to the hand's side)
+p.play_stationary(get_pack_sound("misc/player/*woosh*"), false); // centred
 woosh_pending_side = 0;
 }
 // Where a field's switch can first be pressed: the shared hand window (hand_window_start() in spawner.nvgt).
@@ -199,7 +196,7 @@ void forcefield_countdown()
 {
 for (uint i = 0; i < forcefields.length(); i++)
 {
-// A switched-off field's countdown stops (dev, 2026-11-03): it's no danger any more.
+// A switched-off field's countdown stops: it's no danger any more.
 if (@forcefields[i] == null or !forcefields[i].active) continue;
 play_countdown(forcefieldpool, "force_fields", forcefields[i].x, forcefields[i].countdown_start, forcefields[i].env);
 }

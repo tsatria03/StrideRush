@@ -1,5 +1,5 @@
-/* Floor breakers (the floor breakers plan, dev, 2026-11-13; Section 1). A belt-wide trap that breaks the floor into a hole
-of air. Sounds from environments/<env>/traps/floor_breakers/general/<theme> (air so far): spawn as it appears, loop at
+/* Floor breakers: a belt-wide trap that breaks the floor into a hole of air. Sounds from
+environments/<env>/traps/floor_breakers/general/<theme>: spawn as it appears, loop at
 the hole as you near it, open as you open the corridor, fix1 to fix3 (one at random) for each piece you lay, repair once
 the floor is whole, fall if you go through. Its layered countdown (traps/floor_breakers/countdown) runs up to the hole and
 stops once the corridor is open.
@@ -11,8 +11,8 @@ stops once the corridor is open.
   plays and you're set on the mended floor, running on. Jumping, crouching, lane keys, weapons and inventory do nothing
   at the edge.
 - Falling: reaching the hole without opening it, or a repair mistake (the same hand twice, too slow, too quick): fall, then
-  your death, ending the run outright like a hazard; no shield or life saves you. In practice, a practice death set down
-  just past the hole. Section 2: floor_breakers_repaired and caught_floor_breakers, and the practice hint.
+  your death, ending the run outright like a hazard; no shield or life saves you. In practice (and a free run on practice
+  or no deaths), a practice death set down just past the hole.
 - On a slide or a good trampoline's flight it passes harmlessly (carried()). Not in combinations.
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_floor_breakers() shrinks
 the array. */
@@ -57,7 +57,7 @@ f.env = current_env;
 int level = run_difficulty < 0 ? 0 : run_difficulty; // practice and debug runs get easy's holes
 f.pieces = random(floor_pieces_min[level], floor_pieces_max[level]);
 f.countdown_start = x - countdown;
-practice_hint("floor_breakers", -1, x); // practice_hints.nvgt, a practice run only (Section 2)
+practice_hint("floor_breakers", -1, x); // practice_hints.nvgt, a practice run only
 floorpool.play_2d(get_pack_sound(floor_folder(f) + "*spawn*"), 0, me.x, 0, x, false);
 f.loopslot = floorpool.play_2d(get_pack_sound(floor_folder(f) + "*loop*"), 0, me.x, 0, x, true);
 for (uint i = 0; i < floor_breakers.length(); i++)
@@ -84,7 +84,7 @@ if (@target == null or f.x < target.x) @target = f;
 }
 if (@target == null) return false;
 target.opened = true;
-floorpool.play_stationary(get_pack_sound(floor_folder(target) + "*open*"), false); // stationary, like a door (dev, 2026-11-13)
+floorpool.play_stationary(get_pack_sound(floor_folder(target) + "*open*"), false); // stationary, like a door
 if (me.x == target.x - 1) start_repair(target);
 return true;
 }
@@ -138,7 +138,7 @@ if (repair_laid >= repair_floor.pieces)
 // Whole again: repair, and you're on the mended floor, running on.
 floor_breaker@ f = repair_floor;
 reset_repair();
-stat_add("floor_breakers_repaired"); // Section 2: the statistics, the achievements and the practice goal
+stat_add("floor_breakers_repaired"); // the statistics, the achievements and the practice goal
 f.spent = true;
 stop_floor_loop(f);
 floorpool.play_2d(get_pack_sound(floor_folder(f) + "*repair*"), 0, me.x, 0, f.x, false);
@@ -155,7 +155,7 @@ void floor_breaker_update()
 if (repairing and runtimer.elapsed >= repair_deadline) fall_through(repair_floor, true);
 }
 /* Through the hole: its fall and your death together, ending the run outright like a hazard (no shield or life saves you).
-In a practice run, a practice death set down just past the hole. mistake is a repair that gave way, rather than a hole
+With set_down_deaths(), a practice death set down just past the hole. mistake is a repair that gave way, rather than a hole
 never opened: the practice death says which (last_caught_kind "repair"). In an endless run it counts caught_floor_breakers;
 a practice fall counts nothing, as a hazard's. */
 void fall_through(floor_breaker@ f, bool mistake)
@@ -169,7 +169,7 @@ last_caught_kind = mistake ? "repair" : "";
 string fall_clip = get_pack_sound(floor_folder(f) + "*fall*");
 if (set_down_deaths()) // a practice run, or a free run on practice or no deaths (freerun.nvgt)
 {
-p.play_stationary(get_pack_sound("misc/player/*death*"), false); // with the fall, at the same time (dev, 2026-11-13); practice_death() keeps p playing
+p.play_stationary(get_pack_sound("misc/player/*death*"), false); // with the fall, at the same time; practice_death() keeps p playing
 practice_death(f.x + 1, fall_clip);
 return;
 }

@@ -53,8 +53,8 @@ practice_set_down(hazards[i], fall_clip);
 }
 else
 {
-stat_caught("hazards");
-pair_part_hit(hazards[i].pair); // the statistics: times fell into hazards (dev, 2026-11-06)
+stat_caught("hazards"); // the statistics: times fell into hazards
+pair_part_hit(hazards[i].pair);
 end_run_hazard(fall_clip);
 }
 return;
@@ -68,9 +68,9 @@ pair_part_cleared(hazards[i].pair);
 if (me.x > max(hazards[i].ledge_end, hazards[i].x + spawn_distance())) remove_hazard(i);
 }
 }
-/* A hazard fall in a practice run is a practice death (dev, 2026-11-06, then the practice deaths plan, 2026-11-09: every
-practice death gives everything back): the fall plays, "You died.", and you're set down on the ledge just past the
-hazard, which is always clear floor, while the hazard stays behind you. practice_death() is in endrun.nvgt. */
+/* A hazard fall in a practice run is a practice death that gives everything back: the fall plays, "You died.", and
+you're set down on the ledge just past the hazard, which is always clear floor, while the hazard stays behind you.
+practice_death() is in endrun.nvgt. */
 void practice_set_down(hazard@ h, const string&in fall_clip)
 {
 practice_death(h.x + 1, fall_clip);

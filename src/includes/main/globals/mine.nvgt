@@ -1,9 +1,9 @@
-/* Mines: jump-over obstacles that do mine_damage (40) through take_damage(). A mine plays its spawn clip when it appears. When you reach
+/* Mines: jump-over obstacles that do mine_damage through take_damage(). A mine plays its spawn clip when it appears. When you reach
 mine_arm_x(), a little before its countdown starts, it arms: light plays and its ticking loop starts, so light always
 comes before the first warning cue. Stepping onto it while grounded plays explode, the mine's hit and the player's hit
-all at once and stops its ticking, then costs lives; with none left the run ends with the player's death and the
-tile's fall. Jumped over, it keeps ticking and fades out behind you like a hazard's loop (dev, 2026-11-02), until it's
-dropped a spawn distance behind. No ledges, but a countdown on the normal floor before it, like a hazard's.
+all at once and stops its ticking, then does its damage; a fatal blow ends the run with the player's death and the
+tile's fall. Jumped over, it keeps ticking and fades out behind you like a hazard's loop, until it's dropped a spawn
+distance behind. No ledges, but a countdown on the normal floor before it, like a hazard's.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_mines() shrinks the array. */
 sound_pool minepool;
 class mine

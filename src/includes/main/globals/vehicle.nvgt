@@ -1,26 +1,25 @@
-/* Vehicles (the vehicles plan, dev, 2026-11-13; Section 1). A vehicle drives down a lane toward you, follows you across the
-lanes like a wind, fires bursts down its lane while it's in yours, and rams you if it reaches you there. Sounds from
-environments/<env>/vehicles (its own category, beside traps and transitions; type_path() in environments.nvgt): each folder in
-vehicles/general is a kind (cars), each folder inside a kind a theme (small_car to small_car3) with loop, shoot (fire until
-the dev renamed it, 2026-11-13), hit (the ram), impact (a shot striking you, added by the dev,
-2026-11-13), hurt and death. Each spawn is a random kind, an equal share whatever its number of themes, then one of its themes. Its layered
-countdown (vehicles/countdown) plays only on steps when it's in your lane.
-- Moving: timed to a meeting tile, meet_x, like a wind, closing vehicle_speed_factor (1.5) times as fast as a still
-  obstacle; every vehicle_beat_time (1 s, on runtimer) it moves one lane toward yours, until it reaches you.
-- Firing: once it's been in your lane vehicle_aim_delay (500 ms), a burst of vehicle_burst_shots (5) shots vehicle_shot_gap (50 ms) apart, shoot playing
-  at the car with its gentler falloff (vehicle_fade, dev, 2026-11-13: the shots were lost at a distance; the engine too,
-  heard only after the first shots otherwise), then a vehicle_burst_pause (2 s); leaving its lane ends a burst and starts the pause. Each shot flies down
-  the lane it was fired in, a tile every vehicle_shot_tile_time, unheard in flight; reaching you still in that lane it
-  does vehicle_shot_damage (5, scaled by level, a shield first), in another lane, or on a slide or a flight, it misses.
+/* Vehicles. A vehicle drives down a lane toward you, follows you across the lanes like a wind, fires bursts down its lane
+while it's in yours, and rams you if it reaches you there. Sounds from environments/<env>/vehicles (its own category,
+beside traps and transitions; type_path() in environments.nvgt): each folder in vehicles/general is a kind (cars), each
+folder inside a kind a theme, with loop, shoot, hit (the ram), impact (a shot striking you), hurt and death. Each spawn
+is a random kind, an equal share whatever its number of themes, then one of its themes. Its layered countdown
+(vehicles/countdown) plays only on steps when it's in your lane.
+- Moving: timed to a meeting tile, meet_x, like a wind, closing vehicle_speed_factor times as fast as a still obstacle;
+  every vehicle_beat_time (on runtimer) it moves one lane toward yours, until it reaches you.
+- Firing: once it's been in your lane vehicle_aim_delay, a burst of vehicle_burst_shots shots vehicle_shot_gap apart,
+  shoot playing at the car with a gentler falloff (vehicle_fade) so the shots aren't lost at a distance, then a
+  vehicle_burst_pause; leaving its lane ends a burst and starts the pause. Each shot flies down the lane it was fired in,
+  a tile every vehicle_shot_tile_time, unheard in flight; reaching you still in that lane it does vehicle_shot_damage
+  (scaled by level, a shield first); in another lane, or on a slide or a flight, it misses.
 - Breaking it: weapons hit it only while it's in your lane (vehicle_in_reach() for melee, vehicle_at_bullet() for a
   bullet); its hp is wall_spawn_hp(vehicle_min_hp, vehicle_max_hp), half a fake wall's; hurt on each hit, death at 0, its
   loop and its shots gone.
-- Within vehicle_ram_range (2 tiles) of you it stops firing, a burst cut short, and comes on to ram; shots already in the
-  air still fly.
-- On meet_x: in your lane, a ram of vehicle_ram_damage (40, scaled by level, a shield first), its hit playing like a
-  barrier's (dev, 2026-11-13: "Hit.ogg means the ram sound, like the barior"); in another lane, a dodge. Either way it drives on behind you. On a slide or a flight it passes harmlessly.
-Section 2: vehicles_destroyed, vehicles_dodged, caught_vehicles (rams) and vehicle_shots_taken; last_caught "vehicles" for a
-ram and "vehicle_shots" for a shot, each with its kind's singular ("car") as last_caught_kind; the practice hint.
+- Within vehicle_ram_range of you it stops firing, a burst cut short, and comes on to ram; shots already in the air still
+  fly.
+- On meet_x: in your lane, a ram of vehicle_ram_damage (scaled by level, a shield first), its hit playing like a
+  barrier's; in another lane, a dodge. Either way it drives on behind you. On a slide or a flight it passes harmlessly.
+Statistics: vehicles_destroyed, vehicles_dodged, caught_vehicles (rams) and vehicle_shots_taken; last_caught "vehicles"
+for a ram and "vehicle_shots" for a shot, each with its kind's singular ("car") as last_caught_kind.
 Not in combinations. Same entity pattern as the other traps: null-slot removal, reused slots, and only
 destroy_all_vehicles() shrinks the arrays. */
 sound_pool vehiclepool;
@@ -131,16 +130,16 @@ if (v.lane != current_lane) v.lane += current_lane > v.lane ? 1 : -1;
 vehicle_fire(v);
 }
 if (v.loopslot < 0 or !vehiclepool.verify_slot(v.loopslot)) continue;
-place_vehicle_sound(v, v.loopslot, vehicle_engine_fade); // the engine carries, though less far than its shots (dev, 2026-11-13)
+place_vehicle_sound(v, v.loopslot, vehicle_engine_fade); // the engine carries, though less far than its shots
 }
 shot_flight();
 }
 /* A burst in your lane: lining up with you (it moved into yours, or you into its) starts vehicle_aim_delay before its first
-shot, so you can leave the lane before it fires (dev, 2026-11-13: "How do you even avoide a shot?"); then its shots when
-they're due. Out of your lane, the burst ends and the pause starts. */
+shot, so you can leave the lane before it fires; then its shots when they're due. Out of your lane, the burst ends and
+the pause starts. */
 void vehicle_fire(vehicle@ v)
 {
-// Within vehicle_ram_range of you it stops firing and comes on to ram (dev, 2026-11-13: "It should ram into you instead").
+// Within vehicle_ram_range of you it stops firing and comes on to ram.
 if (vehicle_x(v) - vehicle_player_pos() <= vehicle_ram_range)
 {
 v.burst_left = 0;
@@ -169,7 +168,7 @@ v.burst_charged = false;
 }
 v.burst_left -= 1;
 v.next_shot = runtimer.elapsed + (v.burst_left > 0 ? vehicle_shot_gap : vehicle_burst_pause);
-vehicle_sound(v, "shoot", vehicle_fade); // heard clearly from anywhere it can be (dev, 2026-11-13)
+vehicle_sound(v, "shoot", vehicle_fade); // heard clearly from anywhere it can be
 vehicle_shot s;
 s.x = vehicle_x(v);
 s.lane = v.lane;
@@ -204,16 +203,16 @@ vehicle_shot_hit(s.owner);
 if (!running) return;
 }
 }
-/* A shot reaching you in its lane. last_caught is the vehicles, kind "shot", for the death line (Section 2 counts it). A
-fatal shot plays the player's death through end_run_hit(); in practice the vehicle and its shots go, so the retry is clear. */
+/* A shot reaching you in its lane. last_caught is "vehicle_shots" with the kind's singular, for the death line. A fatal
+shot plays the player's death through end_run_hit(); in practice the vehicle and its shots go, so the retry is clear. */
 void vehicle_shot_hit(vehicle@ v)
 {
 string impact_clip = get_pack_sound(vehicle_folder(v.env) + v.theme + "/*impact*");
-stat_add("vehicle_shots_taken"); // Section 2: each shot that reaches you, a shield's too
+stat_add("vehicle_shots_taken"); // each shot that reaches you, a shield's too
 last_caught = "vehicle_shots"; // the death outcome and the practice death line tell a shot from a ram
 last_caught_kind = animal_singular(v.kind); // "car"
 practice_hints_restart(); // a hit starts a practice run's hints over (practice_hints.nvgt)
-// A timed run's clock counts a burst as one hit, however many of its shots land (dev, 2026-11-13).
+// A timed run's clock counts a burst as one hit, however many of its shots land.
 if (!v.burst_charged)
 {
 v.burst_charged = true;

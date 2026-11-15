@@ -1,6 +1,5 @@
-/* Combined obstacles (the combined obstacles plan, dev, 2026-11-11; Section 1): sometimes the spawner places a pair, two
-obstacles close together that need two actions in a row, in place of one ordinary obstacle. Pairs only, never three
-(dev: "That will just make the game too hard"), and never with real doors. The pairs are combo_firsts[i] then
+/* Combined obstacles: sometimes the spawner places a pair, two obstacles close together that need two actions in a row,
+in place of one ordinary obstacle. Pairs only, never three, and never with real doors. The pairs are combo_firsts[i] then
 combo_seconds[i] (tuning.nvgt), and each also comes reversed. A pair can come once both its obstacles have joined the
 run and the current environment has both. The second part sits after the first by the first action's gap
 (combo_gap_ms()), so each part keeps its own countdown, the two overlapping, with no extra cue. A pair's barrier is a
@@ -10,7 +9,7 @@ single one in your lane. */
 string next_combo_first = "", next_combo_second = "";
 // How far past the first part the last placed pair's second part was, so the next spawn comes after it.
 int last_pair_span = 0;
-/* Section 2: clearing a pair. While place_pair() places its parts, placing_pair is that pair's id, and each part keeps it
+/* Clearing a pair. While place_pair() places its parts, placing_pair is that pair's id, and each part keeps it
 (its pair field; 0 for anything else). The live pairs are kept here by id: how many parts are still to come, and
 whether a hit spoiled it. Each part reports once, cleared (pair_part_cleared()) where its own clean-pass statistic is
 counted, or hit (pair_part_hit()) where its blow is; the pair is cleared when both parts were cleared. */
@@ -51,13 +50,13 @@ pair_spoiled.remove_at(i);
 }
 
 /* Debug spawn choices: "combinations" spawns only the first-order pairs, "combinations_reverse" only the reversed ones,
-and "combinations_mixed" both (dev, 2026-11-11). */
+and "combinations_mixed" both (also practice's combinations choice). */
 bool combo_debug_only()
 {
 return spawn_only == "combinations" or spawn_only == "combinations_reverse" or spawn_only == "combinations_mixed";
 }
 /* The share of obstacle spawns that become a pair: the level's difficulty_combo_percents entry, the full chaos rate in a
-debug run, none in practice (practice gets its own combinations choice in Section 3). */
+debug run, none in practice (practice has its own combinations choice). */
 int combo_percent()
 {
 if (practice_run) return 0;
@@ -96,7 +95,7 @@ next_combo_first = firsts[pick];
 next_combo_second = seconds[pick];
 return true;
 }
-/* The gap after a pair's first part, in ms, by what the first part asks of you (dev, 2026-11-11): a jump keeps you in
+/* The gap after a pair's first part, in ms, by what the first part asks of you: a jump keeps you in
 the air about a second, a crouch has to be stood up from, and lane switches, firing and single hands are instant. Between a
 force field and an animal, either way, the gap is wider, so a hand press never has both in reach (hand_check() gives it
 to the field first). */
@@ -118,7 +117,7 @@ void place_pair(double x, int countdown)
 {
 int span = combo_gap_tiles(next_combo_first, next_combo_second);
 last_pair_id += 1;
-placing_pair = last_pair_id; // each part keeps it (Section 2)
+placing_pair = last_pair_id; // each part keeps it
 pair_ids.insert_last(placing_pair);
 pair_parts_left.insert_last(2);
 pair_spoiled.insert_last(false);

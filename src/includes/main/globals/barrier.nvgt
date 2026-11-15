@@ -1,17 +1,15 @@
-/* Barriers (dev, 2026-11-04; Section 2 of the lanes plan, first built in 1.3, undone, and brought back for 1.4 on top of
-the rebuilt lanes): the one trap that fills a single lane, avoided only by moving to another lane. Jumping, crouching,
-weapons and hands don't help. Each barrier is placed in the lane you're in when it appears, about 3 s ahead, and stays
-in that lane. Its theme is random among the current environment's traps/barriers/general.
-Sound: since Section 3 turned the belt forward (2026-11-05), a barrier's loop is placed like every belt sound, at its
-tile along the belt, but across it by its lane relative to yours (barrier_side()): your lane is straight ahead, one
-lane over is to that side, two lanes over further. It gets louder as it nears and falls behind you once passed,
-lower in pitch. (Before, while the belt still ran to the right, it played stationary with its own pan and fade.)
+/* Barriers: the one trap that fills a single lane, avoided only by moving to another lane. Jumping, crouching, weapons
+and hands don't help. Each barrier appears about 3 s ahead in a lane chosen by spawn_barriers() and stays in that lane.
+Its theme is random among the current environment's traps/barriers/general.
+Sound: a barrier's loop is placed like every belt sound, at its tile along the belt, but across it by its lane relative
+to yours (place_lane_sound()): your lane is straight ahead, one lane over is to that side, two lanes over further. It
+gets louder as it nears and falls behind you once passed, lower in pitch.
 Countdown: the barriers countdown layered warn set, but only on steps where you're in its lane, so the cues stop once
 you've moved out and start again if you move back in.
-Arriving on its tile in its lane is a blow of barrier_damage (80) through take_damage(), with its hit, and its loop
-still passes through and fades behind you, like a spike's (dev, 2026-11-05); in another lane it just passes.
-Barriers are in obstacle_types, an equal pick in "all" and the real game, with the "multiple lanes" rule below; the
-three barrier debug choices still pick one rule each.
+Arriving on its tile in its lane is a blow of barrier_damage through take_damage(), with its hit, and its loop still
+passes through and fades behind you, like a spike's; in another lane it just passes.
+Barriers are in obstacle_types, picked barrier_weight times as often as other types in the real game, with the
+"multiple lanes" rule below; the three barrier debug choices pick one rule each.
 Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_barriers() shrinks the array. */
 sound_pool barrierpool;
 // Where an environment keeps its barriers themes (environments.nvgt).
@@ -37,13 +35,12 @@ bool barriers_available()
 {
 return get_pack_sound_folders(barrier_folder(current_env) + "*").length() > 0;
 }
-/* One barrier spawn, from place_obstacle() (dev, 2026-11-04):
+/* One barrier spawn, from place_obstacle():
 - "barriers" (debug): a single barrier in the lane you're in right now, for testing hits.
 - "barriers, random lanes" (debug): a single barrier in any of the three lanes.
-- "barriers, multiple lanes" (debug) and the real game: a random lane, and barrier_pair_percent of the time a second barrier
-  beside it in a different lane, with its own random theme. Two never share a lane, so one lane is always open (dev: "I
-  highly recommend making them random in the real game so it's not super predictable"; "sometimes 2 of them can
-  appear, but one of them has to be on the lane you are not at"). */
+- "barriers, multiple lanes" (debug and practice) and the real game: a random lane, and barrier_pair_percent of the time
+  a second barrier beside it in a different lane, with its own random theme. Two never share a lane, so one lane is
+  always open. */
 void spawn_barriers(double bx, string theme, int countdown)
 {
 if (spawn_only == "barriers")
@@ -83,7 +80,7 @@ return;
 barriers.insert_last(b);
 }
 /* Its place across the belt, relative to you, in lanes: 0 in your lane (straight ahead), 1 or 2 to the right, -1 or -2
-to the left. barrierpool's pan_step (lane_pan_step) turns one lane into the pan of 50 the stationary version used. */
+to the left; the loop's starting position before place_barrier() moves it. */
 int barrier_side(barrier@ b)
 {
 return b.lane - current_lane;
@@ -97,9 +94,8 @@ if (@barriers[i] == null or barriers[i].loopslot < 0) continue;
 place_barrier(barriers[i]);
 }
 }
-/* Where a barrier's loop sits: by its lane relative to yours, at a fixed angle under HRTF (dev, 2026-11-05: left and
-right barriers sounded "sort of in the front, but not quite"). The placement is shared with the lane items:
-place_lane_sound() in lane.nvgt. */
+/* Where a barrier's loop sits: by its lane relative to yours, at a fixed angle under HRTF so side lanes don't sound
+nearly straight ahead. The placement is shared with the lane items: place_lane_sound() in lane.nvgt. */
 void place_barrier(barrier@ b)
 {
 place_lane_sound(barrierpool, b.loopslot, b.lane, b.x);
@@ -127,9 +123,9 @@ pair_part_cleared(b.pair);
 if (b.lane == current_lane)
 {
 string hit_clip = get_pack_sound(barrier_folder(b.env) + b.theme + "/*hit*");
-// Its loop carries on through you and fades behind, like a spike's (dev, 2026-11-05); a fatal hit silences the run anyway.
-stat_caught("barriers");
-pair_part_hit(b.pair); // the statistics: what caught you, and what ended the run if it's fatal
+// Its loop carries on through you and fades behind, like a spike's; a fatal hit silences the run anyway.
+stat_caught("barriers"); // the statistics: what caught you, and what ended the run if it's fatal
+pair_part_hit(b.pair);
 int blow = take_damage(barrier_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {

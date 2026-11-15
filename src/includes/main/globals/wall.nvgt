@@ -1,16 +1,16 @@
-/* Walls (dev, 2026-11-03, for 1.1): full-height obstacles you destroy with your weapons. A wall plays its theme's loop at
-its tile, so it grows louder as you near it, and spawns with an hp that climbs with your speed (wall_spawn_hp()). It counts down with
-the layered walls set (both octaves at once). Jumping or crouching doesn't get you past one: arriving on a standing
-wall's tile at any height is a CRASH. The wall's hit, the player's hit and the life sound play, its loop stops and you
-run on, taking wall_damage (20) through take_damage(). A crash has NO death sound (dev, 2026-11-03): death is only for a wall your weapons
-destroy. A crash is not a destroy, so later scoring can tell them apart. On the
-last life: its hit, the player's death, then the tile's fall.
+/* Walls: full-height obstacles you destroy with your weapons. These are FAKE walls, so named wherever players see them
+(real walls are climbed by their ladder, ladder.nvgt), and every sound one makes plays at an odd pitch from
+fake_door_pitches, as a fake door's does: an odd pitch always means "break it". The saved statistic keys (walls_broken,
+caught_walls) keep their old names.
+A wall plays its theme's loop at its tile, so it grows louder as you near it, and spawns with an hp that climbs with
+your speed (wall_spawn_hp()). It counts down with the layered walls set (both octaves at once). Jumping or crouching
+doesn't get you past one: arriving on a standing wall's tile at any height is a CRASH. The wall's hit and the player's
+hit play, its loop stops and you run on, taking wall_damage through take_damage(). A crash has NO death sound: death
+is only for a wall your weapons destroy, and a crash doesn't count as a destroy. A fatal blow: its hit, the player's
+death, then the tile's fall.
 Weapons hit the nearest standing wall within reach through strike_wall(), called by weapon_strike() in weapons.nvgt:
 the wall's hurt plays on each hit, and at 0 hp its death plays, its loop stops and it counts as DESTROYED.
-Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_walls() shrinks the array.
-Since the ladders plan (dev, 2026-11-12), these are FAKE walls, so named wherever players see them, and every sound one
-makes plays at an odd pitch from fake_door_pitches, as a fake door's does: an odd pitch always means "break it". The
-saved statistic keys (walls_broken, caught_walls) keep their old names. */
+Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_walls() shrinks the array. */
 sound_pool wallpool;
 class wall
 {
@@ -51,8 +51,7 @@ walls.insert_last(w);
 }
 /* A new wall's or fake door's hp: a center that climbs from min_hp at start_step_time to max_hp at min_step_time as the
 run speeds up, then a random spread of wall_hp_spread percent either side, kept within min_hp to max_hp. Walls pass
-wall_min_hp and wall_max_hp, doors door_min_hp and door_max_hp (dev, 2026-11-05: "Doors are meant to be much stronger
-than walls"). */
+wall_min_hp and wall_max_hp, doors their tougher door_min_hp and door_max_hp. */
 int wall_spawn_hp(int min_hp, int max_hp)
 {
 double progress = double(start_step_time - step_time) / (start_step_time - min_step_time);
@@ -60,8 +59,7 @@ progress = max(0, min(1, progress));
 double center = min_hp + progress * (max_hp - min_hp);
 int low = int(max(min_hp, center * (100 - wall_hp_spread) / 100));
 int high = int(min(max_hp, center * (100 + wall_hp_spread) / 100));
-/* Then the level's share (the difficulty scaling plan's Section 3, dev, 2026-11-09): 60 percent on easy up to the full
-toughness on chaos, the same ladder as damage, never below 1. */
+// Then the level's share: 60 percent on easy up to the full toughness on chaos, the same ladder as damage, never below 1.
 int hp = random(low, high) * level_percent() / 100;
 return hp < 1 ? 1 : hp;
 }
@@ -98,7 +96,7 @@ p.play_stationary_extended(hit_clip, false, 0, 0, 0, w.pitch, false);
 end_run_hit();
 return;
 }
-wallpool.play_extended_2d(hit_clip, 0, me.x, 0, w.x, 0, 0, 0, 0, false, 0, 0, 0, w.pitch); // no death sound: that's only for a wall your weapons destroy (dev)
+wallpool.play_extended_2d(hit_clip, 0, me.x, 0, w.x, 0, 0, 0, 0, false, 0, 0, 0, w.pitch); // no death sound: that's only for a wall your weapons destroy
 if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
 }
 // Dropped once it's as far behind as obstacles appear ahead.
@@ -114,7 +112,7 @@ if (@walls[i] != null and walls[i].x == x and wall_standing(walls[i])) return wa
 }
 return null;
 }
-// The nearest standing wall from 1 to reach tiles ahead, or null. weapon_strike() compares it with the nearest fake door.
+// The nearest standing wall from 1 to reach tiles ahead, or null. weapon_strike() compares it with its other targets.
 wall@ wall_in_reach(int reach)
 {
 wall@ target = null;
@@ -148,7 +146,7 @@ void wall_countdown()
 {
 for (uint i = 0; i < walls.length(); i++)
 {
-// A destroyed wall's countdown stops (dev, 2026-11-03): nothing is left to warn about.
+// A destroyed wall's countdown stops: nothing is left to warn about.
 if (@walls[i] == null or !wall_standing(walls[i])) continue;
 play_countdown(wallpool, "walls", walls[i].x, walls[i].countdown_start, walls[i].env);
 }

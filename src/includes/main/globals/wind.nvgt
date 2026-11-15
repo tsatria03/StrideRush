@@ -1,22 +1,22 @@
-/* Winds (the winds plan, dev, 2026-11-10 and 11; Section 1): a gust that chases you across the lanes and shoves you
-sideways. Each is timed to a meeting tile, meet_x, like a projectile, and closes in wind_speed_factor (1.5) times as fast
-as a still obstacle, so it reaches meet_x on the same step you do. It appears in a random lane, its loop placed in its
+/* Winds: a gust that chases you across the lanes and shoves you sideways. Each is timed to a meeting tile, meet_x, like
+a projectile, and closes in wind_speed_factor times as fast as a still obstacle, so it reaches meet_x on the same step
+you do. It appears in a random lane, its loop placed in its
 lane like a barrier's (place_lane_sound()), and every wind_beat_time (on runtimer, so pausing freezes it) it moves one
 lane toward the lane you're in, remembering which way it went. Its countdown (the layered traps/winds/countdown set)
 plays only on steps when it's in your lane, so the cues start when it catches you and stop when you lose it.
-On meet_x: in another lane, it passes you, a clean dodge (winds_dodged). In your lane, its hit and wind_damage (5, scaled
-by difficulty through take_damage(), a worn shield first), and a shove of one lane (shove_dir(): toward the middle from an
-edge lane, the way it last drifted from the middle, a random way if it never moved); crouching as it arrives is a brace: no shove, still the hit, which
-counts as caught. Either way its loop carries on behind you. On a slide you pass through it harmlessly.
-Not in combinations (the dev, 2026-11-11). Same entity pattern as the other traps: null-slot removal, reused slots, and
-only destroy_all_winds() shrinks the array. */
+On meet_x: in another lane, it passes you, a clean dodge (winds_dodged). In your lane, its hit and wind_damage (scaled
+by difficulty through take_damage(), a worn shield first), and a shove of one lane (shove_dir()); crouching as it
+arrives is a brace: no shove, still the hit, which counts as caught. Either way its loop carries on behind you. On a
+slide you pass through it harmlessly.
+Not in combinations. Same entity pattern as the other traps: null-slot removal, reused slots, and only
+destroy_all_winds() shrinks the array. */
 sound_pool windpool;
 class wind
 {
 double meet_x;
 string theme;
 string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
-int pair = 0; // never set: winds aren't in combinations, kept for the shared pair hooks
+int pair = 0; // always 0, since winds aren't in combinations; kept for the shared pair hooks
 int lane;
 int drift_dir = 0; // -1 it last moved left, 1 right, 0 it hasn't moved
 double next_beat; // on runtimer
@@ -100,11 +100,11 @@ pair_part_cleared(w.pair);
 else
 {
 string hit_clip = get_pack_sound(trap_folder(w.env, "winds") + w.theme + "/*hit*");
-bool braced = is_ducked(); // crouching as it arrives: no shove, still the hit (dev, 2026-11-11)
+bool braced = is_ducked(); // crouching as it arrives: no shove, still the hit
 /* A fatal hit plays the wind's hit through p and no player hit, since end_run_hit() plays the player's death
 instead. */
-stat_caught("winds");
-pair_part_hit(w.pair); // the statistics: what caught you, and what ended the run if it's fatal
+stat_caught("winds"); // the statistics: what caught you, and what ended the run if it's fatal
+pair_part_hit(w.pair);
 int blow = take_damage(wind_damage); // a worn shield, else your health
 if (blow == blow_fatal)
 {
@@ -124,10 +124,9 @@ wind_shove(shove_dir(w));
 if (me.x > w.meet_x + spawn_distance()) remove_wind(i);
 }
 }
-/* Which way a wind shoves you (dev, 2026-11-11, after testing: at an edge it only bumped you, since a wind reaching an
-edge lane was always drifting toward that edge): from the left lane, right toward the middle; from the right lane, left
-toward the middle; from the middle, the way it was drifting, or a random way if it never moved. So a shove always moves
-you one lane. */
+/* Which way a wind shoves you: from the left lane, right toward the middle; from the right lane, left toward the middle;
+from the middle, the way it was drifting, or a random way if it never moved. So a shove always moves you one lane: a
+wind reaching an edge lane is always drifting toward that edge, so shoving the way it drifted would only bump you. */
 int shove_dir(wind@ w)
 {
 if (current_lane == lane_left) return 1;
@@ -148,7 +147,7 @@ return;
 current_lane = target;
 p.play_stationary_extended(get_pack_sound("misc/player/*turn*"), false, 0, belt_pan(current_lane), 0, 100, false);
 }
-// The countdown: the winds countdown cues, only on steps where it's in your lane (dev, 2026-11-11). Runs once per step.
+// The countdown: the winds countdown cues, only on steps where it's in your lane. Runs once per step.
 void wind_countdown()
 {
 for (uint i = 0; i < winds.length(); i++)

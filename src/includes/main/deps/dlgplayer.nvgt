@@ -6,7 +6,7 @@ dlgaudio.play();
 while(dlgaudio.playing)
 {
 wait(5);
-if(key_repeating(KEY_RETURN) and skippable==true or key_down(KEY_A) and skippable==true)
+if(key_repeating(KEY_RETURN) and skippable==true)
 {
 if (fadeable==true)
 {

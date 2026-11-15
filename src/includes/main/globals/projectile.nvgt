@@ -1,9 +1,9 @@
-/* Projectiles: duck-under obstacles that fly toward you (dev, 2026-11-02). Each is timed to a meeting tile, meet_x,
+/* Projectiles: duck-under obstacles that fly toward you. Each is timed to a meeting tile, meet_x,
 picked by the spawner like any obstacle's tile. Its loop starts as far beyond meet_x as you are before it and flies
 toward you at (projectile_speed_factor - 1) times the belt's speed, so it closes in projectile_speed_factor times as
 fast as a still obstacle and reaches meet_x on the same step you do; the countdown stays as reliable as anyone's.
 On that step, crouched is safe and it flies on behind you; standing or in the air is a hit that costs
-projectile_damage (20) through take_damage() and stops its loop. On the last life: its hit, the player's death, then the tile's fall.
+projectile_damage through take_damage() and stops its loop. A fatal blow: its hit, the player's death, then the tile's fall.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_projectiles() shrinks the array. */
 sound_pool projectilepool;
 class projectile
