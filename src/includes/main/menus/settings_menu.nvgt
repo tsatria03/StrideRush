@@ -1,5 +1,4 @@
-/* The settings menu (dev, 2026-11-04, for 1.3): one audio form window with a
-Category tab panel, and save settings and cancel buttons. From the main menu it has General, Game, Keyboard, Menu,
+/* The settings menu: one audio form window with a Category tab panel, and save settings and cancel buttons. From the main menu it has General, Game, Keyboard, Menu,
 Sound and Speech; F2 during a run shows only Game, Menu and Speech (ingame), so keys can't be rebound mid-run.
 
 The checkboxes only take effect on save settings; cancel or escape says "canceled" and drops them. The buttons that
@@ -8,9 +7,9 @@ rebuilds the window afterwards, so the unsaved ticks are carried in locals acros
 void settingsmenu(bool ingame = false)
 {
 bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions, new_updates = auto_check_updates, new_death_results = show_death_results, new_death_copy = show_death_copy_export;
-// The volume sliders (the volume sliders plan, 2026-11-08), in dB from -100 to 0, shown as 0 to 100 percent.
+// The volume sliders, in dB from min_volume to 0, shown as 0 to 100 percent.
 int new_amb_vol = ambience_volume, new_step_vol = footstep_volume, new_mus_vol = music_volume, new_heart_vol = heartbeat_volume, new_menu_vol = menumusvolume, new_master_vol = master_volume;
-int tab_shown = 0; // opens on the first tab: General from the main menu (dev, 2026-11-04), Game from F2
+int tab_shown = 0; // opens on the first tab: General from the main menu, Game from F2
 while (true)
 {
 audio_form setform;
@@ -31,28 +30,27 @@ int tab_speech = ingame ? 2 : 5;
 int reset_btn = -1, view_btn = -1, rebind_btn = -1, fade_box = -1, hrtf_box = -1, device_btn = -1, loop_box = -1, menu_vol_slider = -1, master_vol_slider = -1, updates_box = -1;
 if (!ingame)
 {
-// The General tab: the startup update check (moved from the Game tab, dev, 2026-11-08), then reset, checkboxes before buttons.
-updates_box = setform.create_checkbox("Enable checking for game updates at startup", new_updates); // dev, 2026-11-05
+// The General tab: the startup update check, then reset; checkboxes always come before buttons in a tab.
+updates_box = setform.create_checkbox("Enable checking for game updates at startup", new_updates);
 setform.assign_to_tab(updates_box, tabs, tab_general);
 reset_btn = setform.create_button("&Reset settings");
 setform.assign_to_tab(reset_btn, tabs, tab_general);
 }
-// The Game tab's volume sliders come first, before its checkboxes (dev, 2026-11-08).
+// The Game tab: the volume sliders first (ambience, footsteps, heartbeat, music), then the checkboxes.
 int amb_vol_slider = setform.create_slider("Game ambience volume,", new_amb_vol + 100, 0, 100, "percent", 1);
 setform.assign_to_tab(amb_vol_slider, tabs, tab_game);
-int step_vol_slider = setform.create_slider("Game footsteps volume,", new_step_vol + 100, 0, 100, "percent", 1); // after the ambience, before the heartbeat (the footstep volume plan, dev, 2026-11-10)
+int step_vol_slider = setform.create_slider("Game footsteps volume,", new_step_vol + 100, 0, 100, "percent", 1);
 setform.assign_to_tab(step_vol_slider, tabs, tab_game);
-int heart_vol_slider = setform.create_slider("Game heartbeat volume,", new_heart_vol + 100, 0, 100, "percent", 1); // before the music (the heartbeat plan, dev, 2026-11-08)
+int heart_vol_slider = setform.create_slider("Game heartbeat volume,", new_heart_vol + 100, 0, 100, "percent", 1);
 setform.assign_to_tab(heart_vol_slider, tabs, tab_game);
 int mus_vol_slider = setform.create_slider("Game music volume,", new_mus_vol + 100, 0, 100, "percent", 1);
 setform.assign_to_tab(mus_vol_slider, tabs, tab_game);
-/* The Game tab, in the dev's order (2026-11-05): the "Enable" checkbox first (behind pitch decrease; the startup update
-check moved to the General tab on 2026-11-08), then the Escape question. */
+// After the sliders: the "Enable" checkbox first (behind pitch decrease), then the Escape question.
 int behind_box = setform.create_checkbox("Enable behind pitch decrease", new_behind);
 setform.assign_to_tab(behind_box, tabs, tab_game);
 int ask_box = setform.create_checkbox("Ask to quit the run when pressing escape", new_ask);
 setform.assign_to_tab(ask_box, tabs, tab_game);
-// After the Escape question (the death settings plan, dev, 2026-11-08), both on by default.
+// The two death settings after the Escape question, both on by default.
 int death_results_box = setform.create_checkbox("Show session results after dying", new_death_results);
 setform.assign_to_tab(death_results_box, tabs, tab_game);
 int death_copy_box = setform.create_checkbox("Show copy and export options after dying", new_death_copy);
@@ -72,30 +70,29 @@ int position_box = setform.create_checkbox("Enable position information in menus
 setform.assign_to_tab(position_box, tabs, tab_menu);
 int scroll_box = setform.create_checkbox("Enable side scrolling in menus", new_scroll);
 setform.assign_to_tab(scroll_box, tabs, tab_menu);
-// The learn sounds menu's labels (dev, 2026-11-05), after side scrolling.
+// The learn sounds menu's labels, after side scrolling.
 int variants_box = setform.create_checkbox("Enable variant descriptions in the learn sounds menu", new_variants);
 setform.assign_to_tab(variants_box, tabs, tab_menu);
 if (!ingame)
 {
-/* The Sound tab, in the dev's order (2026-11-05): HRTF, volume fading, the learn sounds menu's looping, then the device.
-Checkboxes always come before buttons in a tab (dev, 2026-11-05). */
-// The global volumes first, before the checkboxes (dev, 2026-11-08: "The menu/master volumes are global, so yes, the sound tab").
+/* The Sound tab: the global volumes first (menu music and master, global rather than in-game, so here and not on the
+Game tab), then HRTF, volume fading, the learn sounds menu's looping, and the device button last. */
 menu_vol_slider = setform.create_slider("Menu music volume,", new_menu_vol + 100, 0, 100, "percent", 1);
 setform.assign_to_tab(menu_vol_slider, tabs, tab_sound);
 master_vol_slider = setform.create_slider("Master game volume,", new_master_vol + 100, 0, 100, "percent", 1);
 setform.assign_to_tab(master_vol_slider, tabs, tab_sound);
-hrtf_box = setform.create_checkbox("Enable global HRTF support", new_hrtf); // main menu only (dev, 2026-11-04)
+hrtf_box = setform.create_checkbox("Enable global HRTF support", new_hrtf); // main menu only
 setform.assign_to_tab(hrtf_box, tabs, tab_sound);
 fade_box = setform.create_checkbox("Enable global volume fading", new_fade);
 setform.assign_to_tab(fade_box, tabs, tab_sound);
-loop_box = setform.create_checkbox("Enable looping of previewed sounds", new_loop); // dev, 2026-11-05
+loop_box = setform.create_checkbox("Enable looping of previewed sounds", new_loop);
 setform.assign_to_tab(loop_box, tabs, tab_sound);
 device_btn = setform.create_button("Select sound &device. Currently set to " + soundcard);
 setform.assign_to_tab(device_btn, tabs, tab_sound);
 }
 int voice_btn = setform.create_button("&Configure voice");
 setform.assign_to_tab(voice_btn, tabs, tab_speech);
-int preview_btn = setform.create_button("&Preview voice"); // dev, 2026-11-04
+int preview_btn = setform.create_button("&Preview voice");
 setform.assign_to_tab(preview_btn, tabs, tab_speech);
 int save_btn = setform.create_button("&Save settings", true);
 int cancel_btn = setform.create_button("&Cancel", false, true);
@@ -145,7 +142,7 @@ variant_descriptions = new_variants;
 if (!ingame) auto_check_updates = new_updates;
 show_death_results = new_death_results;
 show_death_copy_export = new_death_copy;
-apply_volume_settings(new_amb_vol, new_mus_vol, new_heart_vol, new_menu_vol, new_master_vol, new_step_vol); // only on save (dev, 2026-11-08)
+apply_volume_settings(new_amb_vol, new_mus_vol, new_heart_vol, new_menu_vol, new_master_vol, new_step_vol); // volumes change only on save
 behind_pitch = new_behind;
 apply_behind_pitch();
 if (!ingame)
@@ -154,7 +151,7 @@ hrtf = new_hrtf;
 sound_global_hrtf = hrtf; // takes effect for sounds from now on
 }
 writepreffs();
-dlgmessage_return("Settings saved."); // a dialog you dismiss (dev, 2026-11-05), like Preview voice
+dlgmessage_return("Settings saved."); // a dialog you dismiss, like Preview voice
 return;
 }
 if (reset_btn != -1 && setform.is_pressed(reset_btn))
@@ -201,7 +198,7 @@ break;
 }
 if (setform.is_pressed(preview_btn))
 {
-dlgmessage_return("This is your current voice configuration."); // a dialog, so the form doesn't talk over it (dev, 2026-11-04)
+dlgmessage_return("This is your current voice configuration."); // a dialog, so the form doesn't talk over it
 break;
 }
 if (setform.is_pressed(voice_btn))
@@ -225,8 +222,7 @@ if (mres >= 0 and m.selected_item_id == "yes") return true;
 speak("canceled");
 return false;
 }
-/* Puts every setting back to its default and saves (dev, 2026-11-04), then restarts the game (dev, 2026-11-09), so
-every default, the sound device and HRTF included, starts fresh. Key bindings are left alone: they live in keyboard.ini,
+/* Puts every setting back to its default and saves, then restarts the game, so every default, the sound device and HRTF included, starts fresh. Key bindings are left alone: they live in keyboard.ini,
 not settings.srf. Reset is only offered from the main menu, so no run is ever cut off. */
 void reset_settings()
 {
@@ -251,8 +247,8 @@ hrtf = true;
 sound_global_hrtf = hrtf;
 loop_previews = true;
 variant_descriptions = true;
-auto_check_updates = false; // off by default (dev, 2026-11-10)
-for (uint i = 0; i < buffers.length(); i++) buffers[i].muted = false; // every buffer unmuted, saved below (dev, 2026-11-12)
+auto_check_updates = false; // off by default
+for (uint i = 0; i < buffers.length(); i++) buffers[i].muted = false; // every buffer unmuted, saved below
 use_sr = true;
 tts.set_rate(0);
 tts.set_pitch(0);
@@ -272,7 +268,7 @@ devices.remove_at(0);
 setupmenu();
 for (uint i = 0; i < devices.length(); i++)
 {
-// Each one says whether it's the device in use (dev, 2026-11-08): "Speakers, active" or "Headphones, inactive".
+// Each one says whether it's the device in use: "Speakers, active" or "Headphones, inactive".
 m.add_item(devices[i] + (i + 1 == uint(sound_output_device) ? ", active" : ", inactive"), devices[i]);
 }
 m.intro_text = "Choose a sound device you'd like to use in the game.";
@@ -283,9 +279,9 @@ sound_output_device = mres + 1;
 writepreffs();
 dlg("Sound device set to " + soundcard + ".");
 }
-/* Save settings's volumes (the volume sliders plan, 2026-11-08), each in dB from -100 to 0: the run's ambience and music,
-heard at once if a run is playing them (F2 mid-run), the heartbeat from its next beat, the footsteps from the next step, the menu music, and the master through the engine's
-sound_master_volume. writepreffs() after it saves them with the rest. */
+/* Save settings's volumes, each in dB from min_volume to 0: the run's ambience and music, heard at once if a run is
+playing them (F2 mid-run), the heartbeat from its next beat, the footsteps from the next step, the menu music, and the
+master through the engine's sound_master_volume. writepreffs() after it saves them with the rest. */
 void apply_volume_settings(int amb, int mus, int heart, int menu, int master, int step)
 {
 heartbeat_volume = heart; // the next beat plays at it

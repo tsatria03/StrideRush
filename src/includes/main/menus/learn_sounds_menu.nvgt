@@ -1,22 +1,22 @@
-/* The learn sounds menu (dev, 2026-11-05), in the game menu.
+/* The learn sounds menu, in the game menu.
 Everything is built from the sound folders each time it opens, so a new obstacle theme, item or weapon
 dropped into sdr/sounds shows up with no code change:
 - items: common (equipments/items/common) and other (equipments/items/other, the keys)
-- environments: one category per folder in environments/, named by it (default so far), each with
-  - countdowns: one countdown per obstacle type that has cues (environments/<env>/traps/<type>/countdown)
-  - traps: one list per obstacle type (environments/<env>/traps/<type>/general, every theme's sounds)
+- environments: one category per folder in environments/, named by it, each with
+  - countdowns: one countdown per type that has cues, from traps, transitions and vehicles (<type>/countdown)
+  - traps, transitions and vehicles: one list per type (<type>/general, every theme's sounds)
 - weapons: artillery and melee (equipments/weapons/<kind>)
-Every menu and list is alphabetical, and every category says how many sound files it holds. Escape or back steps up a
-level silently, out to the game menu too (they're all nested menus).
+Every menu and list is alphabetical, and every category says how many sounds it holds (learn_count_text()). Escape or
+back steps up a level silently, out to the game menu too (they're all nested menus).
 Labels are friendly names: the theme with underscores as spaces, then the sound's file name with its numbers dropped,
-through learn_sound_name()'s swaps, and nothing about where the sound is used (dev). Numbered files are one entry that
+through learn_sound_name()'s swaps, and nothing about where the sound is used. Numbered files are one entry that
 plays one at random. Inside a list: Enter plays, moving away stops it, Space pauses or resumes, Shift+Page Up and Page
 Down set the preview volume, and the menu's own sounds are silent. The last item picked in each menu is remembered until
 the game closes. The two settings (dec.nvgt): loop_previews repeats a preview, variant_descriptions adds the variants
 note. Countdowns play a step every start_step_time from the list's own loop, so you can keep moving while one plays. */
 const int learn_countdown_gap = 1000; // a looping countdown's pause before it starts again
 int learn_volume = 0; // the preview volume in decibels, 0 full; back to 0 whenever you leave a list
-// Each menu's last picked item, by its path such as "learn/obstacles/barriers", until the game closes.
+// Each menu's last picked item, by its path such as "learn/environments/default/traps", until the game closes.
 string[] learn_focus_paths;
 int[] learn_focus_items;
 int learn_get_focus(const string&in path)
@@ -184,15 +184,14 @@ paused = false;
 // The game menu's entry: builds every category from the folders, then browses them.
 void learn_sounds_menu()
 {
-m.fade_music(); // so the sounds play on their own (dev, 2026-11-07: "fade the music when you open learn sounds")
+m.fade_music(); // so the sounds play on their own
 learn_category root("learn sounds menu");
 learn_category items("items");
 items.subs.insert_last(learn_folder_category("common", "equipments/items/common", ""));
 items.subs.insert_last(learn_folder_category("other", "equipments/items/other", ""));
 root.subs.insert_last(items);
-/* Environments (the environments plan, dev, 2026-11-10: "environments, items, and weapons", switched straight away "so I
-can see how it looks"): one category per folder in environments/, named by the folder, each with its own countdowns and
-traps, since both belong to a place; items and weapons stay global. Each is listed by its folder name alone. */
+/* Environments: one category per folder in environments/, listed by the folder name alone, each with its own countdowns
+and obstacles, since both belong to a place; items and weapons stay global. */
 learn_category envs("environments");
 string[] env_names = get_pack_sound_folders("environments/*");
 for (uint i = 0; i < env_names.length(); i++) envs.subs.insert_last(learn_environment_category(env_names[i]));
@@ -209,13 +208,13 @@ learn_browse(root, "learn");
 learn_category@ learn_environment_category(const string&in env)
 {
 string env_root = "environments/" + env + "/";
-learn_category@ place = learn_category(env.replace("_", " ", true)); // just its name, "default" (dev, 2026-11-10: "not, default environment")
-learn_category cues("countdowns"); // "obstacle cues" until 2026-11-05 (dev: "countdowns and traps")
+learn_category@ place = learn_category(env.replace("_", " ", true)); // just its name, such as "default", not "default environment"
+learn_category cues("countdowns");
 string[] types = get_pack_sound_folders(env_root + "traps/*");
-string[] moves = get_pack_sound_folders(env_root + "transitions/*"); // doors, ladders, slides, switches, trampolines (the transitions plan, dev, 2026-11-13)
+string[] moves = get_pack_sound_folders(env_root + "transitions/*"); // doors, ladders, slides, switches, trampolines
 string[] all_types = types;
 for (uint i = 0; i < moves.length(); i++) all_types.insert_last(moves[i]);
-all_types.insert_last("vehicles"); // its own category, beside traps and transitions (the vehicles plan, 2026-11-13)
+all_types.insert_last("vehicles"); // its own category, beside traps and transitions
 for (uint i = 0; i < all_types.length(); i++)
 {
 // Only types whose countdown folder has cues: traps', transitions' and vehicles' together.
@@ -224,7 +223,7 @@ cues.sounds.insert_last(learn_countdown(env_root, all_types[i]));
 }
 learn_sort_sounds(cues.sounds);
 place.subs.insert_last(cues);
-learn_category obstacles("traps"); // "obstacles" until 2026-11-05
+learn_category obstacles("traps");
 for (uint i = 0; i < types.length(); i++) obstacles.subs.insert_last(learn_folder_category(learn_type_name(types[i]), env_root + "traps/" + types[i] + "/general", ""));
 learn_sort_categories(obstacles.subs);
 place.subs.insert_last(obstacles);
@@ -237,10 +236,9 @@ if (get_pack_sound_folders(env_root + "vehicles/general/*").length() > 0) place.
 learn_sort_categories(place.subs);
 return place;
 }
-/* A category's count (dev, 2026-11-10, after a player's report that countdowns said 85 sounds with only 9 in it): the
-entries you can pick, then every file when variants or layers make that more, "This category has 9 individual sounds,
-85 in total."; when they match, "This category has a total of 6 sounds." (dev, 2026-11-10: "it should say total
-sounds here") */
+/* A category's count: the entries you can pick, then every file when variants or layers make that more, "This category
+has 9 individual sounds, 85 in total."; when they match, "This category has a total of 6 sounds." Counting only files
+would make a category of 9 countdowns sound like 85 sounds. */
 string learn_count_text(learn_category@ cat)
 {
 int entries = cat.entries();
@@ -298,10 +296,10 @@ while (true)
 wait(5);
 learn_preview_keys(preview);
 preview.update();
-/* Enter is handled here, not by the form (dev, 2026-11-05: holding Enter should keep restarting the sound).
-The form waits for Enter to lift before it counts a press, so held Enter would play just once; here every
-key repeat starts the sound again, the Windows keyboard's own repeat (dev, 2026-11-05: key_repeating, not key_down). A
-pass with a repeat skips the form, and between repeats the form sees no repeat to act on, so it never starts its wait. */
+/* Enter is handled here, not by the form, so holding Enter keeps restarting the sound. The form waits for Enter to lift
+before it counts a press, so held Enter would play just once; here every key repeat starts the sound again, the Windows
+keyboard's own repeat (key_repeating, not key_down). A pass with a repeat skips the form, and between repeats the form
+sees no repeat to act on, so it never starts its wait. */
 if (key_repeating(KEY_RETURN) or key_repeating(KEY_NUMPAD_ENTER))
 {
 int pos = m.focused_item;
@@ -339,7 +337,7 @@ preview.stop();
 if (m.focused_item >= 0) learn_set_focus(path, m.focused_item);
 learn_volume = 0;
 }
-// Space pauses or resumes; Shift+Page Up and Page Down change the preview volume between -50 and 0.
+// Space pauses or resumes; Shift+Page Up and Page Down change the preview volume between learn_min_volume and 0.
 void learn_preview_keys(learn_preview@ preview)
 {
 if (key_repeating(KEY_SPACE)) preview.toggle_pause();
@@ -360,9 +358,8 @@ if (variant_descriptions and cat.sounds[index].files.length() > 1) label += ". T
 return label;
 }
 /* The category for the folders under path. A folder holding sound files is a theme, and its sounds join this list. A
-folder holding only more folders is a group of its own, its own category: animals' birds and dogs (dev, 2026-11-05: "If
-you click on the animals category, you should see birds and dogs as a category"), so a new kind of animal, or any
-grouped folder later, gets its own menu. kind picks the weapon swaps ("artillery" or "melee"). */
+folder holding only more folders is a group of its own, its own category: animals' birds and dogs, vehicles' cars, so a
+new kind, or any grouped folder later, gets its own menu. kind picks the weapon swaps ("artillery" or "melee"). */
 learn_category@ learn_folder_category(const string&in name, const string&in path, const string&in kind)
 {
 learn_category cat(name);
@@ -439,8 +436,8 @@ base = base.substr(0, base.length() - 1);
 }
 return base;
 }
-/* The friendly name for a sound's file name (dev: "I want friendly names, not internal names"). Anything not listed
-reads as its file name, with underscores as spaces. */
+/* The friendly name for a sound's file name, never the internal one. Anything not listed reads as its file name, with
+underscores as spaces. */
 string learn_sound_name(const string&in base, const string&in kind)
 {
 if (kind == "artillery" and base == "loop") return "bullet";
@@ -451,9 +448,9 @@ if (base == "spawn") return "appear";
 if (base == "grant") return "unlock";
 if (base == "deny") return "locked";
 if (base == "jam") return "jammed";
-/* Death reads "destroy" (dev, 2026-11-06: "What about Steel shield destroy?", then the walls and doors). It read "break"
-until then, which merged a steel shield's death (a worn shield giving out) with its own break (one broken on the belt)
-into one "break" with two variants (bug found by the dev). Only shields, walls and doors have a death sound here. */
+/* Death reads "destroy", not "break", so a steel shield's death (a worn shield giving out) stays apart from its own break
+(one broken on the belt) instead of merging into one entry with two variants. Shields, fake walls, doors and vehicles
+have a death sound. */
 if (base == "death") return "destroy";
 if (base == "hurt") return "damage";
 if (base == "light") return "light up";
@@ -463,7 +460,7 @@ if (base == "shell") return "shell casing";
 if (base == "empty") return "empty click";
 return base.replace("_", " ", true);
 }
-// A trap folder as players read it: "force fields", and "fake walls" for walls (the ladders plan, dev, 2026-11-12).
+// A trap folder as players read it: "force fields", and "fake walls" for walls.
 string learn_type_name(const string&in type)
 {
 if (type == "walls") return "fake walls";
@@ -475,7 +472,7 @@ learn_sound@ learn_countdown(const string&in env_root, const string&in type)
 {
 learn_sound s;
 s.label = learn_upper_first(learn_type_name(type) + " countdown");
-s.theme = learn_type_name(type); // sorted by the name players hear, so fake walls sit under F (dev, 2026-11-12)
+s.theme = learn_type_name(type); // sorted by the name players hear, so fake walls sit under F
 s.sound_name = "countdown";
 string folder = type_path(env_root, type) + "countdown/";
 bool layered = get_pack_sound(folder + "warn1-1*") != "";
@@ -507,8 +504,7 @@ string learn_upper_first(const string&in text)
 if (text.length() == 0) return text;
 return text.substr(0, 1).upper() + text.substr(1);
 }
-/* Natural order, ignoring case (dev, 2026-11-05: "I saw bird and bird 10 in the animals category"): numbers count as
-numbers, so bird, bird2 ... bird10 (the engine's natural_number_sort(), as sort_naturally() uses). Sounds sort by theme
+/* Natural order, ignoring case: numbers count as numbers, so bird, bird2 ... bird10 (the engine's natural_number_sort(), as sort_naturally() uses). Sounds sort by theme
 first, then by sound name, since comparing whole labels would put "Bird10 loop" before "Bird loop" (a digit sorts before
 the space). Insertion sorts; the lists are short. */
 bool learn_sound_before(learn_sound@ a, learn_sound@ b)

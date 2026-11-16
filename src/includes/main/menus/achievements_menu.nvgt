@@ -1,9 +1,8 @@
-/* The achievements menu (the achievements plan's Section 2, dev, 2026-11-06), with
-the two scopes as its only groups: view game achievements in the game menu opens achievements_menu(), session
-achievements, lifetime achievements, back, each a list in achievements.ini's order (dev: "Keep them in the ini order"),
-earned ones by name and the rest as "<name>, locked". Enter shows the description, or "This achievement is locked."
-and its hint, then reopens on the same one. Escape or back steps back one menu silently. Progress numbers live in
-achievement statistics instead (Section 3). */
+/* The achievements menu, with the two scopes as its only groups: view game achievements in the game menu opens
+achievements_menu(), session achievements, lifetime achievements, back, each a list in achievements.ini's order, earned
+ones by name and the rest as "<name>, locked". Enter shows the description, or "This achievement is locked." and its
+hint, then reopens on the same one. Escape or back steps back one menu silently. Progress numbers live in achievement
+statistics instead (achievement_stat_lines()). */
 void achievements_menu()
 {
 int focus = -1;
@@ -44,8 +43,7 @@ if (achievement_earned(a)) dlgmessage_return(achievement_description(a));
 else dlgmessage_return("This achievement is locked. " + a.hint);
 }
 }
-/* Which menu group an achievement sits in: the timed run ones (scope timed) go with session achievements, each earned in a
-single run (dev, 2026-11-13: "I thought they all have to do with the current game session as well"). */
+// Which menu group an achievement sits in: the timed run ones (scope timed) go with session achievements, each earned in a single run.
 bool achievement_in_group(achievement@ a, const string&in group)
 {
 if (group == "session") return a.scope == "session" or a.scope == "timed";
@@ -62,10 +60,9 @@ if (achievement_earned(achievements[i])) count += 1;
 }
 return count;
 }
-/* Achievement statistics (the achievements plan's Section 3, dev, 2026-11-06), first in the statistics menu: how many are
-unlocked, then every achievement in the ini's order, session ones first: "lane changer, complete", with no number, since
-a cleared stat would show less than it needed (dev, 2026-11-07: "super confusing indeed. Do not add a number after it."),
-or "side stepper, incomplete, 120 of 500 lane changes". An incomplete session one shows your best single run ("door to
+/* Achievement statistics, first in the statistics menu: how many are unlocked, then every achievement in the ini's order,
+session ones first: "lane changer, complete", with no number, since a cleared stat would show less than it needed, or
+"side stepper, incomplete, 120 of 500 lane changes". An incomplete session one shows your best single run ("door to
 door, incomplete, best record, 2 of 3 real doors opened"). Lowercase, like the other stat lines; time in minutes and top
 speed in steps a second, as the file writes them. */
 string[] achievement_stat_lines()
@@ -89,7 +86,7 @@ if (a.scope == "session") best_runs.get(a.stat, value);
 else if (a.scope == "timed") value = timed_stat_value(a.stat); // timerun.nvgt
 else value = stat_value(lifetime_stats, a.stat);
 string amount = stat_amount_text(a.stat, value) + " of " + stat_threshold_text(a) + stat_unit(a.stat, a.threshold);
-if (a.scope == "session") amount = "best record, " + amount; // your best single run (dev, 2026-11-07: "best run," at first, then "I like best record better")
+if (a.scope == "session") amount = "best record, " + amount; // your best single run
 lines.insert_last(a.name.lower() + ", incomplete, " + amount);
 }
 }
@@ -127,9 +124,9 @@ return " " + item + " used";
 }
 return " " + stat.replace("_", " ", true);
 }
-/* The game menu's three "all progress" items (the achievements plan's Section 4, dev, 2026-11-06: "I want them always
-shown"), clear, copy and export of game progresses, for statistics and achievements together. Clearing never
-touches the difficulty unlocks, and doesn't stamp the last played date. */
+/* The game menu's three "all progress" items, always shown: clear, copy and export of game progresses, for statistics
+and achievements together. Clearing never touches the difficulty unlocks, and doesn't stamp the last played date. The
+menu music fades only while each one's dialog is open. */
 void clear_all_progress()
 {
 setupmenu();
@@ -146,10 +143,10 @@ clear_session_stats();
 clear_lifetime_stats(); // the best records and the timed run records go with it
 earned_achievements.delete_all();
 writegame();
-m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
+m.fade_music();
 temp.play_stationary(get_pack_sound("ui/other/*complete*"), false);
 dlgmessage_return("Game progresses cleared.");
-m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
+m.play_music();
 }
 /* Everything as one text, built once from the menus' own lines: "Achievement stats:" (every
 achievement, complete or incomplete with its progress), then "Session stats:" and "Lifetime stats:". */
@@ -163,10 +160,10 @@ return text + "\r\n" + all_stats_text();
 void copy_all_progress()
 {
 clipboard_copy_text(all_progress_text());
-m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
+m.fade_music();
 temp.play_stationary(get_pack_sound("ui/other/*copied*"), false);
 dlgmessage_return("All game progresses have been copied to your clipboard.");
-m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
+m.play_music();
 }
 // Into APPDATA_DIR's stats folder as player_progresses.txt, beside player_statistics.txt, replacing any older copy.
 void export_all_progress()
@@ -178,13 +175,13 @@ if (!f.open(folder + "/player_progresses.txt", "wb"))
 {
 m.fade_music();
 dlgmessage_return("Unable to export the game progresses.");
-m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
+m.play_music();
 return;
 }
 f.write(all_progress_text());
 f.close();
-m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
+m.fade_music();
 temp.play_stationary(get_pack_sound("ui/other/*export*"), false);
 dlgmessage_return("All game progresses have been exported to stats/player_progresses.txt.");
-m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
+m.play_music();
 }

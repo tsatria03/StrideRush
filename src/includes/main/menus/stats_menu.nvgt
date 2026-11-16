@@ -1,8 +1,6 @@
-/* The statistics menus (the statistics plan's Section 2, dev, 2026-11-05 and 2026-11-06),
-as loops instead of menus calling each other. View game statistics
-in the game menu opens statistics_menu(): session statistics, lifetime statistics, and (Section 5) clear game statistics,
-copy all game statistics to clipboard and export all game statistics to file, always shown (dev: "I do not want these
-buttons to be hidable"), then back. Each stat menu is one stat per item, then back. Pressing enter on a stat keeps you
+/* The statistics menus, as loops instead of menus calling each other. View game statistics in the game menu opens
+statistics_menu(): achievement statistics, session statistics, lifetime statistics, then clear game statistics, copy
+all game statistics to clipboard and export all game statistics to file, always shown, then back. Each stat menu is one stat per item, then back. Pressing enter on a stat keeps you
 on it; escape or back steps back one menu silently, as every nested menu does. */
 void statistics_menu()
 {
@@ -11,7 +9,7 @@ while (true)
 {
 setupmenu();
 m.intro_text = "Statistics menu. You can view the stats from your last endless run, or your totals across all of them here.";
-m.add_item("achievement statistics", "achievements"); // first (dev, 2026-11-06), the achievements plan's Section 3
+m.add_item("achievement statistics", "achievements"); // first
 m.add_item("session statistics", "session");
 m.add_item("lifetime statistics", "lifetime");
 m.add_item("clear game statistics", "clear");
@@ -29,7 +27,7 @@ else if (m.selected_item_id == "session") show_stat_lines("Session statistics me
 else show_stat_lines("Lifetime statistics menu. You can see your total stats across all of your endless runs here, then your timed run records.", lifetime_stat_lines());
 }
 }
-/* The pause menu's session statuses (dev, 2026-11-13): what the status keys say, as "label, value" lines like the
+/* The pause menu's session statuses: what the status keys say, as "label, value" lines like the
 session results, in every kind of run. Session results are the run's statistics; these are where you stand right now. */
 string[] session_status_lines()
 {
@@ -69,15 +67,13 @@ if (mres < 0 or m.selected_item_id == "back") return;
 focus = mres;
 }
 }
-/* The stat lines (dev, 2026-11-06: "I wish it looked something like ... total runs played, x"): each is a short label,
-a comma, then the value, all lowercase like the other menus. Lifetime labels start with "total" (dev: "I like it
-prepended"), except top speed and the last played date and time; session labels drop it. Copy and export reuse them. */
+/* The stat lines: each is a short label, a comma, then the value, all lowercase like the other menus. Lifetime labels
+start with "total", except top speed and the last played date and time; session labels drop it. Copy and export reuse them. */
 string stat_line(const string&in label, const string&in value)
 {
 return label + ", " + value;
 }
-/* The last endless run, or a single line before the first one (dev, 2026-11-05: "both"). With live, the run going on now
-(the session results plan, 2026-11-07): steps ran, time ran and top speed read live, and no "death outcome" yet. */
+/* The last endless run, or a single line before the first one. With live, the run going on now: steps ran, time ran and top speed read live, and no "death outcome" yet. */
 string[] session_stat_lines(bool live = false)
 {
 string[] lines;
@@ -89,7 +85,7 @@ return lines;
 dictionary@ stats = @session_stats;
 if (live) @stats = live_session_stats();
 lines.insert_last(stat_line("difficulty", last_run_difficulty));
-// Right after the difficulty (dev, 2026-11-07), so a death's results say what ended the run first; last until then.
+// Right after the difficulty, so a death's results say what ended the run first.
 if (!live) lines.insert_last(stat_line("death outcome", end_cause_text(session_end_cause)));
 add_running_lines(lines, stats, false);
 add_obstacle_and_hit_lines(lines, stats, false);
@@ -119,7 +115,7 @@ lines.insert_last(stat_line("total " + difficulty_names[i] + " runs", thousands_
 }
 add_running_lines(lines, lifetime_stats, true);
 add_obstacle_and_hit_lines(lines, lifetime_stats, true);
-// Then the timed run records, level by level (dev, 2026-11-13: "Put the records in the life stats menu"; timerun.nvgt).
+// Then the timed run records, level by level (timerun.nvgt).
 string[] timed = timed_record_lines();
 for (uint i = 0; i < timed.length(); i++) lines.insert_last(timed[i]);
 return lines;
@@ -138,9 +134,8 @@ lines.insert_last(stat_line(total + "time ran", time_phrase(stat_value(stats, "t
 lines.insert_last(stat_line("top speed", tenths_text(stat_value(stats, "top_speed")) + " steps a second"));
 add_count_line(lines, stats, lifetime, "lanes changed", "lane_changes");
 }
-/* Section 3's Obstacles and Hits lines, for either menu: what you got past, then damage and lives, then how often each
-kind of obstacle caught you, every kind even at 0, like every other stat (dev, 2026-11-06: "always show them for
-consistency. Pluse i want to see what I'm working toard."; they were hidden until they happened at first). */
+/* The Obstacles and Hits lines, for either menu: what you got past, then damage and lives, then how often each kind of
+obstacle caught you, every kind even at 0, like every other stat. */
 void add_obstacle_and_hit_lines(string[]@ lines, dictionary@ stats, bool lifetime)
 {
 add_count_line(lines, stats, lifetime, "hazards jumped", "hazards_jumped");
@@ -151,13 +146,13 @@ add_count_line(lines, stats, lifetime, "force fields switched off", "force_field
 add_count_line(lines, stats, lifetime, "animals scared", "animals_scared");
 add_count_line(lines, stats, lifetime, "barriers dodged", "barriers_dodged");
 add_count_line(lines, stats, lifetime, "fake walls broken", "walls_broken");
-add_count_line(lines, stats, lifetime, "real walls climbed", "real_walls_climbed"); // the ladders plan, 2026-11-12
+add_count_line(lines, stats, lifetime, "real walls climbed", "real_walls_climbed");
 add_count_line(lines, stats, lifetime, "ladders broken", "ladders_broken");
 add_count_line(lines, stats, lifetime, "ladder falls", "ladder_falls");
 add_count_line(lines, stats, lifetime, "fake doors broken", "fake_doors_broken");
 add_count_line(lines, stats, lifetime, "real doors opened", "real_doors_opened");
-add_count_line(lines, stats, lifetime, "floor breakers repaired", "floor_breakers_repaired"); // the floor breakers plan, 2026-11-13
-add_count_line(lines, stats, lifetime, "vehicles destroyed", "vehicles_destroyed"); // the vehicles plan, 2026-11-13
+add_count_line(lines, stats, lifetime, "floor breakers repaired", "floor_breakers_repaired");
+add_count_line(lines, stats, lifetime, "vehicles destroyed", "vehicles_destroyed");
 add_count_line(lines, stats, lifetime, "vehicles dodged", "vehicles_dodged");
 add_count_line(lines, stats, lifetime, "damage taken", "damage_taken");
 add_count_line(lines, stats, lifetime, "lives lost", "lives_lost");
@@ -170,7 +165,7 @@ add_count_line(lines, stats, lifetime, label[i], "caught_" + kinds[i]);
 add_count_line(lines, stats, lifetime, "vehicle shots taken", "vehicle_shots_taken"); // each shot that reached you
 add_item_and_weapon_lines(lines, stats, lifetime);
 }
-/* Section 4's Items and Weapons lines: each inventory item picked up, broken (run onto, landed on or hit) and used, then
+/* The Items and Weapons lines: each inventory item picked up, broken (run onto, landed on or hit) and used, then
 powerups, then swings, shots and reloads. */
 void add_item_and_weapon_lines(string[]@ lines, dictionary@ stats, bool lifetime)
 {
@@ -183,12 +178,12 @@ add_count_line(lines, stats, lifetime, name + " broken", kinds[i] + "_broken");
 add_count_line(lines, stats, lifetime, name + " used", kinds[i] + "_used");
 }
 add_count_line(lines, stats, lifetime, "ground powerups collected", "ground_powerups_collected");
-add_count_line(lines, stats, lifetime, "air powerups collected", "air_powerups_collected"); // the flight ones (dev, 2026-11-06)
+add_count_line(lines, stats, lifetime, "air powerups collected", "air_powerups_collected"); // the flight ones
 add_count_line(lines, stats, lifetime, "melee swings", "melee_swings");
-add_count_line(lines, stats, lifetime, "gunshots fired", "shots_fired"); // "gun" in both (dev, 2026-11-06)
+add_count_line(lines, stats, lifetime, "gunshots fired", "shots_fired"); // "gun" in both labels
 add_count_line(lines, stats, lifetime, "gun reloads", "reloads");
 }
-// How the last run ended: the obstacle that killed you, or "none" for a quit or restart (dev, 2026-11-07: "death outcome, none when you didn't actually die"; "" also covers a session saved before Section 3).
+// How the last run ended: the obstacle that killed you, or "none" for a quit or restart ("" also covers a session saved before causes were recorded).
 string end_cause_text(const string&in cause)
 {
 if (cause == "hazards") return "falling into a hazard";
@@ -222,7 +217,7 @@ count += 1;
 }
 return amount < 0 ? "-" + result : result;
 }
-/* Clear game statistics (Section 5): which stats, then Yes or No. Yes clears and saves them, plays complete
+/* Clear game statistics: which stats, then Yes or No. Yes clears and saves them, plays complete
 and says so; No or escape on the question says "canceled"; escape or back on the choice steps back silently. Clearing
 both resets everything. The difficulty unlocks are never touched. */
 void clear_stats_menu()
@@ -252,10 +247,10 @@ continue;
 if (which != "lifetime") clear_session_stats();
 if (which != "session") clear_lifetime_stats();
 writegame();
-m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
+m.fade_music(); // only for the dialog
 temp.play_stationary(get_pack_sound("ui/other/*complete*"), false);
 dlgmessage_return("Your " + name + " stats have been cleared.");
-m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
+m.play_music(); // and back again once the dialog closes
 return;
 }
 }
@@ -264,7 +259,7 @@ return;
 string all_stats_text()
 {
 /* Session and lifetime stats only: achievement stats belong to the game menu's copy and export of all progress
-(achievements_menu.nvgt's all_progress_text(); dev, 2026-11-07). */
+(achievements_menu.nvgt's all_progress_text()). */
 string text = "Session stats:\r\n";
 string[] lines = session_stat_lines();
 for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";
@@ -276,10 +271,10 @@ return text;
 void copy_all_stats()
 {
 clipboard_copy_text(all_stats_text());
-m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
+m.fade_music(); // only for the dialog
 temp.play_stationary(get_pack_sound("ui/other/*copied*"), false);
 dlgmessage_return("All game statistics have been copied to your clipboard.");
-m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
+m.play_music(); // and back again once the dialog closes
 }
 // Into APPDATA_DIR's stats folder as player_statistics.txt, replacing any older copy.
 void export_all_stats()
@@ -291,13 +286,13 @@ if (!f.open(folder + "/player_statistics.txt", "wb"))
 {
 m.fade_music();
 dlgmessage_return("Unable to export the game statistics.");
-m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
+m.play_music(); // and back again once the dialog closes
 return;
 }
 f.write(all_stats_text());
 f.close();
-m.fade_music(); // only for the dialog (dev, 2026-11-07: "It should only fade for the clear/copy/export dlg messages")
+m.fade_music(); // only for the dialog
 temp.play_stationary(get_pack_sound("ui/other/*export*"), false);
 dlgmessage_return("All game statistics have been exported to stats/player_statistics.txt.");
-m.play_music(); // and back again once the dialog closes (dev, 2026-11-07)
+m.play_music(); // and back again once the dialog closes
 }

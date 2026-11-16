@@ -44,3 +44,44 @@ Moved here from the comments of src/includes/main/menus/ on 2026-11-15 ([[projec
 - Session results (the session results plan, 2026-11-07, [[project_session_results_plan]]), in a menu, never a dialog (2026-11-07: "I'd much rather a menu, not a dlg with 50 lines"). Section 1 put view, copy and export in the pause menu. Section 2 put after_death_menu() in place of the old Yes/No replay question (2026-11-07: a menu that asks what you'd like to do), with replay run after export.
 - The Game tab's two death settings (the death settings plan, 2026-11-08, [[project_death_settings_plan]]). Without the results menu first, the question menu says you died as it first opens (2026-11-08: "I want to know that I died.").
 - A timed run's own results (the timed run plan's Section 2, 2026-11-13, [[project_timed_run_plan]]).
+
+## settings_menu.nvgt
+- The settings menu (2026-11-04, for 1.3, [[project_settings_plan]]): General first from the main menu (2026-11-04), Game first from F2.
+- The volume sliders (the volume sliders plan, 2026-11-08, [[project_volume_sliders_plan]]), applied only on save (2026-11-08). The Game tab's sliders come before its checkboxes (2026-11-08). Footsteps after the ambience and before the heartbeat (the footstep volume plan, 2026-11-10). Heartbeat before the music (the heartbeat plan, 2026-11-08).
+- The menu music and master volumes on the Sound tab (2026-11-08: "The menu/master volumes are global, so yes, the sound tab").
+- The startup update check moved from the Game tab to the General tab (2026-11-08). It was added 2026-11-05 and is off by default since 2026-11-10.
+- The tab orders are the dev's (2026-11-05). Checkboxes always come before buttons in a tab (2026-11-05).
+- The death settings after the Escape question (the death settings plan, 2026-11-08). Variant descriptions and looping previews (2026-11-05). HRTF on the main menu only (2026-11-04). Preview voice (2026-11-04), a dialog so the form doesn't talk over it.
+- "Settings saved." is a dialog you dismiss (2026-11-05).
+- Reset saves the defaults (2026-11-04) and restarts the game (2026-11-09). Every buffer is unmuted on reset (2026-11-12).
+- The sound device menu says active or inactive for each device (2026-11-08).
+
+## stats_menu.nvgt
+- The statistics menus (the statistics plan's Section 2, 2026-11-05 and 2026-11-06, [[project_statistics_plan]]). Clear, copy and export are always shown (dev: "I do not want these buttons to be hidable"). Achievement statistics come first (2026-11-06, the achievements plan's Section 3).
+- Session statuses in the pause menu (2026-11-13, [[project_pause_status_plan]]).
+- The line format (2026-11-06: "I wish it looked something like ... total runs played, x"). "total" comes first in the lifetime labels (dev: "I like it prepended").
+- Session stats before the first run show a single line (2026-11-05: "both"). Live session results (the session results plan, 2026-11-07).
+- The death outcome comes right after the difficulty (2026-11-07). It was last until then. "none" when you didn't die (2026-11-07: "death outcome, none when you didn't actually die").
+- Timed run records sit in the lifetime menu (2026-11-13: "Put the records in the life stats menu").
+- Every hit kind shows even at 0 (2026-11-06: "always show them for consistency. Pluse i want to see what I'm working toard."). They were hidden until they happened at first.
+- Statistics lines added later: real walls climbed (the ladders plan, 2026-11-12), floor breakers repaired (2026-11-13), vehicles destroyed (2026-11-13). Air powerups and "gun" in the gun labels (2026-11-06).
+- The music fades only for the clear, copy and export dialogs (2026-11-07: "It should only fade for the clear/copy/export dlg messages"). Achievement stats belong to the all-progress copy and export (2026-11-07).
+
+## learn_sounds_menu.nvgt
+- The learn sounds menu (2026-11-05, [[project_learn_sounds_plan]]). The menu music fades when it opens (2026-11-07: "fade the music when you open learn sounds").
+- Labels are friendly names (dev: "I want friendly names, not internal names"), with nothing about where the sound is used, at the dev's word.
+- Environments as categories (the environments plan, 2026-11-10: "environments, items, and weapons", switched straight away "so I can see how it looks"). Each is listed by its folder name alone (2026-11-10: "not, default environment").
+- "countdowns" was "obstacle cues" and "traps" was "obstacles" until 2026-11-05 (dev: "countdowns and traps").
+- Transitions joined with the transitions plan, and vehicles became their own category with the vehicles plan (2026-11-13).
+- The category count wording (2026-11-10): a player reported that countdowns said 85 sounds with only 9 in it ("it should say total sounds here").
+- Held Enter keeps restarting the sound (2026-11-05), using key_repeating, not key_down (2026-11-05).
+- Animals' birds and dogs as their own categories (2026-11-05: "If you click on the animals category, you should see birds and dogs as a category").
+- Death reads "destroy" (2026-11-06: "What about Steel shield destroy?", then the walls and doors). It read "break" until then, which merged a steel shield's death and its break into one entry with two variants (a bug found by the dev).
+- Walls read "fake walls" and sort under F (the ladders plan, 2026-11-12).
+- Natural sort order (2026-11-05: "I saw bird and bird 10 in the animals category").
+
+## achievements_menu.nvgt
+- The achievements menu: the achievements plan's Section 2 (2026-11-06, [[project_achievements_plan]]), lists in the ini's order (dev: "Keep them in the ini order").
+- Timed run achievements are listed with the session ones (2026-11-13: "I thought they all have to do with the current game session as well").
+- Achievement statistics: Section 3 (2026-11-06). A completed one shows no number (2026-11-07: "super confusing indeed. Do not add a number after it."). An incomplete session one reads "best record" (2026-11-07: "best run," at first, then "I like best record better").
+- The three all-progress items: Section 4 (2026-11-06: "I want them always shown"). The music fades only for their dialogs and comes back after (2026-11-07: "It should only fade for the clear/copy/export dlg messages").
