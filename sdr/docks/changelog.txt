@@ -1,4 +1,5 @@
 New in 2.3.
+Made it so every weapon now has its own reach, from the bat's two seconds up to the pistol's five and a half, so the stronger the weapon, the sooner it can hit what's coming.
 Fixed a bug where switching weapons during a reload let the reload sound keep playing, even though the gun never reloaded.
 Made it so each melee weapon now has its own swing, winding up before its hit lands and recovering after, slower the harder it hits, with the swing powerups speeding up or slowing down both.
 Made it so practice run now comes last in play game, after free run.
