@@ -1,4 +1,4 @@
-/* The key bindings screens (dev, 2026-11-04, for 1.3). F1 during a run and
+/* The key bindings screens. F1 during a run and
 the settings menu's Keyboard tab both open the read-only view; rebinding is only reachable from the settings menu
 outside a run, since keys are never rebound mid-run. */
 
@@ -45,7 +45,7 @@ wait(5);
 bindform.monitor();
 if (bindform.is_pressed(close_btn))
 {
-if (key_down(KEY_ESCAPE)) speak("canceled"); // escape, not the close button, says so (dev, 2026-11-09)
+if (key_down(KEY_ESCAPE)) speak("canceled"); // escape, not the close button, says so
 return;
 }
 }
@@ -100,8 +100,7 @@ break;
 }
 }
 }
-/* Adds one more key to the action selected in the list, keeping its others, like edit and remove (dev, 2026-11-09: no
-separate menu of every action, which only repeated the list). */
+// Adds one more key to the action selected in the list, keeping its others, like edit and remove.
 void rebind_add_binding(audio_form@ rebindform, const string&in action)
 {
 string combo = kc_capture_combo(rebindform, "Press the key combo to bind to " + action + ", or escape to cancel.");
@@ -150,8 +149,7 @@ return;
 controls.clear_keyboard_action(action);
 save_bindings(action + " bindings cleared.");
 }
-/* The replace question (the rebinding plan, dev, 2026-11-09: "It should ask you if you want to replace that key."): when
-the combo already belongs to other actions, Yes then No, naming them, and saying when one would be left with no key.
+/* The replace question: when the combo already belongs to other actions, Yes then No, naming them, and saying when one would be left with no key.
 True to go on (no other action has it, or Yes); No or escape says "canceled". Nothing is changed until the binding is
 made (rebind_take_over()), so canceling the trigger question afterwards leaves every action as it was. */
 bool rebind_replace_question(const string&in action, const string&in combo)
@@ -182,8 +180,7 @@ void rebind_take_over(const string&in action, const string&in combo)
 string[]@ owners = controls.actions_using(combo, action);
 for (uint i = 0; i < owners.length(); i++) controls.unbind_combo(owners[i], combo);
 }
-/* The trigger question (dev, 2026-11-09: "it should ask them if they want to change the default key trigger"): Yes then
-No; No keeps a press, Yes opens the trigger menu, escape says "canceled" and cancels the binding. Returns the trigger,
+/* The trigger question: Yes then No; No keeps a press, Yes opens the trigger menu, escape says "canceled" and cancels the binding. Returns the trigger,
 or -1 for canceled. */
 int rebind_trigger_question()
 {
@@ -204,5 +201,5 @@ return int(kc_choose_trigger());
 void save_bindings(const string&in done_message)
 {
 if (!kc_save_preserving(controls, keyboard_ini_path)) dlgmessage_return("The change works for now, but it could not be saved to keyboard.ini.");
-else dlgmessage_return(done_message); // dev, 2026-11-09
+else dlgmessage_return(done_message);
 }

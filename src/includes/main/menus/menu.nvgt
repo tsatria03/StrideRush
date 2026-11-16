@@ -1,15 +1,13 @@
-/* The main menu (dev, 2026-11-03, for 1.3): documentation menu, game menu, settings menu (dev,
-2026-11-04), change game version, check for updates and test speakers (dev, 2026-11-05),
-restart game and exit game. main()'s loop reopens it
-whenever a submenu returns. */
+/* The main menu: documentation menu, game menu, settings menu, change game version, check for updates, test speakers,
+restart game and exit game. main()'s loop reopens it whenever a submenu returns. */
 void mainmenu()
 {
 setupmenu(true);
 m.add_item("documentation menu", "docks");
 m.add_item("game menu", "game");
 m.add_item("settings menu", "settings");
-m.add_item("Change game version. Currently set to " + version, "version"); // dev, 2026-11-05
-m.add_item("check for updates", "updates"); // dev, 2026-11-05; globals/updater.nvgt
+m.add_item("Change game version. Currently set to " + version, "version");
+m.add_item("check for updates", "updates"); // globals/updater.nvgt
 m.add_item("test speakers", "speakers");
 m.add_item("restart game", "rx");
 m.add_item("exit game", "ex");
@@ -27,29 +25,28 @@ if(main=="docks") docksmenu();
 else if(main=="game") gamemenu();
 else if(main=="settings")
 {
-m.fade_music(); // from the main menu only (dev, 2026-11-07); F2 in a run finds it already faded
+m.fade_music(); // from the main menu only; F2 in a run finds it already faded
 settingsmenu();
 }
 else if(main=="version") change_game_version();
 else if(main=="updates")
 {
-m.fade_music(); // for the whole check, its menus and alerts (dev, 2026-11-07); the main menu starts it again afterwards
+m.fade_music(); // for the whole check, its menus and alerts; the main menu starts it again afterwards
 check_for_updates(version, update_project, true);
 }
 else if(main=="speakers") test_speakers();
 else if(main=="rx") restart_game();
 }
-/* Change game version (dev, 2026-11-05): the number the updater compares against, for this launch
-only (the next launch reports the real version from version.nvgt again). Typing an older one lets you test the
-updater or download the latest release again. The box won't take an empty answer; its cancel or escape says
-"canceled". */
+/* Change game version: the number the updater compares against, for this launch only (the next launch reports the real
+version from version.nvgt again). Typing an older one lets you test the updater or download the latest release again.
+The box won't take an empty answer; its cancel or escape says "canceled". */
 void change_game_version()
 {
-m.fade_music(); // dev, 2026-11-07; the main menu starts it again afterwards
-/* Digits and periods only (dev, 2026-11-05). vd's filter is a member, not input_box()'s own disallowed_chars
-parameter, which it never reads; true makes the list the only characters allowed. Cleared again afterwards, since vd
-is shared with the speech buffer's boxes. */
-vd.set_disallowed_chars("0123456789.", true, "This character is not allowed."); // input_box()'s own wording (dev, 2026-11-05)
+m.fade_music(); // the main menu starts it again afterwards
+/* Digits and periods only. vd's filter is a member, not input_box()'s own disallowed_chars parameter, which it never
+reads; true makes the list the only characters allowed. Cleared again afterwards, since vd is shared with the speech
+buffer's boxes. */
+vd.set_disallowed_chars("0123456789.", true, "This character is not allowed."); // input_box()'s own wording
 string newver = string_trim_sides(vd.input_box("Game version", "Enter a version number to override what the game reports to the updater. Use this to force a re-download of the latest update or to test against a specific version.", version));
 vd.set_disallowed_chars("");
 if (newver == "")
@@ -65,11 +62,12 @@ return;
 version = newver;
 dlgmessage_return("Version updated to " + version + ".");
 }
-/* Test speakers: the menu music fades (dev, 2026-11-07), ui/menu/speaker plays through (Enter or A fades it out early, dlgplay()'s skip keys), then
-the complete sound and "Speaker test complete." in a dialog. Back in main()'s loop, the main menu opens again. */
+/* Test speakers: the menu music fades, ui/menu/speaker plays through (Enter or A fades it out early, dlgplay()'s skip
+keys), then the complete sound and "Speaker test complete." in a dialog. Back in main()'s loop, the main menu opens
+again. */
 void test_speakers()
 {
-m.fade_music(); // dev, 2026-11-07: "fade the music when I test my speakers"; the main menu starts it again afterwards
+m.fade_music(); // the main menu starts it again afterwards
 dlgplay(get_pack_sound("ui/menu/*speaker*"));
 dlgplay(get_pack_sound("ui/other/*complete*"), false);
 dlgmessage_return("Speaker test complete.");
@@ -120,24 +118,23 @@ docform.monitor();
 if(docform.is_pressed(dockclose)) return;
 }
 }
-/* The game menu: play game, learn sounds and back. Play game opens the mode menu and then the run; when the run ends you're back
-here, so you can play again straight away. Escape or back returns to the main menu silently. */
+/* The game menu: play game, learn sounds, achievements, statistics, the three all-progress items, and back. Play game
+opens the mode menu and then the run; when the run ends you're back here, so you can play again straight away. Escape
+or back returns to the main menu silently. */
 void gamemenu()
 {
 while(true)
 {
 setupmenu(true);
 m.add_item("play game", "play");
-m.add_item("learn sounds", "learn"); // dev, 2026-11-05 (first "learn sounds menu"); learn_sounds_menu.nvgt
-m.add_item("view game achievements", "achievements"); // before statistics (dev, 2026-11-06); achievements_menu.nvgt
-m.add_item("view game statistics", "stats"); // after learn sounds (dev, 2026-11-06); stats_menu.nvgt
+m.add_item("learn sounds", "learn"); // learn_sounds_menu.nvgt
+m.add_item("view game achievements", "achievements"); // achievements_menu.nvgt
+m.add_item("view game statistics", "stats"); // stats_menu.nvgt
 m.add_item("clear game progresses", "clearall"); // the three "all progress" items, always shown (achievements_menu.nvgt)
 m.add_item("copy all game progresses to clipboard", "copyall");
 m.add_item("export all game progresses to file", "exportall");
 m.add_item("back", "back");
-/* The game menu intro (dev, 2026-11-05): "learn about important
-sounds" for the learn sounds menu, and "check your stats" with statistics (2026-11-06), in the
-menu's order, and "view achievements" with achievements (2026-11-06). */
+// The intro names the menu's parts in the menu's order.
 m.intro_text="Game menu. You can start a new game session, learn about important sounds, view achievements, or check your stats here.";
 int mres=m.run();
 if(mres<0 or m.selected_item_id=="back") return;
@@ -150,19 +147,19 @@ else if(m.selected_item_id=="exportall") export_all_progress();
 else play_game();
 }
 }
-/* Play game. It opens the mode menu (the practice plan, dev, 2026-11-06, replacing the 2026-11-03 "Do you want to play
-in debug mode?" question): endless run goes on to the difficulty menu (choose_difficulty()) and plays the real game
-(the level's speed and floor, everything spawning, starting_lives, and the run ends when lives run out), practice run goes on to the practice menus (choose_practice()), and debug run, from source
-only, goes on to the debug options, in the dev's order: the environment (first, 2026-11-10), spawn (before speed since
-2026-11-06), speed, footsteps (2026-11-04), then whether lives can run out. Escape steps back one menu silently: from the
-mode menu to the game menu, and from the environment menu back to the mode menu. They're all nested menus, so nothing says "canceled". The
-lives menu was removed with player health: "all" starts with starting_lives, and any single-type choice with debug_lives. */
+/* Play game. It opens the mode menu: endless and timed runs go on to the difficulty menu (choose_difficulty()) and play
+the real game (the level's speed and floor, everything spawning, starting_lives, and the run ends when lives run out);
+practice run goes on to the practice menus (choose_practice()); free run to its setup (choose_free_setup()); and debug
+run, from source only, goes on to the debug options in this order: the environment, spawn, speed, footsteps, then
+whether lives can run out. Escape steps back one menu silently: from the mode menu to the game menu, and from each
+debug option to the one before. They're all nested menus, so nothing says "canceled". A debug run of "all" starts with
+starting_lives, and any single-type choice with debug_lives. */
 void play_game()
 {
 int speed = start_step_time, can_run_out = 1, steps = 1;
 string only_type = "all";
 bool practicing = false;
-int level = -1; // the endless run's difficulty, or -1
+int level = -1; // the endless or timed run's difficulty, or -1
 int stage = 0;
 while (stage < 6)
 {
@@ -173,7 +170,7 @@ if (mode == "") return;
 practicing = false; // set again below, so backing out of practice into another mode never leaves it on
 timed_run = false; // likewise a timed run (timerun.nvgt)
 free_run = false; // and a free run (freerun.nvgt)
-level = -1; // likewise the difficulty, which only an endless run has
+level = -1; // likewise the difficulty, which only endless and timed runs have
 debug_env = ""; // and the debug environment choice, which only a debug run has (environments.nvgt)
 if (mode == "practice")
 {
@@ -181,7 +178,7 @@ if (mode == "practice")
 string practice_type;
 int practice_speed;
 if (!choose_practice(practice_type, practice_speed)) continue;
-// A practice run (Section 3): its fixed speed, the one obstacle, practice_lives that can't run out.
+// A practice run: its chosen speed, the one obstacle, and practice_lives that never end it (a last-life blow is a practice death).
 practicing = true;
 practice_choice = practice_type; // what the run's clean passes count toward (practice.nvgt)
 speed = practice_speed;
@@ -210,7 +207,7 @@ timed_run = mode == "timed";
 level = choose_difficulty();
 if (level < 0) continue;
 /* The real game. Set every choice here, not just once above, since escaping back from a debug option leaves
-its "escaped" value behind (a speed of -1 ran every step at once; bug found by the dev, 2026-11-04). */
+its "escaped" value behind (a speed of -1 ran every step at once). */
 speed = difficulty_start_times[level];
 only_type = "all";
 can_run_out = 1;
@@ -221,7 +218,7 @@ else stage = 1;
 }
 else if (stage == 1)
 {
-// The environment first, before every other debug option (the environments plan, dev, 2026-11-10): one to stay in, or "random".
+// The environment first, before every other debug option: one to stay in, or "random".
 string env_choice = choose_debug_env();
 if (env_choice == "-") stage = 0;
 else
@@ -232,7 +229,7 @@ stage = 2;
 }
 else if (stage == 2)
 {
-// Then the spawn choice, then the speed (dev, 2026-11-06: "Please make the speed menu come after the obstical/item menu").
+// Then the spawn choice, then the speed.
 only_type = choose_spawn_types();
 stage = only_type == "" ? 1 : 3;
 }
@@ -255,12 +252,13 @@ stage = can_run_out < 0 ? 4 : 6;
 footsteps_on = steps == 1;
 m.fade_music();
 /* Returns when the run ends, back to the game menu. A run starts over with the same choices when restart run was picked,
-when the debug No answer turned a hazard death into a restart, or when you choose replay run after a death (after_death_menu(), results_menu.nvgt)
-(dev, 2026-11-03, in releases too). Quitting from the pause menu or the Escape question just returns here. */
+when the debug No answer turned a hazard death into a restart, or when you choose replay run after a death
+(after_death_menu(), results_menu.nvgt), in releases too. Quitting from the pause menu or the Escape question just
+returns here. */
 bool first_run = true;
 do
 {
-// A free run's replay or restart is the same run again, with everything as it was (freerun.nvgt; dev, 2026-11-13).
+// A free run's replay or restart is the same run again, with everything as it was (freerun.nvgt).
 if (free_run and !first_run)
 {
 free_prepare_replay();
@@ -269,8 +267,9 @@ speed = free_start_step_time();
 first_run = false;
 restart_run_requested = false;
 run_died = false;
-/* A practice run starts with practice_lives; a single-type debug run with debug_lives (dev, 2026-11-03); "all" plays
-like the real game. A practice run can't die, so it never reaches the after death menu. */
+/* A practice run starts with practice_lives, a free run with free_lives, a single-type debug run with debug_lives;
+"all" plays like the real game. Practice deaths have their own retry menu (endrun.nvgt), so a practice run never
+reaches the after death menu. */
 int life_count = practicing ? practice_lives : (free_run ? free_lives : (only_type == "all" ? starting_lives : debug_lives));
 start_run(speed, life_count, only_type, can_run_out == 1, practicing, level);
 if (run_died and !restart_run_requested and after_death_menu()) restart_run_requested = true;
@@ -295,10 +294,10 @@ return;
 }
 exit();
 }
-/* The mode menu (the practice plan, dev, 2026-11-06): the foundation every way to play lands on. Debug run comes first
-and only from source (SCRIPT_COMPILED hides it), then endless run; each item is followed by a
-description; then timed run, free run and practice run, in that order. Returns "debug", "endless", "timed", "free",
-"practice", or "" for escape or back, which step back to the game menu silently. */
+/* The mode menu: the foundation every way to play lands on. Debug run comes first and only from source (SCRIPT_COMPILED
+hides it), then endless run, timed run, free run and practice run, in that order, each followed by a description.
+Choosing a locked mode says why in a dialog and stays in the menu, on that mode. Returns "debug", "endless", "timed",
+"free", "practice", or "" for escape or back, which step back to the game menu silently. */
 string choose_game_mode()
 {
 int focus = -1;
@@ -307,12 +306,10 @@ while (true)
 setupmenu();
 m.intro_text = "Choose the game you'd like to play.";
 if (!SCRIPT_COMPILED) m.add_item("Debug run. This mode lets you choose the speed, obstacles, footsteps and whether lives run out, for testing.", "debug");
-/* "and more obstacles join as you go" joined with the difficulty schedule (Section 5; dev, 2026-11-05). Locked, endless
-run is only its requirement, and open, just its description, with no "Available.", since practice run has none (the
-practice locks plan's Section 2, dev, 2026-11-10). */
+// Locked, a mode reads only its requirement; open, just its description, with no "Available.".
 if (endless_unlocked()) m.add_item("Endless run. This mode lets you run for as long as you can survive. The belt gets faster and more obstacles join as you go, and the run ends when you run out of lives or fall into a hazard.", "endless");
 else m.add_item("Endless run. Unlocked " + endless_lock_reason(), "endless");
-// Timed run (the timed run plan, dev, 2026-11-13): after endless run, open once medium is (timerun.nvgt).
+// Timed run, open once medium is (timerun.nvgt).
 if (timed_mode_unlocked()) m.add_item("Timed run. This mode gives you a countdown clock: clean passes add time, hits take it away, and you win by reaching the finish line before your time runs out.", "timed");
 else m.add_item("Timed run. Unlocked " + timed_mode_lock_reason(), "timed");
 // Free run, open once insane is (freerun.nvgt).
@@ -321,7 +318,7 @@ else m.add_item("Free run. Unlocked " + free_mode_lock_reason(), "free");
 // Practice run, last.
 m.add_item("Practice run. This mode lets you practice one kind of obstacle at a time, for as long as you like. If you die, you try again from just past what caught you, and nothing you do here counts toward your progress, apart from unlocking the next obstacle to practice.", "practice");
 m.add_item("back", "back");
-int mres = m.run(focus, false, focus >= 0); // back on a locked endless run, it's focused and spoken
+int mres = m.run(focus, false, focus >= 0); // back on a locked mode, it's focused and spoken
 if (mres < 0 or m.selected_item_id == "back") return "";
 if (m.selected_item_id == "endless" and !endless_unlocked())
 {
@@ -345,12 +342,12 @@ return m.selected_item_id;
 }
 return "";
 }
-/* The difficulty menu (the game menu refactor plan's Section 4, dev, 2026-11-05), after endless run: the five levels in
-difficulty order (not alphabetical; dev: "this menu will not need it"), then back. Each level reads as
-difficulty_line() puts it: "Easy. Available." or, locked (Section 6), "Medium. Unlocked after completing 3 more easy
-runs."; choosing a locked level says "This difficulty is unlocked after completing ..." in a dialog and stays in the menu, on that level. The pick isn't saved,
-but the cursor starts on the last level picked until the game closes, and restart run and replays keep the level.
-Returns the level's index in difficulty_names, or -1 for escape or back, which step back to the mode menu silently. */
+/* The difficulty menu, after endless or timed run: the five levels in difficulty order (not alphabetical), then back.
+Each level reads as difficulty_line() puts it: "Easy. Available." or, locked, "Medium. Unlocked after completing 3 more
+easy runs."; choosing a locked level says "This difficulty is unlocked after completing ..." in a dialog and stays in
+the menu, on that level. The pick isn't saved, but the cursor starts on the last level picked until the game closes,
+and restart run and replays keep the level. Returns the level's index in difficulty_names, or -1 for escape or back,
+which step back to the mode menu silently. */
 int last_difficulty = -1;
 int choose_difficulty()
 {
@@ -358,7 +355,7 @@ int focus = last_difficulty;
 while (true)
 {
 setupmenu();
-// With how many are open, as the achievements menu counts (dev, 2026-11-12): "Choose a difficulty level. 3 of 5 unlocked."
+// With how many are open, as the achievements menu counts: "Choose a difficulty level. 3 of 5 unlocked."
 int open_levels = 0;
 for (uint i = 0; i < difficulty_names.length(); i++)
 {
@@ -384,11 +381,11 @@ return level;
 }
 return -1;
 }
-/* The practice menus (the game menu refactor plan's Section 2, dev, 2026-11-05): the obstacle, then the speed. The
-obstacles come in learning order, the order the difficulty schedule brings them in, not alphabetical; the speeds are
-fixed for the run. Escape or back on the speed menu steps back to the obstacles, and on the obstacles back to the mode
-menu, all silently. Fills practice_type and practice_speed and returns true, or returns false when backed out. */
-int last_practice_choice = -1; // the last obstacle picked, focused next time until the game closes, as last_difficulty is (dev, 2026-11-10)
+/* The practice menus: the obstacle, then the speed. The obstacles come in learning order, the order the difficulty
+schedule brings them in, not alphabetical; the speed is a fixed one or rising. Escape or back on the speed menu steps
+back to the obstacles, and on the obstacles back to the mode menu, all silently. Fills practice_type and practice_speed
+and returns true, or returns false when backed out. */
+int last_practice_choice = -1; // the last obstacle picked, focused next time until the game closes, as last_difficulty is
 bool choose_practice(string &out practice_type, int &out practice_speed)
 {
 practice_type = "";
@@ -397,15 +394,14 @@ int focus = last_practice_choice;
 while (true)
 {
 setupmenu();
-// With how many are open (dev, 2026-11-12): "Choose what to practice. 6 of 16 obstacles unlocked."
+// With how many are open: "Choose what to practice. 6 of 16 obstacles unlocked."
 int open_choices = 0;
 for (uint i = 0; i < practice_choices.length(); i++)
 {
 if (practice_unlocked(i)) open_choices++;
 }
 m.intro_text = "Choose what to practice. " + open_choices + " of " + practice_choices.length() + " obstacles unlocked.";
-/* practice_choices (practice.nvgt), with three door choices (dev, 2026-11-09); each line says whether it's open or what
-opens it (the practice locks plan's Section 2, dev, 2026-11-10). */
+// practice_choices (practice.nvgt); each line says whether it's open or what opens it.
 for (uint i = 0; i < practice_choices.length(); i++)
 {
 m.add_item(practice_line(i), practice_choices[i]);
@@ -424,12 +420,12 @@ focus = choice; // back from the speed menu, the cursor is still on this choice
 last_practice_choice = choice;
 practice_type = m.selected_item_id;
 setupmenu();
-m.intro_text = "Choose a speed, in steps a second."; // dev, 2026-11-08, so the bare numbers make sense
+m.intro_text = "Choose a speed, in steps a second."; // so the bare numbers make sense
 for (int t = start_step_time; t >= 100; t -= 100)
 {
-m.add_item(tenths_text(int(round(10000.0 / t, 0))), "" + t); // steps a second as bare numbers, 2, 2.5, 3.3, 5, 10 (dev, 2026-11-08)
+m.add_item(tenths_text(int(round(10000.0 / t, 0))), "" + t); // steps a second as bare numbers, 2, 2.5, 3.3, 5, 10
 }
-m.add_item("rising", "rising"); // from 2 up to 10, twice as fast as an endless run (the rising practice plan, dev, 2026-11-12)
+m.add_item("rising", "rising"); // from 2 up to practice_rising_top, twice as fast as an endless run speeds up
 m.add_item("back", "back");
 mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") continue; // back to the obstacles
@@ -439,10 +435,10 @@ return true;
 }
 return false;
 }
-/* A practice choice as the spawner's spawn_only (dev, 2026-11-09: "fake doors, real doors, mixed doors"). Fake doors are
-the plain obstacle type; real doors are a key then its real door, in turn, as the debug run's real doors spawn; mixed
-doors are the practice mix of real doors, each with its key, and fake ones (choose_next_obstacle()); and barriers use
-the real game's lane rule, sometimes two side by side. */
+/* A practice choice as the spawner's spawn_only. Fake doors are the plain obstacle type; real doors are a key then its
+real door, in turn, as the debug run's real doors spawn; mixed doors are the practice mix of real doors, each with its
+key, and fake ones (practice_doors_type() in spawner.nvgt); and barriers use the real game's lane rule, sometimes two
+side by side. */
 string practice_spawn_id(const string&in practice_type)
 {
 if (practice_type == "mixed_doors") return "practice_doors";
@@ -450,13 +446,13 @@ if (practice_type == "barriers") return "barriers_multiple";
 if (practice_type == "combinations") return "combinations_mixed"; // every spawn a pair, all 16 (combo.nvgt)
 if (practice_type == "real_walls") return "ladders"; // every spawn a real wall with its ladder (ladder.nvgt)
 if (practice_type == "mixed_walls") return "mixed_walls"; // fake and real walls, half and half
-if (practice_type == "trampolines") return "practice_trampolines";
-if (practice_type == "mixed_obstacles") return "practice_mixed"; // every kind at random (spawner.nvgt) // a trampoline every other spawn, obstacles between (spawner.nvgt)
+if (practice_type == "trampolines") return "practice_trampolines"; // a trampoline every other spawn, obstacles between (spawner.nvgt)
+if (practice_type == "mixed_obstacles") return "practice_mixed"; // every kind at random (spawner.nvgt)
 return practice_type;
 }
-/* DEBUG OPTION: pick the starting step time, from start_step_time down in 100 ms steps: 500, 400, 300, 200, 100. The
-50 ms in between (450, 350, 250, 150 and 50) were dropped for door testing (dev, 2026-11-03). It only appears when
-running from source; a compiled release always starts at start_step_time. Returns -1 if escaped. */
+/* DEBUG OPTION: pick the starting step time, from start_step_time down in 100 ms steps. The 50 ms steps in between were
+left out to keep the list short. It only appears when running from source; a compiled release always starts at
+start_step_time. Returns -1 if escaped. */
 int choose_start_speed()
 {
 if (SCRIPT_COMPILED) return start_step_time;
@@ -471,9 +467,9 @@ if (mres < 0) return -1; // silent: escape just steps back to the spawn menu
 return int(parse_int(m.selected_item_id));
 }
 /* DEBUG OPTION: pick which obstacles spawn: one type from obstacle_types and item_types (and any added later), one of
-the extra choices below, or all. Every choice is gathered first, then listed in alphabetical order, "all" included
-(dev, 2026-11-05: "Please make the debug options in alphabetical order"). It only appears when running from source; a
-compiled release always spawns all. Returns the type, "all", or "" if escaped. */
+the extra choices below, or all. Every choice is gathered first, then listed in alphabetical order, "all" included. It
+only appears when running from source; a compiled release always spawns all. Returns the type, "all", or "" if
+escaped. */
 string choose_spawn_types()
 {
 if (SCRIPT_COMPILED) return "all";
@@ -481,20 +477,20 @@ string[] labels;
 dictionary ids; // label -> spawn id
 for (uint i = 0; i < obstacle_types.length(); i++)
 {
-if (obstacle_types[i] == "animals") continue; // listed by kind below instead (dev, 2026-11-04)
-if (obstacle_types[i] == "barriers") continue; // the three barrier choices below cover it (dev, 2026-11-05)
+if (obstacle_types[i] == "animals") continue; // listed by kind below instead
+if (obstacle_types[i] == "barriers") continue; // the three barrier choices below cover it
 add_spawn_choice(labels, ids, obstacle_types[i] == "ladders" ? "real walls" : learn_type_name(obstacle_types[i]), obstacle_types[i]); // "force_fields" reads as "force fields", "walls" as "fake walls", "ladders" as "real walls"
 }
-// Debug options: animals of one kind only (dev, 2026-11-04); "all" still mixes every kind.
-// Debug option: fake and real walls at random, half and half (the ladders plan, dev, 2026-11-12).
+// Fake and real walls at random, half and half.
 add_spawn_choice(labels, ids, "mixed walls", "mixed_walls");
+// Animals of one kind only; "all" still mixes every kind.
 add_spawn_choice(labels, ids, "animals, birds", "animals_birds");
 add_spawn_choice(labels, ids, "animals, dogs", "animals_dogs");
 // Real doors aren't in the random mix (they mark speed sections), but as a debug option they can be the only thing that spawns.
 add_spawn_choice(labels, ids, "real doors", "real_doors");
-// Debug option: only the real doors at the 50 ms speed marks, with nothing in between (dev, 2026-11-03).
+// Only the real doors at the speed marks, with nothing in between.
 add_spawn_choice(labels, ids, "real doors, spread", "real_doors_spread");
-// Debug option: only barriers, in your lane, in random lanes, or the real game's pairs (dev, 2026-11-04).
+// Only barriers: in your lane, in random lanes, or the real game's pairs.
 add_spawn_choice(labels, ids, "barriers", "barriers");
 add_spawn_choice(labels, ids, "barriers, random lanes", "barriers_random"); // each barrier in any of the three lanes
 add_spawn_choice(labels, ids, "barriers, multiple lanes", "barriers_multiple"); // the real game's rule: sometimes two side by side, never in one lane
@@ -502,21 +498,21 @@ for (uint i = 0; i < item_types.length(); i++)
 {
 string item_name = item_types[i].replace("_", " ", true);
 add_spawn_choice(labels, ids, item_name, item_types[i]);
-// The lane items get the barriers' three choices (dev, 2026-11-05): your lane, random lanes, multiple lanes.
+// The lane items get the barriers' three choices: your lane, random lanes, multiple lanes.
 if (item_lane_types.find(item_types[i]) < 0) continue;
 add_spawn_choice(labels, ids, item_name + ", random lanes", item_types[i] + "_random");
 add_spawn_choice(labels, ids, item_name + ", multiple lanes", item_types[i] + "_multiple");
 }
-// Debug options: every spawn a pair (the combined obstacles plan, dev, 2026-11-11): first-order pairs, reversed ones, or both mixed.
+// Every spawn a pair: first-order pairs, reversed ones, or both mixed.
 add_spawn_choice(labels, ids, "combinations", "combinations");
-add_spawn_choice(labels, ids, "combinations, reversed", "combinations_reverse"); // "reversed" (dev, 2026-11-11)
+add_spawn_choice(labels, ids, "combinations, reversed", "combinations_reverse");
 add_spawn_choice(labels, ids, "combinations, mixed", "combinations_mixed");
-// Debug option: the full game with a slide about every other spawn (the slides plan, dev, 2026-11-11).
+// The full game with a slide about every other spawn.
 add_spawn_choice(labels, ids, "slides", "slides");
-// Debug option: the full game with a trampoline about every other spawn (the trampolines plan, dev, 2026-11-11).
+// The full game with a trampoline about every other spawn.
 add_spawn_choice(labels, ids, "trampolines", "trampolines");
 add_spawn_choice(labels, ids, "all", "all");
-add_spawn_choice(labels, ids, "nothing", "nothing"); // an empty belt, for the music and ambience (dev, 2026-11-06)
+add_spawn_choice(labels, ids, "nothing", "nothing"); // an empty belt, for the music and ambience
 labels.sort_ascending();
 setupmenu();
 m.intro_text = "Choose which obstacles spawn for debugging.";
@@ -536,10 +532,9 @@ void add_spawn_choice(string[]@ labels, dictionary@ ids, const string&in label, 
 labels.insert_last(label);
 ids.set(label, id);
 }
-/* DEBUG OPTION: whether you hear your footsteps while running (dev, 2026-11-04: "extremely useful for the new
-transformed belt tests"), asked before the run-ending question. No silences every footstep, so only the belt's sounds
-are left; landings still play. It only appears when running from source; a compiled release always answers Yes.
-Returns 1 for Yes, 0 for No, or -1 if escaped. */
+/* DEBUG OPTION: whether you hear your footsteps while running, asked before the run-ending question. No silences every
+footstep, so only the belt's sounds are left; landings still play. It only appears when running from source; a
+compiled release always answers Yes. Returns 1 for Yes, 0 for No, or -1 if escaped. */
 int choose_footsteps()
 {
 if (SCRIPT_COMPILED) return 1;
@@ -551,10 +546,10 @@ int mres = m.run();
 if (mres < 0) return -1; // silent: escape just steps back to the speed menu
 return m.selected_item_id == "yes" ? 1 : 0;
 }
-/* DEBUG OPTION: the environment (the environments plan, dev, 2026-11-10), the first debug option, before the spawn menu: each environment to stay in
-for the whole run, to test one environment's sounds directly, then "random" last, the normal random pick (and, once
-switching exists, the run moves between environments). Returns "" for random, the environment's name, or "-" if
-escaped. A compiled release always answers random. */
+/* DEBUG OPTION: the environment, the first debug option, before the spawn menu: each environment to stay in for the
+whole run, to test one environment's sounds directly, then "random" last, the normal random pick, which also lets the
+run switch between environments. Returns "" for random, the environment's name, or "-" if escaped. A compiled release
+always answers random. */
 string choose_debug_env()
 {
 if (SCRIPT_COMPILED) return "";
@@ -562,7 +557,7 @@ setupmenu();
 m.intro_text = "Which environment do you want to run in?";
 string[] names = env_names();
 for (uint i = 0; i < names.length(); i++) m.add_item(names[i].replace("_", " ", true), names[i]);
-m.add_item("random", "random"); // last (dev, 2026-11-10: "rename this to random, and put it at the bottum")
+m.add_item("random", "random"); // last
 int mres = m.run();
 if (mres < 0) return "-"; // silent: escape just steps back to the mode menu
 return m.selected_item_id == "random" ? "" : m.selected_item_id;

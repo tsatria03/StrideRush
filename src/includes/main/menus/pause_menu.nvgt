@@ -1,9 +1,8 @@
-/* The pause menu (dev, 2026-11-03, for 1.3): "resume run", "restart run" and "quit run", all about the run, while the
-main menu's restart game and exit game are about the program. Pausing freezes the run's timers and every game pool.
-Restart run and quit run each ask Yes/No first; on Yes, restart starts the run straight over with the same choices
-(restart_run_requested, read by play_game()) and quit ends it so start_run() returns to the game menu. P opens this
-menu; Escape during a run asks the quit question directly (quit_run_prompt()). The confirm reads its OWN menu result,
-so answering No never quits. */
+/* The pause menu: its items are all about the run, while the main menu's restart game and exit game are about the
+program. Pausing freezes the run's timers and every game pool but the ambience. Restart run and quit run each ask
+Yes/No first; on Yes, restart starts the run straight over with the same choices (restart_run_requested, read by
+play_game()) and quit ends it so start_run() returns to the game menu. P opens this menu; Escape during a run asks the
+quit question directly (quit_run_prompt()). The confirm reads its OWN menu result, so answering No never quits. */
 void pause_game()
 {
 pause_timers();
@@ -14,7 +13,7 @@ void resume_game()
 resume_pools();
 resume_timers();
 }
-// The run's timers alone. The quit run question uses these on their own, so the run's sounds keep playing (dev).
+// The run's timers alone; a practice death pauses these, then the pools its own way (practice_death() in endrun.nvgt).
 void pause_timers()
 {
 steptimer.pause();
@@ -43,17 +42,17 @@ void pause_menu()
 {
 pause_game();
 temp.play_stationary(get_pack_sound("misc/game/*pause*"), false);
-/* It remembers your place (dev, 2026-11-08): P opens it on resume run, and backing out of anything inside it comes back
-on the item you came from; the item focused is always spoken after the intro (dev: "I want it to say it if it focuses on it"). */
+/* It remembers your place: P opens it on resume run, and backing out of anything inside it comes back on the item you
+came from; the item focused is always spoken after the intro. */
 int focus = 0;
 while (true)
 {
 setupmenu();
 m.intro_text = "Pause menu.";
 m.add_item("resume run", "resume");
-m.add_item("view session statuses", "statuses"); // every kind of run, the status readouts in one list (dev, 2026-11-13)
-m.add_item("restart run", "restart"); // right after resume run (dev, 2026-11-07)
-// Session results, in an endless run only (the session results plan, 2026-11-07); practice and debug runs count nothing.
+m.add_item("view session statuses", "statuses"); // every kind of run, the status readouts in one list
+m.add_item("restart run", "restart");
+// Session results, only while stats count (an endless run); the other runs count nothing.
 if (stats_counting)
 {
 m.add_item("view session results", "view");
@@ -97,7 +96,7 @@ return;
 }
 }
 }
-/* The quit and restart questions (dev, 2026-11-10): an endless run warns that its session goes; a practice or debug run,
+/* The quit and restart questions: a run with a difficulty warns that its session goes; a practice, debug or free run,
 which has no session to lose, asks only "Are you sure you want to quit this run?" (or restart). */
 string leave_run_question(const string&in verb)
 {
@@ -105,10 +104,9 @@ string question = "Are you sure you want to " + verb + " this run?";
 if (run_difficulty >= 0) question += " You will lose all progress for this current session.";
 return question;
 }
-/* Escape during a run (dev, 2026-11-03): the quit run question straight away. The timers and every sound but the ambience
-pause while it's asked (dev, 2026-11-08, replacing 2026-11-03's "the timers should pause, but not the sounds"), with no
-pause or resume cue. Yes ends the run back to the game menu; No or escape says "canceled" and the run carries on. With the Game
-tab's ask setting off (ask_quit_on_escape), Escape leaves at once without the question (dev, 2026-11-04). */
+/* Escape during a run: the quit run question straight away. The timers and every sound but the ambience pause while
+it's asked, with no pause or resume cue. Yes ends the run back to the game menu; No or escape says "canceled" and the
+run carries on. With the Game tab's ask setting off (ask_quit_on_escape), Escape leaves at once without the question. */
 void quit_run_prompt()
 {
 if (!ask_quit_on_escape)
@@ -116,7 +114,7 @@ if (!ask_quit_on_escape)
 leave_run(false);
 return;
 }
-pause_game(); // the timers and every sound but the ambience (dev, 2026-11-08), no longer the timers alone
+pause_game(); // the timers and every sound but the ambience
 if (confirm_leave_run(leave_run_question("quit")))
 {
 leave_paused_run(false);
@@ -131,15 +129,14 @@ void leave_paused_run(bool restart)
 resume_game();
 leave_run(restart);
 }
-/* Every way of choosing to leave a run ends here: the run's sounds fade out the way fademode says
-(dev, 2026-11-04), then the run stops. A death never comes through here, so it keeps its own ending sounds. */
+/* Every way of choosing to leave a run ends here: the run's sounds fade out the way fademode says, then the run stops. A death never comes through here, so it keeps its own ending sounds. */
 void leave_run(bool restart)
 {
 fade_multi_pool(fademode);
 restart_run_requested = restart;
 running = false;
 }
-// The Yes/No for restart run and quit run, with the dev's wording (dev, 2026-11-03). Anything but Yes says "canceled".
+// The Yes/No for restart run and quit run. Anything but Yes says "canceled".
 bool confirm_leave_run(string question)
 {
 setupmenu();

@@ -1,26 +1,24 @@
-/* Session results (the session results plan, dev, 2026-11-07), built once: the session's stat
-lines, from session_stat_lines(), in a menu, never a dialog (dev: "I'd much rather a menu, not a dlg with 50 lines").
-Endless runs only. Section 1: the pause menu's view session results, copy session results to clipboard and export
-session results to file, all reading the run so far (live). Section 2: after a death, after_death_menu(). */
+/* Session results, built once: the session's stat lines, from session_stat_lines(), in a menu, never a dialog, since
+there are about 50 of them. Endless runs only. The pause menu's view, copy and export items read the run so far
+(live); after_death_menu() follows a run's end. */
 void view_session_results()
 {
 show_stat_lines("Session results menu. You can see the stats from your current run so far here.", session_stat_lines(true));
 }
-/* After a death that ends the run (Section 2, replacing the Yes/No replay question): in an endless run, the results menu
-with the run's final lines (end_run_stats() has measured them), then back or escape brings the question menu, copy,
-export (dev, 2026-11-07: a menu that asks what you'd like to do), replay run (after export,
-dev) and return to game menu. Copy and export reopen it on the same item; escape says "canceled" and returns to the game
-menu. A debug death (no difficulty, nothing counted) skips the results and has only replay run and return to game menu.
-True to replay the run with the same choices. */
+/* After a run ends by a death (or, in a timed run, at the finish line or time's up): in an endless run, the results menu
+with the run's final lines (end_run_stats() has measured them), then back or escape brings the question menu: copy,
+export, replay run and return to game menu. A timed run shows its own results instead. Copy and export reopen it on the
+same item; escape says "canceled" and returns to the game menu. A run with nothing counted skips the results and has
+only replay run and return to game menu. True to replay the run with the same choices. */
 bool after_death_menu()
 {
-bool endless = run_difficulty >= 0 and !timed_run; // a timed run has no endless results (the timed run plan)
-/* The Game tab's two death settings (the death settings plan, dev, 2026-11-08), each on by default: one skips the
-results menu, the other leaves copy and export out of the question menu, as a debug death has always done. */
+bool endless = run_difficulty >= 0 and !timed_run; // a timed run has its own results instead
+/* The Game tab's two death settings, each on by default: one skips the results menu, the other leaves copy and export
+out of the question menu, as a run with nothing counted always does. */
 bool copy_shown = endless and show_death_copy_export;
 bool results_shown = endless and show_death_results;
 if (results_shown) show_stat_lines("You have died. Here are your current results for this session.", session_stat_lines());
-// A timed run's own results (the timed run plan's Section 2), under the same setting: how it ended, its clock, the level's best.
+// A timed run's own results, under the same setting: how it ended, its clock, the level's best.
 bool timed_results = timed_run and show_death_results;
 if (timed_results) show_stat_lines(timed_end_line() + " Here are your results for this timed run.", timed_result_lines());
 int focus = -1;
@@ -28,7 +26,7 @@ while (true)
 {
 setupmenu();
 m.intro_text = copy_shown ? "What would you like to do now? You can copy or export your session results, replay the current run, or return to the game menu." : "What would you like to do now? You can replay the current run, or return to the game menu.";
-// Without the results menu first, say you died, only as it first opens (dev, 2026-11-08: "I want to know that I died.", but not again after a copy or export).
+// Without the results menu first, say how the run ended, only as it first opens, not again after a copy or export.
 if (!results_shown and !timed_results and focus < 0) m.intro_text = (timed_run ? timed_end_line() : "You have died.") + " " + m.intro_text; // a timed run: the finish line, time's up, or a death (timerun.nvgt)
 if (copy_shown)
 {
