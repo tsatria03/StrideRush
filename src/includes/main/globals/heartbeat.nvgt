@@ -34,7 +34,7 @@ heart_beat_now = true;
 // Every frame from run_loop(): a beat whenever the gap for the heart rate has passed.
 void heartbeat_check()
 {
-if (door_moving or sliding or free_standing())
+if (door_moving or sliding or free_standing() or (free_run and !free_heartbeat_on)) // a free run's silent heartbeat too (freerun.nvgt)
 {
 heart_beat_now = true; // silent until then, and straight back once it ends
 return;

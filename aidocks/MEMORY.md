@@ -82,7 +82,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
-- [Free run touches plan](plans/project_free_run_touches_plan.md) — SETTLED, NOT BUILT (2026-11-15): modify heartbeat (heard or silent) first, then the modify options saying their current setting, then docks; 2.3's last two entries; Q&A log
+- [Free run touches plan](plans/project_free_run_touches_plan.md) — SECTIONS 1 AND 2 BUILT AND TESTED (2026-11-15), docks next: modify heartbeat (heard or silent) first, then the modify options saying their current setting, then docks; 2.3's last two entries; Q&A log
 - [Weapon swing plan](plans/project_weapon_swing_plan.md) — COMPLETE (2026-11-15, 2.3 at 7 of 10): per-weapon melee swing (windup then recovery, the dev's values in two tuning arrays, after CaveDefender) and the reload sound fix, two sections; Q&A log
 - [Weapon reach plan](plans/project_weapon_reach_plan.md) — COMPLETE (2026-11-15, 2.3 at 8 of 10): per-weapon reach, bat 2000 up to pistol 5500 ms (machine gun 4500), key unlock its own 2000; two sections; Q&A log
 - [Spawner reorg plan](plans/project_spawner_reorg_plan.md) — COMPLETE (2026-11-15), all 3 sections built and tested: choose_next_obstacle() into a dispatcher with real game, debug, practice and free run functions, plus place_obstacle()'s if/else fix; the case order that must survive; three sections; Q&A log
