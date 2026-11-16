@@ -1,0 +1,78 @@
+---
+name: project_weapon_swing_plan
+description: SETTLED, NOT BUILT (2026-11-15): per-weapon melee swing (windup then recovery, the dev's values in two tuning arrays, after CaveDefender) plus the reload sound fix, two sections; per-weapon reach is its own later plan; Q&A log
+metadata:
+  type: project
+---
+
+Started 2026-11-15 (dev: "Let's start the plan now."), from suggestion 23 in [[project_suggestions]] and the comparison with ToyMania's tile ranges recorded there. Re-scoped the same day to swing speed first (see the Q&A log). Begun as project_weapon_reach_plan and renamed to this weapon swing plan (dev, 2026-11-15: "Please rename this plan, and create a new weapon reach plan for later."); per-weapon reach moved to its own plan, [[project_weapon_reach_plan]].
+
+## Today (2026-11-15)
+- weapons.nvgt: weapon_names alphabetical (bat, boot, club, dagger, fist, hammer, knife, sword, machine gun, pistol); weapon_damage 3 to 30 by key, times weapon_damage_multiplier 4. The damage order is alphabetical, from the weapon lineup plan ([[project_weapon_lineup_plan]]), not designed per weapon.
+- Every weapon reaches weapon_reach_time (2000 ms) ahead, turned into tiles at the current speed by weapon_reach(): 4 tiles at 500 ms, 40 at 50 ms. Melee hits the nearest target in reach at once, on the press: fire_weapon() plays *fire* and calls weapon_strike() in the same frame. Guns fire a bullet that flies 30 ms a tile and vanishes after weapon_reach() tiles (bullet.nvgt, b.range).
+- Fire gaps: melee_fire_gap 200 for every melee weapon, pistol_fire_gap 100, machine_gun_fire_gap 100 while held. current_fire_gap() lets the weapon powerups scale them (Quick Swings and Clumsy Swings for melee).
+- So within melee the sword (24) beats every other melee weapon at everything; the guns trade damage for ammo.
+- weapon_reach() is also the key's unlock range for real doors (door.nvgt), so if reach ever varies per weapon, the key needs its own reach first.
+- Targets in reach today: fake walls, fake doors, vehicles in your lane, and items (which break).
+
+## Reference: CaveDefender's melee swing (read only, user/CaveDefender-main, 2026-11-15)
+- client globals/weapon.nvgt, swingloop(): a swing has two phases on one swingtimer. Space PRESS (key_pressed, one tap one swing) starts it once the last swing's recovery has passed: the fire sound plays at once and the weapon is locked in (swing_weapon), so switching mid-swing can't change the pending hit. After the weapon's WINDUP the hit lands: the server picks the nearest wall in reach at that moment and applies the damage; nothing in reach just whiffs. Then the RECOVERY (cooldown) must pass before the next swing. Swinging never blocks movement or switching.
+- The data, cf/server/data/equipment/weapons/melee/<name>.mel ("swing speed" is the windup, "spam time" the recovery; range 5 for every melee weapon):
+  - fist: damage 1 to 2, windup 250, recovery 200
+  - axe: 1 to 3, 300, 200 (plus a burn)
+  - feet: 1 to 3, 350, 250
+  - bat: 2 to 4, 375, 250
+  - crowbar: 3 to 6, 450, 325
+  - hammer: 4 to 8, 600, 450 (plus a burn)
+- The design: heavier weapons wind up slower and recover slower but hit harder; bare fists are the quickest. Reach stays the same for all melee weapons, so speed is the whole difference.
+
+## Constraints
+- Reach must stay time-based (ms turned into tiles at the current speed); a fixed tile count breaks across the tenfold speed range.
+- No new sounds needed: every weapon already has draw, fire and hit ([[feedback_sounds_before_features]]).
+- A changelog entry for 2.3 (5 of 10 used).
+- A windup in a runner: the belt keeps carrying you while a swing winds up, so a 600 ms windup at 50 ms steps is 12 tiles; the target is chosen when the hit lands (as in CaveDefender), and something you've already reached by then is past.
+
+## Open questions (one at a time)
+1. (Answered) Swing speed for melee first, before any range changes.
+2. (Answered) The two-phase swing model.
+3. The values: the dev gives each melee weapon's windup and recovery for tuning.nvgt; then whether damage is re-paired with them (fast and light, slow and heavy) or stays alphabetical.
+4. The weapon powerups: do Quick Swings and Clumsy Swings scale the windup, the recovery, or both?
+5. (Answered, then corrected) Interruptions: a weapon switch, a door, slide, ladder or floor breaker cancels a pending hit silently; a pause freezes it.
+6. (Answered) Guns unchanged.
+7. Does a reload canceled by a weapon switch also cut off the reload sound?
+8. Readouts and docks: does anything say a weapon's speed, and how do the readme and learn sounds describe it?
+9. (Moved) Per-weapon reach: its own plan, [[project_weapon_reach_plan]].
+
+## Q&A log
+- Q1 (Claude, 2026-11-15): what should reach trade against: damage, swing speed, or both? Recommended damage only, keeping the shared fire gaps.
+- A1 (dev, 2026-11-15): "Actually, speaking of swing speed. I really want that for melee weapons first, before we consider modifying any ranges for them. Look at my cave defender game for that." So the plan now starts with per-weapon melee swing speed, after CaveDefender; reach waits. Claude read CaveDefender's swingloop() and its six .mel files (summarized above).
+- Q2 (Claude, 2026-11-15): the swing model: CaveDefender's two phases (windup, then recovery), or a per-weapon recovery only? Recommended: the two phases, as CaveDefender does; a windup is what makes a heavy weapon feel heavy, and timing a slow swing early becomes the skill, while light weapons stay instant enough to react late.
+- A2 (dev, 2026-11-15): "I want the 2 phase swing moddle, but I'll tell you the times each weapon should have so you can put them in the tuning file". So: CaveDefender's windup then recovery, with per-weapon windup and recovery values from the dev, kept in tuning.nvgt (likely two arrays in weapon_names' melee order, like the other per-weapon tables). Waiting for the dev's times.
+- The dev asked Claude for starting times to modify (2026-11-15: "Please give me the times for each weapon, and I'll modify them."). Claude's proposal, windup then recovery in ms, light to heavy, CaveDefender's spread tightened a little for a runner (the hammer's 550 windup is 11 tiles at top speed, well inside the 40-tile reach there): fist 150/150, dagger 175/150, knife 200/175, boot 250/200, bat 300/225, club 375/275, sword 425/300, hammer 550/400. Today every melee weapon is 0/200. Noted for Q3's second half: today's damage order is alphabetical, so the fist (fastest here) does 15 and the bat 3; re-pairing damage with speed comes next. Waiting for the dev's edited times.
+- The dev noticed (2026-11-15): "Wait, i just noticed that the weapon files only have wing speed". Claude checked: each .mel holds "swing speed" (gamedata.nvgt's swing_speed, the melee windup) and a "spam time", but spam time only paces ranged taps (the weaponstats message sends 0 for melee); the melee windup and recovery the game actually uses are hard-coded in the client's swing_windup() and swing_recovery() (weapon.nvgt), matching the files' numbers. So CaveDefender's data has one per-weapon number for melee, the swing speed, and the recovery lives only in code.
+- Q3a (Claude, 2026-11-15): one number per melee weapon (a swing speed, the windup, with the recovery worked out from it), or two (windup and recovery each set)? Recommended: one swing speed per weapon, recovery three quarters of it, rounded (CaveDefender's recovery runs about 0.67 to 0.8 of its windup), so tuning is one array.
+- A3a (dev, 2026-11-15): one number per weapon, the dev's swing speeds (ms, the windup): bat 50, boot 100, club 150, fist 200, dagger 250, hammer 300, knife 350, sword 400 (sent in that order). In key order that is 50, 100, 150, 250 (dagger), 200 (fist), 300, 350, 400, so speed now rises with damage (bat 3 base fastest, sword 24 slowest): the trade-off the plan wanted, with no damage reshuffle needed. Taken with the recommended recovery of three quarters of the swing speed, rounded: bat 38, boot 75, club 113, dagger 188, fist 150, hammer 225, knife 263, sword 300 (to confirm). One exception: the dagger (base damage 12) swings slower than the fist (15), so it's worse at both.
+- Q3b (Claude, 2026-11-15): swap the dagger's and fist's swing speeds (dagger 200, fist 250), so every step up the keys hits harder and swings slower, or keep them as sent? Recommended: swap.
+- The dev asked what the recovery is (2026-11-15); Claude explained: the wait after a hit lands before the next swing can start, today's melee_fire_gap moved to after the hit and made per weapon; with none, a slow weapon could swing again the instant its last hit landed.
+- A3b (dev, 2026-11-15): "Yes. Swap them. And give me the new numbers". The swing speeds in key order: bat 50, boot 100, club 150, dagger 200, fist 250, hammer 300, knife 350, sword 400, each 50 ms slower than the last, as damage rises 12, 24, 36, 48, 60, 72, 84, 96. Recovery at three quarters, rounded: 38, 75, 113, 150, 188, 225, 263, 300 (still to confirm).
+- Q3c (Claude, 2026-11-15): recovery at three quarters of each swing speed, one fixed recovery for every weapon, or none? Recommended: three quarters.
+- A3c (dev, 2026-11-15): the dev's own recoveries, exactly half of each swing speed: bat 25, boot 50, club 75, dagger 100, fist 125, hammer 150, knife 175, sword 200. SETTLED VALUES, key order: swing (windup) 50, 100, 150, 200, 250, 300, 350, 400; recovery 25, 50, 75, 100, 125, 150, 175, 200; damage unchanged (base 3 to 24 times 4). In tuning.nvgt: two arrays in weapon_names' melee order, melee_swing_times and melee_recovery_times, each value set on its own (dev, 2026-11-15: "Can you please add the individual recoveries to the tuning script as well?", replacing Claude's single list with a recovery percent). They go in when the plan is built, not before. So the sword can swing at most every 600 ms, the bat every 75 ms; melee_fire_gap (200) goes, since the recovery replaces it.
+- Q4 (Claude, 2026-11-15): the swing powerups today scale melee_fire_gap (Quick Swings by powerup_fire_faster 0.5, Clumsy Swings by powerup_fire_slower 2.0). Should they scale the windup, the recovery, or both? Recommended: both, so Quick Swings makes the whole swing twice as fast and Clumsy Swings twice as slow.
+- A4 (dev, 2026-11-15): "Yes. Deffenatly both for sure". Both the swing (windup) and the recovery go through current_fire_gap(), so Quick Swings halves both and Clumsy Swings doubles both.
+- Q5 (Claude, 2026-11-15): what happens to a swing still winding up when something interrupts it? Recommended, after CaveDefender: drawing another weapon is allowed and the pending hit still lands with the weapon it started with (locked in on the press); a door carrying you, a slide, a ladder or a floor breaker repair (the states where weapon_input() already refuses) cancel the pending hit silently, since you can't attack in them; a pause freezes the swing's timer with the run's other timers.
+- A5 (dev, 2026-11-15): "I agree with all 3". Switching mid-swing allowed, the hit lands with the locked-in weapon; door, slide, ladder and floor breaker lockouts cancel the pending hit silently; a pause freezes the swing (pause_game() already pauses firetimer and reloadtimer in pause_menu.nvgt, so a swing timer goes beside them).
+- Q6 (Claude, 2026-11-15): do the guns stay exactly as they are in this plan (bullets, ammo, pistol_fire_gap 100, the machine gun held at 100)? Recommended: yes; guns aren't swung, already trade damage for ammo, and their own changes, if any, can be a later plan.
+- A6 (dev, 2026-11-15): "Guns will stay the same." Bullets, ammo, reloads and the gun fire gaps unchanged.
+- CORRECTION to A5 (dev, 2026-11-15): "If you switch a weapon, then the swing is silently canceled. The same goes for reloading ammunation weapons." So drawing another weapon mid-windup cancels the pending hit silently (no lock-in after all; CaveDefender's swing_weapon lock is not copied). For guns, draw_weapon() already sets reloading = false today, so switching mid-reload already cancels it with no ammo moved; but the reload sound, played untracked through p.play_stationary() in start_reload(), keeps playing to its end.
+- Q7 (Claude, 2026-11-15): when a weapon switch cancels a reload, should the reload sound be cut off too? Recommended: yes, keep its slot and stop it on the switch, so the silence matches what happened and a finished-sounding reload never leaves the gun unloaded.
+- A7 (dev, 2026-11-15): "Yes please." start_reload() keeps the reload sound's slot, and draw_weapon() stops it when it cancels a reload. A small fix to existing behavior, so the changelog gets a "Fixed a bug where" entry or folds it into the swing entry (decided at the docks question).
+- Q8 (Claude, 2026-11-15): should any readout tell a melee weapon's speed, or only the docs? Today X on a melee weapon says "This weapon doesn't take any ammo." Recommended: the docs only (the readme's weapons section says each weapon hits harder and swings slower than the one before it, with a recovery after each hit, and the powerups' effect; a changelog entry); no new readout, since the swing and hit sounds already tell you the timing, and X keeps its one sentence.
+- A8 (dev, 2026-11-15): "Docks only. Players do not need to know that in the game." No readout; X unchanged; the readme and changelog explain it.
+- Q9 (Claude, 2026-11-15): one changelog entry or two? 2.3 holds 5 of 10. Recommended: two, one idea each per [[feedback_changelog_rules]]: "Made it so each melee weapon now has its own swing, winding up before its hit lands and recovering after, slower the harder it hits, with the swing powerups speeding up or slowing down both." and "Fixed a bug where switching weapons during a reload let the reload sound keep playing, even though the gun never reloaded." (2.3 would then hold 7 of 10.)
+- A9 (dev, 2026-11-15): "I want 2 entries for this. The ranges will get a third one when we get to that later." Two entries as worded above; per-weapon reach stays a later part of this plan, with its own entry.
+
+## THE PLAN IS SETTLED (2026-11-15)
+Sections, one per go-ahead:
+1. The swing. tuning.nvgt: melee_swing_times {50, 100, 150, 200, 250, 300, 350, 400} and melee_recovery_times {25, 50, 75, 100, 125, 150, 175, 200} in weapon_names' melee order (bat to sword); melee_fire_gap removed. weapons.nvgt: a press (fire, key_pressed, one per press) starts a swing once the last recovery has passed: the fire sound plays at once; after the windup weapon_strike() picks the nearest target in reach and the hit plays as today, or nothing in reach whiffs silently; then the recovery. Both times through current_fire_gap() (Quick Swings halves, Clumsy Swings doubles). A weapon switch, a door carrying you, a slide, a ladder or a floor breaker repair cancels a pending hit silently; the swing timer pauses with firetimer and reloadtimer in pause_game(). The stat melee_swings still counts each press that starts a swing. The reload fix: start_reload() keeps the reload sound's slot and draw_weapon() stops it when it cancels a reload. Guns unchanged. Tests one at a time.
+2. Docks: the readme's weapons section (each weapon hits harder and swings slower than the one before, a recovery after each hit, the swing powerups changing both; the reload cut-off), the two 2.3 changelog entries (7 of 10), the version history, CLAUDE.md.
+Per-weapon reach comes later in its own plan, [[project_weapon_reach_plan]], with its own questions and changelog entry.
