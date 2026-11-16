@@ -202,6 +202,7 @@ void run_loop()
 while (running)
 {
 wait(5);
+joystick_run_frame(); // the left stick's presses, before anything reads input (joystick.nvgt)
 // Jump and crouch first, so a jump pressed on the same frame as a step counts before that step's hazard check.
 jump_check();
 duck_check();
@@ -314,6 +315,7 @@ step_time = int(max(top, step_time - speedup_amount));
 }
 void run_input()
 {
+if (joystick_check(true)) return; // unplugging the joystick pauses the run (joystick.nvgt)
 // P is the pause menu only, and Escape goes straight to the quit run question.
 if (controls.action_triggered("quit_run"))
 {

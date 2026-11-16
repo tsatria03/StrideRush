@@ -312,3 +312,12 @@ const int heart_max_bpm = 155; // reached at heart_full_speed_ms and held at any
 const int heart_full_speed_ms = 150; // the step time where the heart rate reaches heart_max_bpm
 const int heart_gap_base = 2000;
 const int heart_gap_per_bpm = 10;
+
+/* The joystick (joystick.nvgt): the left stick counts as a d-pad press past stick_press_at from center (half its 32768
+travel each way), and must come back within stick_release_at (a quarter) before it counts again. The connection is
+checked every joystick_check_time ms. A run frame more than joystick_gap_time ms after the last one means a menu was
+open, so presses made meanwhile are dropped rather than carried into the run. */
+const int stick_press_at = 16384;
+const int stick_release_at = 8192;
+const int joystick_check_time = 1000;
+const int joystick_gap_time = 250;

@@ -14,6 +14,7 @@ if (!controls.load_keyboard(kpath))
 alert("Error", "Failed to load " + kpath + ". Please reinstall the game.");
 return false;
 }
+start_joystick(); // joystick.ini and the joystick; a problem there only warns (joystick.nvgt)
 return true;
 }
 // Every action in keyboard.ini, in the file's order, for the rebind list.

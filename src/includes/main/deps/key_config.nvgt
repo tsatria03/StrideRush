@@ -193,10 +193,14 @@ class kc_joybind {
 	kc_trigger trigger = KC_PRESS;
 }
 
+// Extra joystick buttons a game can add, such as a stick read as the d-pad: true when that button meets the trigger this frame.
+funcdef bool kc_extra_button_callback(int button, kc_trigger trigger);
+
 class key_config {
 	private dictionary kb;        // action -> kc_combo@[]
 	private dictionary jb;        // action -> kc_joybind@[]
 	joystick@ pad = null;
+	kc_extra_button_callback@ extra_button = null;
 
 	// Frame-cached consumed-key set. Built once per frame on demand:
 	// any primary key used by a multi-key combo that's currently firing is
@@ -359,7 +363,7 @@ class key_config {
 				if (check_key(primary, c.trigger)) return true;
 			}
 		}
-		if (@pad != null && jb.exists(action)) {
+		if ((@pad != null || @extra_button != null) && jb.exists(action)) {
 			kc_joybind@[]@ list;
 			jb.get(action, @list);
 			for (uint i = 0; i < list.length(); i++)
@@ -436,6 +440,33 @@ class key_config {
 		ini cfg;
 		if (!cfg.load(path)) return false;
 		return load_joystick_from(cfg);
+	}
+	/* A joystick-only file laid out like keyboard.ini: every action=value line is a joystick binding whatever its section, so
+	the sections only group the actions. An action with no buttons ("weapon_1=") still exists, so it can be bound later.
+	False if the file can't be read or holds no action lines. */
+	bool load_joystick_file(const string&in path) {
+		file f;
+		if (!f.open(path, "rb")) return false;
+		string content = f.read();
+		f.close();
+		content = string_replace(content, "\r\n", "\n", true);
+		string[] lines = content.split("\n", true);
+		bool loaded = false;
+		for (uint i = 0; i < lines.length(); i++) {
+			string line = lines[i].trim_whitespace();
+			if (line.length() == 0) continue;
+			string first = line.substr(0, 1);
+			if (first == ";" || first == "#" || first == "[") continue;
+			int eq = line.find_first("=");
+			if (eq < 0) continue;
+			string a = line.substr(0, eq).trim_whitespace();
+			if (a == "") continue;
+			add_action(a);
+			clear_joystick_action(a);
+			bind_joystick_string(a, line.substr(eq + 1));
+			loaded = true;
+		}
+		return loaded;
 	}
 	bool save_joystick(const string&in path) {
 		ini cfg;
@@ -539,21 +570,25 @@ class key_config {
 		for (uint i = 0; i < actions.length(); i++) {
 			string a = actions[i];
 			clear_joystick_action(a);
-			string[] entries = cfg.get_string("joystick", a, "").split(",", true);
-			for (uint j = 0; j < entries.length(); j++) {
-				string e = entries[j].trim_whitespace();
-				if (e == "") continue;
-				int colon = e.find_first(":");
-				kc_trigger t = KC_PRESS;
-				string num = e;
-				if (colon >= 0) {
-					t = parse_trigger(e.substr(colon + 1));
-					num = e.substr(0, colon);
-				}
-				bind_joystick_button(a, parse_int(num), t);
-			}
+			bind_joystick_string(a, cfg.get_string("joystick", a, ""));
 		}
 		return true;
+	}
+	// One action's joystick value, such as "12:down,11": each button number with an optional trigger, press if none.
+	private void bind_joystick_string(const string&in a, const string&in value) {
+		string[] entries = value.split(",", true);
+		for (uint j = 0; j < entries.length(); j++) {
+			string e = entries[j].trim_whitespace();
+			if (e == "") continue;
+			int colon = e.find_first(":");
+			kc_trigger t = KC_PRESS;
+			string num = e;
+			if (colon >= 0) {
+				t = parse_trigger(e.substr(colon + 1));
+				num = e.substr(0, colon);
+			}
+			bind_joystick_button(a, parse_int(num), t);
+		}
 	}
 	private void save_joystick_to(ini@ cfg) {
 		string[]@ actions = jb.get_keys();
@@ -680,6 +715,8 @@ class key_config {
 		return false;
 	}
 	private bool check_button(int b, kc_trigger trig) {
+		if (trig == KC_UP) return !check_button(b, KC_DOWN); // up only when neither the pad nor an extra button holds it
+		if (@extra_button != null && extra_button(b, trig)) return true;
 		if (@pad == null) return false;
 		// joystick has no native "repeating" — map to "pressed" for consistency.
 		if (trig == KC_PRESS || trig == KC_REPEAT) return pad.button_pressed(b);
@@ -708,7 +745,7 @@ class key_config {
 				if (check_key(primary, trig)) { hit = true; break; }
 			}
 		}
-		if (!hit && @pad != null && jb.exists(action)) {
+		if (!hit && (@pad != null || @extra_button != null) && jb.exists(action)) {
 			kc_joybind@[]@ list;
 			jb.get(action, @list);
 			for (uint i = 0; i < list.length(); i++)

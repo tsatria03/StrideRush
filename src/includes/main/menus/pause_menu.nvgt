@@ -38,7 +38,8 @@ firetimer.resume();
 reloadtimer.resume();
 heartbeat_timer.resume();
 }
-void pause_menu()
+// lead comes before "Pause menu." in the intro, so news that opened it (an unplugged joystick) is heard with it.
+void pause_menu(const string&in lead = "")
 {
 pause_game();
 temp.play_stationary(get_pack_sound("misc/game/*pause*"), false);
@@ -48,7 +49,7 @@ int focus = 0;
 while (true)
 {
 setupmenu();
-m.intro_text = "Pause menu.";
+m.intro_text = lead == "" ? "Pause menu." : lead + " Pause menu.";
 m.add_item("resume run", "resume");
 m.add_item("view session statuses", "statuses"); // every kind of run, the status readouts in one list
 m.add_item("restart run", "restart");

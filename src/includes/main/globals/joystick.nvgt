@@ -1,0 +1,101 @@
+/* The joystick: one, handed to controls at startup, its buttons set in data/config/joystick.ini. A run reads it through
+controls like the keys, with the left stick counting as the d-pad. Plugging in and out is noticed once a second, in
+menus and runs, and each change is said once; unplugging it during a run pauses the run. If joystick.ini is missing or
+can't be read, no joystick is opened and the game plays with the keyboard only. */
+const string joystick_ini_path = "data/config/joystick.ini";
+joystick@ joy = null;
+bool joy_announced = false; // the connection last spoken
+timer joy_check_timer;
+uint64 joy_last_frame = 0;
+// The left stick as the d-pad: 0 up, 1 down, 2 left, 3 right, read as SDL's d-pad buttons 11 to 14.
+bool[] stick_down(4, false);
+bool[] stick_pressed(4, false);
+bool[] stick_released(4, false);
+
+/* From load_controls(), after keyboard.ini: the bindings, then the joystick. Whatever is plugged in at launch is taken
+silently; only changes after that are spoken. */
+void start_joystick()
+{
+string jpath = joystick_ini_path;
+if (!file_exists(jpath))
+{
+alert("Warning", "Missing joystick.ini at " + jpath + ", so the game will run with the keyboard only.");
+return;
+}
+if (!controls.load_joystick_file(jpath))
+{
+alert("Warning", "Failed to load " + jpath + ", so the game will run with the keyboard only until you reinstall the game.");
+return;
+}
+@joy = joystick();
+controls.set_joystick(joy);
+@controls.extra_button = stick_button;
+@form_frame_hook = joystick_menu_frame;
+joy_announced = joy.active;
+joy_check_timer.restart();
+}
+/* Once a second: opens a joystick that was plugged in, and says "Joystick connected." or "Joystick disconnected." once
+per change. In a run, a disconnect opens the pause menu with the news in its intro, and this returns true. */
+bool joystick_check(bool in_run)
+{
+if (@joy == null or joy_check_timer.elapsed < joystick_check_time) return false;
+joy_check_timer.restart();
+if (!joy.active and joystick_count() > 0) joy.set(0);
+bool connected = joy.active;
+if (connected == joy_announced) return false;
+joy_announced = connected;
+if (connected)
+{
+speak_buffer("Joystick connected.", "misc");
+return false;
+}
+if (!in_run)
+{
+speak_buffer("Joystick disconnected.", "misc");
+return false;
+}
+add_buffer_item("misc", "Joystick disconnected.", false);
+pause_menu("Joystick disconnected.");
+return true;
+}
+// Every menu frame, through form.nvgt's form_frame_hook.
+void joystick_menu_frame()
+{
+joystick_check(false);
+}
+/* Every run frame, before any input is read: the stick's presses for this frame. A frame long after the last one means a
+menu was open, so the pad's waiting presses are dropped and the stick only counts again once moved. */
+void joystick_run_frame()
+{
+if (@joy == null) return;
+uint64 now = ticks();
+bool gap = now - joy_last_frame > uint64(joystick_gap_time);
+joy_last_frame = now;
+if (gap)
+{
+joy.buttons_pressed();
+joy.buttons_released();
+}
+int dx = int(joy.x) - 32768;
+int dy = int(joy.y) - 32768;
+for (int d = 0; d < 4; d++)
+{
+int along = d == 0 ? -dy : (d == 1 ? dy : (d == 2 ? -dx : dx));
+int across = d < 2 ? (dx < 0 ? -dx : dx) : (dy < 0 ? -dy : dy);
+bool was = stick_down[d];
+// A new push must lean mostly this way, so a slightly diagonal jump doesn't change lanes too.
+bool now_down = was ? along > stick_release_at : (along > stick_press_at and along > across);
+stick_pressed[d] = now_down and !was and !gap;
+stick_released[d] = was and !now_down and !gap;
+stick_down[d] = now_down;
+}
+}
+// controls' extra_button: the stick for d-pad buttons 11 to 14. Repeat counts as press, as it does for the pad's buttons.
+bool stick_button(int button, kc_trigger trigger)
+{
+int d = button - 11;
+if (d < 0 or d > 3) return false;
+if (trigger == KC_DOWN) return stick_down[d];
+if (trigger == KC_RELEASE) return stick_released[d];
+return stick_pressed[d];
+}

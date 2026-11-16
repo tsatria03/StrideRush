@@ -115,6 +115,9 @@ funcdef bool form_background_callback(audio_form@ f);
 //control event callback
 funcdef int on_control_event_callback(audio_form@ f, int c, control_event_type event, dictionary@ args);
 funcdef bool kb_echo_update_callback(audio_form@ f, int echo);
+// Called at the top of every form's monitor(), from any form in the program, so a game can run its own per-frame checks in every menu.
+funcdef void form_frame_callback();
+form_frame_callback@ form_frame_hook = null;
 
 //can make this a member of the audio form class as soon as even one person suggests seriously wanting to change on a form by form basis I guess
 bool audioform_input_disable_ralt = true;
@@ -675,6 +678,7 @@ class audio_form {
 		return true;
 	}
 	int monitor() {
+		if (@form_frame_hook != null) form_frame_hook();
 		if (@background_callback != null and background_callback(this) and total_keys_down() < 1) return 0;
 		if (@utility_form != null) {
 			utility_form.monitor();
