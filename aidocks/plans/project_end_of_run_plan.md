@@ -1,6 +1,6 @@
 ---
 name: project_end_of_run_plan
-description: BUILT in the first build (2026-11-02; results dialog deferred to scoring) - what happens when a run ends (a game-ending hazard, or losing the last life): the sounds at the moment of loss, any spoken results, and where the player goes next; Q&A log
+description: COMPLETE (marked 2026-11-16; built in the first build, 2026-11-02; the results dialog deferred to scoring) - what happens when a run ends (a game-ending hazard, or losing the last life): the sounds at the moment of loss, any spoken results, and where the player goes next; Q&A log
 metadata:
   type: project
 ---

@@ -1,6 +1,6 @@
 ---
 name: project_run_plan
-description: BUILT in the first build (2026-11-02; hazard countdown built, other warning cues still deferred) - the core run of Stride Rush (Start game begins a run, a step timer moves the player right one tile per tick with a oneshot footstep, the tick speeds up over time); includes a Q&A log
+description: COMPLETE (marked 2026-11-16; built in the first build, 2026-11-02; hazard countdown built, other warning cues still deferred) - the core run of Stride Rush (Start game begins a run, a step timer moves the player right one tile per tick with a oneshot footstep, the tick speeds up over time); includes a Q&A log
 metadata:
   type: project
 ---

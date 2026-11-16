@@ -1,6 +1,6 @@
 ---
 name: project_obstacles_plan
-description: FIRST BUILD BUILT (hazards with ledges and countdown, spikes, mines; 2026-11-02) (duck-under, force fields and full-height types later) - which obstacles are jumped over, ducked under, or need another action (weapon, hand, later lane change); proposed three-height model; Q&A log
+description: COMPLETE (marked 2026-11-16; the later types came in later plans) (first build: hazards with ledges and countdown, spikes, mines; 2026-11-02) (duck-under, force fields and full-height types later) - which obstacles are jumped over, ducked under, or need another action (weapon, hand, later lane change); proposed three-height model; Q&A log
 metadata:
   type: project
 ---
