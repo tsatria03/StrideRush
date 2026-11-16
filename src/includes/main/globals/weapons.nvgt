@@ -5,7 +5,7 @@ held. A melee weapon swings: the swing plays on the press, the hit lands after t
 melee_recovery_times must pass before the next swing; a gun fires a bullet that travels (bullet.nvgt). A gun with
 nothing loaded, or mid-reload, plays empty instead. R reloads, timed by the length of the gun's reload sound, and ping
 plays when it's done. X speaks the ammo. weapon_strike() is the target hook: walls, fake doors, vehicles in your lane
-and items. Every weapon reaches the same weapon_reach_time ahead, so weapons differ by damage and, for melee, by swing
+and items. Each weapon reaches its own weapon_reach_times ahead, so weapons differ by damage, reach and, for melee, swing
 speed. */
 // Alphabetical, the guns last on 9 and 0; weapon_damage follows the same order.
 string[] weapon_names = {"bat", "boot", "club", "dagger", "fist", "hammer", "knife", "sword", "machine_gun", "pistol"};
@@ -146,7 +146,7 @@ swinging = false;
 int w = swing_weapon;
 swing_recovery = int(current_fire_gap(melee_recovery_times[w]));
 firetimer.restart();
-double target_x = weapon_strike(weapon_damage[w] * weapon_damage_multiplier);
+double target_x = weapon_strike(w, weapon_damage[w] * weapon_damage_multiplier);
 if (target_x < 0) return;
 // A hit: the weapon's hit at the target (the target plays its own hurt or death).
 p.play_2d(get_pack_sound(weapon_folder(w) + "*hit*"), 0, me.x, 0, target_x, false);
@@ -158,16 +158,26 @@ if (!swinging) return;
 swinging = false;
 swing_recovery = 0;
 }
-// How far ahead a weapon reaches: weapon_reach_time at the current speed, in tiles, at least 1.
-int weapon_reach()
+// A time ahead as tiles at the current speed, at least 1.
+int reach_tiles(int ms)
 {
-return int(max(1, ceil(double(weapon_reach_time) / current_step_time())));
+return int(max(1, ceil(double(ms) / current_step_time())));
 }
-/* The target hook. Damages the nearest target within weapon_reach() tiles ahead and returns its x, or -1 if there was
-nothing to hit. The targets are walls, fake doors, vehicles in your lane and items; a new target type adds its own search here. */
-double weapon_strike(int damage)
+// How far ahead weapon w reaches: its weapon_reach_times entry at the current speed, in tiles.
+int weapon_reach(int w)
 {
-int reach = weapon_reach();
+return reach_tiles(weapon_reach_times[w]);
+}
+// How far ahead a key can unlock a real door (door.nvgt), the same for every weapon.
+int key_reach()
+{
+return reach_tiles(key_reach_time);
+}
+/* The target hook. Damages the nearest target within weapon wpn's reach and returns its x, or -1 if there was nothing to
+hit. The targets are walls, fake doors, vehicles in your lane and items; a new target type adds its own search here. */
+double weapon_strike(int wpn, int damage)
+{
+int reach = weapon_reach(wpn);
 wall@ w = wall_in_reach(reach);
 door@ d = fake_door_in_reach(reach);
 vehicle@ vh = vehicle_in_reach(reach); // only one in your lane (vehicle.nvgt)

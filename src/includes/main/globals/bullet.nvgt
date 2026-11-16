@@ -2,8 +2,8 @@
 moves one tile every bullet_tile_time, playing its gun's loop at the bullet the whole way. On each new tile it checks
 for a standing wall, fake door, vehicle in your lane or item there; the first it reaches takes the gun's damage, the
 gun's hit and shell play at it, and the target plays its own hurt or death. A
-bullet that has gone weapon_reach() tiles from where it was fired (counted when it was fired) just vanishes, so firing
-at something still out of reach wastes the round. Real doors and the other traps don't stop it.
+bullet that has gone its gun's weapon_reach() tiles from where it was fired (counted when it was fired) just vanishes,
+so firing at something still out of reach wastes the round. Real doors and the other traps don't stop it.
 Moves are timed off runtimer, which pauses with the game, so a pause freezes bullets in the air.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_bullets() shrinks the array. */
 sound_pool bulletpool;
@@ -24,7 +24,7 @@ void spawn_bullet(int w, int damage)
 bullet b;
 b.x = me.x;
 b.start_x = me.x;
-b.range = weapon_reach();
+b.range = weapon_reach(w);
 b.damage = damage;
 b.weapon = w;
 b.next_move = runtimer.elapsed + bullet_tile_time;

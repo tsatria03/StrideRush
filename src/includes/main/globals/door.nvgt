@@ -2,7 +2,7 @@
 (door_countdown()). Each door picks one of the door themes, and every sound it makes plays at its pitch. Weapons break
 FAKE doors only (strike_door(), through weapon_strike()): hurt on each hit, death at 0 hp.
 - A REAL door (pitch 100) marks each new 50 ms speed section: the spawner forces one when the step time reaches a new
-  mark, and none come past the level's top speed. It starts locked: U on a key unlocks it from within weapon_reach()
+  mark, and none come past the level's top speed. It starts locked: U on a key unlocks it from within key_reach()
   (use_key()), then either hand opens it within hand_window_start(); a hand on a locked one plays deny. Open plays and
   the door's loop stops, then its move sound LOOPS while the door carries you through. While it carries you
   (door_moving) there are no footsteps, and you can't jump, crouch, use a hand or use weapons. Once you're past its
@@ -131,11 +131,11 @@ doorpool.play_stationary_extended(get_pack_sound(door_folder(d.env) + d.theme + 
 speak_buffer("This door is jammed.", "doors");
 }
 /* U on a key: the first half of opening a real door. Unlocks the nearest locked real door within
-weapon_reach(): the key's use and the door's grant play centered. Refused, keeping the key: a fake door in reach jams,
+key_reach(), whatever weapon you hold: the key's use and the door's grant play centered. Refused, keeping the key: a fake door in reach jams,
 an unlocked real door says so, and nothing in reach says there's no door. Returns true if the key was used. */
 bool use_key(string color)
 {
-int reach = weapon_reach();
+int reach = key_reach();
 door@ locked_door = null;
 door@ open_door_ahead = null;
 door@ fake = null;

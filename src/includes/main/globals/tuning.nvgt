@@ -216,9 +216,13 @@ const int[] melee_recovery_times = {25, 50, 75, 100, 125, 150, 175, 200};
 // The shortest gap between two pistol shots per Space press, and the machine gun's rate while Space is held.
 const int pistol_fire_gap = 100;
 const int machine_gun_fire_gap = 100;
-// Every weapon reaches this far ahead, turned into tiles at the current speed.
-const int weapon_reach_time = 2000;
-// A gun's bullet moves one tile every this many ms, at any speed, fast enough to stay ahead of you at 50 ms steps; it travels weapon_reach() tiles.
+/* How far ahead each weapon reaches, one entry per weapon in weapon_names' order (bat, boot, club, dagger, fist, hammer,
+knife, sword, machine gun, pistol), turned into tiles at the current speed. The stronger the weapon, the further. Nothing
+exists further ahead than spawn_ahead_time plus a countdown, so a longer reach only pays off at slower speeds. */
+const int[] weapon_reach_times = {2000, 2200, 2400, 2600, 2800, 3000, 3200, 3500, 4500, 5500};
+// How far ahead a key can unlock a real door, whatever weapon you hold.
+const int key_reach_time = 2000;
+// A gun's bullet moves one tile every this many ms, at any speed, fast enough to stay ahead of you at 50 ms steps; it travels its gun's weapon_reach() tiles.
 const int bullet_tile_time = 30;
 
 /* Ammo packs. About one spawn in ammo_pack_chance is a pack instead of an obstacle. Opening one adds a random

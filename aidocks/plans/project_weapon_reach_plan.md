@@ -1,6 +1,6 @@
 ---
 name: project_weapon_reach_plan
-description: SETTLED, NOT BUILT (2026-11-15): per-weapon reach, bat 2000 up to pistol 4500 ms (sword 3500, machine gun 4000), key unlock split to its own 2000; the hearing gap and spawn horizon; two sections; Q&A log
+description: SECTION 1 BUILT AND TESTED (2026-11-15, all 3 passed; guns changed to 4500 and 5500); Section 2 (docks) next: per-weapon reach, bat 2000 up to pistol 4500 ms (sword 3500, machine gun 4000), key unlock split to its own 2000; the hearing gap and spawn horizon; two sections; Q&A log
 metadata:
   type: project
 ---
@@ -52,3 +52,8 @@ Created 2026-11-15 at the dev's request ("Please rename this plan, and create a 
 Sections, one per go-ahead:
 1. The reach. tuning.nvgt: weapon_reach_time replaced by weapon_reach_times, one entry per weapon in weapon_names' order {2000, 2200, 2400, 2600, 2800, 3000, 3200, 3500, 4000, 4500}, and key_reach_time 2000. weapons.nvgt: weapon_reach() takes the weapon (weapon_reach(int w): weapon_reach_times[w] at the current speed, in tiles, at least 1); swing_check()'s weapon_strike() uses the swinging weapon's reach. bullet.nvgt: a bullet's range is the firing gun's reach (spawn_bullet() already gets the gun). door.nvgt: the key unlock uses a new key_reach() on key_reach_time, so unlocking plays as today. Tests one at a time.
 2. Docks: the readme's weapons section (each weapon's reach, the stronger the further, guns reaching what you can hear from mid speeds up; the bullet range line), the third 2.3 changelog entry (8 of 10), the version history, CLAUDE.md.
+
+## Build log
+- Section 1 BUILT (2026-11-15, the dev: "go"; built on 0563b2c). tuning.nvgt: weapon_reach_time replaced by weapon_reach_times (all ten weapons) and key_reach_time 2000. weapons.nvgt: reach_tiles(ms) turns a time into tiles at the current speed (at least 1); weapon_reach(int w) and key_reach() use it; weapon_strike(int wpn, int damage) searches within weapon_reach(wpn) (wpn, since the function already has a local w for the nearest wall), called from swing_check() with the swinging weapon. bullet.nvgt: spawn_bullet() sets b.range = weapon_reach(w), the firing gun's. door.nvgt: use_key() searches within key_reach(). No other callers. Braces balanced, CRLF kept. Tests pending.
+- GUN REACH CHANGED (dev, 2026-11-15, after the build, before testing: "Please change the gun ranges to 4500 and 5500"): machine gun 4500, pistol 5500, so weapon_reach_times is {2000, 2200, 2400, 2600, 2800, 3000, 3200, 3500, 4500, 5500}. The pistol now reaches everything you can hear at every speed (the horizon is about 5.5 s at 500 ms steps), and the machine gun from 300 ms steps up. Section 2's changelog wording says "up to the pistol's four and a half", so it becomes "five and a half".
+- All 3 tests PASSED (dev, 2026-11-15, each "passed"): it compiled, and at 500 ms on fake walls the sword started hitting before the countdown while the bat only reached from about the second cue; the pistol hit a wall with one shot fired as it appeared; with the pistol drawn, a key refused at the first countdown cue (out of the key's 4 tiles) and unlocked at the third, as before. Section 2 (docks) is next, on the dev's go-ahead.
