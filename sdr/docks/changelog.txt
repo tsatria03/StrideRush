@@ -1,4 +1,6 @@
 New in 2.3.
+Fixed a bug where switching weapons during a reload let the reload sound keep playing, even though the gun never reloaded.
+Made it so each melee weapon now has its own swing, winding up before its hit lands and recovering after, slower the harder it hits, with the swing powerups speeding up or slowing down both.
 Made it so practice run now comes last in play game, after free run.
 Made it so the feat is now replaced by a dagger, on 4, with its own sounds.
 Added a no deaths choice to a free run's death mode, where your last life is never lost and your health just refills, and a way to turn your footsteps on or off.
