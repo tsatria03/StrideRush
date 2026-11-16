@@ -208,8 +208,12 @@ const int weapon_damage_multiplier = 4;
 // Each gun starts every run with this much loaded and in reserve; ammo packs refill the reserve.
 const int gun_start_loaded = 50;
 const int gun_start_reserve = 50;
-// The shortest gap between two swings (melee) or two pistol shots per Space press, and the machine gun's rate while Space is held.
-const int melee_fire_gap = 200;
+/* Melee swings, one entry per melee weapon in weapon_names' order (bat, boot, club, dagger, fist, hammer, knife, sword):
+the swing time runs from the press until the hit lands, then the recovery must pass before the next swing can start.
+Each step up the keys hits harder and swings slower. The swing powerups scale both. */
+const int[] melee_swing_times = {50, 100, 150, 200, 250, 300, 350, 400};
+const int[] melee_recovery_times = {25, 50, 75, 100, 125, 150, 175, 200};
+// The shortest gap between two pistol shots per Space press, and the machine gun's rate while Space is held.
 const int pistol_fire_gap = 100;
 const int machine_gun_fire_gap = 100;
 // Every weapon reaches this far ahead, turned into tiles at the current speed.

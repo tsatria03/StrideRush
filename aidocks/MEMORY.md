@@ -82,7 +82,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
-- [Weapon swing plan](plans/project_weapon_swing_plan.md) — SETTLED, NOT BUILT (2026-11-15): per-weapon melee swing (windup then recovery, the dev's values in two tuning arrays, after CaveDefender) and the reload sound fix, two sections; Q&A log
+- [Weapon swing plan](plans/project_weapon_swing_plan.md) — SECTION 1 BUILT AND TESTED (2026-11-15), Section 2 (docks) next: per-weapon melee swing (windup then recovery, the dev's values in two tuning arrays, after CaveDefender) and the reload sound fix, two sections; Q&A log
 - [Weapon reach plan](plans/project_weapon_reach_plan.md) — FOR LATER (2026-11-15): per-weapon reach after the swing plan is played; the key unlock split, what's known, open questions; no Q&A yet
 - [Spawner reorg plan](plans/project_spawner_reorg_plan.md) — COMPLETE (2026-11-15), all 3 sections built and tested: choose_next_obstacle() into a dispatcher with real game, debug, practice and free run functions, plus place_obstacle()'s if/else fix; the case order that must survive; three sections; Q&A log
 - [Comment cleanup plan](plans/project_comment_cleanup_plan.md) — COMPLETE (2026-11-15): code comments shortened across src/ in sections 1 to 5, 6A and 6B, 593 dated lines down to 0, code identical to the baseline (strip-and-compare), history moved to the four code history memories; one test per section; Q&A log

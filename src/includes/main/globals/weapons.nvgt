@@ -1,10 +1,12 @@
 /* The weapons: one damage table, separate ammo per gun, reloading any time a gun isn't full, and one generic target hook
 instead of a copy of the firing code per target type. All ten are available from the start of every run on 1 to 0, in
 this order, and a run starts with the fist drawn. Space swings or fires; the machine gun keeps firing while Space is
-held. Melee hits at once; a gun fires a bullet that travels (bullet.nvgt). A gun with nothing loaded, or mid-reload,
-plays empty instead. R reloads, timed by the length of the gun's reload sound, and ping plays when it's done. X speaks
-the ammo. weapon_strike() is the target hook: walls, fake doors, vehicles in your lane and items. Every weapon reaches
-the same weapon_reach_time ahead, so weapons differ only by damage. */
+held. A melee weapon swings: the swing plays on the press, the hit lands after the weapon's melee_swing_times, then its
+melee_recovery_times must pass before the next swing; a gun fires a bullet that travels (bullet.nvgt). A gun with
+nothing loaded, or mid-reload, plays empty instead. R reloads, timed by the length of the gun's reload sound, and ping
+plays when it's done. X speaks the ammo. weapon_strike() is the target hook: walls, fake doors, vehicles in your lane
+and items. Every weapon reaches the same weapon_reach_time ahead, so weapons differ by damage and, for melee, by swing
+speed. */
 // Alphabetical, the guns last on 9 and 0; weapon_damage follows the same order.
 string[] weapon_names = {"bat", "boot", "club", "dagger", "fist", "hammer", "knife", "sword", "machine_gun", "pistol"};
 // Base damage by key: the bat (1) 3 up to the pistol (0) 30; every hit is this times weapon_damage_multiplier.
@@ -17,7 +19,14 @@ int current_weapon = -1;
 sound draw_sound; // its own sound, so drawing another weapon cuts the last draw off, with no pool slot to go stale
 bool reloading = false;
 int reload_length = 0;
+int reload_slot = -1; // the reload sound while it plays, so a weapon switch can cut it off
+/* firetimer paces every weapon. For melee it measures the swing's windup while swinging, and the recovery since the
+last hit while not; the pause menu pauses it, so a paused swing waits too. */
 timer firetimer, reloadtimer;
+bool swinging = false;
+int swing_weapon = -1; // the melee weapon the pending swing started with
+int swing_windup = 0; // this swing's time until its hit lands, after the swing powerups
+int swing_recovery = 0; // the time after the last hit before the next swing can start, after the swing powerups
 
 // The guns are the artillery: the last two in the table.
 bool is_gun(int w)
@@ -46,35 +55,54 @@ weapon_reserve[w] = is_gun(w) ? gun_start_reserve : 0;
 if (free_run and !free_reserve_unlimited[w]) weapon_reserve[w] = free_reserve_set[w]; // a free run's set reserve, kept through replays (freerun.nvgt)
 }
 reloading = false;
+reload_slot = -1;
+swinging = false;
+swing_recovery = 0;
 firetimer.restart();
 reloadtimer.restart();
 current_weapon = -1;
 if (practice_weapons_off()) return; // a practice run that needs no weapons: none drawn (practice.nvgt)
 draw_weapon(weapon_names.find("fist"));
 }
-// Runs every frame from run_input(): the reload finishing, the number keys, Space, R and X.
+// Runs every frame from run_input(): the reload finishing, the number keys, a swing landing, Space, R and X.
 void weapon_input()
 {
 if (practice_weapons_off()) return; // silent: no weapons in this practice run (practice.nvgt)
 reload_check(); // a reload already under way still finishes
-if (door_moving or sliding or climbing or repairing) return; // no drawing, firing, reloading or ammo checks while a door carries you, on a slide, on a ladder or at a floor breaker's edge
+/* No drawing, firing, reloading or ammo checks while a door carries you, on a slide, on a ladder or at a floor breaker's
+edge, and a swing winding up as one begins is canceled silently. */
+if (door_moving or sliding or climbing or repairing)
+{
+cancel_swing();
+return;
+}
 for (int k = 1; k <= 10; k++)
 {
 if (controls.action_triggered("weapon_" + k)) draw_weapon(k - 1);
 }
+swing_check();
+// The gun fire gaps and both parts of a swing go through current_fire_gap(), so the weapon powerups can speed them up or slow them down.
 if (weapon_names[current_weapon] == "machine_gun")
 {
 if (controls.action_triggered("fire_held") and firetimer.elapsed >= current_fire_gap(machine_gun_fire_gap)) fire_weapon();
 }
-// The fire gaps go through current_fire_gap(), so the weapon powerups can speed them up or slow them down.
-else if (controls.action_triggered("fire") and firetimer.elapsed >= current_fire_gap(is_gun(current_weapon) ? pistol_fire_gap : melee_fire_gap)) fire_weapon();
+else if (is_gun(current_weapon))
+{
+if (controls.action_triggered("fire") and firetimer.elapsed >= current_fire_gap(pistol_fire_gap)) fire_weapon();
+}
+// A press during a swing, or before its recovery has passed, does nothing.
+else if (controls.action_triggered("fire") and !swinging and firetimer.elapsed >= swing_recovery) start_swing();
 if (controls.action_triggered("reload")) start_reload();
 if (controls.action_triggered("ammo_check")) speak_ammo();
 }
-// Drawing the weapon already held does nothing; drawing another cancels any reload.
+/* Drawing the weapon already held does nothing. Drawing another silently cancels a swing still winding up, and any
+reload, cutting its sound off so it never sounds finished on a gun that didn't load. */
 void draw_weapon(int w)
 {
 if (w == current_weapon) return;
+cancel_swing();
+if (reloading and reload_slot > -1) p.destroy_sound(reload_slot);
+reload_slot = -1;
 current_weapon = w;
 reloading = false;
 // A new draw cuts off the one still playing, so quick swaps never stack.
@@ -82,32 +110,53 @@ draw_sound.close();
 if (draw_sound.load(get_pack_sound(weapon_folder(w) + "*draw*"))) draw_sound.play();
 speak_buffer(weapon_display_name(w) + " equipped.", "weapons");
 }
+// A gun's shot: a bullet that travels (bullet.nvgt), or empty with nothing loaded or mid-reload.
 void fire_weapon()
 {
 firetimer.restart();
 int w = current_weapon;
-if (is_gun(w))
-{
 if (reloading or weapon_loaded[w] <= 0)
 {
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*empty*"), false);
 return;
 }
 weapon_loaded[w]--;
-/* A gun fires a bullet that travels (bullet.nvgt): fire plays at you, and the bullet carries the damage to whatever it
-reaches, playing the gun's hit and shell there. */
+// Fire plays at you, and the bullet carries the damage to whatever it reaches, playing the gun's hit and shell there.
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*fire*"), false);
 stat_add("shots_fired");
 spawn_bullet(w, weapon_damage[w] * weapon_damage_multiplier);
-return;
 }
-// A melee weapon hits at once: the nearest target within reach.
+// A melee press: the swing plays at once, and its hit waits for the windup (swing_check()).
+void start_swing()
+{
+int w = current_weapon;
+swinging = true;
+swing_weapon = w;
+swing_windup = int(current_fire_gap(melee_swing_times[w]));
+firetimer.restart();
 p.play_stationary(get_pack_sound(weapon_folder(w) + "*fire*"), false);
 stat_add("melee_swings");
+}
+/* Every frame: once a swing's windup has passed, its hit lands on the nearest target in reach at that moment, so
+something already behind you is missed, and the recovery starts. Nothing in reach whiffs silently. */
+void swing_check()
+{
+if (!swinging or firetimer.elapsed < swing_windup) return;
+swinging = false;
+int w = swing_weapon;
+swing_recovery = int(current_fire_gap(melee_recovery_times[w]));
+firetimer.restart();
 double target_x = weapon_strike(weapon_damage[w] * weapon_damage_multiplier);
 if (target_x < 0) return;
 // A hit: the weapon's hit at the target (the target plays its own hurt or death).
 p.play_2d(get_pack_sound(weapon_folder(w) + "*hit*"), 0, me.x, 0, target_x, false);
+}
+// A swing still winding up ends with no hit and no sound, and the next one can start straight away.
+void cancel_swing()
+{
+if (!swinging) return;
+swinging = false;
+swing_recovery = 0;
 }
 // How far ahead a weapon reaches: weapon_reach_time at the current speed, in tiles, at least 1.
 int weapon_reach()
@@ -176,8 +225,8 @@ p.play_stationary(get_pack_sound(weapon_folder(w) + "*empty*"), false);
 speak_buffer("This weapon has no more reserved ammo to reload.", "weapons");
 return;
 }
-int slot = p.play_stationary(get_pack_sound(weapon_folder(w) + "*reload*"), false);
-reload_length = int(p.get_sound_length(slot));
+reload_slot = p.play_stationary(get_pack_sound(weapon_folder(w) + "*reload*"), false);
+reload_length = int(p.get_sound_length(reload_slot));
 reloading = true;
 reloadtimer.restart();
 }
@@ -186,6 +235,7 @@ void reload_check()
 {
 if (!reloading or reloadtimer.elapsed < reload_length) return;
 reloading = false;
+reload_slot = -1; // its sound has played out
 stat_add("reloads"); // counted when the reload finishes
 int w = current_weapon;
 int amount = int(min(gun_start_loaded - weapon_loaded[w], weapon_reserve[w]));
