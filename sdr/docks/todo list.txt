@@ -1,5 +1,6 @@
 ####These are the things that need to be finished for future versions of the game.
 
+****Unfinished. Add insects that you can duck under or shoot.
 ****Unfinished. Add a way to give yourself any powerup from a free run's console, starting it straight away, so you can try each one without waiting for it to turn up.
 ****Unfinished. Add a way to choose the lane for barriers, items, vehicles and lane trampolines in a free run, such as your own lane or a set lane, instead of a random one.
 ****Unfinished. Add a spacing choice to a free run, so obstacles and items can come closer together or further apart than the usual gap for your speed.
@@ -39,7 +40,7 @@
 **Finished. Add an auto updater.
 **Finished. Add a learn sounds menu in the game menu.
 **Finished. Add lanes that you can switch between.
-**Finished. Add animals, birds and dogs, that you scare away by clapping your hands.
+**Finished. Add animals that you can scare away by clapping your hands.
 **Finished. Add health potions that restore some of your health.
 **Finished. Add a settings menu.
 **Finished. Add a screen that shows every key binding.

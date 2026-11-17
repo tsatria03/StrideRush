@@ -1,4 +1,7 @@
 New in 2.4.
+Added a section to the readme explaining how to customize the game's sounds, from adding new versions of any sound to making your own environments, and which folders the game finds on its own.
+Made it so a free run's add menus now only list what your current environment has, and anything you add now waits through an environment that doesn't have it instead of being used up.
+Made it so endless and timed runs now only go to environments with obstacles they can bring, so a run never goes quiet in one that has none.
 Added joystick vibration, with a light tap when your shield takes a blow, a rumble when you're hurt, a stronger one when you lose a life and the strongest when you die, which you can turn off in the joystick tab of the settings.
 Added a message when a joystick is plugged in or unplugged, and unplugging one during a run now pauses it.
 Added a Joystick tab to the settings, where you can rebind your joystick's buttons and view what each one does, and F1 during a run now shows your joystick bindings after your keys while one is connected.
