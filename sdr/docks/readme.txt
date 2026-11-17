@@ -11,6 +11,7 @@ Press A for your left hand and D for your right, to switch off force fields, pic
 Press space to swing or fire your weapon at fake walls and fake doors, and the number keys to choose a different weapon.
 Press shift plus tab and tab, or I and O, to move through your inventory, and enter or U to use an item. Before each real door, pick up its key, then use it to unlock the door.
 Press P to pause, or escape to quit the run.
+You can also play with a joystick or game controller, in every menu and in a run, as the joystick commands below describe.
 
 The sections below explain every obstacle, item and feature in detail, and the keyboard commands just below list every key, including the ones you can pick up later, such as the readouts and the volume keys.
 
@@ -44,9 +45,41 @@ Home or F6: Raises the in-game ambience volume by 1 decibel.
 End or F5: Lowers the in-game ambience volume by 1 decibel.
 Letter P: Brings up the pause menu. The pause menu lets you resume, restart or quit the run, view your session statuses, and in an endless run, view, copy or export your session results. Pressing escape in the pause menu also resumes the run.
 Escape: Asks whether you want to quit the run, or quits it straight away if you've turned the question off in the settings menu.
-F1: Shows every key binding, with the run paused until you close it.
+F1: Shows every key binding, and every joystick binding while a joystick is connected, with the run paused until you close it.
 F2: Opens the settings menu with its game, menu and speech tabs, with the run paused until you close it.
 Backspace or F7: In a free run, opens the free run console, with the run paused until you close it.
+
+Joystick commands
+
+Stride Rush works with most game controllers, such as Xbox, PlayStation and Switch Pro controllers. Plug one in before or after starting the game: plugging one in or unplugging it is announced once, and unplugging it during a run pauses the run. In a run, these are the buttons to start with, and you can change them in the joystick tab of the settings menu. The left stick always works the same as the d-pad.
+
+D-pad up: Jumps.
+D-pad down: Crouches, to duck under projectiles.
+D-pad left: Moves one lane to the left.
+D-pad right: Moves one lane to the right.
+Left shoulder: Uses your left hand, to switch off a force field, open a door or pick up an item.
+Right shoulder: Uses your right hand, to switch off a force field, open a door or pick up an item.
+Both shoulders together: Claps, to scare away an animal.
+Left stick click: Moves to the previous item in your inventory.
+Right stick click: Moves to the next item in your inventory.
+B button: Uses the item you're on in your inventory.
+A button: Swings or fires your weapon. With the machine gun, it keeps firing.
+X button: Reloads your gun.
+Y button: Announces how much ammo your gun has loaded and in reserve.
+Start: Brings up the pause menu.
+Back: Asks whether you want to quit the run, or quits it straight away if you've turned the question off in the settings menu.
+
+Choosing a weapon, the readouts, the volume, F1, F2, the free run console and the speech buffers have no button to start with, but you can give any of them one.
+In every menu and dialog, the buttons are always these, and can't be changed. Text boxes still need the keyboard.
+
+D-pad or left stick: Moves, like the arrow keys. Hold it to keep moving.
+A button: Chooses, like enter.
+B button: Goes back, like escape.
+Right shoulder: Moves to the next control, like tab.
+Left shoulder: Moves to the previous control, like shift plus tab.
+Y button: In a message that says to press enter to continue, copies the message, like the letter C.
+
+Your joystick's buttons are kept in joystick.ini, in the data/config folder, which you can also edit by hand. Each line is an action, an equals sign, then its buttons by number, separated by commas, such as jump=11. The numbers are 0 for the A button, 1 for B, 2 for X, 3 for Y, 4 for back, 6 for start, 7 for the left stick click, 8 for the right stick click, 9 for the left shoulder, 10 for the right shoulder, 11 for d-pad up, 12 for d-pad down, 13 for d-pad left and 14 for d-pad right. A button can end with :down, :release or :up, such as duck_held=12:down, and with none, it's a press. If joystick.ini is missing or can't be read, the game tells you when it starts, then runs with the keyboard only.
 
 Speech buffer commands
 
@@ -214,11 +247,12 @@ Change game version, in the main menu, lets you type a different version number 
 Settings.
 
 The settings menu is a window with a list of tabs at the top. Move through the tabs with the arrow keys, and tab through the options on each one. Control plus tab and control plus shift plus tab move to the next or previous tab from anywhere in the window, wrapping around at either end. Nothing you tick or slide takes effect until you choose save settings, and cancel or escape leaves everything as it was. Each volume slider goes from 0 to 100 percent in steps of 1, where 100 percent is full volume, and the volume keys and the sliders always agree, since each shows what the other last set. The menu music, music and ambience start at 80 percent, and the footsteps, heartbeat and master volumes at 100 percent.
-General: choose whether the game checks for updates when it starts, which is unticked to start with. Reset settings puts every setting back to how it started, after asking you first, then restarts the game. Your key bindings aren't touched.
+General: choose whether the game checks for updates when it starts, which is unticked to start with. Reset settings puts every setting back to how it started, after asking you first, then restarts the game. Your key and joystick bindings aren't touched.
 Game: set the volume of the game's ambience, your footsteps, your heartbeat and the music, then choose whether things behind you sound a little lower in pitch, which is ticked to start with and helps you tell what's behind you from what's ahead, and whether escape asks before quitting a run. If you untick the escape question, escape leaves the run straight away. Last, choose whether your session results come up after you die, and whether the menu that follows offers to copy or export them, both ticked to start with.
+Joystick: rebind your joystick's buttons, or view every joystick binding, by button name. The rebind list works like the keyboard's below: select an action, then add another button to it, change its button, or remove its buttons, and each change is saved as soon as you make it. When asked, press any button on your joystick; pressing escape, or nothing for 10 seconds, cancels. If the button already belongs to another action, you're asked whether to replace it, then whether to change its trigger from press to down or release.
 Keyboard: rebind your keys, or view every key binding. In the rebind list, select an action, then add another key to it, change its key, or remove its keys, and each change is saved as soon as you make it. A key can be a combination: hold any shift, control or alt keys first, then press the other key last. Holding one side, such as the left shift, binds that side only, while holding both shifts, both controls or both alts binds either side. Some keyboards can't send both sides of a modifier together with every key, so if nothing happens, try one side or a different key. If the key already belongs to another action, you're asked whether to replace it, which takes it off only that action, then whether to change its trigger from press to repeat, down or release. An action left with no keys stays in the list, so you can give it one later.
 Menu: turn on wrapping, first letter navigation, position information and side scrolling in menus, and choose whether the learn sounds menu tells you when a sound has several versions, which is ticked to start with.
 Sound: set the menu music volume and the master game volume, which turns every sound in the game up or down together. Turn HRTF on or off, which is ticked to start with and makes sounds in front of you, behind you and to your sides easier to place through headphones. You can also choose between fading out by volume, which is ticked to start with, or by pitch when you leave a run, choose whether the sounds in the learn sounds menu keep looping until you move to another, which is also ticked to start with, and pick which sound device the game plays through. Your device choice is saved straight away.
 Speech: set up your voice, either your screen reader or another voice with its own rate, pitch and volume, and preview how it sounds.
-During a run, F2 opens the settings with only the game, menu and speech tabs, and F1 shows your key bindings. The run is paused while either is open, and carries on when you close it.
+During a run, F2 opens the settings with only the game, menu and speech tabs, and F1 shows your key bindings, then your joystick bindings while a joystick is connected. The run is paused while either is open, and carries on when you close it.
 Your settings, including your music, ambience and menu music volumes, are remembered from one launch to the next.
