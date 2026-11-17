@@ -4,10 +4,10 @@
 ****Unfinished. Add a way to choose the lane for barriers, items, vehicles and lane trampolines in a free run, such as your own lane or a set lane, instead of a random one.
 ****Unfinished. Add a spacing choice to a free run, so obstacles and items can come closer together or further apart than the usual gap for your speed.
 ****Unfinished. Add a way to choose which combination comes in a free run, from any of the pairs in either order, instead of a random one.
-****Unfinished. Add controller vibration, such as a rumble when you take damage or lose a life, with a setting to turn it on or off.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add controller vibration, such as a rumble when you take damage or lose a life, with a setting to turn it on or off.
 **Finished. Add joystick and game controller support, for every menu and the game itself, with the buttons set in their own joystick.ini file.
 **Finished. Give every weapon its own reach, so the stronger the weapon, the sooner it can hit what's coming.
 **Finished. Give each melee weapon its own swing, with a windup before its hit lands and a recovery after, slower the harder it hits.
