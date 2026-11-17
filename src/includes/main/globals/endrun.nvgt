@@ -14,6 +14,7 @@ bool run_died = false;
 void end_run_hazard(string fall_clip)
 {
 run_end_cause = "hazards"; // the statistics: what ended the run
+joystick_rumble(rumble_death);
 silence_run();
 if (fall_clip != "") dlgplay(fall_clip);
 if (!lives_can_end) restart_run_requested = true;
@@ -25,6 +26,7 @@ ends. */
 void end_run_floor(string fall_clip)
 {
 run_end_cause = "floor_breakers"; // the statistics: what ended the run
+joystick_rumble(rumble_death);
 silence_run();
 p.play_stationary(get_pack_sound("misc/player/*death*"), false);
 if (fall_clip != "") dlgplay(fall_clip);
@@ -44,6 +46,7 @@ practice_death(me.x + 1, "");
 return;
 }
 run_end_cause = last_caught; // the statistics: the obstacle whose blow was fatal (stat_caught())
+joystick_rumble(rumble_death); // after the practice branch, which rumbles in practice_death()
 string tile = tile_at(me.x);
 silence_run();
 dlgplay(get_pack_sound("misc/player/*death*"));
@@ -121,6 +124,7 @@ practice_lives, and steel shields topped up to practice_shields, keys kept), and
 a landing; return to game menu, or Escape ("canceled"), ends the run as quit run does. */
 void practice_death(double past_x, const string&in fall_clip)
 {
+joystick_rumble(rumble_death); // the same as a real death
 pause_timers();
 pause_pools(true);
 if (fall_clip != "") dlgplay(fall_clip);

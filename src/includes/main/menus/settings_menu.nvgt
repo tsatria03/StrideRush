@@ -6,7 +6,7 @@ open something of their own (reset, the sound device, the voice, the key screens
 rebuilds the window afterwards, so the unsaved ticks are carried in locals across the rebuild. */
 void settingsmenu(bool ingame = false)
 {
-bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions, new_updates = auto_check_updates, new_death_results = show_death_results, new_death_copy = show_death_copy_export;
+bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions, new_updates = auto_check_updates, new_death_results = show_death_results, new_death_copy = show_death_copy_export, new_vibration = joystick_vibration;
 // The volume sliders, in dB from min_volume to 0, shown as 0 to 100 percent.
 int new_amb_vol = ambience_volume, new_step_vol = footstep_volume, new_mus_vol = music_volume, new_heart_vol = heartbeat_volume, new_menu_vol = menumusvolume, new_master_vol = master_volume;
 int tab_shown = 0; // opens on the first tab: General from the main menu, Game from F2
@@ -29,7 +29,7 @@ int tab_keyboard = ingame ? -1 : 3;
 int tab_menu = ingame ? 1 : 4;
 int tab_sound = ingame ? -1 : 5;
 int tab_speech = ingame ? 2 : 6;
-int joy_rebind_btn = -1, joy_view_btn = -1, reset_btn = -1, view_btn = -1, rebind_btn = -1, fade_box = -1, hrtf_box = -1, device_btn = -1, loop_box = -1, menu_vol_slider = -1, master_vol_slider = -1, updates_box = -1;
+int vibration_box = -1, joy_rebind_btn = -1, joy_view_btn = -1, reset_btn = -1, view_btn = -1, rebind_btn = -1, fade_box = -1, hrtf_box = -1, device_btn = -1, loop_box = -1, menu_vol_slider = -1, master_vol_slider = -1, updates_box = -1;
 if (!ingame)
 {
 // The General tab: the startup update check, then reset; checkboxes always come before buttons in a tab.
@@ -60,6 +60,8 @@ setform.assign_to_tab(death_copy_box, tabs, tab_game);
 if (!ingame)
 {
 // The Joystick tab, before Keyboard, built the same way: rebind first, then view.
+vibration_box = setform.create_checkbox("Enable joystick vibration", new_vibration); // the Joystick tab's one checkbox, before its buttons
+setform.assign_to_tab(vibration_box, tabs, tab_joystick);
 joy_rebind_btn = setform.create_button("Rebind &joystick buttons");
 setform.assign_to_tab(joy_rebind_btn, tabs, tab_joystick);
 joy_view_btn = setform.create_button("View current joystick b&indings");
@@ -123,6 +125,7 @@ new_variants = setform.is_checked(variants_box);
 if (updates_box != -1) new_updates = setform.is_checked(updates_box);
 new_death_results = setform.is_checked(death_results_box);
 new_death_copy = setform.is_checked(death_copy_box);
+if (vibration_box != -1) new_vibration = setform.is_checked(vibration_box);
 new_amb_vol = int(setform.get_slider(amb_vol_slider)) - 100;
 new_mus_vol = int(setform.get_slider(mus_vol_slider)) - 100;
 new_heart_vol = int(setform.get_slider(heart_vol_slider)) - 100;
@@ -149,6 +152,7 @@ variant_descriptions = new_variants;
 if (!ingame) auto_check_updates = new_updates;
 show_death_results = new_death_results;
 show_death_copy_export = new_death_copy;
+if (!ingame) joystick_vibration = new_vibration;
 apply_volume_settings(new_amb_vol, new_mus_vol, new_heart_vol, new_menu_vol, new_master_vol, new_step_vol); // volumes change only on save
 behind_pitch = new_behind;
 apply_behind_pitch();
@@ -179,6 +183,7 @@ new_variants = variant_descriptions;
 new_updates = auto_check_updates;
 new_death_results = show_death_results;
 new_death_copy = show_death_copy_export;
+new_vibration = joystick_vibration;
 new_amb_vol = ambience_volume;
 new_mus_vol = music_volume;
 new_heart_vol = heartbeat_volume;
@@ -258,6 +263,7 @@ fademode = 1;
 ask_quit_on_escape = true;
 show_death_results = true;
 show_death_copy_export = true;
+joystick_vibration = true;
 behind_pitch = true;
 apply_behind_pitch();
 hrtf = true;

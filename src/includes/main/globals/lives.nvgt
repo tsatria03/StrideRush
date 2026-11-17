@@ -24,11 +24,19 @@ through p and calls end_run_hit(), as a fatal hit always has. */
 int take_damage(int damage)
 {
 damage = level_damage(damage); // the level's share first: 60 percent on easy up to the full amount on chaos (difficulty.nvgt)
-if (shield_absorb(damage)) return blow_shielded;
+if (shield_absorb(damage))
+{
+joystick_rumble(rumble_shield);
+return blow_shielded;
+}
 int dealt = powerup_damage(damage, "Tough Hide", "Soft Hide"); // halved or doubled by the health powerups
 stat_add("damage_taken", dealt < player_health ? dealt : player_health); // only what your health had to lose, as damage past 0 is dropped
 player_health -= dealt;
-if (player_health > 0) return blow_hurt;
+if (player_health > 0)
+{
+joystick_rumble(rumble_hurt);
+return blow_hurt;
+}
 if (((lives_can_end and !free_no_deaths()) or practice_deaths()) and lives <= 1) // a free run on no deaths refills instead (freerun.nvgt); in practice, or a free run on practice deaths, this is a practice death (end_run_hit())
 {
 player_health = 0;
@@ -38,10 +46,15 @@ return blow_fatal;
 }
 player_health = max_health(); // the next life starts at full health, a free run's set amount
 // Lives that can't end, on the last life: nothing is lost, so health just refills, with no life sound.
-if (lives <= 1) return blow_hurt;
+if (lives <= 1)
+{
+joystick_rumble(rumble_hurt);
+return blow_hurt;
+}
 lives -= 1; // a life goes whenever there's one to spare
 stat_add("lives_lost");
 p.play_stationary(get_pack_sound("misc/player/*life*"), false);
+joystick_rumble(rumble_life);
 return blow_life_lost;
 }
 // H: "70 percent health remaining, 2 lives."

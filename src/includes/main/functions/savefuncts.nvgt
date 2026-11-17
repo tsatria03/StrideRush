@@ -81,6 +81,10 @@ if(st.d.exists("show_death_copy_export"))
 {
 show_death_copy_export=st.read_bool("show_death_copy_export");
 }
+if(st.d.exists("joystick_vibration"))
+{
+joystick_vibration=st.read_bool("joystick_vibration");
+}
 if(st.d.exists("tts_config"))
 {
 tts_load_config(st.read_string("tts_config"), tts);
@@ -233,6 +237,7 @@ st.add("auto_check_updates",auto_check_updates);
 st.add("ask_quit_on_escape",ask_quit_on_escape);
 st.add("show_death_results",show_death_results);
 st.add("show_death_copy_export",show_death_copy_export);
+st.add("joystick_vibration",joystick_vibration);
 st.add("tts_config",tts_dump_config(tts, true));
 st.add("soundcard",soundcard);
 for (uint i = 0; i < buffers.length(); i++)

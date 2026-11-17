@@ -27,6 +27,7 @@ if (!controls.load_joystick_file(jpath))
 alert("Warning", "Failed to load " + jpath + ", so the game will run with the keyboard only until you reinstall the game.");
 return;
 }
+sdl_set_hint("SDL_JOYSTICK_HIDAPI_PS5_RUMBLE", "1"); // a PlayStation 5 controller over Bluetooth rumbles only with this, read as the joystick opens
 @joy = joystick();
 controls.set_joystick(joy);
 @controls.extra_button = stick_button;
@@ -168,6 +169,17 @@ stick_pressed[d] = now_down and !was and !gap;
 stick_released[d] = was and !now_down and !gap;
 stick_down[d] = now_down;
 }
+}
+// The vibration moments, indexes into tuning.nvgt's rumble_low, rumble_high and rumble_times.
+const int rumble_shield = 0;
+const int rumble_hurt = 1;
+const int rumble_life = 2;
+const int rumble_death = 3;
+// One rumble, replacing any still going; nothing without a connected joystick, or with the Joystick tab's setting off.
+void joystick_rumble(int kind)
+{
+if (!joystick_vibration or @joy == null or !joy.active) return;
+joy.vibrate(uint16(rumble_low[kind]), uint16(rumble_high[kind]), rumble_times[kind]);
 }
 // The buttons as the bindings screens say them, by SDL's numbers; any past these is "button 15" and so on.
 const string[] button_names = {"A button", "B button", "X button", "Y button", "back", "guide", "start", "left stick click", "right stick click", "left shoulder", "right shoulder", "d-pad up", "d-pad down", "d-pad left", "d-pad right"};

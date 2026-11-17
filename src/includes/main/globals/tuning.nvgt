@@ -326,3 +326,9 @@ const int joystick_repeat_delay = 400;
 const int joystick_repeat_interval = 100;
 // Rebinding a joystick button waits this many ms for a press, then cancels.
 const int joystick_capture_time = 10000;
+/* Vibration (joystick.nvgt's joystick_rumble()), one strength per moment, not per obstacle: a shield taking a blow, a
+blow to your health, losing a life, and a death. The low motor is the heavy rumble and the high motor the light buzz,
+each 0 to 65535, for rumble_times ms. */
+const int[] rumble_low = {8000, 20000, 40000, 65535};
+const int[] rumble_high = {16000, 30000, 50000, 65535};
+const int[] rumble_times = {120, 250, 500, 900};
