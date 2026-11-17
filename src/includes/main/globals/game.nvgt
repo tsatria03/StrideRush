@@ -46,6 +46,7 @@ void start_run(int starting_step_time = start_step_time, int starting_life_count
 practice_run = practice;
 set_run_difficulty(difficulty); // before reset_run(), whose reset_spawner() places the first obstacle with the level's floor
 set_spawn_only(only_type); // before reset_run(), whose reset_spawner() picks the first obstacle; splits an item's debug lane choice off
+step_time = starting_step_time; // the new run's speed, which has_joined() reads in pick_start_env(); reset_run() sets it too
 pick_start_env(); // after practice_run and the difficulty are set, and before anything spawns or plays (environments.nvgt)
 lives_can_end = can_run_out;
 reset_run(starting_step_time, starting_life_count);

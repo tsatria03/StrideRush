@@ -52,8 +52,8 @@ if (choice == "fake_doors" or choice == "real_doors" or choice == "mixed_doors")
 return choice;
 }
 /* The environment a run starts in: a debug run's chosen one if the debug
-option picked one; otherwise a random one, and for a practice run only among those that have the practiced obstacle. If
-nothing qualifies, the run stays where it was (default at first). */
+option picked one; otherwise a random eligible one (env_eligible()). If nothing qualifies, an endless or timed run takes
+any environment, and a practice run stays where it was (default at first). */
 void pick_start_env()
 {
 string[] names = env_names();
@@ -65,19 +65,37 @@ return;
 string[] candidates;
 for (uint i = 0; i < names.length(); i++)
 {
-if (practice_run and !practice_env_ok(names[i], practice_choice)) continue; // practice.nvgt: combinations need both of some pair
-candidates.insert_last(names[i]);
+if (env_eligible(names[i])) candidates.insert_last(names[i]);
 }
+if (candidates.length() == 0 and run_difficulty >= 0) candidates = names; // a real run has to start somewhere
 if (candidates.length() > 0) current_env = candidates[random(0, candidates.length() - 1)];
 }
 /* Switching. A run can move between environments unless a debug run is held in one; a practice run only
-among environments that have its obstacle. env_switch_at is the runtimer time of the next switch, or -1 when this run
-doesn't switch (one environment to go to, or held in one). */
+among environments that have its obstacle, and an endless or timed run only to one with an obstacle it could bring.
+env_switch_at is the runtimer time of the next switch, or -1 when this run doesn't switch (nowhere else to go, or held
+in one); an endless or timed run keeps it whenever there's more than one environment, trying again each time. */
 double env_switch_at = -1;
-// Can this run be in this environment? Practice runs need their obstacle there.
+/* Can this run be in this environment? Practice runs need their obstacle there (practice.nvgt: combinations need both of
+some pair); endless and timed runs need an obstacle they could bring right now; free and debug runs go anywhere. */
 bool env_eligible(const string&in env)
 {
-return !practice_run or practice_env_ok(env, practice_choice);
+if (practice_run) return practice_env_ok(env, practice_choice);
+if (run_difficulty >= 0) return env_has_obstacles(env);
+return true;
+}
+/* The spawner's own test (available_obstacles()) for one place: an obstacle type that has joined the run on the
+difficulty schedule, with a theme there. A ladder also needs a wall theme, and fake doors live in doors. Items, real
+doors, slides and trampolines don't count, since they come alongside obstacles, not instead of them. */
+bool env_has_obstacles(const string&in env)
+{
+for (uint i = 0; i < obstacle_types.length(); i++)
+{
+string type = obstacle_types[i];
+if (!has_joined(type)) continue;
+if (type == "ladders" and !env_has_type(env, "walls")) continue;
+if (env_has_type(env, practice_trap_type(type))) return true;
+}
+return false;
 }
 // The environments this run could move to from here: every eligible one but the current one.
 string[] env_switch_choices()
@@ -100,7 +118,9 @@ only made when there's more than one environment. It interrupts the weapon draw'
 the weapons buffer, so the environment is heard first. */
 void start_env()
 {
-env_switch_at = env_switch_choices().length() > 0 ? runtimer.elapsed + random(env_switch_min_time, env_switch_max_time) : -1;
+// A real run keeps its switch timer whenever there's somewhere else at all, since a place may gain obstacles as more join.
+bool keeps_trying = run_difficulty >= 0 and env_names().length() > 1;
+env_switch_at = (keeps_trying or env_switch_choices().length() > 0) ? runtimer.elapsed + random(env_switch_min_time, env_switch_max_time) : -1;
 if (env_names().length() > 1) announce_env(true);
 }
 // "You've entered the custom environment." in the misc buffer, no sound.
@@ -118,7 +138,15 @@ if (env_switch_at < 0 or runtimer.elapsed < env_switch_at) return;
 string[] choices = env_switch_choices();
 if (choices.length() == 0)
 {
-env_switch_at = -1;
+if (run_difficulty < 0)
+{
+env_switch_at = -1; // practice and free runs: what's eligible never changes
+return;
+}
+/* A real run with nowhere to go yet stays, tries again next time, and still moves the ambience on, since its own
+ambience timer is off while switching is (game.nvgt). */
+begin_ambience_fade(pick_ambience());
+env_switch_at = runtimer.elapsed + random(env_switch_min_time, env_switch_max_time);
 return;
 }
 current_env = choices[random(0, choices.length() - 1)];

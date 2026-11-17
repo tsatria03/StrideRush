@@ -75,7 +75,7 @@ bool free_kind_available(const string&in type, const string&in group)
 if (group == "item") return item_kind_available(type);
 if (type == "powerups") return powerups_available();
 if (type == "slides") return slides_available();
-if (type == "combinations") return true; // choose_combo() finds a pair, or the spawn is skipped
+if (type == "combinations") return practice_env_ok(current_env, "combinations"); // some pair with both kinds here (practice.nvgt)
 if (type == "ladders") return ladders_ready();
 if (type == "real_doors") return doors_available() and keys_available();
 if (type == "fake_doors") return doors_available();
@@ -92,11 +92,14 @@ if (free_kind_available(ids[i], group)) kinds.insert_last(ids[i]);
 }
 return kinds.length() > 0 ? kinds[random(0, kinds.length() - 1)] : "";
 }
-// One entry's next thing: its kind (a random one for all), with its set health.
+/* One entry's next thing: its kind (a random one for all), with its set health; "" when this environment can't bring it
+now, so it waits rather than spending a turn on nothing. */
 string free_entry_type(free_entry@ e)
 {
 free_hp_next = e.hp;
-return e.type == "all" ? free_pick_all(e.group) : e.type;
+string type = e.type == "all" ? free_pick_all(e.group) : e.type;
+if (type != "" and !free_kind_available(type, e.group)) type = "";
+return type;
 }
 /* From choose_free_run() in spawner.nvgt: what the next spawn is, or "" for nothing yet. A real door comes as its key,
 then the door. */
@@ -109,27 +112,41 @@ free_door_next = false;
 free_hp_next = free_door_hp;
 return "real_doors";
 }
+/* The front-most batch this environment can bring now; a batch only counts down when one of it comes, so in an
+environment without its kind it waits. With no batch able to come, the continuous rules this environment can bring. */
 string type = "";
-if (free_queue.length() > 0)
+for (uint i = 0; i < free_queue.length() and type == ""; i++)
 {
-free_entry@ e = free_queue[0];
+free_entry@ e = free_queue[i];
 type = free_entry_type(e);
+if (type == "") continue;
 e.count -= 1;
-if (e.count <= 0) free_queue.remove_at(0);
+if (e.count <= 0) free_queue.remove_at(i);
 }
-else if (free_rules.length() > 0)
+if (type == "")
 {
+string[] picks; // each rule's kind for this turn, "" when it can't come here now
 int total = 0;
-for (uint i = 0; i < free_rules.length(); i++) total += free_rules[i].count;
+for (uint i = 0; i < free_rules.length(); i++)
+{
+picks.insert_last(free_entry_type(free_rules[i]));
+if (picks[i] != "") total += free_rules[i].count;
+}
+if (total > 0)
+{
 int r = random(1, total);
 for (uint i = 0; i < free_rules.length(); i++)
 {
+if (picks[i] == "") continue;
 r -= free_rules[i].count;
 if (r > 0) continue;
-type = free_entry_type(free_rules[i]);
+type = picks[i];
+free_hp_next = free_rules[i].hp;
 break;
 }
 }
+}
+if (type == "") free_hp_next = 0;
 if (type == "real_doors")
 {
 free_door_next = true;
@@ -233,22 +250,34 @@ dlgmessage_return("Please type a number from " + low + " to " + high + ".");
 }
 return -1;
 }
-/* A group's kind menu: every kind, alphabetical, then all of the group, then back. "" if backed out. Each group's list
-remembers where you were, for the run, since the lists are long. */
-dictionary free_kind_focus; // group -> the last item picked in its add list
+/* A group's kind menu: every kind this environment has, alphabetical, then all of the group, then back. "" if backed out,
+or with "This environment has no obstacles." (or items, specials) when it has none. Each group's list remembers the kind
+you last picked, by name, for the run, since the lists are long and change with the environment. */
+dictionary free_kind_focus; // group -> the id last picked in its add list
 string free_choose_kind(const string&in group)
 {
+string[] ids;
+string[] all_ids = free_ids(group);
+for (uint i = 0; i < all_ids.length(); i++)
+{
+if (free_kind_available(all_ids[i], group)) ids.insert_last(all_ids[i]);
+}
+if (ids.length() == 0)
+{
+free_console_note = "This environment has no " + free_group_name(group) + "."; // said with the console's intro, which would cut it off (freerun.nvgt)
+return "";
+}
 setupmenu();
 m.intro_text = "Choose the " + group + " you'd like to add.";
-string[] ids = free_ids(group);
 for (uint i = 0; i < ids.length(); i++) m.add_item(free_kind_name(ids[i], group), ids[i]);
 m.add_item("all " + free_group_name(group), "all");
 m.add_item("back", "back");
-int64 focus = -1;
-free_kind_focus.get(group, focus);
-int mres = m.run(int(focus), false, focus >= 0);
+string last = "";
+free_kind_focus.get(group, last);
+int focus = last == "all" ? int(ids.length()) : ids.find(last);
+int mres = m.run(focus, false, focus >= 0);
 if (mres < 0 or m.selected_item_id == "back") return "";
-free_kind_focus.set(group, int64(mres));
+free_kind_focus.set(group, m.selected_item_id);
 return m.selected_item_id;
 }
 /* Add obstacles, add items or add specials: the kind, "How many?", for a breakable obstacle its health, then whether they

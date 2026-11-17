@@ -309,6 +309,7 @@ return true;
 }
 /* The console (backspace or F7), from run_input() in a free run: the run frozen while it's open, its items in alphabetical
 order with back last, standing or running. Escape or back closes it silently, as a nested menu. */
+string free_console_note = ""; // a line to say before the console's intro the next time it opens, such as an empty add list
 void free_console()
 {
 pause_game();
@@ -316,6 +317,8 @@ while (running)
 {
 setupmenu();
 m.intro_text = free_moving ? "Free run console. You're running." : "Free run console. You're standing still.";
+if (free_console_note != "") m.intro_text = free_console_note + " " + m.intro_text; // news from the last choice, heard before the intro
+free_console_note = "";
 if (free_moving)
 {
 m.add_item("add items", "add_items");
