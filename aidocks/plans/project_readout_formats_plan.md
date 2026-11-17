@@ -1,6 +1,6 @@
 ---
 name: project_readout_formats_plan
-description: SETTLED (2026-11-17), not built: settings to choose how health and shield readouts are spoken (percentage, amount or both); 2.4's ninth entry; Q&A log
+description: COMPLETE (2026-11-17, 2.4 at 9 of 10): settings to choose how health and shield readouts are spoken (percentage, amount or both); 2.4's ninth entry; Q&A log
 metadata:
   type: project
 ---
@@ -31,3 +31,4 @@ Started 2026-11-17 (dev: "I figured a ninth change we can do for 2.4. Is it poss
 
 ## Build log
 - Section 1 BUILT (2026-11-17, on 458b7c1): dec.nvgt's health_format and shield_format (0); savefuncts.nvgt reads them with read_int() and saves them; settings_menu.nvgt's "Health format," and "Shield format," lists (3 items each, CookieCraze's example style) after the Game tab's sliders, before its checkboxes, carried across rebuilds in new_health_fmt and new_shield_fmt, applied on save settings in and out of a run, put back to 0 by reset_settings() and its rebuild. lives.nvgt's format_readout(format, now, full): "70 percent", "350 of 500" or "70 percent, 350 of 500"; speak_health() (H) adds " health remaining, " and the lives; speak_shield_strength() (M) "Shield strength, " plus it, then "." for a percentage or " endurance remaining." otherwise; session_status_lines() "health, <readout>, 2 lives" and "shield, <readout>" with " endurance" for the amount formats; the potion's "Healed to <readout> health.". The free-run-only wording is gone everywhere. Braces balanced, CRLF checked by bytes. All 5 tests PASSED (dev, 2026-11-17): the two lists after the sliders with their examples, checkboxes after; percentage H and M as before; amount set through F2 mid-run; percentage and amount in H, M and the session statuses; kept through a restart, a free run following it, the potion's line in it. SECTION 1 COMPLETE; section 2 (docks) is next.
+- Section 2 WRITTEN (2026-11-17, on f2d5356; the dev on the entry: "yes"): changelog.txt's entry on top of 2.4 ("Added health format and shield format settings to the game tab, where you can choose whether your health and shield are spoken as a percentage, an amount, or both, in every kind of run."), 9 of 10; readme.txt's H and M lines (the three formats, chosen in the game tab), free run's modify line (its "In a free run H and M give the amounts too" replaced by choosing amount in the formats), and the settings' Game line (the two formats after the volumes). Version history, CLAUDE.md, the changelog rules. Edit tool only, CRLF checked by bytes, longest dock line 978. THE PLAN IS COMPLETE.

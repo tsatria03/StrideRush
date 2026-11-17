@@ -1,4 +1,5 @@
 New in 2.4.
+Added health format and shield format settings to the game tab, where you can choose whether your health and shield are spoken as a percentage, an amount, or both, in every kind of run.
 Added a section to the readme explaining how to customize the game's sounds, from adding new versions of any sound to making your own environments, and which folders the game finds on its own.
 Made it so a free run's add menus now only list what your current environment has, and anything you add now waits through an environment that doesn't have it instead of being used up.
 Made it so endless and timed runs now only go to environments with obstacles they can bring, so a run never goes quiet in one that has none.
