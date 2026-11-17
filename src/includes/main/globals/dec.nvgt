@@ -17,6 +17,8 @@ bool ask_quit_on_escape = true; // false: Escape leaves the run at once, without
 bool show_death_results = true; // false: a death skips the results menu
 bool show_death_copy_export = true; // false: the after death menu leaves out copy and export
 bool joystick_vibration = true; // the Joystick tab: rumble on blows, lives and deaths (joystick.nvgt)
+int health_format = 0; // the Game tab: how health is spoken, 0 a percentage, 1 an amount, 2 both (lives.nvgt's format_readout())
+int shield_format = 0; // and the shield, the same way
 int master_volume = 0; // the master game volume in dB, -100 to 0, through sound_master_volume
 string soundcard = "Default"; // the chosen sound device by name, matched to sound_output_device when the settings load
 form_menu m;

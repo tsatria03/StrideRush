@@ -9,6 +9,7 @@ void settingsmenu(bool ingame = false)
 bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions, new_updates = auto_check_updates, new_death_results = show_death_results, new_death_copy = show_death_copy_export, new_vibration = joystick_vibration;
 // The volume sliders, in dB from min_volume to 0, shown as 0 to 100 percent.
 int new_amb_vol = ambience_volume, new_step_vol = footstep_volume, new_mus_vol = music_volume, new_heart_vol = heartbeat_volume, new_menu_vol = menumusvolume, new_master_vol = master_volume;
+int new_health_fmt = health_format, new_shield_fmt = shield_format; // the readout formats (lives.nvgt's format_readout())
 int tab_shown = 0; // opens on the first tab: General from the main menu, Game from F2
 while (true)
 {
@@ -47,7 +48,20 @@ int heart_vol_slider = setform.create_slider("Game heartbeat volume,", new_heart
 setform.assign_to_tab(heart_vol_slider, tabs, tab_game);
 int mus_vol_slider = setform.create_slider("Game music volume,", new_mus_vol + 100, 0, 100, "percent", 1);
 setform.assign_to_tab(mus_vol_slider, tabs, tab_game);
-// After the sliders: the "Enable" checkbox first (behind pitch decrease), then the Escape question.
+// After the sliders, the two readout format lists, each choice with an example; then the checkboxes.
+int health_fmt_list = setform.create_list("Health format,", 3);
+setform.add_list_item(health_fmt_list, "Percentage. Example, 70 percent.");
+setform.add_list_item(health_fmt_list, "Amount. Example, 350 of 500.");
+setform.add_list_item(health_fmt_list, "Percentage and amount. Example, 70 percent, 350 of 500.");
+setform.set_list_position(health_fmt_list, new_health_fmt);
+setform.assign_to_tab(health_fmt_list, tabs, tab_game);
+int shield_fmt_list = setform.create_list("Shield format,", 3);
+setform.add_list_item(shield_fmt_list, "Percentage. Example, 80 percent.");
+setform.add_list_item(shield_fmt_list, "Amount. Example, 320 of 400 endurance.");
+setform.add_list_item(shield_fmt_list, "Percentage and amount. Example, 80 percent, 320 of 400 endurance.");
+setform.set_list_position(shield_fmt_list, new_shield_fmt);
+setform.assign_to_tab(shield_fmt_list, tabs, tab_game);
+// After the lists: the "Enable" checkbox first (behind pitch decrease), then the Escape question.
 int behind_box = setform.create_checkbox("Enable behind pitch decrease", new_behind);
 setform.assign_to_tab(behind_box, tabs, tab_game);
 int ask_box = setform.create_checkbox("Ask to quit the run when pressing escape", new_ask);
@@ -126,6 +140,10 @@ if (updates_box != -1) new_updates = setform.is_checked(updates_box);
 new_death_results = setform.is_checked(death_results_box);
 new_death_copy = setform.is_checked(death_copy_box);
 if (vibration_box != -1) new_vibration = setform.is_checked(vibration_box);
+int health_fmt_now = setform.get_list_position(health_fmt_list);
+if (health_fmt_now >= 0) new_health_fmt = health_fmt_now;
+int shield_fmt_now = setform.get_list_position(shield_fmt_list);
+if (shield_fmt_now >= 0) new_shield_fmt = shield_fmt_now;
 new_amb_vol = int(setform.get_slider(amb_vol_slider)) - 100;
 new_mus_vol = int(setform.get_slider(mus_vol_slider)) - 100;
 new_heart_vol = int(setform.get_slider(heart_vol_slider)) - 100;
@@ -153,6 +171,8 @@ if (!ingame) auto_check_updates = new_updates;
 show_death_results = new_death_results;
 show_death_copy_export = new_death_copy;
 if (!ingame) joystick_vibration = new_vibration;
+health_format = new_health_fmt;
+shield_format = new_shield_fmt;
 apply_volume_settings(new_amb_vol, new_mus_vol, new_heart_vol, new_menu_vol, new_master_vol, new_step_vol); // volumes change only on save
 behind_pitch = new_behind;
 apply_behind_pitch();
@@ -184,6 +204,8 @@ new_updates = auto_check_updates;
 new_death_results = show_death_results;
 new_death_copy = show_death_copy_export;
 new_vibration = joystick_vibration;
+new_health_fmt = health_format;
+new_shield_fmt = shield_format;
 new_amb_vol = ambience_volume;
 new_mus_vol = music_volume;
 new_heart_vol = heartbeat_volume;
@@ -264,6 +286,8 @@ ask_quit_on_escape = true;
 show_death_results = true;
 show_death_copy_export = true;
 joystick_vibration = true;
+health_format = 0;
+shield_format = 0;
 behind_pitch = true;
 apply_behind_pitch();
 hrtf = true;

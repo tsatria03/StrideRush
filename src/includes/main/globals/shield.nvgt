@@ -209,7 +209,8 @@ p.play_stationary(get_pack_sound(shield_folder + "*death*"), false); // the soun
 else p.play_stationary(get_pack_sound(shield_folder + "*hit*"), false);
 return true;
 }
-// M: the worn shield's strength as a percent of shield_full().
+/* M: the worn shield's strength as the Game tab's shield format says (format_readout() in lives.nvgt): "Shield strength,
+80 percent.", "Shield strength, 320 of 400 endurance remaining.", or both. */
 void speak_shield_strength()
 {
 if (!shield_worn)
@@ -217,10 +218,8 @@ if (!shield_worn)
 speak_buffer("You're not wearing a shield.", "status");
 return;
 }
-int percent = int(round(100.0 * shield_hp_left / shield_full(), 0));
-// A free run gives the amounts too: "Shield strength, 50 percent, 400 of 800 endurance remaining."
-if (free_run) speak_buffer("Shield strength, " + percent + " percent, " + shield_hp_left + " of " + shield_full() + " endurance remaining.", "status");
-else speak_buffer("Shield strength, " + percent + " percent.", "status");
+string amount = format_readout(shield_format, shield_hp_left, shield_full());
+speak_buffer("Shield strength, " + amount + (shield_format == 0 ? "." : " endurance remaining."), "status");
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.
 void shield_lane_sounds()

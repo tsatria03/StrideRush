@@ -57,12 +57,18 @@ p.play_stationary(get_pack_sound("misc/player/*life*"), false);
 joystick_rumble(rumble_life);
 return blow_life_lost;
 }
-// H: "70 percent health remaining, 2 lives."
+/* Health or shield as the Game tab's format says (health_format, shield_format in dec.nvgt), in every kind of run: 0
+"70 percent", 1 "350 of 500", 2 "70 percent, 350 of 500". H, M, the session statuses and the potion build on it. */
+string format_readout(int format, int now, int full)
+{
+int percent = int(round(100.0 * now / full, 0));
+if (format == 1) return now + " of " + full;
+if (format == 2) return percent + " percent, " + now + " of " + full;
+return percent + " percent";
+}
+// H: "70 percent health remaining, 2 lives.", or with the amount, "350 of 500 health remaining, 2 lives."
 void speak_health()
 {
-int percent = int(round(100.0 * player_health / max_health(), 0));
 string life_text = lives == 1 ? "1 life." : lives + " lives.";
-// A free run, where you can set your health, gives the amounts too: "60 percent, 300 of 500 health remaining, 3 lives."
-if (free_run) speak_buffer(percent + " percent, " + player_health + " of " + max_health() + " health remaining, " + life_text, "status");
-else speak_buffer(percent + " percent health remaining, " + life_text, "status");
+speak_buffer(format_readout(health_format, player_health, max_health()) + " health remaining, " + life_text, "status");
 }

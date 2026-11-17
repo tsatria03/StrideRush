@@ -156,7 +156,7 @@ int heal = max_health() * random(health_potion_min_percent, health_potion_max_pe
 player_health = int(min(max_health(), player_health + heal)); // the game's min() works in doubles
 p.play_stationary(get_pack_sound(potion_folder + "*use*"), false);
 p.play_stationary(get_pack_sound("misc/player/*heal*"), false);
-speak_buffer("Healed to " + int(round(100.0 * player_health / max_health(), 0)) + " percent health.", "items");
+speak_buffer("Healed to " + format_readout(health_format, player_health, max_health()) + " health.", "items"); // the health format (lives.nvgt)
 return true;
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.

@@ -32,15 +32,11 @@ session results, in every kind of run. Session results are the run's statistics;
 string[] session_status_lines()
 {
 string[] lines;
-int percent = int(round(100.0 * player_health / max_health(), 0));
 string life_text = lives == 1 ? "1 life" : lives + " lives";
-int shield_percent = shield_worn ? int(round(100.0 * shield_hp_left / shield_full(), 0)) : 0;
-// A free run's amounts too, as H and M say them there (freerun.nvgt).
-if (free_run) lines.insert_last(stat_line("health", percent + " percent, " + player_health + " of " + max_health() + " health, " + life_text));
-else lines.insert_last(stat_line("health", percent + " percent, " + life_text));
+// In the Game tab's health and shield formats, as H and M say them (format_readout() in lives.nvgt).
+lines.insert_last(stat_line("health", format_readout(health_format, player_health, max_health()) + ", " + life_text));
 if (!shield_worn) lines.insert_last(stat_line("shield", "none"));
-else if (free_run) lines.insert_last(stat_line("shield", shield_percent + " percent, " + shield_hp_left + " of " + shield_full() + " endurance"));
-else lines.insert_last(stat_line("shield", shield_percent + " percent"));
+else lines.insert_last(stat_line("shield", format_readout(shield_format, shield_hp_left, shield_full()) + (shield_format == 0 ? "" : " endurance")));
 lines.insert_last(stat_line("lane", lane_names[current_lane].lower()));
 lines.insert_last(stat_line("environment", current_env.replace("_", " ", true)));
 if (run_difficulty < 0 and !practice_run and !free_run) lines.insert_last(stat_line("speed", current_step_time() + " milliseconds per step"));
