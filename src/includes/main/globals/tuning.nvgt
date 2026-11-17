@@ -324,3 +324,5 @@ const int joystick_gap_time = 250;
 // In menus, a held d-pad or left stick taps again after joystick_repeat_delay ms, then every joystick_repeat_interval ms.
 const int joystick_repeat_delay = 400;
 const int joystick_repeat_interval = 100;
+// Rebinding a joystick button waits this many ms for a press, then cancels.
+const int joystick_capture_time = 10000;

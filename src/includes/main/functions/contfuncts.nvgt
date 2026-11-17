@@ -20,9 +20,14 @@ return true;
 // Every action in keyboard.ini, in the file's order, for the rebind list.
 string[]@ keyboard_actions_in_order()
 {
+return ini_actions_in_order(keyboard_ini_path);
+}
+// The same for keyboard.ini or joystick.ini, which share their layout.
+string[]@ ini_actions_in_order(const string&in path)
+{
 string[] result;
 file f;
-if (!f.open(keyboard_ini_path, "rb")) return result;
+if (!f.open(path, "rb")) return result;
 string content = f.read();
 f.close();
 content = string_replace(content, "\r\n", "\n", true);

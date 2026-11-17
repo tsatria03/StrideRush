@@ -1,15 +1,33 @@
-/* The key bindings screens. F1 during a run and
-the settings menu's Keyboard tab both open the read-only view; rebinding is only reachable from the settings menu
-outside a run, since keys are never rebound mid-run. */
+/* The key and joystick bindings screens. F1 during a run and the settings menu's Keyboard and Joystick tabs open the
+read-only views; rebinding is only reachable from the settings menu outside a run, since keys and buttons are never
+rebound mid-run. */
 
-/* A read-only window of keyboard.ini as it is now: section headers and comments kept, and each action line rewritten
-from the live bindings as "action = keys", with "(unbound)" for an action that has none. Close or escape returns. */
-void view_keyboard_bindings()
+/* A read-only window of keyboard.ini as it is now. F1 passes with_joystick, so while a joystick is connected its
+bindings follow the keyboard's, each part headed. Close or escape returns. */
+void view_keyboard_bindings(bool with_joystick = false)
+{
+string body = bindings_text(keyboard_ini_path, false);
+string title = "Current keyboard bindings";
+if (with_joystick and @joy != null and joy.active)
+{
+body = "Keyboard bindings:\r\n" + body + "\r\nJoystick bindings:\r\n" + bindings_text(joystick_ini_path, true);
+title = "Current bindings";
+}
+show_bindings_window(title, body);
+}
+// The Joystick tab's read-only window of joystick.ini, buttons by name.
+void view_joystick_bindings()
+{
+if (!joystick_ready()) return;
+show_bindings_window("Current joystick bindings", bindings_text(joystick_ini_path, true));
+}
+/* keyboard.ini or joystick.ini as it is now: section headers and comments kept, and each action line rewritten from the
+live bindings as "action = keys" (or buttons by name), with "(unbound)" for an action that has none. */
+string bindings_text(const string&in path, bool for_joystick)
 {
 string body = "";
 file f;
-if (f.open(keyboard_ini_path, "rb"))
-{
+if (!f.open(path, "rb")) return "Could not read " + path + ".";
 string content = f.read();
 f.close();
 content = string_replace(content, "\r\n", "\n", true);
@@ -27,15 +45,17 @@ int eq = trimmed.find_first("=");
 string act = eq < 0 ? "" : trimmed.substr(0, eq).trim_whitespace();
 if (act != "" && controls.has_action(act))
 {
-string s = controls.get_keyboard_action_string(act);
+string s = for_joystick ? joystick_names(controls.get_joystick_action_string(act)) : controls.get_keyboard_action_string(act);
 body += act + " = " + (s == "" ? "(unbound)" : s) + "\r\n";
 }
 else body += line + "\r\n";
 }
+return body;
 }
-else body = "Could not read " + keyboard_ini_path + ".";
+void show_bindings_window(const string&in title, const string&in body)
+{
 audio_form bindform;
-bindform.create_window("Current keyboard bindings", false, false, false);
+bindform.create_window(title, false, false, false);
 int view = bindform.create_input_box("Bindings", body, read_only:true, multiline:true);
 int close_btn = bindform.create_button("&close", false, true);
 bindform.focus(view);
@@ -64,7 +84,7 @@ dlg("There are no actions to rebind.");
 return;
 }
 audio_form rebindform;
-rebindform.create_window("Rebind keyboard controls", false);
+rebindform.create_window("Rebind keyboard keys", false);
 int list = rebindform.create_list("Current bindings");
 for (uint i = 0; i < actions.length(); i++)
 {
@@ -165,6 +185,11 @@ string names = owners[0];
 for (uint i = 1; i < owners.length(); i++) names += (i == owners.length() - 1 ? " and " : ", ") + owners[i];
 question = combo + " is already bound to " + names + ". Would you like to replace it?";
 }
+return rebind_replace_answer(question);
+}
+// The replace question's Yes then No, for keys and buttons: true on Yes; No or escape says "canceled".
+bool rebind_replace_answer(const string&in question)
+{
 setupmenu();
 m.intro_text = question;
 m.add_item("Yes", "yes");
@@ -182,10 +207,10 @@ for (uint i = 0; i < owners.length(); i++) controls.unbind_combo(owners[i], comb
 }
 /* The trigger question: Yes then No; No keeps a press, Yes opens the trigger menu, escape says "canceled" and cancels the binding. Returns the trigger,
 or -1 for canceled. */
-int rebind_trigger_question()
+int rebind_trigger_question(const string&in thing = "key")
 {
 setupmenu();
-m.intro_text = "Would you like to change the trigger for this key? It's set to press by default.";
+m.intro_text = "Would you like to change the trigger for this " + thing + "? It's set to press by default.";
 m.add_item("Yes", "yes");
 m.add_item("No", "no");
 int mres = m.run();
@@ -202,4 +227,128 @@ void save_bindings(const string&in done_message)
 {
 if (!kc_save_preserving(controls, keyboard_ini_path)) dlgmessage_return("The change works for now, but it could not be saved to keyboard.ini.");
 else dlgmessage_return(done_message);
+}
+
+/* The joystick's rebind list, the keyboard's twin: every action in joystick.ini's order with its buttons by name, and
+add, edit and remove buttons, each change written straight to joystick.ini keeping its sections and comments. */
+void rebind_joystick_action()
+{
+if (!joystick_ready()) return;
+while (true)
+{
+string[]@ actions = ini_actions_in_order(joystick_ini_path);
+if (actions.length() == 0)
+{
+dlg("There are no actions to rebind.");
+return;
+}
+audio_form rebindform;
+rebindform.create_window("Rebind joystick buttons", false);
+int list = rebindform.create_list("Current bindings");
+for (uint i = 0; i < actions.length(); i++)
+{
+string s = joystick_names(controls.get_joystick_action_string(actions[i]));
+rebindform.add_list_item(list, actions[i] + ": " + (s == "" ? "(unbound)" : s), actions[i]);
+}
+int add_btn = rebindform.create_button("&Add binding");
+int edit_btn = rebindform.create_button("&Edit binding");
+int remove_btn = rebindform.create_button("&Remove binding");
+int close_btn = rebindform.create_button("&Close", false, true);
+rebindform.focus(list);
+while (true)
+{
+wait(5);
+rebindform.monitor();
+if (rebindform.is_pressed(close_btn)) return;
+int pos = rebindform.get_list_position(list);
+if (pos < 0 or pos >= int(actions.length())) continue;
+if (rebindform.is_pressed(add_btn))
+{
+rebind_joystick_button(actions[pos], false);
+break;
+}
+if (rebindform.is_pressed(edit_btn))
+{
+rebind_joystick_button(actions[pos], true);
+break;
+}
+if (rebindform.is_pressed(remove_btn))
+{
+rebind_joystick_remove(actions[pos]);
+break;
+}
+}
+}
+}
+// Add (one more button, keeping the others) or edit (the one button replaces them all), as the keyboard's add and edit do.
+void rebind_joystick_button(const string&in action, bool replacing)
+{
+if (!joy.active)
+{
+dlgmessage_return("No joystick is connected.");
+return;
+}
+int b = joystick_capture_button(replacing ? "Press the new button for " + action + ", or escape to cancel." : "Press the button to bind to " + action + ", or escape to cancel.");
+if (b < 0)
+{
+speak("canceled");
+return;
+}
+if (!rebind_button_question(action, b)) return;
+int trig = rebind_trigger_question("button");
+if (trig < 0) return;
+string[]@ owners = controls.actions_using_button(b, action);
+for (uint i = 0; i < owners.length(); i++) controls.unbind_joystick_button(owners[i], b);
+if (replacing) controls.clear_joystick_action(action);
+controls.bind_joystick_button(action, b, kc_trigger(trig));
+save_joystick_bindings(replacing ? action + " is now bound to " + button_name(b) + "." : "Added " + button_name(b) + " to " + action + ".");
+}
+/* Waits for one joystick button, any of them, and returns its number; escape on the keyboard, or joystick_capture_time
+with no press, cancels (-1). Its loop isn't a form, so the menu buttons don't turn into keys here. */
+int joystick_capture_button(const string&in prompt)
+{
+speak(prompt);
+joy.buttons_pressed(); // a press from before the prompt doesn't count
+timer waited;
+while (waited.elapsed < joystick_capture_time)
+{
+wait(5);
+if (key_pressed(KEY_ESCAPE)) return -1;
+int[]@ pressed = joy.buttons_pressed();
+if (pressed.length() > 0) return pressed[0];
+}
+return -1;
+}
+/* The replace question for a button: when other actions have it, Yes then No, naming them, and saying when one would be
+left with no button. */
+bool rebind_button_question(const string&in action, int b)
+{
+string[]@ owners = controls.actions_using_button(b, action);
+if (owners.length() == 0) return true;
+string name = button_name(b);
+name = name.substr(0, 1).upper() + name.substr(1);
+if (owners.length() == 1 and controls.button_overlap_count(owners[0], b) >= controls.joystick_binding_count(owners[0]))
+return rebind_replace_answer(name + " is the only button for " + owners[0] + ", so " + owners[0] + " will have no button. Would you like to replace it?");
+string names = owners[0];
+for (uint i = 1; i < owners.length(); i++) names += (i == owners.length() - 1 ? " and " : ", ") + owners[i];
+return rebind_replace_answer(name + " is already bound to " + names + ". Would you like to replace it?");
+}
+// Clears every button from an action, after a Yes then No question.
+void rebind_joystick_remove(const string&in action)
+{
+if (!rebind_replace_answer("Do you want to remove all bindings for " + action + "?")) return;
+controls.clear_joystick_action(action);
+save_joystick_bindings(action + " bindings cleared.");
+}
+void save_joystick_bindings(const string&in done_message)
+{
+if (!kc_save_preserving(controls, joystick_ini_path, true)) dlgmessage_return("The change works for now, but it could not be saved to joystick.ini.");
+else dlgmessage_return(done_message);
+}
+// The Joystick tab's buttons need joystick.ini loaded; without it, a dialog says why.
+bool joystick_ready()
+{
+if (@joy != null) return true;
+dlgmessage_return("Joystick bindings aren't available, because joystick.ini couldn't be loaded.");
+return false;
 }

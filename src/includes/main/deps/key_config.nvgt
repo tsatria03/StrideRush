@@ -326,16 +326,53 @@ class key_config {
 		jb.get(action, @list);
 		list.insert_last(@b);
 	}
+	// Takes every binding of the button off the action, whatever its trigger, as unbind_combo() does for keys.
 	void unbind_joystick_button(const string&in action, int button) {
 		if (!jb.exists(action)) return;
 		kc_joybind@[]@ list;
 		jb.get(action, @list);
-		for (uint i = 0; i < list.length(); i++) {
-			if (list[i].button == button) {
-				list.remove_at(i);
-				return;
-			}
+		for (int i = int(list.length()) - 1; i >= 0; i--)
+			if (list[i].button == button) list.remove_at(i);
+	}
+	// Every action but except_action with the button bound, whatever its trigger, for the joystick replace question.
+	string[]@ actions_using_button(int button, const string&in except_action) {
+		string[] found;
+		string[]@ actions = jb.get_keys();
+		for (uint a = 0; a < actions.length(); a++) {
+			if (actions[a] == except_action) continue;
+			if (button_overlap_count(actions[a], button) > 0) found.insert_last(actions[a]);
 		}
+		return found;
+	}
+	// How many of an action's joystick bindings use the button.
+	int button_overlap_count(const string&in action, int button) {
+		if (!jb.exists(action)) return 0;
+		kc_joybind@[]@ list;
+		jb.get(action, @list);
+		int count = 0;
+		for (uint i = 0; i < list.length(); i++)
+			if (list[i].button == button) count++;
+		return count;
+	}
+	int joystick_binding_count(const string&in action) {
+		if (!jb.exists(action)) return 0;
+		kc_joybind@[]@ list;
+		jb.get(action, @list);
+		return int(list.length());
+	}
+	/* One action's joystick bindings as joystick.ini writes them, such as "12:down,11": a press has no ":press". Empty
+	string if none. */
+	string get_joystick_action_string(const string&in action) {
+		if (!jb.exists(action)) return "";
+		kc_joybind@[]@ list;
+		jb.get(action, @list);
+		string result = "";
+		for (uint i = 0; i < list.length(); i++) {
+			string one = "" + list[i].button;
+			if (list[i].trigger != KC_PRESS) one += ":" + trigger_name(list[i].trigger);
+			result += (result == "" ? "" : ",") + one;
+		}
+		return result;
 	}
 	void clear_joystick_action(const string&in a) {
 		if (jb.exists(a)) jb.set(a, array<kc_joybind@>());
@@ -852,12 +889,15 @@ string kc_entry_bindings(const string&in entry) {
 // This matches the original save_keyboard_ini() — it's the right choice
 // when users hand-edit the file for organization, since key_config's own
 // save_keyboard() collapses everything into a single [keyboard] section.
-bool kc_save_preserving(key_config@ kc, const string&in path) {
+// With for_joystick, the file is joystick.ini and each line gets the action's joystick bindings instead of its keys.
+// The file's own line endings are kept: CRLF stays CRLF.
+bool kc_save_preserving(key_config@ kc, const string&in path, bool for_joystick = false) {
 	if (!file_exists(path)) return false;
 	file f;
 	if (!f.open(path, "rb")) return false;
 	string content = f.read();
 	f.close();
+	string eol = content.find("\r\n") >= 0 ? "\r\n" : "\n";
 	string[] lines = content.split("\n", true);
 	string output = "";
 	dictionary written;
@@ -866,25 +906,26 @@ bool kc_save_preserving(key_config@ kc, const string&in path) {
 		// Strip a trailing \r so Windows line-endings round-trip cleanly.
 		if (line.length() > 0 && line.substr(line.length() - 1, 1) == "\r")
 			line = line.substr(0, line.length() - 1);
+		if (i == lines.length() - 1 && line.length() == 0) break; // the file's own last line ending, already written
 		string trimmed = line.trim_whitespace();
 		if (trimmed.length() == 0 || trimmed.substr(0, 1) == ";" || trimmed.substr(0, 1) == "#" || trimmed.substr(0, 1) == "[") {
-			output += line + "\n";
+			output += line + eol;
 			continue;
 		}
 		int eq = trimmed.find("=");
-		if (eq < 0) { output += line + "\n"; continue; }
+		if (eq < 0) { output += line + eol; continue; }
 		string act = trimmed.substr(0, eq).trim_whitespace();
-		if (!kc.has_action(act)) { output += line + "\n"; continue; }
+		if (!kc.has_action(act)) { output += line + eol; continue; }
 		// Written even with no keys left ("fire="), so the action keeps its line and its place in the rebind list.
-		output += act + "=" + kc.get_keyboard_action_string(act) + "\n";
+		output += act + "=" + (for_joystick ? kc.get_joystick_action_string(act) : kc.get_keyboard_action_string(act)) + eol;
 		written.set(act, true);
 	}
 	string[]@ actions = kc.get_actions();
 	for (uint i = 0; i < actions.length(); i++) {
 		if (written.exists(actions[i])) continue;
-		string val = kc.get_keyboard_action_string(actions[i]);
+		string val = for_joystick ? kc.get_joystick_action_string(actions[i]) : kc.get_keyboard_action_string(actions[i]);
 		if (val.length() > 0)
-			output += actions[i] + "=" + val + "\n";
+			output += actions[i] + "=" + val + eol;
 	}
 	file fw;
 	if (!fw.open(path, "wb")) return false;

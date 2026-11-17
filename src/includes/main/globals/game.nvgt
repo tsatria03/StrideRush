@@ -332,7 +332,7 @@ the pause menu and resumes it silently when closed. */
 if (controls.action_triggered("view_bindings"))
 {
 pause_game();
-view_keyboard_bindings();
+view_keyboard_bindings(true); // the joystick's too, while one is connected
 resume_game();
 return;
 }

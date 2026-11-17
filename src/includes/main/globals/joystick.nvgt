@@ -169,6 +169,29 @@ stick_released[d] = was and !now_down and !gap;
 stick_down[d] = now_down;
 }
 }
+// The buttons as the bindings screens say them, by SDL's numbers; any past these is "button 15" and so on.
+const string[] button_names = {"A button", "B button", "X button", "Y button", "back", "guide", "start", "left stick click", "right stick click", "left shoulder", "right shoulder", "d-pad up", "d-pad down", "d-pad left", "d-pad right"};
+string button_name(int b)
+{
+if (b >= 0 and b < int(button_names.length())) return button_names[b];
+return "button " + b;
+}
+// An action's joystick.ini value with names for numbers, such as "d-pad down:down, d-pad up"; empty if none.
+string joystick_names(const string&in value)
+{
+string result = "";
+string[] entries = value.split(",", true);
+for (uint i = 0; i < entries.length(); i++)
+{
+string e = entries[i].trim_whitespace();
+if (e == "") continue;
+int colon = e.find_first(":");
+string num = colon < 0 ? e : e.substr(0, colon);
+string trig = colon < 0 ? "" : e.substr(colon);
+result += (result == "" ? "" : ", ") + button_name(int(parse_double(num))) + trig;
+}
+return result;
+}
 // controls' extra_button: the stick for d-pad buttons 11 to 14. Repeat counts as press, as it does for the pad's buttons.
 bool stick_button(int button, kc_trigger trigger)
 {
