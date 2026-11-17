@@ -1,4 +1,5 @@
 New in 2.4.
+Made it so joystick.ini now names each button, such as DPAD_UP or LEFT_SHOULDER, the way keyboard.ini names its keys, instead of using numbers, and a file that still has the old numbers keeps working.
 Added health format and shield format settings to the game tab, where you can choose whether your health and shield are spoken as a percentage, an amount, or both, in every kind of run.
 Added a section to the readme explaining how to customize the game's sounds, from adding new versions of any sound to making your own environments, and which folders the game finds on its own.
 Made it so a free run's add menus now only list what your current environment has, and anything you add now waits through an environment that doesn't have it instead of being used up.
