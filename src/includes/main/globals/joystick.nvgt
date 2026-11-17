@@ -1,5 +1,5 @@
 /* The joystick: one, handed to controls at startup, its buttons set in data/config/joystick.ini. A run reads it through
-controls like the keys, with the left stick counting as the d-pad. Plugging in and out is noticed once a second, in
+controls like the keys, with the left stick counting as the d-pad; menus get fixed buttons turned into keys. Plugging in and out is noticed once a second, in
 menus and runs, and each change is said once; unplugging it during a run pauses the run. If joystick.ini is missing or
 can't be read, no joystick is opened and the game plays with the keyboard only. */
 const string joystick_ini_path = "data/config/joystick.ini";
@@ -58,10 +58,79 @@ add_buffer_item("misc", "Joystick disconnected.", false);
 pause_menu("Joystick disconnected.");
 return true;
 }
-// Every menu frame, through form.nvgt's form_frame_hook.
+/* The menus' fixed buttons, not rebindable, turned into the keys every menu already knows: the d-pad (and left stick) as
+the arrows, A as Enter, B as Escape, the right shoulder as Tab and the left as Shift+Tab. */
+const int[] menu_buttons = {11, 12, 13, 14, 0, 1, 10, 9};
+const uint[] menu_keys = {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_RETURN, KEY_ESCAPE, KEY_TAB, KEY_TAB};
+uint64 joy_menu_last = 0;
+uint64[] menu_repeat_at(4, 0); // when each held direction taps again; 0 while not held
+int menu_shift_frames = 0; // frames left before the left shoulder's Shift is let go
+/* Every menu frame, through form.nvgt's form_frame_hook (dlg() and dlgplay() call it too). Each button is a key tap; a
+held d-pad or stick taps again after joystick_repeat_delay, then every joystick_repeat_interval. A frame long after the
+last menu frame means a run or a wait came between, so waiting presses are dropped. */
 void joystick_menu_frame()
 {
+if (@joy == null) return;
+uint64 now = ticks();
+if (now == joy_menu_last) return; // a subform's monitor() in the same frame
+bool gap = now - joy_menu_last > uint64(joystick_gap_time);
+joy_menu_last = now;
+if (menu_shift_frames > 0)
+{
+menu_shift_frames--;
+if (menu_shift_frames == 0) reset_forced_key(KEY_LSHIFT);
+}
 joystick_check(false);
+int[]@ pressed = joy.buttons_pressed();
+joy.buttons_released();
+update_stick(gap);
+if (gap)
+{
+for (uint d = 0; d < 4; d++) menu_repeat_at[d] = 0;
+return;
+}
+bool[] tapped(4, false);
+for (uint i = 0; i < pressed.length(); i++)
+{
+if (pressed[i] == 3 and dlg_open) menu_tap(KEY_C); // Y copies a dlg() message (dlg.nvgt), and nothing in other menus
+int slot = menu_buttons.find(pressed[i]);
+if (slot < 0) continue;
+if (slot < 4)
+{
+tapped[slot] = true;
+continue;
+}
+/* Shift is held through the next frame too, since the Tab is only read once it arrives there. */
+if (pressed[i] == 9)
+{
+force_key_down(KEY_LSHIFT);
+menu_shift_frames = 2;
+}
+menu_tap(menu_keys[slot]);
+}
+for (uint d = 0; d < 4; d++)
+{
+if (stick_pressed[d]) tapped[d] = true;
+bool held = joy.button_down(11 + d) or stick_down[d];
+if (tapped[d])
+{
+menu_tap(menu_keys[d]);
+menu_repeat_at[d] = now + uint64(joystick_repeat_delay);
+}
+else if (!held) menu_repeat_at[d] = 0;
+else if (menu_repeat_at[d] > 0 and now >= menu_repeat_at[d])
+{
+menu_tap(menu_keys[d]);
+menu_repeat_at[d] = now + uint64(joystick_repeat_interval);
+}
+}
+}
+/* One key press for the menus. Its held flag is cleared straight away, so the menu sees a press but never a key left
+down: loops that wait for Enter to lift would otherwise wait for a key-up nothing sends. */
+void menu_tap(uint key)
+{
+simulate_key_down(key);
+reset_forced_key(key);
 }
 /* Every run frame, before any input is read: the stick's presses for this frame. A frame long after the last one means a
 menu was open, so the pad's waiting presses are dropped and the stick only counts again once moved. */
@@ -71,11 +140,21 @@ if (@joy == null) return;
 uint64 now = ticks();
 bool gap = now - joy_last_frame > uint64(joystick_gap_time);
 joy_last_frame = now;
+if (menu_shift_frames > 0)
+{
+menu_shift_frames = 0;
+reset_forced_key(KEY_LSHIFT); // a menu closed on Shift+Tab, so nothing in the run sees Shift held
+}
 if (gap)
 {
 joy.buttons_pressed();
 joy.buttons_released();
 }
+update_stick(gap);
+}
+// The left stick's held, pressed and released states for this frame; with gap, nothing is pressed or released.
+void update_stick(bool gap)
+{
 int dx = int(joy.x) - 32768;
 int dy = int(joy.y) - 32768;
 for (int d = 0; d < 4; d++)

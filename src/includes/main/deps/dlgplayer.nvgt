@@ -6,6 +6,7 @@ dlgaudio.play();
 while(dlgaudio.playing)
 {
 wait(5);
+if (@form_frame_hook != null) form_frame_hook(); // the game's per-frame checks, as every form gets them (form.nvgt)
 if(key_repeating(KEY_RETURN) and skippable==true)
 {
 if (fadeable==true)

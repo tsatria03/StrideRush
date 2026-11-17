@@ -1,13 +1,21 @@
+/* True while a dlg() message is open, so a game's joystick can give it a copy button (C) that it gives no other menu,
+where C would jump to items starting with c. */
+bool dlg_open = false;
 bool dlg(string message, bool dlgcoppy=true, bool dlgsound=false, int timeout=-1)
 {
 timer timeouter;
 if(dlgsound==true) temp.play_stationary(get_pack_sound("ui/dialog/*error*"),false);
 speak(message);
+dlg_open = dlgcoppy;
 while(true)
 {
 wait(5);
+if (@form_frame_hook != null) form_frame_hook(); // the game's per-frame checks, as every form gets them (form.nvgt)
 if (timeout>-1 and timeouter.elapsed>=timeout)
+{
+dlg_open = false;
 return false;
+}
 if (key_repeating(KEY_C) and dlgcoppy==true)
 {
 temp.destroy_all();
@@ -22,6 +30,7 @@ speak(message);
 if (key_repeating(KEY_ESCAPE))
 {
 temp.destroy_all();
+dlg_open = false;
 return true;
 }
 if(key_repeating(KEY_RETURN))
@@ -30,6 +39,7 @@ temp.destroy_all();
 break;
 }
 }
+dlg_open = false;
 return false;
 }
 void dlgmessage(string messages)
