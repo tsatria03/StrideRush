@@ -188,7 +188,7 @@ string button_name(int b)
 if (b >= 0 and b < int(button_names.length())) return button_names[b];
 return "button " + b;
 }
-// An action's joystick.ini value with names for numbers, such as "d-pad down:down, d-pad up"; empty if none.
+// An action's joystick.ini value in the spoken names, "DPAD_DOWN:down,DPAD_UP" as "d-pad down:down, d-pad up"; empty if none.
 string joystick_names(const string&in value)
 {
 string result = "";
@@ -200,7 +200,7 @@ if (e == "") continue;
 int colon = e.find_first(":");
 string num = colon < 0 ? e : e.substr(0, colon);
 string trig = colon < 0 ? "" : e.substr(colon);
-result += (result == "" ? "" : ", ") + button_name(int(parse_double(num))) + trig;
+result += (result == "" ? "" : ", ") + button_name(kc_button_from_name(num)) + trig; // joystick.ini's name, or an older number (key_config.nvgt)
 }
 return result;
 }

@@ -181,6 +181,26 @@ string kc_code_to_name(uint code) {
 	return get_key_name(code);
 }
 
+// Joystick buttons by name, as joystick.ini writes them like keyboard.ini's key names: SDL's gamepad buttons 0 to 14, then BUTTON_<n>.
+const string[] _kc_button_names = {"A", "B", "X", "Y", "BACK", "GUIDE", "START", "LEFT_STICK", "RIGHT_STICK", "LEFT_SHOULDER", "RIGHT_SHOULDER", "DPAD_UP", "DPAD_DOWN", "DPAD_LEFT", "DPAD_RIGHT"};
+string kc_button_name(int button) {
+	if (button >= 0 && button < int(_kc_button_names.length())) return _kc_button_names[button];
+	return "BUTTON_" + button;
+}
+// The button for a name, in any case, or a plain number as an older joystick.ini has it; -1 if it's neither.
+int kc_button_from_name(const string&in name) {
+	string n = name.upper().trim_whitespace();
+	int i = _kc_button_names.find(n);
+	if (i >= 0) return i;
+	if (n.length() > 7 && n.substr(0, 7) == "BUTTON_") n = n.substr(7);
+	if (n == "") return -1;
+	for (uint c = 0; c < n.length(); c++) {
+		string ch = n.substr(c, 1);
+		if (ch < "0" || ch > "9") return -1;
+	}
+	return int(parse_double(n));
+}
+
 enum kc_trigger { KC_PRESS, KC_DOWN, KC_RELEASE, KC_REPEAT, KC_UP }
 
 class kc_combo {
@@ -360,7 +380,7 @@ class key_config {
 		jb.get(action, @list);
 		return int(list.length());
 	}
-	/* One action's joystick bindings as joystick.ini writes them, such as "12:down,11": a press has no ":press". Empty
+	/* One action's joystick bindings as joystick.ini writes them, such as "DPAD_DOWN:down,DPAD_UP": a press has no ":press". Empty
 	string if none. */
 	string get_joystick_action_string(const string&in action) {
 		if (!jb.exists(action)) return "";
@@ -368,7 +388,7 @@ class key_config {
 		jb.get(action, @list);
 		string result = "";
 		for (uint i = 0; i < list.length(); i++) {
-			string one = "" + list[i].button;
+			string one = kc_button_name(list[i].button);
 			if (list[i].trigger != KC_PRESS) one += ":" + trigger_name(list[i].trigger);
 			result += (result == "" ? "" : ",") + one;
 		}
@@ -416,8 +436,8 @@ class key_config {
 	//   dash=LSHIFT+A:press,RSHIFT+A:press
 	//
 	//   [joystick]
-	//   jump=0:press
-	//   dash=2:press,3:press
+	//   jump=A:press
+	//   dash=X:press,Y:press
 	bool load(const string&in path) {
 		ini cfg;
 		if (!cfg.load(path)) return false;
@@ -611,7 +631,7 @@ class key_config {
 		}
 		return true;
 	}
-	// One action's joystick value, such as "12:down,11": each button number with an optional trigger, press if none.
+	// One action's joystick value, such as "DPAD_DOWN:down,DPAD_UP": each button by name (or an older number) with an optional trigger, press if none.
 	private void bind_joystick_string(const string&in a, const string&in value) {
 		string[] entries = value.split(",", true);
 		for (uint j = 0; j < entries.length(); j++) {
@@ -624,7 +644,9 @@ class key_config {
 				t = parse_trigger(e.substr(colon + 1));
 				num = e.substr(0, colon);
 			}
-			bind_joystick_button(a, parse_int(num), t);
+			int b = kc_button_from_name(num);
+			if (b < 0) continue; // an unknown name is skipped, as an unknown key is
+			bind_joystick_button(a, b, t);
 		}
 	}
 	private void save_joystick_to(ini@ cfg) {
