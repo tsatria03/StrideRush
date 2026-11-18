@@ -5,7 +5,8 @@ batch, then a weighted pick among the continuous rules, else nothing. Batches ar
 spacing for your speed; a continuous kind keeps coming, its count its share against the other continuous kinds. "all" is
 a random kind of its group each time. Fake walls, fake doors and vehicles can carry a set health (free_hp_next, read by
 their spawn functions), or 0 for the normal health for your speed; barriers, items, vehicles and trampolines a chosen
-lane (free_lane_next, read through free_placed_lane()). A real door comes as its key, then the door. Clearing
+lane (free_lane_next, read through free_placed_lane()); combinations a chosen pair (free_pair_next, read by
+choose_free_run()), waiting until the environment can make it. A real door comes as its key, then the door. Clearing
 a kind takes its batches and rule, and its things on the belt; clear belt takes everything (free_clear_belt()). */
 class free_entry
 {
@@ -15,6 +16,22 @@ int count; // a batch: how many are left; a continuous rule: its share
 int full = 0; // a batch's count as added, for a replay
 int hp = 0; // a set health for breakable kinds, or 0
 int lane = free_lane_random; // a lane kind's lane: random, your lane, or lane_left to lane_right
+int pair = -1; // combinations: a chosen pair's number (combo_pair_first(), combo.nvgt), or -1 for random pairs
+}
+// The chosen pair of the combinations being placed, or -1 for a random one; set beside free_hp_next.
+int free_pair_next = -1;
+// A pair's spoken name from the obstacle singulars, first part first, such as "force field, fake wall".
+string free_pair_name(int pair)
+{
+string first = free_kind_name(combo_pair_first(pair), "obstacle", 1);
+string second = free_kind_name(combo_pair_second(pair), "obstacle", 1);
+return first + ", " + second;
+}
+// An entry's kind as said in confirmations and view current setup, its pair first when one was chosen.
+string free_entry_name(const string&in type, const string&in group, int pair, int amount = 2)
+{
+string name = free_kind_name(type, group, amount);
+return pair >= 0 ? free_pair_name(pair) + " " + name : name;
 }
 /* The lane an entry's barriers, items, vehicles and trampolines come in (free_lane_kinds): random as usual, your lane
 (the one you're in as each appears), or a set lane. It rides to the spawner in free_lane_next, as the health does. */
@@ -132,8 +149,10 @@ string free_entry_type(free_entry@ e)
 {
 free_hp_next = e.hp;
 free_lane_next = e.lane;
+free_pair_next = e.pair;
 string type = e.type == "all" ? free_pick_all(e.group) : e.type;
 if (type != "" and !free_kind_available(type, e.group)) type = "";
+if (type == "combinations" and e.pair >= 0 and !combo_pair_ready(e.pair)) type = ""; // a chosen pair waits for an environment that can make it
 return type;
 }
 /* From choose_free_run() in spawner.nvgt: what the next spawn is, or "" for nothing yet. A real door comes as its key,
@@ -142,6 +161,7 @@ string free_next_type()
 {
 free_hp_next = 0;
 free_lane_next = free_lane_random;
+free_pair_next = -1;
 if (free_door_next)
 {
 free_door_next = false;
@@ -179,6 +199,7 @@ if (r > 0) continue;
 type = picks[i];
 free_hp_next = free_rules[i].hp;
 free_lane_next = free_rules[i].lane;
+free_pair_next = free_rules[i].pair;
 break;
 }
 }
@@ -187,6 +208,7 @@ if (type == "")
 {
 free_hp_next = 0;
 free_lane_next = free_lane_random;
+free_pair_next = -1;
 }
 if (type == "real_doors")
 {
@@ -330,6 +352,26 @@ bool free_add(const string&in group)
 string what = free_group_name(group);
 string type = free_choose_kind(group);
 if (type == "") return false;
+int pair = -1;
+if (type == "combinations")
+{
+/* Which pair: those this environment can make, each then its reverse, then random combinations, then back. Back
+and escape both cancel, as the add flow's other questions do. */
+setupmenu();
+m.intro_text = "Choose the combination.";
+for (int i = 0; i < combo_pair_count(); i++)
+{
+if (combo_pair_ready(i)) m.add_item(free_pair_name(i), "" + i);
+}
+m.add_item("random combinations", "-1");
+m.add_item("back", "back");
+if (m.run() < 0 or m.selected_item_id == "back")
+{
+speak("canceled");
+return false;
+}
+pair = int(parse_int(m.selected_item_id));
+}
 int count = free_ask_number("Add " + what, "How many?", 1, 1000);
 if (count < 0)
 {
@@ -375,6 +417,7 @@ e.group = group;
 e.count = count;
 e.hp = hp;
 e.lane = lane;
+e.pair = pair;
 string health = hp > 0 ? ", with " + hp + " health each" : "";
 string where = lane == free_lane_random ? "" : "in " + free_lane_text(lane); // a random lane says nothing extra
 if (m.selected_item_id == "yes")
@@ -382,14 +425,14 @@ if (m.selected_item_id == "yes")
 free_rules.insert_last(e);
 string kept_lane = where == "" ? "" : (hp > 0 ? ", " : " ") + where; // "keep coming in your lane", or after the health
 if (type == "all") speak_buffer("Every kind of " + group + " will now keep coming" + health + kept_lane + ".", "misc");
-else speak_buffer(learn_upper_first(free_kind_name(type, group)) + " will now keep coming" + health + kept_lane + ".", "misc");
+else speak_buffer(learn_upper_first(free_entry_name(type, group, pair)) + " will now keep coming" + health + kept_lane + ".", "misc");
 return true;
 }
 e.full = count;
 free_queue.insert_last(e);
 free_entry kept = e; // a copy at its full count, for a replay
 free_batches.insert_last(kept);
-speak_buffer(count + " " + free_kind_name(type, group, count) + " added" + health + (where == "" ? "" : ", " + where) + ".", "misc");
+speak_buffer(count + " " + free_entry_name(type, group, pair, count) + " added" + health + (where == "" ? "" : ", " + where) + ".", "misc");
 return true;
 }
 // A group's kinds coming, queued or continuous, each once, in the kind list's order.
@@ -453,7 +496,7 @@ int[] counts;
 for (uint i = 0; i < free_queue.length(); i++)
 {
 free_entry@ e = free_queue[i];
-string key = e.type + "|" + e.group + "|" + e.hp + "|" + e.lane;
+string key = e.type + "|" + e.group + "|" + e.hp + "|" + e.lane + "|" + e.pair;
 int at = keys.find(key);
 if (at < 0)
 {
@@ -467,7 +510,8 @@ for (uint i = 0; i < keys.length(); i++)
 string[]@ part = keys[i].split("|");
 int hp = int(parse_int(part[2]));
 int lane = int(parse_int(part[3]));
-lines.insert_last(stat_line("coming", counts[i] + " " + free_kind_name(part[0], part[1], counts[i]) + (hp > 0 ? ", " + hp + " health each" : "") + free_lane_line(lane)));
+int pair = int(parse_int(part[4]));
+lines.insert_last(stat_line("coming", counts[i] + " " + free_entry_name(part[0], part[1], pair, counts[i]) + (hp > 0 ? ", " + hp + " health each" : "") + free_lane_line(lane)));
 }
 int total = 0;
 for (uint i = 0; i < free_rules.length(); i++) total += free_rules[i].count;
@@ -475,7 +519,7 @@ for (uint i = 0; i < free_rules.length(); i++)
 {
 free_entry@ e = free_rules[i];
 int percent = int(round(100.0 * e.count / total, 0));
-string name = e.type == "all" ? "every kind of " + e.group : free_kind_name(e.type, e.group);
+string name = e.type == "all" ? "every kind of " + e.group : free_entry_name(e.type, e.group, e.pair);
 lines.insert_last(stat_line("continuous", name + ", " + percent + " percent of the mix" + (e.hp > 0 ? ", " + e.hp + " health each" : "") + free_lane_line(e.lane)));
 }
 if (free_queue.length() == 0 and free_rules.length() == 0) lines.insert_last(stat_line("coming", "nothing"));

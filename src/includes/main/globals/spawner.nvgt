@@ -50,7 +50,13 @@ next_countdown = next_type == "" ? 0 : countdown_steps();
 string choose_free_run()
 {
 string type = free_next_type();
-if (type == "combinations" and !choose_combo()) type = "";
+if (type == "combinations" and free_pair_next >= 0)
+{
+// a chosen pair, which free_next_type() only lets come once this environment can make it
+next_combo_first = combo_pair_first(free_pair_next);
+next_combo_second = combo_pair_second(free_pair_next);
+}
+else if (type == "combinations" and !choose_combo()) type = "";
 return type;
 }
 /* Practice's own choices (doors, mixed obstacles, trampolines), otherwise one obstacle type from available_obstacles():

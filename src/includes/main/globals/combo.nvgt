@@ -68,6 +68,25 @@ bool combo_part_ready(const string&in type)
 {
 return has_joined(type) and get_pack_sound_folders(type_folder(type) + "*").length() > 0;
 }
+/* The 18 pairs by number, for a free run's chosen pair (freebelt.nvgt): each pair of combo_firsts and combo_seconds,
+then its reverse, so 0 is the first pair, 1 that pair reversed, 2 the second pair, and so on. */
+int combo_pair_count()
+{
+return int(combo_firsts.length()) * 2;
+}
+string combo_pair_first(int pair)
+{
+return pair % 2 == 0 ? combo_firsts[pair / 2] : combo_seconds[pair / 2];
+}
+string combo_pair_second(int pair)
+{
+return pair % 2 == 0 ? combo_seconds[pair / 2] : combo_firsts[pair / 2];
+}
+// Can the current environment make this pair right now?
+bool combo_pair_ready(int pair)
+{
+return combo_part_ready(combo_pair_first(pair)) and combo_part_ready(combo_pair_second(pair));
+}
 /* Picks a pair the run can have now into next_combo_first and next_combo_second, from the first-order pairs, the reversed
 ones, or both (a normal run). False when none is ready. */
 bool choose_combo()

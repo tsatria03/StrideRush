@@ -1,6 +1,6 @@
 ---
 name: project_free_run_combinations_plan
-description: SETTLED (2026-11-18), not built: choosing which combination pair comes in a free run, from any pair in either order, instead of a random one; last of the todo list's free run items for 2.5; Q&A log
+description: BUILDING (2026-11-18), section 1 built and tested, docks next: choosing which combination pair comes in a free run, from any pair in either order, instead of a random one; last of the todo list's free run items for 2.5; Q&A log
 metadata:
   type: project
 ---
@@ -29,4 +29,10 @@ Started 2026-11-18 (dev: "Ready for the final item on the todo list."), on 41b7e
 2. Docks: the entry on top of 2.5 (9 of 10): "Added a combination choice when adding combinations in a free run, so they can bring one pair you pick, in the order you pick, or random pairs as before."; the readme's free run add line; the todo item to finished, emptying the unfinished list; the version history and CLAUDE.md.
 
 ## Build log
-- Not started.
+- Section 1 BUILT (2026-11-18, on f33b862), awaiting tests: combo.nvgt's combo_pair_count(), combo_pair_first(), combo_pair_second() and combo_pair_ready() (pair 2n is combo_firsts[n] then combo_seconds[n], 2n+1 its reverse); freebelt.nvgt's free_entry.pair (-1 random), free_pair_next (set beside free_lane_next, -1 for none), free_pair_name() ("force field then fake wall", from the obstacle singulars), free_entry_name() for confirmations and view current setup (the setup key gains the pair); free_add() asks "Choose the combination." right after combinations, opening on the first pair; free_entry_type() holds back a chosen pair the environment can't make; spawner.nvgt's choose_free_run() sets next_combo_first and next_combo_second from a chosen pair instead of choose_combo().
+- The dev (2026-11-18, before testing): the pair names should read "projectile/spike" and "spike/projectile", or "projectile, spike", instead of "projectile then spike", open to other formats. Q5 (Claude): which, and the same everywhere a pair is named (menu, confirmations, view current setup). Recommended: the comma, since screen readers say "/" aloud as "slash" at most punctuation levels while a comma is a short pause; confirmations then read "3 projectile, spike combinations added." and "Projectile, spike combinations will now keep coming."
+- A5 (dev, 2026-11-18): "Do the comma formatting". free_pair_name() now gives "projectile, spike"; the menu, confirmations ("3 projectile, spike combinations added.") and view current setup follow. The plan's settled wording ("force field then fake wall") is superseded by this.
+- Section 1 tests: Test 1 of 4 (the combination menu: pairs each then its reverse, comma names, random combinations and back last, escape "canceled") PASSED.
+- Test 2 of 4 (3 force field, fake wall combinations as a batch, all in that order) PASSED.
+- Test 3 of 4 (continuous fake wall, force field combinations in the reverse order; view current setup's continuous line naming the pair) PASSED.
+- Test 4 of 4 (projectile, spike pairs waiting in uncharted, coming back in default; replay bringing them again in order) PASSED. Section 1 TESTED: all 4 passed.
