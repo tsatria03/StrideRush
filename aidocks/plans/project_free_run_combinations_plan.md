@@ -1,6 +1,6 @@
 ---
 name: project_free_run_combinations_plan
-description: BUILDING (2026-11-18), section 1 built and tested, docks next: choosing which combination pair comes in a free run, from any pair in either order, instead of a random one; last of the todo list's free run items for 2.5; Q&A log
+description: COMPLETE (2026-11-18, 2.5 at 9 of 10): choosing which combination pair comes in a free run, from any pair in either order, instead of a random one; last of the todo list's free run items for 2.5; Q&A log
 metadata:
   type: project
 ---
@@ -36,3 +36,4 @@ Started 2026-11-18 (dev: "Ready for the final item on the todo list."), on 41b7e
 - Test 2 of 4 (3 force field, fake wall combinations as a batch, all in that order) PASSED.
 - Test 3 of 4 (continuous fake wall, force field combinations in the reverse order; view current setup's continuous line naming the pair) PASSED.
 - Test 4 of 4 (projectile, spike pairs waiting in uncharted, coming back in default; replay bringing them again in order) PASSED. Section 1 TESTED: all 4 passed.
+- Section 2 DONE (2026-11-18, on 0d54758): the entry on top of 2.5 (9 of 10), a readme paragraph after the lanes one (the combination question, comma names, reverse order, random combinations, waiting for an environment), the todo item to finished with the unfinished section's "Nothing is waiting here right now." line restored (dev's request), the version history and CLAUDE.md. PLAN COMPLETE.

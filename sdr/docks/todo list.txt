@@ -1,9 +1,10 @@
 ####These are the things that need to be finished for future versions of the game.
 
-****Unfinished. Add a way to choose which combination comes in a free run, from any of the pairs in either order, instead of a random one.
+Nothing is waiting here right now. New bugs, planned changes and anything still to be decided will be listed here as they come up.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add a way to choose which combination comes in a free run, from any of the pairs in either order, instead of a random one.
 **Finished. Add a way to give yourself any powerup from a free run's console, starting it straight away, so you can try each one without waiting for it to turn up.
 **Finished. Add a way to choose the lane for barriers, items, vehicles and lane trampolines in a free run, such as your own lane or a set lane, instead of a random one.
 **Finished. Add a spacing choice to a free run, so obstacles and items can come closer together or further apart than the usual gap for your speed.
