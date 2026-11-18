@@ -139,7 +139,7 @@ const int timed_unlock_runs = 3;
 const int[] timed_warn_seconds = {45, 30, 15, 10, 5};
 const int timed_warn_rearm_seconds = 10; // a warning plays again only after the clock climbs this far above it
 // The clean passes that feed the clock: every obstacle got past the right way (combinations_cleared left out, since each part counts).
-const string[] timed_pass_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "barriers_dodged", "winds_dodged", "walls_broken", "real_walls_climbed", "fake_doors_broken", "real_doors_opened", "floor_breakers_repaired", "vehicles_destroyed", "vehicles_dodged"};
+const string[] timed_pass_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "insects_killed", "barriers_dodged", "winds_dodged", "walls_broken", "real_walls_climbed", "fake_doors_broken", "real_doors_opened", "floor_breakers_repaired", "vehicles_destroyed", "vehicles_dodged"};
 
 // Each spike swings on its own rhythm: a random swing time between these, picked when it appears.
 const int spike_swing_min = 500;

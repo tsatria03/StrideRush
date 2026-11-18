@@ -34,6 +34,7 @@ void spawn_insect(double mx, string kind, int countdown)
 {
 string[] kind_insects = get_pack_sound_folders(insect_folder(current_env) + kind + "/*");
 if (kind_insects.length() == 0) return; // no insects of that kind
+practice_hint("insects", -1, mx, animal_singular(kind)); // "bees" says "A bee has appeared." (practice_hints.nvgt)
 insect ins;
 ins.meet_x = mx;
 ins.theme = kind + "/" + kind_insects[random(0, kind_insects.length() - 1)];

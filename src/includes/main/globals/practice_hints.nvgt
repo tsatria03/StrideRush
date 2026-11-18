@@ -57,6 +57,7 @@ else if (last_caught == "mines") how = "A mine went off under you. Jump as its l
 else if (last_caught == "projectiles") how = "A projectile hit you. Crouch before it reaches you, and stay down until it passes.";
 else if (last_caught == "force_fields") how = "A force field hit you. Press either hand during its countdown to switch it off.";
 else if (last_caught == "animals") how = "A " + (last_caught_kind == "" ? "bird" : last_caught_kind) + " hit you. Clap with both hands to scare it away.";
+else if (last_caught == "insects") how = "A " + (last_caught_kind == "" ? "bee" : last_caught_kind) + " stung you. Crouch as it reaches you, then hit it with your weapons before it dives.";
 else if (last_caught == "walls") how = "You crashed into a fake wall. Break it with your weapons before you reach it.";
 else if (last_caught == "real_walls") how = "You crashed into a real wall. Grab its ladder with a hand as you reach it, then climb it hand over hand.";
 else if (last_caught == "ladder_collapse") how = "The ladder collapsed on you. Grab it with a hand as you reach it, then use the other hand on every rung without stopping.";
@@ -98,6 +99,7 @@ if (kind == "mines") return "A mine has appeared. Jump as its last countdown cue
 if (kind == "projectiles") return "A projectile has appeared. Crouch before it reaches you, and stay down until it passes.";
 if (kind == "force_fields") return "A force field has appeared. Press either hand during its countdown to switch it off.";
 if (kind == "animals") return "A " + animal + " has appeared. Clap with both hands to scare it away.";
+if (kind == "insects") return "A " + animal + " has appeared. Crouch as it reaches you, then hit it with your weapons before it dives.";
 if (kind == "walls") return "A fake wall has appeared. Break it with your weapons before you reach it.";
 if (kind == "ladders") return "A real wall has appeared. Grab its ladder with a hand as you reach it, then climb it hand over hand.";
 if (kind == "fake_doors") return "A fake door has appeared. It won't open, so break it with your weapons.";

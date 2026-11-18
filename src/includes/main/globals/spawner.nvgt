@@ -251,7 +251,7 @@ bool practice_mix_door_next = false; // mixed obstacles: the key was just placed
 // The kinds mixed obstacles picks from, each once, those the current environment has sounds for (16 at most, with floor breakers and vehicles).
 string[] practice_mix_kinds()
 {
-string[] plain = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "walls", "fake_doors", "barriers", "winds", "trampolines", "floor_breakers", "vehicles"};
+string[] plain = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "insects", "walls", "fake_doors", "barriers", "winds", "trampolines", "floor_breakers", "vehicles"};
 string[] kinds;
 for (uint i = 0; i < plain.length(); i++)
 {

@@ -21,9 +21,9 @@ bool free_door_next = false; // a real door's key was just placed, so the door c
 int free_door_hp = 0;
 int free_hp_next = 0; // the next placed breakable obstacle's set health, or 0
 // Each group's kinds, alphabetical by their spoken names, with their singulars.
-const string[] free_obstacle_ids = {"animals", "barriers", "combinations", "fake_doors", "walls", "floor_breakers", "force_fields", "hazards", "mines", "projectiles", "real_doors", "ladders", "spikes", "trampolines", "vehicles", "winds"};
-const string[] free_obstacle_names = {"animals", "barriers", "combinations", "fake doors", "fake walls", "floor breakers", "force fields", "hazards", "mines", "projectiles", "real doors", "real walls", "spikes", "trampolines", "vehicles", "winds"};
-const string[] free_obstacle_singulars = {"animal", "barrier", "combination", "fake door", "fake wall", "floor breaker", "force field", "hazard", "mine", "projectile", "real door", "real wall", "spike", "trampoline", "vehicle", "wind"};
+const string[] free_obstacle_ids = {"animals", "barriers", "combinations", "fake_doors", "walls", "floor_breakers", "force_fields", "hazards", "insects", "mines", "projectiles", "real_doors", "ladders", "spikes", "trampolines", "vehicles", "winds"};
+const string[] free_obstacle_names = {"animals", "barriers", "combinations", "fake doors", "fake walls", "floor breakers", "force fields", "hazards", "insects", "mines", "projectiles", "real doors", "real walls", "spikes", "trampolines", "vehicles", "winds"};
+const string[] free_obstacle_singulars = {"animal", "barrier", "combination", "fake door", "fake wall", "floor breaker", "force field", "hazard", "insect", "mine", "projectile", "real door", "real wall", "spike", "trampoline", "vehicle", "wind"};
 const string[] free_item_ids = {"ammo_packs", "health_potions", "keys", "life_capsules", "player_teleporters", "steel_shields"};
 const string[] free_item_names = {"ammo packs", "health potions", "keys", "life capsules", "player teleporters", "steel shields"};
 const string[] free_item_singulars = {"ammo pack", "health potion", "key", "life capsule", "player teleporter", "steel shield"};
@@ -60,7 +60,7 @@ return group + "s";
 }
 bool free_breakable(const string&in type)
 {
-return type == "walls" or type == "fake_doors" or type == "vehicles";
+return type == "walls" or type == "fake_doors" or type == "vehicles" or type == "insects";
 }
 string free_kind_name(const string&in type, const string&in group, int amount = 2)
 {
@@ -193,6 +193,7 @@ else if (type == "mines") destroy_all_mines();
 else if (type == "projectiles") destroy_all_projectiles();
 else if (type == "force_fields") destroy_all_forcefields();
 else if (type == "animals") destroy_all_animals();
+else if (type == "insects") destroy_all_insects();
 else if (type == "walls") destroy_all_walls();
 else if (type == "ladders") destroy_all_ladders();
 else if (type == "fake_doors" or type == "real_doors") destroy_all_doors(); // one list holds both kinds of door
