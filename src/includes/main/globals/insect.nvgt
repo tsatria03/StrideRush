@@ -19,6 +19,7 @@ class insect
 double meet_x;
 string theme; // kind/insect, such as "bees/bee2"
 string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
+int pair = 0; // the combination it belongs to, or 0 (combo.nvgt)
 double countdown_start;
 int hp;
 bool hovering = false; // reached you while you were crouched
@@ -39,6 +40,7 @@ insect ins;
 ins.meet_x = mx;
 ins.theme = kind + "/" + kind_insects[random(0, kind_insects.length() - 1)];
 ins.env = current_env;
+ins.pair = placing_pair;
 ins.countdown_start = mx - countdown;
 ins.hp = free_obstacle_hp(wall_spawn_hp(insect_min_hp, insect_max_hp)); // or a free run's set health (freebelt.nvgt)
 ins.loopslot = insectpool.play_2d(get_pack_sound(insect_folder(ins.env) + ins.theme + "/*loop*"), 0, me.x, 0, insect_x(ins), true);
@@ -125,6 +127,7 @@ ins.spent = true;
 string hit_clip = get_pack_sound(insect_folder(ins.env) + ins.theme + "/*hit*");
 stop_insect(ins);
 stat_caught("insects"); // the statistics: what caught you, and what ended the run if it's fatal
+pair_part_hit(ins.pair);
 last_caught_kind = animal_singular(ins.theme.substr(0, ins.theme.find_first("/"))); // "bees/bee2" is a bee (practice_hints.nvgt)
 int blow = take_damage(insect_damage); // a worn shield, else your health
 if (blow == blow_fatal)
@@ -191,6 +194,7 @@ if (ins.hp <= 0)
 {
 ins.spent = true;
 stat_add("insects_killed");
+pair_part_cleared(ins.pair);
 stop_insect(ins);
 insectpool.play_2d(get_pack_sound(insect_folder(ins.env) + ins.theme + "/*death*"), 0, me.x, 0, ix, false);
 }

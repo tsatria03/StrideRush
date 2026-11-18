@@ -59,8 +59,8 @@ const int barrier_weight = 2;
 reversed (combo.nvgt), and the gap after a pair's first part by its action, in ms: a jump, a crouch, a quick action (a
 lane switch, firing or one hand), and the wider gap between a force field and an animal either way. */
 const int[] difficulty_combo_percents = {5, 10, 15, 20, 25};
-const string[] combo_firsts = {"projectiles", "force_fields", "force_fields", "mines", "barriers", "walls", "animals", "fake_doors"};
-const string[] combo_seconds = {"spikes", "walls", "animals", "barriers", "projectiles", "barriers", "hazards", "mines"};
+const string[] combo_firsts = {"projectiles", "force_fields", "force_fields", "mines", "barriers", "walls", "animals", "fake_doors", "projectiles"};
+const string[] combo_seconds = {"spikes", "walls", "animals", "barriers", "projectiles", "barriers", "hazards", "mines", "insects"};
 const int combo_gap_jump = 1200;
 const int combo_gap_crouch = 600;
 const int combo_gap_quick = 500;

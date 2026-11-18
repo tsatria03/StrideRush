@@ -103,7 +103,7 @@ int combo_gap_ms(const string&in first, const string&in second)
 {
 if ((first == "force_fields" and second == "animals") or (first == "animals" and second == "force_fields")) return combo_gap_hands;
 if (first == "hazards" or first == "spikes" or first == "mines") return combo_gap_jump;
-if (first == "projectiles") return combo_gap_crouch;
+if (first == "projectiles" or first == "insects") return combo_gap_crouch; // an insect keeps you crouched too (insect.nvgt)
 return combo_gap_quick; // barriers, walls, fake doors, force fields, animals
 }
 // That gap in tiles at the current speed, rounded up, never under 1.
