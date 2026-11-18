@@ -1,6 +1,6 @@
 ---
 name: project_npc_folder_plan
-description: SETTLED (2026-11-17), not built: repoint animals (and later insects) to each environment's new traps/npc/<kind> folder after the dev's sound reorg; learn sounds lists npc's kinds; groundwork for 2.5's insects; Q&A log
+description: COMPLETE (2026-11-17, no changelog entry): repoint animals (and later insects) to each environment's new traps/npc/<kind> folder after the dev's sound reorg; learn sounds lists npc's kinds; groundwork for 2.5's insects; Q&A log
 metadata:
   type: project
 ---
@@ -23,4 +23,7 @@ Started 2026-11-17 (dev: "Please rescan the sounds. I did a reorg of it.", then 
 2. Docks: the readme's customizing and learn sounds sections; no changelog entry (unreleased reorg, same play); the version history and CLAUDE.md.
 
 ## Build log
-- Not started.
+- Section 1 BUILT (2026-11-17, on fbb796f, which holds the dev's reorg): environments.nvgt's npc_types {"animals"} and type_path() sending them to traps/npc/<kind>/, so trap_folder(), env_has_type(), animal_folder(), play_countdown() and learn_countdown() all follow (only learn sounds built traps paths by hand). learn_sounds_menu.nvgt: "npc" taken out of the traps list; npcs, the npc_types this place has themes for, join the countdowns and get an npc category beside traps (learn_folder_category() on each kind's general, animals still split into birds and dogs); the insects folder isn't listed, since insects aren't in npc_types yet; its header comment and animal.nvgt's updated. Braces balanced, CRLF checked by bytes. Tests pending.
+- Changed (dev, 2026-11-17: "I see npc in the learn sounds menu, but they are not in the traps category"; Claude proposed mirroring the folders; "yes"): the npc category now sits inside traps, as one entry among the trap types (traps, npc, animals, birds and dogs), instead of beside traps; countdowns unchanged. This revises A1's "beside traps and transitions".
+- All 3 tests PASSED (dev, 2026-11-17): learn sounds' traps holds npc, then animals, birds and dogs, the animals countdown still listed, nothing for insects; a practice run on animals in default, spawning and scared off by a clap; free run's add obstacles lists animals again and brings them. SECTION 1 COMPLETE; section 2 (docks) is next.
+- Section 2 WRITTEN (2026-11-17, before the dev committed section 1, at the dev's request: "Please update the docks before I commit"): readme.txt's learn sounds line (traps with a list per kind of obstacle, and npc holding animals split into birds and dogs) and customizing section (creatures such as animals in traps/npc/animals, working the same way; traps/npc/robots added to the ignored-folder example); no changelog entry. project_sound_layout's NPC FOLDER note; the version history's "After V2.40" section; CLAUDE.md's entity pattern line names traps/npc and npc_types. Edit tool and byte-level Python only, CRLF checked by bytes, longest readme line 978. THE PLAN IS COMPLETE.

@@ -22,12 +22,16 @@ string type_category(const string&in type)
 if (type == "doors" or type == "ladders" or type == "trampolines" or type == "slides" or type == "switches") return "transitions";
 return "traps";
 }
+/* The npc kinds the game has, each kept in an environment's traps/npc/<kind>/. Only these: a folder there the game
+doesn't know is ignored, as any unknown type is. */
+const string[] npc_types = {"animals"};
 /* A type's folder under an environment's root (the root as env_root() gives it): "traps/hazards/", "transitions/doors/",
-or for vehicles, a category of their own beside traps and transitions, just "vehicles/".
-Its themes are in general/ below it, its warning cues in countdown/. */
+for an npc kind "traps/npc/animals/", or for vehicles, a category of their own beside traps and transitions, just
+"vehicles/". Its themes are in general/ below it, its warning cues in countdown/. */
 string type_path(const string&in root, const string&in type)
 {
 if (type == "vehicles") return root + "vehicles/";
+if (npc_types.find(type) >= 0) return root + "traps/npc/" + type + "/";
 return root + type_category(type) + "/" + type + "/";
 }
 // Where one environment keeps a type's themes: "environments/default/traps/hazards/general/", or ".../transitions/doors/general/".

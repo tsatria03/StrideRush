@@ -9,6 +9,9 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
+## After V2.40, before 2.5 opens (no changelog entries)
+- NPC folder ([[project_npc_folder_plan]], 2026-11-17): the dev moved animals to traps/npc/animals and began traps/npc/insects (fbb796f); environments.nvgt's npc_types and type_path() follow, learn sounds shows npc inside traps, the readme's learn sounds and customizing sections say so. Unreleased and the game plays the same, so no entry.
+
 ## 2.4: tagged V2.40 at 1c0f79b (10 of 10; 2026-11-17). The next player-facing change opens "New in 2.5." and bumps build/version.txt to 2.5.
 - Joystick ini names ([[project_joystick_ini_names_plan]], one entry on top): key_config.nvgt's _kc_button_names, kc_button_name() and kc_button_from_name() (a name in any case, BUTTON_<n>, or an older plain number); joystick.ini read and written by name (jump=DPAD_UP); joystick.nvgt's joystick_names() reads through the same lookup; the shipped joystick.ini rewritten; the readme's number list became the name list.
 - Readout formats ([[project_readout_formats_plan]], one entry on top): dec.nvgt's health_format and shield_format (0 percentage, 1 amount, 2 both), saved with the settings; the Game tab's "Health format," and "Shield format," lists after the sliders; lives.nvgt's format_readout(), used by H, M, the session statuses and the potion in every kind of run, replacing free runs' always-both wording.

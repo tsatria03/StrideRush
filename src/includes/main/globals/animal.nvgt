@@ -1,4 +1,4 @@
-/* Animals: a belt-wide trap that only a clap clears. Each theme folder in environments/<env>/traps/animals/general is a
+/* Animals: a belt-wide trap that only a clap clears. Each theme folder in environments/<env>/traps/npc/animals/general is a
 kind (birds, dogs), and each folder inside a kind is one animal. An animal plays its spawn clip at its tile, then its
 loop (every theme has its own call), with the layered animals countdown. Clapping (both hands together, with nothing
 else for the hands to do) inside its hand window, the same window as a force field's switch, scares the nearest animal

@@ -3,8 +3,9 @@ Everything is built from the sound folders each time it opens, so a new obstacle
 dropped into sdr/sounds shows up with no code change:
 - items: common (equipments/items/common) and other (equipments/items/other, the keys)
 - environments: one category per folder in environments/, named by it, each with
-  - countdowns: one countdown per type that has cues, from traps, transitions and vehicles (<type>/countdown)
-  - traps, transitions and vehicles: one list per type (<type>/general, every theme's sounds)
+  - countdowns: one countdown per type that has cues, from traps, npc, transitions and vehicles (<type>/countdown)
+  - traps, transitions and vehicles: one list per type (<type>/general, every theme's sounds); traps also holds npc,
+    the kinds in traps/npc that the game knows (environments.nvgt's npc_types), animals
 - weapons: artillery and melee (equipments/weapons/<kind>)
 Every menu and list is alphabetical, and every category says how many sounds it holds (learn_count_text()). Escape or
 back steps up a level silently, out to the game menu too (they're all nested menus).
@@ -211,8 +212,16 @@ string env_root = "environments/" + env + "/";
 learn_category@ place = learn_category(env.replace("_", " ", true)); // just its name, such as "default", not "default environment"
 learn_category cues("countdowns");
 string[] types = get_pack_sound_folders(env_root + "traps/*");
+int npc_at = types.find("npc");
+if (npc_at >= 0) types.remove_at(npc_at); // the npc folder isn't a trap; its kinds get their own category below
+string[] npcs; // the npc kinds the game has (environments.nvgt) that this place has
+for (uint i = 0; i < npc_types.length(); i++)
+{
+if (get_pack_sound_folders(type_path(env_root, npc_types[i]) + "general/*").length() > 0) npcs.insert_last(npc_types[i]);
+}
 string[] moves = get_pack_sound_folders(env_root + "transitions/*"); // doors, ladders, slides, switches, trampolines
 string[] all_types = types;
+for (uint i = 0; i < npcs.length(); i++) all_types.insert_last(npcs[i]);
 for (uint i = 0; i < moves.length(); i++) all_types.insert_last(moves[i]);
 all_types.insert_last("vehicles"); // its own category, beside traps and transitions
 for (uint i = 0; i < all_types.length(); i++)
@@ -225,6 +234,11 @@ learn_sort_sounds(cues.sounds);
 place.subs.insert_last(cues);
 learn_category obstacles("traps");
 for (uint i = 0; i < types.length(); i++) obstacles.subs.insert_last(learn_folder_category(learn_type_name(types[i]), env_root + "traps/" + types[i] + "/general", ""));
+// npc inside traps, as its folder is (traps/npc): the npc kinds, animals split into birds and dogs.
+learn_category npc("npc");
+for (uint i = 0; i < npcs.length(); i++) npc.subs.insert_last(learn_folder_category(learn_type_name(npcs[i]), type_path(env_root, npcs[i]) + "general", ""));
+learn_sort_categories(npc.subs);
+if (npc.subs.length() > 0) obstacles.subs.insert_last(npc);
 learn_sort_categories(obstacles.subs);
 place.subs.insert_last(obstacles);
 learn_category transitions("transitions"); // sorts before traps
