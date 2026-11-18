@@ -1,6 +1,6 @@
 ---
 name: project_free_run_spacing_plan
-description: BUILDING (2026-11-18), section 1 built and tested, docks next: a free run spacing choice, so obstacles and items come closer together or further apart than the usual gap; first of the todo list's four free run items for 2.5; Q&A log
+description: COMPLETE (2026-11-18, 2.5 at 6 of 10): a free run spacing choice, so obstacles and items come closer together or further apart than the usual gap; first of the todo list's four free run items for 2.5; Q&A log
 metadata:
   type: project
 ---
