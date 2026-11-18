@@ -9,7 +9,10 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## After V2.40, before 2.5 opens (no changelog entries)
+## 2.5: open, 1 of 10 (2026-11-17); build/version.txt is 2.5.
+- Learn sounds' empty environments (a side fix during [[project_insects_plan]], one entry, committed on its own as 77bfc54 at the dev's request: "add a change log entry, then try to split the commit"): learn_sounds_menu.nvgt leaves out an environment with no sounds to play (uncharted, floors and music only), and empty countdowns and traps categories. A released bug since V2.40, so a "Fixed a bug where" entry, which opened 2.5.
+
+## After V2.40, before 2.5 opened (no changelog entries)
 - NPC folder ([[project_npc_folder_plan]], 2026-11-17): the dev moved animals to traps/npc/animals and began traps/npc/insects (fbb796f); environments.nvgt's npc_types and type_path() follow, learn sounds shows npc inside traps, the readme's learn sounds and customizing sections say so. Unreleased and the game plays the same, so no entry.
 
 ## 2.4: tagged V2.40 at 1c0f79b (10 of 10; 2026-11-17). The next player-facing change opens "New in 2.5." and bumps build/version.txt to 2.5.

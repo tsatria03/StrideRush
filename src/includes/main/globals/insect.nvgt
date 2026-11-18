@@ -1,0 +1,228 @@
+/* Insects: the first npc kind that fights back (traps/npc/insects, environments.nvgt's npc_types). Each theme folder in
+general is a kind (bees), and each folder inside a kind is one insect, with its loop (its taunt), hurt, death and hit
+(its sting). An insect flies toward you like a projectile, belt-wide, with the layered insects countdown, so jumping
+and changing lanes don't escape it. On its meeting step, standing or in the air is a sting at once; crouched, it hovers
+at your head and stays with you for insect_dive_time. Your weapons reach it only while you're crouched, from as far as
+each weapon reaches while it flies in (a swing, or a low bullet), and at once while it hovers (weapon_strike() and
+fire_weapon() in weapons.nvgt, bullet_hits() in bullet.nvgt): hurt on each hit, death at 0. Standing up before it's
+dead, or the time running out (its dive), is a sting. A sting is insect_damage through take_damage(), and then it's
+gone, so one insect stings at most once. Its health grows with the belt's speed, like a vehicle's.
+Same entity pattern as the other traps: null-slot removal, reused slots, and only destroy_all_insects() shrinks the array. */
+sound_pool insectpool;
+// Where an environment keeps its insects themes (environments.nvgt): one folder per kind, then one per insect.
+string insect_folder(const string&in env)
+{
+return trap_folder(env, "insects");
+}
+class insect
+{
+double meet_x;
+string theme; // kind/insect, such as "bees/bee2"
+string env; // the environment it spawned in, for its sounds after a switch (environments.nvgt)
+double countdown_start;
+int hp;
+bool hovering = false; // reached you while you were crouched
+double hover_start = 0; // runtimer time it began hovering
+bool spent = false; // stung, killed or passed on a slide: nothing more can happen to it
+int loopslot = -1;
+}
+insect@[] insects(0);
+
+/* countdown comes from the spawner like any trap's. kind is the random kind folder the spawner picked (bees), so every
+kind gets an equal share; then one insect of that kind. */
+void spawn_insect(double mx, string kind, int countdown)
+{
+string[] kind_insects = get_pack_sound_folders(insect_folder(current_env) + kind + "/*");
+if (kind_insects.length() == 0) return; // no insects of that kind
+insect ins;
+ins.meet_x = mx;
+ins.theme = kind + "/" + kind_insects[random(0, kind_insects.length() - 1)];
+ins.env = current_env;
+ins.countdown_start = mx - countdown;
+ins.hp = free_obstacle_hp(wall_spawn_hp(insect_min_hp, insect_max_hp)); // or a free run's set health (freebelt.nvgt)
+ins.loopslot = insectpool.play_2d(get_pack_sound(insect_folder(ins.env) + ins.theme + "/*loop*"), 0, me.x, 0, insect_x(ins), true);
+for (uint i = 0; i < insects.length(); i++)
+{
+if (@insects[i] == null)
+{
+@insects[i] = ins;
+return;
+}
+}
+insects.insert_last(ins);
+}
+/* Where an insect is right now: flying in as a projectile does (projectile_x()), at its own insect_speed_factor,
+reaching meet_x as you do; hovering, right at you, wherever you've got to since. */
+double insect_x(insect@ ins)
+{
+double player_pos = me.x + min(1, double(steptimer.elapsed) / current_step_time());
+if (ins.hovering) return player_pos;
+return ins.meet_x + (insect_speed_factor - 1) * (ins.meet_x - player_pos);
+}
+/* Every frame: each loop to its place, and a hovering insect's watch: standing up stings at once, and so does its dive
+once insect_dive_time has passed. */
+void insect_flight()
+{
+for (uint i = 0; i < insects.length(); i++)
+{
+if (@insects[i] == null) continue;
+insect@ ins = insects[i];
+if (ins.hovering and !ins.spent)
+{
+if (!is_ducked() or runtimer.elapsed - ins.hover_start >= insect_dive_time)
+{
+insect_sting(ins);
+if (!running) return; // a fatal sting ended the run
+continue;
+}
+}
+if (ins.loopslot < 0 or !insectpool.verify_slot(ins.loopslot)) continue;
+insectpool.items[ins.loopslot].y = float(insect_x(ins));
+insectpool.items[ins.loopslot].update(insectpool.last_listener_x, insectpool.last_listener_y, insectpool.last_listener_z, insectpool.last_listener_rotation, insectpool.max_distance);
+}
+}
+// Runs once per step, right after the move: on its meeting step, crouched it hovers, anything else is a sting.
+void insect_check()
+{
+for (uint i = 0; i < insects.length(); i++)
+{
+if (@insects[i] == null) continue;
+insect@ ins = insects[i];
+if (ins.spent)
+{
+remove_insect(i);
+continue;
+}
+if (ins.hovering) continue;
+if (me.x == ins.meet_x)
+{
+if (carried())
+{
+ins.spent = true; // carried past on a slide or a trampoline (slide.nvgt, trampoline.nvgt)
+remove_insect(i);
+continue;
+}
+if (is_ducked())
+{
+ins.hovering = true;
+ins.hover_start = runtimer.elapsed;
+continue;
+}
+insect_sting(ins);
+if (!running) return;
+remove_insect(i);
+continue;
+}
+if (me.x > ins.meet_x + spawn_distance()) remove_insect(i); // gone past without meeting, as after a teleport
+}
+}
+/* Its sting: its hit, a blow of insect_damage, and it's gone. A fatal sting plays its hit through p and ends the run, as a
+projectile's does. */
+void insect_sting(insect@ ins)
+{
+ins.spent = true;
+string hit_clip = get_pack_sound(insect_folder(ins.env) + ins.theme + "/*hit*");
+stop_insect(ins);
+stat_caught("insects"); // the statistics: what caught you, and what ended the run if it's fatal
+last_caught_kind = animal_singular(ins.theme.substr(0, ins.theme.find_first("/"))); // "bees/bee2" is a bee (practice_hints.nvgt)
+int blow = take_damage(insect_damage); // a worn shield, else your health
+if (blow == blow_fatal)
+{
+p.play_stationary(hit_clip, false);
+end_run_hit();
+return;
+}
+insectpool.play_2d(hit_clip, 0, me.x, 0, me.x, false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+}
+// How far ahead of you an insect is right now, in tiles: 0 while it hovers at you, below 0 once it's behind you.
+double insect_distance(insect@ ins)
+{
+if (ins.hovering) return 0;
+double player_pos = me.x + min(1, double(steptimer.elapsed) / current_step_time());
+return insect_x(ins) - player_pos;
+}
+/* The nearest insect a swing can reach, only while you're crouched: one hovering at you, or one flying in no more than
+reach tiles ahead (weapon_strike() in weapons.nvgt); null if none. */
+insect@ insect_in_reach(int reach)
+{
+if (!is_ducked()) return null;
+insect@ best = null;
+for (uint i = 0; i < insects.length(); i++)
+{
+if (@insects[i] == null or insects[i].spent) continue;
+double d = insect_distance(insects[i]);
+if (d < 0 or d > reach) continue;
+if (@best == null or d < insect_distance(best)) @best = insects[i];
+}
+return best;
+}
+/* The insect hovering at you, while you're crouched, or null: a gun hits it at once (fire_weapon() in weapons.nvgt), since
+a bullet only checks from the next tile on. */
+insect@ insect_hovering()
+{
+if (!is_ducked()) return null;
+for (uint i = 0; i < insects.length(); i++)
+{
+if (@insects[i] != null and insects[i].hovering and !insects[i].spent) return insects[i];
+}
+return null;
+}
+/* A low bullet (fired while you were crouched, bullet.nvgt) meets a flying insect once the insect has reached its tile,
+since both close in on each other between the bullet's moves; null if none has. */
+insect@ insect_at_bullet(double bx)
+{
+for (uint i = 0; i < insects.length(); i++)
+{
+if (@insects[i] == null or insects[i].spent or insects[i].hovering) continue;
+double d = insect_distance(insects[i]);
+if (d >= 0 and insect_x(insects[i]) <= bx + 1) return insects[i];
+}
+return null;
+}
+/* A weapon hit: hurt at the insect, or at 0 hp its death, and it's gone. Returns where it was, so the weapon's own hit
+plays there. */
+double strike_insect(insect@ ins, int damage)
+{
+double ix = me.x + insect_distance(ins);
+ins.hp -= damage;
+if (ins.hp <= 0)
+{
+ins.spent = true;
+stat_add("insects_killed");
+stop_insect(ins);
+insectpool.play_2d(get_pack_sound(insect_folder(ins.env) + ins.theme + "/*death*"), 0, me.x, 0, ix, false);
+}
+else insectpool.play_2d(get_pack_sound(insect_folder(ins.env) + ins.theme + "/*hurt*"), 0, me.x, 0, ix, false);
+return ix;
+}
+// The countdown: the layered insects countdown cues before each insect still on its way (see play_countdown()). Runs once per step.
+void insect_countdown()
+{
+for (uint i = 0; i < insects.length(); i++)
+{
+if (@insects[i] == null or insects[i].spent or insects[i].hovering) continue;
+play_countdown(insectpool, "insects", insects[i].meet_x, insects[i].countdown_start, insects[i].env);
+}
+}
+void stop_insect(insect@ ins)
+{
+if (ins.loopslot > -1) insectpool.destroy_sound(ins.loopslot);
+ins.loopslot = -1;
+}
+void remove_insect(uint i)
+{
+if (i >= insects.length() or @insects[i] == null) return;
+stop_insect(insects[i]);
+@insects[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_insects()
+{
+for (uint i = 0; i < insects.length(); i++)
+{
+if (@insects[i] == null) continue;
+stop_insect(insects[i]);
+}
+insects.resize(0);
+}

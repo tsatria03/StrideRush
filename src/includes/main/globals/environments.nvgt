@@ -24,7 +24,7 @@ return "traps";
 }
 /* The npc kinds the game has, each kept in an environment's traps/npc/<kind>/. Only these: a folder there the game
 doesn't know is ignored, as any unknown type is. */
-const string[] npc_types = {"animals"};
+const string[] npc_types = {"animals", "insects"};
 /* A type's folder under an environment's root (the root as env_root() gives it): "traps/hazards/", "transitions/doors/",
 for an npc kind "traps/npc/animals/", or for vehicles, a category of their own beside traps and transitions, just
 "vehicles/". Its themes are in general/ below it, its warning cues in countdown/. */

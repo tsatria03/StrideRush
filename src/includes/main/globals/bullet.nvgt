@@ -3,7 +3,8 @@ moves one tile every bullet_tile_time, playing its gun's loop at the bullet the 
 for a standing wall, fake door, vehicle in your lane or item there; the first it reaches takes the gun's damage, the
 gun's hit and shell play at it, and the target plays its own hurt or death. A
 bullet that has gone its gun's weapon_reach() tiles from where it was fired (counted when it was fired) just vanishes,
-so firing at something still out of reach wastes the round. Real doors and the other traps don't stop it.
+so firing at something still out of reach wastes the round. Real doors and the other traps don't stop it. A bullet fired
+while you're crouched flies low, and a flying insect it meets takes the hit first; a standing one passes under insects.
 Moves are timed off runtimer, which pauses with the game, so a pause freezes bullets in the air.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_bullets() shrinks the array. */
 sound_pool bulletpool;
@@ -14,6 +15,7 @@ double start_x;
 int range;
 int damage;
 int weapon; // index into weapon_names, for its loop and hit sounds
+bool low = false; // fired while you were crouched: it can hit a flying insect, which a standing shot passes under (insect.nvgt)
 int64 next_move;
 int loopslot = -1;
 }
@@ -27,6 +29,7 @@ b.start_x = me.x;
 b.range = weapon_reach(w);
 b.damage = damage;
 b.weapon = w;
+b.low = is_ducked();
 b.next_move = runtimer.elapsed + bullet_tile_time;
 b.loopslot = bulletpool.play_2d(get_pack_sound(weapon_folder(w) + "*loop*"), 0, me.x, 0, b.x, true);
 for (uint i = 0; i < bullets.length(); i++)
@@ -86,8 +89,10 @@ return -1;
 bool bullet_hits(bullet@ b)
 {
 double target_x = -1;
+insect@ ins = b.low ? insect_at_bullet(b.x) : null; // a low bullet meets a flying insect first (insect.nvgt)
 wall@ w = wall_at(b.x);
-if (@w != null) target_x = strike_wall(w, b.damage);
+if (@ins != null) target_x = strike_insect(ins, b.damage);
+else if (@w != null) target_x = strike_wall(w, b.damage);
 else
 {
 door@ d = fake_door_at(b.x);
