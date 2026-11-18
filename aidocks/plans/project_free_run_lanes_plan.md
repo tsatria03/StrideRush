@@ -1,6 +1,6 @@
 ---
 name: project_free_run_lanes_plan
-description: BUILDING (2026-11-18), section 1 built and tested, docks next: choosing the lane for barriers, items, vehicles and lane trampolines added in a free run (your lane or a set lane) instead of a random one; second of the todo list's free run items for 2.5; Q&A log
+description: COMPLETE (2026-11-18, 2.5 at 7 of 10): choosing the lane for barriers, items, vehicles and lane trampolines added in a free run (your lane or a set lane) instead of a random one; second of the todo list's free run items for 2.5; Q&A log
 metadata:
   type: project
 ---
@@ -37,3 +37,4 @@ Started 2026-11-18 (dev: "I want to plan the lain item next."), on 7ecc939, with
 - Test 3 of 5 (continuous ammo packs in the right lane; 2 vehicles with 200 health starting in the middle lane and moving toward you) PASSED.
 - Test 4 of 5 (4 trampolines as left lane pads; all obstacles in the right lane) PASSED. The dev asked whether the lane only covers trampolines that appear in a lane: no, with a chosen lane every trampoline of that add is a lane pad there (belt-wide pads only come with random lanes, trampoline_belt_percent); good or worn stays random.
 - Test 5 of 5 (view current setup keeping a set lane on its own line; replay keeping the lane) PASSED. Section 1 TESTED: all 5 passed.
+- Section 2 DONE (2026-11-18, on 02d75ef): the entry on top of 2.5 (7 of 10), a readme paragraph after the add paragraph (the lane question, your lane, what a chosen lane does to each kind, all mixes, confirmations and setup), the readme's modify line noting modify spacing starts on very close spacing, the todo item to finished, the version history and CLAUDE.md. PLAN COMPLETE.
