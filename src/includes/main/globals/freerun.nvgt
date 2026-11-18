@@ -323,7 +323,7 @@ setupmenu();
 m.intro_text = "Choose how far apart things come on the belt. Currently set to " + free_spacing_names[free_spacing] + " spacing.";
 for (uint i = 0; i < free_spacing_names.length(); i++) m.add_item(free_spacing_names[i] + " spacing", "" + i);
 m.add_item("back", "back");
-int mres = m.run(free_spacing, false, true);
+int mres = m.run(); // opens on very close spacing; the intro says the current one
 if (mres < 0 or m.selected_item_id == "back") return false;
 free_spacing = int(parse_int(m.selected_item_id));
 speak_buffer("Your spacing is now " + free_spacing_names[free_spacing] + ".", "misc");

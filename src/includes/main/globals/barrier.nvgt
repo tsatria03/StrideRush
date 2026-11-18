@@ -40,12 +40,19 @@ return get_pack_sound_folders(barrier_folder(current_env) + "*").length() > 0;
 - "barriers, random lanes" (debug): a single barrier in any of the three lanes.
 - "barriers, multiple lanes" (debug and practice) and the real game: a random lane, and barrier_pair_percent of the time
   a second barrier beside it in a different lane, with its own random theme. Two never share a lane, so one lane is
-  always open. */
+  always open.
+- A free run's barriers with a chosen lane (free_placed_lane(), freebelt.nvgt): a single barrier in that lane. */
 void spawn_barriers(double bx, string theme, int countdown)
 {
 if (spawn_only == "barriers")
 {
 spawn_barrier(bx, theme, countdown, current_lane);
+return;
+}
+int chosen = free_placed_lane();
+if (chosen >= 0)
+{
+spawn_barrier(bx, theme, countdown, chosen);
 return;
 }
 int first = random(lane_left, lane_right);

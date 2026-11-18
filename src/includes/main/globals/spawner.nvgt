@@ -370,6 +370,12 @@ if (item_lane_mode == "own")
 spawn_item(type, x, countdown, current_lane);
 return;
 }
+int chosen = free_placed_lane(); // a free run item with a chosen lane (freebelt.nvgt)
+if (chosen >= 0)
+{
+spawn_item(type, x, countdown, chosen);
+return;
+}
 int first = random(lane_left, lane_right);
 spawn_item(type, x, countdown, first);
 if (item_lane_mode == "random" or random(1, 100) > item_pair_percent) return;

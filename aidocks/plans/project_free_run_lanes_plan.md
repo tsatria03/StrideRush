@@ -1,6 +1,6 @@
 ---
 name: project_free_run_lanes_plan
-description: SETTLED (2026-11-18), not built: choosing the lane for barriers, items, vehicles and lane trampolines added in a free run (your lane or a set lane) instead of a random one; second of the todo list's free run items for 2.5; Q&A log
+description: BUILDING (2026-11-18), section 1 built and tested, docks next: choosing the lane for barriers, items, vehicles and lane trampolines added in a free run (your lane or a set lane) instead of a random one; second of the todo list's free run items for 2.5; Q&A log
 metadata:
   type: project
 ---
@@ -30,4 +30,10 @@ Started 2026-11-18 (dev: "I want to plan the lain item next."), on 7ecc939, with
 2. Docks: the entry on top of 2.5: "Added a lane choice when adding barriers, items, vehicles or trampolines in a free run, so they can come in random lanes, your own lane, or the left, middle or right lane."; the readme's free run add line; the todo item to finished; the version history and CLAUDE.md.
 
 ## Build log
-- Not started.
+- Section 1 BUILT (2026-11-18, on baeee40), awaiting tests: freebelt.nvgt's free_entry.lane (free_lane_random -1, free_lane_own -2, or lane_left to lane_right), free_lane_kinds, free_lane_next (set beside free_hp_next in free_entry_type() and the rule pick, random for a real door's key), free_placed_lane(), free_lane_text(), free_lane_line(), free_has_lane() (a lane kind, or all obstacles or all items); free_add() asks "Choose the lane for these obstacles." (or items) after the health; confirmations and view current setup name a chosen lane (the setup key gains the lane, so a set lane gets its own line, an addition to the plan's wording); barrier.nvgt's spawn_barriers(), spawner.nvgt's spawn_items(), vehicle.nvgt's spawn_vehicle() and trampoline.nvgt's spawn_trampoline() take it. Replays keep it, since free_batches copies the whole entry.
+- CHANGED (dev, 2026-11-18, before testing: "Please make your lain and random lain go after right lain in the menu."): the lane menu is left lane, middle lane, right lane, your lane, random lanes.
+- Section 1 tests: Test 1 of 5 (the lane menu, 5 barriers in the left lane) PASSED. The dev asked the default lane if none is chosen: there is none to skip to, since a lane kind always asks and escape cancels the add; random lanes is what everything gets that never asks (kinds without a lane, a no deaths requeue, a real door's key).
+- Test 2 of 5 (your lane, barriers following each lane switch) PASSED. The dev keeps the lane menu opening on left lane ("I'll leave the menu as is").
+- Test 3 of 5 (continuous ammo packs in the right lane; 2 vehicles with 200 health starting in the middle lane and moving toward you) PASSED.
+- Test 4 of 5 (4 trampolines as left lane pads; all obstacles in the right lane) PASSED. The dev asked whether the lane only covers trampolines that appear in a lane: no, with a chosen lane every trampoline of that add is a lane pad there (belt-wide pads only come with random lanes, trampoline_belt_percent); good or worn stays random.
+- Test 5 of 5 (view current setup keeping a set lane on its own line; replay keeping the lane) PASSED. Section 1 TESTED: all 5 passed.
