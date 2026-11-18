@@ -1,4 +1,5 @@
 New in 2.5.
+Fixed a bug where a force field in a combination could throw you right over the fake wall or animal that came with it, so it never reached you and its hit never played.
 Added a new combination of a projectile and an insect, coming in either order, where staying crouched carries you through both.
 Added insects to practice runs, free runs and the statistics, along with two new achievements for killing them, Swatter and Pest Control.
 Added insects, starting with bees, which fly at you and sting unless you crouch and hit them with your weapons, from as far away as your weapon reaches, before they dive at you.

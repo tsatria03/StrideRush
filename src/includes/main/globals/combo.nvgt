@@ -106,10 +106,14 @@ if (first == "hazards" or first == "spikes" or first == "mines") return combo_ga
 if (first == "projectiles" or first == "insects") return combo_gap_crouch; // an insect keeps you crouched too (insect.nvgt)
 return combo_gap_quick; // barriers, walls, fake doors, force fields, animals
 }
-// That gap in tiles at the current speed, rounded up, never under 1.
+/* That gap in tiles at the current speed, rounded up, never under 1. A force field first adds its throw
+(forcefield_knockback_tiles), as the spawner does after a lone one, so a hit from it lands you before the second part
+instead of throwing you over it. */
 int combo_gap_tiles(const string&in first, const string&in second)
 {
-return int(max(1, ceil(double(combo_gap_ms(first, second)) / current_step_time())));
+int tiles = int(max(1, ceil(double(combo_gap_ms(first, second)) / current_step_time())));
+if (first == "force_fields") tiles += forcefield_knockback_tiles;
+return tiles;
 }
 /* Places the pair: the first part at x, the second after the gap, each with the full countdown. A barrier part is a
 single barrier in your lane, so the lane switch is always part of it. */
