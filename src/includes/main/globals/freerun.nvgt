@@ -228,6 +228,7 @@ free_clear_queue(); // every batch and continuous rule (freebelt.nvgt)
 clear_inventory();
 reset_shield();
 reset_weapons(); // the guns refilled to their start, the fist drawn (weapons.nvgt)
+reset_powerups(); // every running powerup ends, quietly (powerup.nvgt)
 free_moving = false;
 }
 string free_speed_text()
@@ -248,6 +249,7 @@ lines.insert_last(stat_line("footsteps", footsteps_on ? "heard" : "silent"));
 lines.insert_last(stat_line("heartbeat", free_heartbeat_on ? "heard" : "silent"));
 lines.insert_last(stat_line("practice hints", free_hints ? "spoken" : "silent")); // as the menu names them
 lines.insert_last(stat_line("environment", (debug_env == "" ? "random, now " : "") + current_env.replace("_", " ", true)));
+free_powerup_lines(lines);
 free_add_belt_lines(lines); // what's coming (freebelt.nvgt)
 return lines;
 }
@@ -329,6 +331,55 @@ free_spacing = int(parse_int(m.selected_item_id));
 speak_buffer("Your spacing is now " + free_spacing_names[free_spacing] + ".", "misc");
 return true;
 }
+/* Modify player specials, while running: "Choose what you'd like to do with your specials." with give powerup, then back,
+as modify player inventory does. Backing out of give powerup steps back here silently. True once something is given. */
+bool free_specials_menu()
+{
+while (true)
+{
+setupmenu();
+m.intro_text = "Choose what you'd like to do with your specials.";
+m.add_item("give powerup", "powerup");
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+if (free_give_powerup()) return true;
+}
+return false;
+}
+/* Give powerup: "Choose a powerup to start." with the 14 in their pairs, good first (the shield pair only
+with a shield worn, as on the belt), then back. The chosen one starts as a collected one does, powerget and its name in
+the powerups buffer, for powerup_time, replacing its kind (apply_powerup(), powerup.nvgt), but counts no statistic. */
+bool free_give_powerup()
+{
+setupmenu();
+m.intro_text = "Choose a powerup to start.";
+for (uint i = 0; i < powerup_names.length(); i++)
+{
+if (!shield_worn and powerup_name_kinds[i] == powerup_kind_shield) continue;
+m.add_item(powerup_names[i], "" + i);
+}
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+string get_path = get_pack_sound(powerup_folder + "*powerget*");
+if (get_path != "") p.play_stationary(get_path, false);
+apply_powerup(int(parse_int(m.selected_item_id)));
+return true;
+}
+// View current setup's running powerups, each with its whole seconds left on runtimer, or none.
+void free_powerup_lines(string[]@ lines)
+{
+bool running_one = false;
+for (int k = 0; k < powerup_kinds; k++)
+{
+if (active_powerups[k] == "") continue;
+int left = int(max(1, ceil((powerup_ends[k] - runtimer.elapsed) / 1000.0)));
+lines.insert_last(stat_line("powerup", active_powerups[k] + ", " + left + (left == 1 ? " second left" : " seconds left")));
+running_one = true;
+}
+if (!running_one) lines.insert_last(stat_line("powerups", "none"));
+}
 string free_console_note = ""; // a line to say before the console's intro the next time it opens, such as an empty add list
 void free_console()
 {
@@ -360,6 +411,7 @@ if (free_moving)
 m.add_item("modify player health", "health");
 m.add_item("modify player inventory", "inventory"); // give, set and take items
 m.add_item("modify player lives", "lives");
+m.add_item("modify player specials", "specials"); // give powerup, for now
 }
 m.add_item("modify practice hints", "hints");
 m.add_item("modify running speed", "speed");
@@ -393,6 +445,7 @@ else if (id == "add_specials") done = free_add("special");
 else if (id == "clear_items") done = free_clear("item");
 else if (id == "clear_obstacles") done = free_clear("obstacle");
 else if (id == "clear_specials") done = free_clear("special");
+else if (id == "specials") done = free_specials_menu();
 else if (id == "inventory") done = free_inventory_menu();
 else if (id == "ammo") done = free_set_reserve();
 else if (id == "unlimited") done = free_unlimited_menu();

@@ -1,6 +1,6 @@
 ---
 name: project_free_run_powerups_plan
-description: SETTLED (2026-11-18), not built: giving yourself any powerup from a free run's console, starting it straight away; third of the todo list's free run items for 2.5; Q&A log
+description: BUILDING (2026-11-18), section 1 built and tested, docks next: giving yourself any powerup from a free run's console, starting it straight away; third of the todo list's free run items for 2.5; Q&A log
 metadata:
   type: project
 ---
@@ -28,4 +28,9 @@ Started 2026-11-18 (dev: "Let's plan the powerups in the free run."), on 0fe1f38
 2. Docks: the entry on top of 2.5 (8 of 10): "Added a way to give yourself any powerup from a free run's console, starting it straight away, and the current setup now says which powerups are running and how long they have left, while clearing the belt ends them."; the readme's free run console; the todo item to finished; the version history and CLAUDE.md.
 
 ## Build log
-- Not started.
+- Section 1 BUILT (2026-11-18, on fa6628d), awaiting tests: freerun.nvgt's free_give_powerup() (the console's "give powerup" after clear specials, running only; opens on its first item, Slow Motion; powerget if it exists, then apply_powerup()), free_powerup_lines() in free_setup_lines() just before what's coming ("powerup, Moon Jump, 12 seconds left", whole seconds rounded up, "1 second left"; "powerups, none"), and free_clear_belt() calling reset_powerups().
+- CHANGED (dev, 2026-11-18, before testing: "Can you please put give powerups in a special category? Something like, modify player specials"): the console item is "modify player specials" (after modify player lives, running only), opening free_specials_menu(), "Choose what you'd like to do with your specials." with give powerup and back, as modify player inventory does; give powerup's back or escape steps back to it silently. The docks name it so. Also fixed before testing: two variables named after types (sound, any) broke the compile, renamed get_path and running_one.
+- Section 1 tests: Test 1 of 4 (the menus: specials only while running, after modify player lives; 12 powerups without a shield; escape steps back) PASSED.
+- Test 2 of 4 (Moon Jump given: powerget, its name, longer jumps, wore off after 15 seconds) PASSED.
+- Test 3 of 4 (Rush Hour replacing Slow Motion; the shield pair listed with a shield worn; view current setup's powerup lines with seconds left) PASSED.
+- Test 4 of 4 (clear belt ending Long Crouch quietly; "powerups, none") PASSED. Section 1 TESTED: all 4 passed.
