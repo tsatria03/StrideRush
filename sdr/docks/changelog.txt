@@ -1,4 +1,5 @@
 New in 2.5.
+Added a way to give yourself any powerup from a free run's console, starting it straight away, and the current setup now says which powerups are running and how long they have left, while clearing the belt ends them.
 Added a lane choice when adding barriers, items, vehicles or trampolines in a free run, so they can come in random lanes, your own lane, or the left, middle or right lane.
 Added a spacing choice to a free run's console, from very close to very far, so obstacles and items can come closer together or further apart than usual.
 Fixed a bug where a force field in a combination could throw you right over the fake wall or animal that came with it, so it never reached you and its hit never played.

@@ -1,6 +1,6 @@
 ---
 name: project_free_run_powerups_plan
-description: BUILDING (2026-11-18), section 1 built and tested, docks next: giving yourself any powerup from a free run's console, starting it straight away; third of the todo list's free run items for 2.5; Q&A log
+description: COMPLETE (2026-11-18, 2.5 at 8 of 10): giving yourself any powerup from a free run's console, starting it straight away; third of the todo list's free run items for 2.5; Q&A log
 metadata:
   type: project
 ---
@@ -34,3 +34,4 @@ Started 2026-11-18 (dev: "Let's plan the powerups in the free run."), on 0fe1f38
 - Test 2 of 4 (Moon Jump given: powerget, its name, longer jumps, wore off after 15 seconds) PASSED.
 - Test 3 of 4 (Rush Hour replacing Slow Motion; the shield pair listed with a shield worn; view current setup's powerup lines with seconds left) PASSED.
 - Test 4 of 4 (clear belt ending Long Crouch quietly; "powerups, none") PASSED. Section 1 TESTED: all 4 passed.
+- Section 2 DONE (2026-11-18): the entry on top of 2.5 (8 of 10), the readme (modify player specials in the running console list, a paragraph for it after the give, set and take paragraph, powerups in view current setup, clear belt ending powerups), the todo item to finished, the version history and CLAUDE.md. PLAN COMPLETE.
