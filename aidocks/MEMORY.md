@@ -92,7 +92,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Joystick ini names plan](plans/project_joystick_ini_names_plan.md) — COMPLETE (2026-11-17, 2.4 FULL at 10 of 10): 2 sections, joystick.ini writes buttons by name (jump=DPAD_UP) instead of SDL numbers; 2.4's tenth entry; Q&A log
 - [NPC folder plan](plans/project_npc_folder_plan.md) — COMPLETE (2026-11-17, no changelog entry): 2 sections, repoint animals (later insects) to traps/npc/<kind> after the sound reorg; learn sounds lists npc; groundwork for 2.5; Q&A log
 - [Insects plan](plans/project_insects_plan.md) — COMPLETE (2026-11-17, 2.5 at 3 of 10): 3 sections, insects, a new npc kind (bees first) for 2.5, from the todo list; Q&A log
-- [Free run spacing plan](plans/project_free_run_spacing_plan.md) — SETTLED (2026-11-18), not built, 2 sections: a free run spacing choice, closer together or further apart than the usual gap; Q&A log
+- [Free run spacing plan](plans/project_free_run_spacing_plan.md) — BUILDING (2026-11-18), section 1 built and tested, docks next, 2 sections: a free run spacing choice, closer together or further apart than the usual gap; Q&A log
 - [Free run lanes plan](plans/project_free_run_lanes_plan.md) — SETTLED (2026-11-18), not built, 2 sections: choosing the lane for barriers, items, vehicles and lane trampolines in a free run; Q&A log
 - [Free run powerups plan](plans/project_free_run_powerups_plan.md) — SETTLED (2026-11-18), not built, 2 sections: giving yourself any powerup from a free run's console, starting it straight away; Q&A log
 - [Free run combinations plan](plans/project_free_run_combinations_plan.md) — SETTLED (2026-11-18), not built, 2 sections: choosing which combination pair comes in a free run, any pair in either order; Q&A log

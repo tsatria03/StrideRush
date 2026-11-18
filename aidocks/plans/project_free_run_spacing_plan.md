@@ -1,6 +1,6 @@
 ---
 name: project_free_run_spacing_plan
-description: SETTLED (2026-11-18), not built: a free run spacing choice, so obstacles and items come closer together or further apart than the usual gap; first of the todo list's four free run items for 2.5; Q&A log
+description: BUILDING (2026-11-18), section 1 built and tested, docks next: a free run spacing choice, so obstacles and items come closer together or further apart than the usual gap; first of the todo list's four free run items for 2.5; Q&A log
 metadata:
   type: project
 ---
@@ -27,4 +27,5 @@ Started 2026-11-18 (dev: "Yes, the spacing option will come first.", after reord
 2. Docks: the entry on top of 2.5 (6 of 10): "Added a spacing choice to a free run's console, from very close to very far, so obstacles and items can come closer together or further apart than usual."; the readme's free run section; the todo item to finished; the version history and CLAUDE.md.
 
 ## Build log
-- Not started.
+- Section 1 BUILT (2026-11-18, on 21752c2), awaiting tests: tuning.nvgt's free_spacing_min_times and free_spacing_max_times; spawner.nvgt's next_gap() takes them in a free run; freerun.nvgt's free_spacing and free_spacing_names, reset to normal in reset_free_settings() (free_prepare_replay() leaves it), free_spacing_menu(), the console's "modify spacing" after modify shield strength, and view current setup's spacing line after running speed. The first spawn of a run and a slide's landing still use run_min_floor_time.
+- Section 1 TESTED (2026-11-18): all 4 steps passed (the menu, very close, very far mid-run, view current setup with replay and a new setup).

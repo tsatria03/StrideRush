@@ -296,10 +296,13 @@ int floor_tiles(int ms)
 return int(max(min_floor_tiles, ceil(double(ms) / current_step_time())));
 }
 /* The gap from one obstacle to the next: room for a hazard's ledge after (kept for every type, to be safe), a random
-stretch of normal floor (run_min_floor_time to run_max_floor_time, the level's, difficulty.nvgt), the next one's countdown, and its tile. */
+stretch of normal floor (run_min_floor_time to run_max_floor_time, the level's, difficulty.nvgt, or a free run's spacing),
+the next one's countdown, and its tile. */
 int next_gap(int countdown)
 {
-int floor_len = random(floor_tiles(run_min_floor_time), floor_tiles(run_max_floor_time));
+int min_time = free_run ? free_spacing_min_times[free_spacing] : run_min_floor_time;
+int max_time = free_run ? free_spacing_max_times[free_spacing] : run_max_floor_time;
+int floor_len = random(floor_tiles(min_time), floor_tiles(max_time));
 return int(max(min_gap_tiles, ledge_after_tiles + floor_len + countdown + 1));
 }
 /* After a forward teleport: the next obstacle may now be due on or just ahead of you, with no warning. Pushes it ahead
