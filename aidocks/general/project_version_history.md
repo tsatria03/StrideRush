@@ -9,7 +9,8 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.5: open, 1 of 10 (2026-11-17); build/version.txt is 2.5.
+## 2.5: open, 3 of 10 (2026-11-17); build/version.txt is 2.5.
+- Insects ([[project_insects_plan]], two entries on top: insects everywhere else, then insects themselves): globals/insect.nvgt, bees in traps/npc/insects flying in like a projectile (insect_speed_factor 2), stinging (insect_damage 20) unless killed while you crouch, from any weapon's reach (weapon_strike(), a low bullet, an instant hit while it hovers), hovering insect_dive_time (1000 ms) then diving; health insect_min_hp 40 to insect_max_hp 100 by speed; joins at 250 ms; practice after animals (practice_insects_check() keeps returning players' unlocks), free run, insects_killed and caught_insects, Swatter and Pest Control.
 - Learn sounds' empty environments (a side fix during [[project_insects_plan]], one entry, committed on its own as 77bfc54 at the dev's request: "add a change log entry, then try to split the commit"): learn_sounds_menu.nvgt leaves out an environment with no sounds to play (uncharted, floors and music only), and empty countdowns and traps categories. A released bug since V2.40, so a "Fixed a bug where" entry, which opened 2.5.
 
 ## After V2.40, before 2.5 opened (no changelog entries)

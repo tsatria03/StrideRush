@@ -1,4 +1,6 @@
 New in 2.5.
+Added insects to practice runs, free runs and the statistics, along with two new achievements for killing them, Swatter and Pest Control.
+Added insects, starting with bees, which fly at you and sting unless you crouch and hit them with your weapons, from as far away as your weapon reaches, before they dive at you.
 Fixed a bug where an environment with no obstacles of its own still showed up in the learn sounds menu, saying it had a total of 0 sounds.
 New in 2.4.
 Made it so joystick.ini now names each button, such as DPAD_UP or LEFT_SHOULDER, the way keyboard.ini names its keys, instead of using numbers, and a file that still has the old numbers keeps working.
