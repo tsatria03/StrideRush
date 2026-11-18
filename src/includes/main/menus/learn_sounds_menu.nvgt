@@ -195,7 +195,11 @@ root.subs.insert_last(items);
 and obstacles, since both belong to a place; items and weapons stay global. */
 learn_category envs("environments");
 string[] env_names = get_pack_sound_folders("environments/*");
-for (uint i = 0; i < env_names.length(); i++) envs.subs.insert_last(learn_environment_category(env_names[i]));
+for (uint i = 0; i < env_names.length(); i++)
+{
+learn_category@ place = learn_environment_category(env_names[i]);
+if (place.count() > 0) envs.subs.insert_last(place); // an environment with nothing to play, only floors and music, isn't listed
+}
 root.subs.insert_last(envs);
 learn_category weapons("weapons");
 weapons.subs.insert_last(learn_folder_category("artillery", "equipments/weapons/artillery", "artillery"));
@@ -231,7 +235,7 @@ if (get_pack_sound(type_path(env_root, all_types[i]) + "countdown/warn*") == "")
 cues.sounds.insert_last(learn_countdown(env_root, all_types[i]));
 }
 learn_sort_sounds(cues.sounds);
-place.subs.insert_last(cues);
+if (cues.sounds.length() > 0) place.subs.insert_last(cues); // only with a countdown in it
 learn_category obstacles("traps");
 for (uint i = 0; i < types.length(); i++) obstacles.subs.insert_last(learn_folder_category(learn_type_name(types[i]), env_root + "traps/" + types[i] + "/general", ""));
 // npc inside traps, as its folder is (traps/npc): the npc kinds, animals split into birds and dogs.
@@ -240,7 +244,7 @@ for (uint i = 0; i < npcs.length(); i++) npc.subs.insert_last(learn_folder_categ
 learn_sort_categories(npc.subs);
 if (npc.subs.length() > 0) obstacles.subs.insert_last(npc);
 learn_sort_categories(obstacles.subs);
-place.subs.insert_last(obstacles);
+if (obstacles.subs.length() > 0) place.subs.insert_last(obstacles); // only with a trap in it
 learn_category transitions("transitions"); // sorts before traps
 for (uint i = 0; i < moves.length(); i++) transitions.subs.insert_last(learn_folder_category(learn_type_name(moves[i]), env_root + "transitions/" + moves[i] + "/general", ""));
 learn_sort_categories(transitions.subs);

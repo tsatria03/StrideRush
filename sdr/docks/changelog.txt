@@ -1,3 +1,5 @@
+New in 2.5.
+Fixed a bug where an environment with no obstacles of its own still showed up in the learn sounds menu, saying it had a total of 0 sounds.
 New in 2.4.
 Made it so joystick.ini now names each button, such as DPAD_UP or LEFT_SHOULDER, the way keyboard.ini names its keys, instead of using numbers, and a file that still has the old numbers keeps working.
 Added health format and shield format settings to the game tab, where you can choose whether your health and shield are spoken as a percentage, an amount, or both, in every kind of run.
