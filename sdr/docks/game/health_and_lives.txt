@@ -1,0 +1,29 @@
+Health and lives.
+
+You start each endless run with 1 life and 200 health. Obstacles that catch you take some of your health, and when it runs out you lose a life. Hazards and floor breakers are different: falling into either ends your run straight away.
+
+How health works.
+
+Spikes, mines, force fields, projectiles, fake walls, ladders, real walls, animals, insects, barriers, winds, vehicles and doors each take some of your health when they catch you, and you'll hear yourself get hit. Each obstacle's document gives its damage, which is the full amount: easier levels take less, as described under difficulty.
+Press H to hear how much health you have left, and how many lives, as a percentage, an amount such as 350 of 500, or both, whichever you choose in the game tab of the settings menu.
+
+How lives work.
+
+When your health runs out, you lose a life. If you have lives to spare, you'll hear a sound, your health fills back up, and you keep running. If it was your last life, the run ends, and you can see your results and replay it.
+Falling into a hazard or a floor breaker ends your run straight away, however much health or how many lives you have.
+With a joystick, you feel a rumble when you're hurt, a stronger one when you lose a life, and the strongest when you die.
+
+Staying alive.
+
+A worn steel shield takes blows before your health does. Health potions heal 5 to 10 percent of your health, never past full, and life capsules give you 1 or 2 more lives, up to 20. Harder levels give you fewer shields, potions and capsules.
+Two powerups change how much a hit hurts for a while: Tough Hide halves the damage to your health, and Soft Hide doubles it.
+
+Health and lives in a run.
+
+The damage you take counts toward damage taken in your statistics, and each life you lose toward lives lost. Each kind of obstacle also counts the times it caught you.
+
+Health and lives in practice and free runs.
+
+A practice run starts you with 1 life and full health. When a hit would take your last life, or you fall into a hazard or a floor breaker, you die just as you would in a real run, but the run doesn't end: after the death message and its retry options, unless you've turned those off, you're set down just past what caught you, with full health and your life back.
+
+In a free run, modify player health sets your full health, and modify player lives sets your lives, each with give, set and take. Modify death mode chooses what happens when you die: no deaths, where your last life is never lost and your health just refills, normal deaths, where the run ends, or practice deaths, as in a practice run.

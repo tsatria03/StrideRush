@@ -1,0 +1,34 @@
+Weapons.
+
+You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, dagger, fist, hammer, knife, sword, machine gun and pistol. Each run starts with the fist in your hands, and each weapon is stronger than the one before it. Your weapons are for breaking fake walls and fake doors, shooting down vehicles and killing insects.
+
+How your weapons work.
+
+Press the space bar to swing a melee weapon or fire a gun, or the A button on a joystick. Your weapons always hit the nearest thing ahead of you, and that includes any item lying ahead of you in your lane, such as an ammo pack, key or shield, which breaks if you hit it. Items in other lanes are safe from your weapons.
+Real doors and real walls can't be harmed. A vehicle can only be hit while it's in your lane, and an insect only while you're crouched.
+
+Melee weapons.
+
+The bat, boot, club, dagger, fist, hammer, knife and sword are melee weapons. A melee weapon's hit lands a moment after you swing it, on whatever is nearest within reach by then, and the stronger the weapon, the slower its swing: the bat lands almost at once, while the sword takes nearly half a second, so swing a heavy weapon early, before what you're aiming at reaches you.
+After each hit, a melee weapon needs a moment to recover before it can swing again, longer for the stronger ones, so pressing the space bar faster won't help. Switching weapons during a swing cancels it.
+
+Guns.
+
+The pistol fires up to ten times a second, one shot per press, while the machine gun keeps firing ten times a second for as long as you hold the space bar. A gun fires a bullet that you'll hear flying off ahead of you until it lands. A bullet only flies as far as its gun reaches, so a shot fired at something still too far away falls short and wastes the round.
+Each gun starts every run with 50 rounds loaded and 50 in reserve, and they keep their own ammo separately. A reserve can hold up to 200 rounds. Once a gun is empty you'll hear it click instead of firing. Press R to reload any time a gun isn't full, and you'll hear a ping when it's ready; switching weapons during a reload cancels it. When the reserve runs out, that gun is empty until you open an ammo pack. Press X to hear how much ammo your gun has loaded and in reserve.
+
+Reach.
+
+Each weapon reaches its own distance ahead of you, and the stronger the weapon, the further it reaches: the bat about 2 seconds ahead, a little further for each melee weapon after it up to the sword's 3 and a half, then the machine gun's 4 and a half and the pistol's 5 and a half, which is as far ahead as you can hear anything.
+The further a weapon reaches, the sooner you can start hitting what's coming, which makes tough fake walls and fake doors easier to break in time. Nothing can be hit before you can hear it, and at high speeds things appear closer than that.
+
+Weapons in a run.
+
+Each swing counts toward melee swings in your statistics, each shot toward gunshots fired, and each reload toward gun reloads.
+Four powerups change your weapons for a while: Quick Swings and Clumsy Swings make your melee weapons swing faster or slower, and Rapid Fire and Sticky Trigger make your guns fire faster or slower.
+
+Weapons in practice and free runs.
+
+You only have weapons when practicing insects, fake walls, mixed walls, fake doors, mixed doors, vehicles, combinations, trampolines or mixed obstacles, since those can need them, and then your guns never run out of reserve rounds, and X tells you so. In every other practice run, no weapon is drawn and the weapon keys do nothing.
+
+In a free run, your guns start with 50 rounds in reserve, as in an endless run. While a gun is drawn, modify ammo limits gives it limited or unlimited rounds, and modify ammo reserves gives, sets or takes its reserve.

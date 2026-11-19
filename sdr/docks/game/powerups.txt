@@ -1,0 +1,34 @@
+Powerups.
+
+Powerups are passive pickups that give you a good or bad effect for a while. Unlike items, you don't pick one up with your hands, and it doesn't go into your inventory. You can't tell a good powerup from a bad one until you collect it, so going for one is a gamble.
+
+How a powerup works.
+
+A ground powerup sits on the belt, and you collect it by running onto it, so jumping over it skips it. A flight powerup floats above the belt, with its own sound repeating a little more slowly, and you collect it by being in the air as you reach it, so running underneath misses it. A powerup you miss either way breaks with a sound of its own.
+Powerups don't sit in a lane, so you can collect one whichever lane you're in.
+When you collect one, you hear it and its name is spoken. Its effect lasts 15 seconds, and you're told when it wears off.
+
+The powerups.
+
+Powerups come in pairs, one good and one bad, and a new one replaces whichever of its pair is already running instead of adding to it, so you can have one effect of each pair going at once. The pairs are:
+
+Slow Motion and Rush Hour, which make the belt slower or faster.
+Moon Jump and Short Hop, which make your jumps longer or shorter.
+Long Crouch and Stiff Knees, which make your crouches longer or shorter.
+Quick Swings and Clumsy Swings, which make your melee weapons swing faster or slower.
+Rapid Fire and Sticky Trigger, which make your guns fire faster or slower.
+Tough Hide and Soft Hide, which make hits do half or double damage to your health.
+Sturdy Shield and Brittle Shield, which make hits do half or double damage to your shield.
+
+The shield pair only turns up while you're wearing a shield, and ends early if your shield breaks.
+
+Powerups in a run.
+
+Powerups start turning up once the belt reaches 5 steps a second, and come just as often on every level. No flight powerup comes along a slide, where you can't jump.
+Each powerup you collect counts toward ground powerups collected or air powerups collected in your statistics.
+
+Powerups in practice and free runs.
+
+Powerups never come in practice runs.
+
+In a free run, add powerups from add specials in the console, in batches or continuously, or start any of them straight away from modify player specials, with give powerup. View current setup tells you which powerups are running and how long they have left, and clear belt ends them.
