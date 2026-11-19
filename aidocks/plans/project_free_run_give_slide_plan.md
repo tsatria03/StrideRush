@@ -1,6 +1,6 @@
 ---
 name: project_free_run_give_slide_plan
-description: SETTLED (2026-11-18), not built: giving yourself a slide from a free run's console (modify player specials), starting it straight away; 2.5's tenth and last entry; Q&A log
+description: BUILDING (2026-11-18), section 1 built and tested, docks next: giving yourself a slide from a free run's console (modify player specials), starting it straight away; 2.5's tenth and last entry; Q&A log
 metadata:
   type: project
 ---
@@ -29,4 +29,9 @@ Started 2026-11-18 (dev: "Please add giving slides to the todo list." then "It w
 2. Docks: the entry on top of 2.5 (10 of 10): "Added a way to give yourself a slide from a free run's console, putting you on one straight away, and the current setup now says how long your slide has left."; the readme's modify player specials paragraph; the todo item to finished, bringing back the "Nothing is waiting here right now." line; the version history and CLAUDE.md.
 
 ## Build log
-- Not started.
+- Section 1 BUILT (2026-11-18, on 7d5a8e3), awaiting tests: slide.nvgt's new_slide() (spawn_slide()'s ride, theme and landing, now shared) and give_slide() (a reached slide at me.x, then start_slide()); freerun.nvgt's free_specials_menu() lists give slide after give powerup ("This environment has no slides." via speak() and stays when slides_available() is false); free_setup_lines() shows "slide, 2 seconds left" from slide_end_at while sliding. Things already placed on the belt pass harmlessly during the ride; the landing push (spawn_check()'s slide_landing_push()) keeps new placements out of the landing.
+- CHANGED (dev, 2026-11-18, before testing: "It should say something if you press the give slide button. RIght now it says nothing."): reversing Q2's no misc line, give slide now says "You're now on a slide." in the misc buffer, as the console's other changes do. The dev: "Yes, now everything works" (sounds and speech); the numbered tests follow.
+- Section 1 tests: Test 1 of 3 (the ride: speech, start and move, double speed, jump blocked, lanes allowed, stop on time) PASSED.
+- Test 2 of 3 (uncharted: "This environment has no slides.", staying in the specials menu) PASSED.
+- Test 3 of 3 (view current setup's slide line; a fresh ride mid-ride with no stray move loop; clear belt ending a ride) PASSED. Section 1 TESTED: all 3 passed.
+- Note (2026-11-18, after the plan's commit 7d5a8e3): the dev added two todo items for 2.6 (a shop for items and special helpers; helicopters you must jump to shoot), so section 2 moves give slide to finished WITHOUT bringing back the "Nothing is waiting here right now." line.

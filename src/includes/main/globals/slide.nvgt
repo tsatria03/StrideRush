@@ -45,6 +45,13 @@ return trap_folder(s.env, "slides") + s.theme + "/";
 clear. At double the current speed, ride_ms covers that many tiles. */
 void spawn_slide(double x)
 {
+slide_obj@ s = new_slide(x);
+s.loopslot = slidepool.play_2d(get_pack_sound(slide_folder(s) + "*loop*"), 0, me.x, 0, x, true);
+slides.insert_last(s);
+}
+// A slide at x with its ride length, a random theme from the current environment, and its clear landing.
+slide_obj@ new_slide(double x)
+{
 slide_obj s;
 s.x = x;
 s.reached = false;
@@ -56,8 +63,16 @@ s.env = current_env;
 int tiles = int(ceil(double(s.ride_ms) / (current_step_time() / 2.0)));
 s.land_from = x + tiles;
 s.land_to = s.land_from + countdown_steps() + floor_tiles(run_min_floor_time);
-s.loopslot = slidepool.play_2d(get_pack_sound(slide_folder(s) + "*loop*"), 0, me.x, 0, x, true);
+return s;
+}
+/* A free run's give slide (modify player specials, freerun.nvgt): a slide at your tile, already reached, ridden at once,
+with the usual clear landing. Riding one already, the new ride takes over, as back-to-back slides do. */
+void give_slide()
+{
+slide_obj@ s = new_slide(me.x);
+s.reached = true;
 slides.insert_last(s);
+start_slide(s);
 }
 // Runs once per step, right after the move: reaching a slide's tile puts you on it, in the air or on the ground.
 void slide_check()

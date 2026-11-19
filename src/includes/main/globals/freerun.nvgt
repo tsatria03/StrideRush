@@ -249,6 +249,11 @@ lines.insert_last(stat_line("footsteps", footsteps_on ? "heard" : "silent"));
 lines.insert_last(stat_line("heartbeat", free_heartbeat_on ? "heard" : "silent"));
 lines.insert_last(stat_line("practice hints", free_hints ? "spoken" : "silent")); // as the menu names them
 lines.insert_last(stat_line("environment", (debug_env == "" ? "random, now " : "") + current_env.replace("_", " ", true)));
+if (sliding) // a slide being ridden, with its whole seconds left; nothing about slides otherwise
+{
+int slide_left = int(max(1, ceil((slide_end_at - runtimer.elapsed) / 1000.0)));
+lines.insert_last(stat_line("slide", slide_left + (slide_left == 1 ? " second left" : " seconds left")));
+}
 free_powerup_lines(lines);
 free_add_belt_lines(lines); // what's coming (freebelt.nvgt)
 return lines;
@@ -331,7 +336,8 @@ free_spacing = int(parse_int(m.selected_item_id));
 speak_buffer("Your spacing is now " + free_spacing_names[free_spacing] + ".", "misc");
 return true;
 }
-/* Modify player specials, while running: "Choose what you'd like to do with your specials." with give powerup, then back,
+/* Modify player specials, while running: "Choose what you'd like to do with your specials." with give powerup and give
+slide, then back,
 as modify player inventory does. Backing out of give powerup steps back here silently. True once something is given. */
 bool free_specials_menu()
 {
@@ -340,9 +346,22 @@ while (true)
 setupmenu();
 m.intro_text = "Choose what you'd like to do with your specials.";
 m.add_item("give powerup", "powerup");
+m.add_item("give slide", "slide");
 m.add_item("back", "back");
 int mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") return false;
+if (m.selected_item_id == "slide")
+{
+// One slide, started at once (slide.nvgt); without slide themes here, say so and stay.
+if (!slides_available())
+{
+speak("This environment has no slides.");
+continue;
+}
+give_slide();
+speak_buffer("You're now on a slide.", "misc");
+return true;
+}
 if (free_give_powerup()) return true;
 }
 return false;
@@ -411,7 +430,7 @@ if (free_moving)
 m.add_item("modify player health", "health");
 m.add_item("modify player inventory", "inventory"); // give, set and take items
 m.add_item("modify player lives", "lives");
-m.add_item("modify player specials", "specials"); // give powerup, for now
+m.add_item("modify player specials", "specials"); // give powerup and give slide
 }
 m.add_item("modify practice hints", "hints");
 m.add_item("modify running speed", "speed");
