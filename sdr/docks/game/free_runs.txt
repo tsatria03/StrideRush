@@ -27,7 +27,7 @@ Clear belt clears everything coming and on the belt, empties your inventory, tak
 
 Your settings.
 
-Each modify choice tells you what it's currently set to, or how much you currently have, as you open it, and its menu starts on your current choice, except modify spacing, which starts on very close spacing.
+Each modify choice tells you what it's currently set to, or how much you currently have, as you open it, and its menu starts on your current choice.
 Modify death mode chooses no deaths, where your last life is never lost and your health just refills, while a hazard or a floor breaker sets you down just past it and sends another one down the belt; normal deaths, where losing your last life or falling into a hazard or a floor breaker ends the run; or practice deaths, which set you down just past what caught you with your lives back.
 Modify spacing chooses how far apart things come on the belt: very close, with only a couple of steps between one thing and the next one's warning, close, normal, which is how a free run starts, far or very far, with up to 10 seconds between them. A change applies from the next gap on.
 Modify environment chooses an environment to stay in, or random, modify running speed chooses your speed, modify footsteps chooses heard or silent footsteps, modify heartbeat chooses a heard or silent heartbeat, and modify practice hints chooses silent or spoken hints for whatever you've added.

@@ -18,7 +18,7 @@ New key colours can be added as folders in sounds/game/equipments/items/other.
 
 Fixed folders.
 
-Other folders are fixed: you can swap the files in them, but new folders are ignored. These are:
+Other folders are fixed: you can swap the files in them, but new folders are ignored. These are the following:
 
 The kinds of obstacle themselves, since the game only knows its own, and a traps/lasers or traps/npc/robots folder would do nothing.
 The ten weapons in sounds/game/equipments/weapons.

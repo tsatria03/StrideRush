@@ -14,7 +14,7 @@ Be careful: if you run onto a pack in its lane, or land on it from a jump, it br
 
 Using one.
 
-Packs stay in your inventory until you open them. Opening one adds 5 to 10 rounds to the reserve of the gun you're holding, so draw the gun you want to fill first. If you're holding a melee weapon, or that gun's reserve is already full, the pack stays in your inventory for later.
+Ammo packs stay in your inventory until you open them. Opening one adds 5 to 10 rounds to the reserve of the gun you're holding, so draw the gun you want to fill first. If you're holding a melee weapon, or that gun's reserve is already full, the pack stays in your inventory for later.
 
 Ammo packs in a run.
 

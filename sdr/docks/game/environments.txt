@@ -27,4 +27,4 @@ Each add list only has the kinds your current environment has, and anything you'
 Learning and making environments.
 
 Learn sounds, in the game menu, has a category for each environment, holding its countdowns, transitions, traps and vehicles, so you can hear its obstacles before you run into them.
-You can make your own environments, too: every folder in sounds/game/environments is an environment, and the game finds a new one on its own, as described under customizing sounds.
+You can make your own environments too. Every folder in sounds/game/environments is an environment, and the game finds a new one on its own, as described under customizing sounds.
