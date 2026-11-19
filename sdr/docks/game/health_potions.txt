@@ -1,0 +1,26 @@
+Health potions.
+
+Health potions heal you. One turns up ahead of you now and then, in one of the three lanes, and you pick it up with a hand to keep it in your inventory until you need it.
+
+How a health potion works.
+
+You'll hear a health potion waiting in its lane as you come toward it, and one in another lane just passes you by. Health potions turn up more often than life capsules, and less often on harder difficulties.
+
+Picking one up.
+
+Get into its lane, then press either hand in the last few steps before you reach it to pick it up, and it goes into your inventory. If you run onto one in its lane, or land on it from a jump, it breaks and is lost, and so does shooting or swinging at it. A jump that carries you right over it just misses it.
+
+Using one.
+
+Choose it in your inventory and use it to heal 5 to 10 percent of your health, never past full. If your health is already full, it tells you so and keeps the potion for later, so collecting a few is worth it.
+
+Health potions in a run.
+
+Health potions can turn up from the very start of a run.
+Each potion counts toward health potions picked up, health potions broken or health potions used in your statistics.
+
+Health potions in practice and free runs.
+
+Health potions never come in practice runs.
+
+In a free run, add health potions from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. You can also give, set or take health potions from modify player inventory.

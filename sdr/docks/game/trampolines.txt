@@ -1,0 +1,24 @@
+Trampolines.
+
+Trampolines launch you into the air when you run onto one. A good one sends you on a long flight over everything ahead, while a worn one gives you only a short bounce. Trampolines come in four kinds: good or worn, and either in one lane or across the whole belt.
+
+How a trampoline works.
+
+A lane trampoline sits in one lane and is heard in that lane as you come toward it, so you take it by being in its lane and avoid it by being in another one. A belt-wide trampoline covers the whole belt and is heard straight ahead, so there's no avoiding it.
+Jumping never gets you over a trampoline, since running onto one launches you whether you're on the ground or in the air.
+A good trampoline sounds normal and sends you on a long flight of two and a half seconds. A worn trampoline sounds higher or lower, like a fake door, and gives you only a normal jump.
+
+Flying.
+
+On a good trampoline's flight, everything you reach before you land passes under you without a sound, including ladders, floor breakers and vehicles, while anything past your landing counts down as normal.
+In the air you can switch lanes, use your hands, fire and use your inventory, though you can't jump or crouch until you land.
+
+Trampolines in a run.
+
+Trampolines start once the belt reaches about 3.3 steps a second, and like slides they come less often on each harder difficulty. They never come as part of a combination.
+
+Trampolines in practice and free runs.
+
+Trampolines has its own practice choice, which brings a trampoline of any of the four kinds every other spawn, with an obstacle of any type in between, and your weapons drawn. It opens once you've cleared 5 combinations while practicing them, and taking 5 trampoline flights while practicing opens mixed obstacles.
+
+In a free run, add trampolines from add obstacles in the console, and choose their lane: random lanes, as usual, where some cover the whole belt, your own lane, or the left, middle or right lane, where every one is a pad in that lane.

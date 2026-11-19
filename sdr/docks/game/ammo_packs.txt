@@ -1,0 +1,28 @@
+Ammo packs.
+
+Ammo packs refill your guns. Every so often one turns up ahead of you instead of an obstacle, in one of the three lanes, and you pick it up with a hand to keep it in your inventory until you need it.
+
+How an ammo pack works.
+
+You'll hear an ammo pack waiting in its lane as you come toward it. One in your lane sounds straight ahead, and one in another lane sounds off to that side, and a pack in another lane just passes you by.
+Sometimes two items turn up side by side in different lanes, so you have to choose which one to go for.
+
+Picking one up.
+
+Get into its lane, then press either hand in the last few steps before you reach it to pick it up, and it goes into your inventory.
+Be careful: if you run onto a pack in its lane, or land on it from a jump, it breaks and is lost, and so does shooting or swinging at it. A jump that carries you right over it just misses it.
+
+Using one.
+
+Packs stay in your inventory until you open them. Opening one adds 5 to 10 rounds to the reserve of the gun you're holding, so draw the gun you want to fill first. If you're holding a melee weapon, or that gun's reserve is already full, the pack stays in your inventory for later.
+
+Ammo packs in a run.
+
+Ammo packs start turning up once the belt reaches about 3.3 steps a second. Your inventory starts empty every run.
+Each pack counts toward ammo packs picked up, ammo packs broken or ammo packs used in your statistics.
+
+Ammo packs in practice and free runs.
+
+Ammo packs never come in practice runs, where your guns never run out of reserve rounds.
+
+In a free run, add ammo packs from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. You can also give, set or take ammo packs from modify player inventory.

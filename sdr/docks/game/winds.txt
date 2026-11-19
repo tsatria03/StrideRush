@@ -1,0 +1,23 @@
+Winds.
+
+Winds are gusts that blow toward you down a single lane, a little faster than the belt carries you, and chase you across the lanes. The way past a wind is to wait for its last move, then switch lanes so it can't follow.
+
+How a wind works.
+
+Each wind starts in a random lane, and about every three quarters of a second it moves one lane toward the lane you're in, so you'll hear it sweep across the belt until it's lined up with you. Its countdown only plays while it's in your lane.
+If it reaches you in your lane, it takes 5 of your health and shoves you one lane over: toward the middle from either side lane, or the way it was blowing from the middle lane, which could put you in the path of something else.
+
+Getting past a wind.
+
+Switching lanes early doesn't help, since it just follows you. Switching at the last moment, after it's made its final move, leaves it behind to blow past you.
+Crouching as it reaches you braces you, so you stay in your lane, though you still take the hit.
+
+Winds in a run.
+
+Winds join an endless run once the belt reaches 5 steps a second, in any environment that has them. They never come as part of a combination.
+
+Winds in practice and free runs.
+
+Winds has its own practice choice. It opens once you've dodged past 5 barriers while practicing them, and dodging 5 winds while practicing opens vehicles. If a wind catches you in practice, the death message tells you to wait for its last move, then switch lanes so it can't follow.
+
+In a free run, add winds from add obstacles in the console.
