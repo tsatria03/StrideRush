@@ -72,31 +72,91 @@ dlgplay(get_pack_sound("main/ui/menu/*speaker*"));
 dlgplay(get_pack_sound("main/ui/other/*complete*"), false);
 dlgmessage_return("Speaker test complete.");
 }
-/* The documentation menu: a loop, so closing a document comes back here and escape or back
-returns to the main menu silently (a nested menu), with nothing stacking up. */
+/* The documentation menu: game (a topic for each part of the game, docks/game) then main (the four main docks,
+docks/main), each a list of its own. Every level is a loop, so closing a document comes back to its list, and escape or
+back steps out silently (nested menus), with nothing stacking up. Each list remembers the item you last chose, for as
+long as the game is open, and opens on it next time (by its id, so a new game document doesn't shift it). */
+string docks_focus = "", docks_main_focus = "", docks_game_focus = "";
 void docksmenu()
 {
 while(true)
 {
 setupmenu(true);
-m.add_item("changelog", "changelog.txt");
-m.add_item("credits", "credits.txt");
-m.add_item("readme", "readme.txt");
-m.add_item("todo list", "todo list.txt");
+m.add_item("Game. This section explains each part of the game on its own, from every obstacle and item to the game modes.", "game");
+m.add_item("Main. This section has the readme, changelog, todo list and credits.", "main");
 m.add_item("back", "back");
 m.intro_text="Documentation menu.";
-int mres=m.run();
+int focus=docks_focus=="game" ? 0 : (docks_focus=="main" ? 1 : -1);
+int mres=m.run(focus, false, focus>=0);
+if(mres<0 or m.selected_item_id=="back") return;
+docks_focus=m.selected_item_id;
+if(docks_focus=="game") docks_game_menu();
+else docks_main_menu();
+}
+}
+/* Main: the changelog, credits, readme and todo list, from docks/main. With none of them there, a dialog says so and it
+stays in the documentation menu, as game does. */
+void docks_main_menu()
+{
+while(true)
+{
+if(find_files("docks/main/*.txt").length()==0)
+{
+dlgmessage_return("There are no documents yet.");
+return;
+}
+setupmenu(true);
+string[] files={"changelog.txt", "credits.txt", "readme.txt", "todo list.txt"};
+for(uint i=0; i<files.length(); i++) m.add_item(string_replace(files[i], ".txt", "", true), files[i]);
+m.add_item("back", "back");
+m.intro_text="Main section.";
+int focus=files.find(docks_main_focus);
+int mres=m.run(focus, false, focus>=0);
 if(mres<0 or m.selected_item_id=="back") return;
 string filename=m.selected_item_id;
+docks_main_focus=filename;
 m.fade_music();
-dockread("docks/main/"+filename); // the main docks: changelog, credits, readme and todo list
+dockread("docks/main/"+filename);
+}
+}
+/* Game: every .txt file in docks/game, alphabetically, each named from its file with spaces for underscores
+(force_fields.txt reads "force fields"), so a new topic file shows up on its own. With none there yet, a dialog says
+so and it stays in the documentation menu. */
+void docks_game_menu()
+{
+while(true)
+{
+string[] topics=find_files("docks/game/*.txt");
+if(topics.length()==0)
+{
+dlgmessage_return("There are no documents yet.");
+return;
+}
+topics.sort_ascending();
+setupmenu(true);
+for(uint i=0; i<topics.length(); i++)
+{
+string name=string_replace(topics[i], ".txt", "", true);
+m.add_item(string_replace(name, "_", " ", true), topics[i]);
+}
+m.add_item("back", "back");
+m.intro_text="Game section.";
+int focus=topics.find(docks_game_focus);
+int mres=m.run(focus, false, focus>=0);
+if(mres<0 or m.selected_item_id=="back") return;
+string filename=m.selected_item_id;
+docks_game_focus=filename;
+m.fade_music();
+dockread("docks/game/"+filename);
 }
 }
 /* Shows one document in an audio form window: the whole file in a read-only box you can arrow through, and a close
-button that escape also presses. A missing file shows an alert instead. Either way it returns to docksmenu(). */
+button that escape also presses. A missing file shows an alert instead. Either way it returns to the list it came
+from. The window is named by the file alone, without its folder. */
 void dockread(const string&in filename)
 {
-string shortname=string_replace(filename, "docks/main/", "", true);
+string[]@ path_parts=filename.split("/");
+string shortname=path_parts[path_parts.length()-1];
 if(!file_exists(filename))
 {
 alert("Error", "Could not find "+shortname+".");
