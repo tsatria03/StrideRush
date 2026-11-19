@@ -1,0 +1,33 @@
+Customizing sounds.
+
+Every sound in Stride Rush is a file in the sounds folder, and you can change any of them. There are no sound packs to choose between: what's in that folder is what you hear.
+
+The sounds folder.
+
+The sounds folder has two parts: sounds/game holds the environments, weapons and items, and sounds/main holds the game's own events, your own sounds and the menus.
+
+Changing and adding sounds.
+
+Any sound can be replaced, and any sound can be given more versions. The game looks for a sound by its name, such as fire or step, and plays a random file whose name contains it, so adding fire8.ogg next to fire1 to fire7 adds another version of that sound, with nothing else to change.
+
+Folders the game finds on its own.
+
+Some folders are found on their own, so a new folder there is all it takes. Every folder in sounds/game/environments is an environment. Inside one, each folder in platforms is a surface you can run on, platforms/ledge holds the ledge around hazards, and audio/tracks and audio/ambiences hold its music and ambiences.
+Its traps and transitions folders hold a folder for each kind of obstacle, such as traps/hazards or transitions/doors, each with a countdown folder for its warning sounds and a general folder of themes, where every new folder is another version of that obstacle. Creatures, such as animals, live one level down, in traps/npc/animals, and work the same way. Its vehicles folder does too, with a folder in general for each kind of vehicle.
+New key colours can be added as folders in sounds/game/equipments/items/other.
+
+Fixed folders.
+
+Other folders are fixed: you can swap the files in them, but new folders are ignored. These are:
+
+The kinds of obstacle themselves, since the game only knows its own, and a traps/lasers or traps/npc/robots folder would do nothing.
+The ten weapons in sounds/game/equipments/weapons.
+The five items in sounds/game/equipments/items/common.
+sounds/main/misc/game, for powerups and the game's own events.
+sounds/main/misc/player, for your own sounds.
+The sounds/main/ui folders, for menus, dialogs and the speech buffers.
+
+Making an environment.
+
+An environment doesn't need everything. Nothing is ever borrowed from another environment: a kind of obstacle with no folder there just doesn't come while you're there, and a missing sound is simply silent.
+Endless and timed runs only go to an environment once it has an obstacle they can bring, while a free run can go to any of them, so you can try out a new environment's surfaces, music and ambience before giving it any obstacles. Learn sounds finds what you add too.

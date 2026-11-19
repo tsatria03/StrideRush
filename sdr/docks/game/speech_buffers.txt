@@ -1,0 +1,42 @@
+Speech buffers.
+
+Everything the game speaks during a run is kept in speech buffers, so you can go back and review it. You can move through the messages, copy them, mute a kind of message you don't want to hear, or save a buffer to a file.
+
+The buffers.
+
+The all buffer holds every message, and the rest each hold one kind:
+
+Achievements, for the achievements you earn.
+Doors, for locked, jammed and unlocked doors.
+Items, for what you pick up, your inventory and what your items do.
+Misc, for your music and ambience volume, the environments you enter, anything you unlock in a practice run, and what you change in a free run's console.
+Powerups, for the powerups you collect and when they wear off.
+Practice, for the hints in a practice run.
+Status, for your health, shield, lane, distance, speed and running time.
+Weapons, for drawing, reloading and your ammo.
+
+A buffer only shows up once something has been spoken into it, and they come in alphabetical order after all.
+
+The keys.
+
+Comma: Moves to the previous message in the current buffer.
+Period: Moves to the next message in the current buffer.
+Shift plus comma: Moves to the first message in the current buffer.
+Shift plus period: Moves to the last message in the current buffer.
+Left bracket: Moves to the previous buffer.
+Right bracket: Moves to the next buffer.
+Shift plus left bracket: Moves to the first buffer.
+Shift plus right bracket: Moves to the last buffer.
+Shift plus M: Mutes or unmutes the current buffer.
+Shift plus C: Copies the current message to the clipboard.
+Alt plus shift plus C: Opens the current message in a box you can read with the arrow keys.
+Shift plus B: Brings up the buffer menu.
+Shift plus backslash: Exports the current buffer to a text file, then clears it.
+
+Muting a buffer.
+
+A muted buffer still keeps its messages, so you can review them, but they aren't spoken as they happen. A muted buffer stays muted the next time you play, until you unmute it. The all buffer can't be muted.
+
+The buffer menu.
+
+The buffer menu lets you copy, export, mute or review a buffer or a single message, all in one place.

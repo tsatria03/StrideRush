@@ -1,0 +1,18 @@
+Achievements.
+
+View game achievements, in the game menu, holds over 100 achievements to work toward. Finding out how to earn them is up to you, and the achievements menu gives you a hint for each one you haven't earned yet.
+
+How achievements work.
+
+Session achievements are earned within a single run, and lifetime achievements add up over all of your runs. Endless runs count toward them, and timed runs have a few of their own, while practice runs and free runs never earn achievements.
+The moment you earn one, mid-run or as a run ends, a sound plays and the game tells you its name and what you did, and the message is kept in the achievements speech buffer. Each achievement is earned once and stays earned for good, unless you clear all of your game progress.
+
+The achievements menu.
+
+The achievements menu tells you how many you've unlocked in total, and each list, session and lifetime, tells you how many of its own you've unlocked. The lists keep every ladder in order, from the easiest step to the hardest.
+An earned achievement shows by name, and pressing enter on it tells you what you did to earn it. One you haven't earned yet says locked, and pressing enter on it gives you a hint about how to earn it.
+
+Your progress.
+
+Achievement statistics, first in the statistics menu, tells you how many achievements you've unlocked, then lists each one as complete, or incomplete with how far you've got. An incomplete session achievement shows your best record, the most you've managed in a single run.
+Clear game progresses, in the game menu, clears every achievement you've earned, along with your stats and records, after asking you first. Copy all game progresses to clipboard and export all game progresses to file include your achievement stats.

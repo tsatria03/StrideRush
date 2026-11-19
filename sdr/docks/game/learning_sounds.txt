@@ -1,0 +1,26 @@
+Learning sounds.
+
+Learn sounds, in the game menu, lets you play the game's sounds before you run into them, so you can learn what each obstacle, item and weapon sounds like.
+
+The categories.
+
+Learn sounds has three categories:
+
+Environments, with a category for each environment, holding its countdowns, with the countdown of each kind of obstacle, its transitions, with doors, ladders, slides, switches and trampolines, and its traps, with a list for each kind of obstacle, and npc, holding animals split into birds and dogs, and insects, with bees, and its vehicles, with a list for each kind of vehicle, such as cars.
+Items, with common items and keys.
+Weapons, with artillery and melee.
+
+Each category tells you how many sounds it holds, and how many there are in total when some of them have several versions or layers. Everything is in alphabetical order. An environment with nothing to play isn't listed. Escape or back takes you up one level.
+
+Playing sounds.
+
+In a list of sounds, press enter to play the one you're on, or hold it down to keep starting it again. A sound with several versions plays one of them at random each time. Moving to another sound stops the one playing, space pauses or resumes it, and shift plus page up or page down makes the sounds louder or quieter.
+A countdown plays its five cues at the starting speed, and you can keep moving through the list while it plays. Each menu remembers where you were until you close the game.
+
+Settings.
+
+Two settings change learn sounds. Enable variant descriptions in the learn sounds menu, in the menu tab of the settings menu, tells you when a sound has several versions as you move through the list. Enable looping of previewed sounds, in the sound tab, loops a sound you play, so it keeps going until you stop it.
+
+Sounds you add.
+
+Learn sounds finds the sounds you add to the game, so a new environment, obstacle theme or key colour shows up on its own, as described under customizing sounds.

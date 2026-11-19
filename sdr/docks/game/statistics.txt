@@ -1,0 +1,24 @@
+Statistics.
+
+View game statistics, in the game menu, keeps track of how you play. Only endless runs count: practice runs and free runs never change your stats.
+
+The statistics menu.
+
+Achievement statistics comes first, with how many achievements you've unlocked and how far you've got with each, as described under achievements.
+Session statistics shows your last endless run, starting with its difficulty and its death outcome, which names the obstacle that killed you, or says none if you quit or restarted. Lifetime statistics adds up every endless run you've played, starting with when you last played and how many runs you've played on each difficulty.
+Each stat is a short label and its value, such as "steps ran, 87", or "total steps ran, 4,000" in the lifetime list.
+
+What's counted.
+
+Between them, the lists cover your steps, running time, top speed and lane changes, every kind of obstacle you've got past and how often each one caught you, the damage you've taken and the lives you've lost, each item you've picked up, broken and used, the powerups you've collected, and your melee swings, gunshots and gun reloads. Each obstacle's and item's document names the stats it counts toward.
+Your stats are saved whenever an endless run ends, however it ends.
+
+Timed run records.
+
+At the end of lifetime statistics come your timed run records, level by level: timed runs played, wins, time-outs, deaths and your best finish. They're saved whenever a timed run ends, and clearing your lifetime stats clears them too.
+
+Clearing, copying and exporting.
+
+The statistics menu can also clear, copy or export your stats. Clear game statistics clears your session stats, your lifetime stats or both, after asking you first, and never clears your achievements or changes which difficulties, modes or practice obstacles you've unlocked. Copy all game statistics to clipboard copies your session and lifetime stats as one text, and export all game statistics to file saves the same text as player_statistics.txt in a stats folder beside your settings.
+The game menu does the same for all of your game progress at once. Clear game progresses clears your session and lifetime stats, your best records and every achievement you've earned, after asking you first, and still never changes which difficulties, modes or practice obstacles you've unlocked. Copy all game progresses to clipboard copies your achievement stats followed by your session and lifetime stats, and export all game progresses to file saves the same text as player_progresses.txt in the same stats folder.
+Your session results can be copied or exported on their own too, from the pause menu during an endless run or after a death. Copy session results to clipboard copies the run's stats as one text, and export session results to file saves the same text as player_results.txt in the same stats folder.
