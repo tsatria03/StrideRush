@@ -1,0 +1,27 @@
+Player teleporters.
+
+Player teleporters are a gamble. Use one and it throws you a random distance along the belt, either forward or back. You pick one up with a hand to keep it in your inventory until you want to take the chance.
+
+How a player teleporter works.
+
+You'll hear a player teleporter waiting in its lane as you come toward it, and one in another lane just passes you by.
+
+Picking one up.
+
+Get into its lane, then press either hand in the last few steps before you reach it to pick it up, and it goes into your inventory. If you run onto one in its lane, or land on it from a jump, it breaks and is lost, and so does shooting or swinging at it. A jump that carries you right over it just misses it.
+
+Using one.
+
+Choose it in your inventory and use it, and it throws you a random 2 to 5 seconds' worth of belt either forward or back.
+It never drops you right on top of an obstacle, but it can drop you just in front of one, so be ready to react the moment you land. If it sends you back, anything you passed that's still waiting there, such as a spike or a hazard, comes up again, while anything you already dealt with, such as a broken fake wall or an opened door, stays that way.
+
+Player teleporters in a run.
+
+Player teleporters start turning up once the belt reaches 4 steps a second.
+Each one counts toward player teleporters picked up, player teleporters broken or player teleporters used in your statistics.
+
+Player teleporters in practice and free runs.
+
+Player teleporters never come in practice runs.
+
+In a free run, add player teleporters from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. Modify player inventory can give, set or take them too.

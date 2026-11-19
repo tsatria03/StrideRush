@@ -1,0 +1,27 @@
+Keys.
+
+Keys unlock real doors. One turns up in every stretch, somewhere before its real door, and you pick it up with a hand to keep it in your inventory until the door comes.
+
+How a key works.
+
+You'll hear a key waiting in its lane as you come toward it, and one in another lane just passes you by. Keys come in several colors, but the color doesn't matter: any key unlocks any real door.
+
+Picking one up.
+
+Get into its lane, then press either hand in the last few steps before you reach it to pick it up, and it goes into your inventory. If you run onto one in its lane, or land on it from a jump, it breaks and is lost, and so does shooting or swinging at it. A jump that carries you right over it just misses it.
+
+Using one.
+
+Once a real door is within about 2 seconds of you, choose a key in your inventory and use it, and you'll hear the lock give. Then open the door with a hand.
+Each key you use is gone. A key you don't use stays in your inventory for a later door. If there's no door within reach, the door ahead is already unlocked, or it's a fake door, the key stays in your inventory, and using a key on a fake door only finds it jammed.
+
+Keys in a run.
+
+A key comes once in every stretch, before its real door, until you reach your level's top speed, after which there are no more real doors.
+Each key counts toward keys picked up, keys broken or keys used in your statistics.
+
+Keys in practice and free runs.
+
+Keys come in practice when you practice real doors, mixed doors or mixed obstacles, each one just before its real door.
+
+In a free run, every real door you add brings its key first. You can also add keys on their own from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. Modify player inventory can give, set or take keys too.

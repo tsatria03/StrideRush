@@ -1,0 +1,29 @@
+Steel shields.
+
+Steel shields are armor. Wear one and it takes the blows in place of your health until it breaks. They turn up only now and then, in one of the three lanes, and you pick one up with a hand to keep it in your inventory until you put it on.
+
+How a steel shield works.
+
+You'll hear a steel shield waiting in its lane as you come toward it, and one in another lane just passes you by. Shields turn up much less often than ammo packs, and less often still on harder difficulties.
+A worn shield takes the damage from every blow in place of your health, and you'll hear the obstacle hit your shield instead of you. A force field still throws you forward. A fresh shield takes 400 damage, twice your own health, and the hit that wears it out is still fully blocked, so you'll hear it break and lose nothing.
+Shields can't save you from falling into a hazard or a floor breaker.
+
+Picking one up.
+
+Get into its lane, then press either hand in the last few steps before you reach it to pick it up, and it goes into your inventory. If you run onto one in its lane, or land on it from a jump, it breaks and is lost, and so does shooting or swinging at it. A jump that carries you right over it just misses it.
+
+Wearing one.
+
+Choose it in your inventory and use it to wear it like armor. You can only wear one at a time, so any others wait in your inventory until the one you're wearing breaks.
+Press M to hear how strong your shield is, as a percentage, an amount such as 320 of 400 endurance, or both, whichever you choose in the game tab of the settings menu. With a joystick, you feel a light tap each time your shield takes a blow.
+
+Steel shields in a run.
+
+Steel shields can turn up from the very start of a run. While you wear one, two powerups can turn up that only affect your shield, and they end early if it breaks.
+Each shield counts toward steel shields picked up, steel shields broken or steel shields used in your statistics.
+
+Steel shields in practice and free runs.
+
+Every practice run starts you with 1 steel shield in your inventory, except when practicing hazards or floor breakers, and gives it back after each practice death. No other shields turn up while you practice.
+
+In a free run, add steel shields from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. Modify player inventory can give, set or take them, and while you wear one, modify shield strength can give, set or take its strength, from 1 to 1000.

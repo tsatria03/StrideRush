@@ -1,0 +1,26 @@
+Life capsules.
+
+Life capsules give you extra lives. They turn up only rarely, in one of the three lanes, and you pick one up with a hand to keep it in your inventory until you need it.
+
+How a life capsule works.
+
+You'll hear a life capsule waiting in its lane as you come toward it, and one in another lane just passes you by. Capsules are rare, and rarer still on harder difficulties.
+
+Picking one up.
+
+Get into its lane, then press either hand in the last few steps before you reach it to pick it up, and it goes into your inventory. If you run onto one in its lane, or land on it from a jump, it breaks and is lost, and so does shooting or swinging at it. A jump that carries you right over it just misses it.
+
+Using one.
+
+Choose it in your inventory and use it to get 1 or 2 extra lives, up to a limit of 20 lives. You can carry as many capsules as you find, and if you're already at 20 lives, it tells you so and keeps the capsule for later.
+
+Life capsules in a run.
+
+Life capsules can turn up from the very start of a run.
+Each capsule counts toward life capsules picked up, life capsules broken or life capsules used in your statistics.
+
+Life capsules in practice and free runs.
+
+Life capsules never come in practice runs.
+
+In a free run, add life capsules from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. Modify player inventory can give, set or take them too. If you've set more than 20 lives with modify player lives, a capsule can take you up to that number instead.
