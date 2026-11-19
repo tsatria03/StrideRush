@@ -1,6 +1,6 @@
 ---
 name: project_practice_retry_menu_plan
-description: SETTLED (2026-11-19), not built: a game settings option to hide the menu after a practice death, setting you straight down past what caught you as before 2.0; first plan for 2.6; Q&A log
+description: COMPLETE (2026-11-19, opened 2.6 at 1 of 10): a game settings option to hide the menu after a practice death, setting you straight down past what caught you as before 2.0; first plan for 2.6; Q&A log
 metadata:
   type: project
 ---
@@ -29,4 +29,8 @@ Started 2026-11-19 (dev: "I'd say the retry menu because recall that in earlier 
 2. Docks, straight after section 1's tests pass (dev's request): "New in 2.6." on top of the changelog with the entry "Added a setting to the game tab to hide the retry options after a practice death, so closing the death message sets you down just past what caught you."; build/version.txt to 2.6; the readme's settings list and practice death paragraph; the todo item to finished; the version history and CLAUDE.md.
 
 ## Build log
-- Not started.
+- Section 1 BUILT (2026-11-19, on b8079a1), awaiting tests: dec.nvgt's show_practice_retry (true); savefuncts.nvgt reads and writes it; settings_menu.nvgt's checkbox after the copy and export one (new_practice_retry, saved, and reset to on by reset_settings()); endrun.nvgt's practice_death() runs the menu only when show_practice_retry is on (and not on no deaths), otherwise falls through to the set-down after the dialog.
+- Section 1 tests: Test 1 of 3 (the checkbox after the copy and export one, checked by default, unchecked and kept through a relaunch) PASSED.
+- Test 2 of 3 (spikes practice, menu hidden: the death line, then straight down past the spike with full health, no carried key press) PASSED.
+- Test 3 of 3 (turned back on mid-run with F2: the menu returns, return to game menu works; off again, a free run on practice deaths skips the menu after a hazard fall) PASSED. Section 1 TESTED: all 3 passed. The docks follow straight on, as the dev asked.
+- Section 2 DONE (2026-11-19, straight after the tests, on b8079a1): "New in 2.6." with the entry on top of the changelog (1 of 10), build/version.txt to 2.6, the readme's practice death paragraph (turning the setting off, free runs too), the todo item to finished, the version history (a 2.6 section) and CLAUDE.md. PLAN COMPLETE.

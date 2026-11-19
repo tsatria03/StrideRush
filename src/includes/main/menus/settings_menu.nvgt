@@ -6,7 +6,7 @@ open something of their own (reset, the sound device, the voice, the key screens
 rebuilds the window afterwards, so the unsaved ticks are carried in locals across the rebuild. */
 void settingsmenu(bool ingame = false)
 {
-bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions, new_updates = auto_check_updates, new_death_results = show_death_results, new_death_copy = show_death_copy_export, new_vibration = joystick_vibration;
+bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions, new_updates = auto_check_updates, new_death_results = show_death_results, new_death_copy = show_death_copy_export, new_practice_retry = show_practice_retry, new_vibration = joystick_vibration;
 // The volume sliders, in dB from min_volume to 0, shown as 0 to 100 percent.
 int new_amb_vol = ambience_volume, new_step_vol = footstep_volume, new_mus_vol = music_volume, new_heart_vol = heartbeat_volume, new_menu_vol = menumusvolume, new_master_vol = master_volume;
 int new_health_fmt = health_format, new_shield_fmt = shield_format; // the readout formats (lives.nvgt's format_readout())
@@ -66,11 +66,13 @@ int behind_box = setform.create_checkbox("Enable behind pitch decrease", new_beh
 setform.assign_to_tab(behind_box, tabs, tab_game);
 int ask_box = setform.create_checkbox("Ask to quit the run when pressing escape", new_ask);
 setform.assign_to_tab(ask_box, tabs, tab_game);
-// The two death settings after the Escape question, both on by default.
+// The three death settings after the Escape question, all on by default.
 int death_results_box = setform.create_checkbox("Show session results after dying", new_death_results);
 setform.assign_to_tab(death_results_box, tabs, tab_game);
 int death_copy_box = setform.create_checkbox("Show copy and export options after dying", new_death_copy);
 setform.assign_to_tab(death_copy_box, tabs, tab_game);
+int practice_retry_box = setform.create_checkbox("Show retry options after a practice death", new_practice_retry);
+setform.assign_to_tab(practice_retry_box, tabs, tab_game);
 if (!ingame)
 {
 // The Joystick tab, before Keyboard, built the same way: rebind first, then view.
@@ -139,6 +141,7 @@ new_variants = setform.is_checked(variants_box);
 if (updates_box != -1) new_updates = setform.is_checked(updates_box);
 new_death_results = setform.is_checked(death_results_box);
 new_death_copy = setform.is_checked(death_copy_box);
+new_practice_retry = setform.is_checked(practice_retry_box);
 if (vibration_box != -1) new_vibration = setform.is_checked(vibration_box);
 int health_fmt_now = setform.get_list_position(health_fmt_list);
 if (health_fmt_now >= 0) new_health_fmt = health_fmt_now;
@@ -170,6 +173,7 @@ variant_descriptions = new_variants;
 if (!ingame) auto_check_updates = new_updates;
 show_death_results = new_death_results;
 show_death_copy_export = new_death_copy;
+show_practice_retry = new_practice_retry;
 if (!ingame) joystick_vibration = new_vibration;
 health_format = new_health_fmt;
 shield_format = new_shield_fmt;
@@ -203,6 +207,7 @@ new_variants = variant_descriptions;
 new_updates = auto_check_updates;
 new_death_results = show_death_results;
 new_death_copy = show_death_copy_export;
+new_practice_retry = show_practice_retry;
 new_vibration = joystick_vibration;
 new_health_fmt = health_format;
 new_shield_fmt = shield_format;
@@ -285,6 +290,7 @@ fademode = 1;
 ask_quit_on_escape = true;
 show_death_results = true;
 show_death_copy_export = true;
+show_practice_retry = true;
 joystick_vibration = true;
 health_format = 0;
 shield_format = 0;

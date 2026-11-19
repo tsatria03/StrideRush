@@ -1,3 +1,5 @@
+New in 2.6.
+Added a setting to the game tab to hide the retry options after a practice death, so closing the death message sets you down just past what caught you.
 New in 2.5.
 Added a way to give yourself a slide from a free run's console, putting you on one straight away, and the current setup now says how long your slide has left.
 Added a combination choice when adding combinations in a free run, so they can bring one pair you pick, in the order you pick, or random pairs as before.

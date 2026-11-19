@@ -81,6 +81,10 @@ if(st.d.exists("show_death_copy_export"))
 {
 show_death_copy_export=st.read_bool("show_death_copy_export");
 }
+if(st.d.exists("show_practice_retry"))
+{
+show_practice_retry=st.read_bool("show_practice_retry");
+}
 if(st.d.exists("joystick_vibration"))
 {
 joystick_vibration=st.read_bool("joystick_vibration");
@@ -248,6 +252,7 @@ st.add("auto_check_updates",auto_check_updates);
 st.add("ask_quit_on_escape",ask_quit_on_escape);
 st.add("show_death_results",show_death_results);
 st.add("show_death_copy_export",show_death_copy_export);
+st.add("show_practice_retry",show_practice_retry);
 st.add("joystick_vibration",joystick_vibration);
 st.add("health_format",health_format);
 st.add("shield_format",shield_format);

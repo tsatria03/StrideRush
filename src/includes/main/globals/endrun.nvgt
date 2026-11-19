@@ -122,7 +122,8 @@ hit, already playing through p, plays out. Then the death: the hazard's fall cli
 tile fall. A dialog says what caught you and how to get past it (practice_death_text()), then a menu asks "What would
 you like to do now?": retry sets you down at past_x, just past what caught you, with everything back (full health,
 practice_lives, and steel shields topped up to practice_shields, keys kept), and the run picks up where it froze, with
-a landing; return to game menu, or Escape ("canceled"), ends the run as quit run does. */
+a landing; return to game menu, or Escape ("canceled"), ends the run as quit run does. With the retry options hidden
+in the settings, the menu is skipped and closing the dialog retries. */
 void practice_death(double past_x, const string&in fall_clip)
 {
 joystick_rumble(rumble_death); // the same as a real death
@@ -141,6 +142,11 @@ else
 {
 dlgmessage_return(practice_death_text()); // practice_hints.nvgt
 while (key_down(KEY_RETURN) or key_down(KEY_SPACE) or key_down(KEY_A) or key_down(KEY_ESCAPE)) wait(5);
+}
+/* The retry menu, unless the game tab's "Show retry options after a practice death" is off (show_practice_retry): then
+closing the death dialog sets you straight down past what caught you. */
+if (!free_no_deaths() and show_practice_retry)
+{
 setupmenu();
 m.intro_text = "What would you like to do now?";
 m.add_item(free_run ? "retry free run" : "retry practice", "retry"); // a free run on practice deaths isn't a practice run
