@@ -97,7 +97,7 @@ end_run_hit();
 return;
 }
 wallpool.play_extended_2d(hit_clip, 0, me.x, 0, w.x, 0, 0, 0, 0, false, 0, 0, 0, w.pitch); // no death sound: that's only for a wall your weapons destroy
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 }
 // Dropped once it's as far behind as obstacles appear ahead.
 if (me.x > w.x + spawn_distance()) remove_wall(i);

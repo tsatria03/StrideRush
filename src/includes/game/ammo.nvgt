@@ -6,7 +6,7 @@ plays and it's lost. A clean jump that's still in the air across its tile misses
 There are no countdown cues for packs; their loop is the guide.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_ammopacks() shrinks the array. */
 sound_pool ammopackpool;
-const string ammopack_folder = "equipments/items/common/ammo_pack/";
+const string ammopack_folder = "game/equipments/items/common/ammo_pack/";
 class ammopack
 {
 double x;
@@ -63,7 +63,7 @@ target.spent = true;
 stop_ammopack(target);
 ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*get*"), false);
 // The player's give sound as it goes into the inventory, together with get.
-p.play_stationary(get_pack_sound("misc/player/*give*"), false);
+p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("ammo_pack", 1);
 stat_add("ammo_packs_picked_up");
 speak_buffer(item_display_name("ammo_pack"), "items"); // just the item's name

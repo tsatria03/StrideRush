@@ -5,7 +5,7 @@ give, centered) and it goes into the inventory as "health_potion". Arriving on i
 a weapon hit breaks it (break) and it's lost; a clean jump over it misses it. U uses it (use_potion()).
 Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_potions() shrinks the array. */
 sound_pool potionpool;
-const string potion_folder = "equipments/items/common/health_potion/";
+const string potion_folder = "game/equipments/items/common/health_potion/";
 class healthpotion
 {
 double x;
@@ -56,7 +56,7 @@ if (@target == null) return false;
 target.spent = true;
 stop_potion(target);
 potionpool.play_stationary(get_pack_sound(potion_folder + "*get*"), false);
-p.play_stationary(get_pack_sound("misc/player/*give*"), false);
+p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("health_potion", 1);
 stat_add("health_potions_picked_up");
 speak_buffer(item_display_name("health_potion"), "items");
@@ -155,7 +155,7 @@ return false;
 int heal = max_health() * random(health_potion_min_percent, health_potion_max_percent) / 100; // of a free run's set health too
 player_health = int(min(max_health(), player_health + heal)); // the game's min() works in doubles
 p.play_stationary(get_pack_sound(potion_folder + "*use*"), false);
-p.play_stationary(get_pack_sound("misc/player/*heal*"), false);
+p.play_stationary(get_pack_sound("main/misc/player/*heal*"), false);
 speak_buffer("Healed to " + format_readout(health_format, player_health, max_health()) + " health.", "items"); // the health format (lives.nvgt)
 return true;
 }

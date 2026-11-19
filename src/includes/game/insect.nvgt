@@ -137,7 +137,7 @@ end_run_hit();
 return;
 }
 insectpool.play_2d(hit_clip, 0, me.x, 0, me.x, false);
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 }
 // How far ahead of you an insect is right now, in tiles: 0 while it hovers at you, below 0 once it's behind you.
 double insect_distance(insect@ ins)

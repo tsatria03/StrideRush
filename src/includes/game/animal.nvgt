@@ -1,4 +1,4 @@
-/* Animals: a belt-wide trap that only a clap clears. Each theme folder in environments/<env>/traps/npc/animals/general is a
+/* Animals: a belt-wide trap that only a clap clears. Each theme folder in game/environments/<env>/traps/npc/animals/general is a
 kind (birds, dogs), and each folder inside a kind is one animal. An animal plays its spawn clip at its tile, then its
 loop (every theme has its own call), with the layered animals countdown. Clapping (both hands together, with nothing
 else for the hands to do) inside its hand window, the same window as a force field's switch, scares the nearest animal
@@ -101,7 +101,7 @@ end_run_hit();
 return;
 }
 animalpool.play_2d(hit_clip, 0, me.x, 0, bd.x, false);
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 }
 if (me.x > bd.x + spawn_distance()) remove_animal(i);
 }

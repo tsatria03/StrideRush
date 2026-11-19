@@ -1,5 +1,5 @@
 /* Vehicles. A vehicle drives down a lane toward you, follows you across the lanes like a wind, fires bursts down its lane
-while it's in yours, and rams you if it reaches you there. Sounds from environments/<env>/vehicles (its own category,
+while it's in yours, and rams you if it reaches you there. Sounds from game/environments/<env>/vehicles (its own category,
 beside traps and transitions; type_path() in environments.nvgt): each folder in vehicles/general is a kind (cars), each
 folder inside a kind a theme, with loop, shoot, hit (the ram), impact (a shot striking you), hurt and death. Each spawn
 is a random kind, an equal share whatever its number of themes, then one of its themes. Its layered countdown
@@ -53,7 +53,7 @@ vehicle_shot@[] vehicle_shots(0);
 
 string vehicle_folder(const string&in env)
 {
-return trap_folder(env, "vehicles"); // environments/<env>/vehicles/general/
+return trap_folder(env, "vehicles"); // game/environments/<env>/vehicles/general/
 }
 // kind is the random kind folder the spawner picked; one of its themes is picked here.
 void spawn_vehicle(double mx, string kind, int countdown)
@@ -229,7 +229,7 @@ end_run_hit();
 return;
 }
 vehiclepool.play_stationary(impact_clip, false);
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 }
 // Runs once per step, right after the move: on meet_x, a ram in your lane or a dodge in another.
 void vehicle_check()
@@ -255,7 +255,7 @@ end_run_hit();
 return;
 }
 vehiclepool.play_stationary(hit_clip, false);
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 }
 else if (!carried()) stat_add("vehicles_dodged"); // it reached you in another lane: a clean dodge
 }

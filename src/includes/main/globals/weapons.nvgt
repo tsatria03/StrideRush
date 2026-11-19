@@ -36,7 +36,7 @@ return weapon_names[w] == "machine_gun" or weapon_names[w] == "pistol";
 }
 string weapon_folder(int w)
 {
-return "equipments/weapons/" + (is_gun(w) ? "artillery" : "melee") + "/" + weapon_names[w] + "/";
+return "game/equipments/weapons/" + (is_gun(w) ? "artillery" : "melee") + "/" + weapon_names[w] + "/";
 }
 // "machine_gun" is spoken as "machine gun".
 string weapon_display_name(int w)

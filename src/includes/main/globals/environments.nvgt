@@ -9,10 +9,10 @@ string current_env = "default";
 debug run stays in. Cleared for endless and practice runs by play_game(). */
 string debug_env = "";
 
-// "environments/default/", the root of one environment's sounds.
+// "game/environments/default/", the root of one environment's sounds.
 string env_root(const string&in env)
 {
-return "environments/" + env + "/";
+return "game/environments/" + env + "/";
 }
 /* Which of an environment's two folders a type lives in: doors, ladders,
 trampolines, slides and switches are transitions, things that move you or that you move through; every other type is
@@ -34,7 +34,7 @@ if (type == "vehicles") return root + "vehicles/";
 if (npc_types.find(type) >= 0) return root + "traps/npc/" + type + "/";
 return root + type_category(type) + "/" + type + "/";
 }
-// Where one environment keeps a type's themes: "environments/default/traps/hazards/general/", or ".../transitions/doors/general/".
+// Where one environment keeps a type's themes: "game/environments/default/traps/hazards/general/", or ".../transitions/doors/general/".
 string trap_folder(const string&in env, const string&in type)
 {
 return type_path(env_root(env), type) + "general/";
@@ -42,7 +42,7 @@ return type_path(env_root(env), type) + "general/";
 // Every environment, naturally sorted, from the folders.
 string[] env_names()
 {
-return get_pack_sound_folders("environments/*");
+return get_pack_sound_folders("game/environments/*");
 }
 // True when an environment has at least one theme for a type, so the type can spawn there.
 bool env_has_type(const string&in env, const string&in type)

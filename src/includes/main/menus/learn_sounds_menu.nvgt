@@ -1,12 +1,12 @@
 /* The learn sounds menu, in the game menu.
 Everything is built from the sound folders each time it opens, so a new obstacle theme, item or weapon
 dropped into sdr/sounds shows up with no code change:
-- items: common (equipments/items/common) and other (equipments/items/other, the keys)
+- items: common (game/equipments/items/common) and other (game/equipments/items/other, the keys)
 - environments: one category per folder in environments/, named by it, each with
   - countdowns: one countdown per type that has cues, from traps, npc, transitions and vehicles (<type>/countdown)
   - traps, transitions and vehicles: one list per type (<type>/general, every theme's sounds); traps also holds npc,
     the kinds in traps/npc that the game knows (environments.nvgt's npc_types), animals
-- weapons: artillery and melee (equipments/weapons/<kind>)
+- weapons: artillery and melee (game/equipments/weapons/<kind>)
 Every menu and list is alphabetical, and every category says how many sounds it holds (learn_count_text()). Escape or
 back steps up a level silently, out to the game menu too (they're all nested menus).
 Labels are friendly names: the theme with underscores as spaces, then the sound's file name with its numbers dropped,
@@ -188,13 +188,13 @@ void learn_sounds_menu()
 m.fade_music(); // so the sounds play on their own
 learn_category root("learn sounds menu");
 learn_category items("items");
-items.subs.insert_last(learn_folder_category("common", "equipments/items/common", ""));
-items.subs.insert_last(learn_folder_category("other", "equipments/items/other", ""));
+items.subs.insert_last(learn_folder_category("common", "game/equipments/items/common", ""));
+items.subs.insert_last(learn_folder_category("other", "game/equipments/items/other", ""));
 root.subs.insert_last(items);
 /* Environments: one category per folder in environments/, listed by the folder name alone, each with its own countdowns
 and obstacles, since both belong to a place; items and weapons stay global. */
 learn_category envs("environments");
-string[] env_names = get_pack_sound_folders("environments/*");
+string[] env_names = get_pack_sound_folders("game/environments/*");
 for (uint i = 0; i < env_names.length(); i++)
 {
 learn_category@ place = learn_environment_category(env_names[i]);
@@ -202,8 +202,8 @@ if (place.count() > 0) envs.subs.insert_last(place); // an environment with noth
 }
 root.subs.insert_last(envs);
 learn_category weapons("weapons");
-weapons.subs.insert_last(learn_folder_category("artillery", "equipments/weapons/artillery", "artillery"));
-weapons.subs.insert_last(learn_folder_category("melee", "equipments/weapons/melee", "melee"));
+weapons.subs.insert_last(learn_folder_category("artillery", "game/equipments/weapons/artillery", "artillery"));
+weapons.subs.insert_last(learn_folder_category("melee", "game/equipments/weapons/melee", "melee"));
 root.subs.insert_last(weapons);
 learn_sort_categories(root.subs);
 for (uint i = 0; i < root.subs.length(); i++) learn_sort_categories(root.subs[i].subs);
@@ -212,7 +212,7 @@ learn_browse(root, "learn");
 // One environment's category: its countdowns (only types whose countdown folder has cues) and its traps, one list per type.
 learn_category@ learn_environment_category(const string&in env)
 {
-string env_root = "environments/" + env + "/";
+string env_root = "game/environments/" + env + "/";
 learn_category@ place = learn_category(env.replace("_", " ", true)); // just its name, such as "default", not "default environment"
 learn_category cues("countdowns");
 string[] types = get_pack_sound_folders(env_root + "traps/*");

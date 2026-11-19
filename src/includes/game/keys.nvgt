@@ -7,7 +7,7 @@ The color doesn't matter: any key opens any real door. Each color is a folder un
 just a new folder. One key is due before each real door; the spawner decides when (key_due()).
 Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_keys() shrinks the array. */
 sound_pool keypool;
-const string key_folder = "equipments/items/other/";
+const string key_folder = "game/equipments/items/other/";
 class doorkey
 {
 double x;
@@ -68,7 +68,7 @@ if (@target == null) return false;
 target.spent = true;
 stop_key(target);
 keypool.play_stationary(get_pack_sound(key_sound_folder(target) + "*get*"), false);
-p.play_stationary(get_pack_sound("misc/player/*give*"), false);
+p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item(target.color, 1);
 stat_add("keys_picked_up");
 speak_buffer(item_display_name(target.color), "items"); // just its name, like a pack: "red key"

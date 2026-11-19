@@ -1,8 +1,10 @@
-/* Every folder is glob-included, so dropping a new .nvgt file into one of these folders is all the wiring it needs.
-main/parsers is left out until it holds a file; there are no map files yet. */
+/* Every folder is glob-included, so dropping a new .nvgt file into one of these folders is all the wiring it needs. A
+glob only reaches the files directly in its folder, so each of main's folders is listed on its own. game holds the
+obstacle and item files; main holds the core: deps, functions, globals and menus. */
 #pragma plugin nvgt_curl
 #include"version.nvgt"
 
+#include"game/*"
 #include"main/deps/*"
 #include"main/functions/*"
 #include"main/globals/*"

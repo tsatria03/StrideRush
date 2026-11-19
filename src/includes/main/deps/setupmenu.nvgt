@@ -21,7 +21,7 @@ m.enter_sound = entersound != "" ? entersound : menu_sound("enter");
 m.open_sound = opensound != "" ? opensound : menu_sound("open");
 m.wrap_sound = wrapsound != "" ? wrapsound : menu_sound("wrap");
 }
-/* The menu sounds, cached: each ui/menu name is searched on disk
+/* The menu sounds, cached: each main/ui/menu name is searched on disk
 once per launch, the first time a menu needs it, instead of every time a menu opens, which was slow on a busy disk.
 The cache keeps every file that matches, and a random one is still picked each time, as get_pack_sound() does, so
 variants such as click2.ogg keep working. A name with no files caches an empty list and plays nothing, as before. */
@@ -32,8 +32,8 @@ string menu_sound(const string&in name)
 int i = menu_sound_names.find(name);
 if (i < 0)
 {
-string[] found = find_files("sounds/ui/menu/*" + name + "*");
-for (uint f = 0; f < found.length(); f++) found[f] = "sounds/ui/menu/" + found[f];
+string[] found = find_files("sounds/main/ui/menu/*" + name + "*");
+for (uint f = 0; f < found.length(); f++) found[f] = "sounds/main/ui/menu/" + found[f];
 menu_sound_names.insert_last(name);
 menu_sound_files.insert_last(found);
 i = int(menu_sound_names.length()) - 1;

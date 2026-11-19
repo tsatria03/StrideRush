@@ -144,7 +144,7 @@ clear_lifetime_stats(); // the best records and the timed run records go with it
 earned_achievements.delete_all();
 writegame();
 m.fade_music();
-temp.play_stationary(get_pack_sound("ui/other/*complete*"), false);
+temp.play_stationary(get_pack_sound("main/ui/other/*complete*"), false);
 dlgmessage_return("Game progresses cleared.");
 m.play_music();
 }
@@ -161,7 +161,7 @@ void copy_all_progress()
 {
 clipboard_copy_text(all_progress_text());
 m.fade_music();
-temp.play_stationary(get_pack_sound("ui/other/*copied*"), false);
+temp.play_stationary(get_pack_sound("main/ui/other/*copied*"), false);
 dlgmessage_return("All game progresses have been copied to your clipboard.");
 m.play_music();
 }
@@ -181,7 +181,7 @@ return;
 f.write(all_progress_text());
 f.close();
 m.fade_music();
-temp.play_stationary(get_pack_sound("ui/other/*export*"), false);
+temp.play_stationary(get_pack_sound("main/ui/other/*export*"), false);
 dlgmessage_return("All game progresses have been exported to stats/player_progresses.txt.");
 m.play_music();
 }

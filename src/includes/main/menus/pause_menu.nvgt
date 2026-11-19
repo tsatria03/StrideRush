@@ -42,7 +42,7 @@ heartbeat_timer.resume();
 void pause_menu(const string&in lead = "")
 {
 pause_game();
-temp.play_stationary(get_pack_sound("misc/game/*pause*"), false);
+temp.play_stationary(get_pack_sound("main/misc/game/*pause*"), false);
 /* It remembers your place: P opens it on resume run, and backing out of anything inside it comes back on the item you
 came from; the item focused is always spoken after the intro. */
 int focus = 0;
@@ -81,7 +81,7 @@ continue;
 // Escape resumes, the same as choosing resume run.
 if (mres < 0 or choice == "resume")
 {
-temp.play_stationary(get_pack_sound("misc/game/*resume*"), false);
+temp.play_stationary(get_pack_sound("main/misc/game/*resume*"), false);
 resume_game();
 return;
 }

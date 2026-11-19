@@ -11,7 +11,7 @@ spacing, items, doors, damage, health and lives), plus two clocks on runtimer, s
   below, apart from endless's difficulty_runs. The mode itself opens once easy endless has its difficulty_unlock_runs.
 - Timed runs keep out of the endless statistics and achievements (start_run_stats()), with their own records, results
   after each run, and achievements of scope timed in achievements.ini.
-- Optional sounds in misc/game, played if they're ever added: timewin (the finish line), timelost (time's up), timewarn
+- Optional sounds in main/misc/game, played if they're ever added: timewin (the finish line), timelost (time's up), timewarn
   (each warning). */
 bool timed_run = false; // the mode's runs, set by play_game() and kept through restarts and replays
 int[] timed_level_runs = {0, 0, 0, 0, 0}; // completed timed runs per level, as difficulty_runs is for endless
@@ -91,7 +91,7 @@ say = timed_warn_seconds[i];
 else if (left > (timed_warn_seconds[i] + timed_warn_rearm_seconds) * 1000.0) timed_warned[i] = false; // re-armed only well clear of it, so hovering near it stays quiet
 }
 if (say < 0) return;
-string clip = get_pack_sound("misc/game/*timewarn*");
+string clip = get_pack_sound("main/misc/game/*timewarn*");
 if (clip != "") p.play_stationary(clip, false);
 speak_buffer(say + " seconds left.", "status");
 }
@@ -101,7 +101,7 @@ void end_run_timed(bool won)
 {
 timed_outcome = won ? "win" : "timeout";
 silence_run();
-string clip = get_pack_sound("misc/game/*" + (won ? "timewin" : "timelost") + "*");
+string clip = get_pack_sound("main/misc/game/*" + (won ? "timewin" : "timelost") + "*");
 if (clip != "") dlgplay(clip);
 finish_run();
 }

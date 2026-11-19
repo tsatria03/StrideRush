@@ -73,7 +73,7 @@ end_run_hit();
 return;
 }
 spikepool.play_2d(hit_clip, 0, me.x, 0, spikes[i].x, false);
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 }
 if (me.x == spikes[i].x and !is_grounded())
 {

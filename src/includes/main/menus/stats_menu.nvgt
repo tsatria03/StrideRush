@@ -246,7 +246,7 @@ if (which != "lifetime") clear_session_stats();
 if (which != "session") clear_lifetime_stats();
 writegame();
 m.fade_music(); // only for the dialog
-temp.play_stationary(get_pack_sound("ui/other/*complete*"), false);
+temp.play_stationary(get_pack_sound("main/ui/other/*complete*"), false);
 dlgmessage_return("Your " + name + " stats have been cleared.");
 m.play_music(); // and back again once the dialog closes
 return;
@@ -270,7 +270,7 @@ void copy_all_stats()
 {
 clipboard_copy_text(all_stats_text());
 m.fade_music(); // only for the dialog
-temp.play_stationary(get_pack_sound("ui/other/*copied*"), false);
+temp.play_stationary(get_pack_sound("main/ui/other/*copied*"), false);
 dlgmessage_return("All game statistics have been copied to your clipboard.");
 m.play_music(); // and back again once the dialog closes
 }
@@ -290,7 +290,7 @@ return;
 f.write(all_stats_text());
 f.close();
 m.fade_music(); // only for the dialog
-temp.play_stationary(get_pack_sound("ui/other/*export*"), false);
+temp.play_stationary(get_pack_sound("main/ui/other/*export*"), false);
 dlgmessage_return("All game statistics have been exported to stats/player_statistics.txt.");
 m.play_music(); // and back again once the dialog closes
 }

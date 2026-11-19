@@ -90,7 +90,7 @@ return;
 // The mine goes off either way; with a shield worn its hit is layered on the shield's.
 minepool.play_2d(explode_clip, 0, me.x, 0, mn.x, false);
 minepool.play_2d(hit_clip, 0, me.x, 0, mn.x, false);
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 }
 }
 // Kept ticking until it's as far behind as obstacles appear ahead, so a jumped mine fades out behind you; then dropped.

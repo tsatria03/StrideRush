@@ -28,7 +28,7 @@ void end_run_floor(string fall_clip)
 run_end_cause = "floor_breakers"; // the statistics: what ended the run
 joystick_rumble(rumble_death);
 silence_run();
-p.play_stationary(get_pack_sound("misc/player/*death*"), false);
+p.play_stationary(get_pack_sound("main/misc/player/*death*"), false);
 if (fall_clip != "") dlgplay(fall_clip);
 wait_for_pool(p);
 if (!lives_can_end) restart_run_requested = true;
@@ -49,7 +49,7 @@ run_end_cause = last_caught; // the statistics: the obstacle whose blow was fata
 joystick_rumble(rumble_death); // after the practice branch, which rumbles in practice_death()
 string tile = tile_at(me.x);
 silence_run();
-dlgplay(get_pack_sound("misc/player/*death*"));
+dlgplay(get_pack_sound("main/misc/player/*death*"));
 wait_for_pool(p);
 if (tile != "") dlgplay(get_pack_sound(env_root(current_env) + "platforms/" + tile + "/*fall*"));
 finish_run();
@@ -132,7 +132,7 @@ pause_pools(true);
 if (fall_clip != "") dlgplay(fall_clip);
 else
 {
-dlgplay(get_pack_sound("misc/player/*death*"));
+dlgplay(get_pack_sound("main/misc/player/*death*"));
 wait_for_pool(p); // the blow's hit, if it's still going
 }
 /* A free run on no deaths: only the fall, then set down past it, with no dying line and no retry menu, and what caught

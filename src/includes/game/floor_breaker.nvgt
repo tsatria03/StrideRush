@@ -1,5 +1,5 @@
 /* Floor breakers: a belt-wide trap that breaks the floor into a hole of air. Sounds from
-environments/<env>/traps/floor_breakers/general/<theme>: spawn as it appears, loop at
+game/environments/<env>/traps/floor_breakers/general/<theme>: spawn as it appears, loop at
 the hole as you near it, open as you open the corridor, fix1 to fix3 (one at random) for each piece you lay, repair once
 the floor is whole, fall if you go through. Its layered countdown (traps/floor_breakers/countdown) runs up to the hole and
 stops once the corridor is open.
@@ -169,7 +169,7 @@ last_caught_kind = mistake ? "repair" : "";
 string fall_clip = get_pack_sound(floor_folder(f) + "*fall*");
 if (set_down_deaths()) // a practice run, or a free run on practice or no deaths (freerun.nvgt)
 {
-p.play_stationary(get_pack_sound("misc/player/*death*"), false); // with the fall, at the same time; practice_death() keeps p playing
+p.play_stationary(get_pack_sound("main/misc/player/*death*"), false); // with the fall, at the same time; practice_death() keeps p playing
 practice_death(f.x + 1, fall_clip);
 return;
 }

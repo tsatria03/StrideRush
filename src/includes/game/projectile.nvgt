@@ -95,7 +95,7 @@ end_run_hit();
 return;
 }
 projectilepool.play_2d(hit_clip, 0, me.x, 0, pr.meet_x, false);
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 }
 }
 // Ducked under, it flies on behind you until it's as far behind as obstacles appear ahead; then dropped.

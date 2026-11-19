@@ -5,7 +5,7 @@ landing on it, or a weapon hit breaks it (break) and it's lost; a clean jump ove
 (use_teleporter()).
 Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_teleporters() shrinks the array. */
 sound_pool teleporterpool;
-const string teleporter_folder = "equipments/items/common/player_teleporter/";
+const string teleporter_folder = "game/equipments/items/common/player_teleporter/";
 class teleporter
 {
 double x;
@@ -56,7 +56,7 @@ if (@target == null) return false;
 target.spent = true;
 stop_teleporter(target);
 teleporterpool.play_stationary(get_pack_sound(teleporter_folder + "*get*"), false);
-p.play_stationary(get_pack_sound("misc/player/*give*"), false);
+p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("player_teleporter", 1);
 stat_add("player_teleporters_picked_up");
 speak_buffer(item_display_name("player_teleporter"), "items");

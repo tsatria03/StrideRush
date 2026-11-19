@@ -53,7 +53,7 @@ return blow_hurt;
 }
 lives -= 1; // a life goes whenever there's one to spare
 stat_add("lives_lost");
-p.play_stationary(get_pack_sound("misc/player/*life*"), false);
+p.play_stationary(get_pack_sound("main/misc/player/*life*"), false);
 joystick_rumble(rumble_life);
 return blow_life_lost;
 }

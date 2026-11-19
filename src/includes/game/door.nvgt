@@ -247,7 +247,7 @@ end_run_hit();
 return;
 }
 play_door(d, "hit", d.x, false); // at the door's pitch
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 }
 }
 else if (d.opened and !d.closed and me.x > d.x) finish_door_move(d); // close is behind you, so it fades as you run on

@@ -61,7 +61,7 @@ return text;
 void copy_session_results(bool live)
 {
 clipboard_copy_text(session_results_text(live));
-temp.play_stationary(get_pack_sound("ui/other/*copied*"), false);
+temp.play_stationary(get_pack_sound("main/ui/other/*copied*"), false);
 dlgmessage_return("Your session results have been copied to your clipboard.");
 }
 /* Into APPDATA_DIR's stats folder as player_results.txt, beside player_statistics.txt and player_progresses.txt,
@@ -78,6 +78,6 @@ return;
 }
 f.write(session_results_text(live));
 f.close();
-temp.play_stationary(get_pack_sound("ui/other/*export*"), false);
+temp.play_stationary(get_pack_sound("main/ui/other/*export*"), false);
 dlgmessage_return("Your session results have been exported to stats/player_results.txt.");
 }

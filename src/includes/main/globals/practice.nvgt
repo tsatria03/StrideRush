@@ -98,10 +98,10 @@ practice_unlock_said_at = runtimer.elapsed; // a hint right after waits for the 
 bool both = (i == 0);
 if (both)
 {
-p.play_stationary(get_pack_sound("misc/game/*pracunlock*"), false);
+p.play_stationary(get_pack_sound("main/misc/game/*pracunlock*"), false);
 speak_buffer("Mode unlocked: Endless run is now available to play.", "misc");
 }
-p.play_stationary(get_pack_sound("misc/game/*pracunlock*"), false);
+p.play_stationary(get_pack_sound("main/misc/game/*pracunlock*"), false);
 speak_buffer("Obstacle unlocked: " + practice_display_name(i + 1) + " are now available for practice.", "misc", both ? false : tts_default_interrupt); // after the mode's, queued, not cutting it off
 }
 /* The returning player check, once per save, from readgame(): a save from before the practice locks that shows any endless

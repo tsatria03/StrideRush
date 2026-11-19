@@ -113,7 +113,7 @@ end_run_hit();
 return;
 }
 windpool.play_2d(hit_clip, 0, me.x, 0, w.meet_x, false);
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 if (!braced)
 {
 wind_shove(shove_dir(w));
@@ -141,11 +141,11 @@ void wind_shove(int dir)
 int target = current_lane + dir;
 if (target < lane_left or target > lane_right)
 {
-p.play_stationary_extended(get_pack_sound("misc/player/*bump*"), false, 0, belt_pan(target), 0, 100, false);
+p.play_stationary_extended(get_pack_sound("main/misc/player/*bump*"), false, 0, belt_pan(target), 0, 100, false);
 return;
 }
 current_lane = target;
-p.play_stationary_extended(get_pack_sound("misc/player/*turn*"), false, 0, belt_pan(current_lane), 0, 100, false);
+p.play_stationary_extended(get_pack_sound("main/misc/player/*turn*"), false, 0, belt_pan(current_lane), 0, 100, false);
 }
 // The countdown: the winds countdown cues, only on steps where it's in your lane. Runs once per step.
 void wind_countdown()

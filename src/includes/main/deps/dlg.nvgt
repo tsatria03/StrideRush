@@ -4,7 +4,7 @@ bool dlg_open = false;
 bool dlg(string message, bool dlgcoppy=true, bool dlgsound=false, int timeout=-1)
 {
 timer timeouter;
-if(dlgsound==true) temp.play_stationary(get_pack_sound("ui/dialog/*error*"),false);
+if(dlgsound==true) temp.play_stationary(get_pack_sound("main/ui/dialog/*error*"),false);
 speak(message);
 dlg_open = dlgcoppy;
 while(true)
@@ -19,7 +19,7 @@ return false;
 if (key_repeating(KEY_C) and dlgcoppy==true)
 {
 temp.destroy_all();
-temp.play_stationary(get_pack_sound("ui/dialog/*copy*"),false);
+temp.play_stationary(get_pack_sound("main/ui/dialog/*copy*"),false);
 speak("Text copied");
 clipboard_copy_text(string_replace(message, " Press enter to continue.", "", true));
 }
@@ -44,25 +44,25 @@ return false;
 }
 void dlgmessage(string messages)
 {
-temp.play_stationary(get_pack_sound("ui/dialog/*open*"),false);
+temp.play_stationary(get_pack_sound("main/ui/dialog/*open*"),false);
 string[] d = string_split(messages, "--", true);
 bool escaped = dlg(d[0], dlgsound:false);
 if (escaped)
 {
-temp.play_stationary(get_pack_sound("ui/dialog/*close*"),false);
+temp.play_stationary(get_pack_sound("main/ui/dialog/*close*"),false);
 return;
 }
 for (uint i = 1; i < d.length(); i++)
 {
-temp.play_stationary(get_pack_sound("ui/dialog/*scroll*"),false);
+temp.play_stationary(get_pack_sound("main/ui/dialog/*scroll*"),false);
 escaped = dlg(d[i], dlgsound:false);
 if (escaped)
 {
-temp.play_stationary(get_pack_sound("ui/dialog/*close*"),false);
+temp.play_stationary(get_pack_sound("main/ui/dialog/*close*"),false);
 return;
 }
 }
-temp.play_stationary(get_pack_sound("ui/dialog/*close*"),false);
+temp.play_stationary(get_pack_sound("main/ui/dialog/*close*"),false);
 }
 void dlgmessage_return(string msg)
 {

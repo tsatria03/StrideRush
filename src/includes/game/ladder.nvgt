@@ -1,7 +1,7 @@
 /* Ladders and real walls. A real wall is tall, can't be broken, and plays its environment's walls theme at pitch 100
 (fake walls play at odd pitches, wall.nvgt); it always comes with a ladder ladder_wall_gap steps before it, far enough
 apart that the two loops aren't heard as one, so the two are one obstacle. Ladder sounds come from
-environments/<env>/traps/ladders/general/<theme>: spawn as it's placed, loop at its tile as you near it, grab1 or grab2
+game/environments/<env>/traps/ladders/general/<theme>: spawn as it's placed, loop at its tile as you near it, grab1 or grab2
 at random as you take hold, step1 to step5 as you climb, collapse if it collapses, fall if you fall off, land as you come
 down past the wall. Its countdown is the layered traps/ladders/countdown set, ending on the step before the ladder, where
 the grab window closes; it stops once grabbed.
@@ -232,7 +232,7 @@ return;
 }
 if (fall) ladderpool.play_stationary(clip, false);
 else ladderpool.play_2d(clip, 0, me.x, 0, l.x, false);
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 steptimer.restart(); // off the ladder: the belt carries you on from here
 }
 // Reaching a real wall after a failed climb: its hit and wall_damage, as a fake wall crash, and you run on past it.
@@ -248,7 +248,7 @@ end_run_hit();
 return;
 }
 ladderpool.play_2d(hit_clip, 0, me.x, 0, l.wall_x, false);
-if (blow != blow_shielded) p.play_stationary(get_pack_sound("misc/player/*hit*"), false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
 }
 // After a climb: set down on the real wall's tile, past it, with the step timer starting fresh.
 void past_ladder(ladder@ l)

@@ -60,7 +60,7 @@ invpos += dir;
 if (invpos >= int(keys.length())) invpos = 0;
 else if (invpos < 0) invpos = int(keys.length()) - 1;
 double pan = keys.length() > 1 ? convert_to_pan(keys.length(), invpos, -25, 25) : 0;
-p.play_stationary_extended(get_pack_sound("misc/player/*inv*"), false, 0, pan, 0, 100, false);
+p.play_stationary_extended(get_pack_sound("main/misc/player/*inv*"), false, 0, pan, 0, 100, false);
 string item = keys[invpos];
 int count = item_count(item);
 string name = item_display_name(item);

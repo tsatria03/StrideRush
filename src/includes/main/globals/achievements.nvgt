@@ -1,11 +1,11 @@
-/* Achievements. Every achievement is a [section] in data/config/achievements.ini, so none of their text lives in the
+/* Achievements. Every achievement is a [section] in data/game/achievements.ini, so none of their text lives in the
 code: stat (a name from stat_keys in stats.nvgt), threshold, scope (session, one run; lifetime, all runs; or timed, a
 timed run's records), name, description (with %threshold%) and hint. The file uses friendly units, converted here:
 time_running in minutes and top_speed in steps a second. Each is earned once and kept for good (its id saved in
 saves/game.srf), only in endless runs or, for timed ones, as a timed run ends, and announced the moment it's earned:
-speak_buffer() into the achievements buffer and misc/game achsession or achlife. The best single run of each stat a session
+speak_buffer() into the achievements buffer and main/misc/game achsession or achlife. The best single run of each stat a session
 achievement reads is kept too, for achievement statistics, and cleared with the lifetime stats. */
-const string achievements_path = "data/config/achievements.ini";
+const string achievements_path = "data/game/achievements.ini";
 class achievement
 {
 string id, stat, scope, name, description, hint;
@@ -85,7 +85,7 @@ if (achievement_progress(a) >= a.threshold) earn_achievement(a);
 void earn_achievement(achievement@ a)
 {
 earned_achievements.set(a.id, true);
-p.play_stationary(get_pack_sound("misc/game/" + (a.scope == "lifetime" ? "*achlife*" : "*achsession*")), false); // timed run ones are single-run, like session
+p.play_stationary(get_pack_sound("main/misc/game/" + (a.scope == "lifetime" ? "*achlife*" : "*achsession*")), false); // timed run ones are single-run, like session
 speak_buffer("Achievement unlocked: " + a.name + ". " + achievement_description(a), "achievements"); // how you got it too
 writegame();
 }

@@ -43,7 +43,7 @@ int bpm = heart_rate();
 if (!heart_beat_now and heartbeat_timer.elapsed < heartbeat_gap(bpm)) return;
 heart_beat_now = false;
 heartbeat_timer.restart();
-heartpool.play_stationary_extended(get_pack_sound("misc/player/*heartbeat*"), false, 0, 0, heartbeat_volume, 100, false);
+heartpool.play_stationary_extended(get_pack_sound("main/misc/player/*heartbeat*"), false, 0, 0, heartbeat_volume, 100, false);
 }
 // B: "Your heart rate is 100 beats per minute." into the status buffer, like the other readouts.
 void speak_heart_rate()

@@ -1,6 +1,6 @@
 /* Trampolines. Four kinds of pad: good or worn (worn
 trampoline_worn_percent of the time, playing every sound at an odd pitch like a fake door; good at 100), and in one lane
-or across the whole belt (trampoline_belt_percent). Themes from environments/<env>/traps/trampolines/general/<pad>: spawn
+or across the whole belt (trampoline_belt_percent). Themes from game/environments/<env>/traps/trampolines/general/<pad>: spawn
 as it appears, one of its loops as you approach (a lane pad's in its lane, a belt-wide one's straight ahead), rise as you
 launch, land as you come down. No countdown.
 Arriving on its tile (in its lane, for a lane pad) launches you, on the ground or in the air: jumping never avoids a pad;

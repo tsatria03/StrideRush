@@ -63,8 +63,8 @@ duckcooldowntimer.restart();
 }
 jump_state = 1;
 jumptimer.restart();
-p.play_stationary(get_pack_sound("misc/player/*jump*"), false);
-p.play_stationary(get_pack_sound("misc/player/*rise*"), false);
+p.play_stationary(get_pack_sound("main/misc/player/*jump*"), false);
+p.play_stationary(get_pack_sound("main/misc/player/*rise*"), false);
 }
 // Landing from a jump: the landing sounds, and a Down still held starts a crouch.
 void player_land()
@@ -85,7 +85,7 @@ if (controls.action_triggered("duck_held") and can_duck()) start_duck();
 pass false, so only the tile is heard. */
 void play_landing(bool with_player_sound = true)
 {
-if (with_player_sound) p.play_stationary(get_pack_sound("misc/player/*land*"), false);
+if (with_player_sound) p.play_stationary(get_pack_sound("main/misc/player/*land*"), false);
 string tile = tile_at(me.x);
 if (tile != "") p.play_stationary(get_pack_sound(env_root(current_env) + "platforms/" + tile + "/*land*"), false);
 }
@@ -119,11 +119,11 @@ void start_duck()
 {
 ducked = true;
 ducktimer.restart();
-p.play_stationary(get_pack_sound("misc/player/duck*"), false);
+p.play_stationary(get_pack_sound("main/misc/player/duck*"), false);
 }
 void stop_duck()
 {
 ducked = false;
 duckcooldowntimer.restart();
-p.play_stationary(get_pack_sound("misc/player/unduck*"), false);
+p.play_stationary(get_pack_sound("main/misc/player/unduck*"), false);
 }

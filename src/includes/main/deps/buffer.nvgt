@@ -1,6 +1,6 @@
 /* Speech buffers. Adapted for Stride Rush: no networking, logs go to
-tsatria03/StrideRush/logs, sounds come through get_pack_sound from ui/buffer and ui/other, keys are the [buffer]
-actions in data/config/keyboard.ini, and the menu uses item ids. */
+tsatria03/StrideRush/logs, sounds come through get_pack_sound from main/ui/buffer and main/ui/other, keys are the [buffer]
+actions in data/main/keyboard.ini, and the menu uses item ids. */
 buffer@[]buffers(0);
 int bufferpos=0;
 class buffer_item
@@ -30,7 +30,7 @@ speak("This buffer can not be muted.",true);
 else
 {
 muted = !muted;
-spool.play_stationary(get_pack_sound(muted ? "ui/other/*toggleoff*" : "ui/other/*toggleon*"), false);
+spool.play_stationary(get_pack_sound(muted ? "main/ui/other/*toggleoff*" : "main/ui/other/*toggleon*"), false);
 speak(name + " " + (muted ? "muted" : "unmuted"), true);
 writepreffs();
 }
@@ -165,7 +165,7 @@ void announce_buffer()
 {
 if(bufferpos<0 or bufferpos>=int(buffers.length())) return;
 int vc=visible_buffer_count(), vp=visible_buffer_position();
-spool.play_stationary_extended(get_pack_sound("ui/buffer/*switch*"),false,0,convert_to_pan(vc+1,vp,-50,50),0,max(20,convert_to_pitch(vc+1,vp,20,200)),false);
+spool.play_stationary_extended(get_pack_sound("main/ui/buffer/*switch*"),false,0,convert_to_pan(vc+1,vp,-50,50),0,max(20,convert_to_pitch(vc+1,vp,20,200)),false);
 string binfo = buffers[bufferpos].name + (buffers[bufferpos].muted ? ", muted, " : ", ") + (buffers[bufferpos].items.length() > 0 ? "" + (buffers[bufferpos].bpos + 1) + " of " + buffers[bufferpos].items.length() : "empty") + ".";
 if (buffers[bufferpos].items.length() > 0) binfo += " " + buffers[bufferpos].items[buffers[bufferpos].bpos].name;
 speak(binfo, true);
@@ -173,7 +173,7 @@ speak(binfo, true);
 // The shared "moved to this item" cue + readout, positioned within the focused category. Used by all four item-nav keys.
 void announce_buffer_item()
 {
-spool.play_stationary_extended(get_pack_sound("ui/buffer/*choose*"),false,0,convert_to_pan(buffers[bufferpos].items.length()+1,buffers[bufferpos].bpos,-50,50),0,max(20,convert_to_pitch(buffers[bufferpos].items.length()+1,buffers[bufferpos].bpos,20,200)),false);
+spool.play_stationary_extended(get_pack_sound("main/ui/buffer/*choose*"),false,0,convert_to_pan(buffers[bufferpos].items.length()+1,buffers[bufferpos].bpos,-50,50),0,max(20,convert_to_pitch(buffers[bufferpos].items.length()+1,buffers[bufferpos].bpos,20,200)),false);
 speak(buffers[bufferpos].items[buffers[bufferpos].bpos].name);
 }
 void next_buffer()
