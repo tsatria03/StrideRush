@@ -1,0 +1,23 @@
+Projectiles.
+
+Projectiles, such as missiles, fly toward you at head height, twice as fast as you run, so you'll hear them rushing in. Jumping won't help: the way past a projectile is to crouch under it.
+
+How a projectile works.
+
+A projectile fills the whole belt, so switching lanes won't help. As it comes, it plays the same five-cue countdown as most obstacles.
+If one hits you, it takes 40 of your health.
+
+Getting past a projectile.
+
+Hold the crouch key so you're crouched when it reaches you, and it flies over you and fades away behind. A crouch only lasts a second and a half, so at slower speeds wait for the last few countdown cues before you crouch, and stay down until it passes.
+
+Projectiles in a run.
+
+Projectiles join an endless run once the belt reaches about 2.2 steps a second, in any environment that has them. They can also come as half of a combination, with a spike, a barrier or an insect, in either order.
+Ducking under one counts toward projectiles ducked in your statistics, and one that hits you counts toward times hit by projectiles.
+
+Projectiles in practice and free runs.
+
+Projectiles has its own practice choice. It opens once you've jumped over 5 mines while practicing them, and ducking under 5 projectiles while practicing opens force fields.
+
+In a free run, add projectiles from add obstacles in the console.

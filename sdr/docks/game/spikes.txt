@@ -1,0 +1,23 @@
+Spikes.
+
+Spikes swing back and forth across the belt with their own rhythm, which you'll hear as you approach them. The way past a spike is to jump over it.
+
+How a spike works.
+
+A spike fills the whole belt, so switching lanes won't help. As it comes, it plays the same five-cue countdown as most obstacles, and you hear it swinging as it gets closer.
+Getting hit by a spike takes 20 of your health.
+
+Getting past a spike.
+
+Jump as its last countdown cue plays to sail over it.
+
+Spikes in a run.
+
+Spikes are in an endless run from the very start, at every speed. They can also come as half of a combination with a projectile, in either order.
+Jumping over one counts toward spikes jumped in your statistics, and one that hits you counts toward times hit by spikes.
+
+Spikes in practice and free runs.
+
+Spikes has its own practice choice. It opens once you've jumped over 5 hazards while practicing them, and jumping over 5 spikes while practicing opens mines.
+
+In a free run, add spikes from add obstacles in the console.

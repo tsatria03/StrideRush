@@ -26,7 +26,6 @@ Combinations never include real doors, real walls, winds, slides or trampolines.
 Combinations in a run.
 
 A pair only starts once both of its obstacles have joined the run, in an environment that has both. Combinations come more often on harder levels, from 1 obstacle in 20 on easy to 1 in 4 on chaos.
-Clearing one counts toward combinations cleared in your statistics.
 
 Combinations in practice and free runs.
 

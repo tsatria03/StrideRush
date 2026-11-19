@@ -1,0 +1,23 @@
+Mines.
+
+Mines lie on the belt and go off under you if you step onto one. The way past a mine is to jump over it.
+
+How a mine works.
+
+A mine fills the whole belt, so switching lanes won't help. It makes a sound when it appears, then lights up and starts ticking once you get close. As it comes, it plays the same five-cue countdown as most obstacles.
+Stepping onto a mine takes 60 of your health.
+
+Getting past a mine.
+
+Jump as its last countdown cue plays to clear it. Once you're over, you'll hear it keep ticking as it fades out behind you.
+
+Mines in a run.
+
+Mines are in an endless run from the very start, at every speed. They can also come as half of a combination, with a barrier or with a fake door, in either order.
+Jumping over one counts toward mines jumped in your statistics, and stepping onto one counts toward times hit by mines.
+
+Mines in practice and free runs.
+
+Mines has its own practice choice. It opens once you've jumped over 5 spikes while practicing them, and jumping over 5 mines while practicing opens projectiles.
+
+In a free run, add mines from add obstacles in the console.

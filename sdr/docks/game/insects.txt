@@ -1,0 +1,25 @@
+Insects.
+
+Insects, starting with bees, buzz ahead of you and fly straight at you, faster than the belt, so neither changing lanes nor jumping will escape one. The way past an insect is to crouch and hit it with your weapons before it stings you.
+
+How an insect works.
+
+An insect flies in at your head, like a projectile, and you hear it buzzing closer. If you're standing or in the air when one reaches you, it stings you and takes 20 of your health.
+If you're crouched when it reaches you and it's still alive, it hovers at your head for about a second, then dives and stings you. Standing up before it's dead lets it sting you straight away.
+A bee gets tougher as the belt speeds up, and each hit on it plays its hurt, until it dies.
+
+Getting past an insect.
+
+Crouch as it comes, and your weapons can reach it: a swing or a shot hits it from as far away as your weapon reaches while it flies in. Standing up, you can't touch it.
+If it reaches you while you're crouched, keep hitting it while it hovers, and stay down until it's dead.
+
+Insects in a run.
+
+Insects join an endless run once the belt reaches 4 steps a second, in any environment that has them. They can also come as half of a combination with a projectile, in either order, where staying crouched carries you through both.
+Killing one counts toward insects killed in your statistics, and a sting counts toward times stung by insects.
+
+Insects in practice and free runs.
+
+Insects has its own practice choice, with your weapons drawn. It opens once you've scared away 5 animals while practicing them, and killing 5 insects while practicing opens fake walls. If an insect stings you in practice, the death message tells you to crouch as it reaches you, then hit it with your weapons before it dives.
+
+In a free run, add insects from add obstacles in the console, and give each one its own health, or leave it empty for the normal health for your speed.
