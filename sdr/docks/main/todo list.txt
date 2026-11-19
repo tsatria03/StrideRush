@@ -1,12 +1,12 @@
 ####These are the things that need to be finished for future versions of the game.
 
-****Unfinished. Split the game's readme into several files explaining each feature/macanic.
 ****Unfinished. Add game translations for other languages.
 ****Unfinished. Add a shop that you can access in the game to buy items and special helpers.
 ****Unfinished. Add helicopters that you must jump to shoot.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Split the game's readme into several files explaining each feature/macanic.
 **Finished. Add an option to hide the retry menu for a practice run in the game settings menu.
 **Finished. Add a way to give yourself a slide from a free run's console, starting it straight away, so you can try sliding without waiting for one to turn up.
 **Finished. Add a way to choose which combination comes in a free run, from any of the pairs in either order, instead of a random one.
