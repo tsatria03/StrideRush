@@ -1,6 +1,6 @@
 ---
 name: project_free_run_give_slide_plan
-description: BUILDING (2026-11-18), section 1 built and tested, docks next: giving yourself a slide from a free run's console (modify player specials), starting it straight away; 2.5's tenth and last entry; Q&A log
+description: COMPLETE (2026-11-18, 2.5 FULL at 10 of 10): giving yourself a slide from a free run's console (modify player specials), starting it straight away; 2.5's tenth and last entry; Q&A log
 metadata:
   type: project
 ---
@@ -35,3 +35,4 @@ Started 2026-11-18 (dev: "Please add giving slides to the todo list." then "It w
 - Test 2 of 3 (uncharted: "This environment has no slides.", staying in the specials menu) PASSED.
 - Test 3 of 3 (view current setup's slide line; a fresh ride mid-ride with no stray move loop; clear belt ending a ride) PASSED. Section 1 TESTED: all 3 passed.
 - Note (2026-11-18, after the plan's commit 7d5a8e3): the dev added two todo items for 2.6 (a shop for items and special helpers; helicopters you must jump to shoot), so section 2 moves give slide to finished WITHOUT bringing back the "Nothing is waiting here right now." line.
+- Section 2 DONE (2026-11-18, on c9a4ae7): the entry on top of 2.5 (10 of 10, filling it), the readme's modify player specials paragraph (give slide) and view current setup list (a slide you're riding), the todo item to finished (the two 2.6 items stay), the version history (2.5 FULL, not yet tagged) and CLAUDE.md. PLAN COMPLETE.
