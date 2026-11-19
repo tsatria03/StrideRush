@@ -17,7 +17,7 @@ Guns.
 The pistol fires up to ten times a second, one shot per press, while the machine gun keeps firing ten times a second for as long as you hold the space bar. A gun fires a bullet that you'll hear flying off ahead of you until it lands. A bullet only flies as far as its gun reaches, so a shot fired at something still too far away falls short and wastes the round.
 Each gun starts every run with 50 rounds loaded and 50 in reserve, and they keep their own ammo separately. A reserve can hold up to 200 rounds. Once a gun is empty you'll hear it click instead of firing. Press R to reload any time a gun isn't full, and you'll hear a ping when it's ready; switching weapons during a reload cancels it. When the reserve runs out, that gun is empty until you open an ammo pack. Press X to hear how much ammo your gun has loaded and in reserve.
 
-Reach.
+How far each weapon reaches.
 
 Each weapon reaches its own distance ahead of you, and the stronger the weapon, the further it reaches: the bat about 2 seconds ahead, a little further for each melee weapon after it up to the sword's 3 and a half, then the machine gun's 4 and a half and the pistol's 5 and a half, which is as far ahead as you can hear anything.
 The further a weapon reaches, the sooner you can start hitting what's coming, which makes tough fake walls and fake doors easier to break in time. Nothing can be hit before you can hear it, and at high speeds things appear closer than that.

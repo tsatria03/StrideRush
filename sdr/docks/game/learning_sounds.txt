@@ -17,7 +17,7 @@ Playing sounds.
 In a list of sounds, press enter to play the one you're on, or hold it down to keep starting it again. A sound with several versions plays one of them at random each time. Moving to another sound stops the one playing, space pauses or resumes it, and shift plus page up or page down makes the sounds louder or quieter.
 A countdown plays its five cues at the starting speed, and you can keep moving through the list while it plays. Each menu remembers where you were until you close the game.
 
-Settings.
+Learn sounds settings.
 
 Two settings change learn sounds. Enable variant descriptions in the learn sounds menu, in the menu tab of the settings menu, tells you when a sound has several versions as you move through the list. Enable looping of previewed sounds, in the sound tab, loops a sound you play, so it keeps going until you stop it.
 

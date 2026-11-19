@@ -2,7 +2,7 @@ Movement.
 
 Once a run starts, you never stop moving. The belt carries you straight ahead with a footstep on every step, and you get past what's coming by jumping, crouching and switching between the belt's three lanes.
 
-Running.
+Running along the belt.
 
 You'll hear a footstep with every step you take. The ground under your feet changes every 10 to 20 seconds, so listen for new footstep sounds as you go.
 The belt speeds up as you run, a little every 10 seconds, up to your level's top speed, as described under difficulty. Press C to hear your current speed in steps a second, and Z to hear how far you've run, in steps.

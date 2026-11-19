@@ -27,7 +27,7 @@ Hits take your health as they do in a real run, and when one would take your las
 After you press enter, choose retry practice to be set down just past what caught you, with full health, your life and your shield back, or return to game menu to stop, which escape does too. If you'd rather skip that choice, turn off show retry options after a practice death in the game tab of the settings menu, and pressing enter sets you down just past what caught you straight away.
 Quit from the pause menu or with escape when you're done, or restart to begin the same practice again.
 
-Hints.
+Practice hints.
 
 While you practice, each thing is described in the practice buffer as it appears: what it is, which lane it's in if it sits in one, and what to do about it. Each kind is described the first 5 times it appears in a run, or just the first time in mixed obstacles, and once 5 of what you're practicing have passed you, a closing line says the hints are done. Until then, getting hit by anything but a hazard, or missing a key, starts the hints over, so you hear them again; after the closing line, the rest of the run is quiet.
 

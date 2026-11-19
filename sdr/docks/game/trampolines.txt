@@ -8,7 +8,7 @@ A lane trampoline sits in one lane and is heard in that lane as you come toward 
 Jumping never gets you over a trampoline, since running onto one launches you whether you're on the ground or in the air.
 A good trampoline sounds normal and sends you on a long flight of two and a half seconds. A worn trampoline sounds higher or lower, like a fake door, and gives you only a normal jump.
 
-Flying.
+Flying over the belt.
 
 On a good trampoline's flight, everything you reach before you land passes under you without a sound, including ladders, floor breakers and vehicles, while anything past your landing counts down as normal.
 In the air you can switch lanes, use your hands, fire and use your inventory, though you can't jump or crouch until you land.
