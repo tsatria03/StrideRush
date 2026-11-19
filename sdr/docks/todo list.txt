@@ -1,6 +1,8 @@
 ####These are the things that need to be finished for future versions of the game.
 
-Nothing is waiting here right now. New bugs, planned changes and anything still to be decided will be listed here as they come up.
+****Unfinished. Add a way to give yourself a slide from a free run's console, starting it straight away, so you can try sliding without waiting for one to turn up.
+****Unfinished. Add a shop that you can access in the game to buy items and special helpers.
+****Unfinished. Add helicopters that you must jump to shoot.
 
 ##These are the things that are already finished from earlier versions of the game.
 
