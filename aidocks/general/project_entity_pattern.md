@@ -5,6 +5,8 @@ metadata:
   type: project
 ---
 
+MOVED (dev, 2026-11-19): every obstacle and item file now lives in src/includes/game/, not main/globals/ (includes.nvgt includes game/*); read older globals/<type>.nvgt notes that way.
+
 The pattern to adapt for Stride Rush objects (hazards, pickups, platforms), taken from SimpleFighter's src/includes/builder/traps/hazard.nvgt ([[reference_simplefighter_readonly]]). BUILT in the first build (2026-11-02): globals/hazard.nvgt, spike.nvgt and mine.nvgt follow it. As built:
 - spawn_x() reuses the first null slot before appending, and returns nothing.
 - x_check() runs once per step from game.nvgt's step_check(), not every frame. spike_swing() is the one per-frame check.

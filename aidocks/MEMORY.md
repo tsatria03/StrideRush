@@ -55,6 +55,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Ask one question at a time](general/feedback_ask_one_question_at_a_time.md) — one question per turn, with a recommendation
 - [Test steps one at a time](general/feedback_test_steps_one_at_a_time.md) — numbered "Test x of y" (2026-11-06); no tests in build summaries; ask "ready for the test steps?" first, then one numbered step per message with what to hear, ask if it passed, wait; tests use the debug run unless the mode itself is under test; never assume a pass: the dev must answer passed/failed/yes/no, and explain a fail
 - [Log without Bash](general/feedback_log_without_bash.md) — append test results and small plan or memory notes with Read and Edit, not Bash and Python, so the dev isn't asked to approve each one
+- [No sed -i](general/feedback_no_sed_i.md) — never sed -i (it turns CRLF to LF and sed -i.bak leaves backups); never send a "draft" command to Bash, since every call runs
 - [Describe, don't show code](general/feedback_describe_dont_show_code.md) — give all section plans up front, build per go-ahead, never paste code in chat
 - [List modified files](general/feedback_list_modified_files.md) — end editing turns with a condensed "Files changed:" (files grouped by reason with counts, not one line each), the git change count since the last commit, and a relaunch note
 - [Don't run or build the game](general/feedback_dont_run_or_build_the_game.md) — never launch or compile; the dev verifies

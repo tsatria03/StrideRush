@@ -1,11 +1,11 @@
 ---
 name: feedback_changelog_rules
-description: no version numbers in changelog entries, the readme or the todo list (only the "New in x." headers); sdr/docks/changelog.txt is a player-facing record of what changed; prose, reverse-chronological, bump build/version.txt with each block; entries open "Added", "Made it so ... now", "Fixed a bug where" or "Removed"
+description: no version numbers in changelog entries, the readme or the todo list (only the "New in x." headers); sdr/docks/main/changelog.txt is a player-facing record of what changed; prose, reverse-chronological, bump build/version.txt with each block; entries open "Added", "Made it so ... now", "Fixed a bug where" or "Removed"
 metadata:
   type: feedback
 ---
 
-sdr/docks/changelog.txt is the source of truth for what shipped. It is a record, not a manual: player-facing prose, one idea per entry, newest block on top under a "New in X.Y." style header. Each new block pairs with a bump of build/version.txt to the same number ([[feedback_update_build_version_txt]]).
+sdr/docks/main/changelog.txt is the source of truth for what shipped (the main docks moved to sdr/docks/main/ on 2026-11-19, the dev's prep for splitting the readme; sdr/docks/game/ is for the feature files to come). It is a record, not a manual: player-facing prose, one idea per entry, newest block on top under a "New in X.Y." style header. Each new block pairs with a bump of build/version.txt to the same number ([[feedback_update_build_version_txt]]).
 
 **Why:** players read it; engine internals, file names and how-to instructions don't belong there.
 
