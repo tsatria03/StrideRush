@@ -1,0 +1,24 @@
+Force fields.
+
+Force fields hum ahead of you while they're on, and jumping or crouching won't get you past one. The way past a force field is to switch it off with one of your hands before you reach it.
+
+How a force field works.
+
+A force field fills the whole belt, so it sounds straight ahead of you whichever lane you're in. As it comes, it plays the same five-cue countdown as most obstacles.
+If you reach a force field while it's still on, it takes 30 of your health and throws you 5 steps forward past it.
+
+Getting past a force field.
+
+Press either hand during a force field's countdown to switch it off. You'll hear the switch, then the field's sound changes as it shuts off, its countdown stops, and you can run straight through.
+At the fastest speeds, where the countdown is very short, you can still switch one off in the last half second before you reach it.
+
+Force fields in a run.
+
+Force fields join an endless run once the belt reaches 2.5 steps a second, in any environment that has them. They can also come as half of a combination, with a fake wall or with an animal, in either order. When a force field comes first, the gap after it leaves room for its throw, so a hit from it lands you before the second part, not over it.
+Switching one off counts toward force fields switched off in your statistics, and one that reaches you while it's on counts toward times hit by force fields.
+
+Force fields in practice and free runs.
+
+Force fields has its own practice choice. It opens once you've ducked under 5 projectiles while practicing them, and switching off 5 force fields while practicing opens animals.
+
+In a free run, add force fields from add obstacles in the console.

@@ -1,0 +1,26 @@
+Real walls.
+
+Real walls are tall walls you can't break, played at their normal pitch, so you can tell them from fake walls. Each one has a ladder in front of it, and the way past a real wall is to climb its ladder, hand over hand, and over the top.
+
+How a real wall works.
+
+A real wall fills the whole belt. Its ladder stands 5 steps in front of it, and the ladder plays the same five-cue countdown as most obstacles, with two notes at once.
+Grab the ladder with a hand during its countdown, and once you reach it the belt holds you while you climb. While you climb, you can't jump, crouch, use your weapons or your inventory.
+If you run into the ladder without grabbing it, press the same hand twice, or take too long on a rung, the ladder collapses on you, taking 60 of your health. If you switch lanes on the ladder, or climb too fast, you fall off, taking 40. Either way, you then run on into the real wall, which takes 50 more.
+
+Getting past a real wall.
+
+Press either hand during the ladder's countdown to grab it. Then climb hand over hand, pressing the other hand from your last each time, at a steady pace: each rung must come within 2 seconds of the last on easy, down to 1 second on chaos, but no sooner than 0.2 seconds on easy, up to 0.4 on chaos.
+Harder levels have taller ladders, from 6 to 8 rungs on easy up to 10 to 12 on chaos, so listen for the top instead of counting. Reach it and you climb over, landing past the wall.
+On a slide or a trampoline flight, a ladder and its wall pass you by harmlessly.
+
+Real walls in a run.
+
+Real walls join an endless run once the belt reaches 4 steps a second, in any environment that has them. They never come as part of a combination.
+Climbing one counts toward real walls climbed in your statistics, a collapse toward ladders broken, a fall toward ladder falls, and running into the wall toward real walls crashed into.
+
+Real walls in practice and free runs.
+
+Real walls has its own practice choice, with only real walls, each with its ladder to climb, and mixed walls brings real and fake walls together, so you can practice telling them apart by their pitch. Real walls opens once you've broken 5 fake walls while practicing them, and climbing 5 real walls while practicing opens mixed walls. If you fall off a ladder in practice, the death message reminds you never to switch lanes while you're climbing.
+
+In a free run, add real walls from add obstacles in the console.

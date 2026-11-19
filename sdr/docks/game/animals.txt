@@ -15,7 +15,7 @@ A single hand does nothing to an animal, so make sure both hands go down togethe
 Animals in a run.
 
 Animals join an endless run once the belt reaches about 2.9 steps a second, and come at every speed after that, in any environment that has them. They can also come as half of a combination, with a force field or with a hazard, in either order.
-Scaring one away counts toward animals scared in your statistics, and one that reaches you counts as a time an animal caught you.
+Scaring one away counts toward animals scared in your statistics, and one that reaches you counts toward times run into by animals.
 
 Animals in practice and free runs.
 

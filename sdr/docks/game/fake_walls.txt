@@ -1,0 +1,24 @@
+Fake walls.
+
+Fake walls are glass windows standing in your way. Each one sounds a little higher or lower in pitch than normal, like a fake door, which is how you tell it from a real wall. Jumping or crouching won't get you past one, so the way past a fake wall is to break it with your weapons.
+
+How a fake wall works.
+
+A fake wall fills the whole belt, so it sounds straight ahead of you whichever lane you're in, and you hear it getting closer as it comes. It plays the same five-cue countdown as most obstacles, with two notes at once.
+Fake walls get tougher the faster you run: early walls break with a few swings of the bat, while the fastest ones take a few hits from a strong weapon.
+If you crash into a fake wall that's still standing, it takes 50 of your health.
+
+Getting past a fake wall.
+
+Swing or fire your weapon at it as it comes. Each hit cracks it a little more, and once it shatters its countdown stops and you can run straight through. Your weapons reach from about 2 seconds ahead of you with the bat to 5 and a half with the pistol, so start early.
+
+Fake walls in a run.
+
+Fake walls join an endless run once the belt reaches about 3.3 steps a second, and come at every speed after that, in any environment that has them. They can also come as half of a combination, with a force field or with a barrier, in either order.
+Breaking one counts toward fake walls broken in your statistics, and crashing into one counts toward fake walls crashed into.
+
+Fake walls in practice and free runs.
+
+Fake walls has its own practice choice, with only fake walls to break, and mixed walls brings fake and real walls together, so you can practice telling them apart by their pitch. Fake walls opens once you've killed 5 insects while practicing them, and breaking 5 fake walls while practicing opens real walls. Your weapons are drawn when practicing fake walls or mixed walls.
+
+In a free run, add fake walls from add obstacles in the console, and give each one its own health, or leave it empty for the normal health for your speed.

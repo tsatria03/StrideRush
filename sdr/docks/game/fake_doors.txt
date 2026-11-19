@@ -15,7 +15,7 @@ Fake doors are tough, about twice as tough as a fake wall at any speed, and they
 Fake doors in a run.
 
 Fake doors join an endless run once the belt reaches 4 steps a second, and come at every speed after that, in any environment that has doors. They can also come as half of a combination with a mine, in either order.
-Breaking one counts toward fake doors broken in your statistics, and crashing into one counts as a time a door caught you.
+Breaking one counts toward fake doors broken in your statistics, and crashing into one counts toward doors crashed into.
 
 Fake doors in practice and free runs.
 

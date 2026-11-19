@@ -17,7 +17,7 @@ Any key opens any real door, so a spare key from an earlier stretch works too.
 Real doors in a run.
 
 A real door comes each time the belt speeds into a new stretch, until you reach your level's top speed, after which there are no more. Real doors never come as part of a combination.
-Opening one counts toward real doors opened in your statistics, and each key you use counts toward keys used.
+Opening one counts toward real doors opened in your statistics, each key you use toward keys used, and crashing into one toward doors crashed into.
 
 Real doors in practice and free runs.
 

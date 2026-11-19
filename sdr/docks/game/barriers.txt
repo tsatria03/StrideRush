@@ -16,7 +16,7 @@ Two barriers that sound the same, one on each side of you, can blend into a sing
 Barriers in a run.
 
 Barriers join an endless run once the belt reaches 5 steps a second, in any environment that has them. Since many of them pass in another lane, barriers come about twice as often as each other kind of obstacle. They can also come as half of a combination, with a mine, a projectile or a fake wall, and a combination's barrier is always in your lane.
-Dodging one counts toward barriers dodged in your statistics, and one that reaches you counts as a time a barrier caught you.
+Dodging one counts toward barriers dodged in your statistics, and one that reaches you counts toward times hit by barriers.
 
 Barriers in practice and free runs.
 

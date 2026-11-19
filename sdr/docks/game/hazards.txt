@@ -1,0 +1,23 @@
+Hazards.
+
+Hazards, such as pits, chasms, fire, lava, water, quicksand and electricity, end your run straight away if you fall into one, however much health or how many lives you have. The way past a hazard is to jump over it.
+
+How a hazard works.
+
+A hazard fills the whole belt, so switching lanes won't help. Each one has a five-step ledge leading up to it, and as you step along the ledge you'll hear a five-cue countdown, one cue per step, with the last cue on the step right before the hazard.
+If you're still on the ground when you step onto it, you fall in, and your run ends.
+
+Getting past a hazard.
+
+Jump at the right moment to sail over it. At slower speeds, wait for the last few cues before you jump, since a jump lasts about a second. Once you're fast enough, jumping on any ledge step will carry you over.
+
+Hazards in a run.
+
+Hazards are in an endless run from the very start, at every speed. They can also come as half of a combination with an animal, in either order.
+Jumping over one counts toward hazards jumped in your statistics, and falling into one counts toward times fell into hazards.
+
+Hazards in practice and free runs.
+
+Hazards is the first practice choice, open from the start, and you practice it without a steel shield, since a shield can't save you from a fall. Jumping over 5 hazards while practicing opens spikes, and opens endless run too, since a hazard is the one obstacle that ends a run outright. A fall in practice doesn't end the run: the death message tells you to jump just before you reach the edge.
+
+In a free run, add hazards from add obstacles in the console. With no deaths, a fall sets you down just past the hazard and sends another one down the belt.

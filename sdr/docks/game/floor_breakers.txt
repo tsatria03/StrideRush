@@ -1,0 +1,26 @@
+Floor breakers.
+
+Floor breakers break the belt open into a hole of air, across every lane, so switching lanes won't help. Fall into one and your run ends straight away, however much health or how many lives you have. The way past a floor breaker is to open the corridor to it, then rebuild the hole piece by piece with your hands.
+
+How a floor breaker works.
+
+A floor breaker plays the same five-cue countdown as most obstacles, with two notes at once, and you hear the hole getting closer as it comes.
+Once you reach its edge with the corridor open, the belt holds you while you rebuild. While you rebuild, you can't switch lanes, jump, crouch, use your weapons or your inventory. Once the floor is whole, you run on over it.
+If you reach a floor breaker without opening its corridor, press the same hand twice, lay a piece too fast, or take too long, you fall through, and your run ends.
+
+Getting past a floor breaker.
+
+Press either hand during its countdown to open the corridor to it. Once you reach its edge, lay each piece with the other hand from your last, at the same steady pace as a ladder's rungs, starting as soon as you reach the edge.
+Harder levels make bigger holes, from 3 or 4 pieces on easy up to 7 or 8 on chaos, so listen for the repair instead of counting.
+On a slide or a trampoline flight, a floor breaker passes you by harmlessly.
+
+Floor breakers in a run.
+
+Floor breakers join an endless run once the belt reaches 4 steps a second, in any environment that has them. They never come as part of a combination.
+Repairing one counts toward floor breakers repaired in your statistics, and falling into one counts toward times fell into floor breakers.
+
+Floor breakers in practice and free runs.
+
+Floor breakers has its own practice choice, and like hazards, you practice it without a steel shield, since a shield can't save you from a fall. It opens once you've got through 5 mixed doors while practicing them, and repairing 5 floor breakers while practicing opens barriers. A fall in practice doesn't end the run: the death message tells you to open the corridor with a hand before you reach it, then rebuild the hole with alternating hands.
+
+In a free run, add floor breakers from add obstacles in the console. With no deaths, a fall sets you down just past the floor breaker and sends another one down the belt.
