@@ -1,5 +1,6 @@
 ####These are the things that need to be finished for future versions of the game.
 
+****Unfinished. Split the game's readme into several files explaining each feature/macanic.
 ****Unfinished. Add game translations for other languages.
 ****Unfinished. Add a shop that you can access in the game to buy items and special helpers.
 ****Unfinished. Add helicopters that you must jump to shoot.
