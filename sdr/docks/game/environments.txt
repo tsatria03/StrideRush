@@ -1,0 +1,30 @@
+Environments.
+
+Every run takes place in an environment, a place with its own ground, music, ambience and obstacle sounds. A run moves you from one environment to another as you go, so you'll hear the world around you change.
+
+How environments work.
+
+A run starts in a random environment, and every 1 to 2 minutes it moves you to a different one, telling you which, such as "You've entered the uncharted environment." Press V to hear which environment you're in.
+The ground and the ambience change straight away, and the obstacles that come next belong to the new place, while anything already on its way keeps its own sounds. The song that's playing finishes first, and the next one comes from the new environment's music.
+If a run has only one environment to be in, its ambience fades into another of that place's ambiences every 1 to 2 minutes instead.
+
+Music, ambience and your heartbeat.
+
+Every run has music and an ambience playing behind it. The music shuffles through its environment's tracks, playing one after another, and every run starts a new shuffle. The ambience puts you somewhere, such as a city street, a beach or a forest in the rain.
+Change the music volume with page up and page down or F4 and F3, and the ambience volume with home and end or F6 and F5. Each change is spoken, and a key does nothing once its volume is as high or as low as it goes.
+You can also hear your heartbeat, which speeds up as you run faster. It starts at 5 beats per minute and climbs steadily as the belt speeds up, reaching 155 beats per minute at 6.7 steps a second, where it stays however much faster you go. A speed powerup changes it too, for as long as the powerup lasts. Press B to hear your heart rate, and change the heartbeat volume with its slider in the game tab of the settings menu.
+
+Which environments a run visits.
+
+An environment doesn't need everything. A kind of obstacle with no sounds in an environment just doesn't come while you're there. Endless and timed runs only start in, or move to, an environment with an obstacle they can bring at that point in the run; when there's nowhere else like that yet, you stay where you are, and the ambience moves on instead.
+A practice run only moves between environments that have the obstacle you're practicing.
+
+Environments in free runs.
+
+In a free run, you choose an environment to stay in, or random, when you start, and modify environment in the console changes it at any time. A free run can go to any environment, even one with no obstacles, so you can try out a place's surfaces, music and ambience on their own.
+Each add list only has the kinds your current environment has, and anything you've added that it can't bring waits until you're somewhere that has it.
+
+Learning and making environments.
+
+Learn sounds, in the game menu, has a category for each environment, holding its countdowns, transitions, traps and vehicles, so you can hear its obstacles before you run into them.
+You can make your own environments, too: every folder in sounds/game/environments is an environment, and the game finds a new one on its own, as described under customizing sounds.

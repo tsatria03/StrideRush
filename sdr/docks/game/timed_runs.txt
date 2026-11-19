@@ -1,0 +1,34 @@
+Timed runs.
+
+A timed run plays just like an endless run on the level you choose, with the same speed, obstacles, items and doors, but you also have a countdown clock, and you win by reaching the finish line before it runs out.
+
+Starting one.
+
+Timed run, in play game after endless run, opens once you've finished 5 easy endless runs, the same time medium opens. Choosing it asks for a difficulty level.
+
+The clock.
+
+The clock starts at 60 seconds on easy, 50 on medium, 40 on hard, 30 on insane and 20 on chaos, and ticks down as you run. Every obstacle you get past the right way adds time, and every hit takes some away:
+
+Easy: 7 seconds a pass, 5 a hit.
+Medium: 6 seconds a pass, 5 a hit.
+Hard: 5 seconds a pass, 7 a hit.
+Insane: 4 seconds a pass, 8 a hit.
+Chaos: 4 seconds a pass, 10 a hit.
+
+A vehicle's burst costs one hit, however many of its shots land.
+As the clock drops past 45, 30, 15, 10 and 5 seconds, a sound plays and you're told how much is left. Once you've heard a warning, it only comes again after the clock climbs more than 10 seconds back above it.
+
+The finish line.
+
+The finish line comes after 5 minutes of running on easy, 4 and a half on medium, 4 on hard, 3 and a half on insane and 3 on chaos. Keep the clock above zero until then and you win, with "You crossed the finish line." If it reaches zero first, "Time's up." ends the run, and dying ends it just as in an endless run.
+Press T to hear the time left on the clock and how long until you reach the finish line.
+
+When a run ends.
+
+When a timed run ends, your results come up: the difficulty, how it ended, the time left on the clock or how long you lasted, and your best finish on that level, the most time you've had left at the finish line. Then you can replay the run or return to the game menu.
+
+Levels and records.
+
+Timed runs have their own levels to unlock: easy is open, and each level after it opens once you've finished 3 timed runs on the level below, whether you won, ran out of time or died, while quitting or restarting doesn't count.
+Timed runs are kept apart from endless runs: they never change your endless stats or difficulty unlocks. They have their own records at the end of lifetime statistics, level by level: timed runs played, wins, time-outs, deaths and your best finish.

@@ -1,0 +1,38 @@
+Practice runs.
+
+Practice run lets you learn one kind of obstacle at a time, for as long as you like. A practice run never ends on its own, and dying just sets you down past what caught you, so you can keep trying.
+
+Starting one.
+
+Practice run is in play game. Choose an obstacle, listed in the order they join an endless run, with combinations, trampolines and mixed obstacles last:
+
+Hazards, spikes, mines, projectiles, force fields, animals, insects.
+Fake walls, real walls, mixed walls.
+Fake doors, real doors, mixed doors.
+Floor breakers, barriers, winds, vehicles.
+Combinations, trampolines, mixed obstacles.
+
+Then choose a speed of 2, 2.5, 3.3, 5 or 10 steps a second, or rising.
+
+How a practice run works.
+
+The belt stays at the speed you chose for the whole run, and only that obstacle comes at you, with the same spacing as chaos. Mixed walls mixes fake and real walls, and mixed doors mixes fake and real doors, so you can practice telling them apart by their pitch. Trampolines brings a trampoline of any kind every other spawn, with an obstacle of any type in between. Mixed obstacles brings every kind at random, each about as often as the others, with each real door's key just before it, as a warm-up before an endless run.
+Rising starts at 2 steps a second and speeds up every 5 seconds, twice as fast as an endless run, until it reaches 10 steps a second about 3 and a half minutes in, then stays there. If you die, you try again at the speed you'd reached, while restarting the run starts you from 2 again.
+You start with 1 life and 1 steel shield in your inventory, except when practicing hazards or floor breakers, since a shield can't save you from either. Nothing else turns up on the belt except the keys for real doors, and no slides, and no trampolines unless you're practicing them. A practice run moves between environments too, but only ones that have the obstacle you're practicing.
+You only have weapons when practicing insects, fake walls, mixed walls, fake doors, mixed doors, vehicles, combinations, trampolines or mixed obstacles, and then your guns never run out of reserve rounds.
+
+Dying in practice.
+
+Hits take your health as they do in a real run, and when one would take your last life, or you fall into a hazard or a floor breaker, you die just as you would in a real run, but the run doesn't end. You hear yourself die, and a message tells you what caught you and how to get past it.
+After you press enter, choose retry practice to be set down just past what caught you, with full health, your life and your shield back, or return to game menu to stop, which escape does too. If you'd rather skip that choice, turn off show retry options after a practice death in the game tab of the settings menu, and pressing enter sets you down just past what caught you straight away.
+Quit from the pause menu or with escape when you're done, or restart to begin the same practice again.
+
+Hints.
+
+While you practice, each thing is described in the practice buffer as it appears: what it is, which lane it's in if it sits in one, and what to do about it. Each kind is described the first 5 times it appears in a run, or just the first time in mixed obstacles, and once 5 of what you're practicing have passed you, a closing line says the hints are done. Until then, getting hit by anything but a hazard, or missing a key, starts the hints over, so you hear them again; after the closing line, the rest of the run is quiet.
+
+Unlocking obstacles.
+
+At first, only hazards are open, and each obstacle after them opens once you've got past 5 of the one before it, while practicing that one. Each obstacle's document says what opens it. Jumping over your first 5 hazards also opens endless run.
+Only getting past the right way counts, so a hit or a fall doesn't, but your count adds up over all your practice runs and deaths, and doesn't need to be in a row. The practice menu says each obstacle is available, or how many more of the one before it you need, and choosing a locked one tells you the same. Each time you open something, you hear a sound and are told what you've unlocked. Your unlocks are saved, and clearing your stats or progress never takes them away.
+Practice runs never change your statistics or earn achievements.
