@@ -1,0 +1,26 @@
+Real doors.
+
+Real doors mark your progress. As the belt picks up the pace, a real door comes up ahead of you every so often, marking the start of a faster stretch. Real doors are locked, so you'll need the key that turns up earlier in each stretch, then a hand to open the door, and it carries you through into the next stretch.
+
+How a real door works.
+
+A real door fills the whole belt and plays at its normal pitch, while a fake door sounds slightly higher or lower. As it comes, it plays the same five-cue countdown as most obstacles, with four notes at once.
+Each real door is locked. Its key turns up on the belt earlier in the same stretch, in a random lane, so pick it up with a hand as it reaches you, and it goes in your inventory.
+While a door carries you, your footsteps and heartbeat go quiet, and you can't jump, crouch, switch lanes, use your weapons or use your inventory, until it closes behind you.
+If you crash into a real door, it takes 70 of your health, the same as any door. Even a missed door still marks the start of its faster stretch.
+
+Getting past a real door.
+
+Once the door is within about 2 seconds of you, choose a key in your inventory and use it, and you'll hear the lock give. Then press either hand in the last few steps before the door to open it, and its countdown stops as it carries you through. If you try to open a door that's still locked, you'll hear it refuse.
+Any key opens any real door, so a spare key from an earlier stretch works too.
+
+Real doors in a run.
+
+A real door comes each time the belt speeds into a new stretch, until you reach your level's top speed, after which there are no more. Real doors never come as part of a combination.
+Opening one counts toward real doors opened in your statistics, and each key you use counts toward keys used.
+
+Real doors in practice and free runs.
+
+Real doors has its own practice choice, with only real doors, each with its key just before it, to unlock and open, and mixed doors brings real and fake doors together, so you can practice telling them apart. Real doors opens once you've broken 5 fake doors while practicing them, and opening 5 real doors while practicing opens mixed doors.
+
+In a free run, add real doors from add obstacles in the console. Each one always brings its key first, then the door.

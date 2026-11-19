@@ -1,0 +1,25 @@
+Barriers.
+
+Barriers, such as boulders, firewalls and power lines, each fill a single lane. Jumping, crouching, your hands and your weapons are no use against one: the only way past a barrier is to be in another lane when it reaches you.
+
+How a barrier works.
+
+A barrier sits in one lane, and you hear it in that lane as it comes. One in your lane sounds straight ahead, one a lane over sounds off to that side, and one two lanes over sounds further out still. Each one turns up in a random lane, and sometimes two come side by side in different lanes, but never in all three, so there's always a lane open.
+A barrier plays the same five-cue countdown as most obstacles, with three notes at once, but only while it's in your lane. The countdown stops as soon as you move out of its way, and starts again if you move back in.
+If a barrier reaches you in its lane, it takes 80 of your health, the hardest blow of any obstacle, and carries on past you, fading away behind.
+
+Getting past a barrier.
+
+Listen for which lane it's in, and if it's in yours, switch to another lane before it reaches you. If it's already in another lane, stay where you are.
+Two barriers that sound the same, one on each side of you, can blend into a single sound that seems to come from straight ahead, even though nothing is in your lane. A barrier in your lane always plays its countdown, so a barrier that sounds centred but has no countdown means there's one on each side of you, and the lane you're in is the open one. When you're not sure, switch lanes for a moment: two side by side split apart straight away.
+
+Barriers in a run.
+
+Barriers join an endless run once the belt reaches 5 steps a second, in any environment that has them. Since many of them pass in another lane, barriers come about twice as often as each other kind of obstacle. They can also come as half of a combination, with a mine, a projectile or a fake wall, and a combination's barrier is always in your lane.
+Dodging one counts toward barriers dodged in your statistics, and one that reaches you counts as a time a barrier caught you.
+
+Barriers in practice and free runs.
+
+Barriers has its own practice choice, where they come in random lanes and sometimes side by side. It opens once you've repaired 5 floor breakers while practicing them, and dodging past 5 barriers while practicing opens winds.
+
+In a free run, add barriers from add obstacles in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. With a chosen lane, barriers come one at a time, never side by side.

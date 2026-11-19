@@ -1,0 +1,35 @@
+Combinations.
+
+A combination is two obstacles coming close together, so you need two actions in a row, such as crouching under a projectile and then jumping a spike, or switching lanes out of a barrier's way and then breaking a fake wall. Getting through both without a hit counts as a combination cleared.
+
+How a combination works.
+
+Each obstacle in a combination plays its own countdown, the two overlapping, and the one whose countdown finishes first comes first. There's no extra warning, so listen for two countdowns at once.
+The gap between the two always leaves you time for the first action: after a jump you land before the second one arrives, after a crouch you have time to stand, and after a force field's throw you land before the second part rather than over it. A combination's barrier is always in your lane, so moving out of its way is always part of it.
+
+The pairs.
+
+There are nine pairs, and each can come in either order, so eighteen in all:
+
+A projectile and a spike.
+A force field and a fake wall.
+A force field and an animal.
+A mine and a barrier.
+A barrier and a projectile.
+A fake wall and a barrier.
+An animal and a hazard.
+A fake door and a mine.
+A projectile and an insect, where staying crouched carries you through both.
+
+Combinations never include real doors, real walls, winds, slides or trampolines.
+
+Combinations in a run.
+
+A pair only starts once both of its obstacles have joined the run, in an environment that has both. Combinations come more often on harder levels, from 1 obstacle in 20 on easy to 1 in 4 on chaos.
+Clearing one counts toward combinations cleared in your statistics.
+
+Combinations in practice and free runs.
+
+Combinations has its own practice choice, where every spawn is a pair, in either order. It opens once you've got past 5 vehicles while practicing them, by destroying or dodging them, and clearing 5 combinations while practicing opens trampolines. Your weapons are drawn, since some pairs need them.
+
+In a free run, add combinations from add obstacles in the console, then choose which combination: each pair your environment can make, named first part first, such as projectile, spike, followed by the same pair the other way round, or random combinations, which bring any of them. A chosen pair always comes in that order, and if you move to an environment that can't make it, it waits until you're somewhere that can.

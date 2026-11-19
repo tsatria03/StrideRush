@@ -1,0 +1,24 @@
+Animals.
+
+Animals, birds and dogs, call out ahead of you as they come. Every one has its own call, and none of the usual moves will get rid of one: jumping, crouching, switching lanes, a single hand or your weapons are no use. The only way past an animal is to scare it away by clapping.
+
+How an animal works.
+
+An animal fills the whole belt, so it sounds straight ahead of you whichever lane you're in, and switching lanes won't get you past it. As it comes, it plays the same five-cue countdown as most obstacles, one cue per step, with three notes at once, so you can tell an animal's countdown from any other. It keeps calling as it gets closer.
+If an animal reaches you, it runs into you and takes 10 of your health.
+
+Getting past an animal.
+
+Clap by pressing both hand keys together during an animal's countdown. It runs off, its countdown stops, and you can run straight on. On a joystick, press both shoulder buttons together.
+A single hand does nothing to an animal, so make sure both hands go down together. A clap scares away the nearest animal within reach, so when two come close together, clap once for each.
+
+Animals in a run.
+
+Animals join an endless run once the belt reaches about 2.9 steps a second, and come at every speed after that, in any environment that has them. They can also come as half of a combination, with a force field or with a hazard, in either order.
+Scaring one away counts toward animals scared in your statistics, and one that reaches you counts as a time an animal caught you.
+
+Animals in practice and free runs.
+
+Animals has its own practice choice, which brings both birds and dogs. It opens once you've switched off 5 force fields while practicing them, and scaring away 5 animals while practicing opens insects. If an animal catches you in practice, the death message tells you whether it was a bird or a dog, and to clap with both hands.
+
+In a free run, add animals from add obstacles in the console, in batches or continuously.

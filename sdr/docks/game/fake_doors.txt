@@ -1,0 +1,24 @@
+Fake doors.
+
+Fake doors are doors that won't open. They can turn up anywhere along the belt, and sound slightly higher or lower in pitch than a real door, which is how you tell them apart. Your hands or a key only find one jammed, so the way past a fake door is to break it with your weapons.
+
+How a fake door works.
+
+A fake door fills the whole belt, so it sounds straight ahead of you whichever lane you're in. As it comes, it plays the same five-cue countdown as most obstacles, with four notes at once, like a real door's.
+Pressing a hand on a fake door, or using a key on it, only tells you it's jammed, and a key is never used up on one. If you crash into a fake door that's still standing, it takes 70 of your health, the same as any door.
+
+Getting past a fake door.
+
+Swing or fire your weapon at it as it comes. Each hit cracks it a little more, and once it breaks its countdown stops and you can run straight through. Your weapons reach from about 2 seconds ahead of you with the bat to 5 and a half with the pistol, so start early.
+Fake doors are tough, about twice as tough as a fake wall at any speed, and they get tougher the faster you run. Draw your strongest weapon and start as soon as you hear one.
+
+Fake doors in a run.
+
+Fake doors join an endless run once the belt reaches 4 steps a second, and come at every speed after that, in any environment that has doors. They can also come as half of a combination with a mine, in either order.
+Breaking one counts toward fake doors broken in your statistics, and crashing into one counts as a time a door caught you.
+
+Fake doors in practice and free runs.
+
+Fake doors has its own practice choice, with only fake doors to break, and mixed doors brings fake and real doors together, so you can practice telling them apart by their pitch. Fake doors opens once you've got through 5 mixed walls while practicing them, and breaking 5 fake doors while practicing opens real doors. Your weapons are drawn when practicing fake doors or mixed doors.
+
+In a free run, add fake doors from add obstacles in the console, and give each one its own health, or leave it empty for the normal health for your speed.
