@@ -13,7 +13,7 @@ Press shift plus tab and tab, or I and O, to move through your inventory, and en
 Press P to pause, or escape to quit the run.
 You can also play with a joystick or game controller, in every menu and in a run.
 
-The joystick and keyboard document, under game in the documentation menu, lists every key and button, including the ones you can pick up later, such as the readouts and the volume keys. Every obstacle, item, mode and feature is explained in detail in its own document there too.
+The keyboard and joystick document, under game in the documentation menu, lists every key and button, including the ones you can pick up later, such as the readouts and the volume keys. Every obstacle, item, mode and feature is explained in detail in its own document there too.
 
 How to play.
 
