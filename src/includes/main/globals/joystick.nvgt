@@ -1,8 +1,8 @@
-/* The joystick: one, handed to controls at startup, its buttons set in data/main/joystick.ini. A run reads it through
+/* The joystick: one, handed to controls at startup, its buttons set in data/config/main/joystick.ini. A run reads it through
 controls like the keys, with the left stick counting as the d-pad; menus get fixed buttons turned into keys. Plugging in and out is noticed once a second, in
 menus and runs, and each change is said once; unplugging it during a run pauses the run. If joystick.ini is missing or
 can't be read, no joystick is opened and the game plays with the keyboard only. */
-const string joystick_ini_path = "data/main/joystick.ini";
+const string joystick_ini_path = "data/config/main/joystick.ini";
 joystick@ joy = null;
 bool joy_announced = false; // the connection last spoken
 timer joy_check_timer;

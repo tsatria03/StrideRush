@@ -72,10 +72,12 @@ dlgplay(get_pack_sound("main/ui/menu/*speaker*"));
 dlgplay(get_pack_sound("main/ui/other/*complete*"), false);
 dlgmessage_return("Speaker test complete.");
 }
-/* The documentation menu: game (a topic for each part of the game, docks/game) then main (the four main docks,
-docks/main), each a list of its own. Every level is a loop, so closing a document comes back to its list, and escape or
+/* The documentation menu: game (a topic for each part of the game, game in docks_dir) then main (the four main docks,
+main in docks_dir), each a list of its own. Every level is a loop, so closing a document comes back to its list, and escape or
 back steps out silently (nested menus), with nothing stacking up. Each list remembers the item you last chose, for as
-long as the game is open, and opens on it next time (by its id, so a new game document doesn't shift it). */
+long as the game is open, and opens on it next time (by its id, so a new game document doesn't shift it). The docks
+sit in a folder for each language, docks/lang/<language>/; English is the only one read for now. */
+const string docks_dir = "docks/lang/english/";
 string docks_focus = "", docks_main_focus = "", docks_game_focus = "";
 void docksmenu()
 {
@@ -94,13 +96,13 @@ if(docks_focus=="game") docks_game_menu();
 else docks_main_menu();
 }
 }
-/* Main: the changelog, credits, readme and todo list, from docks/main. With none of them there, a dialog says so and it
+/* Main: the changelog, credits, readme and todo list, from main in docks_dir. With none of them there, a dialog says so and it
 stays in the documentation menu, as game does. */
 void docks_main_menu()
 {
 while(true)
 {
-if(find_files("docks/main/*.txt").length()==0)
+if(find_files(docks_dir+"main/*.txt").length()==0)
 {
 dlgmessage_return("There are no documents yet.");
 return;
@@ -116,17 +118,17 @@ if(mres<0 or m.selected_item_id=="back") return;
 string filename=m.selected_item_id;
 docks_main_focus=filename;
 m.fade_music();
-dockread("docks/main/"+filename);
+dockread(docks_dir+"main/"+filename);
 }
 }
-/* Game: every .txt file in docks/game, alphabetically, each named from its file with spaces for underscores
+/* Game: every .txt file in game in docks_dir, alphabetically, each named from its file with spaces for underscores
 (force_fields.txt reads "force fields"), so a new topic file shows up on its own. With none there yet, a dialog says
 so and it stays in the documentation menu. */
 void docks_game_menu()
 {
 while(true)
 {
-string[] topics=find_files("docks/game/*.txt");
+string[] topics=find_files(docks_dir+"game/*.txt");
 if(topics.length()==0)
 {
 dlgmessage_return("There are no documents yet.");
@@ -147,7 +149,7 @@ if(mres<0 or m.selected_item_id=="back") return;
 string filename=m.selected_item_id;
 docks_game_focus=filename;
 m.fade_music();
-dockread("docks/game/"+filename);
+dockread(docks_dir+"game/"+filename);
 }
 }
 /* Shows one document in an audio form window: the whole file in a read-only box you can arrow through, and a close

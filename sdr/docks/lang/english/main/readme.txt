@@ -79,7 +79,7 @@ Right shoulder: Moves to the next control, like tab.
 Left shoulder: Moves to the previous control, like shift plus tab.
 Y button: In a message that says to press enter to continue, copies the message, like the letter C.
 
-Your joystick's buttons are kept in joystick.ini, in the data/main folder, which you can also edit by hand. Each line is an action, an equals sign, then its buttons by name, separated by commas, such as jump=DPAD_UP, the same way keyboard.ini names its keys. The names are A, B, X and Y for the four face buttons, BACK, GUIDE and START, LEFT_STICK and RIGHT_STICK for the stick clicks, LEFT_SHOULDER and RIGHT_SHOULDER, and DPAD_UP, DPAD_DOWN, DPAD_LEFT and DPAD_RIGHT, in capitals or not; any other button your controller has, such as a touchpad or a mute button, is BUTTON_ followed by its number, such as BUTTON_15. A button can end with :down, :release or :up, such as duck_held=DPAD_DOWN:down, and with none, it's a press. A file with the old numbers instead of names still works. If joystick.ini is missing or can't be read, the game tells you when it starts, then runs with the keyboard only.
+Your joystick's buttons are kept in joystick.ini, in the data/config/main folder, which you can also edit by hand. Each line is an action, an equals sign, then its buttons by name, separated by commas, such as jump=DPAD_UP, the same way keyboard.ini names its keys. The names are A, B, X and Y for the four face buttons, BACK, GUIDE and START, LEFT_STICK and RIGHT_STICK for the stick clicks, LEFT_SHOULDER and RIGHT_SHOULDER, and DPAD_UP, DPAD_DOWN, DPAD_LEFT and DPAD_RIGHT, in capitals or not; any other button your controller has, such as a touchpad or a mute button, is BUTTON_ followed by its number, such as BUTTON_15. A button can end with :down, :release or :up, such as duck_held=DPAD_DOWN:down, and with none, it's a press. A file with the old numbers instead of names still works. If joystick.ini is missing or can't be read, the game tells you when it starts, then runs with the keyboard only.
 
 Speech buffer commands
 
@@ -116,8 +116,8 @@ When an endless run ends in a death, your results for the run come up straight a
 The game's folders.
 
 The game keeps its files in three folders, each split into a main part, for the game as a whole, and a game part, for what you meet in a run.
-The data folder holds your settings files: data/main has keyboard.ini and joystick.ini, your key and joystick bindings, and data/game has the achievements.
-The docks folder holds these documents: docks/main has the readme, changelog, todo list and credits, and docks/game has a document for each part of the game.
+The data folder holds your settings files in its config folder: data/config/main has keyboard.ini and joystick.ini, your key and joystick bindings, and data/config/game has the achievements. Its lang folder holds the game's languages, which the translations document explains.
+The docks folder holds these documents in a folder for each language, such as docks/lang/english: its main folder has the readme, changelog, todo list and credits, and its game folder has a document for each part of the game.
 The sounds folder holds every sound: sounds/main has the game's own events, your own sounds and the menus, and sounds/game has the environments, weapons and items. The customizing sounds document explains how to change them or add your own.
 
 Updates.

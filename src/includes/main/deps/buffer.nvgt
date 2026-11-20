@@ -1,6 +1,6 @@
 /* Speech buffers. Adapted for Stride Rush: no networking, logs go to
 tsatria03/StrideRush/logs, sounds come through get_pack_sound from main/ui/buffer and main/ui/other, keys are the [buffer]
-actions in data/main/keyboard.ini, and the menu uses item ids. */
+actions in data/config/main/keyboard.ini, and the menu uses item ids. */
 buffer@[]buffers(0);
 int bufferpos=0;
 class buffer_item
