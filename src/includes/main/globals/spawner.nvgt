@@ -6,7 +6,7 @@ double next_spawn_x = 0;
 string next_type = "";
 int next_countdown = 0;
 // Every obstacle type the spawner knows; a new type is added here. The spawn debug option lists these too.
-string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles", "walls", "fake_doors", "animals", "barriers", "winds", "ladders", "floor_breakers", "vehicles", "insects", "helicopters"}; // vehicles (vehicle.nvgt); insects (insect.nvgt); helicopters (helicopter.nvgt); ladders: a ladder and its real wall (ladder.nvgt); floor breakers (floor_breaker.nvgt)
+string[] obstacle_types = {"hazards", "spikes", "mines", "force_fields", "projectiles", "walls", "fake_doors", "animals", "barriers", "winds", "ladders", "floor_breakers", "vehicles", "insects", "aircrafts"}; // vehicles (vehicle.nvgt); insects (insect.nvgt); aircrafts (aircraft.nvgt); ladders: a ladder and its real wall (ladder.nvgt); floor breakers (floor_breaker.nvgt)
 /* The next 50 ms speed mark that gets a real door: the first mark below the run's starting speed,
 then door_section_ms lower each time one is placed, until it passes min_step_time. Real doors come at these marks in
 every normal run; a debug run limited to one type gets none (the "real doors" debug choice spawns only them). */
@@ -328,6 +328,7 @@ string placed = next_type;
 string last_part = placed == "combinations" ? next_combo_second : placed;
 int span = placed == "combinations" ? last_pair_span : 0;
 if (placed == "ladders") span = ladder_wall_gap; // its real wall stands ladder_wall_gap past the ladder, so the next spawn counts from there
+if (placed == "aircrafts") span = aircraft_stay_tiles(); // it stays with you through its hover and landing, so the next spawn waits until it's gone (aircraft.nvgt)
 choose_next_obstacle();
 next_spawn_x += span + next_gap(next_countdown);
 // A force field's throw needs room after it, so the gap after one gets that many extra tiles.
@@ -479,7 +480,7 @@ else if (type == "trampolines") spawn_trampoline(x, theme, countdown); // trampo
 else if (type == "ladders") spawn_ladder(x, theme, countdown); // ladder.nvgt: the ladder at x, its real wall on the next tile
 else if (type == "floor_breakers") spawn_floor_breaker(x, theme, countdown); // floor_breaker.nvgt
 else if (type == "vehicles") spawn_vehicle(x, theme, countdown); // vehicle.nvgt: theme is a kind folder (cars), each an equal share
-else if (type == "helicopters") spawn_helicopter(x, theme, countdown); // helicopter.nvgt: theme is the kind folder (helicopters)
+else if (type == "aircrafts") spawn_aircraft(x, theme, countdown); // aircraft.nvgt: theme is a kind folder (helicopters), each an equal share
 // The belt-wide obstacles' practice hints; lane things, animals and trampolines give theirs in their own spawn functions (practice_hints.nvgt).
 if (type == "hazards" or type == "spikes" or type == "mines" or type == "force_fields" or type == "projectiles" or type == "walls") practice_hint(type, -1, x);
 }

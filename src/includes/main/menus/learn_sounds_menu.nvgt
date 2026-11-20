@@ -6,7 +6,7 @@ dropped into sdr/sounds shows up with no code change:
   - countdowns: one countdown per type that has cues, from traps, npc, transitions and transports (<type>/countdown)
   - traps, transitions and transports: one list per type (<type>/general, every theme's sounds); traps also holds npc,
     the kinds in traps/npc that the game knows (environments.nvgt's npc_types), animals; transports holds the
-    transport_types the game knows, vehicles and aircrafts (helicopters)
+    transport_types the game knows, vehicles and aircrafts
 - weapons: artillery and melee (game/equipments/weapons/<kind>)
 Every menu and list is alphabetical, and every category says how many sounds it holds (learn_count_text()). Escape or
 back steps up a level silently, out to the game menu too (they're all nested menus).
@@ -256,7 +256,7 @@ learn_category transports("transports");
 for (uint i = 0; i < transport_types.length(); i++)
 {
 string folder = type_path(env_root, transport_types[i]) + "general";
-if (get_pack_sound_folders(folder + "/*").length() > 0) transports.subs.insert_last(learn_folder_category(learn_type_name(transport_folder(transport_types[i])), folder, "")); // named by its folder: vehicles, aircrafts
+if (get_pack_sound_folders(folder + "/*").length() > 0) transports.subs.insert_last(learn_folder_category(learn_type_name(transport_types[i]), folder, ""));
 }
 learn_sort_categories(transports.subs);
 if (transports.subs.length() > 0) place.subs.insert_last(transports);

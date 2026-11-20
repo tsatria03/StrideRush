@@ -199,8 +199,8 @@ if (cause == "doors") return "crashing into a door";
 if (cause == "floor_breakers") return "falling into a floor breaker";
 if (cause == "vehicles") return "a vehicle ramming you";
 if (cause == "vehicle_shots") return "a vehicle's shot";
-if (cause == "helicopters") return "a helicopter landing on you";
-if (cause == "helicopter_shots") return "a helicopter's shot";
+if (cause == "aircrafts") return "an aircraft landing on you";
+if (cause == "aircraft_shots") return "an aircraft's shot";
 return "none";
 }
 // A whole number with a comma every three digits: 4000 reads "4,000".

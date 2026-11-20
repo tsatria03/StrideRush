@@ -1,0 +1,398 @@
+/* Aircrafts: a transport (environments.nvgt's transport_types), its sounds in game/environments/<env>/transports/
+aircrafts, like vehicles: each folder in aircrafts/general is a kind (helicopters), each folder inside a kind one
+aircraft, with air (its loop in the air), shoot, land (touching down), ground (its loop moving on the ground), impact (a
+shot striking you), hit (the crash), hurt and death; its layered countdown in aircrafts/countdown. Each spawn is a
+random kind, an equal share whatever its number of aircraft, then one of them. Every kind behaves the same, in three
+phases:
+- Flying in: timed to a meeting tile, meet_x, closing aircraft_speed_factor times as fast as a still obstacle, moving a
+  lane toward yours every aircraft_hover_beat, its countdown on the last steps. On meet_x it doesn't pass you: it
+  starts hovering.
+- Hovering, for aircraft_hover_time: over you as you run, in its own lane, moving a lane toward yours every
+  aircraft_hover_beat. It fires in bursts like a vehicle's (aircraft_burst_shots shots, aircraft_burst_gap apart,
+  then aircraft_burst_pause): each shot's shoot plays, and aircraft_shot_delay later the shot lands in the lane it
+  was fired at, aircraft_shot_damage if you're still in that lane (a shield first), a miss if not. A burst costs a
+  timed run one hit, however many of its shots land.
+- Landing, for aircraft_land_time: its air loop stops, its land plays, it stops firing, and its ground loop plays as it
+  moves along the ground a lane toward yours every aircraft_land_beat. At touchdown, in your lane it crashes onto you (its hit,
+  aircraft_crash_damage); in another lane it's a clean dodge. Either way it's gone.
+In your lane, any weapon hits it while you're in the air from your own jump: flying in, within your weapon's reach (a
+swing, or a bullet fired in the air), and hovering, at once (aircraft_in_reach(), aircraft_overhead()); its hurt on
+each hit, its death at 0 hp, its health growing with speed. While a slide or a trampoline flight carries
+you, its shots and its crash can't touch you, you can't hit it, and one meeting you then flies on harmlessly.
+Statistics: aircrafts_destroyed, aircrafts_dodged, caught_aircrafts (a crash) and aircraft_shots_taken; last_caught
+"aircrafts" for a crash and "aircraft_shots" for a shot, with its kind's singular ("helicopter") as last_caught_kind.
+Not in combinations. Same entity pattern as the other traps: null-slot removal, reused slots, and only
+destroy_all_aircrafts() shrinks the arrays. */
+sound_pool aircraftpool;
+const int aircraft_flying = 0;
+const int aircraft_hovering = 1;
+const int aircraft_landing = 2;
+class aircraft
+{
+double meet_x;
+string kind; // its kind folder, "helicopters"
+string theme; // "helicopters/helicopter", below aircrafts/general
+string env;
+int lane;
+int hp;
+int phase = aircraft_flying;
+double countdown_start;
+double phase_end = 0; // on runtimer: when the hover or the landing ends
+double next_beat = 0; // on runtimer: its next lane move
+double next_shot = 0; // on runtimer: its next shot while hovering, or the end of its pause
+int burst_left = 0; // shots still to come in this burst
+bool burst_charged = false; // this burst has already cost a timed run its hit (timerun.nvgt)
+int loopslot = -1;
+}
+aircraft@[] aircrafts(0);
+class aircraft_shot
+{
+int lane;
+double lands_at; // on runtimer
+aircraft@ owner;
+}
+aircraft_shot@[] aircraft_shots(0);
+
+// Where an environment keeps its aircrafts: a folder for each kind in aircrafts/general, and one for each aircraft in that.
+string aircraft_folder(const string&in env)
+{
+return trap_folder(env, "aircrafts"); // game/environments/<env>/transports/aircrafts/general/
+}
+// kind is the random kind folder the spawner picked (helicopters); one aircraft in it is picked here.
+void spawn_aircraft(double mx, string kind, int countdown)
+{
+string[] themes = get_pack_sound_folders(aircraft_folder(current_env) + kind + "/*");
+if (themes.length() == 0) return;
+aircraft h;
+h.meet_x = mx;
+h.kind = kind;
+h.theme = kind + "/" + themes[random(0, themes.length() - 1)];
+h.env = current_env;
+h.lane = free_placed_lane(); // a free run's chosen lane to start in (freebelt.nvgt); it still moves toward yours
+if (h.lane < 0) h.lane = random(lane_left, lane_right);
+h.hp = free_obstacle_hp(wall_spawn_hp(aircraft_min_hp, aircraft_max_hp)); // or a free run's set health (freebelt.nvgt)
+h.countdown_start = mx - countdown;
+h.next_beat = runtimer.elapsed + aircraft_hover_beat; // it drifts toward your lane as it flies in, too
+h.loopslot = aircraftpool.play_2d(get_pack_sound(aircraft_folder(h.env) + h.theme + "/*air*"), 0, me.x, 0, aircraft_x(h), true);
+place_aircraft_sound(h, h.loopslot);
+for (uint i = 0; i < aircrafts.length(); i++)
+{
+if (@aircrafts[i] == null)
+{
+@aircrafts[i] = h;
+return;
+}
+}
+aircrafts.insert_last(h);
+}
+/* How far you run while one hovers and lands, in tiles at the current speed, with two to spare for the belt speeding up
+meanwhile: spawn_check() (spawner.nvgt) puts the next obstacle at least this far past an aircraft's meeting tile, so
+only one is ever with you and nothing else comes until it's gone. */
+int aircraft_stay_tiles()
+{
+return int(ceil(double(aircraft_hover_time + aircraft_land_time) / current_step_time())) + 2;
+}
+// Where you are along the belt right now, between steps.
+double aircraft_player_pos()
+{
+return me.x + min(1, double(steptimer.elapsed) / current_step_time());
+}
+// Where an aircraft is along the belt: flying in, as a projectile does at its own speed; hovering or landing, over you.
+double aircraft_x(aircraft@ h)
+{
+double player_pos = aircraft_player_pos();
+if (h.phase != aircraft_flying) return player_pos;
+return h.meet_x + (aircraft_speed_factor - 1) * (h.meet_x - player_pos);
+}
+/* An aircraft sound in its lane at the aircraft. Flying in, its fade is divided by its speed, so it's heard as early as
+a still obstacle (mover_volume_step(), decpool.nvgt). */
+void place_aircraft_sound(aircraft@ h, int slot)
+{
+place_lane_sound(aircraftpool, slot, h.lane, aircraft_x(h));
+if (h.phase != aircraft_flying or slot < 0 or slot >= int(aircraftpool.items.length()) or belt_volume_step <= 0) return;
+aircraftpool.items[slot].volume_step = mover_volume_step(aircraft_speed_factor);
+aircraftpool.items[slot].update(aircraftpool.last_listener_x, aircraftpool.last_listener_y, aircraftpool.last_listener_z, aircraftpool.last_listener_rotation, aircraftpool.max_distance);
+}
+// One of an aircraft's sounds, once, at the aircraft in its lane.
+void aircraft_sound(aircraft@ h, const string&in name)
+{
+int slot = aircraftpool.play_2d(get_pack_sound(aircraft_folder(h.env) + h.theme + "/*" + name + "*"), 0, me.x, 0, aircraft_x(h), false);
+place_aircraft_sound(h, slot);
+}
+// A lane toward yours, from the lane it's in.
+void aircraft_drift(aircraft@ h)
+{
+if (h.lane != current_lane) h.lane += current_lane > h.lane ? 1 : -1;
+}
+/* Every frame from run_loop(): each hovering aircraft's drift and shots and the start of its landing, each landing one's
+drift and its touchdown, every loop placed, then the shots landing. A shot or a crash can end the run, so the caller
+checks running after. */
+void aircraft_flight()
+{
+for (uint i = 0; i < aircrafts.length(); i++)
+{
+if (@aircrafts[i] == null) continue;
+aircraft@ h = aircrafts[i];
+if (h.phase == aircraft_flying and runtimer.elapsed >= h.next_beat)
+{
+h.next_beat += aircraft_hover_beat;
+aircraft_drift(h);
+}
+if (h.phase == aircraft_hovering)
+{
+if (runtimer.elapsed >= h.phase_end)
+{
+/* Its hover is over: it lands, no longer firing, and chases your lane along the ground. Its air loop cuts off, its land
+plays once, and its ground loop takes the air loop's slot, so it follows the aircraft's lane as it moves. */
+h.phase = aircraft_landing;
+h.phase_end = runtimer.elapsed + aircraft_land_time;
+h.next_beat = runtimer.elapsed + aircraft_land_beat;
+stop_aircraft(h);
+aircraft_sound(h, "land");
+h.loopslot = aircraftpool.play_2d(get_pack_sound(aircraft_folder(h.env) + h.theme + "/*ground*"), 0, me.x, 0, aircraft_x(h), true);
+place_aircraft_sound(h, h.loopslot);
+}
+else
+{
+if (runtimer.elapsed >= h.next_beat)
+{
+h.next_beat += aircraft_hover_beat;
+aircraft_drift(h);
+}
+if (runtimer.elapsed >= h.next_shot)
+{
+if (h.burst_left <= 0)
+{
+h.burst_left = aircraft_burst_shots;
+h.burst_charged = false;
+}
+h.burst_left -= 1;
+h.next_shot = runtimer.elapsed + (h.burst_left > 0 ? aircraft_burst_gap : aircraft_burst_pause);
+aircraft_fire(h);
+}
+}
+}
+if (h.phase == aircraft_landing)
+{
+if (runtimer.elapsed >= h.next_beat and runtimer.elapsed < h.phase_end)
+{
+h.next_beat += aircraft_land_beat;
+aircraft_drift(h);
+}
+if (runtimer.elapsed >= h.phase_end)
+{
+aircraft_touchdown(i);
+if (!running) return;
+continue;
+}
+}
+if (h.loopslot < 0 or !aircraftpool.verify_slot(h.loopslot)) continue;
+place_aircraft_sound(h, h.loopslot);
+}
+aircraft_shot_landing();
+}
+// A shot: its shoot at the aircraft, landing in the lane it's over after aircraft_shot_delay.
+void aircraft_fire(aircraft@ h)
+{
+aircraft_sound(h, "shoot");
+aircraft_shot s;
+s.lane = h.lane;
+s.lands_at = runtimer.elapsed + aircraft_shot_delay;
+@s.owner = h;
+for (uint i = 0; i < aircraft_shots.length(); i++)
+{
+if (@aircraft_shots[i] == null)
+{
+@aircraft_shots[i] = s;
+return;
+}
+}
+aircraft_shots.insert_last(s);
+}
+// Each shot whose time has come lands: on you if you're still in its lane and not carried, a miss otherwise.
+void aircraft_shot_landing()
+{
+for (uint i = 0; i < aircraft_shots.length(); i++)
+{
+if (@aircraft_shots[i] == null) continue;
+aircraft_shot@ s = aircraft_shots[i];
+if (runtimer.elapsed < s.lands_at) continue;
+@aircraft_shots[i] = null;
+if (s.lane != current_lane or carried()) continue;
+aircraft_shot_hit(s.owner);
+if (!running) return;
+}
+}
+/* A shot landing on you: its impact at you, as a vehicle's shot's, and your own hit unless a shield took it. A burst is
+one hit for a timed run's clock, however many of its shots land. A fatal one plays its impact through p and the player's
+death through end_run_hit(); in practice the aircraft and its shots go, so the retry is clear. */
+void aircraft_shot_hit(aircraft@ h)
+{
+string impact_clip = @h != null ? get_pack_sound(aircraft_folder(h.env) + h.theme + "/*impact*") : "";
+stat_add("aircraft_shots_taken"); // each shot that reaches you, a shield's too
+last_caught = "aircraft_shots"; // the death outcome and the practice death line tell a shot from a crash
+last_caught_kind = @h != null ? animal_singular(h.kind) : ""; // "helicopter"
+practice_hints_restart(); // a hit starts a practice run's hints over (practice_hints.nvgt)
+if (@h != null and !h.burst_charged)
+{
+h.burst_charged = true;
+timed_hit();
+}
+int blow = take_damage(aircraft_shot_damage);
+if (blow == blow_fatal)
+{
+if (impact_clip != "") p.play_stationary(impact_clip, false);
+if (practice_deaths() and @h != null) remove_aircraft_and_shots(h);
+end_run_hit();
+return;
+}
+if (impact_clip != "") aircraftpool.play_stationary(impact_clip, false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
+}
+/* Touchdown: in your lane, the crash, its hit as a barrier's (through p when fatal, since end_run_hit() silences the run);
+in another lane, a clean dodge. Either way it's gone; a shot it fired just before landing still lands. */
+void aircraft_touchdown(uint i)
+{
+aircraft@ h = aircrafts[i];
+bool crash = !carried() and h.lane == current_lane;
+string hit_clip = get_pack_sound(aircraft_folder(h.env) + h.theme + "/*hit*");
+remove_aircraft(i);
+if (!crash)
+{
+if (!carried()) stat_add("aircrafts_dodged");
+return;
+}
+stat_caught("aircrafts"); // what caught you, and what ended the run if it's fatal
+last_caught_kind = animal_singular(h.kind); // "helicopter"
+int blow = take_damage(aircraft_crash_damage);
+if (blow == blow_fatal)
+{
+p.play_stationary(hit_clip, false);
+end_run_hit();
+return;
+}
+aircraftpool.play_stationary(hit_clip, false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
+}
+/* Runs once per step, right after the move: one still flying in that has reached meet_x starts hovering, or, while a
+slide or a trampoline flight carries you, flies on harmlessly and is gone. */
+void aircraft_check()
+{
+for (uint i = 0; i < aircrafts.length(); i++)
+{
+if (@aircrafts[i] == null) continue;
+aircraft@ h = aircrafts[i];
+if (h.phase != aircraft_flying or me.x < h.meet_x) continue;
+if (carried())
+{
+remove_aircraft(i);
+continue;
+}
+h.phase = aircraft_hovering;
+h.phase_end = runtimer.elapsed + aircraft_hover_time;
+h.next_beat = runtimer.elapsed + aircraft_hover_beat;
+h.next_shot = runtimer.elapsed + aircraft_first_burst;
+}
+}
+// The countdown: the layered aircraft cues before each aircraft still flying in. Runs once per step.
+void aircraft_countdown()
+{
+for (uint i = 0; i < aircrafts.length(); i++)
+{
+if (@aircrafts[i] == null or aircrafts[i].phase != aircraft_flying) continue;
+play_countdown(aircraftpool, "aircrafts", aircrafts[i].meet_x, aircrafts[i].countdown_start, aircrafts[i].env);
+}
+}
+/* Weapons reach an aircraft only in your lane while you're in the air from your own jump: never from the ground, during
+its landing, or while a slide or a trampoline flight carries you. */
+bool aircraft_hittable_now()
+{
+return !is_grounded() and !carried();
+}
+/* The aircraft hovering right over you in your lane, which any weapon reaches at once (a gun's shot in fire_weapon(),
+weapons.nvgt, since a bullet only checks from the next tile on); null if none. */
+aircraft@ aircraft_overhead()
+{
+if (!aircraft_hittable_now()) return null;
+for (uint i = 0; i < aircrafts.length(); i++)
+{
+if (@aircrafts[i] != null and aircrafts[i].phase == aircraft_hovering and aircrafts[i].lane == current_lane) return aircrafts[i];
+}
+return null;
+}
+/* The aircraft a swing can reach (weapon_strike()): the one hovering over you, or else the nearest flying in down your
+lane no more than reach tiles ahead; null if none. */
+aircraft@ aircraft_in_reach(int reach)
+{
+aircraft@ over = aircraft_overhead();
+if (@over != null or !aircraft_hittable_now()) return over;
+aircraft@ target = null;
+for (uint i = 0; i < aircrafts.length(); i++)
+{
+if (@aircrafts[i] == null or aircrafts[i].phase != aircraft_flying or aircrafts[i].lane != current_lane) continue;
+double ahead = aircraft_x(aircrafts[i]) - me.x;
+if (ahead <= 0 or ahead > reach) continue;
+if (@target == null or aircraft_x(aircrafts[i]) < aircraft_x(target)) @target = aircrafts[i];
+}
+return target;
+}
+// An aircraft flying in down your lane that a high bullet (fired in the air, bullet.nvgt) on tile bx has reached; null if none.
+aircraft@ aircraft_at_bullet(double bx)
+{
+for (uint i = 0; i < aircrafts.length(); i++)
+{
+if (@aircrafts[i] == null or aircrafts[i].phase != aircraft_flying or aircrafts[i].lane != current_lane) continue;
+double hx = aircraft_x(aircrafts[i]);
+if (hx > me.x and hx <= bx) return aircrafts[i];
+}
+return null;
+}
+/* A weapon hit: its hurt, or at 0 hp its death, and it's gone with its shots still in the air. Returns where it was, so
+the weapon's own hit plays there. */
+double strike_aircraft(aircraft@ h, int damage)
+{
+double hx = aircraft_x(h);
+h.hp -= damage;
+if (h.hp <= 0)
+{
+stat_add("aircrafts_destroyed");
+aircraft_sound(h, "death");
+remove_aircraft_and_shots(h);
+}
+else aircraft_sound(h, "hurt");
+return hx;
+}
+// Its loop and every shot it still has in the air, gone (destroyed, or a fatal shot in practice).
+void remove_aircraft_and_shots(aircraft@ h)
+{
+for (uint i = 0; i < aircraft_shots.length(); i++)
+{
+if (@aircraft_shots[i] != null and @aircraft_shots[i].owner == @h) @aircraft_shots[i] = null;
+}
+for (uint i = 0; i < aircrafts.length(); i++)
+{
+if (@aircrafts[i] == @h) remove_aircraft(i);
+}
+}
+void stop_aircraft(aircraft@ h)
+{
+if (h.loopslot > -1) aircraftpool.destroy_sound(h.loopslot);
+h.loopslot = -1;
+}
+void remove_aircraft(uint i)
+{
+if (i >= aircrafts.length() or @aircrafts[i] == null) return;
+stop_aircraft(aircrafts[i]);
+@aircrafts[i] = null;
+}
+// The only place allowed to shrink the arrays.
+void destroy_all_aircrafts()
+{
+for (uint i = 0; i < aircrafts.length(); i++)
+{
+if (@aircrafts[i] == null) continue;
+stop_aircraft(aircrafts[i]);
+}
+aircrafts.resize(0);
+aircraft_shots.resize(0);
+}

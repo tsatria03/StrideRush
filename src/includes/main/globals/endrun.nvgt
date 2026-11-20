@@ -104,7 +104,7 @@ destroy_all_trampolines();
 destroy_all_ladders();
 destroy_all_floor_breakers();
 destroy_all_vehicles();
-destroy_all_helicopters();
+destroy_all_aircrafts();
 reset_slides(); // slide.nvgt: off any slide, none on the belt
 heartpool.destroy_all(); // the heartbeat, so a death silences them too
 }

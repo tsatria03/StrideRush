@@ -133,6 +133,14 @@ double ix = strike_insect(ins, weapon_damage[w] * weapon_damage_multiplier);
 p.play_2d(get_pack_sound(weapon_folder(w) + "*hit*"), 0, me.x, 0, ix, false);
 return;
 }
+// So is an aircraft hovering over you in your lane, while you're in the air (aircraft.nvgt).
+aircraft@ hc = aircraft_overhead();
+if (@hc != null)
+{
+double hx = strike_aircraft(hc, weapon_damage[w] * weapon_damage_multiplier);
+p.play_2d(get_pack_sound(weapon_folder(w) + "*hit*"), 0, me.x, 0, hx, false);
+return;
+}
 spawn_bullet(w, weapon_damage[w] * weapon_damage_multiplier);
 }
 // A melee press: the swing plays at once, and its hit waits for the windup (swing_check()).
@@ -183,8 +191,8 @@ int key_reach()
 return reach_tiles(key_reach_time);
 }
 /* The target hook. Damages the nearest target within weapon wpn's reach and returns its x, or -1 if there was nothing to
-hit. The targets are walls, fake doors, vehicles in your lane, items, and insects while you're crouched; a new target
-type adds its own search here. */
+hit. The targets are walls, fake doors, vehicles in your lane, items, insects while you're crouched, and an aircraft
+hovering in your lane while you're in the air; a new target type adds its own search here. */
 double weapon_strike(int wpn, int damage)
 {
 int reach = weapon_reach(wpn);
@@ -195,6 +203,8 @@ wall@ w = wall_in_reach(reach);
 door@ d = fake_door_in_reach(reach);
 vehicle@ vh = vehicle_in_reach(reach); // only one in your lane (vehicle.nvgt)
 double vhx = @vh != null ? vehicle_x(vh) : -1;
+aircraft@ hc = aircraft_in_reach(reach); // over you, or flying in within reach, only while you're in the air (aircraft.nvgt)
+double hcx = @hc != null ? aircraft_x(hc) : -1;
 ammopack@ a = ammopack_in_reach(reach);
 doorkey@ k = key_in_reach(reach);
 shield@ s = shield_in_reach(reach);
@@ -213,7 +223,9 @@ if (@lc != null and (best < 0 or lc.x < best)) best = lc.x;
 if (@pot != null and (best < 0 or pot.x < best)) best = pot.x;
 if (@t != null and (best < 0 or t.x < best)) best = t.x;
 if (@ins != null and (best < 0 or insx <= best)) best = insx; // a tie goes to the insect, at your head height
+if (@hc != null and (best < 0 or hcx <= best)) best = hcx; // a tie goes to the aircraft, overhead
 if (best < 0) return -1;
+if (@hc != null and hcx == best) return strike_aircraft(hc, damage);
 if (@ins != null and insx == best) return strike_insect(ins, damage);
 if (@w != null and w.x == best) return strike_wall(w, damage);
 if (@d != null and d.x == best) return strike_door(d, damage);

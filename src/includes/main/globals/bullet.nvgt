@@ -5,6 +5,7 @@ gun's hit and shell play at it, and the target plays its own hurt or death. A
 bullet that has gone its gun's weapon_reach() tiles from where it was fired (counted when it was fired) just vanishes,
 so firing at something still out of reach wastes the round. Real doors and the other traps don't stop it. A bullet fired
 while you're crouched flies low, and a flying insect it meets takes the hit first; a standing one passes under insects.
+One fired while you're in the air from your own jump flies high, and an aircraft flying in down your lane takes it first.
 Moves are timed off runtimer, which pauses with the game, so a pause freezes bullets in the air.
 Same entity pattern as hazards: null-slot removal, reused slots, and only destroy_all_bullets() shrinks the array. */
 sound_pool bulletpool;
@@ -16,6 +17,7 @@ int range;
 int damage;
 int weapon; // index into weapon_names, for its loop and hit sounds
 bool low = false; // fired while you were crouched: it can hit a flying insect, which a standing shot passes under (insect.nvgt)
+bool high = false; // fired in the air from your own jump: it can hit an aircraft flying in (aircraft.nvgt)
 int64 next_move;
 int loopslot = -1;
 }
@@ -30,6 +32,7 @@ b.range = weapon_reach(w);
 b.damage = damage;
 b.weapon = w;
 b.low = is_ducked();
+b.high = aircraft_hittable_now();
 b.next_move = runtimer.elapsed + bullet_tile_time;
 b.loopslot = bulletpool.play_2d(get_pack_sound(weapon_folder(w) + "*loop*"), 0, me.x, 0, b.x, true);
 for (uint i = 0; i < bullets.length(); i++)
@@ -90,8 +93,10 @@ bool bullet_hits(bullet@ b)
 {
 double target_x = -1;
 insect@ ins = b.low ? insect_at_bullet(b.x) : null; // a low bullet meets a flying insect first (insect.nvgt)
+aircraft@ hc = b.high ? aircraft_at_bullet(b.x) : null; // a high one, an aircraft flying in (aircraft.nvgt)
 wall@ w = wall_at(b.x);
 if (@ins != null) target_x = strike_insect(ins, b.damage);
+else if (@hc != null) target_x = strike_aircraft(hc, b.damage);
 else if (@w != null) target_x = strike_wall(w, b.damage);
 else
 {

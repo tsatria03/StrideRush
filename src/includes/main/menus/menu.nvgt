@@ -611,6 +611,13 @@ add_spawn_choice(labels, ids, "trampolines", "trampolines");
 add_spawn_choice(labels, ids, "all", "all");
 add_spawn_choice(labels, ids, "nothing", "nothing"); // an empty belt, for the music and ambience
 labels.sort_ascending();
+// All always comes first, whatever sorts before it (aircrafts would).
+int all_at = labels.find("all");
+if (all_at > 0)
+{
+labels.remove_at(all_at);
+labels.insert_at(0, "all");
+}
 setupmenu();
 m.intro_text = "Choose which obstacles spawn for debugging.";
 for (uint i = 0; i < labels.length(); i++)
