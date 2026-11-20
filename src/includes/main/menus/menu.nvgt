@@ -72,14 +72,41 @@ dlgplay(get_pack_sound("main/ui/menu/*speaker*"));
 dlgplay(get_pack_sound("main/ui/other/*complete*"), false);
 dlgmessage_return("Speaker test complete.");
 }
-/* The documentation menu: game (a topic for each part of the game, game in docks_dir) then main (the four main docks,
-main in docks_dir), each a list of its own. Every level is a loop, so closing a document comes back to its list, and escape or
-back steps out silently (nested menus), with nothing stacking up. Each list remembers the item you last chose, for as
-long as the game is open, and opens on it next time (by its id, so a new game document doesn't shift it). The docks
-sit in a folder for each language, docks/lang/<language>/; English is the only one read for now. */
-const string docks_dir = "docks/lang/english/";
-string docks_focus = "", docks_main_focus = "", docks_game_focus = "";
+/* The documentation menu. The docks sit in a folder for each language, docks/lang/<language>/, each with game and main.
+With more than one language there, it opens on a list of them (focused on the game's language, english under
+fallback); with one, it goes straight on to that one's sections. Then game (a topic for each part of the game) and main
+(the main docks), each a list of its own. Every level is a loop, so closing a document comes back to its list, and
+escape or back steps out silently (nested menus), with nothing stacking up. Each list remembers the item you last
+chose, for as long as the game is open, and opens on it next time (by its id, so a new game document doesn't shift it). */
+string docks_dir = "docks/lang/english/"; // the chosen language's folder
+string docks_language_focus = "", docks_focus = "", docks_main_focus = "", docks_game_focus = "";
 void docksmenu()
+{
+string[] languages = find_directories("docks/lang/*");
+languages.sort_ascending();
+if (languages.length() <= 1)
+{
+docks_dir = "docks/lang/" + (languages.length() == 1 ? languages[0] : "english") + "/";
+docks_sections_menu();
+return;
+}
+while(true)
+{
+setupmenu(true);
+for (uint i = 0; i < languages.length(); i++) m.add_item(languages[i], languages[i]);
+m.add_item("back", "back");
+m.intro_text="Documentation menu. Choose the language you'd like to read the documents in.";
+string wanted = docks_language_focus != "" ? docks_language_focus : (language == "fallback" ? "english" : language);
+int focus=languages.find(wanted);
+int mres=m.run(focus, false, focus>=0);
+if(mres<0 or m.selected_item_id=="back") return;
+docks_language_focus=m.selected_item_id;
+docks_dir="docks/lang/"+docks_language_focus+"/";
+docks_sections_menu();
+}
+}
+// Game or main, in the chosen language's folder.
+void docks_sections_menu()
 {
 while(true)
 {
@@ -96,19 +123,25 @@ if(docks_focus=="game") docks_game_menu();
 else docks_main_menu();
 }
 }
-/* Main: the changelog, credits, readme and todo list, from main in docks_dir. With none of them there, a dialog says so and it
-stays in the documentation menu, as game does. */
+/* Main: the changelog, credits, readme and todo list, from main in docks_dir, in that order, each only if the chosen
+language has it (a translation may have some so far). With none of them there, a dialog says so and it stays in the
+documentation menu, as game does. */
 void docks_main_menu()
 {
 while(true)
 {
-if(find_files(docks_dir+"main/*.txt").length()==0)
+string[] all_files={"changelog.txt", "credits.txt", "readme.txt", "todo list.txt"};
+string[] files;
+for(uint i=0; i<all_files.length(); i++)
+{
+if(file_exists(docks_dir+"main/"+all_files[i])) files.insert_last(all_files[i]);
+}
+if(files.length()==0)
 {
 dlgmessage_return("There are no documents yet.");
 return;
 }
 setupmenu(true);
-string[] files={"changelog.txt", "credits.txt", "readme.txt", "todo list.txt"};
 for(uint i=0; i<files.length(); i++) m.add_item(string_replace(files[i], ".txt", "", true), files[i]);
 m.add_item("back", "back");
 m.intro_text="Main section. You can read the changelog, credits, readme and todo list here.";
