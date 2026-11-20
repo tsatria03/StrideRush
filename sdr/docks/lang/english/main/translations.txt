@@ -1,0 +1,46 @@
+Translations.
+
+Stride Rush can speak in any language that has a language file, and anyone can write one. Everything the game says is translated as it's spoken, from menus and dialogs to messages during a run, and your copied or exported statistics come out in the same language.
+
+Choosing a language.
+
+The Language list is the first thing in the general tab of the settings menu, and a new language takes effect as soon as you save. It can only be changed from the main menu, not during a run.
+Fallback is the default. It loads no file and speaks the game's own English, just as it always has.
+Every other choice is a language file. The game comes with English, and changing a line in its file changes what the game says in English too.
+
+Language files.
+
+A language file is a text file ending in .lng, named after its language, such as german.lng. The game's own languages are in the data/lang folder, and each file there is a choice in the Language list, except template.lng and any file with no lines in it.
+Each line is the English the game says, an equals sign, then what to say instead, such as You died.=Du bist gestorben. The English must match exactly, capitals and full stops included.
+Lines starting with two slashes are comments, and blank lines are skipped. Anything the file doesn't have a line for is spoken in English, so a language can be used long before it's finished.
+
+Lines with values.
+
+Some lines have values in them, such as a number of steps or the name of a weapon. In those, a star stands for each value, and $1, $2 and so on place them in your translation, in any order you need. These are the following:
+
+You have run * steps.=Du bist $1 Schritte gelaufen.
+* percent health remaining, * lives.=$2 Leben und $1 Prozent Gesundheit.
+
+A value is looked up as a line of its own too, so with * equipped.=$1 ausgerüstet. and fist=Faust in your file, the game says Faust ausgerüstet. when you draw your fist.
+When more than one line could fit, the one with the most text besides its stars wins, so a broad line such as *, *=$1, $2 is only used when nothing closer fits.
+One and many are separate lines, such as Gained * life. and Gained * lives., so each can be worded the way your language needs.
+
+Starting a new language.
+
+The template.lng file in data/lang holds every line the game speaks, with English on both sides of each equals sign, grouped under comments saying where each group comes from. Copy it, rename the copy after your language, and change only the text after each equals sign. Lines you haven't got to yet can stay as they are, or be deleted, and they'll be spoken in English.
+
+Your own lang folder.
+
+You can keep your own language files in a lang folder of your own, at %APPDATA%\tsatria03\StrideRush\lang, so you don't need to change anything in the game's folder. The game reads this folder first, so a file there with the same name as one of the game's own, such as english.lng, is used instead of it.
+Updates never touch this folder, so your work is safe when the game updates.
+
+Logging untranslated lines.
+
+The Log untranslated language lines checkbox, in the general tab after the update check, helps you find what still needs translating. It's off by default.
+While it's on and a language other than fallback is chosen, every line you hear that your file has no line for is added once to a text file named after the language, such as german.txt, in your own lang folder. Each is already written as a line, with English on both sides and every number as a star, so you can fill in the translations and paste the lines into your language file.
+The file grows as you play, and remembers what it already has, so nothing is written twice.
+
+Translating the documents.
+
+The documents are kept in a folder for each language, in docks/lang, each with a main folder and a game folder, such as docks/lang/english/main. To translate them, make a folder for your language beside english, with the same main and game folders, and give each translated document the same file name as the English one.
+Once there's more than one language there, the documentation menu asks which one to read first, opening on the language you play in, and each language lists only the documents it has.

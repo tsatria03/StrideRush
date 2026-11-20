@@ -11,7 +11,7 @@ bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_lette
 int new_amb_vol = ambience_volume, new_step_vol = footstep_volume, new_mus_vol = music_volume, new_heart_vol = heartbeat_volume, new_menu_vol = menumusvolume, new_master_vol = master_volume;
 int new_health_fmt = health_format, new_shield_fmt = shield_format; // the readout formats (lives.nvgt's format_readout())
 string new_language = language; // the General tab's Language list (translation.nvgt)
-bool new_log = log_untranslated; // and its "Log untranslated lines" checkbox
+bool new_log = log_untranslated; // and its "Log untranslated language lines" checkbox
 int tab_shown = 0; // opens on the first tab: General from the main menu, Game from F2
 while (true)
 {
@@ -48,7 +48,7 @@ setform.set_list_position(language_list, language_at >= 0 ? language_at : 0);
 setform.assign_to_tab(language_list, tabs, tab_general);
 updates_box = setform.create_checkbox("Enable checking for game updates at startup", new_updates);
 setform.assign_to_tab(updates_box, tabs, tab_general);
-log_box = setform.create_checkbox("Log untranslated lines", new_log);
+log_box = setform.create_checkbox("Log untranslated language lines", new_log);
 setform.assign_to_tab(log_box, tabs, tab_general);
 reset_btn = setform.create_button("&Reset settings");
 setform.assign_to_tab(reset_btn, tabs, tab_general);

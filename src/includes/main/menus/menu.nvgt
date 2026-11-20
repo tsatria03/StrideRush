@@ -112,9 +112,9 @@ while(true)
 {
 setupmenu(true);
 m.add_item("Game. This section explains each part of the game on its own, from every obstacle and item to the game modes.", "game");
-m.add_item("Main. This section has the readme, changelog, todo list and credits.", "main");
+m.add_item("Main. This section has the readme, changelog, todo list, credits and translations.", "main");
 m.add_item("back", "back");
-m.intro_text="Documentation menu. You can read about each part of the game, or the readme, changelog, todo list and credits here.";
+m.intro_text="Documentation menu. You can read about each part of the game, or the readme, changelog, todo list, credits and translations here.";
 int focus=docks_focus=="game" ? 0 : (docks_focus=="main" ? 1 : -1);
 int mres=m.run(focus, false, focus>=0);
 if(mres<0 or m.selected_item_id=="back") return;
@@ -123,14 +123,14 @@ if(docks_focus=="game") docks_game_menu();
 else docks_main_menu();
 }
 }
-/* Main: the changelog, credits, readme and todo list, from main in docks_dir, in that order, each only if the chosen
+/* Main: the changelog, credits, readme, todo list and translations, from main in docks_dir, in that order, each only if the chosen
 language has it (a translation may have some so far). With none of them there, a dialog says so and it stays in the
 documentation menu, as game does. */
 void docks_main_menu()
 {
 while(true)
 {
-string[] all_files={"changelog.txt", "credits.txt", "readme.txt", "todo list.txt"};
+string[] all_files={"changelog.txt", "credits.txt", "readme.txt", "todo list.txt", "translations.txt"};
 string[] files;
 for(uint i=0; i<all_files.length(); i++)
 {
@@ -144,7 +144,7 @@ return;
 setupmenu(true);
 for(uint i=0; i<files.length(); i++) m.add_item(string_replace(files[i], ".txt", "", true), files[i]);
 m.add_item("back", "back");
-m.intro_text="Main section. You can read the changelog, credits, readme and todo list here.";
+m.intro_text="Main section. You can read the changelog, credits, readme, todo list and translations here.";
 int focus=files.find(docks_main_focus);
 int mres=m.run(focus, false, focus>=0);
 if(mres<0 or m.selected_item_id=="back") return;

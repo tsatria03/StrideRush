@@ -14,7 +14,8 @@ The lines come from four places, each under its own // heading:
 template.lng is rewritten in full each run. The language files are never touched; each is compared with the template:
 missing lines (in the template, not the file) and stale lines (in the file, no longer in the template).
 
-Usage: python build/lang_template.py [--details]
+Usage: python build/lang_template.py [--details], or double-click build/lang_template.bat, which runs it with --details
+and waits for a key so the report stays on screen.
 """
 import os
 import re

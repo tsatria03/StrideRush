@@ -10,7 +10,7 @@ With log_untranslated on, a line no language line covers is written once to the 
 <language>.txt, already as an English=English line to fill in, with each number turned into a * on the left and $1, $2
 on the right, so a readout is logged once and not once for every value. */
 string language = "fallback"; // the General tab's Language list, saved in settings.srf
-bool log_untranslated = false; // the General tab's "Log untranslated lines" checkbox, saved in settings.srf
+bool log_untranslated = false; // the General tab's "Log untranslated language lines" checkbox, saved in settings.srf
 dictionary lang_logged; // the lines already in the chosen language's log, so each is written once
 const string lang_dir = "data/lang/";
 /* The player's own lang folder, without a trailing slash, as the game's other folders in APPDATA_DIR are made (a
