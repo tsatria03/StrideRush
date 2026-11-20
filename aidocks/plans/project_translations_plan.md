@@ -1,6 +1,6 @@
 ---
 name: project_translations_plan
-description: SETTLED (2026-11-19, 2.6, for 7 of 10): game translations at the speech layer with our own translator, English=Translated .lng files (* wildcards), template.lng from a build script, a language setting, a missing log, language folders for docks; 6 sections; Q&A log
+description: SETTLED (2026-11-19, 2.6, for 7 of 10): game translations at the speech layer with our own translator, English=Translated .lng files (* wildcards), template.lng from a build script, a language setting, a missing log, language folders for docks; 7 sections (1 complete); Q&A log
 metadata:
   type: project
 ---
@@ -32,11 +32,12 @@ The todo item "Add game translations for other languages." Discussion opened 202
 ## Sections
 
 1. Prep, the new paths: contfuncts.nvgt, joystick.nvgt and achievements.nvgt to data/config/main and data/config/game; menu.nvgt's documentation menu reading docks/lang/english/main and game; comments naming the old paths. Also (dev, since 2.6 is unreleased) its docks: the data entry reworded in place (wording above), and the readme split entry reworded in place for the docks reorg ("Made it so the readme is now split into a document for each part of the game, from every obstacle and item to the game modes, found under game in the documentation menu, while main holds the readme, changelog, todo list, credits and translations, with every document kept in a folder for its language."). Test: keys, joystick and achievements load; both documentation sections open.
-2. The translator and the hooks: a new main/globals file (loading a .lng, exact then wildcard lookup, the language list from both folders, the language variable saved in settings.srf, fallback by default), the speak() and speak_buffer() hook in speech.nvgt, add_list_item() in form.nvgt (each dep's altered-source header noted), and the General tab's Language list. Test with a few hand-written lines in english.lng.
-3. The missing log and exports: the "Log untranslated lines" checkbox and APPDATA_DIR/lang/<language>.txt; the three export builders translating each line.
-4. The documentation menu's language level: languages from docks/lang, skipped while only english exists, focused on the game language; game or main; documents.
-5. The template script in build/: writes template.lng, reports each .lng; then english.lng seeded from it.
-6. Docks: translations.txt, the translations changelog entry, the todo item to finished, version history.
+2. The translator, the speech hook and the setting: a new main/globals file (loading a .lng, exact then wildcard lookup, the language list from both folders, an empty file skipped, the language variable saved in settings.srf, fallback by default), the speak() and speak_buffer() hook in speech.nvgt, and the General tab's Language list as its first control. Test with a few hand-written lines in english.lng.
+3. Menus, forms and dialogs (found while reviewing, 2026-11-19): add_list_item() in form.nvgt (letter navigation); form.nvgt's focus() speaks caption + " " + typename + hotkey joined, so caption and type name are translated before joining; reading a document or typed text in a form's text box skips translation (so a wildcard like "* of *" never rewrites a document line or your typing); dlg.nvgt's dlgmessage_return() appends " Press enter to continue." to the message, so the message and that ending are translated before joining (and the C copy strips the translated ending). Each dep's altered-source header noted.
+4. The missing log and exports: the "Log untranslated lines" checkbox and APPDATA_DIR/lang/<language>.txt; all_progress_text(), session_results_text() and all_stats_text() translating each line.
+5. The documentation menu's language level: languages from docks/lang, skipped while only english exists, focused on the game language; game or main; documents.
+6. The template script in build/: writes template.lng, reports each .lng; then english.lng seeded from it.
+7. Docks: translations.txt (and main's list gains it), the translations changelog entry, the todo item to finished, version history.
 
 ## Q&A log
 
@@ -89,3 +90,5 @@ The todo item "Add game translations for other languages." Discussion opened 202
 - Q (Claude): the readme split entry reworded as "Made it so the readme is now split into a document for each part of the game, from every obstacle and item to the game modes, found under game in the documentation menu, while main holds the readme, changelog, todo list, credits and translations, with every document kept in a folder for its language."? Recommended.
 - A (dev): yes. Settled. The plan is complete and ready to commit.
 - Section 1 BUILT (2026-11-19, after the plan commit c655551): keyboard_ini_path (contfuncts.nvgt), joystick_ini_path (joystick.nvgt) and achievements_path (achievements.nvgt) point to data/config/main and data/config/game; menu.nvgt has const docks_dir = "docks/lang/english/" for both documentation lists; comments in buffer.nvgt and dec.nvgt updated; the data and readme split changelog entries reworded in place; the readme's joystick.ini folder and its data and docks folder lines updated; CLAUDE.md's paths updated. translations.txt (empty) isn't in main's fixed list yet: section 6 adds it. Dev: the readme may mention translation, the feature itself goes in translations.txt; so the data folder line now ends "Its lang folder holds the game's languages, which the translations document explains." Tests: 1 of 4 (launch, keys from keyboard.ini) PASSED; 2 of 4 (joystick.ini, DualSense in menus and a run) PASSED; 3 of 4 (achievements from achievements.ini) PASSED; 4 of 4 (documentation game and main lists, a document opens, reworded entries) PASSED. Section 1 COMPLETE.
+- Dev committed section 1 (b1aa0de) and asked for a review of the remaining sections. Reviewing form.nvgt and dlg.nvgt found three joined strings the speech hook alone would miss (focus() captions with type names, dialogs with " Press enter to continue.") and a risk (wildcards rewriting document text or typing), so section 2 split in two: 2 the translator, speech hook and setting; 3 menus, forms and dialogs. Now 7 sections. Q (Claude): approve the 7-section layout? Recommended.
+- A (dev): "all looks good." The 7 sections are settled; waiting for the dev to commit before section 2.
