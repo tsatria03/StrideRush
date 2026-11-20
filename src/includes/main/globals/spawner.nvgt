@@ -502,7 +502,7 @@ if (flying and ox < flight_land_x) return; // nor for anything a trampoline flig
 int steps_left = int(ox - me.x);
 if (steps_left < 1 or steps_left > 5 or me.x < countdown_start) return;
 int note = 6 - steps_left;
-string folder = type_path(env_root(env), type) + "countdown/"; // the obstacle's own environment, in traps, transitions or vehicles (environments.nvgt)
+string folder = type_path(env_root(env), type) + "countdown/"; // the obstacle's own environment, in traps, transitions or transports (environments.nvgt)
 /* A layered set stacks octaves as warn<group>-<note>, such as the walls' warn1-3 (low) with warn2-3
 (high): every group's note for this step plays at once, for as many groups as exist. A plain set has warn<note>. */
 if (get_pack_sound(folder + "warn1-1*") != "")

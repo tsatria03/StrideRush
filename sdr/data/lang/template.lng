@@ -1364,6 +1364,7 @@ english=english
 
 // Sound folder names (sounds/game)
 air=air
+aircrafts=aircrafts
 ammo pack=ammo pack
 artillery=artillery
 audio=audio
@@ -1432,6 +1433,8 @@ fist=fist
 green key=green key
 hammer=hammer
 health potion=health potion
+helicopter=helicopter
+helicopters=helicopters
 knife=knife
 ladders=ladders
 large spike=large spike
@@ -1469,6 +1472,7 @@ tramp3=tramp3
 tramp4=tramp4
 tramp5=tramp5
 transitions=transitions
+transports=transports
 traps=traps
 uncharted=uncharted
 walls=walls

@@ -3,9 +3,10 @@ Everything is built from the sound folders each time it opens, so a new obstacle
 dropped into sdr/sounds shows up with no code change:
 - items: common (game/equipments/items/common) and other (game/equipments/items/other, the keys)
 - environments: one category per folder in environments/, named by it, each with
-  - countdowns: one countdown per type that has cues, from traps, npc, transitions and vehicles (<type>/countdown)
-  - traps, transitions and vehicles: one list per type (<type>/general, every theme's sounds); traps also holds npc,
-    the kinds in traps/npc that the game knows (environments.nvgt's npc_types), animals
+  - countdowns: one countdown per type that has cues, from traps, npc, transitions and transports (<type>/countdown)
+  - traps, transitions and transports: one list per type (<type>/general, every theme's sounds); traps also holds npc,
+    the kinds in traps/npc that the game knows (environments.nvgt's npc_types), animals; transports holds the
+    transport_types the game knows, vehicles
 - weapons: artillery and melee (game/equipments/weapons/<kind>)
 Every menu and list is alphabetical, and every category says how many sounds it holds (learn_count_text()). Escape or
 back steps up a level silently, out to the game menu too (they're all nested menus).
@@ -227,10 +228,10 @@ string[] moves = get_pack_sound_folders(env_root + "transitions/*"); // doors, l
 string[] all_types = types;
 for (uint i = 0; i < npcs.length(); i++) all_types.insert_last(npcs[i]);
 for (uint i = 0; i < moves.length(); i++) all_types.insert_last(moves[i]);
-all_types.insert_last("vehicles"); // its own category, beside traps and transitions
+for (uint i = 0; i < transport_types.length(); i++) all_types.insert_last(transport_types[i]); // vehicles, in transports (environments.nvgt)
 for (uint i = 0; i < all_types.length(); i++)
 {
-// Only types whose countdown folder has cues: traps', transitions' and vehicles' together.
+// Only types whose countdown folder has cues: traps', transitions' and transports' together.
 if (get_pack_sound(type_path(env_root, all_types[i]) + "countdown/warn*") == "") continue;
 cues.sounds.insert_last(learn_countdown(env_root, all_types[i]));
 }
@@ -249,8 +250,16 @@ learn_category transitions("transitions"); // sorts before traps
 for (uint i = 0; i < moves.length(); i++) transitions.subs.insert_last(learn_folder_category(learn_type_name(moves[i]), env_root + "transitions/" + moves[i] + "/general", ""));
 learn_sort_categories(transitions.subs);
 if (transitions.subs.length() > 0) place.subs.insert_last(transitions);
-// Vehicles, a kind of its own per folder (cars), each kind's themes inside, like animals' birds and dogs.
-if (get_pack_sound_folders(env_root + "vehicles/general/*").length() > 0) place.subs.insert_last(learn_folder_category("vehicles", env_root + "vehicles/general", ""));
+/* Transports, as their folder is: each transport type the game knows (transport_types), such as vehicles, a kind of
+its own per folder (cars), each kind's themes inside, like animals' birds and dogs. */
+learn_category transports("transports");
+for (uint i = 0; i < transport_types.length(); i++)
+{
+string folder = type_path(env_root, transport_types[i]) + "general";
+if (get_pack_sound_folders(folder + "/*").length() > 0) transports.subs.insert_last(learn_folder_category(learn_type_name(transport_types[i]), folder, ""));
+}
+learn_sort_categories(transports.subs);
+if (transports.subs.length() > 0) place.subs.insert_last(transports);
 learn_sort_categories(place.subs);
 return place;
 }

@@ -14,23 +14,24 @@ string env_root(const string&in env)
 {
 return "game/environments/" + env + "/";
 }
-/* Which of an environment's two folders a type lives in: doors, ladders,
-trampolines, slides and switches are transitions, things that move you or that you move through; every other type is
-a trap. */
+/* Which of an environment's folders a type lives in: doors, ladders, trampolines, slides and switches are transitions,
+things that move you or that you move through; the transport_types are transports, things that travel the belt
+toward you; every other type is a trap. */
+const string[] transport_types = {"vehicles"};
 string type_category(const string&in type)
 {
 if (type == "doors" or type == "ladders" or type == "trampolines" or type == "slides" or type == "switches") return "transitions";
+if (transport_types.find(type) >= 0) return "transports";
 return "traps";
 }
 /* The npc kinds the game has, each kept in an environment's traps/npc/<kind>/. Only these: a folder there the game
 doesn't know is ignored, as any unknown type is. */
 const string[] npc_types = {"animals", "insects"};
 /* A type's folder under an environment's root (the root as env_root() gives it): "traps/hazards/", "transitions/doors/",
-for an npc kind "traps/npc/animals/", or for vehicles, a category of their own beside traps and transitions, just
-"vehicles/". Its themes are in general/ below it, its warning cues in countdown/. */
+"transports/vehicles/", or for an npc kind "traps/npc/animals/". Its themes are in general/ below it, its warning cues
+in countdown/. */
 string type_path(const string&in root, const string&in type)
 {
-if (type == "vehicles") return root + "vehicles/";
 if (npc_types.find(type) >= 0) return root + "traps/npc/" + type + "/";
 return root + type_category(type) + "/" + type + "/";
 }
