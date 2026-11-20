@@ -13,7 +13,7 @@ Any sound can be replaced, and any sound can be given more versions. The game lo
 Folders the game finds on its own.
 
 Some folders are found on their own, so a new folder there is all it takes. Every folder in sounds/game/environments is an environment. Inside one, each folder in platforms is a surface you can run on, platforms/ledge holds the ledge around hazards, and audio/tracks and audio/ambiences hold its music and ambiences.
-Its traps and transitions folders hold a folder for each kind of obstacle, such as traps/hazards or transitions/doors, each with a countdown folder for its warning sounds and a general folder of themes, where every new folder is another version of that obstacle. Creatures, such as animals, live one level down, in traps/npc/animals, and work the same way. Its transports folder does too, with vehicles in transports/vehicles and a folder in its general folder for each kind of vehicle.
+Its traps and transitions folders hold a folder for each kind of obstacle, such as traps/hazards or transitions/doors, each with a countdown folder for its warning sounds and a general folder of themes, where every new folder is another version of that obstacle. Creatures, such as animals, live one level down, in traps/npc/animals, and work the same way. Its transports folder does too, with vehicles in transports/vehicles and aircrafts in transports/aircrafts, each with a folder in its general folder for each kind, such as cars or helicopters.
 New key colours can be added as folders in sounds/game/equipments/items/other.
 
 Fixed folders.

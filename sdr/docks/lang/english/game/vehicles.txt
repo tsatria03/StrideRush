@@ -21,6 +21,6 @@ Destroying one counts toward vehicles destroyed in your statistics, letting one 
 
 Vehicles in practice and free runs.
 
-Vehicles has its own practice choice, with your weapons drawn. It opens once you've dodged 5 winds while practicing them, and getting past 5 vehicles while practicing, by destroying or dodging them, opens combinations. If a vehicle catches you in practice, the death message tells you how: shoot it while it's in your lane, or switch lanes after its last move so it drives past, or, for its shots, step out of its lane when it fires.
+Vehicles has its own practice choice, with your weapons drawn. It opens once you've dodged 5 winds while practicing them, and getting past 5 vehicles while practicing, by destroying or dodging them, opens aircrafts. If a vehicle catches you in practice, the death message tells you how: shoot it while it's in your lane, or switch lanes after its last move so it drives past, or, for its shots, step out of its lane when it fires.
 
 In a free run, add vehicles from add obstacles in the console, give each one its own health, or leave it empty for the normal health for your speed, and choose the lane it starts in: random lanes, as usual, your own lane, or the left, middle or right lane. Wherever it starts, it still moves toward your lane.

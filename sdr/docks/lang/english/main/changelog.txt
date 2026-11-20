@@ -1,4 +1,6 @@
 New in 2.6.
+Added aircrafts to practice runs, right after vehicles, with trampolines now coming before combinations, as well as free runs and the statistics, along with thirteen new achievements for shooting them down, dodging their landings and more.
+Added aircrafts, starting with helicopters, which hover over a lane shooting down at it while you jump to hit them with any weapon, then try to land on you, so you have to be in another lane when they touch down.
 Added game translations, with a language setting in the general tab, so the game and its documents can be read in any language that has a language file, and players can write their own, as the new translations document explains.
 Made it so the environment menu is now skipped when there's only one environment to choose from.
 Made it so winds, projectiles, and insects are now heard clearly as soon as they appear, like every other obstacle, instead of starting out much quieter from further away.

@@ -1,0 +1,28 @@
+Aircrafts.
+
+Aircrafts, such as helicopters, fly in toward you over a single lane, faster than the belt carries you, then hover over you, firing bursts of shots down at their lane, before coming down to land on you. The way past an aircraft is to jump and hit it with your weapons before it lands, or to be in another lane when it touches down.
+
+How an aircraft works.
+
+An aircraft starts in a random lane and moves one lane toward yours about every half second, both as it flies in and while it hovers. You hear it in its lane from the moment it appears, and its countdown, the same five cues as most obstacles with two notes at once, plays as it flies in.
+When it reaches you, it hovers over you for 4 seconds, moving with you. A second into its hover, it fires a quick burst of 5 shots down at its lane, then waits a second and a half before the next, so a hover brings two bursts. Each shot lands half a second after you hear it fire, in the lane it was fired at, and each one that lands while you're still in that lane takes 5 of your health.
+Once its hover is over, it stops shooting and comes down to land, which takes 3 seconds. You hear it land, then hear it moving on the ground, still following you a lane at a time, about every three quarters of a second. If it touches down in your lane, it takes 40 of your health. If it touches down in another lane, you've dodged it, and it's left behind as you run on.
+Only one aircraft is ever with you at a time, and nothing else comes down the belt until it's gone.
+
+Getting past an aircraft.
+
+Your weapons can only reach an aircraft while you're in the air from your own jump. While it's hovering over you in your lane, every swing lands and a shot hits it at once, and while it's still flying in down your lane, a swing or a shot reaches it from as far away as your weapon reaches. Once it starts to land, it can't be hit at all.
+An aircraft is about four times as tough as a fake wall, and gets tougher as the belt speeds up, so a strong weapon or a gun brings it down fastest. Each hit plays its hurt, and once it's destroyed, its sound and any shots it still has in the air are gone.
+To dodge its shots, step out of its lane as it fires, and the burst falls behind you. To dodge its landing, keep moving as it comes down, and be in another lane when it touches down.
+On a slide or a trampoline flight, an aircraft and its shots pass you by, and you can't hit it.
+
+Aircrafts in a run.
+
+Aircrafts join an endless run once the belt reaches 5 steps a second, in any environment that has them. They never come as part of a combination.
+Destroying one counts toward aircrafts destroyed in your statistics, dodging its landing toward aircrafts dodged, a landing on you toward times landed on by aircrafts, and each shot that reaches you toward aircraft shots taken.
+
+Aircrafts in practice and free runs.
+
+Aircrafts has its own practice choice, with your weapons drawn. It opens once you've got past 5 vehicles while practicing them, and getting past 5 aircrafts while practicing, by destroying them or dodging their landings, opens trampolines. If an aircraft catches you in practice, the death message tells you how: be in another lane when it touches down, or jump and hit it with your weapons before it lands, or, for its shots, step out of its lane when it fires.
+
+In a free run, add aircrafts from add obstacles in the console, give each one its own health, or leave it empty for the normal health for your speed, and choose the lane it starts in: random lanes, as usual, your own lane, or the left, middle or right lane. Wherever it starts, it still moves toward your lane.

@@ -16,7 +16,7 @@ Hard: 5 seconds a pass, 7 a hit.
 Insane: 4 seconds a pass, 8 a hit.
 Chaos: 4 seconds a pass, 10 a hit.
 
-A vehicle's burst costs one hit, however many of its shots land.
+A vehicle's or an aircraft's burst costs one hit, however many of its shots land.
 As the clock drops past 45, 30, 15, 10 and 5 seconds, a sound plays and you're told how much is left. Once you've heard a warning, it only comes again after the clock climbs more than 10 seconds back above it.
 
 The finish line.

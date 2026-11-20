@@ -1,10 +1,10 @@
 ####These are the things that need to be finished for future versions of the game.
 
-****Unfinished. Add helicopters that you must jump to hit with any weapon.
 ****Unfinished. Add a shop that you can access in the game to buy items and special helpers.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Add aircrafts, such as helicopters, that you must jump to hit with any weapon.
 **Finished. Add game translations for other languages.
 **Finished. Split the game's readme into several files explaining each feature/macanic.
 **Finished. Add an option to hide the retry menu for a practice run in the game settings menu.

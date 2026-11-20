@@ -8,7 +8,7 @@ Each level starts you at a different speed: easy at 2 steps a second, medium at 
 
 Damage and toughness.
 
-The easier the level, the less each obstacle hurts and the easier fake walls, fake doors and vehicles are to break: easy takes 60 percent of the full damage and toughness, medium 70, hard 80, insane 90 and chaos the full amount. The damage given in each obstacle's document is the full amount. Practice runs always use the full amount.
+The easier the level, the less each obstacle hurts and the easier fake walls, fake doors, vehicles and aircrafts are to break: easy takes 60 percent of the full damage and toughness, medium 70, hard 80, insane 90 and chaos the full amount. The damage given in each obstacle's document is the full amount. Practice runs always use the full amount.
 Harder levels also have taller ladders, from 6 to 8 rungs on easy up to 10 to 12 on chaos, with a quicker pace between rungs, and bigger floor breakers, from 3 or 4 pieces on easy up to 7 or 8 on chaos.
 
 Room between obstacles.
@@ -29,7 +29,7 @@ Force fields at 2.5.
 Animals at 2.9.
 Fake walls, slides and trampolines at 3.3.
 Fake doors, real walls, floor breakers and insects at 4.
-Barriers, winds and vehicles at 5.
+Barriers, winds, vehicles and aircrafts at 5.
 
 Health potions, life capsules and steel shields are there from the start, and a key always comes before each real door, while ammo packs join at 3.3 steps a second, player teleporters at 4 and powerups at 5. A level that starts faster already has everything it has passed, so insane opens with six kinds of obstacle. Chaos ignores all this and throws everything at you from the first step.
 

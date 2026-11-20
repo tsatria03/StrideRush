@@ -29,6 +29,6 @@ A pair only starts once both of its obstacles have joined the run, in an environ
 
 Combinations in practice and free runs.
 
-Combinations has its own practice choice, where every spawn is a pair, in either order. It opens once you've got past 5 vehicles while practicing them, by destroying or dodging them, and clearing 5 combinations while practicing opens trampolines. Your weapons are drawn, since some pairs need them.
+Combinations has its own practice choice, where every spawn is a pair, in either order. It opens once you've taken 5 trampoline flights while practicing trampolines, and clearing 5 combinations while practicing opens mixed obstacles. Your weapons are drawn, since some pairs need them.
 
 In a free run, add combinations from add obstacles in the console, then choose which combination: each pair your environment can make, named first part first, such as projectile, spike, followed by the same pair the other way round, or random combinations, which bring any of them. A chosen pair always comes in that order, and if you move to an environment that can't make it, it waits until you're somewhere that can.

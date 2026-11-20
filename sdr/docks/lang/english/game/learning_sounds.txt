@@ -6,7 +6,7 @@ The categories.
 
 Learn sounds has three categories:
 
-Environments, with a category for each environment, holding its countdowns, with the countdown of each kind of obstacle, its transitions, with doors, ladders, slides, switches and trampolines, and its traps, with a list for each kind of obstacle, and npc, holding animals split into birds and dogs, and insects, with bees, and its vehicles, with a list for each kind of vehicle, such as cars.
+Environments, with a category for each environment, holding its countdowns, with the countdown of each kind of obstacle, its transitions, with doors, ladders, slides, switches and trampolines, and its traps, with a list for each kind of obstacle, and npc, holding animals split into birds and dogs, and insects, with bees, and its transports, holding vehicles and aircrafts, each with a list for each kind, such as cars or helicopters.
 Items, with common items and keys.
 Weapons, with artillery and melee.
 

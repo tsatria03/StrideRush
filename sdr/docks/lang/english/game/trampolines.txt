@@ -10,7 +10,7 @@ A good trampoline sounds normal and sends you on a long flight of two and a half
 
 Flying over the belt.
 
-On a good trampoline's flight, everything you reach before you land passes under you without a sound, including ladders, floor breakers and vehicles, while anything past your landing counts down as normal.
+On a good trampoline's flight, everything you reach before you land passes under you without a sound, including ladders, floor breakers, vehicles and aircrafts, while anything past your landing counts down as normal.
 In the air you can switch lanes, use your hands, fire and use your inventory, though you can't jump or crouch until you land.
 
 Trampolines in a run.
@@ -19,6 +19,6 @@ Trampolines start once the belt reaches about 3.3 steps a second, and like slide
 
 Trampolines in practice and free runs.
 
-Trampolines has its own practice choice, which brings a trampoline of any of the four kinds every other spawn, with an obstacle of any type in between, and your weapons drawn. It opens once you've cleared 5 combinations while practicing them, and taking 5 trampoline flights while practicing opens mixed obstacles.
+Trampolines has its own practice choice, which brings a trampoline of any of the four kinds every other spawn, with an obstacle of any type in between, and your weapons drawn. It opens once you've got past 5 aircrafts while practicing them, by destroying them or dodging their landings, and taking 5 trampoline flights while practicing opens combinations.
 
 In a free run, add trampolines from add obstacles in the console, and choose their lane: random lanes, as usual, where some cover the whole belt, your own lane, or the left, middle or right lane, where every one is a pad in that lane.

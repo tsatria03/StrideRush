@@ -6,7 +6,7 @@ How a slide works.
 
 You'll hear a slide coming ahead of you, then a sound as you get on, and for 2 to 4 seconds it carries you along at twice your speed. Your footsteps and heartbeat go quiet until you hear it end.
 While you're on it you can't jump, crouch, use your hands, your inventory or your weapons, but you can switch lanes.
-Obstacles still come, without their countdowns, and you pass straight through them without being hit. Ladders, floor breakers and vehicles pass you by too.
+Obstacles still come, without their countdowns, and you pass straight through them without being hit. Ladders, floor breakers, vehicles and aircrafts pass you by too.
 
 Riding a slide.
 

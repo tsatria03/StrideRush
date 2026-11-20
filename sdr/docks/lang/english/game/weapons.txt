@@ -1,11 +1,11 @@
 Weapons.
 
-You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, dagger, fist, hammer, knife, sword, machine gun and pistol. Each run starts with the fist in your hands, and each weapon is stronger than the one before it. Your weapons are for breaking fake walls and fake doors, shooting down vehicles and killing insects.
+You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, dagger, fist, hammer, knife, sword, machine gun and pistol. Each run starts with the fist in your hands, and each weapon is stronger than the one before it. Your weapons are for breaking fake walls and fake doors, shooting down vehicles and aircrafts, and killing insects.
 
 How your weapons work.
 
 Press the space bar to swing a melee weapon or fire a gun, or the A button on a joystick. Your weapons always hit the nearest thing ahead of you, and that includes any item lying ahead of you in your lane, such as an ammo pack, key or shield, which breaks if you hit it. Items in other lanes are safe from your weapons.
-Real doors and real walls can't be harmed. A vehicle can only be hit while it's in your lane, and an insect only while you're crouched.
+Real doors and real walls can't be harmed. A vehicle can only be hit while it's in your lane, an aircraft only while you're in the air from your own jump, and an insect only while you're crouched.
 
 Melee weapons.
 
@@ -29,6 +29,6 @@ Four powerups change your weapons for a while: Quick Swings and Clumsy Swings ma
 
 Weapons in practice and free runs.
 
-You only have weapons when practicing insects, fake walls, mixed walls, fake doors, mixed doors, vehicles, combinations, trampolines or mixed obstacles, since those can need them, and then your guns never run out of reserve rounds, and X tells you so. In every other practice run, no weapon is drawn and the weapon keys do nothing.
+You only have weapons when practicing insects, fake walls, mixed walls, fake doors, mixed doors, vehicles, aircrafts, combinations, trampolines or mixed obstacles, since those can need them, and then your guns never run out of reserve rounds, and X tells you so. In every other practice run, no weapon is drawn and the weapon keys do nothing.
 
 In a free run, your guns start with 50 rounds in reserve, as in an endless run. While a gun is drawn, modify ammo limits gives it limited or unlimited rounds, and modify ammo reserves gives, sets or takes its reserve.
