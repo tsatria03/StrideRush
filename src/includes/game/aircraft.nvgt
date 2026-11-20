@@ -70,6 +70,7 @@ h.theme = kind + "/" + themes[random(0, themes.length() - 1)];
 h.env = current_env;
 h.lane = free_placed_lane(); // a free run's chosen lane to start in (freebelt.nvgt); it still moves toward yours
 if (h.lane < 0) h.lane = random(lane_left, lane_right);
+practice_hint("aircrafts", h.lane, mx + aircraft_stay_tiles(), animal_singular(kind)); // "A helicopter has appeared in the left lane.", its pass counted once it's gone (practice_hints.nvgt)
 h.hp = free_obstacle_hp(wall_spawn_hp(aircraft_min_hp, aircraft_max_hp)); // or a free run's set health (freebelt.nvgt)
 h.countdown_start = mx - countdown;
 h.next_beat = runtimer.elapsed + aircraft_hover_beat; // it drifts toward your lane as it flies in, too

@@ -47,7 +47,7 @@ if (slides_debug or trampolines_debug)
 give_item("steel_shield", 2); // the debug choices "slides" and "trampolines" play like "all" but get the debug shields
 return;
 }
-string[] shielded_types = {"spikes", "mines", "force_fields", "projectiles", "walls", "animals", "animals_birds", "animals_dogs", "insects", "fake_doors", "real_doors", "real_doors_spread", "powerups", "barriers", "barriers_random", "barriers_multiple", "winds", "combinations", "combinations_reverse", "combinations_mixed", "ladders", "mixed_walls", "vehicles"}; // never "all", which plays like the real game
+string[] shielded_types = {"spikes", "mines", "force_fields", "projectiles", "walls", "animals", "animals_birds", "animals_dogs", "insects", "fake_doors", "real_doors", "real_doors_spread", "powerups", "barriers", "barriers_random", "barriers_multiple", "winds", "combinations", "combinations_reverse", "combinations_mixed", "ladders", "mixed_walls", "vehicles", "aircrafts"}; // never "all", which plays like the real game
 if (shielded_types.find(spawn_only) >= 0) give_item("steel_shield", 2);
 }
 /* The steel shields a practice run starts with and gets back after each practice death: practice_shields, but none when
