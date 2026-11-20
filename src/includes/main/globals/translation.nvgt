@@ -6,11 +6,10 @@ wildcards, those with the most fixed text first, each value they take looked up 
 stays in English. Languages are read from the player's own lang folder
 first, then the game's, so a player's file replaces a shipped one of the same name; template.lng and a file with no
 lines are never listed. "fallback" loads no file and speaks the code's own English.
-With log_untranslated on, a line no language line covers is written once to the player's lang folder as
+While a language other than fallback is chosen, a line no language line covers is written once to the player's lang folder as
 <language>.txt, already as an English=English line to fill in, with each number turned into a * on the left and $1, $2
 on the right, so a readout is logged once and not once for every value. */
 string language = "fallback"; // the General tab's Language list, saved in settings.srf
-bool log_untranslated = false; // the General tab's "Log untranslated language lines" checkbox, saved in settings.srf
 dictionary lang_logged; // the lines already in the chosen language's log, so each is written once
 const string lang_dir = "data/lang/";
 /* The player's own lang folder, without a trailing slash, as the game's other folders in APPDATA_DIR are made (a
@@ -158,14 +157,14 @@ lang_pattern_fixed.insert_at(at, fixed);
 }
 return count;
 }
-/* A line in the chosen language (translate_line()), else the English as it is, logged if the log is on. A value a
+/* A line in the chosen language (translate_line()), else the English as it is, logged. A value a
 wildcard took that has no line of its own, a name such as "fist", is logged too. */
 string translate(const string&in text)
 {
 if (language == "fallback" or text.empty()) return text;
 bool found = false;
 string result = translate_line(text, 0, found);
-if (!found and log_untranslated) log_missing(text);
+if (!found) log_missing(text);
 return result;
 }
 /* Its exact line, else the closest wildcard that fits, with each value it took translated the same way (so "fist" in
@@ -186,7 +185,7 @@ for (int v = int(values.length()); v >= 1; v--)
 {
 bool value_found = false;
 string value = translate_line(values[v - 1], depth + 1, value_found);
-if (!value_found and log_untranslated and has_letter(values[v - 1])) log_missing(values[v - 1]);
+if (!value_found and has_letter(values[v - 1])) log_missing(values[v - 1]);
 result = string_replace(result, "$" + v, value, true);
 }
 return result;

@@ -646,7 +646,6 @@ Sound=Sound
 Speech=Speech
 Language=Language
 Enable checking for game updates at startup=Enable checking for game updates at startup
-Log untranslated language lines=Log untranslated language lines
 Reset settings=Reset settings
 Game ambience volume,=Game ambience volume,
 Game footsteps volume,=Game footsteps volume,

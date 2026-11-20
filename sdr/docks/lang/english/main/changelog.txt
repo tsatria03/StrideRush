@@ -1,3 +1,5 @@
+New in 2.7.
+Made it so lines your language doesn't translate yet are now always logged to a file named after it in your own lang folder, so the setting to log untranslated language lines has been removed.
 New in 2.6.
 Added aircrafts to practice runs, right after vehicles, with trampolines now coming before combinations, as well as free runs and the statistics, along with thirteen new achievements for shooting them down, dodging their landings and more.
 Added aircrafts, starting with helicopters, which hover over a lane shooting down at it while you jump to hit them with any weapon, then try to land on you, so you have to be in another lane when they touch down.

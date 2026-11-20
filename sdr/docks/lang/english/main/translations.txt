@@ -36,8 +36,7 @@ Updates never touch this folder, so your work is safe when the game updates.
 
 Logging untranslated lines.
 
-The Log untranslated language lines checkbox, in the general tab after the update check, helps you find what still needs translating. It's off by default.
-While it's on and a language other than fallback is chosen, every line you hear that your file has no line for is added once to a text file named after the language, such as german.txt, in your own lang folder. Each is already written as a line, with English on both sides and every number as a star, so you can fill in the translations and paste the lines into your language file.
+While a language other than fallback is chosen, every line you hear that your file has no line for is added once to a text file named after the language, such as german.txt, in your own lang folder. Each is already written as a line, with English on both sides and every number as a star, so you can fill in the translations and paste the lines into your language file.
 The file grows as you play, and remembers what it already has, so nothing is written twice.
 
 Translating the documents.
