@@ -87,6 +87,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
+- [Helicopters plan](plans/project_helicopters_plan.md) — SETTLED (2026-11-19, 2.6, two entries for 9 and 10 of 10, the shop waits for 2.7): hover and shoot over a lane, hit only from your jumps with any weapon, then a landing chase (dodge or crash); practice, stats, 13 achievements; 6 sections; Q&A log
 - [Translations plan](plans/project_translations_plan.md) — COMPLETE (2026-11-19, 2.6 at 8 of 10): speech-layer translation with our own translator, English=Translated .lng with * wildcards, template.lng from a build script, Language setting, missing log, docks/lang/<language>; all 7 sections built; build/lang_template.py writes template.lng; Q&A log
 - [Free run touches plan](plans/project_free_run_touches_plan.md) — COMPLETE (2026-11-15, 2.3 FULL at 10 of 10): modify heartbeat (heard or silent) first, then the modify options saying their current setting, then docks; 2.3's last two entries; Q&A log
 - [Joystick plan](plans/project_joystick_plan.md) — COMPLETE (2026-11-16, opened 2.4 at 4 of 10): 4 sections, joystick support for every menu and runs, through key_config's [joystick] section and a data/config/joystick.ini; engine findings and Q&A log
