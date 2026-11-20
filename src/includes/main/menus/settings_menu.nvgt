@@ -63,13 +63,13 @@ setform.assign_to_tab(heart_vol_slider, tabs, tab_game);
 int mus_vol_slider = setform.create_slider("Game music volume,", new_mus_vol + 100, 0, 100, "percent", 1);
 setform.assign_to_tab(mus_vol_slider, tabs, tab_game);
 // After the sliders, the two readout format lists, each choice with an example; then the checkboxes.
-int health_fmt_list = setform.create_list("Health format,", 3);
+int health_fmt_list = setform.create_list("Health format", 3);
 setform.add_list_item(health_fmt_list, "Percentage. Example, 70 percent.");
 setform.add_list_item(health_fmt_list, "Amount. Example, 350 of 500.");
 setform.add_list_item(health_fmt_list, "Percentage and amount. Example, 70 percent, 350 of 500.");
 setform.set_list_position(health_fmt_list, new_health_fmt);
 setform.assign_to_tab(health_fmt_list, tabs, tab_game);
-int shield_fmt_list = setform.create_list("Shield format,", 3);
+int shield_fmt_list = setform.create_list("Shield format", 3);
 setform.add_list_item(shield_fmt_list, "Percentage. Example, 80 percent.");
 setform.add_list_item(shield_fmt_list, "Amount. Example, 320 of 400 endurance.");
 setform.add_list_item(shield_fmt_list, "Percentage and amount. Example, 80 percent, 320 of 400 endurance.");
