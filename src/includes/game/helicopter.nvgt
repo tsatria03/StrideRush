@@ -1,0 +1,310 @@
+/* Helicopters: a transport (environments.nvgt's transport_types), its sounds in game/environments/<env>/transports/
+aircrafts: each folder in aircrafts/general/helicopters is one helicopter, with loop, shoot, land, hit (the crash), hurt
+and death; its layered countdown in aircrafts/countdown. A helicopter lives in three phases:
+- Flying in: timed to a meeting tile, meet_x, closing helicopter_speed_factor times as fast as a still obstacle, in one
+  lane, its countdown on the last steps. On meet_x it doesn't pass you: it starts hovering.
+- Hovering, for helicopter_hover_time: over you as you run, in its own lane, moving a lane toward yours every
+  helicopter_hover_beat. It fires in bursts like a vehicle's (helicopter_burst_shots shots, helicopter_burst_gap apart,
+  then helicopter_burst_pause): each shot's shoot plays, and helicopter_shot_delay later the shot lands in the lane it
+  was fired at, helicopter_shot_damage if you're still in that lane (a shield first), a miss if not. A burst costs a
+  timed run one hit, however many of its shots land.
+- Landing, for helicopter_land_time: its land plays, it stops firing, and it moves a lane toward yours every
+  helicopter_land_beat as it comes down. At touchdown, in your lane it crashes onto you (its hit,
+  helicopter_crash_damage); in another lane it's a clean dodge. Either way it's gone.
+While a slide or a trampoline flight carries you, its shots and its crash can't touch you, and one meeting you then flies
+on harmlessly. Statistics: helicopters_dodged, caught_helicopters (a crash) and helicopter_shots_taken; last_caught
+"helicopters" for a crash and "helicopter_shots" for a shot, with "helicopter" as last_caught_kind.
+Not in combinations. Same entity pattern as the other traps: null-slot removal, reused slots, and only
+destroy_all_helicopters() shrinks the arrays. */
+sound_pool helicopterpool;
+const int heli_flying = 0;
+const int heli_hovering = 1;
+const int heli_landing = 2;
+class helicopter
+{
+double meet_x;
+string theme; // "helicopters/helicopter", below aircrafts/general
+string env;
+int lane;
+int hp;
+int phase = heli_flying;
+double countdown_start;
+double phase_end = 0; // on runtimer: when the hover or the landing ends
+double next_beat = 0; // on runtimer: its next lane move
+double next_shot = 0; // on runtimer: its next shot while hovering, or the end of its pause
+int burst_left = 0; // shots still to come in this burst
+bool burst_charged = false; // this burst has already cost a timed run its hit (timerun.nvgt)
+int loopslot = -1;
+}
+helicopter@[] helicopters(0);
+class helicopter_shot
+{
+int lane;
+double lands_at; // on runtimer
+helicopter@ owner;
+}
+helicopter_shot@[] helicopter_shots(0);
+
+// Where an environment keeps its helicopters: one folder each in aircrafts/general/helicopters.
+string helicopter_folder(const string&in env)
+{
+return trap_folder(env, "helicopters"); // game/environments/<env>/transports/aircrafts/general/
+}
+// kind is the kind folder the spawner picked (helicopters); one helicopter in it is picked here.
+void spawn_helicopter(double mx, string kind, int countdown)
+{
+string[] themes = get_pack_sound_folders(helicopter_folder(current_env) + kind + "/*");
+if (themes.length() == 0) return;
+helicopter h;
+h.meet_x = mx;
+h.theme = kind + "/" + themes[random(0, themes.length() - 1)];
+h.env = current_env;
+h.lane = free_placed_lane(); // a free run's chosen lane to start in (freebelt.nvgt); it still moves toward yours
+if (h.lane < 0) h.lane = random(lane_left, lane_right);
+h.hp = free_obstacle_hp(wall_spawn_hp(helicopter_min_hp, helicopter_max_hp)); // or a free run's set health (freebelt.nvgt)
+h.countdown_start = mx - countdown;
+h.loopslot = helicopterpool.play_2d(get_pack_sound(helicopter_folder(h.env) + h.theme + "/*loop*"), 0, me.x, 0, helicopter_x(h), true);
+place_helicopter_sound(h, h.loopslot);
+for (uint i = 0; i < helicopters.length(); i++)
+{
+if (@helicopters[i] == null)
+{
+@helicopters[i] = h;
+return;
+}
+}
+helicopters.insert_last(h);
+}
+// Where you are along the belt right now, between steps.
+double helicopter_player_pos()
+{
+return me.x + min(1, double(steptimer.elapsed) / current_step_time());
+}
+// Where a helicopter is along the belt: flying in, as a projectile does at its own speed; hovering or landing, over you.
+double helicopter_x(helicopter@ h)
+{
+double player_pos = helicopter_player_pos();
+if (h.phase != heli_flying) return player_pos;
+return h.meet_x + (helicopter_speed_factor - 1) * (h.meet_x - player_pos);
+}
+/* A helicopter sound in its lane at the helicopter. Flying in, its fade is divided by its speed, so it's heard as early as
+a still obstacle (mover_volume_step(), decpool.nvgt). */
+void place_helicopter_sound(helicopter@ h, int slot)
+{
+place_lane_sound(helicopterpool, slot, h.lane, helicopter_x(h));
+if (h.phase != heli_flying or slot < 0 or slot >= int(helicopterpool.items.length()) or belt_volume_step <= 0) return;
+helicopterpool.items[slot].volume_step = mover_volume_step(helicopter_speed_factor);
+helicopterpool.items[slot].update(helicopterpool.last_listener_x, helicopterpool.last_listener_y, helicopterpool.last_listener_z, helicopterpool.last_listener_rotation, helicopterpool.max_distance);
+}
+// One of a helicopter's sounds, once, at the helicopter in its lane.
+void helicopter_sound(helicopter@ h, const string&in name)
+{
+int slot = helicopterpool.play_2d(get_pack_sound(helicopter_folder(h.env) + h.theme + "/*" + name + "*"), 0, me.x, 0, helicopter_x(h), false);
+place_helicopter_sound(h, slot);
+}
+// A lane toward yours, from the lane it's in.
+void helicopter_drift(helicopter@ h)
+{
+if (h.lane != current_lane) h.lane += current_lane > h.lane ? 1 : -1;
+}
+/* Every frame from run_loop(): each hovering helicopter's drift and shots and the start of its landing, each landing one's
+drift and its touchdown, every loop placed, then the shots landing. A shot or a crash can end the run, so the caller
+checks running after. */
+void helicopter_flight()
+{
+for (uint i = 0; i < helicopters.length(); i++)
+{
+if (@helicopters[i] == null) continue;
+helicopter@ h = helicopters[i];
+if (h.phase == heli_hovering)
+{
+if (runtimer.elapsed >= h.phase_end)
+{
+// Its hover is over: it starts to come down, no longer firing, chasing your lane faster.
+h.phase = heli_landing;
+h.phase_end = runtimer.elapsed + helicopter_land_time;
+h.next_beat = runtimer.elapsed + helicopter_land_beat;
+helicopter_sound(h, "land");
+}
+else
+{
+if (runtimer.elapsed >= h.next_beat)
+{
+h.next_beat += helicopter_hover_beat;
+helicopter_drift(h);
+}
+if (runtimer.elapsed >= h.next_shot)
+{
+if (h.burst_left <= 0)
+{
+h.burst_left = helicopter_burst_shots;
+h.burst_charged = false;
+}
+h.burst_left -= 1;
+h.next_shot = runtimer.elapsed + (h.burst_left > 0 ? helicopter_burst_gap : helicopter_burst_pause);
+helicopter_fire(h);
+}
+}
+}
+if (h.phase == heli_landing)
+{
+if (runtimer.elapsed >= h.next_beat and runtimer.elapsed < h.phase_end)
+{
+h.next_beat += helicopter_land_beat;
+helicopter_drift(h);
+}
+if (runtimer.elapsed >= h.phase_end)
+{
+helicopter_touchdown(i);
+if (!running) return;
+continue;
+}
+}
+if (h.loopslot < 0 or !helicopterpool.verify_slot(h.loopslot)) continue;
+place_helicopter_sound(h, h.loopslot);
+}
+helicopter_shot_landing();
+}
+// A shot: its shoot at the helicopter, landing in the lane it's over after helicopter_shot_delay.
+void helicopter_fire(helicopter@ h)
+{
+helicopter_sound(h, "shoot");
+helicopter_shot s;
+s.lane = h.lane;
+s.lands_at = runtimer.elapsed + helicopter_shot_delay;
+@s.owner = h;
+for (uint i = 0; i < helicopter_shots.length(); i++)
+{
+if (@helicopter_shots[i] == null)
+{
+@helicopter_shots[i] = s;
+return;
+}
+}
+helicopter_shots.insert_last(s);
+}
+// Each shot whose time has come lands: on you if you're still in its lane and not carried, a miss otherwise.
+void helicopter_shot_landing()
+{
+for (uint i = 0; i < helicopter_shots.length(); i++)
+{
+if (@helicopter_shots[i] == null) continue;
+helicopter_shot@ s = helicopter_shots[i];
+if (runtimer.elapsed < s.lands_at) continue;
+@helicopter_shots[i] = null;
+if (s.lane != current_lane or carried()) continue;
+helicopter_shot_hit(s.owner);
+if (!running) return;
+}
+}
+/* A shot landing on you: there's no impact sound, so your own hit plays, or the shield's. A burst is one hit for a timed
+run's clock, however many of its shots land. A fatal one plays the player's death through end_run_hit(); in practice the helicopter and its shots go, so
+the retry is clear. */
+void helicopter_shot_hit(helicopter@ h)
+{
+stat_add("helicopter_shots_taken"); // each shot that reaches you, a shield's too
+last_caught = "helicopter_shots"; // the death outcome and the practice death line tell a shot from a crash
+last_caught_kind = "helicopter";
+practice_hints_restart(); // a hit starts a practice run's hints over (practice_hints.nvgt)
+if (@h != null and !h.burst_charged)
+{
+h.burst_charged = true;
+timed_hit();
+}
+int blow = take_damage(helicopter_shot_damage);
+if (blow == blow_fatal)
+{
+if (practice_deaths() and @h != null) remove_helicopter_and_shots(h);
+end_run_hit();
+return;
+}
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
+}
+/* Touchdown: in your lane, the crash, its hit as a barrier's (through p when fatal, since end_run_hit() silences the run);
+in another lane, a clean dodge. Either way it's gone; a shot it fired just before landing still lands. */
+void helicopter_touchdown(uint i)
+{
+helicopter@ h = helicopters[i];
+bool crash = !carried() and h.lane == current_lane;
+string hit_clip = get_pack_sound(helicopter_folder(h.env) + h.theme + "/*hit*");
+remove_helicopter(i);
+if (!crash)
+{
+if (!carried()) stat_add("helicopters_dodged");
+return;
+}
+stat_caught("helicopters"); // what caught you, and what ended the run if it's fatal
+last_caught_kind = "helicopter";
+int blow = take_damage(helicopter_crash_damage);
+if (blow == blow_fatal)
+{
+p.play_stationary(hit_clip, false);
+end_run_hit();
+return;
+}
+helicopterpool.play_stationary(hit_clip, false);
+if (blow != blow_shielded) p.play_stationary(get_pack_sound("main/misc/player/*hit*"), false);
+}
+/* Runs once per step, right after the move: one still flying in that has reached meet_x starts hovering, or, while a
+slide or a trampoline flight carries you, flies on harmlessly and is gone. */
+void helicopter_check()
+{
+for (uint i = 0; i < helicopters.length(); i++)
+{
+if (@helicopters[i] == null) continue;
+helicopter@ h = helicopters[i];
+if (h.phase != heli_flying or me.x < h.meet_x) continue;
+if (carried())
+{
+remove_helicopter(i);
+continue;
+}
+h.phase = heli_hovering;
+h.phase_end = runtimer.elapsed + helicopter_hover_time;
+h.next_beat = runtimer.elapsed + helicopter_hover_beat;
+h.next_shot = runtimer.elapsed + helicopter_first_burst;
+}
+}
+// The countdown: the layered aircraft cues before each helicopter still flying in. Runs once per step.
+void helicopter_countdown()
+{
+for (uint i = 0; i < helicopters.length(); i++)
+{
+if (@helicopters[i] == null or helicopters[i].phase != heli_flying) continue;
+play_countdown(helicopterpool, "helicopters", helicopters[i].meet_x, helicopters[i].countdown_start, helicopters[i].env);
+}
+}
+// Its loop and every shot it still has in the air, gone (a fatal shot in practice).
+void remove_helicopter_and_shots(helicopter@ h)
+{
+for (uint i = 0; i < helicopter_shots.length(); i++)
+{
+if (@helicopter_shots[i] != null and @helicopter_shots[i].owner == @h) @helicopter_shots[i] = null;
+}
+for (uint i = 0; i < helicopters.length(); i++)
+{
+if (@helicopters[i] == @h) remove_helicopter(i);
+}
+}
+void stop_helicopter(helicopter@ h)
+{
+if (h.loopslot > -1) helicopterpool.destroy_sound(h.loopslot);
+h.loopslot = -1;
+}
+void remove_helicopter(uint i)
+{
+if (i >= helicopters.length() or @helicopters[i] == null) return;
+stop_helicopter(helicopters[i]);
+@helicopters[i] = null;
+}
+// The only place allowed to shrink the arrays.
+void destroy_all_helicopters()
+{
+for (uint i = 0; i < helicopters.length(); i++)
+{
+if (@helicopters[i] == null) continue;
+stop_helicopter(helicopters[i]);
+}
+helicopters.resize(0);
+helicopter_shots.resize(0);
+}

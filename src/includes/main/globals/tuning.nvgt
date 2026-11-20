@@ -113,6 +113,26 @@ const int vehicle_ram_damage = 40;
 const double vehicle_ram_range = 2; // within this many tiles of you a vehicle stops firing and rams
 const int vehicle_min_hp = 25;
 const int vehicle_max_hp = 250;
+/* Helicopters (helicopter.nvgt): flying in helicopter_speed_factor times as fast as a still obstacle, then hovering over
+you for helicopter_hover_time, a lane toward yours every helicopter_hover_beat, firing in bursts like a vehicle's: the
+first helicopter_first_burst into the hover, helicopter_burst_shots shots helicopter_burst_gap apart, then
+helicopter_burst_pause before the next; each shot lands helicopter_shot_delay later in the lane it was fired at, for
+helicopter_shot_damage. Then landing for helicopter_land_time, a lane toward yours every helicopter_land_beat, crashing
+onto you in your lane. hp between an insect's and a vehicle's, growing with speed (wall_spawn_hp()). */
+const double helicopter_speed_factor = 2;
+const int helicopter_hover_time = 4000;
+const int helicopter_hover_beat = 1000;
+const int helicopter_first_burst = 1000;
+const int helicopter_burst_shots = 5;
+const int helicopter_burst_gap = 100;
+const int helicopter_burst_pause = 1500;
+const int helicopter_shot_delay = 500;
+const int helicopter_shot_damage = 5;
+const int helicopter_land_time = 2000;
+const int helicopter_land_beat = 750;
+const int helicopter_crash_damage = 40;
+const int helicopter_min_hp = 50;
+const int helicopter_max_hp = 150;
 /* Trampolines: like slides, one spawn in trampoline_chance and survival_roll(); worn pads trampoline_worn_percent of the
 time, belt-wide ones trampoline_belt_percent; a good pad's flight lasts trampoline_air_time. */
 const int trampoline_chance = 6;
@@ -127,8 +147,8 @@ const int[] difficulty_top_step_times = {200, 150, 100, 75, 50};
 the same order as schedule_types. Anything not listed is in from the start: hazards, spikes and mines, health potions,
 life capsules and steel shields, and keys, which come before every real door outside the schedule. Chaos has everything
 from the first spawn. */
-const string[] schedule_types = {"projectiles", "force_fields", "animals", "walls", "ammo_packs", "fake_doors", "player_teleporters", "barriers", "powerups", "slides", "winds", "trampolines", "ladders", "floor_breakers", "vehicles", "insects"};
-const int[] schedule_join_times = {450, 400, 350, 300, 300, 250, 250, 200, 200, 300, 200, 300, 250, 250, 200, 250};
+const string[] schedule_types = {"projectiles", "force_fields", "animals", "walls", "ammo_packs", "fake_doors", "player_teleporters", "barriers", "powerups", "slides", "winds", "trampolines", "ladders", "floor_breakers", "vehicles", "insects", "helicopters"};
+const int[] schedule_join_times = {450, 400, 350, 300, 300, 250, 250, 200, 200, 300, 200, 300, 250, 250, 200, 250, 200};
 const int chaos_level = 4; // difficulty_names' index of chaos, which ignores the schedule
 // The locks: easy is always open, and each other level opens after this many counted runs on the level below.
 const int difficulty_unlock_runs = 5;
@@ -143,7 +163,7 @@ const int timed_unlock_runs = 3;
 const int[] timed_warn_seconds = {45, 30, 15, 10, 5};
 const int timed_warn_rearm_seconds = 10; // a warning plays again only after the clock climbs this far above it
 // The clean passes that feed the clock: every obstacle got past the right way (combinations_cleared left out, since each part counts).
-const string[] timed_pass_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "insects_killed", "barriers_dodged", "winds_dodged", "walls_broken", "real_walls_climbed", "fake_doors_broken", "real_doors_opened", "floor_breakers_repaired", "vehicles_destroyed", "vehicles_dodged"};
+const string[] timed_pass_stats = {"hazards_jumped", "spikes_jumped", "mines_jumped", "projectiles_ducked", "force_fields_switched_off", "animals_scared", "insects_killed", "barriers_dodged", "winds_dodged", "walls_broken", "real_walls_climbed", "fake_doors_broken", "real_doors_opened", "floor_breakers_repaired", "vehicles_destroyed", "vehicles_dodged", "helicopters_destroyed", "helicopters_dodged"};
 
 // Each spike swings on its own rhythm: a random swing time between these, picked when it appears.
 const int spike_swing_min = 500;
