@@ -89,6 +89,10 @@ if(st.d.exists("joystick_vibration"))
 {
 joystick_vibration=st.read_bool("joystick_vibration");
 }
+if(st.d.exists("language"))
+{
+language=st.read_string("language");
+}
 if(st.d.exists("health_format"))
 {
 health_format=st.read_int("health_format");
@@ -256,6 +260,7 @@ st.add("show_practice_retry",show_practice_retry);
 st.add("joystick_vibration",joystick_vibration);
 st.add("health_format",health_format);
 st.add("shield_format",shield_format);
+st.add("language",language);
 st.add("tts_config",tts_dump_config(tts, true));
 st.add("soundcard",soundcard);
 for (uint i = 0; i < buffers.length(); i++)

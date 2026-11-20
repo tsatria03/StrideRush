@@ -1,0 +1,4 @@
+// Test lines for the translator, replaced when the template script seeds this file.
+canceled=Nothing was changed.
+* percent health remaining, * lives.=You have $2 lives and $1 percent health.
+* percent health remaining, 1 life.=You have 1 life and $1 percent health.

@@ -12,6 +12,7 @@
 /* Altered source version, modified for Stride Rush (marked as such per clause 2 of the license above):
  * - Added speak_buffer(), which logs a line to a speech-buffer category and speaks it.
  * - tts_dump_config() no longer asks for the name of voice -1 when no voice is chosen; it saves "default" and keeps the rest.
+ * - speak() and speak_buffer() pass their text through translate() (translation.nvgt) first; speak_buffer() translates before it logs, so a buffer holds what was heard.
 */
 
 #include "form.nvgt"
@@ -24,7 +25,8 @@ audio_form@ tts_config_form = null;
 bool tts_default_interrupt = true;
 funcdef string text_processing_callback(const string&in text);
 text_processing_callback@ tts_default_text_processing_callback = null;
-bool speak(string text, bool interrupt = tts_default_interrupt, text_processing_callback@ processing_callback = tts_default_text_processing_callback, bool braille = true) {
+bool speak(string text, bool interrupt = tts_default_interrupt, text_processing_callback@ processing_callback = tts_default_text_processing_callback, bool braille = true, bool translated = false) {
+	if (!translated) text = translate(text);
 	speechbuff = text;
 	if (@processing_callback != null) text = processing_callback(text);
 	if (braille) screen_reader_braille(text);
@@ -43,13 +45,14 @@ bool speak(string text, bool interrupt = tts_default_interrupt, text_processing_
 /* Logs text to a speech-buffer category, then speaks it unless that category is muted. A category whose interrupt is
 off queues its line instead of cutting off current speech. An unknown category just speaks, without logging. */
 bool speak_buffer(string text, string buffer_name = "misc", bool interrupt = tts_default_interrupt) {
+	text = translate(text);
 	int buffer_index = get_buffer_index(buffer_name);
 	if (buffer_index > -1) {
 		add_buffer_item(buffer_name, text, false);
 		if (buffers[buffer_index].muted) return false;
 		if (!buffers[buffer_index].interrupt) interrupt = false;
 	}
-	return speak(text, interrupt);
+	return speak(text, interrupt, tts_default_text_processing_callback, true, true);
 }
 void raw_speak(string text, bool interrupt) {
 	if (interrupt and tts.speaking) tts.stop();

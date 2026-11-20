@@ -10,6 +10,7 @@ bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_lette
 // The volume sliders, in dB from min_volume to 0, shown as 0 to 100 percent.
 int new_amb_vol = ambience_volume, new_step_vol = footstep_volume, new_mus_vol = music_volume, new_heart_vol = heartbeat_volume, new_menu_vol = menumusvolume, new_master_vol = master_volume;
 int new_health_fmt = health_format, new_shield_fmt = shield_format; // the readout formats (lives.nvgt's format_readout())
+string new_language = language; // the General tab's Language list (translation.nvgt)
 int tab_shown = 0; // opens on the first tab: General from the main menu, Game from F2
 while (true)
 {
@@ -30,10 +31,20 @@ int tab_keyboard = ingame ? -1 : 3;
 int tab_menu = ingame ? 1 : 4;
 int tab_sound = ingame ? -1 : 5;
 int tab_speech = ingame ? 2 : 6;
+int language_list = -1;
+string[] language_choices = {"fallback"};
 int vibration_box = -1, joy_rebind_btn = -1, joy_view_btn = -1, reset_btn = -1, view_btn = -1, rebind_btn = -1, fade_box = -1, hrtf_box = -1, device_btn = -1, loop_box = -1, menu_vol_slider = -1, master_vol_slider = -1, updates_box = -1;
 if (!ingame)
 {
-// The General tab: the startup update check, then reset; checkboxes always come before buttons in a tab.
+/* The General tab: the language first (fallback, then every language found), then the startup update check, then
+reset; checkboxes always come before buttons in a tab. */
+string[] found_languages = language_names();
+for (uint i = 0; i < found_languages.length(); i++) language_choices.insert_last(found_languages[i]);
+language_list = setform.create_list("Language");
+for (uint i = 0; i < language_choices.length(); i++) setform.add_list_item(language_list, language_choices[i]);
+int language_at = language_choices.find(new_language);
+setform.set_list_position(language_list, language_at >= 0 ? language_at : 0);
+setform.assign_to_tab(language_list, tabs, tab_general);
 updates_box = setform.create_checkbox("Enable checking for game updates at startup", new_updates);
 setform.assign_to_tab(updates_box, tabs, tab_general);
 reset_btn = setform.create_button("&Reset settings");
@@ -153,6 +164,11 @@ new_heart_vol = int(setform.get_slider(heart_vol_slider)) - 100;
 new_step_vol = int(setform.get_slider(step_vol_slider)) - 100;
 if (menu_vol_slider != -1) new_menu_vol = int(setform.get_slider(menu_vol_slider)) - 100;
 if (master_vol_slider != -1) new_master_vol = int(setform.get_slider(master_vol_slider)) - 100;
+if (language_list != -1)
+{
+int language_now = setform.get_list_position(language_list);
+if (language_now >= 0) new_language = language_choices[language_now];
+}
 int tab_now = setform.get_list_position(tabs);
 if (tab_now >= 0) tab_shown = tab_now;
 if (setform.is_pressed(cancel_btn))
@@ -184,6 +200,11 @@ if (!ingame)
 {
 hrtf = new_hrtf;
 sound_global_hrtf = hrtf; // takes effect for sounds from now on
+if (new_language != language)
+{
+language = new_language;
+if (!load_language(language)) language = "fallback"; // its file went while the settings were open
+}
 }
 writepreffs();
 dlgmessage_return("Settings saved."); // a dialog you dismiss, like Preview voice
@@ -211,6 +232,7 @@ new_practice_retry = show_practice_retry;
 new_vibration = joystick_vibration;
 new_health_fmt = health_format;
 new_shield_fmt = shield_format;
+new_language = language;
 new_amb_vol = ambience_volume;
 new_mus_vol = music_volume;
 new_heart_vol = heartbeat_volume;
@@ -294,6 +316,8 @@ show_practice_retry = true;
 joystick_vibration = true;
 health_format = 0;
 shield_format = 0;
+language = "fallback";
+load_language(language);
 behind_pitch = true;
 apply_behind_pitch();
 hrtf = true;

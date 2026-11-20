@@ -1,0 +1,129 @@
+/* Translations, at the speech layer: speak() and speak_buffer() (speech.nvgt) pass every line through translate(), so
+nothing in the code is wrapped. A language is a .lng file of English=Translated lines, split at the first "=", with
+// comments and blank lines skipped. A line whose English has a * is a wildcard, matched against the whole sentence,
+each * taking a value that $1, $2 and on place in the translation. An exact line is looked up first, then the
+wildcards in file order; anything with no line stays in English. Languages are read from the player's own lang folder
+first, then the game's, so a player's file replaces a shipped one of the same name; template.lng and a file with no
+lines are never listed. "fallback" loads no file and speaks the code's own English. */
+string language = "fallback"; // the General tab's Language list, saved in settings.srf
+const string lang_dir = "data/lang/";
+const string lang_user_dir = APPDATA_DIR + "lang/";
+dictionary lang_lines; // each exact English line to its translation
+string[][] lang_patterns; // each wildcard line's English, cut at its stars
+string[] lang_pattern_out; // and its translation, at the same index
+
+// Every language there is, sorted, without fallback, which the setting adds in front.
+string[] language_names()
+{
+string[] names;
+string[] dirs = {lang_user_dir, lang_dir};
+for (uint d = 0; d < dirs.length(); d++)
+{
+string[] found = find_files(dirs[d] + "*.lng");
+for (uint i = 0; i < found.length(); i++)
+{
+string name = found[i].substr(0, found[i].length() - 4).lower();
+if (name == "template" or names.find(name) >= 0) continue;
+if (language_file(name) == "") continue;
+names.insert_last(name);
+}
+}
+names.sort_ascending();
+return names;
+}
+// The file a language loads from, the player's before the game's, or "" if neither has any lines.
+string language_file(const string&in name)
+{
+string user_path = lang_user_dir + name + ".lng";
+if (file_exists(user_path) and parse_lng(user_path, false) > 0) return user_path;
+string game_path = lang_dir + name + ".lng";
+if (file_exists(game_path) and parse_lng(game_path, false) > 0) return game_path;
+return "";
+}
+// Loads a language, replacing the last one. False if it has no file with lines, and then nothing is loaded.
+bool load_language(const string&in name)
+{
+lang_lines.delete_all();
+lang_patterns.resize(0);
+lang_pattern_out.resize(0);
+if (name == "fallback") return true;
+string path = language_file(name);
+if (path == "") return false;
+parse_lng(path, true);
+return true;
+}
+// Counts a .lng file's lines; with keep, also loads them into the lookups.
+int parse_lng(const string&in path, bool keep)
+{
+file f;
+if (!f.open(path, "rb")) return 0;
+string content = f.read();
+f.close();
+string bom = ascii_to_character(0xEF) + ascii_to_character(0xBB) + ascii_to_character(0xBF);
+if (content.substr(0, 3) == bom) content = content.substr(3); // a UTF-8 byte order mark
+string[]@ rows = content.split("\n");
+int count = 0;
+for (uint i = 0; i < rows.length(); i++)
+{
+string row = rows[i].trim_whitespace();
+if (row.empty() or row.substr(0, 2) == "//") continue;
+int eq = row.find_first("=");
+if (eq < 1) continue;
+string english = row.substr(0, eq).trim_whitespace();
+string translated = row.substr(eq + 1).trim_whitespace();
+if (english.empty() or translated.empty()) continue;
+count++;
+if (!keep) continue;
+if (english.find_first("*") < 0)
+{
+lang_lines.set(english, translated);
+continue;
+}
+string[] parts = english.split("*");
+lang_patterns.insert_last(parts);
+lang_pattern_out.insert_last(translated);
+}
+return count;
+}
+// A line in the chosen language: its exact line, else the first wildcard that fits, else the English as it is.
+string translate(const string&in text)
+{
+if (language == "fallback" or text.empty()) return text;
+string result;
+if (lang_lines.get(text, result)) return result;
+for (uint i = 0; i < lang_patterns.length(); i++)
+{
+string[]@ values = wildcard_match(text, lang_patterns[i]);
+if (values is null) continue;
+result = lang_pattern_out[i];
+for (int v = int(values.length()); v >= 1; v--) result = string_replace(result, "$" + v, values[v - 1], true);
+return result;
+}
+return text;
+}
+/* Whether text fits a wildcard line's English (cut at its stars), as a whole sentence: the first piece starts it, the
+last ends it, and the pieces between come in order. Returns what each star stood for, at least a character each, or
+null if it doesn't fit. */
+string[]@ wildcard_match(const string&in text, const string[]&in parts)
+{
+uint n = parts.length();
+if (n < 2) return null;
+string first = parts[0], last = parts[n - 1];
+if (text.length() < first.length() + last.length()) return null;
+if (text.substr(0, first.length()) != first) return null;
+uint stop = text.length() - last.length(); // where the last piece starts
+if (text.substr(stop) != last) return null;
+string[] values;
+uint pos = first.length();
+for (uint i = 1; i < n - 1; i++)
+{
+if (parts[i].empty()) return null; // two stars together
+int found = text.find_first(parts[i], pos + 1);
+if (found < 0 or uint(found) + parts[i].length() > stop) return null;
+values.insert_last(text.substr(pos, uint(found) - pos));
+pos = uint(found) + parts[i].length();
+}
+if (stop <= pos) return null;
+values.insert_last(text.substr(pos, stop - pos));
+return values;
+}
