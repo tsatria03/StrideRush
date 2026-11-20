@@ -3,8 +3,8 @@ specials (powerups and slides, which are neither). spawn_only "free" sends the s
 choose_free_run()) at each spawn: a real door's key's door first, then the queue's front
 batch, then a weighted pick among the continuous rules, else nothing. Batches arrive in the order added, at the usual
 spacing for your speed; a continuous kind keeps coming, its count its share against the other continuous kinds. "all" is
-a random kind of its group each time. Fake walls, fake doors and vehicles can carry a set health (free_hp_next, read by
-their spawn functions), or 0 for the normal health for your speed; barriers, items, vehicles and trampolines a chosen
+a random kind of its group each time. Fake walls, fake doors, insects, vehicles and aircrafts can carry a set health (free_hp_next, read by
+their spawn functions), or 0 for the normal health for your speed; barriers, items, vehicles, aircrafts and trampolines a chosen
 lane (free_lane_next, read through free_placed_lane()); combinations a chosen pair (free_pair_next, read by
 choose_free_run()), waiting until the environment can make it. A real door comes as its key, then the door. Clearing
 a kind takes its batches and rule, and its things on the belt; clear belt takes everything (free_clear_belt()). */
@@ -33,11 +33,11 @@ string free_entry_name(const string&in type, const string&in group, int pair, in
 string name = free_kind_name(type, group, amount);
 return pair >= 0 ? free_pair_name(pair) + " " + name : name;
 }
-/* The lane an entry's barriers, items, vehicles and trampolines come in (free_lane_kinds): random as usual, your lane
+/* The lane an entry's barriers, items, vehicles, aircrafts and trampolines come in (free_lane_kinds): random as usual, your lane
 (the one you're in as each appears), or a set lane. It rides to the spawner in free_lane_next, as the health does. */
 const int free_lane_random = -1;
 const int free_lane_own = -2;
-const string[] free_lane_kinds = {"barriers", "vehicles", "trampolines", "ammo_packs", "health_potions", "keys", "life_capsules", "player_teleporters", "steel_shields"};
+const string[] free_lane_kinds = {"barriers", "vehicles", "aircrafts", "trampolines", "ammo_packs", "health_potions", "keys", "life_capsules", "player_teleporters", "steel_shields"};
 int free_lane_next = free_lane_random;
 // The lane for the thing being placed now: lane_left to lane_right, or -1 for its usual random lane.
 int free_placed_lane()
@@ -72,9 +72,9 @@ bool free_door_next = false; // a real door's key was just placed, so the door c
 int free_door_hp = 0;
 int free_hp_next = 0; // the next placed breakable obstacle's set health, or 0
 // Each group's kinds, alphabetical by their spoken names, with their singulars.
-const string[] free_obstacle_ids = {"animals", "barriers", "combinations", "fake_doors", "walls", "floor_breakers", "force_fields", "hazards", "insects", "mines", "projectiles", "real_doors", "ladders", "spikes", "trampolines", "vehicles", "winds"};
-const string[] free_obstacle_names = {"animals", "barriers", "combinations", "fake doors", "fake walls", "floor breakers", "force fields", "hazards", "insects", "mines", "projectiles", "real doors", "real walls", "spikes", "trampolines", "vehicles", "winds"};
-const string[] free_obstacle_singulars = {"animal", "barrier", "combination", "fake door", "fake wall", "floor breaker", "force field", "hazard", "insect", "mine", "projectile", "real door", "real wall", "spike", "trampoline", "vehicle", "wind"};
+const string[] free_obstacle_ids = {"aircrafts", "animals", "barriers", "combinations", "fake_doors", "walls", "floor_breakers", "force_fields", "hazards", "insects", "mines", "projectiles", "real_doors", "ladders", "spikes", "trampolines", "vehicles", "winds"};
+const string[] free_obstacle_names = {"aircrafts", "animals", "barriers", "combinations", "fake doors", "fake walls", "floor breakers", "force fields", "hazards", "insects", "mines", "projectiles", "real doors", "real walls", "spikes", "trampolines", "vehicles", "winds"};
+const string[] free_obstacle_singulars = {"aircraft", "animal", "barrier", "combination", "fake door", "fake wall", "floor breaker", "force field", "hazard", "insect", "mine", "projectile", "real door", "real wall", "spike", "trampoline", "vehicle", "wind"};
 const string[] free_item_ids = {"ammo_packs", "health_potions", "keys", "life_capsules", "player_teleporters", "steel_shields"};
 const string[] free_item_names = {"ammo packs", "health potions", "keys", "life capsules", "player teleporters", "steel shields"};
 const string[] free_item_singulars = {"ammo pack", "health potion", "key", "life capsule", "player teleporter", "steel shield"};
@@ -111,7 +111,7 @@ return group + "s";
 }
 bool free_breakable(const string&in type)
 {
-return type == "walls" or type == "fake_doors" or type == "vehicles" or type == "insects";
+return type == "walls" or type == "fake_doors" or type == "vehicles" or type == "insects" or type == "aircrafts";
 }
 string free_kind_name(const string&in type, const string&in group, int amount = 2)
 {
@@ -265,6 +265,7 @@ else if (type == "floor_breakers") destroy_all_floor_breakers();
 else if (type == "barriers") destroy_all_barriers();
 else if (type == "winds") destroy_all_winds();
 else if (type == "vehicles") destroy_all_vehicles();
+else if (type == "aircrafts") destroy_all_aircrafts();
 else if (type == "trampolines") destroy_all_trampolines();
 else if (type == "ammo_packs") destroy_all_ammopacks();
 else if (type == "keys") destroy_all_keys();
@@ -381,7 +382,7 @@ return false;
 int hp = 0;
 if (group == "obstacle" and free_breakable(type))
 {
-hp = free_ask_number("Add " + what, "How much health should each one have? Leave it empty for the normal health for your speed.", 1, 1000, true);
+hp = free_ask_number("Add " + what, "How much health should each one have? Leave it empty for the normal health for your speed.", 1, 2000, true); // 2000, an aircraft's top health
 if (hp < 0) hp = 0; // an empty answer and escape both mean the normal health
 }
 int lane = free_lane_random;

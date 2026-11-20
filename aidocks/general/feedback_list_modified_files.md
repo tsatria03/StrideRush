@@ -17,3 +17,5 @@ Condense the list (dev, 2026-11-15: "When you show the files that were changed, 
 - 12 core files in src/includes/main/globals/ (comments only)
 - 4 memory files: the new core code history, the plan, aidocks/MEMORY.md, CLAUDE.md
 Still give the git total, and the full per-file list only when the dev asks for it.
+
+This applies to the commit-ready summary at the end of a section too (dev, 2026-11-20: "Remember to always condence how many files you show that was commited. Not every single file."), after it had been forgotten across the aircrafts sections' wrap-ups: group by reason with counts (for example, "2 free run files in src/includes/main/globals/, the plan"), plus the git total.

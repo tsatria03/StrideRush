@@ -501,7 +501,7 @@ break;
 }
 resume_game();
 }
-/* The player, set from the running console. Each number box takes 1 to 1000 (a reserve 0 to 1000); escape cancels.
+/* The player, set from the running console. Each number box takes 1 to 1000 (health and shield strength 1 to 2000, a reserve 0 to 1000); escape cancels.
 free_health is your full health, filled at once and on a new life; free_lives the lives you have and get back from a
 practice death, capsules adding up to the higher of max_lives or it; free_shield_full the worn shield's full strength (a
 newly worn shield starts at shield_hp); each gun's reserve a set number (gun_start_reserve to start, as a normal run) or
@@ -542,17 +542,17 @@ int mres = m.run();
 if (mres < 0 or m.selected_item_id == "back") return "";
 return m.selected_item_id;
 }
-// The amount to give or take, 1 to 1000: "How much health do you want to give?" Below 0 if escaped.
-int free_change_amount(const string&in title, const string&in how, const string&in what, const string&in way)
+// The amount to give or take, 1 to high: "How much health do you want to give?" Below 0 if escaped.
+int free_change_amount(const string&in title, const string&in how, const string&in what, const string&in way, int high = 1000)
 {
-return free_ask_number(title, how + " " + what + " do you want to " + way + "?", 1, 1000);
+return free_ask_number(title, how + " " + what + " do you want to " + way + "?", 1, high);
 }
 // Modify player health: give, set or take. True once changed.
 bool free_set_health()
 {
 string way = free_change_choice("Choose how you'd like to change your health. You currently have " + player_health + " of " + free_health + " health.", "health");
 if (way == "") return false;
-int n = way == "set" ? free_ask_number("Modify player health", "How much health do you want?", 1, 1000) : free_change_amount("Modify player health", "How much", "health", way);
+int n = way == "set" ? free_ask_number("Modify player health", "How much health do you want?", 1, 2000) : free_change_amount("Modify player health", "How much", "health", way, 2000);
 if (n < 0)
 {
 speak("canceled");
@@ -596,7 +596,7 @@ bool free_set_shield()
 {
 string way = free_change_choice("Choose how you'd like to change your shield's strength. Your shield currently has " + shield_hp_left + " of " + free_shield_full + " strength.", "shield strength");
 if (way == "") return false;
-int n = way == "set" ? free_ask_number("Modify shield strength", "How strong should your shield be?", 1, 1000) : free_change_amount("Modify shield strength", "How much", "strength", way);
+int n = way == "set" ? free_ask_number("Modify shield strength", "How strong should your shield be?", 1, 2000) : free_change_amount("Modify shield strength", "How much", "strength", way, 2000);
 if (n < 0)
 {
 speak("canceled");
