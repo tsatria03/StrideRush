@@ -2,7 +2,8 @@
 nothing in the code is wrapped. A language is a .lng file of English=Translated lines, split at the first "=", with
 // comments and blank lines skipped. A line whose English has a * is a wildcard, matched against the whole sentence,
 each * taking a value that $1, $2 and on place in the translation. An exact line is looked up first, then the
-wildcards in file order; anything with no line stays in English. Languages are read from the player's own lang folder
+wildcards, those with the most fixed text first, each value they take looked up the same way; anything with no line
+stays in English. Languages are read from the player's own lang folder
 first, then the game's, so a player's file replaces a shipped one of the same name; template.lng and a file with no
 lines are never listed. "fallback" loads no file and speaks the code's own English.
 With log_untranslated on, a line no language line covers is written once to the player's lang folder as
@@ -21,6 +22,7 @@ return APPDATA_DIR + "lang";
 dictionary lang_lines; // each exact English line to its translation
 string[][] lang_patterns; // each wildcard line's English, cut at its stars
 string[] lang_pattern_out; // and its translation, at the same index
+uint[] lang_pattern_fixed; // and how much fixed text it has, which orders them (parse_lng())
 
 // Every language there is, sorted, without fallback, which the setting adds in front.
 string[] language_names()
@@ -56,6 +58,7 @@ bool load_language(const string&in name)
 lang_lines.delete_all();
 lang_patterns.resize(0);
 lang_pattern_out.resize(0);
+lang_pattern_fixed.resize(0);
 lang_logged.delete_all();
 if (name == "fallback") return true;
 string path = language_file(name);
@@ -145,27 +148,62 @@ lang_lines.set(english, translated);
 continue;
 }
 string[] parts = english.split("*");
-lang_patterns.insert_last(parts);
-lang_pattern_out.insert_last(translated);
+// Kept with the most fixed text first, so a broad line such as "*, *" is only tried once every closer one has failed.
+uint fixed = english.length() - (parts.length() - 1);
+uint at = 0;
+while (at < lang_pattern_fixed.length() and lang_pattern_fixed[at] >= fixed) at++;
+lang_patterns.insert_at(at, parts);
+lang_pattern_out.insert_at(at, translated);
+lang_pattern_fixed.insert_at(at, fixed);
 }
 return count;
 }
-// A line in the chosen language: its exact line, else the first wildcard that fits, else the English as it is.
+/* A line in the chosen language (translate_line()), else the English as it is, logged if the log is on. A value a
+wildcard took that has no line of its own, a name such as "fist", is logged too. */
 string translate(const string&in text)
 {
 if (language == "fallback" or text.empty()) return text;
+bool found = false;
+string result = translate_line(text, 0, found);
+if (!found and log_untranslated) log_missing(text);
+return result;
+}
+/* Its exact line, else the closest wildcard that fits, with each value it took translated the same way (so "fist" in
+"fist equipped." becomes the language's own word), a few levels deep at most. found says whether anything matched. */
+string translate_line(const string&in text, int depth, bool &out found)
+{
+found = true;
 string result;
 if (lang_lines.get(text, result)) return result;
+if (depth < 4)
+{
 for (uint i = 0; i < lang_patterns.length(); i++)
 {
 string[]@ values = wildcard_match(text, lang_patterns[i]);
 if (values is null) continue;
 result = lang_pattern_out[i];
-for (int v = int(values.length()); v >= 1; v--) result = string_replace(result, "$" + v, values[v - 1], true);
+for (int v = int(values.length()); v >= 1; v--)
+{
+bool value_found = false;
+string value = translate_line(values[v - 1], depth + 1, value_found);
+if (!value_found and log_untranslated and has_letter(values[v - 1])) log_missing(values[v - 1]);
+result = string_replace(result, "$" + v, value, true);
+}
 return result;
 }
-if (log_untranslated) log_missing(text);
+}
+found = false;
 return text;
+}
+// Whether text has a letter in it, so a bare number taken by a wildcard isn't logged.
+bool has_letter(const string&in text)
+{
+for (uint i = 0; i < text.length(); i++)
+{
+string c = text.substr(i, 1).lower();
+if (c >= "a" and c <= "z") return true;
+}
+return false;
 }
 /* Whether text fits a wildcard line's English (cut at its stars), as a whole sentence: the first piece starts it, the
 last ends it, and the pieces between come in order. Returns what each star stood for, at least a character each, or
