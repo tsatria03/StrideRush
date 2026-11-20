@@ -1,5 +1,6 @@
 New in 2.6.
-Fixed a bug where turning down the menu music or choosing a menu option would pause the menu for up to a second while the music faded, and could make it briefly louder instead of quieter.
+Made it so winds, projectiles, and insects are now heard clearly as soon as they appear, like every other obstacle, instead of starting out much quieter from further away.
+Fixed a bug where, after turning down the menu music, choosing a menu option would pause the menu for up to a second while the music faded, and could make it briefly louder instead of quieter.
 Made it so the readme is now split into a document for each part of the game, from every obstacle and item to the game modes, found under game in the documentation menu, while main holds the readme, changelog, todo list and credits.
 Made it so the data folder is now split into a game folder, for the achievements, and a main folder, for your key and joystick settings in keyboard.ini and joystick.ini.
 Made it so the sounds folder is now split into a game folder, for the environments, weapons and items, and a main folder, for the game's own events, your own sounds and the menus.

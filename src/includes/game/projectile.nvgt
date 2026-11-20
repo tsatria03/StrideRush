@@ -56,6 +56,7 @@ if (@projectiles[i] == null or projectiles[i].loopslot < 0) continue;
 int slot = projectiles[i].loopslot;
 if (!projectilepool.verify_slot(slot)) continue;
 projectilepool.items[slot].y = float(projectile_x(projectiles[i]));
+if (belt_volume_step > 0) projectilepool.items[slot].volume_step = mover_volume_step(projectile_speed_factor); // heard as early as a still obstacle (decpool.nvgt)
 projectilepool.items[slot].update(projectilepool.last_listener_x, projectilepool.last_listener_y, projectilepool.last_listener_z, projectilepool.last_listener_rotation, projectilepool.max_distance);
 }
 }

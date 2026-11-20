@@ -81,6 +81,7 @@ continue;
 }
 if (ins.loopslot < 0 or !insectpool.verify_slot(ins.loopslot)) continue;
 insectpool.items[ins.loopslot].y = float(insect_x(ins));
+if (belt_volume_step > 0) insectpool.items[ins.loopslot].volume_step = mover_volume_step(insect_speed_factor); // heard as early as a still obstacle (decpool.nvgt)
 insectpool.items[ins.loopslot].update(insectpool.last_listener_x, insectpool.last_listener_y, insectpool.last_listener_z, insectpool.last_listener_rotation, insectpool.max_distance);
 }
 }

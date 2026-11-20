@@ -39,7 +39,7 @@ practice_hint("winds", w.lane, mx); // practice_hints.nvgt, a practice run only
 w.next_beat = runtimer.elapsed + wind_beat_time;
 w.countdown_start = mx - countdown;
 w.loopslot = windpool.play_2d(get_pack_sound(trap_folder(current_env, "winds") + theme + "/*loop*"), 0, me.x, 0, wind_x(w), true);
-place_lane_sound(windpool, w.loopslot, w.lane, wind_x(w));
+place_wind_sound(w);
 for (uint i = 0; i < winds.length(); i++)
 {
 if (@winds[i] == null)
@@ -74,8 +74,17 @@ w.lane += w.drift_dir;
 }
 }
 if (w.loopslot < 0 or !windpool.verify_slot(w.loopslot)) continue;
-place_lane_sound(windpool, w.loopslot, w.lane, wind_x(w));
+place_wind_sound(w);
 }
+}
+/* The wind's loop in its lane (place_lane_sound(), which sets its fade for the lane), then that fade divided by
+wind_speed_factor, so it's heard as early as a still obstacle (mover_volume_step(), decpool.nvgt). */
+void place_wind_sound(wind@ w)
+{
+place_lane_sound(windpool, w.loopslot, w.lane, wind_x(w));
+if (w.loopslot < 0 or w.loopslot >= int(windpool.items.length()) or belt_volume_step <= 0) return;
+windpool.items[w.loopslot].volume_step = float(windpool.items[w.loopslot].volume_step / wind_speed_factor);
+windpool.items[w.loopslot].update(windpool.last_listener_x, windpool.last_listener_y, windpool.last_listener_z, windpool.last_listener_rotation, windpool.max_distance);
 }
 // Runs once per step, right after the move: reaching meet_x in its lane is a hit and a shove; in another lane, a dodge.
 void wind_check()

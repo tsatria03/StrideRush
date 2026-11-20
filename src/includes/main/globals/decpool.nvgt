@@ -44,6 +44,15 @@ all_pools[i].update_listener_2d(0, me.x);
 time makes every sound fade belt_fade_ms of running per decibel instead, the barriers' feel: a sound 3 seconds away is
 equally loud at 500 ms and at 50 ms. Sounds already playing are retuned too; the listener move that follows applies it. */
 float belt_volume_step = -1;
+/* A sound that closes in speed_factor times as fast as the belt starts speed_factor times as far away, so it would
+sound quieter than a still obstacle the same time from you. Fading it at the belt's rate divided by its speed factor
+evens that out: winds, projectiles and insects use this, set every frame as they move, since retune_belt_falloff()
+resets every sound's fade when the speed changes. */
+float mover_volume_step(double speed_factor)
+{
+if (belt_volume_step <= 0 or speed_factor <= 1) return belt_volume_step;
+return float(belt_volume_step / speed_factor);
+}
 void retune_belt_falloff()
 {
 float step = float(current_step_time()) / (belt_fade_ms * 0.8);
