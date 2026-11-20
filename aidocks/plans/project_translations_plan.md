@@ -1,6 +1,6 @@
 ---
 name: project_translations_plan
-description: SETTLED (2026-11-19, 2.6, for 7 of 10): game translations at the speech layer with our own translator, English=Translated .lng files (* wildcards), template.lng from a build script, a language setting, a missing log, language folders for docks; 7 sections (1 complete); Q&A log
+description: SETTLED (2026-11-19, 2.6, for 8 of 10 since the one-environment skip took 7): game translations at the speech layer with our own translator, English=Translated .lng files (* wildcards), template.lng from a build script, a language setting, a missing log, language folders for docks; 7 sections (1 to 5 complete); Q&A log
 metadata:
   type: project
 ---
@@ -27,7 +27,7 @@ The todo item "Add game translations for other languages." Discussion opened 202
 - Template script (Python, build/): scans src for spoken strings (fixed sentences as exact lines, text + value + text as * lines; strings built across functions or in loops listed for hand-written patterns), achievements.ini, dock names from docks/lang/english, and names built from sound folders; reports each .lng's missing and stale lines; never writes a language file.
 - Data: sdr/data/config/main/keyboard.ini, joystick.ini; sdr/data/config/game/achievements.ini.
 - Docks: sdr/docks/lang/<language>/game and main. Documentation menu: languages (from the folders, skipped while english is the only one, focused on the game language, english under fallback), then game or main, then documents. A new main document, translations.txt; the readme untouched.
-- Changelog: a new entry on top (7 of 10): "Added game translations, with a language setting in the general tab, so the game and its documents can be read in any language that has a language file, and players can write their own, as the new translations document explains." And 2.6's data entry reworded in place: "Made it so the data folder is now split into a config folder, holding the achievements in its game folder and your key and joystick settings in its main folder, and a lang folder for the game's languages."
+- Changelog: a new entry on top (8 of 10, after the one-environment skip's entry): "Added game translations, with a language setting in the general tab, so the game and its documents can be read in any language that has a language file, and players can write their own, as the new translations document explains." And 2.6's data entry reworded in place: "Made it so the data folder is now split into a config folder, holding the achievements in its game folder and your key and joystick settings in its main folder, and a lang folder for the game's languages."
 
 ## Sections
 

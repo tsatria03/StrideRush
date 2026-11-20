@@ -1,4 +1,5 @@
 New in 2.6.
+Made it so the environment menu is now skipped when there's only one environment to choose from.
 Made it so winds, projectiles, and insects are now heard clearly as soon as they appear, like every other obstacle, instead of starting out much quieter from further away.
 Fixed a bug where after turning down the menu music, choosing a menu option would pause the menu for up to a second while the music faded, and could make it briefly louder instead of quieter.
 Made it so the readme is now split into a document for each part of the game, from every obstacle and item to the game modes, found under game in the documentation menu, while main holds the readme, changelog, todo list, credits and translations, with every document kept in a folder for its language.

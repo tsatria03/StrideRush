@@ -139,9 +139,15 @@ free_speed = int(parse_int(id));
 return true;
 }
 /* The environment menu, at setup and in the console: each environment to stay in, then random, then back. From the
-console it says what it's currently set to and opens on it. */
+console it says what it's currently set to and opens on it. With only one environment there's nothing to choose:
+setup goes on without asking, and the console doesn't offer it. */
 bool choose_free_env(bool console = false)
 {
+if (env_names().length() <= 1)
+{
+debug_env = "";
+return true;
+}
 setupmenu();
 m.intro_text = "Choose the environment you'd like to run in.";
 if (console) m.intro_text += " Currently set to " + (debug_env == "" ? "random" : debug_env.replace("_", " ", true)) + ".";
@@ -422,7 +428,7 @@ if (is_gun(current_weapon)) m.add_item("modify ammo limits", "unlimited"); // th
 if (is_gun(current_weapon) and !free_reserve_unlimited[current_weapon]) m.add_item("modify ammo reserves", "ammo"); // only with a gun drawn, and hidden while it has unlimited rounds
 }
 m.add_item("modify death mode", "death");
-m.add_item("modify environment", "env");
+if (env_names().length() > 1) m.add_item("modify environment", "env"); // nothing to choose with only one
 m.add_item("modify footsteps", "footsteps"); // standing or running
 m.add_item("modify heartbeat", "heartbeat"); // standing or running
 if (free_moving)

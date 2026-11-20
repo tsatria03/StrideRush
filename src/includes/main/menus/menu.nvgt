@@ -326,7 +326,9 @@ else if (stage == 2)
 {
 // Then the spawn choice, then the speed.
 only_type = choose_spawn_types();
-stage = only_type == "" ? 1 : 3;
+// Escape steps back to the environment, or past it to the mode menu when there's only one and it wasn't asked.
+if (only_type == "") stage = env_names().length() <= 1 ? 0 : 1;
+else stage = 3;
 }
 else if (stage == 3)
 {
@@ -644,10 +646,10 @@ return m.selected_item_id == "yes" ? 1 : 0;
 /* DEBUG OPTION: the environment, the first debug option, before the spawn menu: each environment to stay in for the
 whole run, to test one environment's sounds directly, then "random" last, the normal random pick, which also lets the
 run switch between environments. Returns "" for random, the environment's name, or "-" if escaped. A compiled release
-always answers random. */
+always answers random, and so does a game with only one environment, without asking. */
 string choose_debug_env()
 {
-if (SCRIPT_COMPILED) return "";
+if (SCRIPT_COMPILED or env_names().length() <= 1) return "";
 setupmenu();
 m.intro_text = "Which environment do you want to run in?";
 string[] names = env_names();
