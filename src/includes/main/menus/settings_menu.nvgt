@@ -11,6 +11,7 @@ bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_lette
 int new_amb_vol = ambience_volume, new_step_vol = footstep_volume, new_mus_vol = music_volume, new_heart_vol = heartbeat_volume, new_menu_vol = menumusvolume, new_master_vol = master_volume;
 int new_health_fmt = health_format, new_shield_fmt = shield_format; // the readout formats (lives.nvgt's format_readout())
 string new_language = language; // the General tab's Language list (translation.nvgt)
+bool new_log = log_untranslated; // and its "Log untranslated lines" checkbox
 int tab_shown = 0; // opens on the first tab: General from the main menu, Game from F2
 while (true)
 {
@@ -31,13 +32,13 @@ int tab_keyboard = ingame ? -1 : 3;
 int tab_menu = ingame ? 1 : 4;
 int tab_sound = ingame ? -1 : 5;
 int tab_speech = ingame ? 2 : 6;
-int language_list = -1;
+int language_list = -1, log_box = -1;
 string[] language_choices = {"fallback"};
 int vibration_box = -1, joy_rebind_btn = -1, joy_view_btn = -1, reset_btn = -1, view_btn = -1, rebind_btn = -1, fade_box = -1, hrtf_box = -1, device_btn = -1, loop_box = -1, menu_vol_slider = -1, master_vol_slider = -1, updates_box = -1;
 if (!ingame)
 {
-/* The General tab: the language first (fallback, then every language found), then the startup update check, then
-reset; checkboxes always come before buttons in a tab. */
+/* The General tab: the language first (fallback, then every language found), then the startup update check, logging
+untranslated lines, then reset; checkboxes always come before buttons in a tab. */
 string[] found_languages = language_names();
 for (uint i = 0; i < found_languages.length(); i++) language_choices.insert_last(found_languages[i]);
 language_list = setform.create_list("Language");
@@ -47,6 +48,8 @@ setform.set_list_position(language_list, language_at >= 0 ? language_at : 0);
 setform.assign_to_tab(language_list, tabs, tab_general);
 updates_box = setform.create_checkbox("Enable checking for game updates at startup", new_updates);
 setform.assign_to_tab(updates_box, tabs, tab_general);
+log_box = setform.create_checkbox("Log untranslated lines", new_log);
+setform.assign_to_tab(log_box, tabs, tab_general);
 reset_btn = setform.create_button("&Reset settings");
 setform.assign_to_tab(reset_btn, tabs, tab_general);
 }
@@ -150,6 +153,7 @@ if (hrtf_box != -1) new_hrtf = setform.is_checked(hrtf_box);
 if (loop_box != -1) new_loop = setform.is_checked(loop_box);
 new_variants = setform.is_checked(variants_box);
 if (updates_box != -1) new_updates = setform.is_checked(updates_box);
+if (log_box != -1) new_log = setform.is_checked(log_box);
 new_death_results = setform.is_checked(death_results_box);
 new_death_copy = setform.is_checked(death_copy_box);
 new_practice_retry = setform.is_checked(practice_retry_box);
@@ -205,6 +209,7 @@ if (new_language != language)
 language = new_language;
 if (!load_language(language)) language = "fallback"; // its file went while the settings were open
 }
+log_untranslated = new_log;
 }
 writepreffs();
 dlgmessage_return("Settings saved."); // a dialog you dismiss, like Preview voice
@@ -233,6 +238,7 @@ new_vibration = joystick_vibration;
 new_health_fmt = health_format;
 new_shield_fmt = shield_format;
 new_language = language;
+new_log = log_untranslated;
 new_amb_vol = ambience_volume;
 new_mus_vol = music_volume;
 new_heart_vol = heartbeat_volume;
@@ -318,6 +324,7 @@ health_format = 0;
 shield_format = 0;
 language = "fallback";
 load_language(language);
+log_untranslated = false;
 behind_pitch = true;
 apply_behind_pitch();
 hrtf = true;

@@ -1,6 +1,7 @@
 /* True while a dlg() message is open, so a game's joystick can give it a copy button (C) that it gives no other menu,
 where C would jump to items starting with c. */
 bool dlg_open = false;
+bool dlg_translated = false; // true while dlgmessage_return() shows a message it has already translated
 // The ending dlgmessage_return() adds, in the chosen language (translation.nvgt), so a copy can take it off again.
 string dlg_enter_ending()
 {
@@ -11,7 +12,7 @@ dlgmessage_return() arrives already translated, its ending too. */
 bool dlg(string message, bool dlgcoppy=true, bool dlgsound=false, int timeout=-1)
 {
 timer timeouter;
-message = translate(message);
+if (!dlg_translated) message = translate(message); // never twice, so the untranslated lines log never gets a joined one
 if(dlgsound==true) temp.play_stationary(get_pack_sound("main/ui/dialog/*error*"),false);
 speak(message, tts_default_interrupt, tts_default_text_processing_callback, true, true);
 dlg_open = dlgcoppy;
@@ -74,5 +75,8 @@ temp.play_stationary(get_pack_sound("main/ui/dialog/*close*"),false);
 }
 void dlgmessage_return(string msg)
 {
-dlgmessage(translate(msg) + dlg_enter_ending()); // each half translated apart, then joined
+string shown = translate(msg) + dlg_enter_ending(); // each half translated apart, then joined
+dlg_translated = true;
+dlgmessage(shown);
+dlg_translated = false;
 }

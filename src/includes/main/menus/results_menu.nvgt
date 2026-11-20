@@ -53,9 +53,9 @@ return false;
 // The results as one text, as the statistics menu's copy does: "Session results:", then a dash before each line.
 string session_results_text(bool live)
 {
-string text = "Session results:\r\n";
+string text = translate("Session results:") + "\r\n"; // the heading and each line in the chosen language, as the menu says them
 string[] lines = session_stat_lines(live);
-for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";
+for (uint i = 0; i < lines.length(); i++) text += "- " + translate(lines[i]) + "\r\n";
 return text;
 }
 void copy_session_results(bool live)

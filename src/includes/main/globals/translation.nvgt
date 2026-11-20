@@ -4,10 +4,20 @@ nothing in the code is wrapped. A language is a .lng file of English=Translated 
 each * taking a value that $1, $2 and on place in the translation. An exact line is looked up first, then the
 wildcards in file order; anything with no line stays in English. Languages are read from the player's own lang folder
 first, then the game's, so a player's file replaces a shipped one of the same name; template.lng and a file with no
-lines are never listed. "fallback" loads no file and speaks the code's own English. */
+lines are never listed. "fallback" loads no file and speaks the code's own English.
+With log_untranslated on, a line no language line covers is written once to the player's lang folder as
+<language>.txt, already as an English=English line to fill in, with each number turned into a * on the left and $1, $2
+on the right, so a readout is logged once and not once for every value. */
 string language = "fallback"; // the General tab's Language list, saved in settings.srf
+bool log_untranslated = false; // the General tab's "Log untranslated lines" checkbox, saved in settings.srf
+dictionary lang_logged; // the lines already in the chosen language's log, so each is written once
 const string lang_dir = "data/lang/";
-const string lang_user_dir = APPDATA_DIR + "lang/";
+/* The player's own lang folder, without a trailing slash, as the game's other folders in APPDATA_DIR are made (a
+function, so APPDATA_DIR is always set by the time it's read). */
+string lang_user_folder()
+{
+return APPDATA_DIR + "lang";
+}
 dictionary lang_lines; // each exact English line to its translation
 string[][] lang_patterns; // each wildcard line's English, cut at its stars
 string[] lang_pattern_out; // and its translation, at the same index
@@ -16,7 +26,7 @@ string[] lang_pattern_out; // and its translation, at the same index
 string[] language_names()
 {
 string[] names;
-string[] dirs = {lang_user_dir, lang_dir};
+string[] dirs = {lang_user_folder() + "/", lang_dir};
 for (uint d = 0; d < dirs.length(); d++)
 {
 string[] found = find_files(dirs[d] + "*.lng");
@@ -34,7 +44,7 @@ return names;
 // The file a language loads from, the player's before the game's, or "" if neither has any lines.
 string language_file(const string&in name)
 {
-string user_path = lang_user_dir + name + ".lng";
+string user_path = lang_user_folder() + "/" + name + ".lng";
 if (file_exists(user_path) and parse_lng(user_path, false) > 0) return user_path;
 string game_path = lang_dir + name + ".lng";
 if (file_exists(game_path) and parse_lng(game_path, false) > 0) return game_path;
@@ -46,11 +56,66 @@ bool load_language(const string&in name)
 lang_lines.delete_all();
 lang_patterns.resize(0);
 lang_pattern_out.resize(0);
+lang_logged.delete_all();
 if (name == "fallback") return true;
 string path = language_file(name);
 if (path == "") return false;
 parse_lng(path, true);
+read_lang_log(name);
 return true;
+}
+// Where a language's log of untranslated lines goes.
+string lang_log_path(const string&in name)
+{
+return lang_user_folder() + "/" + name + ".txt";
+}
+// Remembers the lines a language's log already holds, from earlier sessions.
+void read_lang_log(const string&in name)
+{
+file f;
+if (!f.open(lang_log_path(name), "rb")) return;
+string[]@ rows = f.read().split("\n");
+f.close();
+for (uint i = 0; i < rows.length(); i++)
+{
+string row = rows[i].trim_whitespace();
+int eq = row.find_first("=");
+if (eq > 0) lang_logged.set(row.substr(0, eq), true);
+}
+}
+/* Writes an untranslated line to the log, numbers as wildcards, once. A single character (typing) and a line with an
+"=" or a line break, which can't be written as a line, are skipped. */
+void log_missing(const string&in text)
+{
+if (text.length() < 2 or text.find_first("=") >= 0 or text.find_first("\n") >= 0 or text.find_first("*") >= 0) return;
+string english = "", translated = "";
+int values = 0;
+bool in_number = false;
+for (uint i = 0; i < text.length(); i++)
+{
+string c = text.substr(i, 1);
+if (c >= "0" and c <= "9")
+{
+if (!in_number)
+{
+values++;
+english += "*";
+translated += "$" + values;
+in_number = true;
+}
+continue;
+}
+in_number = false;
+english += c;
+translated += c;
+}
+if (lang_logged.exists(english)) return;
+lang_logged.set(english, true);
+if (!directory_exists(lang_user_folder())) directory_create(lang_user_folder());
+file f;
+if (!f.open(lang_log_path(language), "ab")) return;
+f.write(english + "=" + translated + "\r\n");
+f.close();
 }
 // Counts a .lng file's lines; with keep, also loads them into the lookups.
 int parse_lng(const string&in path, bool keep)
@@ -99,6 +164,7 @@ result = lang_pattern_out[i];
 for (int v = int(values.length()); v >= 1; v--) result = string_replace(result, "$" + v, values[v - 1], true);
 return result;
 }
+if (log_untranslated) log_missing(text);
 return text;
 }
 /* Whether text fits a wildcard line's English (cut at its stars), as a whole sentence: the first piece starts it, the

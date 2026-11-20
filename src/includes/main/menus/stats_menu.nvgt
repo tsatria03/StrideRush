@@ -258,12 +258,12 @@ string all_stats_text()
 {
 /* Session and lifetime stats only: achievement stats belong to the game menu's copy and export of all progress
 (achievements_menu.nvgt's all_progress_text()). */
-string text = "Session stats:\r\n";
+string text = translate("Session stats:") + "\r\n"; // each heading and line in the chosen language, as the menus say them
 string[] lines = session_stat_lines();
-for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";
-text += "\r\nLifetime stats:\r\n";
+for (uint i = 0; i < lines.length(); i++) text += "- " + translate(lines[i]) + "\r\n";
+text += "\r\n" + translate("Lifetime stats:") + "\r\n";
 lines = lifetime_stat_lines();
-for (uint i = 0; i < lines.length(); i++) text += "- " + lines[i] + "\r\n";
+for (uint i = 0; i < lines.length(); i++) text += "- " + translate(lines[i]) + "\r\n";
 return text;
 }
 void copy_all_stats()
