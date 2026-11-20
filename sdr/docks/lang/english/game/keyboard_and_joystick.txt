@@ -1,4 +1,4 @@
-Joystick and keyboard.
+Keyboard and joystick.
 
 You can play Stride Rush with the keyboard, or with a joystick or game controller, in every menu and in a run. This document lists every key and button, including the ones you can pick up later, such as the readouts and the volume keys.
 
