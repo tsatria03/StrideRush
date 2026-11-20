@@ -311,8 +311,10 @@ break;
 wait (delay);
 }
 }
+	/* Fades the menu music down to -50 dB, then stops it. Music already at or below that (a low menu music volume, such as
+	0 percent, which is -100 dB) stops at once, since fade() would otherwise raise it to -50 first. */
 	void fade_music(int value1 = 20) {
-		fade(music, -50, value1);
+		if (music.volume > -50) fade(music, -50, value1);
 		music.stop();
 	}
 	void stop_music() { music.stop(); }
