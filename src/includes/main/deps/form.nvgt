@@ -45,6 +45,11 @@
 	added prespeech callback
 	added event callback
 */
+/* Altered source version, modified for Stride Rush (marked as such per clause 2 of the license above):
+ * - Translations (translation.nvgt): add_list_item() stores each item translated; a control's caption and type name are
+ *   translated apart before they're joined; list items speak with only their joined words translated; and text in a box
+ *   (lines, words and selections you read or type) is spoken as it is, never translated.
+*/
 
 int keyboardsounds=1;
 sound_pool formpool;
@@ -972,15 +977,16 @@ class audio_form {
 			return false;
 		}
 		c_form[control_index].list_length++;
+		string shown = translate(option); // stored translated, so first letter navigation and sorting use what's heard
 		if ((position < 0) || (position == c_form[control_index].list_length + 1)) {
 			c_form[control_index].list.resize(c_form[control_index].list.length() + 1);
-			c_form[control_index].list[c_form[control_index].list_length].item = option;
+			c_form[control_index].list[c_form[control_index].list_length].item = shown;
 			c_form[control_index].list[c_form[control_index].list_length].id = id;
 			if (c_form[control_index].list_multiselect)
 				c_form[control_index].list[c_form[control_index].list_length].checked = selected;
 		} else {
 			c_form[control_index].list.insert_at(position, list_item());
-			c_form[control_index].list[position].item = option;
+			c_form[control_index].list[position].item = shown;
 			c_form[control_index].list[position].id = id;
 			if (c_form[control_index].list_multiselect)
 				c_form[control_index].list[position].checked = selected;
@@ -2835,10 +2841,8 @@ class control {
 				speak(caption, false);
 			speak(typename, false);
 		} else {
-			if (interrupt_previous_speech == true)
-				speak(caption + " " + typename + hotkey_text, true);
-			else
-				speak(caption + " " + typename + hotkey_text, false);
+			// The caption and type name are translated apart, then joined, so a translation has a line for each.
+			speak(translate(caption) + " " + translate(typename) + hotkey_text, interrupt_previous_speech, tts_default_text_processing_callback, true, true);
 		}
 		if (hotkey_letter != "" && separate_attributes == true)
 			speak("Alt+" + hotkey_letter, false);
@@ -2854,9 +2858,9 @@ class control {
 					if (sel_end - sel_start >= 1024)
 						speak(highlight_selection_speech_text + " " + (sel_end - sel_start + 1) + " characters", false);
 					else
-						speak(highlight_selection_speech_text + " " + text.substr(sel_start, sel_end - sel_start + 1), false);
+						speak(translate(highlight_selection_speech_text) + " " + text.substr(sel_start, sel_end - sel_start + 1), false, tts_default_text_processing_callback, true, true);
 				} else
-					speak(read_line(current_line_start_position()), false);
+					speak(read_line(current_line_start_position()), false, tts_default_text_processing_callback, true, true);
 			} else
 				speak("Blank", false);
 		}
@@ -3338,7 +3342,7 @@ speak("Maximum length reached.");
 		cursor = pos;
 		sel_start = -1;
 		sel_end = -1;
-		if (!silent) speak(read_line(current_line_start_position()), false);
+		if (!silent) speak(read_line(current_line_start_position()), false, tts_default_text_processing_callback, true, true);
 		return true;
 	}
 	bool search(const string& in text, int dir = 1, bool silent = false) {
@@ -3391,7 +3395,7 @@ speak("Maximum length reached.");
 			sel_end = -1;
 			if (!silent) {
 				if (wrapped != "") speak(wrapped);
-				speak(read_line(current_line_start_position()), wrapped == "");
+				speak(read_line(current_line_start_position()), wrapped == "", tts_default_text_processing_callback, true, true);
 			}
 			return true;
 		} else
@@ -3450,7 +3454,7 @@ speak("Maximum length reached.");
 		sel_end = -1;
 		if (!multiline) {
 			cursor = text.length();
-			speak(read_line(0), true, null);
+			speak(read_line(0), true, null, true, true);
 			return;
 		}
 		int line_start = current_line_start_position();
@@ -3464,10 +3468,10 @@ speak("Maximum length reached.");
 			if (text[counter] != "\n")
 				continue;
 			cursor = counter + 1;
-			speak(read_line(cursor), true, null);
+			speak(read_line(cursor), true, null, true, true);
 			return;
 		}
-		speak(read_line(line_start), true, null);
+		speak(read_line(line_start), true, null, true, true);
 		cursor = text.length();
 	}
 	void previous_line() {
@@ -3479,14 +3483,14 @@ speak("Maximum length reached.");
 			if (text == "")
 				speak("Blank");
 			else
-				speak(read_line(0), true, null);
+				speak(read_line(0), true, null, true, true);
 			return;
 		}
 		cursor = line_start - 1;
 		cursor = current_line_start_position();
 		if (cursor < 0)
 			cursor = 0;
-		speak(read_line(cursor), true, null);
+		speak(read_line(cursor), true, null, true, true);
 	}
 	void highlight_all() {
 		if (text == "") {
@@ -3504,7 +3508,7 @@ speak("Maximum length reached.");
 		if (selection.length() >= 1024 || password_mask != "")
 			speak(selection.length() + " characters " + highlight_selection_speech_text);
 		else
-			speak(selection + " " + highlight_selection_speech_text, true, null);
+			speak(selection + " " + translate(highlight_selection_speech_text), true, null, true, true);
 	}
 	void add(string character, bool silent = false) {
 		if(type != ct_input)
@@ -3533,7 +3537,7 @@ speak("Maximum length reached.");
 			if (password_mask != "") {
 				for (uint i = 0; i < word.length(); i++) word[i] = password_mask;
 			}
-			speak(word, echo_flag != textflag_characters_words);
+			speak(word, echo_flag != textflag_characters_words, tts_default_text_processing_callback, true, true);
 		}
 	}
 	void edit(string character) {
@@ -3551,7 +3555,7 @@ speak("Maximum length reached.");
 			int temp_position = cursor - 1;
 			while (temp_position > 0 && (temp_position >= text.length() || audioform_word_separators .find(text[temp_position - 1]) < 0))
 				temp_position--;
-			speak(read_word_from_position(temp_position), echo_flag != textflag_characters_words);
+			speak(read_word_from_position(temp_position), echo_flag != textflag_characters_words, tts_default_text_processing_callback, true, true);
 		}
 	}
 	bool add_silent(string content, int position) {
@@ -4002,19 +4006,19 @@ speak("Maximum length reached.");
 				if (sel_end == -1)
 					sel_end = cursor - 1;
 				if (speak_selection_status) speak_selected(text.substr(sel_start, cursor - sel_start));
-				else speak(text.substr(sel_start, cursor - sel_start), true, null);
+				else speak(text.substr(sel_start, cursor - sel_start), true, null, true, true);
 				cursor = sel_start;
 				return;
 			} else if (cursor == sel_end || cursor - 1 == sel_end) {
 				sel_end = pos - 1;
-				if (speak_selection_status) speak(text.substr(pos, cursor - 1 - pos) + " " + highlight_unselection_speech_text, true, null);
-				else speak(text.substr(pos, cursor - 1 - pos), true, null);
+				if (speak_selection_status) speak(text.substr(pos, cursor - 1 - pos) + " " + translate(highlight_unselection_speech_text), true, null, true, true);
+				else speak(text.substr(pos, cursor - 1 - pos), true, null, true, true);
 				cursor = pos;
 				return;
 			}
 		}
 		if (cursor <= 0) {
-			speak(read_word_from_position(0), true, null);
+			speak(read_word_from_position(0), true, null, true, true);
 			return;
 		}
 		int cur_word = current_line_start_position(true);
@@ -4025,7 +4029,7 @@ speak("Maximum length reached.");
 			cursor = tmp_cursor;
 		}
 		cursor = cur_word;
-		speak(read_word_from_position(cur_word), true, null);
+		speak(read_word_from_position(cur_word), true, null, true, true);
 	}
 	void move_word_right(bool highlighting = false, bool speak_selection_status = true) {
 		if (text == "" || cursor < 0 || cursor >= text.length()) {
@@ -4210,9 +4214,10 @@ speak("Maximum length reached.");
 		sel_end = end;
 	}
 	void speak_list_item(bool interrupt = true) {
-		if (list_is_tab_panel) speak(list[list_position].item + " tab", (interrupt ? true : false));
-		else if (!list_is_tab_panel and list[list_position].checked) speak(list[list_position].item + " Checked", (interrupt ? true : false));
-		else speak(list[list_position].item, (interrupt ? true : false));
+		// Items were translated as they were added (add_list_item()), so only the words joined to them are translated here.
+		if (list_is_tab_panel) speak(list[list_position].item + " " + translate("tab"), interrupt, tts_default_text_processing_callback, true, true);
+		else if (!list_is_tab_panel and list[list_position].checked) speak(list[list_position].item + " " + translate("Checked"), interrupt, tts_default_text_processing_callback, true, true);
+		else speak(list[list_position].item, interrupt, tts_default_text_processing_callback, true, true);
 	}
 	/*
 	bool speak(string text, bool interrupt)

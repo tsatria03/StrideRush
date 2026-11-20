@@ -2,3 +2,9 @@
 canceled=Nothing was changed.
 * percent health remaining, * lives.=You have $2 lives and $1 percent health.
 * percent health remaining, 1 life.=You have 1 life and $1 percent health.
+back=return
+Language=Speech language
+List=dropdown
+Settings saved.=Your settings are stored.
+Press enter to continue.=Press enter to close this.
+Welcome to Stride Rush!=This line should never be heard.

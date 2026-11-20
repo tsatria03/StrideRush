@@ -1,11 +1,19 @@
 /* True while a dlg() message is open, so a game's joystick can give it a copy button (C) that it gives no other menu,
 where C would jump to items starting with c. */
 bool dlg_open = false;
+// The ending dlgmessage_return() adds, in the chosen language (translation.nvgt), so a copy can take it off again.
+string dlg_enter_ending()
+{
+return " " + translate("Press enter to continue.");
+}
+/* The message is translated once here and then spoken as it is, so a copy (C) holds what you heard. A message from
+dlgmessage_return() arrives already translated, its ending too. */
 bool dlg(string message, bool dlgcoppy=true, bool dlgsound=false, int timeout=-1)
 {
 timer timeouter;
+message = translate(message);
 if(dlgsound==true) temp.play_stationary(get_pack_sound("main/ui/dialog/*error*"),false);
-speak(message);
+speak(message, tts_default_interrupt, tts_default_text_processing_callback, true, true);
 dlg_open = dlgcoppy;
 while(true)
 {
@@ -21,11 +29,11 @@ if (key_repeating(KEY_C) and dlgcoppy==true)
 temp.destroy_all();
 temp.play_stationary(get_pack_sound("main/ui/dialog/*copy*"),false);
 speak("Text copied");
-clipboard_copy_text(string_replace(message, " Press enter to continue.", "", true));
+clipboard_copy_text(string_replace(message, dlg_enter_ending(), "", true));
 }
 if (key_repeating(KEY_LEFT) or key_repeating(KEY_RIGHT) or key_repeating(KEY_UP) or key_repeating(KEY_DOWN))
 {
-speak(message);
+speak(message, tts_default_interrupt, tts_default_text_processing_callback, true, true);
 }
 if (key_repeating(KEY_ESCAPE))
 {
@@ -66,5 +74,5 @@ temp.play_stationary(get_pack_sound("main/ui/dialog/*close*"),false);
 }
 void dlgmessage_return(string msg)
 {
-dlgmessage(msg + " Press enter to continue.");
+dlgmessage(translate(msg) + dlg_enter_ending()); // each half translated apart, then joined
 }
