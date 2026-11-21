@@ -3,6 +3,7 @@ const string keyboard_ini_path = "data/config/main/keyboard.ini";
 /* fire and duck each do all their own jobs (press, held and release), read by trigger in weapons.nvgt and player.nvgt. A
 keyboard.ini or joystick.ini from before that still has fire_held, duck_held or duck_release: any key on those lines that
 fire or duck lacks joins them, the old lines go, and a trigger on fire or duck is dropped, since it no longer means anything. */
+const string[] every_trigger_action_names = {"fire", "duck"};
 const string[] old_action_names = {"fire_held", "duck_held", "duck_release"};
 const string[] old_action_homes = {"fire", "duck", "duck"};
 // The action a line of an ini file sets, or "" for a section, comment or blank line.
@@ -41,7 +42,7 @@ content = string_replace(content, "\r\n", "\n", true);
 bool ends_in_newline = content.length() > 0 and content.substr(content.length() - 1) == "\n";
 string[]@ lines = content.split("\n", true);
 bool changed = false;
-string[] homes = {"fire", "duck"};
+string[] homes = every_trigger_action_names;
 for (uint h = 0; h < homes.length(); h++)
 {
 string[] names;
@@ -95,6 +96,7 @@ if (!file_exists(kpath))
 alert("Error", "Missing keyboard.ini at " + kpath + ".");
 return false;
 }
+controls.every_trigger_actions = every_trigger_action_names; // the rebind screen's clash rule
 merge_old_actions(kpath);
 if (!controls.load_keyboard(kpath))
 {

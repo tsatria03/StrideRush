@@ -221,6 +221,7 @@ class key_config {
 	private dictionary jb;        // action -> kc_joybind@[]
 	joystick@ pad = null;
 	kc_extra_button_callback@ extra_button = null;
+	string[] every_trigger_actions; // actions read by several triggers, whose keys clash with any other binding
 
 	// Frame-cached consumed-key set. Built once per frame on demand:
 	// any primary key used by a multi-key combo that's currently firing is
@@ -274,25 +275,32 @@ class key_config {
 		if (kb.exists(a)) kb.set(a, array<kc_combo@>());
 		invalidate_cache();
 	}
-	/* The binder's replace question: every action but except_action with a keyboard
-	binding that uses the same keys as one of combo_str's side variants (SHIFT+TAB overlaps LSHIFT+TAB), whatever its trigger. */
-	string[]@ actions_using(const string&in combo_str, const string&in except_action) {
+	// Can a binding on binding_action with this trigger share its key with one on another action? Only when the triggers differ.
+	private bool triggers_clash(const string&in binding_action, kc_trigger trigger, const string&in other_action, kc_trigger other_trigger) {
+		if (every_trigger_actions.find(binding_action) >= 0 or every_trigger_actions.find(other_action) >= 0) return true;
+		return trigger == other_trigger;
+	}
+	bool uses_every_trigger(const string&in action) { return every_trigger_actions.find(action) >= 0; }
+	/* The binder's replace question: every action but except_action with a keyboard binding that uses the same keys as one
+	of combo_str's side variants (SHIFT+TAB overlaps LSHIFT+TAB) and clashes with this trigger. */
+	string[]@ actions_using(const string&in combo_str, const string&in except_action, kc_trigger trigger) {
 		string[] found;
 		string[]@ actions = kb.get_keys();
 		for (uint a = 0; a < actions.length(); a++) {
 			if (actions[a] == except_action) continue;
-			if (overlap_count(actions[a], combo_str) > 0) found.insert_last(actions[a]);
+			if (overlap_count(actions[a], combo_str, except_action, trigger) > 0) found.insert_last(actions[a]);
 		}
 		return found;
 	}
-	// How many of an action's keyboard bindings use the same keys as one of combo_str's side variants.
-	int overlap_count(const string&in action, const string&in combo_str) {
+	// How many of an action's keyboard bindings use the same keys as one of combo_str's side variants and clash with binding_action's trigger.
+	int overlap_count(const string&in action, const string&in combo_str, const string&in binding_action, kc_trigger trigger) {
 		if (!kb.exists(action)) return 0;
 		kc_combo@[]@ list;
 		kb.get(action, @list);
 		string[] variants = _kc_expand_modifiers(combo_str);
 		int count = 0;
 		for (uint i = 0; i < list.length(); i++) {
+			if (!triggers_clash(binding_action, trigger, action, list[i].trigger)) continue;
 			for (uint v = 0; v < variants.length(); v++) {
 				kc_combo@ c = parse_combo(variants[v], KC_PRESS);
 				if (@c != null and same_keys(list[i].keys, c.keys)) {
@@ -310,13 +318,14 @@ class key_config {
 		kb.get(action, @list);
 		return int(list.length());
 	}
-	// Takes off only the bindings that overlap combo_str, so hand_left keeps A when Tab is replaced.
-	void unbind_combo(const string&in action, const string&in combo_str) {
+	// Takes off only the bindings that overlap combo_str and clash with the trigger, so hand_left keeps A when Tab is replaced.
+	void unbind_combo(const string&in action, const string&in combo_str, const string&in binding_action, kc_trigger trigger) {
 		if (!kb.exists(action)) return;
 		kc_combo@[]@ list;
 		kb.get(action, @list);
 		string[] variants = _kc_expand_modifiers(combo_str);
 		for (int i = int(list.length()) - 1; i >= 0; i--) {
+			if (!triggers_clash(binding_action, trigger, action, list[i].trigger)) continue;
 			for (uint v = 0; v < variants.length(); v++) {
 				kc_combo@ c = parse_combo(variants[v], KC_PRESS);
 				if (@c != null and same_keys(list[i].keys, c.keys)) {
@@ -346,32 +355,32 @@ class key_config {
 		jb.get(action, @list);
 		list.insert_last(@b);
 	}
-	// Takes every binding of the button off the action, whatever its trigger, as unbind_combo() does for keys.
-	void unbind_joystick_button(const string&in action, int button) {
+	// Takes the button's clashing bindings off the action, as unbind_combo() does for keys.
+	void unbind_joystick_button(const string&in action, int button, const string&in binding_action, kc_trigger trigger) {
 		if (!jb.exists(action)) return;
 		kc_joybind@[]@ list;
 		jb.get(action, @list);
 		for (int i = int(list.length()) - 1; i >= 0; i--)
-			if (list[i].button == button) list.remove_at(i);
+			if (list[i].button == button and triggers_clash(binding_action, trigger, action, list[i].trigger)) list.remove_at(i);
 	}
-	// Every action but except_action with the button bound, whatever its trigger, for the joystick replace question.
-	string[]@ actions_using_button(int button, const string&in except_action) {
+	// Every action but except_action with the button bound on a clashing trigger, for the joystick replace question.
+	string[]@ actions_using_button(int button, const string&in except_action, kc_trigger trigger) {
 		string[] found;
 		string[]@ actions = jb.get_keys();
 		for (uint a = 0; a < actions.length(); a++) {
 			if (actions[a] == except_action) continue;
-			if (button_overlap_count(actions[a], button) > 0) found.insert_last(actions[a]);
+			if (button_overlap_count(actions[a], button, except_action, trigger) > 0) found.insert_last(actions[a]);
 		}
 		return found;
 	}
-	// How many of an action's joystick bindings use the button.
-	int button_overlap_count(const string&in action, int button) {
+	// How many of an action's joystick bindings use the button on a trigger that clashes with binding_action's.
+	int button_overlap_count(const string&in action, int button, const string&in binding_action, kc_trigger trigger) {
 		if (!jb.exists(action)) return 0;
 		kc_joybind@[]@ list;
 		jb.get(action, @list);
 		int count = 0;
 		for (uint i = 0; i < list.length(); i++)
-			if (list[i].button == button) count++;
+			if (list[i].button == button and triggers_clash(binding_action, trigger, action, list[i].trigger)) count++;
 		return count;
 	}
 	int joystick_binding_count(const string&in action) {

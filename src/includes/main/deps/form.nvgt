@@ -131,7 +131,7 @@ form_background_callback@ audioform_default_background_callback = null;
 //main window class
 class audio_form {
 	bool active;
-	bool wrap_lists = true;
+	bool wrap_lists = false;
 	bool speak_control_attributes_separately;
 	int subform_control_index = -1;
 	on_control_event_callback@ event_callback = null;
