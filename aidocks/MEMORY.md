@@ -87,6 +87,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
+- [Shield toggle plan](plans/project_shield_toggle_plan.md) — SETTLED (2026-11-21, 2.8's third entry): switching a steel shield on and off from the inventory, with the wear and remove sounds, keeping its strength until it breaks; 3 sections; Q&A log
 - [Character upgrades plan](plans/project_character_upgrades_plan.md) — COMPLETE (2026-11-21, 2.8's second entry): a character category first in the player shop with attack, defence and shield defence, after SimpleFighter's arena shop; player_stats document; 3 sections; Q&A log
 - [Catch-all helper plan](plans/project_catch_all_helper_plan.md) — COMPLETE (2026-11-21, 2.8's first entry): the master helper, a seventh, premium helper at 15,000 gold coins doing all six helpers' jobs; 2 sections; Q&A log
 - [Helpers plan](plans/project_helpers_plan.md) — COMPLETE (2026-11-21, 2.7's tenth entry): animal, floor, force field and ladder helpers in the player shop's specials, a game document for each of the six helpers; 4 sections; Q&A log
