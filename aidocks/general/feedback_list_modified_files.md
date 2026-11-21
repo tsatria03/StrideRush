@@ -19,3 +19,5 @@ Condense the list (dev, 2026-11-15: "When you show the files that were changed, 
 Still give the git total, and the full per-file list only when the dev asks for it.
 
 This applies to the commit-ready summary at the end of a section too (dev, 2026-11-20: "Remember to always condence how many files you show that was commited. Not every single file."), after it had been forgotten across the aircrafts sections' wrap-ups: group by reason with counts (for example, "2 free run files in src/includes/main/globals/, the plan"), plus the git total.
+
+Use git status --short's line count as the total, as is (dev, 2026-11-20: "you said 13 changes, but I only see 5 in my git thing"): a new untracked folder is one change there, however many files it holds, so don't count its files.

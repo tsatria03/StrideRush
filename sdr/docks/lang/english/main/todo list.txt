@@ -1,5 +1,6 @@
 ####These are the things that need to be finished for future versions of the game.
 
+****Unfinished. Add gold packs that give you coins to spend in the shop.
 ****Unfinished. Add a shop that you can access in the game to buy items and special helpers.
 
 ##These are the things that are already finished from earlier versions of the game.
