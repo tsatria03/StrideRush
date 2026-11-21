@@ -1,7 +1,8 @@
 /* The player shop's specials: inventory items that are only ever bought, or given in a free run, never found on the belt.
 The use key, repeating while held like any item's, starts a slide or a good trampoline's flight, and switches a helper on or off. A helper lasts the whole run,
 through lost lives. The item helper takes every item in your lane as soon as a hand could; the door helper unlocks a real
-door with your first key once it's in key reach, then opens it as soon as a hand could. With no key it tries a locked door once, as a hand would. It leaves fake doors alone. */
+door with your first key once it's in key reach, then opens it as soon as a hand could. With no key it tries a locked door once, as a hand would. It leaves fake doors alone. The force field helper presses a
+field's switch, and the animal helper claps at an animal, as soon as a hand could. */
 const string[] helper_items = {"animal_helper", "door_helper", "floor_helper", "force_field_helper", "item_helper", "ladder_helper"};
 bool[] helpers_on(6); // one per helper_items entry
 
@@ -90,7 +91,14 @@ pick_up_capsule();
 pick_up_potion();
 pick_up_teleporter();
 }
-if (helper_active("door_helper") and !flying) door_helper_update();
+if (flying) return; // a flight carries you past doors, force fields and animals
+if (helper_active("door_helper")) door_helper_update();
+if (helper_active("force_field_helper"))
+{
+forcefield@ field = forcefield_in_reach();
+if (@field != null) press_forcefield_switch(field);
+}
+if (helper_active("animal_helper") and scare_animal()) p.play_stationary(get_pack_sound("main/misc/player/*clap*"), false);
 }
 // The next door ahead, if it's real: unlocked with your first key once in key reach, then opened in its hand window.
 void door_helper_update()
