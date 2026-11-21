@@ -1,4 +1,7 @@
 New in 2.7.
+Changed the default keys, so space now jumps, control or F fires your weapon, alt crouches, and left and right shift change lanes, alongside the arrow keys and letters that already did.
+Made it so either control key can now be bound on its own, such as for firing your weapons, and actions can now share a key when they use different triggers.
+Fixed a bug where rebinding your fire or crouch keys only moved part of the action, so each is now a single binding on the keyboard and joystick.
 Made it so lines your language doesn't translate yet are now always logged to a file named after it in your own lang folder, so the setting to log untranslated language lines has been removed.
 New in 2.6.
 Added aircrafts to practice runs, right after vehicles, with trampolines now coming before combinations, as well as free runs and the statistics, along with thirteen new achievements for shooting them down, dodging their landings and more.

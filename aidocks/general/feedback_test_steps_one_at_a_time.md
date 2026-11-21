@@ -28,3 +28,5 @@ AN EXPLICIT RESULT IS REQUIRED (dev, 2026-11-15, after Claude took a commit and 
 USE THE DEBUG RUN (dev, 2026-11-08: "For tests in the future, please tell me to use the debug run feature, not any other run unless you want me to play the real game."): test steps start a debug run (play game, debug run, then the spawn, speed, footsteps and "end the run when out of lives?" debug options), naming the choices that set up the test, such as "nothing" for an empty belt, one obstacle type, or "real doors" and a speed. Ask for an endless or practice run only when the test is about that mode itself (difficulties, stats, achievements, session results, practice rules).
 
 REPEATED (dev, 2026-11-18, starting the free run lanes tests: "when you show tests, make sure to say something like, test x of x"): open every test message with exactly "Test 1 of 5:" (not "Test step 1 of 5"), and keep it on every step.
+
+Docks never get test steps (dev, 2026-11-20: "recall that docks do not require test steps. I'll read those on my own time."). When a section only changes documents, list what changed and say it's ready to commit; don't ask the dev to read them as a test.

@@ -4,17 +4,17 @@ You have ten weapons, one on each number key from 1 to 0: the bat, boot, club, d
 
 How your weapons work.
 
-Press the space bar to swing a melee weapon or fire a gun, or the A button on a joystick. Your weapons always hit the nearest thing ahead of you, and that includes any item lying ahead of you in your lane, such as an ammo pack, key or shield, which breaks if you hit it. Items in other lanes are safe from your weapons.
+Press control or F to swing a melee weapon or fire a gun, or the A button on a joystick. Your weapons always hit the nearest thing ahead of you, and that includes any item lying ahead of you in your lane, such as an ammo pack, key or shield, which breaks if you hit it. Items in other lanes are safe from your weapons.
 Real doors and real walls can't be harmed. A vehicle can only be hit while it's in your lane, an aircraft only while you're in the air from your own jump, and an insect only while you're crouched.
 
 Melee weapons.
 
 The bat, boot, club, dagger, fist, hammer, knife and sword are melee weapons. A melee weapon's hit lands a moment after you swing it, on whatever is nearest within reach by then, and the stronger the weapon, the slower its swing: the bat lands almost at once, while the sword takes nearly half a second, so swing a heavy weapon early, before what you're aiming at reaches you.
-After each hit, a melee weapon needs a moment to recover before it can swing again, longer for the stronger ones, so pressing the space bar faster won't help. Switching weapons during a swing cancels it.
+After each hit, a melee weapon needs a moment to recover before it can swing again, longer for the stronger ones, so pressing the fire key faster won't help. Switching weapons during a swing cancels it.
 
 Guns.
 
-The pistol fires up to ten times a second, one shot per press, while the machine gun keeps firing ten times a second for as long as you hold the space bar. A gun fires a bullet that you'll hear flying off ahead of you until it lands. A bullet only flies as far as its gun reaches, so a shot fired at something still too far away falls short and wastes the round.
+The pistol fires up to ten times a second, one shot per press, while the machine gun keeps firing ten times a second for as long as you hold the fire key. A gun fires a bullet that you'll hear flying off ahead of you until it lands. A bullet only flies as far as its gun reaches, so a shot fired at something still too far away falls short and wastes the round.
 Each gun starts every run with 50 rounds loaded and 50 in reserve, and they keep their own ammo separately. A reserve can hold up to 200 rounds. Once a gun is empty you'll hear it click instead of firing. Press R to reload any time a gun isn't full, and you'll hear a ping when it's ready; switching weapons during a reload cancels it. When the reserve runs out, that gun is empty until you open an ammo pack. Press X to hear how much ammo your gun has loaded and in reserve.
 
 How far each weapon reaches.

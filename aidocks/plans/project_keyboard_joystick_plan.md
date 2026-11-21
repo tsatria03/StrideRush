@@ -1,6 +1,6 @@
 ---
 name: project_keyboard_joystick_plan
-description: SETTLED (2026-11-20, 2.7, before the shop, three entries for 2 to 4 of 10, 4 sections): keyboard and joystick bindings: fire and duck each become one action (fire_held, duck_held and duck_release removed, older ini files merged), clashes that respect triggers, Control bindable on its own for firing; Q&A log
+description: COMPLETE (2026-11-20, 2.7, before the shop, three entries for 2 to 4 of 10, 4 sections): keyboard and joystick bindings: fire and duck each become one action (fire_held, duck_held and duck_release removed, older ini files merged), clashes that respect triggers, Control bindable on its own for firing; Q&A log
 metadata:
   type: project
 ---
@@ -75,3 +75,6 @@ The dev's suggestions (2026-11-20, before building the shop): "Fix key binding i
 - Docks that name the changed keys, for section 4: keyboard_and_joystick.txt, movement.txt, weapons.txt (the space bar, three places), readme.txt's getting started.
 - Q (Claude): three entries on top (2.7 to 4 of 10, the shop's three then 5 to 7), newest first: "Changed the default keys, so space now jumps, control or F fires your weapon, alt crouches, and left and right shift change lanes, alongside the arrow keys and letters that already did."; "Made it so either control key can now be bound on its own, such as for firing your weapons, and actions can now share a key when they use different triggers."; "Fixed a bug where rebinding your fire or crouch keys only moved part of the action, so each is now a single binding on the keyboard and joystick." Recommended.
 - A (dev): yes. The three entries settled. Section 3 and the new default keys are ready to commit; section 4 waits for the dev's go-ahead.
+- Section 4 BUILT (2026-11-20, after 672b8c9): keyboard_and_joystick.txt (the new keys; the trigger example is now reload=X:release, with fire and duck noted, on its own line to stay under 1024 characters), movement.txt, weapons.txt ("the fire key"), readme.txt (getting started; the rebind paragraphs follow the new order, sharing rule and Control alone, the keyboard one split in two); the three entries on top (2.7 at 4 of 10); version history, controls plan and CLAUDE.md.
+- Dev: add the warning about Shift commands. keyboard_and_joystick.txt's keyboard intro now says: "Because left and right shift also change lanes, any command that uses shift during a run, such as shift plus tab, moves you a lane as well."
+- Dev: passed; docks need no test steps, the dev reads them on their own time. Section 4 and the plan COMPLETE.
