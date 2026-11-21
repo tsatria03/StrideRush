@@ -70,7 +70,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [No co-author lines](general/feedback_no_coauthor_lines.md) — commits Claude makes for the dev have no Co-Authored-By or other attribution line, only the dev's one-line message
 - [Update build/version.txt](general/feedback_update_build_version_txt.md) — version.txt is the source of truth; version.nvgt is generated
 - [Sounds before features](general/feedback_sounds_before_features.md) — nothing gets built until its sounds exist in sdr/sounds; design it and defer
-- [Docks later](general/feedback_docks_later.md) — HOLD LIFTED 2026-11-02: docks written in first-build Section 7; player-facing changes now get docks entries; todo list is player-facing entries only
+- [Docks later](general/feedback_docks_later.md) — HOLD LIFTED 2026-11-02: docks written in first-build Section 7; player-facing changes now get docks entries; todo list is player-facing entries only; an emptied todo section keeps its exact placeholder line
 - [Dock line length 1024](general/feedback_dock_line_length_1024.md) — lines in sdr/docks/ stay at or under 1024 chars
 - [Menu music rule](general/project_menu_music_rule.md) — the menu music plays through every main menu submenu; fades only for a run starting, opening a document, the settings menu, learn sounds, change game version, test speakers or check for updates, a clear, copy or export dialog, exit and restart; run menus silent (2026-11-07)
 - [One-sentence game messages](general/feedback_one_sentence_game_messages.md) — achievement announcements are the exception (2026-11-06); in-game speech is one sentence, no trailing advice

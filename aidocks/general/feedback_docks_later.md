@@ -19,3 +19,9 @@ When each file starts (agreed 2026-11-01, then updated the same day):
 UPDATE 2026-11-02: Section 7 is written, so the hold is lifted. From here on, player-facing changes get changelog entries (a new block pairs with a version bump), and finished todo entries move to the "already finished" section.
 
 **How to apply:** don't add changelog, readme or todo entries as part of building sections. Track what would need documenting in the relevant aidocks/plans/ file instead, and raise it when the dev says the docks are due.
+
+EMPTY TODO PLACEHOLDER (dev, 2026-11-20: "Save that placeholder line in your memmory so it's not forgotten"): when the last unfinished item moves to finished, the unfinished section of todo list.txt must keep this exact line, with a blank line on each side, under its #### heading:
+
+Nothing is waiting here right now. New bugs, planned changes and anything still to be decided will be listed here as they come up.
+
+Remove it when a new unfinished item is added, and put it back whenever the section empties again.
