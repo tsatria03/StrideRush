@@ -23,6 +23,7 @@ class form_menu {
 	audio_form form; // Only access if really needed.
 	// All properties from this point can be freely set while using this class.
 	string intro_text; // Spoken when intro() is called. Safe to set right before run().
+	string first_speech = ""; // said once in place of intro_text as the menu opens, which stays the menu's intro
 	string click_sound; // Played when the user changes positions in the menu.
 	string enter_sound; // Played when the user chooses an option in the menu.
 	string edge_sound; // Played when the user attempts moving beyond the border of a menu while wrapping is disabled.
@@ -171,7 +172,8 @@ class form_menu {
 		}
 		play(open_sound);
 		int count = list >= 0 ? form.get_list_count(list) : 0;
-		speak(intro_text.format(count));
+		speak(first_speech != "" ? first_speech : intro_text.format(count));
+		first_speech = "";
 		if (list < 0) return;
 		if (focus_first_item) {
 			form.focus_silently(list);

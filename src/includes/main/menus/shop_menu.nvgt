@@ -19,7 +19,7 @@ int focus = -1;
 while (true)
 {
 setupmenu();
-m.intro_text = "Shop menu. You have " + coins_text(shown_coins()) + " available to spend.";
+m.intro_text = "Welcome to the player shop. What would you like to buy?";
 m.add_item("items", "items");
 m.add_item("back", "back");
 int mres = m.run(focus, false, focus >= 0);
@@ -53,7 +53,7 @@ int focus = -1;
 while (true)
 {
 setupmenu();
-m.intro_text = "Items menu. You have " + coins_text(shown_coins()) + " available to spend.";
+m.intro_text = "Items menu.";
 for (uint i = 0; i < shop_item_ids.length(); i++)
 {
 string name = item_display_name(shop_item_ids[i]);
@@ -82,7 +82,8 @@ while (true)
 {
 int64 can_buy = shown_coins() / price;
 setupmenu();
-m.intro_text = news != "" ? news : learn_upper_first(name) + " menu. You have " + coins_text(shown_coins()) + " available to spend.";
+m.intro_text = learn_upper_first(name) + " menu. You have " + coins_text(shown_coins()) + " available to spend.";
+m.first_speech = news; // a purchase is said once, and the intro stays as it is
 for (uint i = 0; i < shop_pack_sizes.length(); i++)
 {
 int size = shop_pack_sizes[i];
@@ -105,7 +106,7 @@ continue;
 spend_coins(cost);
 give_item(item, int(amount));
 shop_purchase_sounds(cost);
-news = "You bought " + thousands_text(amount) + " " + shop_item_words(name, amount) + " for " + coins_text(cost) + ", and have " + coins_text(shown_coins()) + " left.";
+news = "You bought " + thousands_text(amount) + " " + shop_item_words(name, amount) + " for " + coins_text(cost) + ".";
 if (buy_all or shown_coins() < price)
 {
 dlgmessage_return(news);
