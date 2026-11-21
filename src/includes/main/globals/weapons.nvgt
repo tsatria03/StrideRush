@@ -84,14 +84,14 @@ swing_check();
 // The gun fire gaps and both parts of a swing go through current_fire_gap(), so the weapon powerups can speed them up or slow them down.
 if (weapon_names[current_weapon] == "machine_gun")
 {
-if (controls.action_triggered("fire_held") and firetimer.elapsed >= current_fire_gap(machine_gun_fire_gap)) fire_weapon();
+if (controls.action_down("fire") and firetimer.elapsed >= current_fire_gap(machine_gun_fire_gap)) fire_weapon(); // held, for as long as the key is down
 }
 else if (is_gun(current_weapon))
 {
-if (controls.action_triggered("fire") and firetimer.elapsed >= current_fire_gap(pistol_fire_gap)) fire_weapon();
+if (controls.action_pressed("fire") and firetimer.elapsed >= current_fire_gap(pistol_fire_gap)) fire_weapon();
 }
 // A press during a swing, or before its recovery has passed, does nothing.
-else if (controls.action_triggered("fire") and !swinging and firetimer.elapsed >= swing_recovery) start_swing();
+else if (controls.action_pressed("fire") and !swinging and firetimer.elapsed >= swing_recovery) start_swing();
 if (controls.action_triggered("reload")) start_reload();
 if (controls.action_triggered("ammo_check")) speak_ammo();
 }

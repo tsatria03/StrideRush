@@ -22,6 +22,7 @@ if (!file_exists(jpath))
 alert("Warning", "Missing joystick.ini at " + jpath + ", so the game will run with the keyboard only.");
 return;
 }
+merge_old_actions(jpath); // contfuncts.nvgt
 if (!controls.load_joystick_file(jpath))
 {
 alert("Warning", "Failed to load " + jpath + ", so the game will run with the keyboard only until you reinstall the game.");

@@ -1,5 +1,91 @@
 // Where the key bindings live, read at startup and written back by the rebind screen.
 const string keyboard_ini_path = "data/config/main/keyboard.ini";
+/* fire and duck each do all their own jobs (press, held and release), read by trigger in weapons.nvgt and player.nvgt. A
+keyboard.ini or joystick.ini from before that still has fire_held, duck_held or duck_release: any key on those lines that
+fire or duck lacks joins them, the old lines go, and a trigger on fire or duck is dropped, since it no longer means anything. */
+const string[] old_action_names = {"fire_held", "duck_held", "duck_release"};
+const string[] old_action_homes = {"fire", "duck", "duck"};
+// The action a line of an ini file sets, or "" for a section, comment or blank line.
+string ini_line_action(const string&in line)
+{
+string trimmed = line.trim_whitespace();
+if (trimmed.length() == 0 or trimmed.substr(0, 1) == ";" or trimmed.substr(0, 1) == "#" or trimmed.substr(0, 1) == "[") return "";
+int eq = trimmed.find_first("=");
+return eq < 0 ? "" : trimmed.substr(0, eq).trim_whitespace();
+}
+// Adds a line's keys to names, without their triggers, skipping any it already has in capitals or not.
+void collect_line_keys(const string&in line, string[]@ names, string[]@ seen)
+{
+int eq = line.find_first("=");
+if (eq < 0) return;
+string[]@ parts = line.substr(eq + 1).split(",", true);
+for (uint i = 0; i < parts.length(); i++)
+{
+string part = parts[i].trim_whitespace();
+int colon = part.find_first(":");
+if (colon >= 0) part = part.substr(0, colon).trim_whitespace();
+if (part == "" or seen.find(part.upper()) >= 0) continue;
+seen.insert_last(part.upper());
+names.insert_last(part);
+}
+}
+// From load_controls() and start_joystick(), before the file is read. It only writes the file when something changed.
+void merge_old_actions(const string&in path)
+{
+file f;
+if (!f.open(path, "rb")) return;
+string content = f.read();
+f.close();
+string eol = content.find("\r\n") >= 0 ? "\r\n" : "\n";
+content = string_replace(content, "\r\n", "\n", true);
+bool ends_in_newline = content.length() > 0 and content.substr(content.length() - 1) == "\n";
+string[]@ lines = content.split("\n", true);
+bool changed = false;
+string[] homes = {"fire", "duck"};
+for (uint h = 0; h < homes.length(); h++)
+{
+string[] names;
+string[] seen;
+int home_at = -1;
+int first_old = -1;
+for (uint i = 0; i < lines.length(); i++)
+{
+if (ini_line_action(lines[i]) != homes[h]) continue;
+if (home_at < 0) home_at = int(i);
+collect_line_keys(lines[i], names, seen);
+}
+for (uint i = 0; i < lines.length(); i++)
+{
+int old = old_action_names.find(ini_line_action(lines[i]));
+if (old < 0 or old_action_homes[old] != homes[h]) continue;
+if (first_old < 0) first_old = int(i);
+collect_line_keys(lines[i], names, seen);
+}
+if (home_at < 0) home_at = first_old; // no fire or duck line left: it takes the old line's place
+if (home_at < 0) continue;
+string joined = homes[h] + "=";
+for (uint i = 0; i < names.length(); i++) joined += (i > 0 ? "," : "") + names[i];
+if (lines[home_at].trim_whitespace() != joined)
+{
+lines[home_at] = joined;
+changed = true;
+}
+}
+for (int i = int(lines.length()) - 1; i >= 0; i--)
+{
+if (old_action_names.find(ini_line_action(lines[i])) < 0) continue;
+lines.remove_at(i);
+changed = true;
+}
+if (!changed) return;
+string output = "";
+for (uint i = 0; i < lines.length(); i++) output += lines[i] + (i + 1 < lines.length() ? eol : "");
+if (ends_in_newline and lines.length() > 0 and lines[lines.length() - 1] != "") output += eol; // the file keeps its last line ending
+file fw;
+if (!fw.open(path, "wb")) return; // read only: the game still runs, on fire and duck's own keys
+fw.write(output);
+fw.close();
+}
 // Loads the key bindings into controls at startup. A missing or broken keyboard.ini stops the game.
 bool load_controls()
 {
@@ -9,6 +95,7 @@ if (!file_exists(kpath))
 alert("Error", "Missing keyboard.ini at " + kpath + ".");
 return false;
 }
+merge_old_actions(kpath);
 if (!controls.load_keyboard(kpath))
 {
 alert("Error", "Failed to load " + kpath + ". Please reinstall the game.");

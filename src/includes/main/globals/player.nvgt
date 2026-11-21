@@ -79,7 +79,7 @@ shield_landing();
 capsule_landing();
 potion_landing();
 teleporter_landing();
-if (controls.action_triggered("duck_held") and can_duck()) start_duck();
+if (controls.action_down("duck") and can_duck()) start_duck(); // still holding it from the air
 }
 /* The player's own land sound together with the land clip of the tile under them. A force field's throw and a teleport
 pass false, so only the tile is heard. */
@@ -107,12 +107,12 @@ duckcooldowntimer.restart();
 }
 void duck_check()
 {
-if (ducked and (controls.action_triggered("duck_release") or ducktimer.elapsed >= current_duck_time())) // Long Crouch and Stiff Knees change this
+if (ducked and (controls.action_released("duck") or ducktimer.elapsed >= current_duck_time())) // Long Crouch and Stiff Knees change this
 {
 stop_duck();
 return;
 }
-if (controls.action_triggered("duck") and can_duck()) start_duck();
+if (controls.action_pressed("duck") and can_duck()) start_duck();
 }
 // "duck*" rather than "*duck*", which would also match unduck.ogg.
 void start_duck()
