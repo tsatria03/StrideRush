@@ -9,7 +9,7 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.7: FULL at 10 of 10 (2026-11-21), not tagged yet; build/version.txt is 2.7. The next player-facing change opens 2.8.
+## 2.7: tagged V2.70 at c2edccb (10 of 10; 2026-11-21); build/version.txt is 2.7. The next player-facing change opens "New in 2.8." and bumps build/version.txt to 2.8.
 - Helpers ([[project_helpers_plan]], 10 of 10): animal, floor, force field and ladder helpers join the item and door helpers in specials.nvgt (helper_items, helpers_on; helperon and helperoff sounds). Ladder and floor helpers go at ladder_rung_min_time(); your hands do nothing during their work, but a lane key still knocks you off a ladder. Each of the six has its own game document (50 in all).
 - Ammo reserve (the dev, 9 of 10): gun_max_reserve raised from 200 to 500; ammo packs read it, and the free run's own 1000 limit is unchanged. Test: 1 of 1 (a pack stops at 500, the next is refused and kept) PASSED.
 - Debug heartbeat (the dev, no entry, as debug options are source only): a "Do you want to hear your heartbeat while running?" debug option after footsteps (menu.nvgt's choose_heartbeat(), heartbeat.nvgt's heartbeat_on); every other kind of run keeps it on. Tests: 1 of 2 (silent with No, B still reads) PASSED; 2 of 2 (escape steps back through the questions, Yes keeps the beat) PASSED.
