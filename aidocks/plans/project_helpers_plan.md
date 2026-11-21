@@ -56,4 +56,5 @@ Versioning: 2.7 has 1 changelog entry left, so this plan either shares that entr
 - Q6: the names, prices and alphabetical order above? Dev: "that works".
 - Q7: should the new helpers' work count toward statistics and achievements? Dev: "I want them to count like the item/door helpers already do."
 - Sounds (dev, 2026-11-21): added main/misc/game/helperon.ogg and helperoff.ogg, to use instead of the generic toggle sounds. The generic ones stay in place for whatever else uses them.
+- Section 1 BUILT (2026-11-21, after 2e5bc36): specials.nvgt holds all six helpers in helper_items and helpers_on, with helperon and helperoff; the four new ones are in tuning.nvgt's specials and freebelt.nvgt's give, set and take lists. Tests: 1 of 3 (shop list and prices), 2 of 3 (free run give and the new toggle sounds), 3 of 3 (item and door helpers still work) all PASSED.
 - Build note: helpers_update() in specials.nvgt returns early while climbing or repairing, so the ladder and floor helpers need their own path there. The existing helpers call the normal pickup and door functions, which is why their work already counts in statistics and achievements.

@@ -2,33 +2,33 @@
 The use key, repeating while held like any item's, starts a slide or a good trampoline's flight, and switches a helper on or off. A helper lasts the whole run,
 through lost lives. The item helper takes every item in your lane as soon as a hand could; the door helper unlocks a real
 door with your first key once it's in key reach, then opens it as soon as a hand could. With no key it tries a locked door once, as a hand would. It leaves fake doors alone. */
-bool item_helper_on = false;
-bool door_helper_on = false;
+const string[] helper_items = {"animal_helper", "door_helper", "floor_helper", "force_field_helper", "item_helper", "ladder_helper"};
+bool[] helpers_on(6); // one per helper_items entry
 
 bool is_helper_item(const string&in item)
 {
-return item == "item_helper" or item == "door_helper";
+return helper_items.find(item) >= 0;
 }
 bool helper_active(const string&in item)
 {
-return item == "item_helper" ? item_helper_on : door_helper_on;
+int at = helper_items.find(item);
+return at >= 0 and helpers_on[at];
 }
 void set_helper(const string&in item, bool on)
 {
-if (item == "item_helper") item_helper_on = on;
-else door_helper_on = on;
+int at = helper_items.find(item);
+if (at >= 0) helpers_on[at] = on;
 }
 void reset_helpers()
 {
-item_helper_on = false;
-door_helper_on = false;
+for (uint i = 0; i < helpers_on.length(); i++) helpers_on[i] = false;
 }
-// The use key on a helper: "Item helper on." with the toggle sound.
+// The use key on a helper: "Item helper on." with its own on or off sound.
 void toggle_helper(const string&in item)
 {
 bool on = !helper_active(item);
 set_helper(item, on);
-p.play_stationary(get_pack_sound(on ? "main/ui/other/*toggleon*" : "main/ui/other/*toggleoff*"), false);
+p.play_stationary(get_pack_sound(on ? "main/misc/game/*helperon*" : "main/misc/game/*helperoff*"), false);
 speak_buffer(learn_upper_first(item_display_name(item)) + (on ? " on." : " off."), "items");
 }
 // The use key on a slide: one starts at once, as a free run's give slide does. True if it was used.
@@ -80,7 +80,7 @@ if (item == "slide" or item == "trampoline") speak_buffer("You're already slidin
 void helpers_update()
 {
 if (door_moving or sliding or climbing or repairing) return;
-if (item_helper_on)
+if (helper_active("item_helper"))
 {
 pick_up_ammopack();
 pick_up_goldpack();
@@ -90,7 +90,7 @@ pick_up_capsule();
 pick_up_potion();
 pick_up_teleporter();
 }
-if (door_helper_on and !flying) door_helper_update();
+if (helper_active("door_helper") and !flying) door_helper_update();
 }
 // The next door ahead, if it's real: unlocked with your first key once in key reach, then opened in its hand window.
 void door_helper_update()
