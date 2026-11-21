@@ -1,4 +1,5 @@
 New in 2.7.
+Added animal, floor, force field and ladder helpers to the player shop's specials, which do the work of your hands for you as the belt speeds up.
 Made it so each gun's reserve can now hold up to 500 rounds, up from 200.
 Added gold coin statistics and eleven new achievements for collecting and spending gold coins, and gold packs and the player shop's specials can now be given from a free run's console.
 Added specials to the player shop, a slide and a trampoline you can use whenever you like, and an item helper and a door helper you switch on to grab items in your lane and unlock and open real doors for you.

@@ -1,0 +1,24 @@
+Door helpers.
+
+A door helper unlocks and opens real doors for you, so you don't have to choose a key and press a hand as the door comes at you. It's a special you buy in the player shop for 3,500 gold coins.
+
+How a door helper works.
+
+While it's on, it unlocks the next real door with the first key in your inventory once the door is in reach, then opens it as soon as a hand could. You'll hear the lock and the door just as if you'd done it yourself.
+If you have no key, it tries the door once, and you'll hear that it's locked. You'll still need a key, so keep an ear out for one.
+It leaves fake doors alone, so you still need your weapons to break those. It also waits during a trampoline flight.
+
+Using one.
+
+Choose it in your inventory and use it to switch it on or off, and you'll hear its sound and be told which. Your inventory also says whether it's on, such as "door helper, on." You can still open doors by hand while it's off.
+
+Door helpers in a run.
+
+A door helper is never used up. It lasts for the rest of the run, even if you lose a life, and extra copies don't make it any stronger. It's gone when the run ends, along with the rest of your inventory.
+Every key it uses and door it opens counts in your statistics, just as if you'd done it yourself.
+
+Door helpers in practice and free runs.
+
+Door helpers aren't available in practice or timed runs.
+
+In a free run, you can give, set or take door helpers from modify player inventory, so you can try one without spending anything.

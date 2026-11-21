@@ -1,0 +1,31 @@
+Floor helpers.
+
+A floor helper rebuilds floor breakers for you, from opening the corridor to laying the last piece. It's a special you buy in the player shop for 5,500 gold coins, the most expensive thing there, since a floor breaker can end your run outright.
+
+How a floor helper works.
+
+While it's on, it opens a floor breaker's corridor as soon as a hand could. Once you reach the edge, it lays each piece with alternating hands at the fastest pace your level allows:
+
+Easy: one piece every 0.2 seconds.
+Medium: one piece every 0.25 seconds.
+Hard: one piece every 0.3 seconds.
+Insane: one piece every 0.35 seconds.
+Chaos: one piece every 0.4 seconds.
+
+You'll hear the corridor open, each piece go down and the repair, just as if you'd done it yourself. Your own hands do nothing during the repair, so a stray press can't drop you through the floor.
+It waits during a trampoline flight, since the flight carries you over the hole safely.
+
+Using one.
+
+Choose it in your inventory and use it to switch it on or off, and you'll hear its sound and be told which. Your inventory also says whether it's on, such as "floor helper, on." You can still repair floor breakers by hand while it's off.
+
+Floor helpers in a run.
+
+A floor helper is never used up. It lasts for the rest of the run, even if you lose a life, and extra copies don't make it any stronger. It's gone when the run ends, along with the rest of your inventory.
+Every floor breaker it repairs counts in your statistics, just as if you'd done it yourself.
+
+Floor helpers in practice and free runs.
+
+Floor helpers aren't available in practice or timed runs.
+
+In a free run, you can give, set or take floor helpers from modify player inventory, so you can try one without spending anything.

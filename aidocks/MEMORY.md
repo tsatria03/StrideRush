@@ -5,7 +5,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 ## Project
 - [Runner overview](general/project_runner_overview.md) — audio runner in legacy NVGT, first build COMPLETE and v1.0 playable (game 69dedf8, docks 0f0ccff), git repo tsatria03/StrideRush on main, assets in sdr/, CLAUDE.md written 2026-11-01 as a dispatcher
 - [Game design](general/project_game_design.md) — a lane runner (the dev's term) with three lanes, heard from behind, since 1.4 (2d side-scroller through 1.3), jump, duck or turn on cue or die, weapons/hands later, speed-up step timer with oneshot footsteps, ToyMania sound layout
-- [Version history](general/project_version_history.md) — every release newest first (2.7 open at 9 of 10, then 2.6 V2.60 at 95da019 down to 1.0), its entries in engine terms and plans; moved out of CLAUDE.md 2026-11-10; add each closed version here, not to CLAUDE.md
+- [Version history](general/project_version_history.md) — every release newest first (2.7 full at 10 of 10 and not tagged yet, then 2.6 V2.60 at 95da019 down to 1.0), its entries in engine terms and plans; moved out of CLAUDE.md 2026-11-10; add each closed version here, not to CLAUDE.md
 - [DualSense controller](general/user_dualsense_controller.md) — the dev owns and tests with a PS5 DualSense; cross is the game's A button; Bluetooth rumble needs SDL's PS5 rumble hint
 - [Tuning history](general/project_tuning_history.md) — how tuning.nvgt's values came to be (earlier values, the dev's reasons, dates), moved out of its comments 2026-11-15; read before changing a tuning value
 - [Core code history](general/project_core_code_history.md) — decision history moved out of the 12 core files' comments (game, spawner, decpool, environments, player, surface, lane, lives, endrun, difficulty, practice, practice_hints) 2026-11-15
@@ -87,7 +87,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
-- [Helpers plan](plans/project_helpers_plan.md) — SETTLED (2026-11-20, 2.7's tenth entry): animal, floor, force field and ladder helpers in the player shop's specials; 4 sections; Q&A log
+- [Helpers plan](plans/project_helpers_plan.md) — COMPLETE (2026-11-21, 2.7's tenth entry): animal, floor, force field and ladder helpers in the player shop's specials, a game document for each of the six helpers; 4 sections; Q&A log
 - [Keyboard and joystick plan](plans/project_keyboard_joystick_plan.md) — COMPLETE (2026-11-20, 2.7, entries 2 to 4 of 10, before the shop): fire and duck become one action each with older ini files merged, trigger-aware clashes, Control bindable alone, new default keys; 4 sections
 - [Shop plan](plans/project_shop_plan.md) — COMPLETE (2026-11-20, 2.7, entries 5 to 8 of 10): gold packs give coins in endless runs, the player shop on slash/F8, Y for coins, CookieCraze pack menus, items and specials (slide, trampoline, item helper, door helper), coin stats, 11 achievements; 5 sections
 - [Automatic translation log plan](plans/project_auto_translation_log_plan.md) — COMPLETE (2026-11-20, 2.7, first entry): the logging checkbox removed, untranslated lines always logged for any language but fallback

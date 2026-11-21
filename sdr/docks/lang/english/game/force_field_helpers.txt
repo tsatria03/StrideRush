@@ -1,0 +1,23 @@
+Force field helpers.
+
+A force field helper switches off force fields for you, so you don't have to press a hand during each countdown. It's a special you buy in the player shop for 2,500 gold coins.
+
+How a force field helper works.
+
+While it's on, it presses a force field's switch as soon as the field comes within reach of your hands. You'll hear the switch, then the field's sound changes as it shuts off, and you can run straight through.
+It waits during a trampoline flight, since the flight carries you past force fields safely.
+
+Using one.
+
+Choose it in your inventory and use it to switch it on or off, and you'll hear its sound and be told which. Your inventory also says whether it's on, such as "force field helper, on." You can still switch off force fields by hand while it's off.
+
+Force field helpers in a run.
+
+A force field helper is never used up. It lasts for the rest of the run, even if you lose a life, and extra copies don't make it any stronger. It's gone when the run ends, along with the rest of your inventory.
+Every force field it switches off counts in your statistics, just as if you'd done it yourself.
+
+Force field helpers in practice and free runs.
+
+Force field helpers aren't available in practice or timed runs.
+
+In a free run, you can give, set or take force field helpers from modify player inventory, so you can try one without spending anything.

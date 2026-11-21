@@ -1,0 +1,32 @@
+Ladder helpers.
+
+A ladder helper gets you over real walls, from grabbing the ladder to climbing the last rung. It's a special you buy in the player shop for 4,500 gold coins.
+
+How a ladder helper works.
+
+While it's on, it grabs a real wall's ladder as soon as a hand could. Once you reach the ladder, it climbs with alternating hands at the fastest pace your level allows:
+
+Easy: one rung every 0.2 seconds.
+Medium: one rung every 0.25 seconds.
+Hard: one rung every 0.3 seconds.
+Insane: one rung every 0.35 seconds.
+Chaos: one rung every 0.4 seconds.
+
+You'll hear the grab, each rung and the landing on the other side, just as if you'd climbed it yourself. Your own hands do nothing during the climb, so a stray press can't break its rhythm.
+Be careful: switching lanes while you're on the ladder still knocks you off, and you'll take the fall and then crash into the wall.
+It leaves fake walls alone, so you still need your weapons to break those. It also waits during a trampoline flight, since the flight carries you over the wall safely.
+
+Using one.
+
+Choose it in your inventory and use it to switch it on or off, and you'll hear its sound and be told which. Your inventory also says whether it's on, such as "ladder helper, on." You can still climb by hand while it's off.
+
+Ladder helpers in a run.
+
+A ladder helper is never used up. It lasts for the rest of the run, even if you lose a life, and extra copies don't make it any stronger. It's gone when the run ends, along with the rest of your inventory.
+Every real wall it climbs counts in your statistics, just as if you'd climbed it yourself.
+
+Ladder helpers in practice and free runs.
+
+Ladder helpers aren't available in practice or timed runs.
+
+In a free run, you can give, set or take ladder helpers from modify player inventory, so you can try one without spending anything.
