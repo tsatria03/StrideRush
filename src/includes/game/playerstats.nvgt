@@ -51,8 +51,8 @@ int weapon_hit_damage(int w)
 {
 return weapon_damage[w] * weapon_damage_multiplier + player_attack;
 }
-// Shield defence shows while you carry a steel shield or wear one.
+// Shield defence shows while you have a steel shield, on or off, as one on stays in the inventory.
 bool has_a_shield()
 {
-return shield_worn or item_count("steel_shield") > 0;
+return item_count("steel_shield") > 0;
 }

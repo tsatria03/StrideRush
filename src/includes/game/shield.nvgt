@@ -219,15 +219,21 @@ else p.play_stationary(get_pack_sound(shield_folder + "*hit*"), false);
 return true;
 }
 /* M: the worn shield's strength as the Game tab's shield format says (format_readout() in lives.nvgt): "Shield strength,
-80 percent.", "Shield strength, 320 of 400 endurance remaining.", or both. */
+80 percent.", "Shield strength, 320 of 400 endurance remaining.", or both. A shield you've taken off says so, with its
+strength: "Your shield is off, with 80 percent strength." */
 void speak_shield_strength()
 {
-if (!shield_worn)
+if (!shield_in_use)
 {
 speak_buffer("You're not wearing a shield.", "status");
 return;
 }
 string amount = format_readout(shield_format, shield_hp_left, shield_full());
+if (!shield_worn)
+{
+speak_buffer("Your shield is off, with " + amount + " strength.", "status");
+return;
+}
 speak_buffer("Shield strength, " + amount + (shield_format == 0 ? "." : " endurance remaining."), "status");
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.

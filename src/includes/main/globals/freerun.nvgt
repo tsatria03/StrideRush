@@ -441,7 +441,7 @@ m.add_item("modify player stats", "stats"); // attack, defence and shield defenc
 }
 m.add_item("modify practice hints", "hints");
 m.add_item("modify running speed", "speed");
-if (free_moving and shield_worn) m.add_item("modify shield strength", "shield"); // only while a shield is worn
+if (free_moving and shield_in_use) m.add_item("modify shield strength", "shield"); // a shield that's on, or one you've taken off
 m.add_item("modify spacing", "spacing"); // standing or running
 if (!free_moving) m.add_item("start running", "start");
 m.add_item("view current setup", "view");
@@ -593,7 +593,7 @@ lives = now;
 speak_buffer("You now have " + (now == 1 ? "1 life." : now + " lives."), "misc");
 return true;
 }
-// Modify shield strength, while one is worn: give, set or take. True once changed.
+// Modify shield strength, for a shield that's on or that you've taken off: give, set or take. True once changed.
 bool free_set_shield()
 {
 string way = free_change_choice("Choose how you'd like to change your shield's strength. Your shield currently has " + shield_hp_left + " of " + free_shield_full + " strength.", "shield strength");

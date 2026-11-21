@@ -35,8 +35,8 @@ string[] lines;
 string life_text = lives == 1 ? "1 life" : lives + " lives";
 // In the Game tab's health and shield formats, as H and M say them (format_readout() in lives.nvgt).
 lines.insert_last(stat_line("health", format_readout(health_format, player_health, max_health()) + ", " + life_text));
-if (!shield_worn) lines.insert_last(stat_line("shield", "none"));
-else lines.insert_last(stat_line("shield", format_readout(shield_format, shield_hp_left, shield_full()) + (shield_format == 0 ? "" : " endurance")));
+if (!shield_in_use) lines.insert_last(stat_line("shield", "none"));
+else lines.insert_last(stat_line("shield", (shield_worn ? "" : "off, ") + format_readout(shield_format, shield_hp_left, shield_full()) + (shield_format == 0 ? "" : " endurance")));
 // Your character upgrades, in the runs that can have them.
 if (shop_available() or free_run)
 {
