@@ -23,6 +23,23 @@ if (item == "attack") player_attack += amount;
 else if (item == "defence") player_defence += amount;
 else if (item == "shield_defence") player_shield_defence += amount;
 }
+int player_stat(const string&in item)
+{
+if (item == "attack") return player_attack;
+if (item == "defence") return player_defence;
+return player_shield_defence;
+}
+// "1 point" or "5 points".
+string points_text(int value)
+{
+return value == 1 ? "1 point" : value + " points";
+}
+// "1 attack point" or "5 attack points".
+string stat_points_text(const string&in item)
+{
+int value = player_stat(item);
+return value + " " + item_display_name(item) + (value == 1 ? " point" : " points");
+}
 // A blow after defence or shield defence, at least 1.
 int after_defence(int damage, int points)
 {

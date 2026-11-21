@@ -437,6 +437,7 @@ m.add_item("modify player health", "health");
 m.add_item("modify player inventory", "inventory"); // give, set and take items
 m.add_item("modify player lives", "lives");
 m.add_item("modify player specials", "specials"); // give powerup and give slide
+m.add_item("modify player stats", "stats"); // attack, defence and shield defence
 }
 m.add_item("modify practice hints", "hints");
 m.add_item("modify running speed", "speed");
@@ -471,6 +472,7 @@ else if (id == "clear_items") done = free_clear("item");
 else if (id == "clear_obstacles") done = free_clear("obstacle");
 else if (id == "clear_specials") done = free_clear("special");
 else if (id == "specials") done = free_specials_menu();
+else if (id == "stats") done = free_stats_menu();
 else if (id == "inventory") done = free_inventory_menu();
 else if (id == "ammo") done = free_set_reserve();
 else if (id == "unlimited") done = free_unlimited_menu();
@@ -614,6 +616,43 @@ if (now > free_shield_full) now = free_shield_full; // give stops at full streng
 if (now < 1) now = 1; // take never breaks the shield
 shield_hp_left = now;
 speak_buffer("Your shield's strength is now " + now + " of " + free_shield_full + ".", "misc");
+return true;
+}
+// Modify player stats: attack, defence, and shield defence while you carry or wear a shield. True once one is changed.
+bool free_stats_menu()
+{
+setupmenu();
+m.intro_text = "Choose the stat you'd like to change.";
+for (uint i = 0; i < shop_character_ids.length(); i++)
+{
+string stat_id = shop_character_ids[i];
+if (stat_id == "shield_defence" and !has_a_shield()) continue;
+m.add_item(stat_line(item_display_name(stat_id), points_text(player_stat(stat_id))), stat_id);
+}
+m.add_item("back", "back");
+int mres = m.run();
+if (mres < 0 or m.selected_item_id == "back") return false;
+string chosen = m.selected_item_id;
+return free_change_stat(chosen);
+}
+// Give, set or take one stat's points, from 0 up; take stops at 0. Like the shop's, they're gone when the run ends.
+bool free_change_stat(const string&in item)
+{
+string name = item_display_name(item);
+string way = free_change_choice("Choose how you'd like to change your " + name + ". You currently have " + stat_points_text(item) + ".", name);
+if (way == "") return false;
+string title = "Modify " + name;
+int n = way == "set" ? free_ask_number(title, "How many " + name + " points do you want?", 0, 1000) : free_change_amount(title, "How many", name + " points", way);
+if (n < 0)
+{
+speak("canceled");
+return false;
+}
+int current = player_stat(item);
+int now = way == "set" ? n : (way == "give" ? current + n : current - n);
+if (now < 0) now = 0;
+add_player_stat(item, now - current);
+speak_buffer("You now have " + stat_points_text(item) + ".", "misc");
 return true;
 }
 /* Modify ammo reserves, with a gun drawn that doesn't have unlimited rounds: give, set or take rounds. Give stops at 1000
