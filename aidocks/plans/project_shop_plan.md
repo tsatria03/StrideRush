@@ -1,6 +1,6 @@
 ---
 name: project_shop_plan
-description: SETTLED (2026-11-20, 2.7, three entries for 2 to 4 of 10): an endless run shop (backslash or F8) paid in coins from clean passes, CookieCraze-style pack menus, items and specials (slide, trampoline, item helper, door helper), coin stats and 9 achievements; 5 sections; Q&A log
+description: SETTLED (2026-11-20, 2.7, three entries for 4 to 6 of 10, after the keyboard and joystick plan): an endless run shop (backslash or F8) paid in coins from clean passes, CookieCraze-style pack menus, items and specials (slide, trampoline, item helper, door helper), coin stats and 9 achievements; 5 sections; Q&A log
 metadata:
   type: project
 ---
@@ -40,7 +40,7 @@ The todo item "Add a shop that you can access in the game to buy items and speci
 2. The shop with its items: the backslash and F8 binding, pausing and dlgplay open and close, the items and specials menu, item lines, pack menus and buy all, errors, the purchase sounds and coin bands.
 3. Specials: the four inventory items, the specials list, using the slide and trampoline, the helpers' toggles and behaviour; free run's give, take and set items.
 4. Achievements: the nine in achievements.ini; the achievements menu's keys.
-5. Docks: shop.txt and the other documents, the three entries (2.7 at 4 of 10), the todo item to finished, the template script rerun (english.lng by hand), version history.
+5. Docks: shop.txt and the other documents, the three entries (2.7 at 6 of 10), the todo item to finished, the template script rerun (english.lng by hand), version history.
 
 ## Q&A log
 
