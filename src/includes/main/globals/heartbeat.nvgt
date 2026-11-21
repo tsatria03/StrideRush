@@ -7,6 +7,7 @@ ends. clear_run_objects() stops it, so a death silences it with everything else.
 sound_pool heartpool;
 timer heartbeat_timer; // paused and resumed with the run's other timers (pause_menu.nvgt)
 bool heart_beat_now = true; // the next beat plays at once: a run's first, or the first after a door sets you down
+bool heartbeat_on = true; // the debug heartbeat question; every other run keeps it on (menu.nvgt)
 int heartbeat_volume = 0; // in dB, -100 to 0, set only by the Game tab's "Game heartbeat volume," slider
 
 /* A straight line from heart_start_bpm at start_step_time to heart_max_bpm at heart_full_speed_ms, rounded, and held at
@@ -34,7 +35,7 @@ heart_beat_now = true;
 // Every frame from run_loop(): a beat whenever the gap for the heart rate has passed.
 void heartbeat_check()
 {
-if (door_moving or sliding or free_standing() or (free_run and !free_heartbeat_on)) // a free run's silent heartbeat too (freerun.nvgt)
+if (!heartbeat_on or door_moving or sliding or free_standing() or (free_run and !free_heartbeat_on)) // a free run's silent heartbeat too (freerun.nvgt)
 {
 heart_beat_now = true; // silent until then, and straight back once it ends
 return;

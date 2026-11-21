@@ -245,18 +245,18 @@ else play_game();
 /* Play game. It opens the mode menu: endless and timed runs go on to the difficulty menu (choose_difficulty()) and play
 the real game (the level's speed and floor, everything spawning, starting_lives, and the run ends when lives run out);
 practice run goes on to the practice menus (choose_practice()); free run to its setup (choose_free_setup()); and debug
-run, from source only, goes on to the debug options in this order: the environment, spawn, speed, footsteps, then
+run, from source only, goes on to the debug options in this order: the environment, spawn, speed, footsteps, heartbeat, then
 whether lives can run out. Escape steps back one menu silently: from the mode menu to the game menu, and from each
 debug option to the one before. They're all nested menus, so nothing says "canceled". A debug run of "all" starts with
 starting_lives, and any single-type choice with debug_lives. */
 void play_game()
 {
-int speed = start_step_time, can_run_out = 1, steps = 1;
+int speed = start_step_time, can_run_out = 1, steps = 1, beats = 1;
 string only_type = "all";
 bool practicing = false;
 int level = -1; // the endless or timed run's difficulty, or -1
 int stage = 0;
-while (stage < 6)
+while (stage < 7)
 {
 if (stage == 0)
 {
@@ -280,7 +280,8 @@ speed = practice_speed;
 only_type = practice_spawn_id(practice_type);
 can_run_out = 0;
 steps = 1;
-stage = 6;
+beats = 1;
+stage = 7;
 }
 else if (mode == "free")
 {
@@ -292,7 +293,8 @@ speed = free_start_step_time();
 only_type = "free"; // only what you add from the console (freebelt.nvgt)
 can_run_out = 1;
 steps = 1;
-stage = 6;
+beats = 1;
+stage = 7;
 }
 else if (mode == "endless" or mode == "timed")
 {
@@ -307,7 +309,8 @@ speed = difficulty_start_times[level];
 only_type = "all";
 can_run_out = 1;
 steps = 1;
-stage = 6;
+beats = 1;
+stage = 7;
 }
 else stage = 1;
 }
@@ -340,13 +343,19 @@ else if (stage == 4)
 steps = choose_footsteps();
 stage = steps < 0 ? 3 : 5;
 }
+else if (stage == 5)
+{
+beats = choose_heartbeat();
+stage = beats < 0 ? 4 : 6;
+}
 else
 {
 can_run_out = choose_lives_can_end();
-stage = can_run_out < 0 ? 4 : 6;
+stage = can_run_out < 0 ? 5 : 7;
 }
 }
 footsteps_on = steps == 1;
+heartbeat_on = beats == 1;
 m.fade_music();
 /* Returns when the run ends, back to the game menu. A run starts over with the same choices when restart run was picked,
 when the debug No answer turned a hazard death into a restart, or when you choose replay run after a death
@@ -402,7 +411,7 @@ while (true)
 {
 setupmenu();
 m.intro_text = "Choose the game you'd like to play.";
-if (!SCRIPT_COMPILED) m.add_item("Debug run. This mode lets you choose the speed, obstacles, footsteps and whether lives run out, for testing.", "debug");
+if (!SCRIPT_COMPILED) m.add_item("Debug run. This mode lets you choose the speed, obstacles, footsteps, heartbeat and whether lives run out, for testing.", "debug");
 // Locked, a mode reads only its requirement; open, just its description, with no "Available.".
 if (endless_unlocked()) m.add_item("Endless run. This mode lets you run for as long as you can survive. The belt gets faster and more obstacles join as you go, and the run ends when you run out of lives or fall into a hazard.", "endless");
 else m.add_item("Endless run. Unlocked " + endless_lock_reason(), "endless");
@@ -636,7 +645,7 @@ void add_spawn_choice(string[]@ labels, dictionary@ ids, const string&in label, 
 labels.insert_last(label);
 ids.set(label, id);
 }
-/* DEBUG OPTION: whether you hear your footsteps while running, asked before the run-ending question. No silences every
+/* DEBUG OPTION: whether you hear your footsteps while running, asked before the heartbeat question. No silences every
 footstep, so only the belt's sounds are left; landings still play. It only appears when running from source; a
 compiled release always answers Yes. Returns 1 for Yes, 0 for No, or -1 if escaped. */
 int choose_footsteps()
@@ -648,6 +657,19 @@ m.add_item("Yes", "yes");
 m.add_item("No", "no");
 int mres = m.run();
 if (mres < 0) return -1; // silent: escape just steps back to the speed menu
+return m.selected_item_id == "yes" ? 1 : 0;
+}
+/* DEBUG OPTION: whether you hear your heartbeat while running, asked after the footsteps. It only appears when running
+from source; a compiled release always answers Yes. Returns 1 for Yes, 0 for No, or -1 if escaped. */
+int choose_heartbeat()
+{
+if (SCRIPT_COMPILED) return 1;
+setupmenu();
+m.intro_text = "Do you want to hear your heartbeat while running?";
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+int mres = m.run();
+if (mres < 0) return -1; // silent: escape just steps back to the footsteps question
 return m.selected_item_id == "yes" ? 1 : 0;
 }
 /* DEBUG OPTION: the environment, the first debug option, before the spawn menu: each environment to stay in for the
@@ -677,6 +699,6 @@ m.intro_text = "Do you want the run to end when you run out of lives?";
 m.add_item("Yes", "yes");
 m.add_item("No", "no");
 int mres = m.run();
-if (mres < 0) return -1; // silent: escape just steps back to the footsteps question
+if (mres < 0) return -1; // silent: escape just steps back to the heartbeat question
 return m.selected_item_id == "yes" ? 1 : 0;
 }
