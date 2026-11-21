@@ -28,8 +28,8 @@ int mres = m.run(focus, false, focus >= 0);
 if (mres < 0 or m.selected_item_id == "back") break;
 focus = mres;
 if (m.selected_item_id == "character") shop_open_character();
-else if (m.selected_item_id == "specials") shop_open_category("specials", shop_special_ids, shop_special_prices);
-else shop_open_category("items", shop_item_ids, shop_item_prices);
+else if (m.selected_item_id == "specials") shop_category_menu("specials", shop_special_ids, shop_special_prices);
+else shop_category_menu("items", shop_item_ids, shop_item_prices);
 }
 speak("You're now exiting the player shop.");
 dlgplay(get_pack_sound(shop_sounds + "*close*"));
@@ -46,24 +46,15 @@ if (shop_character_ids[i] == "shield_defence" and !has_a_shield()) continue;
 ids.insert_last(shop_character_ids[i]);
 prices.insert_last(shop_character_prices[i]);
 }
-shop_open_category("character", ids, prices);
+shop_category_menu("character", ids, prices);
 }
 // What a category's things are called in its errors.
 string shop_things(const string&in word)
 {
 return word == "character" ? "character upgrades" : word;
 }
-// The lowest price in a category: with less than this, the category won't open.
-int shop_cheapest(const int[]&in prices)
-{
-int lowest = prices[0];
-for (uint i = 1; i < prices.length(); i++)
-{
-if (prices[i] < lowest) lowest = prices[i];
-}
-return lowest;
-}
-// A category's list, each thing with its price and how many you can afford; word is "character", "items" or "specials".
+/* A category's list, each thing with its price and how many you can afford; word is "character", "items" or "specials".
+It always opens, so you can see what you're saving for, and choosing something you can't afford gives an error. */
 void shop_category_menu(const string&in word, const string[]&in ids, const int[]&in prices)
 {
 int focus = -1;
@@ -83,21 +74,11 @@ int at = ids.find(m.selected_item_id);
 string name = item_display_name(ids[at]);
 if (shown_coins() < prices[at])
 {
-shop_error(shown_coins() < 1 ? "Error! You have no gold coins to buy " + shop_things(word) + " with!" : "Error! You can't afford another " + shop_item_words(name, 1) + "!");
+shop_error(shown_coins() < 1 ? "Error! You have no gold coins to buy " + shop_things(word) + " with!" : "Error! You can't afford 1 " + shop_item_words(name, 1) + "!");
 continue;
 }
 shop_pack_menu(ids[at], prices[at]);
 }
-}
-// Opens a category, or says why not when nothing in it is affordable.
-void shop_open_category(const string&in word, const string[]&in ids, const int[]&in prices)
-{
-if (shown_coins() < shop_cheapest(prices))
-{
-shop_error(shown_coins() < 1 ? "Error! You have no gold coins to buy " + shop_things(word) + " with!" : "Error! You can't afford any of these " + shop_things(word) + "!");
-return;
-}
-shop_category_menu(word, ids, prices);
 }
 // One thing's packs. A purchase keeps you on its line, unless it was buy all or you can't afford another.
 void shop_pack_menu(const string&in item, int price)

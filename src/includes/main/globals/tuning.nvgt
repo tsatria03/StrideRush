@@ -256,10 +256,12 @@ const int ammo_pack_chance = 8;
 const int ammo_pack_min = 5;
 const int ammo_pack_max = 10;
 /* Gold packs. About one spawn in gold_pack_chance is a gold pack, in endless runs from the first step. Opening one gives a
-random amount of coins between these, one entry per level, easy to chaos. */
-const int gold_pack_chance = 8;
+random amount of coins between these, one entry per level, easy to chaos. In an endless run it pays gold_pack_start_percent
+of that at the level's start speed, rising steadily to all of it at the level's top speed. */
+const int gold_pack_chance = 4;
 const int[] gold_pack_min_coins = {100, 200, 300, 400, 500};
 const int[] gold_pack_max_coins = {300, 600, 900, 1200, 1500};
+const int gold_pack_start_percent = 10;
 /* The shop (shop_menu.nvgt): what it sells and for how many gold coins, the pack sizes, and which coin sound a purchase
 plays: below the first step coin1, then one more along for each step reached. */
 const string[] shop_character_ids = {"attack", "defence", "shield_defence"};

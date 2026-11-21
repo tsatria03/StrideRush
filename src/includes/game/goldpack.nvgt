@@ -185,12 +185,23 @@ stop_goldpack(goldpacks[i]);
 }
 goldpacks.resize(0);
 }
-/* The use key on a gold pack: a random amount for the level (easy's outside a difficulty), saved at once in an endless
-run so a crash can't lose it. Always used. */
+/* How much of its amount a pack pays when opened now: in an endless run, gold_pack_start_percent at the level's start speed
+up to 100 at its top speed, by the belt's own speed so powerups don't change it. Every other run pays it all. */
+int goldpack_percent()
+{
+if (!stats_counting) return 100;
+int start = difficulty_start_times[run_difficulty];
+int top = run_top_step_time();
+if (step_time <= top) return 100;
+if (step_time >= start) return gold_pack_start_percent;
+return gold_pack_start_percent + (100 - gold_pack_start_percent) * (start - step_time) / (start - top);
+}
+/* The use key on a gold pack: a random amount for the level (easy's outside a difficulty), scaled by goldpack_percent() and
+saved at once in an endless run so a crash can't lose it. Always used. */
 bool use_goldpack()
 {
 int at = run_difficulty >= 0 ? run_difficulty : 0;
-int amount = random(gold_pack_min_coins[at], gold_pack_max_coins[at]);
+int amount = random(gold_pack_min_coins[at], gold_pack_max_coins[at]) * goldpack_percent() / 100;
 p.play_stationary(get_pack_sound(goldpack_folder + "*use*"), false);
 speak_buffer("You got " + coins_text(amount) + ".", "items");
 if (!stats_counting)
