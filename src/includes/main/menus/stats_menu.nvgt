@@ -38,7 +38,7 @@ lines.insert_last(stat_line("health", format_readout(health_format, player_healt
 if (!shield_in_use) lines.insert_last(stat_line("shield", "none"));
 else lines.insert_last(stat_line("shield", (shield_worn ? "" : "off, ") + format_readout(shield_format, shield_hp_left, shield_full()) + (shield_format == 0 ? "" : " endurance")));
 // Your character upgrades, in the runs that can have them.
-if (shop_available() or free_run)
+if (shop_available())
 {
 lines.insert_last(stat_line("attack", points_text(player_attack)));
 lines.insert_last(stat_line("defence", points_text(player_defence)));

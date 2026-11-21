@@ -36,3 +36,4 @@ The dev's idea: the player shop should open in free runs, as it does in debug ru
 - Dev: "Oh I forgot about that. I do want both if possible. We can start a small plan for this."
 - Q1, dev: "Will it have give/set/take like the other modify options do?" (yes), then: "I want the input cap to be 1000000, not 999999".
 - Q2: the changelog wording? Dev: "That works for me." Plan SETTLED.
+- Section 1 BUILT (2026-11-21): shop_available() includes free runs, free_set_gold() and the modify player gold item in freerun.nvgt, free_ask_number() reads 7 digits. Tests: 1 of 3 (modify player gold), 2 of 3 (buying in a free run), 3 of 3 (the balance stays separate, and practice has no shop) all PASSED.

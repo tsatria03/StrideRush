@@ -363,7 +363,7 @@ if (controls.action_triggered("free_console") and free_run)
 free_console();
 return;
 }
-// Slash or F8: the shop, in endless and debug runs (shop_menu.nvgt).
+// Slash or F8: the shop, in endless, debug and free runs (shop_menu.nvgt).
 if (controls.action_triggered("shop") and shop_available())
 {
 shop_menu();
