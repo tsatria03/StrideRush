@@ -36,6 +36,7 @@ Floor helper: 5,500 gold coins. Opens and repairs floor breakers.
 Force field helper: 2,500 gold coins. Switches off force fields.
 Item helper: 4,000 gold coins. Picks up items in your lane.
 Ladder helper: 4,500 gold coins. Grabs and climbs real walls' ladders.
+Master helper: 15,000 gold coins. Does the jobs of all six other helpers at once.
 Slide: 1,250 gold coins. Using one puts you on a slide straight away.
 Trampoline: 1,750 gold coins. Using one launches you on a good trampoline's flight from where you are.
 

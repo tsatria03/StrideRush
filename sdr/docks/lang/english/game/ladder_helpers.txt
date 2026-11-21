@@ -14,7 +14,7 @@ Chaos: one rung every 0.4 seconds.
 
 You'll hear the grab, each rung and the landing on the other side, just as if you'd climbed it yourself. Your own hands do nothing during the climb, so a stray press can't break its rhythm.
 Be careful: switching lanes while you're on the ladder still knocks you off, and you'll take the fall and then crash into the wall.
-It leaves fake walls alone, so you still need your weapons to break those. It also waits during a trampoline flight, since the flight carries you over the wall safely.
+It leaves fake walls alone, so you still need your weapons to break those. It also waits during a slide or a trampoline flight, since either one carries you past the wall safely.
 
 Using one.
 

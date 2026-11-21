@@ -5,7 +5,7 @@ An animal helper claps for you, so you never have to press both hands together t
 How an animal helper works.
 
 While it's on, it claps as soon as an animal comes within reach of your hands, and the animal runs off, just as if you'd clapped yourself. You'll hear the clap and the animal being scared, and it only claps when there's an animal to scare.
-It waits during a trampoline flight, since the flight carries you past animals safely.
+It waits during a slide or a trampoline flight, since either one carries you past animals safely.
 
 Using one.
 

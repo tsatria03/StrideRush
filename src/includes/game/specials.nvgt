@@ -4,9 +4,10 @@ through lost lives. The item helper takes every item in your lane as soon as a h
 door with your first key once it's in key reach, then opens it as soon as a hand could. With no key it tries a locked door once, as a hand would. It leaves fake doors alone. The force field helper presses a
 field's switch, and the animal helper claps at an animal, as soon as a hand could. The ladder helper grabs a ladder and
 the floor helper opens a floor breaker the same way, then each climbs or repairs with alternating hands at the fastest
-pace the level allows, while your own hands do nothing there. */
-const string[] helper_items = {"animal_helper", "door_helper", "floor_helper", "force_field_helper", "item_helper", "ladder_helper"};
-bool[] helpers_on(6); // one per helper_items entry
+pace the level allows, while your own hands do nothing there. The master helper does all six jobs while it's on, and each
+other helper keeps its own setting underneath. */
+const string[] helper_items = {"animal_helper", "door_helper", "floor_helper", "force_field_helper", "item_helper", "ladder_helper", "master_helper"};
+bool[] helpers_on(7); // one per helper_items entry
 
 bool is_helper_item(const string&in item)
 {
@@ -16,6 +17,11 @@ bool helper_active(const string&in item)
 {
 int at = helper_items.find(item);
 return at >= 0 and helpers_on[at];
+}
+// Whether a helper's job is being done: by that helper, or by the master helper. helper_active() is its own setting.
+bool helper_working(const string&in item)
+{
+return helper_active(item) or helper_active("master_helper");
 }
 void set_helper(const string&in item, bool on)
 {
@@ -85,15 +91,15 @@ void helpers_update()
 if (door_moving or sliding) return;
 if (climbing)
 {
-if (helper_active("ladder_helper") and runtimer.elapsed - climb_last_rung_at >= ladder_rung_min_time()) climb_hand(climb_last_hand == 1, climb_last_hand != 1);
+if (helper_working("ladder_helper") and runtimer.elapsed - climb_last_rung_at >= ladder_rung_min_time()) climb_hand(climb_last_hand == 1, climb_last_hand != 1);
 return;
 }
 if (repairing)
 {
-if (helper_active("floor_helper") and (repair_laid == 0 or runtimer.elapsed - repair_last_at >= ladder_rung_min_time())) repair_hand(repair_last_hand == 1, repair_last_hand != 1);
+if (helper_working("floor_helper") and (repair_laid == 0 or runtimer.elapsed - repair_last_at >= ladder_rung_min_time())) repair_hand(repair_last_hand == 1, repair_last_hand != 1);
 return;
 }
-if (helper_active("item_helper"))
+if (helper_working("item_helper"))
 {
 pick_up_ammopack();
 pick_up_goldpack();
@@ -104,15 +110,15 @@ pick_up_potion();
 pick_up_teleporter();
 }
 if (flying) return; // a flight carries you past doors, force fields and animals
-if (helper_active("door_helper")) door_helper_update();
-if (helper_active("force_field_helper"))
+if (helper_working("door_helper")) door_helper_update();
+if (helper_working("force_field_helper"))
 {
 forcefield@ field = forcefield_in_reach();
 if (@field != null) press_forcefield_switch(field);
 }
-if (helper_active("animal_helper") and scare_animal()) p.play_stationary(get_pack_sound("main/misc/player/*clap*"), false);
-if (helper_active("ladder_helper")) grab_ladder(true, false);
-if (helper_active("floor_helper")) open_floor_breaker(true, false);
+if (helper_working("animal_helper") and scare_animal()) p.play_stationary(get_pack_sound("main/misc/player/*clap*"), false);
+if (helper_working("ladder_helper")) grab_ladder(true, false);
+if (helper_working("floor_helper")) open_floor_breaker(true, false);
 }
 // The next door ahead, if it's real: unlocked with your first key once in key reach, then opened in its hand window.
 void door_helper_update()

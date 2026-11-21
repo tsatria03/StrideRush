@@ -1,0 +1,50 @@
+Master helpers.
+
+The master helper does the jobs of all six other helpers at once, so one item handles everything your hands would do. It's a special you buy in the player shop for 15,000 gold coins, which is 8,000 less than buying all six separately.
+
+What it covers.
+
+While it's on, it does each of these jobs, by the same rules as the helper that normally does it:
+
+Animals: it claps as soon as an animal comes within reach of your hands, and the animal runs off. It only claps when there's an animal to scare.
+Real doors: it unlocks the next real door with the first key in your inventory once the door is in reach, then opens it as soon as a hand could. With no key, it tries the door once, and you'll hear that it's locked.
+Floor breakers: it opens the corridor as soon as a hand could. Once you reach the edge, it lays each piece with alternating hands at the fastest pace your level allows.
+Force fields: it presses a field's switch as soon as the field comes within reach of your hands, and you can run straight through.
+Items: it picks up every item in your lane as soon as a hand could reach it, keys and gold packs included.
+Real walls: it grabs the ladder as soon as a hand could. Once you reach it, it climbs with alternating hands at the fastest pace your level allows.
+
+The fastest pace for a rung or a floor piece depends on your level:
+
+Easy: one every 0.2 seconds.
+Medium: one every 0.25 seconds.
+Hard: one every 0.3 seconds.
+Insane: one every 0.35 seconds.
+Chaos: one every 0.4 seconds.
+
+You'll hear every job's normal sounds, just as if you'd done it yourself. Your own hands do nothing during a climb or a repair, so a stray press can't break its rhythm.
+
+What it doesn't cover.
+
+It doesn't protect you from damage, and it never jumps, crouches, changes lanes or fires for you. Hazards, spikes, mines, projectiles, barriers, winds, vehicles, aircrafts and insects are still up to you, and so are fake walls and fake doors, which need your weapons.
+Items in other lanes still pass you by, since it can't move you. Keys are the only thing it uses from your inventory, so potions, shields, packs and everything else wait for you to use them.
+Be careful: switching lanes while you're on a ladder still knocks you off, and you'll take the fall and then crash into the wall.
+During a trampoline flight it only picks up items, and leaves the other jobs until you land, since the flight carries you past them safely. It does nothing on a slide, which carries you past them too and catches the items in your lane by itself.
+
+Using one.
+
+Choose it in your inventory and use it to switch it on or off, and you'll hear its sound and be told which. Your inventory also says whether it's on, such as "master helper, on." Your inventory is locked during a climb or a repair, so switch it on before one starts.
+
+With your other helpers.
+
+While the master helper is on, all six jobs get done however your other helpers are set, and having both on never does a job twice or any faster. Each of your other helpers keeps its own on or off setting, which you can still change. When you switch the master helper off, those settings apply again, so a ladder helper you left on carries on by itself.
+
+Master helpers in a run.
+
+A master helper is never used up. It lasts for the rest of the run, even if you lose a life, and extra copies don't make it any stronger. It's gone when the run ends, along with the rest of your inventory.
+Everything it does counts in your statistics, just as if you'd done it yourself.
+
+Master helpers in practice and free runs.
+
+Master helpers aren't available in practice or timed runs.
+
+In a free run, you can give, set or take master helpers from modify player inventory, so you can try one without spending anything.

@@ -6,7 +6,7 @@ How a door helper works.
 
 While it's on, it unlocks the next real door with the first key in your inventory once the door is in reach, then opens it as soon as a hand could. You'll hear the lock and the door just as if you'd done it yourself.
 If you have no key, it tries the door once, and you'll hear that it's locked. You'll still need a key, so keep an ear out for one.
-It leaves fake doors alone, so you still need your weapons to break those. It also waits during a trampoline flight.
+It leaves fake doors alone, so you still need your weapons to break those. It also waits during a slide or a trampoline flight.
 
 Using one.
 

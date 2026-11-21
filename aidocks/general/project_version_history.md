@@ -9,6 +9,9 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
+## 2.8: open, 1 of 10 (2026-11-21); build/version.txt is 2.8.
+- Master helper ([[project_catch_all_helper_plan]], 1 of 10): a seventh helper at 15,000 gold coins doing all six jobs. specials.nvgt's helper_working() is true for a helper or the master helper, while helper_active() stays each helper's own setting. Its document is master_helpers.txt (51 game documents). All seven helper documents say what happens on a slide and in a flight. Tests: 3 of 3 PASSED.
+
 ## 2.7: tagged V2.70 at 721011f (moved there from c2edccb by the dev for the release; 10 of 10; 2026-11-21), released on GitHub (2026-11-21); build/version.txt is 2.7. The next player-facing change opens "New in 2.8." and bumps build/version.txt to 2.8.
 - Helpers ([[project_helpers_plan]], 10 of 10): animal, floor, force field and ladder helpers join the item and door helpers in specials.nvgt (helper_items, helpers_on; helperon and helperoff sounds). Ladder and floor helpers go at ladder_rung_min_time(); your hands do nothing during their work, but a lane key still knocks you off a ladder. Each of the six has its own game document (50 in all).
 - Ammo reserve (the dev, 9 of 10): gun_max_reserve raised from 200 to 500; ammo packs read it, and the free run's own 1000 limit is unchanged. Test: 1 of 1 (a pack stops at 500, the next is refused and kept) PASSED.

@@ -1,6 +1,6 @@
 Floor helpers.
 
-A floor helper rebuilds floor breakers for you, from opening the corridor to laying the last piece. It's a special you buy in the player shop for 5,500 gold coins, the most expensive thing there, since a floor breaker can end your run outright.
+A floor helper rebuilds floor breakers for you, from opening the corridor to laying the last piece. It's a special you buy in the player shop for 5,500 gold coins, the most expensive of the helpers that do a single job, since a floor breaker can end your run outright.
 
 How a floor helper works.
 
@@ -13,7 +13,7 @@ Insane: one piece every 0.35 seconds.
 Chaos: one piece every 0.4 seconds.
 
 You'll hear the corridor open, each piece go down and the repair, just as if you'd done it yourself. Your own hands do nothing during the repair, so a stray press can't drop you through the floor.
-It waits during a trampoline flight, since the flight carries you over the hole safely.
+It waits during a slide or a trampoline flight, since either one carries you over the hole safely.
 
 Using one.
 

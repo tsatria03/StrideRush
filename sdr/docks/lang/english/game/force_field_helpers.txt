@@ -5,7 +5,7 @@ A force field helper switches off force fields for you, so you don't have to pre
 How a force field helper works.
 
 While it's on, it presses a force field's switch as soon as the field comes within reach of your hands. You'll hear the switch, then the field's sound changes as it shuts off, and you can run straight through.
-It waits during a trampoline flight, since the flight carries you past force fields safely.
+It waits during a slide or a trampoline flight, since either one carries you past force fields safely.
 
 Using one.
 

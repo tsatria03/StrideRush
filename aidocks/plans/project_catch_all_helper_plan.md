@@ -1,6 +1,6 @@
 ---
 name: project_catch_all_helper_plan
-description: SETTLED (2026-11-21, 2.8's first entry): the master helper, a seventh, premium helper at 15,000 gold coins that does all six helpers' jobs, sold alongside them; 2 sections; Q&A log
+description: COMPLETE (2026-11-21, 2.8's first entry): the master helper, a seventh, premium helper at 15,000 gold coins that does all six helpers' jobs, sold alongside them; 2 sections; Q&A log
 metadata:
   type: project
 ---
@@ -39,4 +39,6 @@ While it's on, it does all six jobs, by the same rules: claps at animals, unlock
 - Q3 asked again in full. Dev: "yes. That works."
 - Q5: the same sounds, or its own? Dev: "Use the same helper sounds."
 - Q6: the changelog wording? Dev: "That's goood. Please create a master_helper dock file covering every helper job as a hole, and what each one covers." Drafted as master_helpers.txt (plural to match the other helpers at the dev's request), then moved out of the repo to the session scratchpad, as the dev wants it added in section 2 with the other dock changes. Plan SETTLED.
+- Sections 1 and 2 BUILT together at the dev's request (2026-11-21, after 0c26883): helper_working() in specials.nvgt, read by helpers_update() and hand_check(); tuning.nvgt and freebelt.nvgt lists; "New in 2.8." with the entry, version.txt 2.8; master_helpers.txt back in game/ (51 documents); player_shop updated; floor_helpers no longer calls itself the most expensive thing in the shop; template.lng 1509 lines, english.lng synced (1 added, 0 missing). Tests: 1 of 3 (shop list and price), 2 of 3 (all six jobs from the master helper), 3 of 3 (other helpers keep their own settings) all PASSED. Plan COMPLETE.
+- Dock fix (dev, 2026-11-21: "don't slides do the same thing?"): all seven helper documents now say what happens on a slide as well as in a trampoline flight. helpers_update() does nothing on a slide, and slide_update() catches your lane's items by itself.
 - Build note: helpers_update() and hand_check() need a "job is being done" check (the helper or the master helper on), while the inventory's on or off wording keeps reading each helper's own setting.

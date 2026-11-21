@@ -1,3 +1,5 @@
+New in 2.8.
+Added a master helper to the player shop's specials, which does the jobs of all six other helpers at once.
 New in 2.7.
 Added animal, floor, force field and ladder helpers to the player shop's specials, which do the work of your hands for you as the belt speeds up.
 Made it so each gun's reserve can now hold up to 500 rounds, up from 200.
