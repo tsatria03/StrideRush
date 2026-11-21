@@ -1,4 +1,5 @@
 New in 2.7.
+Made it so each gun's reserve can now hold up to 500 rounds, up from 200.
 Added gold coin statistics and eleven new achievements for collecting and spending gold coins, and gold packs and the player shop's specials can now be given from a free run's console.
 Added specials to the player shop, a slide and a trampoline you can use whenever you like, and an item helper and a door helper you switch on to grab items in your lane and unlock and open real doors for you.
 Added a player shop, opened with slash or F8 during an endless run, where your gold coins buy items such as health potions and life capsules, while Y tells you how many gold coins you have.

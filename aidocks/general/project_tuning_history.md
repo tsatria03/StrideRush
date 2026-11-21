@@ -52,7 +52,7 @@ Moved here from src/includes/main/globals/tuning.nvgt's comments on 2026-11-15 (
 - melee_fire_gap 200 and pistol_fire_gap 100 (2026-11-04): both were one shared 50 ms, too short for the weapon powerups to be heard.
 - weapon_reach_time 2000 (2026-11-03).
 - bullet_tile_time 30: first 30, tried at 50, settled on 40 (2026-11-03), back to 30 (2026-11-05), so bullets stay ahead of you even at 50 ms steps.
-- Ammo packs (2026-11-02): a pack gave a flat 50 to both guns until 2026-11-03, now 5 to 10 to the gun you hold; gun_max_reserve 200 (2026-11-03), was 250.
+- Ammo packs (2026-11-02): a pack gave a flat 50 to both guns until 2026-11-03, now 5 to 10 to the gun you hold; gun_max_reserve 500 (2026-11-20, the dev), was 200 (2026-11-03), and 250 before that.
 - shield_chance 16: first proposed as 20, the dev chose 16. shield_hp 400: first proposed as 100, then 200; 400 since 2026-11-04 ("armor is twice as strong as you").
 - Powerups (2026-11-03 and 4, [[project_powerups_plan]]): powerup_time 15000, first 20000 (2026-11-04); powerup_speed_ms 50, first proposed as 100; the belt sound replays every 300 ms on the ground and 400 in flight, the dev's final choice after trying 500, 350, 250 and 500 for flight (2026-11-04).
 - Health potions (2026-11-04, [[project_health_potion_plan]]). Life capsules and teleporters (2026-11-03).
