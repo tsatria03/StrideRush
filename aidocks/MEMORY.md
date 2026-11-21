@@ -87,6 +87,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
+- [Character upgrades plan](plans/project_character_upgrades_plan.md) — SETTLED (2026-11-21, 2.8's second entry): a character category first in the player shop with attack, defence and shield defence, after SimpleFighter's arena shop; 3 sections; Q&A log
 - [Catch-all helper plan](plans/project_catch_all_helper_plan.md) — COMPLETE (2026-11-21, 2.8's first entry): the master helper, a seventh, premium helper at 15,000 gold coins doing all six helpers' jobs; 2 sections; Q&A log
 - [Helpers plan](plans/project_helpers_plan.md) — COMPLETE (2026-11-21, 2.7's tenth entry): animal, floor, force field and ladder helpers in the player shop's specials, a game document for each of the six helpers; 4 sections; Q&A log
 - [Keyboard and joystick plan](plans/project_keyboard_joystick_plan.md) — COMPLETE (2026-11-20, 2.7, entries 2 to 4 of 10, before the shop): fire and duck become one action each with older ini files merged, trigger-aware clashes, Control bindable alone, new default keys; 4 sections
