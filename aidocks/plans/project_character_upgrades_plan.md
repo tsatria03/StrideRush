@@ -1,6 +1,6 @@
 ---
 name: project_character_upgrades_plan
-description: SETTLED (2026-11-21, 2.8's second entry): a character category first in the player shop selling attack, defence and shield defence, 1 for 1 at 100, 200 and 300 gold coins a point with no cap, lasting the run; 3 sections; Q&A log
+description: COMPLETE (2026-11-21, 2.8's second entry): a character category first in the player shop selling attack, defence and shield defence, 1 for 1 at 100, 200 and 300 gold coins a point with no cap, lasting the run; 3 sections; Q&A log
 metadata:
   type: project
 ---
@@ -63,4 +63,5 @@ The dev's idea: a third player shop category, character, selling attack (useful 
 - Sounds (dev, 2026-11-21): the steel_shield folder lost use.ogg and break.ogg for wear.ogg, remove.ogg and break1 to break6. Wearing now plays wear; the *break* lookup picks the new variants by itself. remove.ogg has no use yet, as a worn shield can't be taken off. Asked the dev whether to add that. Dev: "Let's save that question for after this plan is complete." ASK AGAIN once this plan is complete: should a worn shield be removable, with which key, and does a damaged one keep its strength?
 - Section 1's tests became 3: exact damage can't be checked until section 2 adds modify player stats and your points to the session statuses, so the attack, defence, shield defence and reset checks move to section 2's tests.
 - Section 2 BUILT (2026-11-21, after 026f82a): attack, defence and shield defence lines in session_status_lines() for endless, debug and free runs; modify player stats in the free run console (free_stats_menu(), free_change_stat()), set 0 to 1000, give and take 1 to 1000, take stopping at 0, reset on a replay like the shop's points. Tests: 1 of 5 (console and statuses), 2 of 5 (defence, floor of 1), 3 of 5 (shield defence, separate from defence), 4 of 5 (attack), 5 of 5 (kept through a lost life, reset on restart) all PASSED.
+- Section 3 BUILT (2026-11-21, after 272eaf8): player_stats.txt (52 game documents); player shop, health and lives, steel shields, weapons, free runs and the readme updated; steel shields' strength corrected to 2000; the changelog entry on top (2.8 at 2 of 10). Docks get no test steps. Plan COMPLETE, so the removable shield question is now due.
 - Q2 and Q3 revised, dev: "Actually I have a better idea, put the 0 back, and no max cap for the following stats. attack, defence, shield defence." At 200 a point, 47 defence costs 9,400 gold coins and 79 costs 15,800, so the price is now what limits them.

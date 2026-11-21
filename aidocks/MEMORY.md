@@ -5,7 +5,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 ## Project
 - [Runner overview](general/project_runner_overview.md) — audio runner in legacy NVGT, first build COMPLETE and v1.0 playable (game 69dedf8, docks 0f0ccff), git repo tsatria03/StrideRush on main, assets in sdr/, CLAUDE.md written 2026-11-01 as a dispatcher
 - [Game design](general/project_game_design.md) — a lane runner (the dev's term) with three lanes, heard from behind, since 1.4 (2d side-scroller through 1.3), jump, duck or turn on cue or die, weapons/hands later, speed-up step timer with oneshot footsteps, ToyMania sound layout
-- [Version history](general/project_version_history.md) — every release newest first (2.8 open at 1 of 10, then 2.7 V2.70 at 721011f down to 1.0), its entries in engine terms and plans; moved out of CLAUDE.md 2026-11-10; add each closed version here, not to CLAUDE.md
+- [Version history](general/project_version_history.md) — every release newest first (2.8 open at 2 of 10, then 2.7 V2.70 at 721011f down to 1.0), its entries in engine terms and plans; moved out of CLAUDE.md 2026-11-10; add each closed version here, not to CLAUDE.md
 - [DualSense controller](general/user_dualsense_controller.md) — the dev owns and tests with a PS5 DualSense; cross is the game's A button; Bluetooth rumble needs SDL's PS5 rumble hint
 - [Tuning history](general/project_tuning_history.md) — how tuning.nvgt's values came to be (earlier values, the dev's reasons, dates), moved out of its comments 2026-11-15; read before changing a tuning value
 - [Core code history](general/project_core_code_history.md) — decision history moved out of the 12 core files' comments (game, spawner, decpool, environments, player, surface, lane, lives, endrun, difficulty, practice, practice_hints) 2026-11-15
@@ -87,7 +87,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
-- [Character upgrades plan](plans/project_character_upgrades_plan.md) — SETTLED (2026-11-21, 2.8's second entry): a character category first in the player shop with attack, defence and shield defence, after SimpleFighter's arena shop; 3 sections; Q&A log
+- [Character upgrades plan](plans/project_character_upgrades_plan.md) — COMPLETE (2026-11-21, 2.8's second entry): a character category first in the player shop with attack, defence and shield defence, after SimpleFighter's arena shop; player_stats document; 3 sections; Q&A log
 - [Catch-all helper plan](plans/project_catch_all_helper_plan.md) — COMPLETE (2026-11-21, 2.8's first entry): the master helper, a seventh, premium helper at 15,000 gold coins doing all six helpers' jobs; 2 sections; Q&A log
 - [Helpers plan](plans/project_helpers_plan.md) — COMPLETE (2026-11-21, 2.7's tenth entry): animal, floor, force field and ladder helpers in the player shop's specials, a game document for each of the six helpers; 4 sections; Q&A log
 - [Keyboard and joystick plan](plans/project_keyboard_joystick_plan.md) — COMPLETE (2026-11-20, 2.7, entries 2 to 4 of 10, before the shop): fire and duck become one action each with older ini files merged, trigger-aware clashes, Control bindable alone, new default keys; 4 sections

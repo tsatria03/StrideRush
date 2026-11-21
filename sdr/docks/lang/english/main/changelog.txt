@@ -1,4 +1,5 @@
 New in 2.8.
+Added a character category to the player shop, where your gold coins buy attack, defence and shield defence points that help you hit harder and take less damage for the rest of your run.
 Added a master helper to the player shop's specials, which does the jobs of all six other helpers at once.
 New in 2.7.
 Added animal, floor, force field and ladder helpers to the player shop's specials, which do the work of your hands for you as the belt speeds up.

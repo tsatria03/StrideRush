@@ -6,6 +6,7 @@ How your weapons work.
 
 Press control or F to swing a melee weapon or fire a gun, or the A button on a joystick. Your weapons always hit the nearest thing ahead of you, and that includes any item lying ahead of you in your lane, such as an ammo pack, key or shield, which breaks if you hit it. Items in other lanes are safe from your weapons.
 Real doors and real walls can't be harmed. A vehicle can only be hit while it's in your lane, an aircraft only while you're in the air from your own jump, and an insect only while you're crouched.
+Attack points from the player shop add to every hit from any weapon, as the player stats document explains.
 
 Melee weapons.
 

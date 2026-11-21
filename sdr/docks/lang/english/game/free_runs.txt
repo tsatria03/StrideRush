@@ -10,7 +10,7 @@ The run starts with you standing still on an empty belt, hearing only the music 
 The console.
 
 Press backslash or F7 to open the free run console, which freezes the run while it's open and lists its choices in alphabetical order. Standing still, it has modify death mode, modify environment, modify footsteps, modify heartbeat, modify practice hints, modify running speed, modify spacing, start running and view current setup.
-Once you choose start running, your footsteps and heartbeat begin and the rest of the console appears: add items, add obstacles, add specials, clear belt, clear items, clear obstacles, clear specials, modify ammo limits and modify ammo reserves while a gun is drawn, modify player health, modify player inventory, modify player lives, modify player specials, and modify shield strength while you wear a shield.
+Once you choose start running, your footsteps and heartbeat begin and the rest of the console appears: add items, add obstacles, add specials, clear belt, clear items, clear obstacles, clear specials, modify ammo limits and modify ammo reserves while a gun is drawn, modify player health, modify player inventory, modify player lives, modify player specials, modify player stats, and modify shield strength while you wear a shield.
 Every change closes the console and tells you what it did in the misc buffer, while view current setup lists your speed, spacing, death mode, footsteps, heartbeat, hints, environment, a slide you're riding and any powerups running, with how long they have left, and everything coming, one line for each kind.
 
 Adding to the belt.
@@ -38,6 +38,7 @@ Modify player health, modify player lives and modify shield strength each offer 
 Modify player inventory gives you any number of any item or player shop special, choosing keys by color, sets exactly how many of one you carry, from 0 to 1000, or takes items away, listing what you're carrying with how many of each.
 Modify ammo limits chooses limited or unlimited rounds for the drawn gun, and while it's limited, modify ammo reserves gives, sets or takes its rounds, from 0 to 1000.
 Modify player specials has give powerup and give slide. Give powerup lists every powerup by name, the two shield ones only while you wear a shield, and starts the one you choose straight away, just as if you'd collected it, for its usual 15 seconds, replacing one of the same kind. Give slide puts you on a slide right where you are, for its usual 2 to 4 seconds, or starts a fresh ride if you're already on one, and tells you if your environment has no slides.
+Modify player stats gives, sets or takes your attack and defence, and your shield defence while you carry or wear a shield, from 0 to 1000, as the player stats document explains.
 
 Replaying a free run.
 

@@ -25,6 +25,12 @@ There is no door nearby.=There is no door nearby.
 You have * available to spend.=You have $1 available to spend.
 You got *.=You got $1.
 
+// includes/game/playerstats.nvgt
+1 point=1 point
+* points=$1 points
+* * point=$1 $2 point
+* * points=$1 $2 points
+
 // includes/game/potion.nvgt
 You're already at maximum health.=You're already at maximum health.
 Healed to * health.=Healed to $1 health.
@@ -386,6 +392,7 @@ modify player health=modify player health
 modify player inventory=modify player inventory
 modify player lives=modify player lives
 modify player specials=modify player specials
+modify player stats=modify player stats
 modify practice hints=modify practice hints
 modify running speed=modify running speed
 modify shield strength=modify shield strength
@@ -403,6 +410,8 @@ You now have 1 life.=You now have 1 life.
 You now have * lives.=You now have $1 lives.
 Your shield's strength is now *.=Your shield's strength is now $1.
 Your shield's strength is now * of *.=Your shield's strength is now $1 of $2.
+Choose the stat you'd like to change.=Choose the stat you'd like to change.
+You now have *.=You now have $1.
 Your * now has 1 round in reserve.=Your $1 now has 1 round in reserve.
 Your * now has * rounds in reserve.=Your $1 now has $2 rounds in reserve.
 all keys=all keys
@@ -705,12 +714,16 @@ Sound device set to *.=Sound device set to $1.
 // includes/main/menus/shop_menu.nvgt
 You're now entering the player shop.=You're now entering the player shop.
 Welcome to the player shop. What would you like to buy?=Welcome to the player shop. What would you like to buy?
+character=character
 items=items
 specials=specials
 You're now exiting the player shop.=You're now exiting the player shop.
+character upgrades=character upgrades
 *, costs *. You can buy *.=$1, costs $2. You can buy $3.
 * menu. You have * available to spend.=$1 menu. You have $2 available to spend.
 Buy * * for *=Buy $1 $2 for $3
+Buy all * for *=Buy all $1 for $2
+* point=$1 point
 
 // includes/main/menus/stats_menu.nvgt
 Statistics menu. You can view the stats from your last endless run, or your totals across all of them here.=Statistics menu. You can view the stats from your last endless run, or your totals across all of them here.
@@ -722,6 +735,9 @@ copy all game statistics to clipboard=copy all game statistics to clipboard
 export all game statistics to file=export all game statistics to file
 health=health
 shield=shield
+attack=attack
+defence=defence
+shield defence=shield defence
 lane=lane
 speed=speed
 distance=distance
@@ -1458,6 +1474,7 @@ master helpers=master helpers
 mines=mines
 movement=movement
 player shop=player shop
+player stats=player stats
 player teleporters=player teleporters
 practice runs=practice runs
 projectiles=projectiles
