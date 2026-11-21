@@ -625,6 +625,7 @@ class key_config {
 				else if (sides[i][mi] != "") one += sides[i][mi] + names[mi] + "+";
 			}
 			one += rest[i];
+			if (rest[i] == "" and one != "") one = one.substr(0, one.length() - 1); // a modifier on its own, such as CTRL, with no + after it
 			if (trig[i] != int(KC_PRESS)) one += ":" + trigger_name(kc_trigger(trig[i]));
 			result += (result == "" ? "" : ",") + one;
 		}
@@ -968,10 +969,12 @@ bool kc_save_preserving(key_config@ kc, const string&in path, bool for_joystick 
 /* Interactive: capture a key combo from the user, as a string like "LSHIFT+A", or "" if the user cancels. It reads the
 keys itself, not through a form, so Tab, Shift plus Tab and the like reach it; the form passed in is left alone. A
 modifier held on both sides captures its side-agnostic name (SHIFT, CTRL, ALT), one side captures that side (LSHIFT,
-RSHIFT, ...), and they mix.
+RSHIFT, ...), and they mix. Control pressed and released with nothing else binds that side (LCTRL or RCTRL), or CTRL with both held.
 Escape is treated specially: pops a menu (the global `m` and `setupmenu`) asking whether to bind it or cancel. */
 string kc_capture_combo(audio_form@ form, const string&in prompt) {
 	speak(prompt);
+	bool control_alone = false; // Control is down with no other key or modifier so far
+	string control_name = ""; // the side or sides held: LCTRL, RCTRL, or CTRL for both
 	while (true) {
 		wait(5);
 		key_code[]@ pressed = keys_pressed();
@@ -986,10 +989,21 @@ string kc_capture_combo(audio_form@ form, const string&in prompt) {
 				if (eres == -1 || m.get_item_id(eres) == "cancel") return "";
 				return "ESCAPE";
 			}
-			// Skip modifier-only presses: wait for a real key.
-			if (k == KEY_LSHIFT || k == KEY_RSHIFT || k == KEY_LCTRL || k == KEY_RCTRL || k == KEY_LALT || k == KEY_RALT || k == KEY_LGUI || k == KEY_RGUI) continue;
+			if (k == KEY_LCTRL || k == KEY_RCTRL) {
+				string side = k == KEY_LCTRL ? "LCTRL" : "RCTRL";
+				if (!control_alone) control_name = side;
+				else if (control_name != side) control_name = "CTRL";
+				control_alone = !(key_down(KEY_LSHIFT) || key_down(KEY_RSHIFT) || key_down(KEY_LALT) || key_down(KEY_RALT) || key_down(KEY_LGUI) || key_down(KEY_RGUI));
+				continue;
+			}
+			// Any other modifier on its own waits for a real key.
+			if (k == KEY_LSHIFT || k == KEY_RSHIFT || k == KEY_LALT || k == KEY_RALT || k == KEY_LGUI || k == KEY_RGUI) {
+				control_alone = false;
+				continue;
+			}
 			return kc_modifier_side("CTRL", KEY_LCTRL, KEY_RCTRL) + kc_modifier_side("ALT", KEY_LALT, KEY_RALT) + kc_modifier_side("SHIFT", KEY_LSHIFT, KEY_RSHIFT) + kc_code_to_name(k);
 		}
+		if (control_alone and !key_down(KEY_LCTRL) and !key_down(KEY_RCTRL)) return control_name; // let go with nothing else pressed
 	}
 	return "";
 }

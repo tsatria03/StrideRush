@@ -1,6 +1,6 @@
 ---
 name: project_keyboard_joystick_plan
-description: SETTLED (2026-11-20, 2.7, before the shop, two entries for 2 and 3 of 10, 4 sections): keyboard and joystick bindings: fire and duck each become one action (fire_held, duck_held and duck_release removed, older ini files merged), clashes that respect triggers, Control bindable on its own for firing; Q&A log
+description: SETTLED (2026-11-20, 2.7, before the shop, three entries for 2 to 4 of 10, 4 sections): keyboard and joystick bindings: fire and duck each become one action (fire_held, duck_held and duck_release removed, older ini files merged), clashes that respect triggers, Control bindable on its own for firing; Q&A log
 metadata:
   type: project
 ---
@@ -25,17 +25,18 @@ The dev's suggestions (2026-11-20, before building the shop): "Fix key binding i
 - The trigger question is skipped for fire and duck.
 - Otherwise a key clashes only when the keys and the trigger both match, the rebind flow asking for the trigger first.
 - fire's and duck's keys and buttons clash with any other action whatever its trigger, so the replace question always comes up for them.
-- Control alone (released with no other key) binds as CTRL, either side; Control plus a key is still a combo; Shift, Alt and the Windows key stay combo-only. Space stays fire's default, since tapping Control silences NVDA and JAWS by default.
+- Control alone (released with no other key) binds the side pressed, LCTRL or RCTRL, or CTRL with both held (changed during section 3, see the Q&A log); Control plus a key is still a combo; Shift, Alt and the Windows key stay combo-only.
+- New default keys for every player: jump=SPACE,UP,W, duck=ALT,DOWN,S, lane_left=LSHIFT,LEFT,Q, lane_right=RSHIFT,RIGHT,E, fire=CTRL,F (Space no longer fires). Known side effects: Shift combos also change lanes, Alt+Shift+C also crouches, five quick Shift taps can open Sticky Keys, and tapping Control silences NVDA and JAWS by default.
 
-- Changelog, on top in this order: "Made it so either control key can now be bound on its own, such as for firing your weapons, and actions can now share a key when they use different triggers." / "Fixed a bug where rebinding your fire or crouch keys only moved part of the action, so each is now a single binding on the keyboard and joystick, and your current keys are kept."
-- Docks: keyboard_and_joystick.txt's trigger example (duck_held=DPAD_DOWN:down) swapped for an action that still exists, with a short note that fire and duck handle their own triggers.
+- Changelog, on top in this order: "Changed the default keys, so space now jumps, control or F fires your weapon, alt crouches, and left and right shift change lanes, alongside the arrow keys and letters that already did." / "Made it so either control key can now be bound on its own, such as for firing your weapons, and actions can now share a key when they use different triggers." / "Fixed a bug where rebinding your fire or crouch keys only moved part of the action, so each is now a single binding on the keyboard and joystick."
+- Docks: keyboard_and_joystick.txt's trigger example (duck_held=DPAD_DOWN:down) swapped for an action that still exists, with a short note that fire and duck handle their own triggers; the new default keys in keyboard_and_joystick.txt, movement.txt, weapons.txt and readme.txt's getting started.
 
 ## Sections
 
 1. One action each: weapons.nvgt and player.nvgt read fire and duck by press, down and release; the three old actions out of keyboard.ini and joystick.ini; older files merged on load and the old lines removed.
 2. The rebind rules, on both devices: clashes by keys and trigger, fire and duck clashing with any trigger, the trigger asked before the replace question, and skipped for fire and duck.
 3. Control on its own: the capture screen binds CTRL when Control is released with no other key; combos unchanged.
-4. Docks: keyboard_and_joystick.txt, the two entries (2.7 at 3 of 10), the template script rerun (english.lng by hand if lines change), version history.
+4. Docks: keyboard_and_joystick.txt, movement.txt, weapons.txt and the readme for the new keys, the three entries (2.7 at 4 of 10), the template script rerun (english.lng by hand if lines change), version history.
 
 ## Q&A log
 
@@ -64,3 +65,13 @@ The dev's suggestions (2026-11-20, before building the shop): "Fix key binding i
 - Test 2 of 3 (clash rules, in three parts at the dev's request): part 1 (reload on L release shares with info_lane's press, no question) PASSED; part 2 (ammo_check on L press asks to replace info_lane only) PASSED; part 3 (reload on F release asks to replace fire, which clashes on any trigger) PASSED.
 - Test 3 of 3 (joystick, two parts): part 1 (fire on Y skips the trigger question and asks to replace ammo_check) PASSED; part 2 (reload on Y release shares with ammo_check's press) PASSED; the dev reverted the test binding. Section 2 tests all passed.
 - Dev: revert the test bindings. keyboard.ini is back to fire=SPACE and jump=UP,W. Section 2 COMPLETE. The shop's coins readout stays on Y.
+- Section 3 BUILT (2026-11-20, after 1492115): key_config.nvgt's kc_capture_combo() returns CTRL when Control is pressed and released with no other key or modifier; Control plus a key is still a combo, and Shift, Alt and the Windows key still wait for a real key. Found while building: get_keyboard_action_string() would have written a lone modifier as "CTRL+", so it now drops the trailing plus when a binding has no other key.
+- Test 1 of 3 (Control alone) worked, saving fire=SPACE,CTRL. The dev has only a left Control key, and expected pressing it to add only that side. Claude: as built it saved CTRL, both sides, a choice Claude had inferred from the firing request; combos already record the side pressed. Q (Claude): record the side for Control alone too (left LCTRL, right RCTRL, both held CTRL)? Recommended.
+- A (dev): yes. Built: kc_capture_combo() tracks the side or sides held and returns LCTRL, RCTRL or CTRL on release. keyboard.ini's test binding removed, so test 1 is rerun.
+- Tests after the change: 1 of 3 (left Control alone saves LCTRL) PASSED; 2 of 3 (swings, machine gun held, jumping and changing lanes while holding it) PASSED; 3 of 3 (LCTRL+G still binds as a combo) PASSED; the file showed fire=SPACE,LCTRL and reload=R,LCTRL+G, and the test bindings were removed. Section 3 COMPLETE.
+- Dev edited keyboard.ini by hand: jump=SPACE,UP,W, duck=ALT,DOWN,S, fire=CTRL,F, and SHIFT on both lanes. Claude: SHIFT means either side, so it would only ever move left (lane.nvgt checks left first). Dev: meant left and right Shift. Set lane_left=LSHIFT,LEFT,Q and lane_right=RSHIFT,RIGHT,E. Known side effects: Shift combos (Shift+Tab, the Shift buffer keys) also change lanes, Alt+Shift+C also crouches, and five quick Shift taps can open Windows Sticky Keys. Whether these become the shipped defaults is still to confirm before section 4.
+- A (dev): the new layout is the default for every player, with its own changelog entry. Settled: jump=SPACE,UP,W, duck=ALT,DOWN,S, lane_left=LSHIFT,LEFT,Q, lane_right=RSHIFT,RIGHT,E, fire=CTRL,F (Space no longer fires). Supersedes "Space stays fire's default".
+- Finding: build/installer.iss copies every file with ignoreversion and no onlyifdoesntexist, so installing an update replaces data/config/main/keyboard.ini and joystick.ini with the shipped ones; custom bindings don't survive it (already true before this plan). merge_old_actions() still covers a file that stays in place, such as a portable copy kept or pasted back. So the agreed entry's "and your current keys are kept" would overpromise.
+- Docks that name the changed keys, for section 4: keyboard_and_joystick.txt, movement.txt, weapons.txt (the space bar, three places), readme.txt's getting started.
+- Q (Claude): three entries on top (2.7 to 4 of 10, the shop's three then 5 to 7), newest first: "Changed the default keys, so space now jumps, control or F fires your weapon, alt crouches, and left and right shift change lanes, alongside the arrow keys and letters that already did."; "Made it so either control key can now be bound on its own, such as for firing your weapons, and actions can now share a key when they use different triggers."; "Fixed a bug where rebinding your fire or crouch keys only moved part of the action, so each is now a single binding on the keyboard and joystick." Recommended.
+- A (dev): yes. The three entries settled. Section 3 and the new default keys are ready to commit; section 4 waits for the dev's go-ahead.
