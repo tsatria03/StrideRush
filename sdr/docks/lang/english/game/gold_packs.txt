@@ -1,0 +1,36 @@
+Gold packs.
+
+Gold packs are how you earn gold coins, which you spend in the player shop. Every so often one turns up ahead of you in an endless run instead of an obstacle, in one of the three lanes, and you pick it up with a hand to keep it in your inventory until you open it.
+
+How a gold pack works.
+
+You'll hear a gold pack waiting in its lane as you come toward it. One in your lane sounds straight ahead, and one in another lane sounds off to that side, and a pack in another lane just passes you by.
+Sometimes two items turn up side by side in different lanes, so you have to choose which one to go for.
+
+Picking one up.
+
+Get into its lane, then press either hand in the last few steps before you reach it to pick it up, and it goes into your inventory. You can carry as many as you collect.
+Be careful: if you run onto a pack in its lane, or land on it from a jump, it breaks and is lost, and so does shooting or swinging at it. A jump that carries you right over it just misses it.
+
+Opening one.
+
+Use a gold pack from your inventory to open it, and it gives you a random number of gold coins, which depends on your level:
+
+Easy: 100 to 300 gold coins.
+Medium: 200 to 600 gold coins.
+Hard: 300 to 900 gold coins.
+Insane: 400 to 1,200 gold coins.
+Chaos: 500 to 1,500 gold coins.
+
+Your gold coins are saved as soon as you open a pack, and carry over from one run to the next. Your inventory doesn't, so any pack you haven't opened when the run ends is lost. Press Y during a run to hear how many gold coins you have available to spend.
+
+Gold packs in a run.
+
+Gold packs come from the first step of an endless run, on every level, and never come in timed runs. They can't be bought in the player shop.
+Each pack counts toward gold packs picked up, gold packs broken or gold packs used in your statistics, and what it gives you counts toward gold coins earned. Clearing your statistics leaves your gold coins alone, while clear game progresses clears them too.
+
+Gold packs in practice and free runs.
+
+Gold packs never come in practice runs.
+
+In a free run, add gold packs from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. You can also give, set or take them from modify player inventory. Opening one there pays easy's amount into a balance of its own, which Y reads, that starts at 0 and is gone when the run ends, so it never changes your saved gold coins or your statistics.

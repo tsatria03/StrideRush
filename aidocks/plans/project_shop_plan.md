@@ -1,6 +1,6 @@
 ---
 name: project_shop_plan
-description: SETTLED again (2026-11-20, 2.7, four entries for 5 to 8 of 10): gold packs from endless runs give coins (replacing pay per clean pass), an endless run shop (slash or F8), CookieCraze-style pack menus, items and specials (slide, trampoline, item helper, door helper), coin stats and 11 achievements; 5 sections; Q&A log
+description: COMPLETE (2026-11-20, 2.7, four entries for 5 to 8 of 10): gold packs from endless runs give coins (replacing pay per clean pass), an endless run shop (slash or F8), CookieCraze-style pack menus, items and specials (slide, trampoline, item helper, door helper), coin stats and 11 achievements; 5 sections; Q&A log
 metadata:
   type: project
 ---
@@ -164,3 +164,4 @@ The todo item "Add a shop that you can access in the game to buy items and speci
 - Section 4 BUILT (2026-11-20, after 21e9650): the eleven achievements in achievements.ini after the ammo packs' (172 to 183), saying gold coins and gold packs, one hint naming the player shop; achievements_menu.nvgt's keys, one and many gain coins_earned and coins_spent ("gold coins earned", "gold coins spent"); gold_packs_used reads through the existing _used rule.
 - Found while listing the lines: the new achievements, and the 13 aircraft ones from 2.6, were written with no blank line between entries, unlike the rest of achievements.ini. Fixed by adding only those blank lines.
 - Tests: 1 of 2 (the eleven read in achievements.ini) PASSED; 2 of 2 (Pocket Change's and Gold Digger's progress lines in the game) PASSED. Section 4 COMPLETE.
+- Section 5 BUILT (2026-11-20, after 7c48418): game documents gold_packs.txt and player_shop.txt; inventory, keyboard and joystick (Y, slash or F8), endless runs, free runs, statistics, difficulty and the readme updated; the four entries on top, worded with gold coins (2.7 at 8 of 10); both todo items finished; template.lng regenerated (1502 lines), english.lng synced (60 added, the old clear question removed, 0 missing). Plan COMPLETE.

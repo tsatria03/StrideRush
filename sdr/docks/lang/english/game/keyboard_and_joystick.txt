@@ -28,6 +28,7 @@ Letter C: Announces your current speed, in steps a second.
 Letter T: Announces how long you've been running for, or in a timed run, how much time is left on the clock and how long until you reach the finish line.
 Letter B: Announces your heart rate, in beats per minute.
 Letter V: Announces which environment you're in.
+Letter Y: Announces how many gold coins you have available to spend.
 Page up or F4: Raises the in-game music volume by 1 decibel.
 Page down or F3: Lowers the in-game music volume by 1 decibel.
 Home or F6: Raises the in-game ambience volume by 1 decibel.
@@ -37,6 +38,7 @@ Escape: Asks whether you want to quit the run, or quits it straight away if you'
 F1: Shows every key binding, and every joystick binding while a joystick is connected, with the run paused until you close it.
 F2: Opens the settings menu with its game, menu and speech tabs, with the run paused until you close it.
 Backslash or F7: In a free run, opens the free run console, with the run paused until you close it.
+Slash or F8: In an endless run, opens the player shop, with the run paused until you leave it.
 
 Speech buffer commands.
 

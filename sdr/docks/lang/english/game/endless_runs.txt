@@ -11,6 +11,10 @@ How an endless run works.
 You start with 1 life and 200 health, in a random environment, at your level's starting speed. Every 10 seconds you get a little faster, until you reach your level's top speed. As you speed up, new kinds of obstacle and item join, and a real door marks the start of each faster stretch.
 The run ends when you lose your last life, or straight away if you fall into a hazard or a floor breaker.
 
+Gold coins and the player shop.
+
+Gold packs turn up along the way in an endless run, and opening them gives you gold coins, which are saved from one run to the next. Press Y to hear how many you have, and slash or F8 to spend them in the player shop, which pauses the run while you're inside. The gold packs and player shop documents explain both.
+
 Pausing and quitting.
 
 Press P for the pause menu, where you can resume, restart or quit the run, view your session statuses, or view your session results, the stats for the run so far, and copy them to your clipboard or export them to a file. Pressing escape asks straight away whether you want to quit, and the run stops moving while you decide. Restarting or quitting asks you first, since you'll lose the run you're on.

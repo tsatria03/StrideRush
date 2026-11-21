@@ -1,4 +1,8 @@
 New in 2.7.
+Added gold coin statistics and eleven new achievements for collecting and spending gold coins, and gold packs and the player shop's specials can now be given from a free run's console.
+Added specials to the player shop, a slide and a trampoline you can use whenever you like, and an item helper and a door helper you switch on to grab items in your lane and unlock and open real doors for you.
+Added a player shop, opened with slash or F8 during an endless run, where your gold coins buy items such as health potions and life capsules, while Y tells you how many gold coins you have.
+Added gold packs, which turn up during endless runs and give you a bunch of gold coins when you use them.
 Changed the default keys, so space now jumps, control or F fires your weapon, alt crouches, and left and right shift change lanes, alongside the arrow keys and letters that already did, and backslash now opens a free run's console.
 Made it so either control key can now be bound on its own, such as for firing your weapons, and actions can now share a key when they use different triggers.
 Fixed a bug where rebinding your fire or crouch keys only moved part of the action, so each is now a single binding on the keyboard and joystick.

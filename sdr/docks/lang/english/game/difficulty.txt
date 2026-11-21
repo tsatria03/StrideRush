@@ -31,7 +31,7 @@ Fake walls, slides and trampolines at 3.3.
 Fake doors, real walls, floor breakers and insects at 4.
 Barriers, winds, vehicles and aircrafts at 5.
 
-Health potions, life capsules and steel shields are there from the start, and a key always comes before each real door, while ammo packs join at 3.3 steps a second, player teleporters at 4 and powerups at 5. A level that starts faster already has everything it has passed, so insane opens with six kinds of obstacle. Chaos ignores all this and throws everything at you from the first step.
+Gold packs, health potions, life capsules and steel shields are there from the start, and a key always comes before each real door, while ammo packs join at 3.3 steps a second, player teleporters at 4 and powerups at 5. A level that starts faster already has everything it has passed, so insane opens with six kinds of obstacle. Chaos ignores all this and throws everything at you from the first step.
 
 Unlocking levels.
 

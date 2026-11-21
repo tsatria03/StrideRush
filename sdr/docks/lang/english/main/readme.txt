@@ -10,6 +10,7 @@ Press the left and right shift keys, the left and right arrows, or Q and E, to s
 Press A for your left hand and D for your right, to switch off force fields, pick up items and open doors, and press both together to clap animals away.
 Press control or F to swing or fire your weapon at fake walls and fake doors, and the number keys to choose a different weapon.
 Press shift plus tab and tab, or I and O, to move through your inventory, and enter or U to use an item. Before each real door, pick up its key, then use it to unlock the door.
+In an endless run, open gold packs for gold coins, press Y to hear how many you have, and press slash or F8 to spend them in the player shop.
 Press P to pause, or escape to quit the run.
 You can also play with a joystick or game controller, in every menu and in a run.
 

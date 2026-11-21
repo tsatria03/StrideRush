@@ -35,7 +35,7 @@ Modify environment chooses an environment to stay in, or random, modify running 
 Your health, lives, items and specials.
 
 Modify player health, modify player lives and modify shield strength each offer give, set and take. Set takes a number, from 1 to 2000 for your health and your shield, or 1 to 1000 for your lives, which becomes your full health, your lives, or your shield's full strength. Give adds to what you have, up to full, and take removes from it, stopping at 1, so it never costs a life or breaks your shield. To hear the amounts you've set when you press H and M, choose amount, or percentage and amount, for the health and shield formats in the game tab of the settings menu.
-Modify player inventory gives you any number of any item, choosing keys by color, sets exactly how many of one you carry, from 0 to 1000, or takes items away, listing what you're carrying with how many of each.
+Modify player inventory gives you any number of any item or player shop special, choosing keys by color, sets exactly how many of one you carry, from 0 to 1000, or takes items away, listing what you're carrying with how many of each.
 Modify ammo limits chooses limited or unlimited rounds for the drawn gun, and while it's limited, modify ammo reserves gives, sets or takes its rounds, from 0 to 1000.
 Modify player specials has give powerup and give slide. Give powerup lists every powerup by name, the two shield ones only while you wear a shield, and starts the one you choose straight away, just as if you'd collected it, for its usual 15 seconds, replacing one of the same kind. Give slide puts you on a slide right where you are, for its usual 2 to 4 seconds, or starts a fresh ride if you're already on one, and tells you if your environment has no slides.
 
