@@ -1,6 +1,6 @@
 Gold packs.
 
-Gold packs are how you earn gold coins, which you spend in the player shop. Every so often one turns up ahead of you in an endless run instead of an obstacle, in one of the three lanes, and you pick it up with a hand to keep it in your inventory until you open it.
+Gold packs are how you earn gold coins, which you spend in the player shop. About one in every four things coming toward you in an endless run is a gold pack, in one of the three lanes, and you pick it up with a hand to keep it in your inventory until you open it.
 
 How a gold pack works.
 
@@ -14,13 +14,16 @@ Be careful: if you run onto a pack in its lane, or land on it from a jump, it br
 
 Opening one.
 
-Use a gold pack from your inventory to open it, and it gives you a random number of gold coins, which depends on your level:
+Use a gold pack from your inventory to open it, and it gives you a random number of gold coins, which depends on your level and how far into the run you are. These are the full amounts:
 
 Easy: 100 to 300 gold coins.
 Medium: 200 to 600 gold coins.
 Hard: 300 to 900 gold coins.
 Insane: 400 to 1,200 gold coins.
 Chaos: 500 to 1,500 gold coins.
+
+A pack pays only 10 percent of that at the start of a run, rising steadily to the full amount when the belt reaches your level's top speed, which takes about 4 to 5 minutes. On easy, a pack opened right at the start pays 10 to 30, and one opened at top speed pays 100 to 300.
+What a pack pays is decided when you open it, by the belt's speed at that moment, and powerups that change your speed don't affect it. Holding on to a pack can pay off, but you'll lose it if the run ends first.
 
 Your gold coins are saved as soon as you open a pack, and carry over from one run to the next. Your inventory doesn't, so any pack you haven't opened when the run ends is lost. Press Y during a run to hear how many gold coins you have available to spend.
 
@@ -33,4 +36,4 @@ Gold packs in practice and free runs.
 
 Gold packs never come in practice runs.
 
-In a free run, add gold packs from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. You can also give, set or take them from modify player inventory. Opening one there pays easy's amount into a balance of its own, which Y reads, that starts at 0 and is gone when the run ends, so it never changes your saved gold coins or your statistics.
+In a free run, add gold packs from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. You can also give, set or take them from modify player inventory. Opening one there pays easy's full amount at any speed into a balance of its own, which Y reads, that starts at 0 and is gone when the run ends, so it never changes your saved gold coins or your statistics.
