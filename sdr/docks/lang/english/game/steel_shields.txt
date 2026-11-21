@@ -1,6 +1,6 @@
 Steel shields.
 
-Steel shields are armor. Wear one and it takes the blows in place of your health until it breaks. They turn up only now and then, in one of the three lanes, and you pick one up with a hand to keep it in your inventory until you put it on.
+Steel shields are armor. Wear one and it takes the blows in place of your health until it breaks. They turn up only now and then, in one of the three lanes, and you pick one up with a hand to keep it in your inventory, where you can switch it on and off.
 
 How a steel shield works.
 
@@ -15,16 +15,18 @@ Get into its lane, then press either hand in the last few steps before you reach
 
 Wearing one.
 
-Choose it in your inventory and use it to wear it like armor. You can only wear one at a time, so any others wait in your inventory until the one you're wearing breaks.
-Press M to hear how strong your shield is, as a percentage, an amount such as 320 of 400 endurance, or both, whichever you choose in the game tab of the settings menu. With a joystick, you feel a light tap each time your shield takes a blow.
+Choose it in your inventory and use it to switch it on or off. You'll hear it go on or come off and be told "Shield on." or "Shield off.", and your inventory says which, such as "steel shields, 3, on."
+Your shield stays in your inventory while it's on, and keeps its strength while it's off, so a damaged one comes back just as you left it. Blows go to your health while it's off.
+You can only use one at a time, so any others wait in your inventory until your current one breaks. When it does, the next one stays off until you use it, and starts at full strength.
+Press M to hear how strong your shield is, as a percentage, an amount such as 320 of 400 endurance, or both, whichever you choose in the game tab of the settings menu. If you've taken it off, M tells you that too, such as "Your shield is off, with 80 percent strength." With a joystick, you feel a light tap each time your shield takes a blow.
 
 Steel shields in a run.
 
-Steel shields can turn up from the very start of a run. While you wear one, two powerups can turn up that only affect your shield, and they end early if it breaks.
-Each shield counts toward steel shields picked up, steel shields broken or steel shields used in your statistics.
+Steel shields can turn up from the very start of a run. While your shield is on, two powerups can turn up that only affect your shield, and they end early if it breaks. If you take it off, a running one keeps counting down but does nothing until your shield is back on.
+Each shield counts toward steel shields picked up, steel shields broken or steel shields used in your statistics. A shield counts as used once, the first time it goes on.
 
 Steel shields in practice and free runs.
 
-Every practice run starts you with 1 steel shield in your inventory, except when practicing hazards or floor breakers, and gives it back after each practice death. No other shields turn up while you practice.
+Every practice run starts you with 1 steel shield in your inventory, except when practicing hazards or floor breakers, and gives it back after each practice death, fresh and switched off. No other shields turn up while you practice.
 
-In a free run, add steel shields from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. Modify player inventory can give, set or take them, and while you wear one, modify shield strength can give, set or take its strength, from 1 to 2000.
+In a free run, add steel shields from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. Modify player inventory can give, set or take them, and taking your last one removes it even if it's on. While your shield is on, or after you've taken it off, modify shield strength can give, set or take its strength, from 1 to 2000.

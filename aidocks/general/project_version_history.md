@@ -9,7 +9,8 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.8: open, 2 of 10 (2026-11-21); build/version.txt is 2.8.
+## 2.8: open, 3 of 10 (2026-11-21); build/version.txt is 2.8.
+- Shield toggle ([[project_shield_toggle_plan]], 3 of 10): U switches the current steel shield on or off (toggle_shield(), wear and remove sounds). It stays in the inventory until it breaks and keeps its strength while off (shield_in_use); spares wait, off, until it breaks; it counts as used once. M, session statuses and modify shield strength read a shield that's off. Tests: 6 PASSED across sections 1 and 2.
 - Player stats ([[project_character_upgrades_plan]], 2 of 10): a character category first in the player shop with attack (100 gold coins a point), defence (200) and shield defence (300), 1 for 1, no cap, never below 1 damage, after the level and powerups (game/playerstats.nvgt). They work at once, last through lost lives and reset with reset_run(). Session statuses list them; a free run has modify player stats. Document: player_stats.txt (52 game documents). Tests: 8 PASSED across sections 1 and 2.
 - Master helper ([[project_catch_all_helper_plan]], 1 of 10): a seventh helper at 15,000 gold coins doing all six jobs. specials.nvgt's helper_working() is true for a helper or the master helper, while helper_active() stays each helper's own setting. Its document is master_helpers.txt (51 game documents). All seven helper documents say what happens on a slide and in a flight. Tests: 3 of 3 PASSED.
 

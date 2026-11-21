@@ -20,7 +20,7 @@ Rapid Fire and Sticky Trigger, which make your guns fire faster or slower.
 Tough Hide and Soft Hide, which make hits do half or double damage to your health.
 Sturdy Shield and Brittle Shield, which make hits do half or double damage to your shield.
 
-The shield pair only turns up while you're wearing a shield, and ends early if your shield breaks.
+The shield pair only turns up while your shield is on, and ends early if your shield breaks. If you take your shield off, a running one keeps counting down but does nothing until it's back on.
 
 Powerups in a run.
 

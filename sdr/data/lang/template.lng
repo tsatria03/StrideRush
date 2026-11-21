@@ -39,9 +39,10 @@ Healed to * health.=Healed to $1 health.
 * wore off.=$1 wore off.
 
 // includes/game/shield.nvgt
-You're already wearing a shield.=You're already wearing a shield.
-You put on the steel shield.=You put on the steel shield.
+Shield off.=Shield off.
+Shield on.=Shield on.
 You're not wearing a shield.=You're not wearing a shield.
+Your shield is off, with * strength.=Your shield is off, with $1 strength.
 Shield strength, *.=Shield strength, $1.
 Shield strength, * endurance remaining.=Shield strength, $1 endurance remaining.
 

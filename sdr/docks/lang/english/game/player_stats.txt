@@ -24,7 +24,7 @@ Shield defence: 300 gold coins.
 
 Each one has the usual packs of 1, 5, 10, 25, 50 and 100, then buy all, and a pack of 5 gives you 5 points. There's no limit to how many points you can have.
 Your points work the moment you buy them, and they don't go into your inventory, so there's nothing to choose or use.
-Shield defence is only listed while you have a steel shield in your inventory or are wearing one. Any shield defence you've already bought stays yours when a shield breaks, and works again on your next one.
+Shield defence is only listed while you have a steel shield in your inventory, on or off. Any shield defence you've already bought stays yours when a shield breaks, and works again on your next one.
 
 Checking your points.
 

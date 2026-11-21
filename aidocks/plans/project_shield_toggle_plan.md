@@ -1,6 +1,6 @@
 ---
 name: project_shield_toggle_plan
-description: SETTLED (2026-11-21, 2.8's third entry): switching a steel shield on and off from the inventory with wear and remove sounds, saying shield on or off and keeping its strength until it breaks, after SimpleFighter; 3 sections; Q&A log
+description: COMPLETE (2026-11-21, 2.8's third entry): switching a steel shield on and off from the inventory with wear and remove sounds, saying shield on or off and keeping its strength until it breaks, after SimpleFighter; 3 sections; Q&A log
 metadata:
   type: project
 ---
@@ -46,5 +46,6 @@ The dev's idea: a worn steel shield can be taken off and put back on. Nothing ge
 - Q5: count a shield as used once, the first time it goes on? Dev: "agreed".
 - Q6: other runs, practice deaths, free run inventory and clear belt? Dev: "agreed."
 - Q7: the changelog wording? Dev: "it works". Plan SETTLED.
+- Section 3 BUILT (2026-11-21, after 31be880): steel shields, inventory, keyboard and joystick, powerups, player stats, player shop and free runs updated; the changelog entry on top (2.8 at 3 of 10). Docks get no test steps. Plan COMPLETE.
 - Section 2 BUILT (2026-11-21, after f734b73): speak_shield_strength() and session_status_lines() read a shield that's off; modify shield strength shows for shield_in_use; has_a_shield() is just the inventory count. Practice deaths needed no change, since reset_shield() already leaves the refilled shield fresh and off. Tests: 1 of 3 (M and statuses while off), 2 of 3 (the console and shield defence's visibility), 3 of 3 (a practice death gives a fresh shield, off) all PASSED.
 - Section 1 BUILT (2026-11-21, after bcfb1b7): toggle_shield() replaces use_shield(); shield_in_use marks a current shield that has been put on; a break calls reset_shield() and takes one from the stack; the inventory line reads on or off; clear_inventory() and losing your last shield reset it, so a free run's take and set already follow the settled rule. Tests: 1 of 3 (toggle, sounds and inventory line), 2 of 3 (strength kept while off), 3 of 3 (a break, the spare at full strength, the last one leaving) all PASSED.

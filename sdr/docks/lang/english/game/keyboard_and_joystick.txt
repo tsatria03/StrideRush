@@ -15,13 +15,13 @@ Letter D: Uses your right hand, to switch off a force field, open a door or pick
 Both hand keys together, A and D: Claps, to scare away an animal. With nothing for your hands to do, a single hand makes a whoosh and a clap is just a clap.
 Shift plus tab or letter I: Moves to the previous item in your inventory.
 Tab or letter O: Moves to the next item in your inventory.
-Enter or letter U: Uses the item you're on in your inventory, such as opening an ammo pack, unlocking a door with a key, putting on a shield, using a life capsule, a health potion or a teleporter.
+Enter or letter U: Uses the item you're on in your inventory, such as opening an ammo pack, unlocking a door with a key, switching a shield on or off, using a life capsule, a health potion or a teleporter.
 Numbers 1 through 0: Draws the bat, boot, club, dagger, fist, hammer, knife, sword, machine gun or pistol.
 Control or letter F: Swings or fires your weapon. With the machine gun, it keeps firing.
 Letter R: Reloads your gun.
 Letter X: Announces how much ammo your gun has loaded and in reserve.
 Letter H: Announces how much health you have left, and how many lives you have, as a percentage, an amount such as 350 of 500, or both, whichever you choose in the game tab of the settings menu.
-Letter M: Announces how strong the shield you're wearing is, as a percentage, an amount such as 320 of 400 endurance, or both, whichever you choose in the game tab of the settings menu.
+Letter M: Announces how strong your shield is, and whether it's off, as a percentage, an amount such as 320 of 400 endurance, or both, whichever you choose in the game tab of the settings menu.
 Letter L: Announces which lane you're in.
 Letter Z: Announces how far you've run, in steps.
 Letter C: Announces your current speed, in steps a second.
