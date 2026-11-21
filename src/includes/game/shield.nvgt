@@ -188,7 +188,7 @@ return false;
 shield_worn = true;
 shield_hp_left = shield_hp;
 free_shield_full = shield_hp; // a newly worn shield is at the normal strength (freerun.nvgt)
-p.play_stationary(get_pack_sound(shield_folder + "*use*"), false);
+p.play_stationary(get_pack_sound(shield_folder + "*wear*"), false);
 speak_buffer("You put on the steel shield.", "items");
 return true;
 }
@@ -198,7 +198,7 @@ absorbed in full: death plays, with no speech, and it's gone. */
 bool shield_absorb(int damage)
 {
 if (!shield_worn) return false;
-shield_hp_left -= powerup_damage(damage, "Sturdy Shield", "Brittle Shield"); // halved or doubled by the shield powerups
+shield_hp_left -= after_defence(powerup_damage(damage, "Sturdy Shield", "Brittle Shield"), player_shield_defence); // halved or doubled by the shield powerups, then your shield defence
 if (shield_hp_left <= 0)
 {
 shield_worn = false;

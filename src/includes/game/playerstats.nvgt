@@ -1,0 +1,41 @@
+/* The player's stats, bought in the player shop's character category. They work at once rather than going into the
+inventory, last through lost lives, and are gone when the run ends. Each point of attack adds 1 to a weapon's hit. Each
+point of defence or shield defence takes 1 off a blow to your health or your shield, after the level and the powerups,
+never below 1. Hazards and floor breaker falls never come through here. */
+int player_attack = 0;
+int player_defence = 0;
+int player_shield_defence = 0;
+
+// From reset_run(): every run starts with none.
+void reset_player_stats()
+{
+player_attack = 0;
+player_defence = 0;
+player_shield_defence = 0;
+}
+bool is_player_stat(const string&in item)
+{
+return shop_character_ids.find(item) >= 0;
+}
+void add_player_stat(const string&in item, int amount)
+{
+if (item == "attack") player_attack += amount;
+else if (item == "defence") player_defence += amount;
+else if (item == "shield_defence") player_shield_defence += amount;
+}
+// A blow after defence or shield defence, at least 1.
+int after_defence(int damage, int points)
+{
+int left = damage - points;
+return left < 1 ? 1 : left;
+}
+// What a hit from weapon w does, with your attack.
+int weapon_hit_damage(int w)
+{
+return weapon_damage[w] * weapon_damage_multiplier + player_attack;
+}
+// Shield defence shows while you carry a steel shield or wear one.
+bool has_a_shield()
+{
+return shield_worn or item_count("steel_shield") > 0;
+}

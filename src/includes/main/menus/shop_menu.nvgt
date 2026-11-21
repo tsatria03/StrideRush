@@ -1,7 +1,7 @@
 /* The shop: slash or F8 during an endless or debug run pauses it and opens this menu, with the open and close sounds through
 dlgplay(), so enter skips either one. It lists its categories, each category its things with their prices, and each
 thing a pack menu: buy 1, 5, 10, 25, 50 or 100, then buy all you can afford. An endless run spends your saved coins and a
-debug run its own temporary ones (shown_coins()), and what you buy goes straight into your inventory. Its sounds go through temp, which keeps playing while the run is paused. */
+debug run its own temporary ones (shown_coins()), and what you buy goes straight into your inventory, or for the character category, straight onto you. Its sounds go through temp, which keeps playing while the run is paused. */
 const string shop_sounds = "main/misc/store/";
 
 // Endless runs and debug runs have the shop; a debug run is the one with no difficulty that isn't practice or a free run.
@@ -20,18 +20,38 @@ while (true)
 {
 setupmenu();
 m.intro_text = "Welcome to the player shop. What would you like to buy?";
+m.add_item("character", "character");
 m.add_item("items", "items");
 m.add_item("specials", "specials");
 m.add_item("back", "back");
 int mres = m.run(focus, false, focus >= 0);
 if (mres < 0 or m.selected_item_id == "back") break;
 focus = mres;
-if (m.selected_item_id == "specials") shop_open_category("specials", shop_special_ids, shop_special_prices);
+if (m.selected_item_id == "character") shop_open_character();
+else if (m.selected_item_id == "specials") shop_open_category("specials", shop_special_ids, shop_special_prices);
 else shop_open_category("items", shop_item_ids, shop_item_prices);
 }
 speak("You're now exiting the player shop.");
 dlgplay(get_pack_sound(shop_sounds + "*close*"));
 resume_game();
+}
+// The character category, with shield defence only while you carry or wear a shield.
+void shop_open_character()
+{
+string[] ids;
+int[] prices;
+for (uint i = 0; i < shop_character_ids.length(); i++)
+{
+if (shop_character_ids[i] == "shield_defence" and !has_a_shield()) continue;
+ids.insert_last(shop_character_ids[i]);
+prices.insert_last(shop_character_prices[i]);
+}
+shop_open_category("character", ids, prices);
+}
+// What a category's things are called in its errors.
+string shop_things(const string&in word)
+{
+return word == "character" ? "character upgrades" : word;
 }
 // The lowest price in a category: with less than this, the category won't open.
 int shop_cheapest(const int[]&in prices)
@@ -43,7 +63,7 @@ if (prices[i] < lowest) lowest = prices[i];
 }
 return lowest;
 }
-// A category's list, each thing with its price and how many you can afford; word is "items" or "specials".
+// A category's list, each thing with its price and how many you can afford; word is "character", "items" or "specials".
 void shop_category_menu(const string&in word, const string[]&in ids, const int[]&in prices)
 {
 int focus = -1;
@@ -63,7 +83,7 @@ int at = ids.find(m.selected_item_id);
 string name = item_display_name(ids[at]);
 if (shown_coins() < prices[at])
 {
-shop_error(shown_coins() < 1 ? "Error! You have no gold coins to buy " + word + " with!" : "Error! You can't afford another " + name + "!");
+shop_error(shown_coins() < 1 ? "Error! You have no gold coins to buy " + shop_things(word) + " with!" : "Error! You can't afford another " + shop_item_words(name, 1) + "!");
 continue;
 }
 shop_pack_menu(ids[at], prices[at]);
@@ -74,7 +94,7 @@ void shop_open_category(const string&in word, const string[]&in ids, const int[]
 {
 if (shown_coins() < shop_cheapest(prices))
 {
-shop_error(shown_coins() < 1 ? "Error! You have no gold coins to buy " + word + " with!" : "Error! You can't afford any of these " + word + "!");
+shop_error(shown_coins() < 1 ? "Error! You have no gold coins to buy " + shop_things(word) + " with!" : "Error! You can't afford any of these " + shop_things(word) + "!");
 return;
 }
 shop_category_menu(word, ids, prices);
@@ -96,7 +116,7 @@ for (uint i = 0; i < shop_pack_sizes.length(); i++)
 int size = shop_pack_sizes[i];
 m.add_item("Buy " + size + " " + shop_item_words(name, size) + " for " + coins_text(int64(size) * price), "" + size);
 }
-m.add_item("Buy all " + name + "s for " + coins_text(can_buy * price), "all");
+m.add_item("Buy all " + shop_item_words(name, 2) + " for " + coins_text(can_buy * price), "all");
 m.add_item("back", "back");
 int mres = m.run(focus, false, focus >= 0 and news == ""); // a purchase's message is enough on its own
 if (mres < 0 or m.selected_item_id == "back") return;
@@ -111,7 +131,8 @@ news = "";
 continue;
 }
 spend_coins(cost);
-give_item(item, int(amount));
+if (is_player_stat(item)) add_player_stat(item, int(amount));
+else give_item(item, int(amount));
 shop_purchase_sounds(cost);
 news = "You bought " + thousands_text(amount) + " " + shop_item_words(name, amount) + " for " + coins_text(cost) + ".";
 if (buy_all or shown_coins() < price)
@@ -121,9 +142,10 @@ return;
 }
 }
 }
-// "health potion" for one, "health potions" for more.
+// "health potion" for one, "health potions" for more; "attack point" and "attack points" for a stat.
 string shop_item_words(const string&in name, int64 amount)
 {
+if (name == "attack" or name == "defence" or name == "shield defence") return name + (amount == 1 ? " point" : " points");
 return amount == 1 ? name : name + "s";
 }
 // Not enough coins: the error sound and its dialog.

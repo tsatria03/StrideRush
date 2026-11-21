@@ -29,7 +29,7 @@ if (shield_absorb(damage))
 joystick_rumble(rumble_shield);
 return blow_shielded;
 }
-int dealt = powerup_damage(damage, "Tough Hide", "Soft Hide"); // halved or doubled by the health powerups
+int dealt = after_defence(powerup_damage(damage, "Tough Hide", "Soft Hide"), player_defence); // halved or doubled by the health powerups, then your defence
 stat_add("damage_taken", dealt < player_health ? dealt : player_health); // only what your health had to lose, as damage past 0 is dropped
 player_health -= dealt;
 if (player_health > 0)

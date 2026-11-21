@@ -262,6 +262,8 @@ const int[] gold_pack_min_coins = {100, 200, 300, 400, 500};
 const int[] gold_pack_max_coins = {300, 600, 900, 1200, 1500};
 /* The shop (shop_menu.nvgt): what it sells and for how many gold coins, the pack sizes, and which coin sound a purchase
 plays: below the first step coin1, then one more along for each step reached. */
+const string[] shop_character_ids = {"attack", "defence", "shield_defence"};
+const int[] shop_character_prices = {100, 200, 300}; // a point each
 const string[] shop_item_ids = {"ammo_pack", "health_potion", "life_capsule", "player_teleporter", "steel_shield"};
 const int[] shop_item_prices = {500, 1000, 5000, 1500, 2000};
 const string[] shop_special_ids = {"animal_helper", "door_helper", "floor_helper", "force_field_helper", "item_helper", "ladder_helper", "master_helper", "slide", "trampoline"};

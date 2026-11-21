@@ -1,6 +1,6 @@
 ---
 name: project_character_upgrades_plan
-description: SETTLED (2026-11-21, 2.8's second entry): a character category first in the player shop selling attack, defence and shield defence, 1 for 1 at 100, 200 and 150 gold coins a point with no cap, lasting the run; 3 sections; Q&A log
+description: SETTLED (2026-11-21, 2.8's second entry): a character category first in the player shop selling attack, defence and shield defence, 1 for 1 at 100, 200 and 300 gold coins a point with no cap, lasting the run; 3 sections; Q&A log
 metadata:
   type: project
 ---
@@ -25,7 +25,7 @@ The dev's idea: a third player shop category, character, selling attack (useful 
 ## Open questions
 
 1. SETTLED: 1 for 1. Each point of attack adds 1 damage to a hit, and each point of defence or shield defence takes 1 off a blow, never below 1 damage.
-2. SETTLED: attack 100, shield defence 150, defence 200 gold coins a point, with the usual pack sizes of 1, 5, 10, 25, 50 and 100 and buy all.
+2. SETTLED: attack 100, defence 200, shield defence 300 gold coins a point, with the usual pack sizes of 1, 5, 10, 25, 50 and 100 and buy all.
 3. SETTLED: no maximum for attack, defence or shield defence.
 4. SETTLED: the level's share first, then the powerups, then defence or shield defence, never below 1 damage. Hazards and floor breaker falls are unaffected.
 5. SETTLED: the shop's usual lines with no current amount, as for the other items; "You bought 5 attack points for 500 gold coins." on buying; your points in the pause menu's view session statuses; no new key.
@@ -58,4 +58,8 @@ The dev's idea: a third player shop category, character, selling attack (useful 
 - Q8c, dev asked when shield items appear in a free run (only while a shield is worn), then: "I was gonna say you need to have a shield in your inventory, but you do not need to wear it". Claude raised that wearing one takes it out of your inventory, so a worn shield should count too. Dev: "I agree with that."
 - Q8: the changelog wording? Dev: "It's good to go". Plan SETTLED.
 - Dev: "There should be a new game dock called player_stats, but save that for the dock section".
+- Section 1 BUILT (2026-11-21, after d6d1ec6): game/playerstats.nvgt holds the three stats, after_defence(), weapon_hit_damage() and has_a_shield(); reset_run() clears them (not clear_inventory(), which a free run also calls to empty the inventory); take_damage() and shield_absorb() take defence off last; the four weapon hit paths use weapon_hit_damage(); the shop lists character first. Dev, after the build: "please make shield defence 300gold" (was 150). Tests: 1 of 3 (shop list and buying), 2 of 3 (shield defence's visibility), 3 of 3 (the new wear sound) all PASSED.
+- Tests: 1 of 4 (shop list and buying) and 2 of 4 (shield defence's visibility) PASSED.
+- Sounds (dev, 2026-11-21): the steel_shield folder lost use.ogg and break.ogg for wear.ogg, remove.ogg and break1 to break6. Wearing now plays wear; the *break* lookup picks the new variants by itself. remove.ogg has no use yet, as a worn shield can't be taken off. Asked the dev whether to add that. Dev: "Let's save that question for after this plan is complete." ASK AGAIN once this plan is complete: should a worn shield be removable, with which key, and does a damaged one keep its strength?
+- Section 1's tests became 3: exact damage can't be checked until section 2 adds modify player stats and your points to the session statuses, so the attack, defence, shield defence and reset checks move to section 2's tests.
 - Q2 and Q3 revised, dev: "Actually I have a better idea, put the 0 back, and no max cap for the following stats. attack, defence, shield defence." At 200 a point, 47 defence costs 9,400 gold coins and 79 costs 15,800, so the price is now what limits them.

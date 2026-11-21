@@ -29,6 +29,7 @@ reset_surface();
 reset_player();
 reset_weapons();
 clear_inventory();
+reset_player_stats(); // attack, defence and shield defence (playerstats.nvgt)
 run_coins = 0; // a free or debug run's coins (goldpack.nvgt)
 reset_shield();
 reset_powerups();
