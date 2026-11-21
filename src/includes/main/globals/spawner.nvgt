@@ -18,7 +18,7 @@ int next_key_mark = 0;
 // The "real doors" choice and practice's mixed doors: true while the next door still needs its key placed first.
 bool key_before_door = true;
 // Items the spawner places too: ammo packs, shields, capsules, potions, teleporters and powerups at their _chance rates, keys before each real door; listed after the obstacles in the spawn debug option.
-string[] item_types = {"ammo_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters", "powerups"};
+string[] item_types = {"ammo_packs", "gold_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters", "powerups"};
 // "all" for the real game, or a debug, practice or free run choice; set by start_run() through set_spawn_only().
 string spawn_only = "all";
 
@@ -108,7 +108,7 @@ if (practice_trampoline_turn and get_pack_sound_folders(type_folder("trampolines
 return available.length() > 0 ? available[random(0, available.length() - 1)] : "";
 }
 // The debug spawn choices that make every spawn one item kind (keys have their own choice).
-string[] debug_item_choices = {"ammo_packs", "steel_shields", "life_capsules", "health_potions", "player_teleporters", "powerups"};
+string[] debug_item_choices = {"ammo_packs", "gold_packs", "steel_shields", "life_capsules", "health_potions", "player_teleporters", "powerups"};
 /* The debug spawn choices: sets next_type and next_countdown and returns true when spawn_only is one of them, false
 otherwise. Practice reuses three: its real doors ("real_doors"), barriers ("barriers_multiple") and combinations
 ("combinations_mixed"). */
@@ -228,6 +228,8 @@ string type = "";
 teleporters and powerups wait for their speeds on easy to insane. */
 // Each item only in the real game; the debug item choices are choose_debug_spawn()'s.
 bool packs_ok = ammopacks_available() and has_joined("ammo_packs") and spawn_only == "all";
+// Gold packs roll first, so their chance is a true one in gold_pack_chance; the slide and trampoline debug choices stay as they are.
+bool gold_ok = goldpacks_available() and gold_packs_allowed() and spawn_only == "all" and !slides_debug and !trampolines_debug;
 bool shields_ok = shields_available() and has_joined("steel_shields") and spawn_only == "all";
 bool capsules_ok = capsules_available() and has_joined("life_capsules") and spawn_only == "all";
 bool potions_ok = potions_available() and has_joined("health_potions") and spawn_only == "all";
@@ -237,7 +239,8 @@ bool powerups_ok = powerups_available() and has_joined("powerups") and spawn_onl
 bool slides_ok = slides_available() and has_joined("slides") and spawn_only == "all" and !practice_run and !slide_holds();
 // Trampolines: normal runs only here; a pad of any kind (trampoline.nvgt).
 bool trampolines_ok = has_joined("trampolines") and spawn_only == "all" and !practice_run and get_pack_sound_folders(type_folder("trampolines") + "*").length() > 0;
-if (slides_ok and random(1, slides_debug ? 2 : slide_chance) == 1 and (slides_debug or survival_roll())) type = "slides";
+if (gold_ok and random(1, gold_pack_chance) == 1) type = "gold_packs";
+else if (slides_ok and random(1, slides_debug ? 2 : slide_chance) == 1 and (slides_debug or survival_roll())) type = "slides";
 else if (trampolines_ok and random(1, trampolines_debug ? 2 : trampoline_chance) == 1 and (trampolines_debug or survival_roll())) type = "trampolines";
 else if (capsules_ok and random(1, life_capsule_chance) == 1 and survival_roll()) type = "life_capsules";
 else if (potions_ok and random(1, health_potion_chance) == 1 and survival_roll()) type = "health_potions";
@@ -340,7 +343,7 @@ any real door) appears beside it in a different lane. Each item has three debug 
 puts each one in your lane, "ammo packs, random lanes" one at a time in any lane, and "ammo packs, multiple lanes" the
 real game's pairs, of that kind only. set_spawn_only() turns the choice into spawn_only (the item's own type) and
 item_lane_mode. */
-string[] item_lane_types = {"ammo_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters"};
+string[] item_lane_types = {"ammo_packs", "gold_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters"};
 string item_lane_mode = ""; // "" all and the real game, "own" your lane, "random" one in any lane, "multiple" same-kind pairs
 void set_spawn_only(string only_type)
 {
@@ -397,6 +400,7 @@ string[] kinds;
 for (uint i = 0; i < item_lane_types.length(); i++)
 {
 // Only kinds that have joined the schedule, so a pair can't sneak in an ammo pack or teleporter early; keys always can.
+if (item_lane_types[i] == "gold_packs" and !gold_packs_allowed()) continue;
 if (item_kind_available(item_lane_types[i]) and has_joined(item_lane_types[i])) kinds.insert_last(item_lane_types[i]);
 }
 if (kinds.length() == 0) return;
@@ -418,6 +422,7 @@ return random(1, 100) <= item_percent();
 void spawn_item(string type, double x, int countdown, int lane)
 {
 if (type == "ammo_packs") spawn_ammopack(x, countdown, lane);
+else if (type == "gold_packs") spawn_goldpack(x, countdown, lane);
 else if (type == "keys") spawn_key(x, countdown, lane);
 else if (type == "steel_shields") spawn_shield(x, countdown, lane);
 else if (type == "life_capsules") spawn_capsule(x, countdown, lane);
@@ -427,6 +432,7 @@ else if (type == "player_teleporters") spawn_teleporter(x, countdown, lane);
 bool item_kind_available(string type)
 {
 if (type == "ammo_packs") return ammopacks_available();
+if (type == "gold_packs") return goldpacks_available();
 if (type == "keys") return keys_available();
 if (type == "steel_shields") return shields_available();
 if (type == "life_capsules") return capsules_available();

@@ -74,6 +74,7 @@ jump_state = 0;
 play_pad_landing(); // a trampoline's land, after a launch (trampoline.nvgt)
 play_landing();
 ammopack_landing(); // landing on an ammo pack by mistake breaks it
+goldpack_landing();
 key_landing(); // and so does landing on a key or a shield
 shield_landing();
 capsule_landing();

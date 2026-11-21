@@ -1,0 +1,202 @@
+/* Gold packs: the only way to earn coins. On the belt a pack works exactly like an ammo pack: its spawn clip, a loop at
+its tile, in its lane; either hand picks it up within hand_window_start(), and running onto it, landing on it or a
+weapon hit breaks it. Packs stack in the inventory, and the use key opens one for a random amount by level. An endless
+run adds it to your saved coins and the statistics; a free or debug run adds it to run_coins, a balance from 0 that
+is thrown away when the run ends. Timed and practice runs never bring them, and the shop never sells them. */
+int64 player_coins = 0; // saved in saves/game.srf
+int64 run_coins = 0; // a free or debug run's coins, reset by reset_run()
+// Endless and debug runs bring them on their own; a free run adds them from its console.
+bool gold_packs_allowed()
+{
+return !timed_run and !practice_run;
+}
+// The balance Y reads: a free or debug run's own, otherwise your saved coins.
+int64 shown_coins()
+{
+return free_run or (run_difficulty < 0 and !practice_run) ? run_coins : player_coins;
+}
+// "1,250 gold coins", or "1 gold coin".
+string coins_text(int64 amount)
+{
+return thousands_text(amount) + (amount == 1 ? " gold coin" : " gold coins");
+}
+// Y: your coins, with the gold check sound only when you have any.
+void speak_coins()
+{
+int64 coins = shown_coins();
+if (coins >= 1) p.play_stationary(get_pack_sound("main/misc/game/*goldcheck*"), false);
+speak_buffer("You have " + coins_text(coins) + " available to spend.", "status");
+}
+sound_pool goldpackpool;
+const string goldpack_folder = "game/equipments/items/common/gold_pack/";
+class goldpack
+{
+double x;
+int lane = 1; // lane_middle until spawned, then the spawner's lane
+double countdown_start;
+bool spent = false; // picked up, broken or jumped past: nothing more can happen to it
+int loopslot = -1;
+}
+goldpack@[] goldpacks(0);
+
+// True when gold pack sounds exist, so the spawner can offer them.
+bool goldpacks_available()
+{
+return get_pack_sound(goldpack_folder + "*loop*") != "";
+}
+// countdown comes from the spawner like an obstacle's; it sets the pickup window and the spacing.
+void spawn_goldpack(double ax, int countdown, int lane = -1)
+{
+goldpack a;
+a.x = ax;
+a.countdown_start = ax - countdown;
+a.lane = lane < 0 ? random(lane_left, lane_right) : lane;
+goldpackpool.play_2d(get_pack_sound(goldpack_folder + "*spawn*"), 0, me.x, lane_across(a.lane, ax), ax, false);
+a.loopslot = goldpackpool.play_2d(get_pack_sound(goldpack_folder + "*loop*"), 0, me.x, lane_across(a.lane, ax), ax, true);
+place_lane_sound(goldpackpool, a.loopslot, a.lane, a.x);
+for (uint i = 0; i < goldpacks.length(); i++)
+{
+if (@goldpacks[i] == null)
+{
+@goldpacks[i] = a;
+return;
+}
+}
+goldpacks.insert_last(a);
+}
+// Called from hand_check() when no force field or door took the press, after ammo packs. Picks up the nearest pack in its window. True if one was.
+bool pick_up_goldpack()
+{
+goldpack@ target = null;
+double target_dist = 0;
+for (uint i = 0; i < goldpacks.length(); i++)
+{
+if (@goldpacks[i] == null) continue;
+goldpack@ a = goldpacks[i];
+if (a.spent or a.lane != current_lane or me.x < hand_window_start(a.x, a.countdown_start) or a.x - me.x < 1) continue;
+if (@target == null or a.x - me.x < target_dist)
+{
+@target = a;
+target_dist = a.x - me.x;
+}
+}
+if (@target == null) return false; // nothing in reach: the press can still pick up a key
+target.spent = true;
+stop_goldpack(target);
+goldpackpool.play_stationary(get_pack_sound(goldpack_folder + "*get*"), false);
+// The player's give sound as it goes into the inventory, together with get.
+p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
+give_item("gold_pack", 1);
+stat_add("gold_packs_picked_up");
+speak_buffer(item_display_name("gold_pack"), "items"); // just the item's name
+return true;
+}
+/* Runs once per step, right after the move. Arriving on a pack's tile on the ground breaks it; arriving in the air
+leaves it to goldpack_landing(), and once you're past its tile still unspent, it was jumped cleanly. */
+void goldpack_check()
+{
+for (uint i = 0; i < goldpacks.length(); i++)
+{
+if (@goldpacks[i] == null) continue;
+goldpack@ a = goldpacks[i];
+if (!a.spent)
+{
+if (me.x == a.x and is_grounded() and a.lane == current_lane and !sliding) break_goldpack(a); // not on a slide: there it's caught or passes (slide.nvgt)
+else if (me.x > a.x) a.spent = true; // jumped clean over: its loop carries on and fades behind you
+}
+// Kept until it's as far behind as obstacles appear ahead, so a missed pack's loop fades out; then dropped.
+if (me.x > a.x + spawn_distance()) remove_goldpack(i);
+}
+}
+// Called from player_land(): landing on a pack's tile by mistake breaks it.
+void goldpack_landing()
+{
+for (uint i = 0; i < goldpacks.length(); i++)
+{
+if (@goldpacks[i] == null) continue;
+if (!goldpacks[i].spent and me.x == goldpacks[i].x and goldpacks[i].lane == current_lane) break_goldpack(goldpacks[i]);
+}
+}
+/* Weapons break items too: a melee swing breaks a pack that's the nearest thing in reach, and a bullet breaks one it
+reaches. These find it; break_goldpack() does the breaking. */
+goldpack@ goldpack_at(double x)
+{
+for (uint i = 0; i < goldpacks.length(); i++)
+{
+if (@goldpacks[i] != null and !goldpacks[i].spent and goldpacks[i].x == x and goldpacks[i].lane == current_lane) return goldpacks[i];
+}
+return null;
+}
+goldpack@ goldpack_in_reach(int reach)
+{
+goldpack@ target = null;
+for (uint i = 0; i < goldpacks.length(); i++)
+{
+if (@goldpacks[i] == null or goldpacks[i].spent or goldpacks[i].lane != current_lane) continue;
+double ahead = goldpacks[i].x - me.x;
+if (ahead < 1 or ahead > reach) continue;
+if (@target == null or goldpacks[i].x < target.x) @target = goldpacks[i];
+}
+return target;
+}
+// A weapon hit on a pack: it breaks (break plays) and is lost. Returns its x, so the weapon's hit plays there.
+double strike_goldpack(goldpack@ a)
+{
+break_goldpack(a);
+return a.x;
+}
+void break_goldpack(goldpack@ a)
+{
+stat_add("gold_packs_broken");
+a.spent = true;
+stop_goldpack(a);
+goldpackpool.play_stationary(get_pack_sound(goldpack_folder + "*break*"), false); // stationary, so the pitch never drops behind you
+}
+void stop_goldpack(goldpack@ a)
+{
+if (a.loopslot > -1) goldpackpool.destroy_sound(a.loopslot);
+a.loopslot = -1;
+}
+void remove_goldpack(uint i)
+{
+if (i >= goldpacks.length() or @goldpacks[i] == null) return;
+stop_goldpack(goldpacks[i]);
+@goldpacks[i] = null;
+}
+// The only place allowed to shrink the array.
+void destroy_all_goldpacks()
+{
+for (uint i = 0; i < goldpacks.length(); i++)
+{
+if (@goldpacks[i] == null) continue;
+stop_goldpack(goldpacks[i]);
+}
+goldpacks.resize(0);
+}
+/* The use key on a gold pack: a random amount for the level (easy's outside a difficulty), saved at once in an endless
+run so a crash can't lose it. Always used. */
+bool use_goldpack()
+{
+int at = run_difficulty >= 0 ? run_difficulty : 0;
+int amount = random(gold_pack_min_coins[at], gold_pack_max_coins[at]);
+p.play_stationary(get_pack_sound(goldpack_folder + "*use*"), false);
+speak_buffer("You got " + coins_text(amount) + ".", "items");
+if (!stats_counting)
+{
+run_coins += amount;
+return true;
+}
+player_coins += amount;
+stat_add("coins_earned", amount);
+writegame();
+return true;
+}
+// Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.
+void goldpack_lane_sounds()
+{
+for (uint i = 0; i < goldpacks.length(); i++)
+{
+if (@goldpacks[i] == null or goldpacks[i].loopslot < 0) continue;
+place_lane_sound(goldpackpool, goldpacks[i].loopslot, goldpacks[i].lane, goldpacks[i].x);
+}
+}

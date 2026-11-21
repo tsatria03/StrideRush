@@ -130,7 +130,7 @@ menu music fades only while each one's dialog is open. */
 void clear_all_progress()
 {
 setupmenu();
-m.intro_text = "Are you sure you want to clear all of your game progresses? This action cannot be undone.";
+m.intro_text = "Are you sure you want to clear all of your game progresses, including your gold coins? This action cannot be undone.";
 m.add_item("Yes", "yes");
 m.add_item("No", "no");
 int mres = m.run();
@@ -142,6 +142,7 @@ return;
 clear_session_stats();
 clear_lifetime_stats(); // the best records and the timed run records go with it
 earned_achievements.delete_all();
+player_coins = 0;
 writegame();
 m.fade_music();
 temp.play_stationary(get_pack_sound("main/ui/other/*complete*"), false);

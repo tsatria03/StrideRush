@@ -142,7 +142,7 @@ target_steps = steps_left;
 // No field counting down: the same press can act on a door, or else pick up an ammo pack, a key, a shield, a capsule, a potion or a teleporter, or does nothing.
 if (@target == null)
 {
-if (!open_door() and !pick_up_ammopack() and !pick_up_key() and !pick_up_shield() and !pick_up_capsule() and !pick_up_potion() and !pick_up_teleporter()) empty_hand_sound(left, right);
+if (!open_door() and !pick_up_ammopack() and !pick_up_goldpack() and !pick_up_key() and !pick_up_shield() and !pick_up_capsule() and !pick_up_potion() and !pick_up_teleporter()) empty_hand_sound(left, right);
 return;
 }
 forcefieldpool.play_stationary(switch_press_sound(target.env), false);

@@ -29,6 +29,7 @@ reset_surface();
 reset_player();
 reset_weapons();
 clear_inventory();
+run_coins = 0; // a free or debug run's coins (goldpack.nvgt)
 reset_shield();
 reset_powerups();
 reset_lane();
@@ -285,6 +286,7 @@ slide_check(); // slide.nvgt: reaching a slide puts you on it
 trampoline_check(); // trampoline.nvgt: a grounded arrival on a pad launches you
 if (!running) return;
 ammopack_check();
+goldpack_check();
 key_check();
 shield_check();
 capsule_check();
@@ -366,6 +368,7 @@ if (controls.action_triggered("info_speed")) speak_buffer(speed_phrase(), "statu
 if (controls.action_triggered("info_time")) speak_buffer(timed_run ? timed_status_line() : "You have been running for " + time_phrase(runtimer.elapsed) + ".", "status"); // a timed run's two clocks (timerun.nvgt)
 if (controls.action_triggered("info_heart")) speak_heart_rate(); // B: your heart rate (heartbeat.nvgt)
 if (controls.action_triggered("info_environment")) speak_buffer(current_env.replace("_", " ", true) + " environment.", "status"); // V: the environment you're in, as L says your lane
+if (controls.action_triggered("info_coins")) speak_coins(); // Y: your coins (goldpack.nvgt)
 weapon_input();
 inventory_input();
 lane_input();

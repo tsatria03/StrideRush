@@ -169,7 +169,7 @@ add_item_and_weapon_lines(lines, stats, lifetime);
 powerups, then swings, shots and reloads. */
 void add_item_and_weapon_lines(string[]@ lines, dictionary@ stats, bool lifetime)
 {
-string[] kinds = {"ammo_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters"};
+string[] kinds = {"ammo_packs", "gold_packs", "keys", "steel_shields", "life_capsules", "health_potions", "player_teleporters"};
 for (uint i = 0; i < kinds.length(); i++)
 {
 string name = kinds[i].replace("_", " ", true);
@@ -177,6 +177,8 @@ add_count_line(lines, stats, lifetime, name + " picked up", kinds[i] + "_picked_
 add_count_line(lines, stats, lifetime, name + " broken", kinds[i] + "_broken");
 add_count_line(lines, stats, lifetime, name + " used", kinds[i] + "_used");
 }
+add_count_line(lines, stats, lifetime, "gold coins earned", "coins_earned");
+add_count_line(lines, stats, lifetime, "gold coins spent", "coins_spent");
 add_count_line(lines, stats, lifetime, "ground powerups collected", "ground_powerups_collected");
 add_count_line(lines, stats, lifetime, "air powerups collected", "air_powerups_collected"); // the flight ones
 add_count_line(lines, stats, lifetime, "melee swings", "melee_swings");

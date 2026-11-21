@@ -88,6 +88,7 @@ destroy_all_forcefields();
 destroy_all_projectiles();
 destroy_all_insects(); // insect.nvgt
 destroy_all_ammopacks();
+destroy_all_goldpacks();
 destroy_all_keys();
 destroy_all_shields();
 destroy_all_capsules();

@@ -37,7 +37,7 @@ return pair >= 0 ? free_pair_name(pair) + " " + name : name;
 (the one you're in as each appears), or a set lane. It rides to the spawner in free_lane_next, as the health does. */
 const int free_lane_random = -1;
 const int free_lane_own = -2;
-const string[] free_lane_kinds = {"barriers", "vehicles", "aircrafts", "trampolines", "ammo_packs", "health_potions", "keys", "life_capsules", "player_teleporters", "steel_shields"};
+const string[] free_lane_kinds = {"barriers", "vehicles", "aircrafts", "trampolines", "ammo_packs", "gold_packs", "health_potions", "keys", "life_capsules", "player_teleporters", "steel_shields"};
 int free_lane_next = free_lane_random;
 // The lane for the thing being placed now: lane_left to lane_right, or -1 for its usual random lane.
 int free_placed_lane()
@@ -75,9 +75,9 @@ int free_hp_next = 0; // the next placed breakable obstacle's set health, or 0
 const string[] free_obstacle_ids = {"aircrafts", "animals", "barriers", "combinations", "fake_doors", "walls", "floor_breakers", "force_fields", "hazards", "insects", "mines", "projectiles", "real_doors", "ladders", "spikes", "trampolines", "vehicles", "winds"};
 const string[] free_obstacle_names = {"aircrafts", "animals", "barriers", "combinations", "fake doors", "fake walls", "floor breakers", "force fields", "hazards", "insects", "mines", "projectiles", "real doors", "real walls", "spikes", "trampolines", "vehicles", "winds"};
 const string[] free_obstacle_singulars = {"aircraft", "animal", "barrier", "combination", "fake door", "fake wall", "floor breaker", "force field", "hazard", "insect", "mine", "projectile", "real door", "real wall", "spike", "trampoline", "vehicle", "wind"};
-const string[] free_item_ids = {"ammo_packs", "health_potions", "keys", "life_capsules", "player_teleporters", "steel_shields"};
-const string[] free_item_names = {"ammo packs", "health potions", "keys", "life capsules", "player teleporters", "steel shields"};
-const string[] free_item_singulars = {"ammo pack", "health potion", "key", "life capsule", "player teleporter", "steel shield"};
+const string[] free_item_ids = {"ammo_packs", "gold_packs", "health_potions", "keys", "life_capsules", "player_teleporters", "steel_shields"};
+const string[] free_item_names = {"ammo packs", "gold packs", "health potions", "keys", "life capsules", "player teleporters", "steel shields"};
+const string[] free_item_singulars = {"ammo pack", "gold pack", "health potion", "key", "life capsule", "player teleporter", "steel shield"};
 const string[] free_special_ids = {"powerups", "slides"};
 const string[] free_special_names = {"powerups", "slides"};
 const string[] free_special_singulars = {"powerup", "slide"};
@@ -268,6 +268,7 @@ else if (type == "vehicles") destroy_all_vehicles();
 else if (type == "aircrafts") destroy_all_aircrafts();
 else if (type == "trampolines") destroy_all_trampolines();
 else if (type == "ammo_packs") destroy_all_ammopacks();
+else if (type == "gold_packs") destroy_all_goldpacks();
 else if (type == "keys") destroy_all_keys();
 else if (type == "steel_shields") destroy_all_shields();
 else if (type == "life_capsules") destroy_all_capsules();

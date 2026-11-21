@@ -81,6 +81,10 @@ if (item == "ammo_pack")
 {
 if (use_ammopack()) item_used(item);
 }
+else if (item == "gold_pack")
+{
+if (use_goldpack()) item_used(item);
+}
 else if (is_key_item(item))
 {
 if (use_key(item)) item_used(item);

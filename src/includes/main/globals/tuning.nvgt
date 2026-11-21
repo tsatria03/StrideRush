@@ -255,6 +255,11 @@ ammo_pack_min to ammo_pack_max rounds to the reserve of the gun you're holding, 
 const int ammo_pack_chance = 8;
 const int ammo_pack_min = 5;
 const int ammo_pack_max = 10;
+/* Gold packs. About one spawn in gold_pack_chance is a gold pack, in endless runs from the first step. Opening one gives a
+random amount of coins between these, one entry per level, easy to chaos. */
+const int gold_pack_chance = 8;
+const int[] gold_pack_min_coins = {100, 200, 300, 400, 500};
+const int[] gold_pack_max_coins = {300, 600, 900, 1200, 1500};
 const int gun_max_reserve = 200; // a reload still loads at most gun_start_loaded
 
 /* Shields. About one spawn in shield_chance is a steel shield. A worn one starts at shield_hp and takes each blow's

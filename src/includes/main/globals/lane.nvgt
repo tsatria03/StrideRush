@@ -84,6 +84,7 @@ pool.items[slot].update(pool.last_listener_x, pool.last_listener_y, pool.last_li
 void item_lane_sounds()
 {
 ammopack_lane_sounds();
+goldpack_lane_sounds();
 key_lane_sounds();
 shield_lane_sounds();
 capsule_lane_sounds();

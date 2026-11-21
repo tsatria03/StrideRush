@@ -76,6 +76,8 @@ double strike_item_at(double x)
 {
 ammopack@ a = ammopack_at(x);
 if (@a != null) return strike_ammopack(a);
+goldpack@ gp = goldpack_at(x);
+if (@gp != null) return strike_goldpack(gp);
 doorkey@ k = key_at(x);
 if (@k != null) return strike_key(k);
 shield@ s = shield_at(x);

@@ -153,6 +153,7 @@ for (uint i = 0; i < stat_keys.length(); i++)
 if (gs.d.exists("session_" + stat_keys[i])) session_stats.set(stat_keys[i], gs.read_int64("session_" + stat_keys[i]));
 }
 if (gs.d.exists("has_session")) has_session = gs.read_bool("has_session");
+if (gs.d.exists("player_coins")) player_coins = gs.read_int64("player_coins");
 if (gs.d.exists("last_run_difficulty")) last_run_difficulty = gs.read_string("last_run_difficulty");
 if (gs.d.exists("last_played_date")) last_played_date = gs.read_string("last_played_date");
 if (gs.d.exists("last_played_time")) last_played_time = gs.read_string("last_played_time");
@@ -208,6 +209,7 @@ string[] keys = lifetime_stat_keys();
 for (uint i = 0; i < keys.length(); i++) gs.add("stat_" + keys[i], stat_value(lifetime_stats, keys[i]));
 for (uint i = 0; i < stat_keys.length(); i++) gs.add("session_" + stat_keys[i], stat_value(session_stats, stat_keys[i]));
 gs.add("has_session", has_session);
+gs.add("player_coins", player_coins);
 gs.add("last_run_difficulty", last_run_difficulty);
 gs.add("last_played_date", last_played_date);
 gs.add("last_played_time", last_played_time);
