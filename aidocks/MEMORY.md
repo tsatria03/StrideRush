@@ -87,6 +87,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
+- [Helpers plan](plans/project_helpers_plan.md) — SETTLED (2026-11-20, 2.7's tenth entry): animal, floor, force field and ladder helpers in the player shop's specials; 4 sections; Q&A log
 - [Keyboard and joystick plan](plans/project_keyboard_joystick_plan.md) — COMPLETE (2026-11-20, 2.7, entries 2 to 4 of 10, before the shop): fire and duck become one action each with older ini files merged, trigger-aware clashes, Control bindable alone, new default keys; 4 sections
 - [Shop plan](plans/project_shop_plan.md) — COMPLETE (2026-11-20, 2.7, entries 5 to 8 of 10): gold packs give coins in endless runs, the player shop on slash/F8, Y for coins, CookieCraze pack menus, items and specials (slide, trampoline, item helper, door helper), coin stats, 11 achievements; 5 sections
 - [Automatic translation log plan](plans/project_auto_translation_log_plan.md) — COMPLETE (2026-11-20, 2.7, first entry): the logging checkbox removed, untranslated lines always logged for any language but fallback
