@@ -87,6 +87,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
+- [Free run shop plan](plans/project_free_run_shop_plan.md) — SETTLED (2026-11-21, 2.8's sixth entry): the player shop in free runs, with a modify player gold console item; 2 sections; Q&A log
 - [Gold pack scaling plan](plans/project_gold_pack_scaling_plan.md) — COMPLETE (2026-11-21, 2.8's fourth and fifth entries): gold packs come 1 in 4, pay 10 percent early in an endless run and rise to full at top speed, closing the quit and repeat loophole; shop categories always open; 2 sections; Q&A log
 - [Shield toggle plan](plans/project_shield_toggle_plan.md) — COMPLETE (2026-11-21, 2.8's third entry): switching a steel shield on and off from the inventory, with the wear and remove sounds, keeping its strength until it breaks; 3 sections; Q&A log
 - [Character upgrades plan](plans/project_character_upgrades_plan.md) — COMPLETE (2026-11-21, 2.8's second entry): a character category first in the player shop with attack, defence and shield defence, after SimpleFighter's arena shop; player_stats document; 3 sections; Q&A log
