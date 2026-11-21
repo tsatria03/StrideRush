@@ -46,3 +46,4 @@ The dev's idea: a worn steel shield can be taken off and put back on. Nothing ge
 - Q5: count a shield as used once, the first time it goes on? Dev: "agreed".
 - Q6: other runs, practice deaths, free run inventory and clear belt? Dev: "agreed."
 - Q7: the changelog wording? Dev: "it works". Plan SETTLED.
+- Section 1 BUILT (2026-11-21, after bcfb1b7): toggle_shield() replaces use_shield(); shield_in_use marks a current shield that has been put on; a break calls reset_shield() and takes one from the stack; the inventory line reads on or off; clear_inventory() and losing your last shield reset it, so a free run's take and set already follow the settled rule. Tests: 1 of 3 (toggle, sounds and inventory line), 2 of 3 (strength kept while off), 3 of 3 (a break, the spare at full strength, the last one leaving) all PASSED.

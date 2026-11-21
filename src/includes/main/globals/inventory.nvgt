@@ -9,6 +9,7 @@ void clear_inventory()
 inventory.delete_all();
 invpos = 0;
 reset_helpers(); // specials.nvgt
+reset_shield(); // the current shield goes with the rest (shield.nvgt)
 }
 // Adds amount of an item (negative to remove); an item at 0 or below leaves the inventory.
 void give_item(string item, int amount)
@@ -20,6 +21,7 @@ if (count <= 0)
 {
 inventory.delete(item);
 if (is_helper_item(item)) set_helper(item, false);
+if (item == "steel_shield") reset_shield(); // your last one, so nothing is left on
 }
 else inventory.set(item, count);
 string[] keys = inventory_keys();
@@ -77,6 +79,7 @@ string name = item_display_name(item);
 string position = "Item " + (invpos + 1) + " of " + keys.length() + ".";
 string line = count == 1 ? name : name + "s, " + count;
 if (is_helper_item(item)) line += helper_active(item) ? ", on" : ", off"; // "item helper, on. Item 1 of 2."
+else if (item == "steel_shield") line += shield_worn ? ", on" : ", off"; // "steel shields, 3, on."
 speak_buffer(line + ". " + position, "items");
 }
 // The use key: uses the focused item through that item's own function, which removes it only if it was used.
@@ -108,10 +111,7 @@ else if (is_key_item(item))
 {
 if (use_key(item)) item_used(item);
 }
-else if (item == "steel_shield")
-{
-if (use_shield()) item_used(item);
-}
+else if (item == "steel_shield") toggle_shield(); // it stays in the inventory until it breaks
 else if (item == "life_capsule")
 {
 if (use_capsule()) item_used(item);

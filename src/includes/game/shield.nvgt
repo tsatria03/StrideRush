@@ -2,8 +2,9 @@
 its tile, in its lane; either hand picks it up within hand_window_start() (get and the player's give,
 centered) and it goes into the inventory as "steel_shield". Arriving on its tile on the ground, landing on it, or a
 weapon hit breaks it (break) and it's lost; a clean jump over it misses it.
-U wears one (use_shield()): its use plays centered and it's on, with shield_hp hp. Only one can be worn at a time, so
-spares wait in the inventory until the worn one breaks. Every run starts with none worn. M reads its strength.
+U switches your current shield on or off (toggle_shield()), with its wear or remove sound centered. It stays in the
+inventory while on, and keeps its strength while off. Only one is current at a time: it starts at shield_hp the first
+time it goes on, and spares wait until it breaks, which takes one from the stack. Every run starts with none on. M reads its strength.
 Same entity pattern as ammo packs: null-slot removal, reused slots, and only destroy_all_shields() shrinks the array. */
 sound_pool shieldpool;
 const string shield_folder = "game/equipments/items/common/steel_shield/";
@@ -16,8 +17,9 @@ bool spent = false; // picked up, broken or jumped past: nothing more can happen
 int loopslot = -1;
 }
 shield@[] shields(0);
-// The worn shield: whether one is on, and the hp it has left out of shield_full().
+// The current shield: whether it's on, whether it's been put on yet, and the hp it has left out of shield_full().
 bool shield_worn = false;
+bool shield_in_use = false;
 int shield_hp_left = 0;
 
 // True when shield sounds exist, so the spawner can offer shields.
@@ -25,10 +27,11 @@ bool shields_available()
 {
 return get_pack_sound(shield_folder + "*loop*") != "";
 }
-// Called from reset_run(): no shield is worn at the start of a run.
+// No current shield: at the start of a run, when the inventory is emptied, and when your last one is taken away.
 void reset_shield()
 {
 shield_worn = false;
+shield_in_use = false;
 shield_hp_left = 0;
 }
 /* The shields a run starts with in its inventory, to be worn with U, since shields never spawn in these runs: a practice
@@ -177,34 +180,40 @@ stop_shield(shields[i]);
 }
 shields.resize(0);
 }
-// U on a shield: puts it on at full hp. Refused, keeping it, while one is already worn. Returns true if it was worn.
-bool use_shield()
+// U on a shield: switches the current one on or off. The first time it goes on, it starts at full hp and counts as used.
+void toggle_shield()
 {
 if (shield_worn)
 {
-speak_buffer("You're already wearing a shield.", "items");
-return false;
+shield_worn = false;
+p.play_stationary(get_pack_sound(shield_folder + "*remove*"), false);
+speak_buffer("Shield off.", "items");
+return;
+}
+if (!shield_in_use)
+{
+shield_in_use = true;
+shield_hp_left = shield_hp;
+free_shield_full = shield_hp; // a new shield is at the normal strength (freerun.nvgt)
+stat_add("steel_shields_used");
 }
 shield_worn = true;
-shield_hp_left = shield_hp;
-free_shield_full = shield_hp; // a newly worn shield is at the normal strength (freerun.nvgt)
 p.play_stationary(get_pack_sound(shield_folder + "*wear*"), false);
-speak_buffer("You put on the steel shield.", "items");
-return true;
+speak_buffer("Shield on.", "items");
 }
 /* A blow from anything but a hazard. With a shield worn it takes the damage instead and this returns true, so the caller
 plays only the obstacle's own hit, layered with the shield's, and your health is untouched. The blow that empties it is
-absorbed in full: death plays, with no speech, and it's gone. */
+absorbed in full: death plays, with no speech, and it leaves the inventory, any spare waiting, off. */
 bool shield_absorb(int damage)
 {
 if (!shield_worn) return false;
 shield_hp_left -= after_defence(powerup_damage(damage, "Sturdy Shield", "Brittle Shield"), player_shield_defence); // halved or doubled by the shield powerups, then your shield defence
 if (shield_hp_left <= 0)
 {
-shield_worn = false;
-shield_hp_left = 0;
+reset_shield();
 end_shield_powerup(); // a Sturdy or Brittle Shield ends with it
 p.play_stationary(get_pack_sound(shield_folder + "*death*"), false); // the sound alone, no speech
+give_item("steel_shield", -1);
 }
 else p.play_stationary(get_pack_sound(shield_folder + "*hit*"), false);
 return true;
