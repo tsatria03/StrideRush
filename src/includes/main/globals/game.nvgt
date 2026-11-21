@@ -355,10 +355,16 @@ settingsmenu(true);
 resume_game();
 return;
 }
-// Backspace or F7: a free run's console (freerun.nvgt); nothing in any other run.
+// Backslash or F7: a free run's console (freerun.nvgt); nothing in any other run.
 if (controls.action_triggered("free_console") and free_run)
 {
 free_console();
+return;
+}
+// Slash or F8: the shop, in endless and debug runs (shop_menu.nvgt).
+if (controls.action_triggered("shop") and shop_available())
+{
+shop_menu();
 return;
 }
 if (controls.action_triggered("info_lives")) speak_health(); // H: health percent and lives

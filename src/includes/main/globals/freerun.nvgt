@@ -5,7 +5,7 @@ stats_counting stays off).
   an environment (one to stay in, or random). The run starts with you standing still on an empty belt (spawn_only
   "free", which brings only what you add: freebelt.nvgt): music and ambience only, no footsteps or heartbeat; every key
   works, jump, crouch and hands too, for trying them in place.
-- The console, on the free_console action (backspace and F7), freezes the run while it's open. Its items, alphabetical
+- The console, on the free_console action (backslash and F7), freezes the run while it's open. Its items, alphabetical
   with back last, depend on whether you're standing or running (free_console()).
 - Death mode: no deaths (your last life is never lost), normal deaths (the run ends, and replay or restart brings the
   same run back, standing, with everything as it was: free_prepare_replay()) or practice deaths (practice_death(), set
@@ -326,7 +326,7 @@ if (free_hints and !was) reset_practice_hints();
 speak_buffer(free_hints ? "Practice hints are now on." : "Practice hints are now off.", "misc");
 return true;
 }
-/* The console (backspace or F7), from run_input() in a free run: the run frozen while it's open, its items in alphabetical
+/* The console (backslash or F7), from run_input() in a free run: the run frozen while it's open, its items in alphabetical
 order with back last, standing or running. Escape or back closes it silently, as a nested menu. */
 /* Modify spacing: how much floor comes between one thing on the belt and the next one's countdown (next_gap(),
 spawner.nvgt), from the next gap on. True once one is chosen, said in the misc buffer. */

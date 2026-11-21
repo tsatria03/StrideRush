@@ -260,6 +260,13 @@ random amount of coins between these, one entry per level, easy to chaos. */
 const int gold_pack_chance = 8;
 const int[] gold_pack_min_coins = {100, 200, 300, 400, 500};
 const int[] gold_pack_max_coins = {300, 600, 900, 1200, 1500};
+/* The shop (shop_menu.nvgt): what it sells and for how many gold coins, the pack sizes, and which coin sound a purchase
+plays: below the first step coin1, then one more along for each step reached. */
+const string[] shop_item_ids = {"ammo_pack", "health_potion", "life_capsule", "player_teleporter", "steel_shield"};
+const int[] shop_item_prices = {500, 1000, 5000, 1500, 1500};
+const int[] shop_pack_sizes = {1, 5, 10, 25, 50, 100};
+const int[] shop_coin_steps = {1000, 2500, 5000, 10000, 20000};
+const string[] shop_coin_sounds = {"coin1", "coin50", "coin1000", "coin10000", "coin50000", "coin100000"};
 const int gun_max_reserve = 200; // a reload still loads at most gun_start_loaded
 
 /* Shields. About one spawn in shield_chance is a steel shield. A worn one starts at shield_hp and takes each blow's

@@ -36,7 +36,7 @@ Letter P: Brings up the pause menu. The pause menu lets you resume, restart or q
 Escape: Asks whether you want to quit the run, or quits it straight away if you've turned the question off in the settings menu.
 F1: Shows every key binding, and every joystick binding while a joystick is connected, with the run paused until you close it.
 F2: Opens the settings menu with its game, menu and speech tabs, with the run paused until you close it.
-Backspace or F7: In a free run, opens the free run console, with the run paused until you close it.
+Backslash or F7: In a free run, opens the free run console, with the run paused until you close it.
 
 Speech buffer commands.
 

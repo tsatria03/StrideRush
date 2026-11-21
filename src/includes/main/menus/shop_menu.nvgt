@@ -1,0 +1,134 @@
+/* The shop: slash or F8 during an endless or debug run pauses it and opens this menu, with the open and close sounds through
+dlgplay(), so enter skips either one. It lists its categories, each category its things with their prices, and each
+thing a pack menu: buy 1, 5, 10, 25, 50 or 100, then buy all you can afford. An endless run spends your saved coins and a
+debug run its own temporary ones (shown_coins()), and what you buy goes straight into your inventory. Its sounds go through temp, which keeps playing while the run is paused. */
+const string shop_sounds = "main/misc/store/";
+
+// Endless runs and debug runs have the shop; a debug run is the one with no difficulty that isn't practice or a free run.
+bool shop_available()
+{
+return stats_counting or (run_difficulty < 0 and !practice_run and !free_run);
+}
+// The run_input() key: pauses the run, runs the shop until you leave it, and resumes.
+void shop_menu()
+{
+pause_game();
+speak("You're now entering the player shop.");
+dlgplay(get_pack_sound(shop_sounds + "*open*"));
+int focus = -1;
+while (true)
+{
+setupmenu();
+m.intro_text = "Shop menu. You have " + coins_text(shown_coins()) + " available to spend.";
+m.add_item("items", "items");
+m.add_item("back", "back");
+int mres = m.run(focus, false, focus >= 0);
+if (mres < 0 or m.selected_item_id == "back") break;
+focus = mres;
+if (shown_coins() < shop_cheapest(shop_item_prices))
+{
+shop_error(shown_coins() < 1 ? "Error! You have no gold coins to buy items with!" : "Error! You can't afford any of these items!");
+continue;
+}
+shop_items_menu();
+}
+speak("You're now exiting the player shop.");
+dlgplay(get_pack_sound(shop_sounds + "*close*"));
+resume_game();
+}
+// The lowest price in a category: with less than this, the category won't open.
+int shop_cheapest(const int[]&in prices)
+{
+int lowest = prices[0];
+for (uint i = 1; i < prices.length(); i++)
+{
+if (prices[i] < lowest) lowest = prices[i];
+}
+return lowest;
+}
+// The items you can buy, each with its price and how many you can afford.
+void shop_items_menu()
+{
+int focus = -1;
+while (true)
+{
+setupmenu();
+m.intro_text = "Items menu. You have " + coins_text(shown_coins()) + " available to spend.";
+for (uint i = 0; i < shop_item_ids.length(); i++)
+{
+string name = item_display_name(shop_item_ids[i]);
+m.add_item(name + ", costs " + coins_text(shop_item_prices[i]) + ". You can buy " + thousands_text(shown_coins() / shop_item_prices[i]) + ".", shop_item_ids[i]);
+}
+m.add_item("back", "back");
+int mres = m.run(focus, false, focus >= 0);
+if (mres < 0 or m.selected_item_id == "back") return;
+focus = mres;
+int at = shop_item_ids.find(m.selected_item_id);
+if (shown_coins() < shop_item_prices[at])
+{
+shop_error(shown_coins() < 1 ? "Error! You have no gold coins to buy items with!" : "Error! You can't afford another " + item_display_name(shop_item_ids[at]) + "!");
+continue;
+}
+shop_pack_menu(shop_item_ids[at], shop_item_prices[at]);
+}
+}
+// One thing's packs. A purchase keeps you on its line, unless it was buy all or you can't afford another.
+void shop_pack_menu(const string&in item, int price)
+{
+string name = item_display_name(item);
+string news = ""; // the last purchase, said as the menu comes back
+int focus = -1;
+while (true)
+{
+int64 can_buy = shown_coins() / price;
+setupmenu();
+m.intro_text = news != "" ? news : learn_upper_first(name) + " menu. You have " + coins_text(shown_coins()) + " available to spend.";
+for (uint i = 0; i < shop_pack_sizes.length(); i++)
+{
+int size = shop_pack_sizes[i];
+m.add_item("Buy " + size + " " + shop_item_words(name, size) + " for " + coins_text(int64(size) * price), "" + size);
+}
+m.add_item("Buy all " + name + "s for " + coins_text(can_buy * price), "all");
+m.add_item("back", "back");
+int mres = m.run(focus, false, focus >= 0 and news == ""); // a purchase's message is enough on its own
+if (mres < 0 or m.selected_item_id == "back") return;
+focus = mres;
+bool buy_all = m.selected_item_id == "all";
+int64 amount = buy_all ? can_buy : int64(parse_int(m.selected_item_id));
+int64 cost = amount * price;
+if (cost > shown_coins())
+{
+shop_error("Error! You can't afford " + thousands_text(amount) + " " + shop_item_words(name, amount) + "!");
+news = "";
+continue;
+}
+spend_coins(cost);
+give_item(item, int(amount));
+shop_purchase_sounds(cost);
+news = "You bought " + thousands_text(amount) + " " + shop_item_words(name, amount) + " for " + coins_text(cost) + ", and have " + coins_text(shown_coins()) + " left.";
+if (buy_all or shown_coins() < price)
+{
+dlgmessage_return(news);
+return;
+}
+}
+}
+// "health potion" for one, "health potions" for more.
+string shop_item_words(const string&in name, int64 amount)
+{
+return amount == 1 ? name : name + "s";
+}
+// Not enough coins: the error sound and its dialog.
+void shop_error(const string&in message)
+{
+temp.play_stationary(get_pack_sound(shop_sounds + "*error*"), false);
+dlgmessage_return(message);
+}
+// A purchase: a random buy and the coin sound for what it cost, together.
+void shop_purchase_sounds(int64 cost)
+{
+temp.play_stationary(get_pack_sound(shop_sounds + "*buy*"), false);
+uint band = 0;
+while (band < shop_coin_steps.length() and cost >= shop_coin_steps[band]) band += 1;
+temp.play_stationary("sounds/" + shop_sounds + shop_coin_sounds[band] + ".ogg", false); // the exact file, since coin1 is also the start of coin1000
+}

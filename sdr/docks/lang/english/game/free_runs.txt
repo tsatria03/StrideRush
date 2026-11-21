@@ -9,7 +9,7 @@ The run starts with you standing still on an empty belt, hearing only the music 
 
 The console.
 
-Press backspace or F7 to open the free run console, which freezes the run while it's open and lists its choices in alphabetical order. Standing still, it has modify death mode, modify environment, modify footsteps, modify heartbeat, modify practice hints, modify running speed, modify spacing, start running and view current setup.
+Press backslash or F7 to open the free run console, which freezes the run while it's open and lists its choices in alphabetical order. Standing still, it has modify death mode, modify environment, modify footsteps, modify heartbeat, modify practice hints, modify running speed, modify spacing, start running and view current setup.
 Once you choose start running, your footsteps and heartbeat begin and the rest of the console appears: add items, add obstacles, add specials, clear belt, clear items, clear obstacles, clear specials, modify ammo limits and modify ammo reserves while a gun is drawn, modify player health, modify player inventory, modify player lives, modify player specials, and modify shield strength while you wear a shield.
 Every change closes the console and tells you what it did in the misc buffer, while view current setup lists your speed, spacing, death mode, footsteps, heartbeat, hints, environment, a slide you're riding and any powerups running, with how long they have left, and everything coming, one line for each kind.
 

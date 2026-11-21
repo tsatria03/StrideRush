@@ -15,6 +15,18 @@ int64 shown_coins()
 {
 return free_run or (run_difficulty < 0 and !practice_run) ? run_coins : player_coins;
 }
+// A shop purchase: an endless run's comes off your saved coins, counted and saved at once; a debug run's off its own.
+void spend_coins(int64 cost)
+{
+if (!stats_counting)
+{
+run_coins -= cost;
+return;
+}
+player_coins -= cost;
+stat_add("coins_spent", cost);
+writegame();
+}
 // "1,250 gold coins", or "1 gold coin".
 string coins_text(int64 amount)
 {
