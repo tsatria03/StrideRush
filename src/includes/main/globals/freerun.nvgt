@@ -677,8 +677,8 @@ bool free_give_items()
 {
 setupmenu();
 m.intro_text = "Choose the item you'd like to be given.";
-string[] ids = free_ids("item");
-for (uint i = 0; i < ids.length(); i++) m.add_item(free_kind_name(ids[i], "item"), ids[i]);
+string[] ids = free_inventory_ids();
+for (uint i = 0; i < ids.length(); i++) m.add_item(free_inventory_name(ids[i]), ids[i]);
 m.add_item("all items", "all");
 m.add_item("back", "back");
 int mres = m.run(free_give_focus, false, free_give_focus >= 0);
@@ -712,7 +712,7 @@ return true;
 }
 free_give_kind(type, n);
 if (type == "keys") speak_buffer(n + " of each key given.", "misc");
-else speak_buffer(n + " " + free_kind_name(type, "item", n) + " given.", "misc");
+else speak_buffer(n + " " + free_inventory_name(type, n) + " given.", "misc");
 return true;
 }
 /* Take items: only what's in your inventory, each with its count ("health potion,
@@ -813,8 +813,8 @@ bool free_set_items()
 {
 setupmenu();
 m.intro_text = "Choose the item you'd like to set.";
-string[] ids = free_ids("item");
-for (uint i = 0; i < ids.length(); i++) m.add_item(free_kind_name(ids[i], "item"), ids[i]);
+string[] ids = free_inventory_ids();
+for (uint i = 0; i < ids.length(); i++) m.add_item(free_inventory_name(ids[i]), ids[i]);
 m.add_item("all items", "all");
 m.add_item("back", "back");
 int mres = m.run(free_set_focus, false, free_set_focus >= 0);
@@ -848,6 +848,6 @@ return true;
 }
 free_set_kind(type, n);
 if (type == "keys") speak_buffer("You now have " + n + " of each key.", "misc");
-else speak_buffer("You now have " + n + " " + free_kind_name(type, "item", n) + ".", "misc");
+else speak_buffer("You now have " + n + " " + free_inventory_name(type, n) + ".", "misc");
 return true;
 }

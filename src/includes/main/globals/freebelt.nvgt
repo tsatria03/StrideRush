@@ -78,6 +78,10 @@ const string[] free_obstacle_singulars = {"aircraft", "animal", "barrier", "comb
 const string[] free_item_ids = {"ammo_packs", "gold_packs", "health_potions", "keys", "life_capsules", "player_teleporters", "steel_shields"};
 const string[] free_item_names = {"ammo packs", "gold packs", "health potions", "keys", "life capsules", "player teleporters", "steel shields"};
 const string[] free_item_singulars = {"ammo pack", "gold pack", "health potion", "key", "life capsule", "player teleporter", "steel shield"};
+// The player shop's specials, which give, set and take items list but add items doesn't, since they never come on the belt.
+const string[] free_bought_ids = {"door_helpers", "item_helpers", "slides", "trampolines"};
+const string[] free_bought_names = {"door helpers", "item helpers", "slides", "trampolines"};
+const string[] free_bought_singulars = {"door helper", "item helper", "slide", "trampoline"};
 const string[] free_special_ids = {"powerups", "slides"};
 const string[] free_special_names = {"powerups", "slides"};
 const string[] free_special_singulars = {"powerup", "slide"};
@@ -103,6 +107,21 @@ return free_special_names;
 }
 if (one) return free_obstacle_singulars;
 return free_obstacle_names;
+}
+// What give and set items list: every item and bought special, alphabetical.
+string[] free_inventory_ids()
+{
+string[] ids = free_item_ids;
+for (uint i = 0; i < free_bought_ids.length(); i++) ids.insert_last(free_bought_ids[i]);
+ids.sort_ascending();
+return ids;
+}
+// Their spoken name, for that many.
+string free_inventory_name(const string&in type, int amount = 2)
+{
+int at = free_bought_ids.find(type);
+if (at < 0) return free_kind_name(type, "item", amount);
+return amount == 1 ? free_bought_singulars[at] : free_bought_names[at];
 }
 // "obstacles", "items", "specials".
 string free_group_name(const string&in group)

@@ -31,6 +31,7 @@ bool locked = false; // a real door starts locked until a key unlocks it (U)
 int hp = 0;
 double countdown_start;
 bool opened = false; // a real door opened by hand
+bool helper_denied = false; // the door helper has already tried it with no key (specials.nvgt)
 bool destroyed = false; // a fake door broken by weapons
 bool crashed = false; // run into while still standing
 bool closed = false; // a real door's close has played behind you

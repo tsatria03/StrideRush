@@ -1,0 +1,132 @@
+/* The player shop's specials: inventory items that are only ever bought, or given in a free run, never found on the belt.
+The use key, repeating while held like any item's, starts a slide or a good trampoline's flight, and switches a helper on or off. A helper lasts the whole run,
+through lost lives. The item helper takes every item in your lane as soon as a hand could; the door helper unlocks a real
+door with your first key once it's in key reach, then opens it as soon as a hand could. With no key it tries a locked door once, as a hand would. It leaves fake doors alone. */
+bool item_helper_on = false;
+bool door_helper_on = false;
+
+bool is_helper_item(const string&in item)
+{
+return item == "item_helper" or item == "door_helper";
+}
+bool helper_active(const string&in item)
+{
+return item == "item_helper" ? item_helper_on : door_helper_on;
+}
+void set_helper(const string&in item, bool on)
+{
+if (item == "item_helper") item_helper_on = on;
+else door_helper_on = on;
+}
+void reset_helpers()
+{
+item_helper_on = false;
+door_helper_on = false;
+}
+// The use key on a helper: "Item helper on." with the toggle sound.
+void toggle_helper(const string&in item)
+{
+bool on = !helper_active(item);
+set_helper(item, on);
+p.play_stationary(get_pack_sound(on ? "main/ui/other/*toggleon*" : "main/ui/other/*toggleoff*"), false);
+speak_buffer(learn_upper_first(item_display_name(item)) + (on ? " on." : " off."), "items");
+}
+// The use key on a slide: one starts at once, as a free run's give slide does. True if it was used.
+bool use_slide_item()
+{
+if (flying)
+{
+speak_buffer("You're already in the air.", "items");
+return false;
+}
+if (!slides_available())
+{
+speak_buffer("This environment has no slides.", "items");
+return false;
+}
+give_slide();
+return true;
+}
+// The use key on a trampoline: a good pad's flight from where you are, with a random pad's sounds. True if it was used.
+bool use_trampoline_item()
+{
+if (flying)
+{
+speak_buffer("You're already in the air.", "items");
+return false;
+}
+string[] themes = get_pack_sound_folders(trap_folder(current_env, "trampolines") + "*");
+if (themes.length() == 0)
+{
+speak_buffer("This environment has no trampolines.", "items");
+return false;
+}
+trampoline pad;
+pad.theme = themes[random(0, themes.length() - 1)];
+pad.env = current_env;
+launch(pad);
+return true;
+}
+// The inventory's use key while on a slide, where nothing else can be used: a slide or trampoline says why.
+void sliding_item_note()
+{
+if (!controls.action_pressed("item_use")) return;
+string[] keys = inventory_keys();
+if (keys.length() == 0) return;
+string item = keys[invpos];
+if (item == "slide" or item == "trampoline") speak_buffer("You're already sliding.", "items");
+}
+// Every frame from run_loop(): what the helpers do, while your hands are free.
+void helpers_update()
+{
+if (door_moving or sliding or climbing or repairing) return;
+if (item_helper_on)
+{
+pick_up_ammopack();
+pick_up_goldpack();
+pick_up_key();
+pick_up_shield();
+pick_up_capsule();
+pick_up_potion();
+pick_up_teleporter();
+}
+if (door_helper_on and !flying) door_helper_update();
+}
+// The next door ahead, if it's real: unlocked with your first key once in key reach, then opened in its hand window.
+void door_helper_update()
+{
+door@ next = null;
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] == null or !door_standing(doors[i]) or doors[i].x - me.x < 1) continue;
+if (@next == null or doors[i].x < next.x) @next = doors[i];
+}
+if (@next == null or !next.real) return;
+bool in_hand_window = me.x >= hand_window_start(next.x, next.countdown_start);
+if (next.locked)
+{
+string held = first_key_item();
+if (held != "")
+{
+if (next.x - me.x <= key_reach() and use_key(held)) item_used(held);
+}
+// No key: it tries the door once, as a hand would, with its locked sound and line.
+else if (in_hand_window and !next.helper_denied)
+{
+next.helper_denied = true;
+open_door();
+}
+return;
+}
+if (in_hand_window) open_door();
+}
+// The first key in your inventory, or "".
+string first_key_item()
+{
+string[] keys = inventory_keys();
+for (uint i = 0; i < keys.length(); i++)
+{
+if (is_key_item(keys[i])) return keys[i];
+}
+return "";
+}

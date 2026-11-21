@@ -228,6 +228,7 @@ speedup_check();
 powerup_timers(); // every frame, so a timed powerup ends on time
 powerup_sounds(); // every frame: powerups on the belt replay their sound on a timer
 slide_update(); // every frame: a slide's caught items and its end (slide.nvgt)
+helpers_update(); // every frame: the item and door helpers (specials.nvgt)
 ladder_update(); // every frame: too long on a rung and the ladder collapses (ladder.nvgt)
 if (!running) break;
 floor_breaker_update(); // every frame: too long at a floor breaker's edge and you fall (floor_breaker.nvgt)
