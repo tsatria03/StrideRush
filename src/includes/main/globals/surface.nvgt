@@ -1,6 +1,6 @@
 /* The ground under the belt. Surfaces are whatever folders exist in the current environment's platforms
 (environments.nvgt), found at runtime, so adding or removing a folder changes the pool with no code change. "ledge" is
-reserved for the edges around hazards and is never picked as a normal surface. */
+reserved for the edges around hazards and floor breakers and is never picked as a normal surface. */
 string current_surface = "";
 int64 surface_end_time = 0; // on runtimer, which pauses with the game, so a pause doesn't use up a stretch
 
@@ -27,7 +27,7 @@ void surface_check()
 {
 if (runtimer.elapsed >= surface_end_time) pick_surface(); // checked each step, so the change lands on a footstep
 }
-// The tile under a position: "ledge" just before and after a hazard, otherwise the current surface.
+// The tile under a position: "ledge" just before and after a hazard or floor breaker, otherwise the current surface.
 string tile_at(double x)
 {
 if (on_ledge(x)) return "ledge";

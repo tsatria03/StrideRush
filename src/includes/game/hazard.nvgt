@@ -100,13 +100,19 @@ hazardpool.destroy_sound(hazards[i].loopslot);
 }
 hazards.resize(0);
 }
-// True if x is on a ledge around any hazard (not the hazard tile itself); tile_at() uses this.
+// True if x is on a ledge around any hazard or floor breaker (not the tile itself); tile_at() uses this.
 bool on_ledge(double x)
 {
 for (uint i = 0; i < hazards.length(); i++)
 {
 if (@hazards[i] == null) continue;
 if (x != hazards[i].x and x >= hazards[i].ledge_start and x <= hazards[i].ledge_end) return true;
+}
+for (uint i = 0; i < floor_breakers.length(); i++)
+{
+if (@floor_breakers[i] == null) continue;
+floor_breaker@ f = floor_breakers[i];
+if (x != f.x and x >= f.countdown_start and x <= f.x + ledge_after_tiles) return true;
 }
 return false;
 }

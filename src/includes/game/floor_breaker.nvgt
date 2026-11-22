@@ -2,7 +2,7 @@
 game/environments/<env>/traps/floor_breakers/general/<theme>: spawn as it appears, loop at
 the hole as you near it, open as you open the corridor, fix1 to fix3 (one at random) for each piece you lay, repair once
 the floor is whole, fall if you go through. Its layered countdown (traps/floor_breakers/countdown) runs up to the hole and
-stops once the corridor is open.
+stops once the corridor is open. Its countdown steps and the ledge_after_tiles after the hole are ledge, as a hazard's are (on_ledge()).
 - Opening: a hand press in a key's window (hand_window_start()) opens the corridor. You run on to the edge, the step before
   the hole, where the belt holds you (step_check() waits while repairing).
 - Repairing: a random number of pieces by level (floor_pieces_min to floor_pieces_max), the first press at the edge starting
@@ -106,7 +106,7 @@ else if (!f.spent and me.x == f.x)
 fall_through(f, false); // never opened
 return;
 }
-if (me.x > f.x + spawn_distance()) remove_floor_breaker(i);
+if (me.x > max(f.x + ledge_after_tiles, f.x + spawn_distance())) remove_floor_breaker(i); // kept until you're off its ledge
 }
 }
 void start_repair(floor_breaker@ f)

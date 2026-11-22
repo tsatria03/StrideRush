@@ -4,7 +4,7 @@ Floor breakers break the belt open into a hole of air, across every lane, so swi
 
 How a floor breaker works.
 
-A floor breaker plays the same five-cue countdown as most obstacles, with two notes at once, and you hear the hole getting closer as it comes.
+A floor breaker plays the same five-cue countdown as most obstacles, with two notes at once, and you hear the hole getting closer as it comes. Like a hazard, it has a ledge leading up to it and for two steps after it, so your footsteps change as you near the hole.
 Once you reach its edge with the corridor open, the belt holds you while you rebuild. While you rebuild, you can't switch lanes, jump, crouch, use your weapons or your inventory. Once the floor is whole, you run on over it.
 If you reach a floor breaker without opening its corridor, press the same hand twice, lay a piece too fast, or take too long, you fall through, and your run ends.
 
