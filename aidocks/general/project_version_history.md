@@ -9,7 +9,8 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.8: open, 5 of 10 (2026-11-21); build/version.txt is 2.8.
+## 2.8: open, 6 of 10 (2026-11-21); build/version.txt is 2.8.
+- Free run shop ([[project_free_run_shop_plan]], 6 of 10): shop_available() now includes free runs, spending run_coins; modify player gold (free_set_gold()) gives, sets or takes up to 1,000,000 at a time; free_ask_number() reads 7 digits. Tests: 3 PASSED.
 - Shop categories (a player's request, 5 of 10): every category always opens, so you can browse at 0 coins; choosing what you can't afford gives "Error! You can't afford 1 life capsule!" in place of "another". shop_cheapest() and shop_open_category() removed.
 - Gold pack scaling ([[project_gold_pack_scaling_plan]], 4 of 10): after a forum report of quitting and repeating to farm coins, endless run packs pay gold_pack_start_percent (10) at the level's start speed up to 100 at its top speed (goldpack_percent(), read from step_time on opening); gold_pack_chance went from 8 to 4. Debug and free runs pay easy's full amount. Tests: 4 PASSED.
 - Shield toggle ([[project_shield_toggle_plan]], 3 of 10): U switches the current steel shield on or off (toggle_shield(), wear and remove sounds). It stays in the inventory until it breaks and keeps its strength while off (shield_in_use); spares wait, off, until it breaks; it counts as used once. M, session statuses and modify shield strength read a shield that's off. Tests: 6 PASSED across sections 1 and 2.

@@ -1,4 +1,5 @@
 New in 2.8.
+Added the player shop to free runs, with a modify player gold option in the console, so you can try anything it sells without touching your saved gold coins.
 Made it so every category in the player shop now opens even when you can't afford anything in it, so you can see what you're saving for.
 Made it so gold packs now pay less early in a run and more as the belt speeds up, reaching their full amount at your level's top speed.
 Made it so you can now switch a steel shield on and off from your inventory, and it keeps its strength until it breaks.

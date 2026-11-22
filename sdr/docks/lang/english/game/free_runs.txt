@@ -10,7 +10,7 @@ The run starts with you standing still on an empty belt, hearing only the music 
 The console.
 
 Press backslash or F7 to open the free run console, which freezes the run while it's open and lists its choices in alphabetical order. Standing still, it has modify death mode, modify environment, modify footsteps, modify heartbeat, modify practice hints, modify running speed, modify spacing, start running and view current setup.
-Once you choose start running, your footsteps and heartbeat begin and the rest of the console appears: add items, add obstacles, add specials, clear belt, clear items, clear obstacles, clear specials, modify ammo limits and modify ammo reserves while a gun is drawn, modify player health, modify player inventory, modify player lives, modify player specials, modify player stats, and modify shield strength while your shield is on or after you've taken it off.
+Once you choose start running, your footsteps and heartbeat begin and the rest of the console appears: add items, add obstacles, add specials, clear belt, clear items, clear obstacles, clear specials, modify ammo limits and modify ammo reserves while a gun is drawn, modify player gold, modify player health, modify player inventory, modify player lives, modify player specials, modify player stats, and modify shield strength while your shield is on or after you've taken it off.
 Every change closes the console and tells you what it did in the misc buffer, while view current setup lists your speed, spacing, death mode, footsteps, heartbeat, hints, environment, a slide you're riding and any powerups running, with how long they have left, and everything coming, one line for each kind.
 
 Adding to the belt.
@@ -32,8 +32,9 @@ Modify death mode chooses no deaths, where your last life is never lost and your
 Modify spacing chooses how far apart things come on the belt: very close, with only a couple of steps between one thing and the next one's warning, close, normal, which is how a free run starts, far or very far, with up to 10 seconds between them. A change applies from the next gap on.
 Modify environment chooses an environment to stay in, or random, modify running speed chooses your speed, modify footsteps chooses heard or silent footsteps, modify heartbeat chooses a heard or silent heartbeat, and modify practice hints chooses silent or spoken hints for whatever you've added.
 
-Your health, lives, items and specials.
+Your gold, health, lives, items and specials.
 
+Modify player gold gives, sets or takes your free run's own gold coins, up to 1,000,000 at a time, and take stops at 0. Press slash or F8 to spend them in the player shop. They start at 0, are gone when the run ends or you replay it, and never change your saved gold coins or your statistics.
 Modify player health, modify player lives and modify shield strength each offer give, set and take. Set takes a number, from 1 to 2000 for your health and your shield, or 1 to 1000 for your lives, which becomes your full health, your lives, or your shield's full strength. Give adds to what you have, up to full, and take removes from it, stopping at 1, so it never costs a life or breaks your shield. To hear the amounts you've set when you press H and M, choose amount, or percentage and amount, for the health and shield formats in the game tab of the settings menu.
 Modify player inventory gives you any number of any item or player shop special, choosing keys by color, sets exactly how many of one you carry, from 0 to 1000, or takes items away, listing what you're carrying with how many of each.
 Modify ammo limits chooses limited or unlimited rounds for the drawn gun, and while it's limited, modify ammo reserves gives, sets or takes its rounds, from 0 to 1000.

@@ -1,10 +1,10 @@
 Player shop.
 
-The player shop is where you spend your gold coins during an endless run, on character upgrades that work at once, and on items and specials that go straight into your inventory.
+The player shop is where you spend your gold coins during an endless or free run, on character upgrades that work at once, and on items and specials that go straight into your inventory.
 
 Getting there.
 
-Press slash or F8 during an endless run to enter the player shop. The run pauses while you're inside, and picks up where it left off when you leave. Press enter to skip the sound as you enter or leave. On a joystick, you can give it a button in the joystick tab of the settings menu. The player shop isn't open in timed, practice or free runs.
+Press slash or F8 during an endless or free run to enter the player shop. The run pauses while you're inside, and picks up where it left off when you leave. Press enter to skip the sound as you enter or leave. On a joystick, you can give it a button in the joystick tab of the settings menu. The player shop isn't open in timed or practice runs.
 Your gold coins come from gold packs, as described under gold packs, and are saved from one run to the next. Press Y during a run to hear how many you have available to spend.
 
 Buying something.
@@ -55,8 +55,9 @@ A slide or a trampoline is used up when you use it. You can't use one while a sl
 
 The player shop in your statistics.
 
-What you spend counts toward gold coins spent in your statistics.
+What you spend in an endless run counts toward gold coins spent in your statistics.
 
-Specials in free runs.
+The player shop in free runs.
 
-There's no player shop in a free run, but modify player inventory can give, set or take any of the specials, so you can try them without spending anything.
+A free run has a balance of its own, which starts at 0 and is gone when the run ends, so buying there never changes your saved gold coins or your statistics. Fill it with modify player gold in the console, or by opening gold packs.
+Modify player inventory can also give, set or take any of the specials, so you can try them without spending anything.

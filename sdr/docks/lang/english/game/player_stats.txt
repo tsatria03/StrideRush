@@ -16,7 +16,7 @@ Your points can't save you from falling into a hazard or a floor breaker, which 
 
 Buying them.
 
-Press slash or F8 during an endless run to enter the player shop, then choose character, which comes first. Each point costs:
+Press slash or F8 during an endless or free run to enter the player shop, then choose character, which comes first. Each point costs:
 
 Attack: 100 gold coins.
 Defence: 200 gold coins.
@@ -33,10 +33,10 @@ Press P for the pause menu and choose view session statuses, which lists your at
 Player stats in a run.
 
 Your points last through lost lives, and they're gone when the run ends. Replaying or restarting a run starts you back at 0.
-What you spend on them counts toward gold coins spent in your statistics.
+What you spend on them in an endless run counts toward gold coins spent in your statistics.
 
 Player stats in practice and free runs.
 
 Player stats aren't available in practice or timed runs.
 
-In a free run, modify player stats in the console can give, set or take your attack and defence, and your shield defence while you have a shield, so you can try them without spending anything. Set takes a number from 0 to 1000, and take stops at 0. Clear belt leaves your points alone.
+In a free run, you can buy them in the player shop with that run's own gold coins, or modify player stats in the console can give, set or take your attack and defence, and your shield defence while you have a shield, so you can try them without spending anything. Set takes a number from 0 to 1000, and take stops at 0. Clear belt leaves your points alone.

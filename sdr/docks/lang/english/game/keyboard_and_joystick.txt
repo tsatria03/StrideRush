@@ -38,7 +38,7 @@ Escape: Asks whether you want to quit the run, or quits it straight away if you'
 F1: Shows every key binding, and every joystick binding while a joystick is connected, with the run paused until you close it.
 F2: Opens the settings menu with its game, menu and speech tabs, with the run paused until you close it.
 Backslash or F7: In a free run, opens the free run console, with the run paused until you close it.
-Slash or F8: In an endless run, opens the player shop, with the run paused until you leave it.
+Slash or F8: In an endless or free run, opens the player shop, with the run paused until you leave it.
 
 Speech buffer commands.
 

@@ -36,4 +36,4 @@ Gold packs in practice and free runs.
 
 Gold packs never come in practice runs.
 
-In a free run, add gold packs from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. You can also give, set or take them from modify player inventory. Opening one there pays easy's full amount at any speed into a balance of its own, which Y reads, that starts at 0 and is gone when the run ends, so it never changes your saved gold coins or your statistics.
+In a free run, add gold packs from add items in the console, and choose their lane: random lanes, as usual, your own lane, or the left, middle or right lane. You can also give, set or take them from modify player inventory. Opening one there pays easy's full amount at any speed into a balance of its own, which Y reads and the player shop spends, that starts at 0 and is gone when the run ends, so it never changes your saved gold coins or your statistics.

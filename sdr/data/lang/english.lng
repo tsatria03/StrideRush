@@ -382,6 +382,7 @@ modify death mode=modify death mode
 modify environment=modify environment
 modify footsteps=modify footsteps
 modify heartbeat=modify heartbeat
+modify player gold=modify player gold
 modify player health=modify player health
 modify player inventory=modify player inventory
 modify player lives=modify player lives
