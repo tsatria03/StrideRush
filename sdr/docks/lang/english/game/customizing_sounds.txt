@@ -23,7 +23,7 @@ Other folders are fixed: you can swap the files in them, but new folders are ign
 The kinds of obstacle themselves, since the game only knows its own, and a traps/lasers or traps/npc/robots folder would do nothing.
 The ten weapons in sounds/game/equipments/weapons.
 The five items in sounds/game/equipments/items/common.
-sounds/main/misc/game, for powerups and the game's own events.
+sounds/main/misc/global, for powerups and the game's own events.
 sounds/main/misc/player, for your own sounds.
 The sounds/main/ui folders, for menus, dialogs and the speech buffers.
 

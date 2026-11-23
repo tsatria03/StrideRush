@@ -16,11 +16,11 @@ Your points can't save you from falling into a hazard or a floor breaker, which 
 
 Buying them.
 
-Press slash or F8 during an endless or free run to enter the player shop, then choose character, which comes first. Each point costs:
+Press slash or F8 during an endless or free run to enter the player shop, then choose character, which comes first. Each point costs the following:
 
 Attack: 100 gold coins.
-Defence: 200 gold coins.
-Shield defence: 300 gold coins.
+Defence: 150 gold coins.
+Shield defence: 200 gold coins.
 
 Each one has the usual packs of 1, 5, 10, 25, 50 and 100, then buy all, and a pack of 5 gives you 5 points. There's no limit to how many points you can have.
 Your points work the moment you buy them, and they don't go into your inventory, so there's nothing to choose or use.

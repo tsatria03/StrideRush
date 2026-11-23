@@ -36,7 +36,7 @@ return thousands_text(amount) + (amount == 1 ? " gold coin" : " gold coins");
 void speak_coins()
 {
 int64 coins = shown_coins();
-if (coins >= 1) p.play_stationary(get_pack_sound("main/misc/game/*goldcheck*"), false);
+if (coins >= 1) p.play_stationary(get_pack_sound("main/misc/player/*money*"), false);
 speak_buffer("You have " + coins_text(coins) + " available to spend.", "status");
 }
 sound_pool goldpackpool;

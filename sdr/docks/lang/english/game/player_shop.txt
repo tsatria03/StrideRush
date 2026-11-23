@@ -19,8 +19,8 @@ Character.
 Character upgrades make you hit harder and take less damage for the rest of your run, and the player stats document explains them in full. Each costs this much a point:
 
 Attack: 100 gold coins. Adds 1 damage to every weapon hit.
-Defence: 200 gold coins. Takes 1 off every blow to your health.
-Shield defence: 300 gold coins. Takes 1 off every blow to your shield, and is only listed while you have a steel shield.
+Defence: 150 gold coins. Takes 1 off every blow to your health.
+Shield defence: 200 gold coins. Takes 1 off every blow to your shield, and is only listed while you have a steel shield.
 
 Items.
 

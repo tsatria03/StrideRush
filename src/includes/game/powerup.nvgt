@@ -1,4 +1,4 @@
-/* Powerups: passive pickups with a good or bad event, never in the inventory. Each is a ground one (main/misc/game/powerground
+/* Powerups: passive pickups with a good or bad event, never in the inventory. Each is a ground one (main/misc/global/powerground
 at its tile, replayed on a timer) or a flight one (powerflight), half and half. Arriving on a ground one's tile on the
 ground collects it, and arriving on a flight one's tile in the air; the wrong way on its tile (a jump over a ground one,
 running under a flight one) breaks it, with powerbreak. Weapons and bullets pass through them. On contact powerget plays
@@ -8,7 +8,7 @@ one of the same kind, or its opposite, replaces it and restarts the time, so a k
 together. Their effects come through the current_ helpers and powerup_damage() below.
 Same entity pattern as the items: null-slot removal, reused slots, and only destroy_all_powerups() shrinks the array. */
 sound_pool poweruppool;
-const string powerup_folder = "main/misc/game/";
+const string powerup_folder = "main/misc/global/";
 /* Not looped: a powerup replays its sound as a one-shot every powerup_ground_sound_time or powerup_flight_sound_time, on
 runtimer so pausing stops it. soundslot is the latest one-shot. */
 class powerup
@@ -162,7 +162,7 @@ else if (me.x > pu.x) pu.spent = true;
 if (me.x > pu.x + spawn_distance()) remove_powerup(i);
 }
 }
-/* A powerup missed on its tile: main/misc/game/powerbreak plays in 2d where it is, and it goes silent instead of fading behind
+/* A powerup missed on its tile: main/misc/global/powerbreak plays in 2d where it is, and it goes silent instead of fading behind
 you. One skipped some other way (a teleport past it) just fades behind you. */
 void break_powerup(powerup@ pu)
 {

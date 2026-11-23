@@ -37,7 +37,7 @@ void toggle_helper(const string&in item)
 {
 bool on = !helper_active(item);
 set_helper(item, on);
-p.play_stationary(get_pack_sound(on ? "main/misc/game/*helperon*" : "main/misc/game/*helperoff*"), false);
+p.play_stationary(get_pack_sound(on ? "main/misc/global/*helperon*" : "main/misc/global/*helperoff*"), false);
 speak_buffer(learn_upper_first(item_display_name(item)) + (on ? " on." : " off."), "items");
 }
 // The use key on a slide: one starts at once, as a free run's give slide does. True if it was used.

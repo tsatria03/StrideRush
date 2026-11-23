@@ -1,6 +1,6 @@
 ---
 name: project_character_upgrades_plan
-description: COMPLETE (2026-11-21, 2.8's second entry): a character category first in the player shop selling attack, defence and shield defence, 1 for 1 at 100, 200 and 300 gold coins a point with no cap, lasting the run; 3 sections; Q&A log
+description: COMPLETE (2026-11-21, 2.8's second entry): a character category first in the player shop selling attack, defence and shield defence, 1 for 1 at 100, 150 and 200 gold coins a point with no cap, lasting the run; 3 sections; Q&A log
 metadata:
   type: project
 ---
@@ -25,7 +25,7 @@ The dev's idea: a third player shop category, character, selling attack (useful 
 ## Open questions
 
 1. SETTLED: 1 for 1. Each point of attack adds 1 damage to a hit, and each point of defence or shield defence takes 1 off a blow, never below 1 damage.
-2. SETTLED: attack 100, defence 200, shield defence 300 gold coins a point, with the usual pack sizes of 1, 5, 10, 25, 50 and 100 and buy all.
+2. SETTLED: attack 100, defence 150, shield defence 200 gold coins a point (lowered by the dev on 2026-11-23 from 200 and 300), with the usual pack sizes of 1, 5, 10, 25, 50 and 100 and buy all.
 3. SETTLED: no maximum for attack, defence or shield defence.
 4. SETTLED: the level's share first, then the powerups, then defence or shield defence, never below 1 damage. Hazards and floor breaker falls are unaffected.
 5. SETTLED: the shop's usual lines with no current amount, as for the other items; "You bought 5 attack points for 500 gold coins." on buying; your points in the pause menu's view session statuses; no new key.
