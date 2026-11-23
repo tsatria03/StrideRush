@@ -37,6 +37,9 @@ int[] powerup_name_kinds = {powerup_kind_speed, powerup_kind_speed, powerup_kind
 // The running timed powerup of each kind ("" for none), and when it ends on runtimer.
 string[] active_powerups(powerup_kinds);
 double[] powerup_ends(powerup_kinds);
+// The powerup a power crystal started: its kind (-1 for none) and when it ends, so one from the belt replacing it frees the crystal.
+int crystal_kind = -1;
+double crystal_end = 0;
 
 // True when the powerup sounds exist, so the spawner can offer powerups.
 bool powerups_available()
@@ -46,6 +49,7 @@ return get_pack_sound(powerup_folder + "*powerground*") != "" and get_pack_sound
 // Called from reset_run(): every run starts with no powerup running.
 void reset_powerups()
 {
+crystal_kind = -1;
 for (int k = 0; k < powerup_kinds; k++)
 {
 active_powerups[k] = "";
@@ -199,6 +203,33 @@ speak_buffer(name + ".", "powerups");
 int kind = powerup_name_kinds[index];
 active_powerups[kind] = name;
 powerup_ends[kind] = runtimer.elapsed + powerup_time;
+}
+// True while the powerup a power crystal started is still the one running in its slot.
+bool crystal_active()
+{
+return crystal_kind >= 0 and active_powerups[crystal_kind] != "" and powerup_ends[crystal_kind] == crystal_end;
+}
+/* The use key on a power crystal: starts one of the good powerups at random, the first of each pair, leaving out Sturdy
+Shield unless your shield is on. Refused, keeping it, while the last crystal's powerup is running. True if it was used. */
+bool use_power_crystal()
+{
+if (crystal_active())
+{
+speak_buffer("Your power crystal is still active.", "items");
+return false;
+}
+int[] choices;
+for (uint i = 0; i < powerup_names.length(); i += 2)
+{
+if (!shield_worn and powerup_name_kinds[i] == powerup_kind_shield) continue;
+choices.insert_last(i);
+}
+int index = choices[random(0, choices.length() - 1)];
+p.play_stationary(get_pack_sound(powerup_folder + "*powerget*"), false);
+apply_powerup(index);
+crystal_kind = powerup_name_kinds[index];
+crystal_end = powerup_ends[crystal_kind];
+return true;
 }
 // Runs every frame from run_loop(): a timed powerup whose time is up ends, and says so.
 void powerup_timers()

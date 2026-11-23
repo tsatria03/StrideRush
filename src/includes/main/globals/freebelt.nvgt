@@ -79,9 +79,9 @@ const string[] free_item_ids = {"ammo_packs", "gold_packs", "health_potions", "k
 const string[] free_item_names = {"ammo packs", "gold packs", "health potions", "keys", "life capsules", "player teleporters", "steel shields"};
 const string[] free_item_singulars = {"ammo pack", "gold pack", "health potion", "key", "life capsule", "player teleporter", "steel shield"};
 // The player shop's specials, which give, set and take items list but add items doesn't, since they never come on the belt.
-const string[] free_bought_ids = {"animal_helpers", "door_helpers", "floor_helpers", "force_field_helpers", "item_helpers", "ladder_helpers", "master_helpers", "slides", "trampolines"};
-const string[] free_bought_names = {"animal helpers", "door helpers", "floor helpers", "force field helpers", "item helpers", "ladder helpers", "master helpers", "slides", "trampolines"};
-const string[] free_bought_singulars = {"animal helper", "door helper", "floor helper", "force field helper", "item helper", "ladder helper", "master helper", "slide", "trampoline"};
+const string[] free_bought_ids = {"animal_helpers", "door_helpers", "floor_helpers", "force_field_helpers", "item_helpers", "ladder_helpers", "master_helpers", "power_crystals", "slides", "trampolines"};
+const string[] free_bought_names = {"animal helpers", "door helpers", "floor helpers", "force field helpers", "item helpers", "ladder helpers", "master helpers", "power crystals", "slides", "trampolines"};
+const string[] free_bought_singulars = {"animal helper", "door helper", "floor helper", "force field helper", "item helper", "ladder helper", "master helper", "power crystal", "slide", "trampoline"};
 const string[] free_special_ids = {"powerups", "slides"};
 const string[] free_special_names = {"powerups", "slides"};
 const string[] free_special_singulars = {"powerup", "slide"};

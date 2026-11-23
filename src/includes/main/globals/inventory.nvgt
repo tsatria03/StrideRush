@@ -93,9 +93,13 @@ return;
 }
 string item = keys[invpos];
 // Specials repeat while the use key is held, as every other item does.
-if (item == "slide" or item == "trampoline" or is_helper_item(item))
+if (item == "slide" or item == "trampoline" or item == "power_crystal" or is_helper_item(item))
 {
 if (is_helper_item(item)) toggle_helper(item);
+else if (item == "power_crystal")
+{
+if (use_power_crystal()) give_item(item, -1);
+}
 else if (item == "slide" ? use_slide_item() : use_trampoline_item()) give_item(item, -1);
 return;
 }
