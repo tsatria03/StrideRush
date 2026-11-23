@@ -5,7 +5,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 ## Project
 - [Runner overview](general/project_runner_overview.md) — audio runner in legacy NVGT, first build COMPLETE and v1.0 playable (game 69dedf8, docks 0f0ccff), git repo tsatria03/StrideRush on main, assets in sdr/, CLAUDE.md written 2026-11-01 as a dispatcher
 - [Game design](general/project_game_design.md) — a lane runner (the dev's term) with three lanes, heard from behind, since 1.4 (2d side-scroller through 1.3), jump, duck or turn on cue or die, weapons/hands later, speed-up step timer with oneshot footsteps, ToyMania sound layout
-- [Version history](general/project_version_history.md) — every release newest first (2.8 full at 10 of 10 and not tagged yet, then 2.7 V2.70 at 721011f down to 1.0), its entries in engine terms and plans; moved out of CLAUDE.md 2026-11-10; add each closed version here, not to CLAUDE.md
+- [Version history](general/project_version_history.md) — every release newest first (2.8 down to 1.0; releases after 2.7 aren't recorded, see git tags), its entries in engine terms and plans; moved out of CLAUDE.md 2026-11-10; add each closed version here, not to CLAUDE.md
 - [DualSense controller](general/user_dualsense_controller.md) — the dev owns and tests with a PS5 DualSense; cross is the game's A button; Bluetooth rumble needs SDL's PS5 rumble hint
 - [Tuning history](general/project_tuning_history.md) — how tuning.nvgt's values came to be (earlier values, the dev's reasons, dates), moved out of its comments 2026-11-15; read before changing a tuning value
 - [Core code history](general/project_core_code_history.md) — decision history moved out of the 12 core files' comments (game, spawner, decpool, environments, player, surface, lane, lives, endrun, difficulty, practice, practice_hints) 2026-11-15
@@ -61,6 +61,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [List modified files](general/feedback_list_modified_files.md) — end editing turns with a condensed "Files changed:" (files grouped by reason with counts, not one line each), the git change count since the last commit, and a relaunch note
 - [Don't run or build the game](general/feedback_dont_run_or_build_the_game.md) — never launch or compile; the dev verifies
 - [Verify code while fixing](general/feedback_verify_code_while_fixing.md) — locate by symbol, confirm the finding, flag adjacent bugs
+- [No release records](general/feedback_no_release_records.md) — don't record new releases, tags or closed versions in memory or CLAUDE.md; read git tags and build/version.txt
 - [Check git log](general/feedback_check_git_log_for_commits.md) — always check the latest commit before each section; the dev commits between turns; never commit unless asked
 - [Stage commits before big changes](general/feedback_stage_commits_before_big_changes.md) — flag a commit break point before a risky stage; before a big commit, say how many changes git shows and what they are
 - [CLAUDE.md length](general/feedback_claudemd_length.md) — lean dispatcher under 10,000 chars (40,000 until 2026-11-10); detail goes in aidocks
