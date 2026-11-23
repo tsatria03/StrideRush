@@ -1,4 +1,7 @@
 New in 2.8.
+Added a safety net to the player shop's specials, which saves you once from a hazard or floor breaker.
+Added a power crystal to the player shop's specials, which starts a random good powerup when you use it.
+Added max health and max shield strength to the player shop's character category, which raise your health and shield bars for the rest of your run.
 Made it so floor breakers now have a ledge leading up to them and just past them, the same as hazards.
 Added the player shop to free runs, with a modify player gold option in the console, so you can try anything it sells without touching your saved gold coins.
 Made it so every category in the player shop now opens even when you can't afford anything in it, so you can see what you're saving for.

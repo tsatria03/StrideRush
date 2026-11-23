@@ -5,7 +5,7 @@ Hazards, such as pits, chasms, fire, lava, water, quicksand and electricity, end
 How a hazard works.
 
 A hazard fills the whole belt, so switching lanes won't help. Each one has a five-step ledge leading up to it, and as you step along the ledge you'll hear a five-cue countdown, one cue per step, with the last cue on the step right before the hazard.
-If you're still on the ground when you step onto it, you fall in, and your run ends.
+If you're still on the ground when you step onto it, you fall in, and your run ends, unless you're carrying a safety net, as its document explains.
 
 Getting past a hazard.
 

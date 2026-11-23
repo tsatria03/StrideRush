@@ -18,8 +18,8 @@ On a joystick, the left stick click moves to the previous item, the right stick 
 
 Using an item.
 
-Using the item you're on does what that item does: opening an ammo pack or a gold pack, unlocking a door with a key, switching a shield on or off, using a life capsule, a health potion or a player teleporter. The player shop's specials are explained in its document, and each helper has a document of its own.
-An item is only used up if it does something. An ammo pack with no gun to fill, a key with no locked door in reach, a life capsule at your most lives or a health potion at full health stays in your inventory for later, and a steel shield stays until it breaks. With nothing in your inventory, you're told you don't have anything to use.
+Using the item you're on does what that item does: opening an ammo pack or a gold pack, unlocking a door with a key, switching a shield on or off, using a life capsule, a health potion or a player teleporter. The player shop's specials are explained in its document, and each helper, the power crystal and the safety net has a document of its own.
+An item is only used up if it does something. An ammo pack with no gun to fill, a key with no locked door in reach, a life capsule at your most lives or a health potion at full health stays in your inventory for later, a steel shield stays until it breaks, and a safety net stays until it catches you. With nothing in your inventory, you're told you don't have anything to use.
 While a door carries you, a ladder or a floor breaker holds you, or a slide carries you, you can't use your inventory.
 
 Your inventory in practice and free runs.

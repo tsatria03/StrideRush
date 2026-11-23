@@ -39,7 +39,7 @@ Modify player health, modify player lives and modify shield strength each offer 
 Modify player inventory gives you any number of any item or player shop special, choosing keys by color, sets exactly how many of one you carry, from 0 to 1000, or takes items away, listing what you're carrying with how many of each.
 Modify ammo limits chooses limited or unlimited rounds for the drawn gun, and while it's limited, modify ammo reserves gives, sets or takes its rounds, from 0 to 1000.
 Modify player specials has give powerup and give slide. Give powerup lists every powerup by name, the two shield ones only while you wear a shield, and starts the one you choose straight away, just as if you'd collected it, for its usual 15 seconds, replacing one of the same kind. Give slide puts you on a slide right where you are, for its usual 2 to 4 seconds, or starts a fresh ride if you're already on one, and tells you if your environment has no slides.
-Modify player stats gives, sets or takes your attack and defence, and your shield defence while you have a shield, from 0 to 1000, as the player stats document explains.
+Modify player stats gives, sets or takes your attack, defence and max health, and your max shield strength and shield defence while you have a shield, from 0 to 1000, as the player stats document explains. Max health and max shield strength are bonuses on top of what you set with modify player health and modify shield strength. Those settings stay through a replay and the bonuses don't, and taking bonus points only lowers your current amount if it no longer fits.
 
 Replaying a free run.
 

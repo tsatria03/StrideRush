@@ -21,6 +21,7 @@ Tough Hide and Soft Hide, which make hits do half or double damage to your healt
 Sturdy Shield and Brittle Shield, which make hits do half or double damage to your shield.
 
 The shield pair only turns up while your shield is on, and ends early if your shield breaks. If you take your shield off, a running one keeps counting down but does nothing until it's back on.
+A power crystal from the player shop starts a random good powerup when you use it, as its document explains.
 
 Powerups in a run.
 

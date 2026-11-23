@@ -1,0 +1,30 @@
+Safety nets.
+
+A safety net saves you once from falling into a hazard or a floor breaker, the two things that normally end your run straight away. It's a special you buy in the player shop for 10,000 gold coins, and it never turns up on the belt.
+
+How a safety net works.
+
+You don't need to do anything. A safety net waits in your inventory and is used up by itself if you would otherwise fall, which means any of these:
+
+You're on the ground when you reach a hazard.
+You reach a floor breaker's hole without opening its corridor.
+You make a mistake while repairing a floor breaker, by pressing the same hand twice, laying a piece too fast or taking too long.
+
+When it catches you, you'll hear it and be told "Your safety net caught you." You're set down just past the hazard or hole and keep running, with your health, lives and shield untouched.
+Pressing the use key on one only tells you what it does, and you keep it.
+
+What it doesn't cover.
+
+A safety net only works on hazards and floor breakers. It won't save you from falling off a ladder, or from any other blow.
+It stays unused if you never would have fallen, such as when you jump a hazard, repair a hole properly, or pass over one on a slide or a trampoline flight.
+
+Safety nets in a run.
+
+Carrying several means each one saves you once. Like everything in your inventory, they're gone when the run ends.
+A fall that a net catches doesn't count as being caught by that obstacle, or as getting past it, and a combination it saves you from doesn't count as cleared.
+
+Safety nets in practice and free runs.
+
+Safety nets aren't available in practice or timed runs.
+
+In a free run, you can buy them in the player shop with that run's own gold coins, or give, set or take them from modify player inventory. A net catches you first, whichever death mode you've chosen.

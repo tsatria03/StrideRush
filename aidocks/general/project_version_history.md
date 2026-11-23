@@ -9,7 +9,8 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.8: open, 7 of 10 (2026-11-21); build/version.txt is 2.8.
+## 2.8: FULL at 10 of 10 (2026-11-23), not tagged yet; build/version.txt is 2.8. The next player-facing change opens 2.9.
+- Shop items ([[project_shop_items_plan]], 8 to 10 of 10): max health (50 gold coins a point) and max shield strength (25) in the character category, bonuses added into max_health() and shield_full(); a power crystal (750, use_power_crystal()) starting a random good powerup; a safety net (10,000, safety_net_catch()) catching a hazard or floor breaker fall. Each of the last two has its own game document (54 in all). Tests: 11 PASSED across sections 1 to 3.
 - Sound paths (the dev, no entry, as players hear no difference): main/misc/game moved to main/misc/global, and the Y key's goldcheck became main/misc/player/money. The dev confirmed they all play.
 - Floor breaker ledges (the dev, 7 of 10): on_ledge() in hazard.nvgt now also covers a floor breaker's countdown steps and the ledge_after_tiles after its hole, using the environment's ledge platform. Test: 1 of 1 PASSED.
 - Free run shop ([[project_free_run_shop_plan]], 6 of 10): shop_available() now includes free runs, spending run_coins; modify player gold (free_set_gold()) gives, sets or takes up to 1,000,000 at a time; free_ask_number() reads 7 digits. Tests: 3 PASSED.

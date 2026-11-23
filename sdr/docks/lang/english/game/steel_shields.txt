@@ -6,7 +6,7 @@ How a steel shield works.
 
 You'll hear a steel shield waiting in its lane as you come toward it, and one in another lane just passes you by. Shields turn up much less often than ammo packs, and less often still on harder difficulties.
 A worn shield takes the damage from every blow in place of your health, and you'll hear the obstacle hit your shield instead of you. A force field still throws you forward. A fresh shield takes 400 damage, twice your own health, and the hit that wears it out is still fully blocked, so you'll hear it break and lose nothing.
-Shield defence points from the player shop take some off every blow to your shield, as the player stats document explains.
+Shield defence points from the player shop take some off every blow to your shield, and max shield strength points raise how strong every shield is, as the player stats document explains.
 Shields can't save you from falling into a hazard or a floor breaker.
 
 Picking one up.

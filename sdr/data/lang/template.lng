@@ -36,6 +36,7 @@ You're already at maximum health.=You're already at maximum health.
 Healed to * health.=Healed to $1 health.
 
 // includes/game/powerup.nvgt
+Your power crystal is still active.=Your power crystal is still active.
 * wore off.=$1 wore off.
 
 // includes/game/shield.nvgt
@@ -49,6 +50,7 @@ Shield strength, * endurance remaining.=Shield strength, $1 endurance remaining.
 // includes/game/specials.nvgt
 * on.=$1 on.
 * off.=$1 off.
+Your safety net caught you.=Your safety net caught you.
 You're already in the air.=You're already in the air.
 This environment has no slides.=This environment has no slides.
 This environment has no trampolines.=This environment has no trampolines.
@@ -457,6 +459,7 @@ Your heart rate is * beats per minute.=Your heart rate is $1 beats per minute.
 
 // includes/main/globals/inventory.nvgt
 You don't have anything to use.=You don't have anything to use.
+Your safety net will save you from a hazard or floor breaker.=Your safety net will save you from a hazard or floor breaker.
 
 // includes/main/globals/joystick.nvgt
 Joystick connected.=Joystick connected.
@@ -739,6 +742,8 @@ health=health
 shield=shield
 attack=attack
 defence=defence
+max health=max health
+max shield strength=max shield strength
 shield defence=shield defence
 lane=lane
 speed=speed
@@ -1478,10 +1483,12 @@ movement=movement
 player shop=player shop
 player stats=player stats
 player teleporters=player teleporters
+power crystals=power crystals
 practice runs=practice runs
 projectiles=projectiles
 real doors=real doors
 real walls=real walls
+safety nets=safety nets
 slides=slides
 speech buffers=speech buffers
 spikes=spikes

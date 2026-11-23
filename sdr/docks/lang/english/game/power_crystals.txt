@@ -1,0 +1,25 @@
+Power crystals.
+
+A power crystal starts a random good powerup when you use it, so you can save a boost for when you need one. It's a special you buy in the player shop for 750 gold coins, and it never turns up on the belt.
+
+How a power crystal works.
+
+Choose it in your inventory and use it. You'll hear the powerup sound and the powerup's name, and it runs for its usual 15 seconds, then the crystal is used up.
+It can be any of the seven good powerups: Slow Motion, Moon Jump, Long Crouch, Quick Swings, Rapid Fire, Sturdy Shield or Tough Hide. Sturdy Shield only comes up while your shield is on, so a crystal is never wasted on it.
+Like any powerup, it replaces one of the same kind that's already running, so a crystal that gives you Slow Motion ends a Rush Hour.
+
+Using another one.
+
+While a crystal's powerup is running, using another tells you "Your power crystal is still active." and you keep it, so holding the use key can't spend them all. You can use the next one as soon as that powerup wears off, or if a powerup from the belt replaces it.
+Powerups you collect from the belt never stop you from using a crystal.
+
+Power crystals in a run.
+
+You can carry as many as you can afford. Like everything in your inventory, they're gone when the run ends, and you can't use one while a door, a ladder, a floor breaker or a slide is holding you.
+Using one doesn't count toward your powerup statistics.
+
+Power crystals in practice and free runs.
+
+Power crystals aren't available in practice or timed runs.
+
+In a free run, you can buy them in the player shop with that run's own gold coins, or give, set or take them from modify player inventory.
