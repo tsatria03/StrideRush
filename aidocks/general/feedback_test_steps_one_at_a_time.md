@@ -29,4 +29,8 @@ USE THE DEBUG RUN (dev, 2026-11-08: "For tests in the future, please tell me to 
 
 REPEATED (dev, 2026-11-18, starting the free run lanes tests: "when you show tests, make sure to say something like, test x of x"): open every test message with exactly "Test 1 of 5:" (not "Test step 1 of 5"), and keep it on every step.
 
+EVIDENCE COUNTS AS A PASS (dev, 2026-11-23, softening the explicit result rule above: "Next time, if I show you enough evvedence of a test without saying it was passed, you can automaticly count it as passed when possible. If you aren't sure, you can still ask me."): when the dev pastes or describes results that clearly show everything the test checks, record it as passed, say so, and move on. If the evidence covers only part of the test or could mean something else, ask. A commit or a go-ahead alone still isn't evidence.
+
+ONE PART PER MESSAGE (dev, 2026-11-23: "Please split tests into parts when possible." then "Please show one part at a time. You showed 3 parts again"): when a test has several actions, show one action and what to hear, then wait for the result before the next, labelled "Test 4b of 4".
+
 Docks never get test steps (dev, 2026-11-20: "recall that docks do not require test steps. I'll read those on my own time."). When a section only changes documents, list what changed and say it's ready to commit; don't ask the dev to read them as a test.

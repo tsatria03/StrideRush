@@ -193,8 +193,8 @@ return;
 if (!shield_in_use)
 {
 shield_in_use = true;
-shield_hp_left = shield_hp;
 free_shield_full = shield_hp; // a new shield is at the normal strength (freerun.nvgt)
+shield_hp_left = shield_full(); // with any max shield strength (playerstats.nvgt)
 stat_add("steel_shields_used");
 }
 shield_worn = true;

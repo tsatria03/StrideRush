@@ -438,7 +438,7 @@ m.add_item("modify player health", "health");
 m.add_item("modify player inventory", "inventory"); // give, set and take items
 m.add_item("modify player lives", "lives");
 m.add_item("modify player specials", "specials"); // give powerup and give slide
-m.add_item("modify player stats", "stats"); // attack, defence and shield defence
+m.add_item("modify player stats", "stats"); // attack, defence, max health, max shield strength and shield defence
 }
 m.add_item("modify practice hints", "hints");
 m.add_item("modify running speed", "speed");
@@ -514,10 +514,10 @@ int free_health = player_hp;
 int free_shield_full = shield_hp;
 bool[] free_reserve_unlimited = {false, false, false, false, false, false, false, false, false, false}; // one per weapon_names entry; a normal run's reserve to start
 int[] free_reserve_set = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50}; // gun_start_reserve, as a normal run starts; reset_free_settings() sets them from it
-// Your full health: a free run's set amount, or player_hp.
+// Your full health: a free run's set amount, or player_hp, plus any max health points.
 int max_health()
 {
-return free_run ? free_health : player_hp;
+return (free_run ? free_health : player_hp) + player_max_health;
 }
 // The most lives a capsule can take you to: max_lives, or in a free run the higher of it and your set lives.
 int lives_cap()
@@ -528,7 +528,7 @@ return max_lives;
 // The worn shield's full strength, for its percent (M).
 int shield_full()
 {
-return free_run ? free_shield_full : shield_hp;
+return (free_run ? free_shield_full : shield_hp) + player_max_shield; // with any max shield strength points
 }
 /* Give, set and take: each modify choice opens "Choose how you'd like to change your <what>." with give, set and take,
 then back (escape or back steps out silently). Give adds to what you have now, stopping at full (lives and rounds at
@@ -573,7 +573,7 @@ return true;
 // Modify player health: give, set or take. True once changed.
 bool free_set_health()
 {
-string way = free_change_choice("Choose how you'd like to change your health. You currently have " + player_health + " of " + free_health + " health.", "health");
+string way = free_change_choice("Choose how you'd like to change your health. You currently have " + player_health + " of " + max_health() + " health.", "health");
 if (way == "") return false;
 int n = way == "set" ? free_ask_number("Modify player health", "How much health do you want?", 1, 2000) : free_change_amount("Modify player health", "How much", "health", way, 2000);
 if (n < 0)
@@ -584,15 +584,15 @@ return false;
 if (way == "set")
 {
 free_health = n;
-player_health = n;
-speak_buffer("You now have " + n + " health.", "misc");
+player_health = max_health(); // what you set, plus any max health points
+speak_buffer("You now have " + player_health + " health.", "misc");
 return true;
 }
 int now = way == "give" ? player_health + n : player_health - n;
-if (now > free_health) now = free_health; // give stops at full
+if (now > max_health()) now = max_health(); // give stops at full
 if (now < 1) now = 1; // take never costs a life
 player_health = now;
-speak_buffer("You now have " + now + " of " + free_health + " health.", "misc");
+speak_buffer("You now have " + now + " of " + max_health() + " health.", "misc");
 return true;
 }
 // Modify player lives: give, set or take. Your lives are also what a practice death gives back. True once changed.
@@ -617,7 +617,7 @@ return true;
 // Modify shield strength, for a shield that's on or that you've taken off: give, set or take. True once changed.
 bool free_set_shield()
 {
-string way = free_change_choice("Choose how you'd like to change your shield's strength. Your shield currently has " + shield_hp_left + " of " + free_shield_full + " strength.", "shield strength");
+string way = free_change_choice("Choose how you'd like to change your shield's strength. Your shield currently has " + shield_hp_left + " of " + shield_full() + " strength.", "shield strength");
 if (way == "") return false;
 int n = way == "set" ? free_ask_number("Modify shield strength", "How strong should your shield be?", 1, 2000) : free_change_amount("Modify shield strength", "How much", "strength", way, 2000);
 if (n < 0)
@@ -628,18 +628,18 @@ return false;
 if (way == "set")
 {
 free_shield_full = n;
-shield_hp_left = n;
-speak_buffer("Your shield's strength is now " + n + ".", "misc");
+shield_hp_left = shield_full(); // what you set, plus any max shield strength points
+speak_buffer("Your shield's strength is now " + shield_hp_left + ".", "misc");
 return true;
 }
 int now = way == "give" ? shield_hp_left + n : shield_hp_left - n;
-if (now > free_shield_full) now = free_shield_full; // give stops at full strength
+if (now > shield_full()) now = shield_full(); // give stops at full strength
 if (now < 1) now = 1; // take never breaks the shield
 shield_hp_left = now;
-speak_buffer("Your shield's strength is now " + now + " of " + free_shield_full + ".", "misc");
+speak_buffer("Your shield's strength is now " + now + " of " + shield_full() + ".", "misc");
 return true;
 }
-// Modify player stats: attack, defence, and shield defence while you carry or wear a shield. True once one is changed.
+// Modify player stats: attack, defence and max health, and the two shield stats while you have a shield. True once one is changed.
 bool free_stats_menu()
 {
 setupmenu();
@@ -647,7 +647,7 @@ m.intro_text = "Choose the stat you'd like to change.";
 for (uint i = 0; i < shop_character_ids.length(); i++)
 {
 string stat_id = shop_character_ids[i];
-if (stat_id == "shield_defence" and !has_a_shield()) continue;
+if (is_shield_stat(stat_id) and !has_a_shield()) continue;
 m.add_item(stat_line(item_display_name(stat_id), points_text(player_stat(stat_id))), stat_id);
 }
 m.add_item("back", "back");

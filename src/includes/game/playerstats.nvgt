@@ -1,10 +1,13 @@
 /* The player's stats, bought in the player shop's character category. They work at once rather than going into the
 inventory, last through lost lives, and are gone when the run ends. Each point of attack adds 1 to a weapon's hit. Each
 point of defence or shield defence takes 1 off a blow to your health or your shield, after the level and the powerups,
-never below 1. Hazards and floor breaker falls never come through here. */
+never below 1. Hazards and floor breaker falls never come through here. Each point of max health or max shield strength
+adds 1 to that full amount and 1 to what you have now, and every new shield starts with the bonus. */
 int player_attack = 0;
 int player_defence = 0;
 int player_shield_defence = 0;
+int player_max_health = 0;
+int player_max_shield = 0;
 
 // From reset_run(): every run starts with none.
 void reset_player_stats()
@@ -12,6 +15,8 @@ void reset_player_stats()
 player_attack = 0;
 player_defence = 0;
 player_shield_defence = 0;
+player_max_health = 0;
+player_max_shield = 0;
 }
 bool is_player_stat(const string&in item)
 {
@@ -22,11 +27,26 @@ void add_player_stat(const string&in item, int amount)
 if (item == "attack") player_attack += amount;
 else if (item == "defence") player_defence += amount;
 else if (item == "shield_defence") player_shield_defence += amount;
+else if (item == "max_health")
+{
+player_max_health += amount;
+if (amount > 0) player_health += amount; // a purchase fills the new points; taking some only trims what no longer fits
+if (player_health > max_health()) player_health = max_health();
+}
+else if (item == "max_shield_strength")
+{
+player_max_shield += amount;
+if (!shield_in_use) return;
+if (amount > 0) shield_hp_left += amount;
+if (shield_hp_left > shield_full()) shield_hp_left = shield_full();
+}
 }
 int player_stat(const string&in item)
 {
 if (item == "attack") return player_attack;
 if (item == "defence") return player_defence;
+if (item == "max_health") return player_max_health;
+if (item == "max_shield_strength") return player_max_shield;
 return player_shield_defence;
 }
 // "1 point" or "5 points".
@@ -51,7 +71,12 @@ int weapon_hit_damage(int w)
 {
 return weapon_damage[w] * weapon_damage_multiplier + player_attack;
 }
-// Shield defence shows while you have a steel shield, on or off, as one on stays in the inventory.
+// The two shield stats, which only show while you have a shield.
+bool is_shield_stat(const string&in item)
+{
+return item == "shield_defence" or item == "max_shield_strength";
+}
+// The shield stats show while you have a steel shield, on or off, as one on stays in the inventory.
 bool has_a_shield()
 {
 return item_count("steel_shield") > 0;

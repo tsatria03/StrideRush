@@ -35,14 +35,14 @@ speak("You're now exiting the player shop.");
 dlgplay(get_pack_sound(shop_sounds + "*close*"));
 resume_game();
 }
-// The character category, with shield defence only while you carry or wear a shield.
+// The character category, with the shield stats only while you have a shield.
 void shop_open_character()
 {
 string[] ids;
 int[] prices;
 for (uint i = 0; i < shop_character_ids.length(); i++)
 {
-if (shop_character_ids[i] == "shield_defence" and !has_a_shield()) continue;
+if (is_shield_stat(shop_character_ids[i]) and !has_a_shield()) continue;
 ids.insert_last(shop_character_ids[i]);
 prices.insert_last(shop_character_prices[i]);
 }
@@ -126,7 +126,7 @@ return;
 // "health potion" for one, "health potions" for more; "attack point" and "attack points" for a stat.
 string shop_item_words(const string&in name, int64 amount)
 {
-if (name == "attack" or name == "defence" or name == "shield defence") return name + (amount == 1 ? " point" : " points");
+if (name == "attack" or name == "defence" or name == "max health" or name == "max shield strength" or name == "shield defence") return name + (amount == 1 ? " point" : " points");
 return amount == 1 ? name : name + "s";
 }
 // Not enough coins: the error sound and its dialog.
