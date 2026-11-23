@@ -163,6 +163,7 @@ void fall_through(floor_breaker@ f, bool mistake)
 reset_repair();
 f.spent = true;
 stop_floor_loop(f);
+if (safety_net_catch(f.x)) return; // specials.nvgt: set down just past the hole
 if (set_down_deaths()) last_caught = "floor_breakers"; // what caught you (practice_hints.nvgt)
 else stat_caught("floor_breakers"); // the statistics: times fell into floor breakers, and the death outcome
 last_caught_kind = mistake ? "repair" : "";

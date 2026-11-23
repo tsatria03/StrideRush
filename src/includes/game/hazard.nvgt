@@ -45,6 +45,11 @@ if (@hazards[i] == null) continue;
 if (carried() and me.x == hazards[i].x) continue; // on a slide you pass over it (slide.nvgt)
 if (me.x == hazards[i].x and is_grounded())
 {
+if (safety_net_catch(hazards[i].x)) // specials.nvgt: it passes, neither caught nor cleared
+{
+pair_part_hit(hazards[i].pair); // so a combination it was part of doesn't count as cleared
+return;
+}
 string fall_clip = get_pack_sound(trap_folder(hazards[i].env, "hazards") + hazards[i].theme + "/*fall*");
 if (set_down_deaths()) // a practice run, or a free run on practice or no deaths (freerun.nvgt)
 {

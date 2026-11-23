@@ -40,6 +40,20 @@ set_helper(item, on);
 p.play_stationary(get_pack_sound(on ? "main/misc/global/*helperon*" : "main/misc/global/*helperoff*"), false);
 speak_buffer(learn_upper_first(item_display_name(item)) + (on ? " on." : " off."), "items");
 }
+/* A safety net works by itself: a fall into a hazard or floor breaker at x uses one up and sets you down just past it,
+running on, with your health, lives and shield untouched. True if one caught you. */
+bool safety_net_catch(double x)
+{
+if (item_count("safety_net") < 1) return false;
+give_item("safety_net", -1);
+cancel_movement(); // off the ground, crouched or at a floor breaker's edge, you're set down
+me.x = x + 1;
+update_listeners();
+steptimer.restart();
+p.play_stationary(get_pack_sound("main/misc/player/*move*"), false); // move1 or move2
+speak_buffer("Your safety net caught you.", "items");
+return true;
+}
 // The use key on a slide: one starts at once, as a free run's give slide does. True if it was used.
 bool use_slide_item()
 {
