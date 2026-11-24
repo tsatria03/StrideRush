@@ -45,6 +45,29 @@ CALL_RE = re.compile(r"\b(" + "|".join(CALLS) + r")\s*\(")
 INTRO_RE = re.compile(r"\bintro_text\s*\+?=\s*")
 RETURN_RE = re.compile(r"\breturn\s+")
 MAX_VARIANTS = 8
+# The plain heading each code file's lines get in the language files, so they never show the game's file names.
+SECTION_TITLES = {
+    "ammo": "Ammo packs", "capsule": "Life capsules", "door": "Doors and keys", "goldpack": "Gold packs",
+    "playerstats": "Player stats", "potion": "Health potions", "powerup": "Powerups", "shield": "Steel shields",
+    "specials": "Player shop specials", "teleporter": "Player teleporters", "buffer": "Speech buffers",
+    "dlg": "Dialogs", "downloader": "Downloads", "form": "Form controls", "form_menu": "Menu controls",
+    "ini": "Configuration files", "key_config": "Key bindings", "rotation": "Directions", "speech": "Speech",
+    "virtual_dialogs": "Input boxes", "achievements": "Achievement announcements", "difficulty": "Difficulty",
+    "endrun": "Run endings", "environments": "Environments", "freebelt": "Free run belt",
+    "freerun": "Free run console", "game": "Run readouts", "heartbeat": "Heartbeat", "inventory": "Inventory",
+    "joystick": "Joystick", "lane": "Lanes", "lives": "Health and lives", "practice": "Practice runs",
+    "practice_hints": "Practice hints", "timerun": "Timed runs", "updater": "Updates", "weapons": "Weapons",
+    "achievements_menu": "Achievements menu", "bindings_menu": "Key bindings menu",
+    "learn_sounds_menu": "Learn sounds menu", "menu": "Main and game menus", "pause_menu": "Pause menu",
+    "results_menu": "Session results", "settings_menu": "Settings menu", "shop_menu": "Player shop",
+    "stats_menu": "Statistics menu",
+}
+
+
+def section_title(rel):
+    """The plain heading for a code file's lines; a new file gets its name in words until it's added above."""
+    name = os.path.splitext(os.path.basename(rel))[0]
+    return SECTION_TITLES.get(name, name.replace("_", " ").capitalize())
 
 
 def strip_comments(code):
@@ -393,17 +416,17 @@ def read_lng(path):
 def main():
     details = "--details" in sys.argv
     groups, flagged, seen = scan_code()
-    sections = [("// " + rel, found) for rel, found in groups]
-    for heading, found in (("// Achievements (data/config/game/achievements.ini)", scan_achievements(seen)),
-                           ("// Document names (docks/lang/english)", scan_documents(seen)),
-                           ("// Language names (data/lang, docks/lang)", scan_languages(seen)),
-                           ("// Sound folder names (sounds/game)", scan_sound_folders(seen))):
+    sections = [("// " + section_title(rel), found) for rel, found in groups]
+    for heading, found in (("// Achievement names, descriptions and hints", scan_achievements(seen)),
+                           ("// Document names", scan_documents(seen)),
+                           ("// Language names", scan_languages(seen)),
+                           ("// Environment, obstacle, item and weapon names", scan_sound_folders(seen))):
         if found:
             sections.append((heading, found))
     general = [t for t in GENERAL_LINES if t not in seen]
     if general:
         sections.append(("// General lines, tried last: a statistic is spoken as label, value", general))
-    out = ["// Stride Rush language template, written by build/lang_template.py: every line the game speaks.",
+    out = ["// Stride Rush language template: every line the game speaks.",
            "// Copy this file to <language>.lng and change only the text after each =. A * stands for a value,",
            "// which $1, $2 and on place in your translation. Lines you leave out are spoken in English.", ""]
     total = 0

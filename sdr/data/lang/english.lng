@@ -1,56 +1,65 @@
 // Stride Rush in English, started from template.lng. Change the text after any = to change what the game says;
 // lines left out are spoken as the code has them.
 
-// includes/game/ammo.nvgt
+// Ammo packs
 This weapon doesn't take any ammo.=This weapon doesn't take any ammo.
 This weapon's reserve is already full.=This weapon's reserve is already full.
 You got * rounds of ammo.=You got $1 rounds of ammo.
 
-// includes/game/capsule.nvgt
+// Life capsules
 You're already at maximum lives.=You're already at maximum lives.
 Gained * life.=Gained $1 life.
 Gained * lives.=Gained $1 lives.
 
-// includes/game/door.nvgt
+// Doors and keys
 This door is locked.=This door is locked.
 This door is jammed.=This door is jammed.
 The door is unlocked.=The door is unlocked.
 This door is already unlocked.=This door is already unlocked.
 There is no door nearby.=There is no door nearby.
+
+// Gold packs
 * gold coin=$1 gold coin
 * gold coins=$1 gold coins
 You have * available to spend.=You have $1 available to spend.
 You got *.=You got $1.
+
+// Player stats
 1 point=1 point
 * points=$1 points
 * * point=$1 $2 point
 * * points=$1 $2 points
 
-// includes/game/potion.nvgt
+// Health potions
 You're already at maximum health.=You're already at maximum health.
 Healed to * health.=Healed to $1 health.
-Your power crystal is still active.=Your power crystal is still active.
 
-// includes/game/powerup.nvgt
+// Powerups
+Your power crystal is still active.=Your power crystal is still active.
 * wore off.=$1 wore off.
+
+// Steel shields
 Shield off.=Shield off.
 Shield on.=Shield on.
-
-// includes/game/shield.nvgt
 You're not wearing a shield.=You're not wearing a shield.
 Your shield is off, with * strength.=Your shield is off, with $1 strength.
 Shield strength, *.=Shield strength, $1.
 Shield strength, * endurance remaining.=Shield strength, $1 endurance remaining.
+
+// Player shop specials
 * on.=$1 on.
 * off.=$1 off.
 Your safety net caught you.=Your safety net caught you.
 You're already in the air.=You're already in the air.
+This environment has no slides.=This environment has no slides.
+This environment has no trampolines.=This environment has no trampolines.
+You're already sliding.=You're already sliding.
 
-// includes/game/teleporter.nvgt
+// Player teleporters
 You were moved * 1 step.=You were moved $1 1 step.
 You were moved * * steps.=You were moved $1 $2 steps.
 
-// includes/main/deps/buffer.nvgt
+// Speech buffers
 This buffer can not be muted.=This buffer can not be muted.
 * muted=$1 muted
 * unmuted=$1 unmuted
@@ -75,11 +84,11 @@ Review buffer=Review buffer
 Review buffer item=Review buffer item
 canceled=canceled
 
-// includes/main/deps/dlg.nvgt
+// Dialogs
 Press enter to continue.=Press enter to continue.
 Text copied=Text copied
 
-// includes/main/deps/downloader.nvgt
+// Downloads
 File size: *=File size: $1
 Total downloaded: *=Total downloaded: $1
 Total remaining: *=Total remaining: $1
@@ -88,7 +97,7 @@ Progress beeps unmuted.=Progress beeps unmuted.
 * percent downloaded=$1 percent downloaded
 Download progress unavailable.=Download progress unavailable.
 
-// includes/main/deps/form.nvgt
+// Form controls
 Dialog=Dialog
 * Dialog=$1 Dialog
 * deleted.=$1 deleted.
@@ -187,7 +196,7 @@ Disabled Status Bar=Disabled Status Bar
 Disabled Keyboard Area=Disabled Keyboard Area
 Disabled Link=Disabled Link
 
-// includes/main/deps/form_menu.nvgt
+// Menu controls
 OK=OK
 Cancel=Cancel
 * menu=$1 menu
@@ -198,7 +207,7 @@ Unable to play *=Unable to play $1
 yes=yes
 no=no
 
-// includes/main/deps/ini.nvgt
+// Configuration files
 nonexistent section=nonexistent section
 with section, *=with section, $1
 with key, *=with key, $1
@@ -206,7 +215,7 @@ nonexistent key=nonexistent key
 unescaped spaces in identifier=unescaped spaces in identifier
 invalid characters in identifier=invalid characters in identifier
 
-// includes/main/deps/key_config.nvgt
+// Key bindings
 Bind Escape to this action=Bind Escape to this action
 You pressed Escape. Do you want to bind it, or cancel?=You pressed Escape. Do you want to bind it, or cancel?
 Press (fires once when key is pressed)=Press (fires once when key is pressed)
@@ -215,7 +224,7 @@ Down (fires every frame while held)=Down (fires every frame while held)
 Release (fires once when key is released)=Release (fires once when key is released)
 Choose the trigger type for this binding.=Choose the trigger type for this binding.
 
-// includes/main/deps/rotation.nvgt
+// Directions
 straight in front=straight in front
 in front and very slightly to the right=in front and very slightly to the right
 in front and slightly off to the right=in front and slightly off to the right
@@ -241,7 +250,7 @@ in front and very slightly off to the left=in front and very slightly off to the
 below, *=below, $1
 above, *=above, $1
 
-// includes/main/deps/speech.nvgt
+// Speech
 Text to speech configuration=Text to speech configuration
 use screen reader when available=use screen reader when available
 Voice=Voice
@@ -253,30 +262,30 @@ Unknown voice *=Unknown voice $1
 Canceled=Canceled
 Text to speech settings saved=Text to speech settings saved
 
-// includes/main/deps/virtual_dialogs.nvgt
+// Input boxes
 Close=Close
 input is required=input is required
 
-// includes/main/globals/achievements.nvgt
+// Achievement announcements
 Achievement unlocked: *. *=Achievement unlocked: $1. $2
 
-// includes/main/globals/difficulty.nvgt
+// Difficulty
 *. Available.=$1. Available.
 *. Unlocked *=$1. Unlocked $2
 This difficulty is unlocked *=This difficulty is unlocked $1
 after completing * more *.=after completing $1 more $2.
 after completing * *.=after completing $1 $2.
 
-// includes/main/globals/endrun.nvgt
+// Run endings
 What would you like to do now?=What would you like to do now?
 retry free run=retry free run
 retry practice=retry practice
 return to game menu=return to game menu
 
-// includes/main/globals/environments.nvgt
+// Environments
 You've entered the * environment.=You've entered the $1 environment.
 
-// includes/main/globals/freebelt.nvgt
+// Free run belt
 your lane=your lane
 the left lane=the left lane
 the middle lane=the middle lane
@@ -304,7 +313,7 @@ The * have been cleared.=The $1 have been cleared.
 coming=coming
 continuous=continuous
 
-// includes/main/globals/freerun.nvgt
+// Free run console
 after completing * more hard endless run.=after completing $1 more hard endless run.
 after completing * more hard endless runs.=after completing $1 more hard endless runs.
 after completing * hard endless run.=after completing $1 hard endless run.
@@ -362,9 +371,6 @@ Your spacing is now *.=Your spacing is now $1.
 Choose what you'd like to do with your specials.=Choose what you'd like to do with your specials.
 give powerup=give powerup
 give slide=give slide
-This environment has no slides.=This environment has no slides.
-This environment has no trampolines.=This environment has no trampolines.
-You're already sliding.=You're already sliding.
 You're now on a slide.=You're now on a slide.
 Choose a powerup to start.=Choose a powerup to start.
 powerup=powerup
@@ -401,6 +407,7 @@ The belt has been cleared.=The belt has been cleared.
 give *=give $1
 set *=set $1
 take *=take $1
+You now have *.=You now have $1.
 You now have * health.=You now have $1 health.
 You now have * of * health.=You now have $1 of $2 health.
 You now have 1 life.=You now have 1 life.
@@ -408,7 +415,6 @@ You now have * lives.=You now have $1 lives.
 Your shield's strength is now *.=Your shield's strength is now $1.
 Your shield's strength is now * of *.=Your shield's strength is now $1 of $2.
 Choose the stat you'd like to change.=Choose the stat you'd like to change.
-You now have *.=You now have $1.
 Your * now has 1 round in reserve.=Your $1 now has 1 round in reserve.
 Your * now has * rounds in reserve.=Your $1 now has $2 rounds in reserve.
 all keys=all keys
@@ -436,7 +442,7 @@ You now have * of each item.=You now have $1 of each item.
 You now have * *.=You now have $1 $2.
 You now have * of each key.=You now have $1 of each key.
 
-// includes/main/globals/game.nvgt
+// Run readouts
 You have been running for *.=You have been running for $1.
 * environment.=$1 environment.
 You are running * milliseconds per step.=You are running $1 milliseconds per step.
@@ -447,28 +453,28 @@ You have run * steps.=You have run $1 steps.
 track *=track $1
 source *=source $1
 
-// includes/main/globals/heartbeat.nvgt
+// Heartbeat
 Your heart rate is * beats per minute.=Your heart rate is $1 beats per minute.
 
-// includes/main/globals/inventory.nvgt
+// Inventory
 You don't have anything to use.=You don't have anything to use.
 Your safety net will save you from a hazard or floor breaker.=Your safety net will save you from a hazard or floor breaker.
 
-// includes/main/globals/joystick.nvgt
+// Joystick
 Joystick connected.=Joystick connected.
 Joystick disconnected.=Joystick disconnected.
 button *=button $1
 
-// includes/main/globals/lane.nvgt
+// Lanes
 * lane.=$1 lane.
 
-// includes/main/globals/lives.nvgt
+// Health and lives
 * of *=$1 of $2
 * percent, * of *=$1 percent, $2 of $3
 * percent=$1 percent
 * health remaining, *=$1 health remaining, $2
 
-// includes/main/globals/practice.nvgt
+// Practice runs
 fake walls=fake walls
 after you * * more *=after you $1 $2 more $3
 after you * * *=after you $1 $2 $3
@@ -478,7 +484,7 @@ This obstacle is unlocked *.=This obstacle is unlocked $1.
 Mode unlocked: Endless run is now available to play.=Mode unlocked: Endless run is now available to play.
 Obstacle unlocked: * are now available for practice.=Obstacle unlocked: $1 are now available for practice.
 
-// includes/main/globals/practice_hints.nvgt
+// Practice hints
 You died.=You died.
 You died. *=You died. $1
 A hazard has appeared. Jump just before you reach the edge.=A hazard has appeared. Jump just before you reach the edge.
@@ -497,7 +503,7 @@ A good belt-wide trampoline has appeared. You can't avoid it, so get ready to fl
 A worn belt-wide trampoline has appeared. You can't avoid it, so get ready for a short bounce.=A worn belt-wide trampoline has appeared. You can't avoid it, so get ready for a short bounce.
 Well done, that's all the hints for this run, so keep practicing at your own pace and trust your ears, or quit the run whenever you're ready to stop.=Well done, that's all the hints for this run, so keep practicing at your own pace and trust your ears, or quit the run whenever you're ready to stop.
 
-// includes/main/globals/timerun.nvgt
+// Timed runs
 after completing * more easy endless run.=after completing $1 more easy endless run.
 after completing * more easy endless runs.=after completing $1 more easy endless runs.
 after completing * easy endless run.=after completing $1 easy endless run.
@@ -521,7 +527,7 @@ best finish=best finish
 * deaths=$1 deaths
 * best finish=$1 best finish
 
-// includes/main/globals/updater.nvgt
+// Updates
 Checking for updates...=Checking for updates...
 Run Installer=Run Installer
 Extract file=Extract file
@@ -531,7 +537,7 @@ Windows Installer=Windows Installer
 Windows Portable=Windows Portable
 Which version of the game would you like to download?=Which version of the game would you like to download?
 
-// includes/main/globals/weapons.nvgt
+// Weapons
 * equipped.=$1 equipped.
 This weapon is still reloading.=This weapon is still reloading.
 This weapon is already fully loaded.=This weapon is already fully loaded.
@@ -539,7 +545,7 @@ This weapon has no more reserved ammo to reload.=This weapon has no more reserve
 You have * out of * rounds loaded, and unlimited rounds in reserve.=You have $1 out of $2 rounds loaded, and unlimited rounds in reserve.
 You have * out of * rounds loaded, and * rounds in reserve.=You have $1 out of $2 rounds loaded, and $3 rounds in reserve.
 
-// includes/main/menus/achievements_menu.nvgt
+// Achievements menu
 Achievements menu. * of * unlocked in total.=Achievements menu. $1 of $2 unlocked in total.
 session achievements=session achievements
 lifetime achievements=lifetime achievements
@@ -559,7 +565,7 @@ Achievement stats:=Achievement stats:
 All game progresses have been copied to your clipboard.=All game progresses have been copied to your clipboard.
 Unable to export the game progresses.=Unable to export the game progresses.
 
-// includes/main/menus/bindings_menu.nvgt
+// Key bindings menu
 Could not read *.=Could not read $1.
 Bindings=Bindings
 close=close
@@ -575,7 +581,7 @@ Would you like to change the trigger for this *? It's set to press by default.=W
 Rebind joystick buttons=Rebind joystick buttons
 No joystick is connected.=No joystick is connected.
 
-// includes/main/menus/learn_sounds_menu.nvgt
+// Learn sounds menu
 This category has a total of * sound.=This category has a total of $1 sound.
 This category has a total of * sounds.=This category has a total of $1 sounds.
 This category has * individual sound, * in total.=This category has $1 individual sound, $2 in total.
@@ -591,7 +597,7 @@ switched off=switched off
 shell casing=shell casing
 empty click=empty click
 
-// includes/main/menus/menu.nvgt
+// Main and game menus
 documentation menu=documentation menu
 game menu=game menu
 settings menu=settings menu
@@ -635,7 +641,7 @@ Choose a difficulty level. * of * unlocked.=Choose a difficulty level. $1 of $2 
 Choose what to practice. * of * obstacles unlocked.=Choose what to practice. $1 of $2 obstacles unlocked.
 Choose a speed, in steps a second.=Choose a speed, in steps a second.
 
-// includes/main/menus/pause_menu.nvgt
+// Pause menu
 Pause menu.=Pause menu.
 * Pause menu.=$1 Pause menu.
 resume run=resume run
@@ -646,7 +652,7 @@ copy session results to clipboard=copy session results to clipboard
 export session results to file=export session results to file
 quit run=quit run
 
-// includes/main/menus/results_menu.nvgt
+// Session results
 What would you like to do now? You can copy or export your session results, replay the current run, or return to the game menu.=What would you like to do now? You can copy or export your session results, replay the current run, or return to the game menu.
 What would you like to do now? You can replay the current run, or return to the game menu.=What would you like to do now? You can replay the current run, or return to the game menu.
 You have died. *=You have died. $1
@@ -655,7 +661,7 @@ Session results:=Session results:
 Your session results have been copied to your clipboard.=Your session results have been copied to your clipboard.
 Unable to export the session results.=Unable to export the session results.
 
-// includes/main/menus/settings_menu.nvgt
+// Settings menu
 Settings=Settings
 Category=Category
 General=General
@@ -708,6 +714,8 @@ Settings reset.=Settings reset.
 *, inactive=$1, inactive
 Choose a sound device you'd like to use in the game.=Choose a sound device you'd like to use in the game.
 Sound device set to *.=Sound device set to $1.
+
+// Player shop
 You're now entering the player shop.=You're now entering the player shop.
 Welcome to the player shop. What would you like to buy?=Welcome to the player shop. What would you like to buy?
 character=character
@@ -721,7 +729,7 @@ Buy * * for *=Buy $1 $2 for $3
 Buy all * for *=Buy all $1 for $2
 * point=$1 point
 
-// includes/main/menus/stats_menu.nvgt
+// Statistics menu
 Statistics menu. You can view the stats from your last endless run, or your totals across all of them here.=Statistics menu. You can view the stats from your last endless run, or your totals across all of them here.
 achievement statistics=achievement statistics
 session statistics=session statistics
@@ -812,7 +820,7 @@ Lifetime stats:=Lifetime stats:
 All game statistics have been copied to your clipboard.=All game statistics have been copied to your clipboard.
 Unable to export the game statistics.=Unable to export the game statistics.
 
-// Achievements (data/config/game/achievements.ini)
+// Achievement names, descriptions and hints
 First Steps=First Steps
 first steps=first steps
 Run * steps over all your runs.=Run $1 steps over all your runs.
@@ -1438,8 +1446,9 @@ time lord=time lord
 Reach the finish line of a timed run on chaos.=Reach the finish line of a timed run on chaos.
 Twenty seconds to start, and everything comes at once. Every clean pass counts.=Twenty seconds to start, and everything comes at once. Every clean pass counts.
 
-// Document names (docks/lang/english)
+// Document names
 achievements=achievements
+aircrafts=aircrafts
 ammo packs=ammo packs
 animal helpers=animal helpers
 animals=animals
@@ -1495,13 +1504,12 @@ readme=readme
 todo list=todo list
 translations=translations
 
-// Language names (data/lang, docks/lang)
+// Language names
 fallback=fallback
 english=english
 
-// Sound folder names (sounds/game)
+// Environment, obstacle, item and weapon names
 air=air
-aircrafts=aircrafts
 ammo pack=ammo pack
 artillery=artillery
 audio=audio
