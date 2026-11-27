@@ -125,6 +125,7 @@ if (practice_choice == "mixed_doors") return kind == "real_doors" or kind == "fa
 if (practice_choice == "trampolines") return kind.find("trampoline") >= 0;
 if (practice_choice == "real_walls") return kind == "ladders";
 if (practice_choice == "mixed_walls") return kind == "walls" or kind == "ladders";
+if (practice_choice == "fake_doors_and_walls") return kind == "walls" or kind == "fake_doors";
 return kind == practice_choice;
 }
 void practice_hint(const string&in kind, int lane, double x, const string&in animal = "")

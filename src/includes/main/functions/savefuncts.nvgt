@@ -190,6 +190,7 @@ if (gs.d.exists("practice_floors_checked")) practice_floors_checked = gs.read_bo
 if (gs.d.exists("practice_vehicles_checked")) practice_vehicles_checked = gs.read_bool("practice_vehicles_checked");
 if (gs.d.exists("practice_insects_checked")) practice_insects_checked = gs.read_bool("practice_insects_checked");
 if (gs.d.exists("practice_aircrafts_checked")) practice_aircrafts_checked = gs.read_bool("practice_aircrafts_checked");
+if (gs.d.exists("practice_fake_mix_checked")) practice_fake_mix_checked = gs.read_bool("practice_fake_mix_checked");
 practice_returning_check(); // once per save, now that the difficulty runs and lifetime stats are read
 practice_combos_check(); // once per save, after it (practice.nvgt)
 practice_winds_check(); // and the winds check after that (practice.nvgt)
@@ -199,6 +200,7 @@ practice_floors_check(); // and the floor breakers check (practice.nvgt)
 practice_vehicles_check(); // and the vehicles check (practice.nvgt)
 practice_insects_check(); // and the insects check (practice.nvgt)
 practice_aircrafts_check(); // and the aircrafts check (practice.nvgt)
+practice_fake_mix_check(); // and the fake doors and walls check (practice.nvgt)
 }
 // Writes the game's progress to saves/game.srf; called the moment a run count changes.
 void writegame()
@@ -243,6 +245,7 @@ gs.add("practice_floors_checked", practice_floors_checked);
 gs.add("practice_vehicles_checked", practice_vehicles_checked);
 gs.add("practice_insects_checked", practice_insects_checked);
 gs.add("practice_aircrafts_checked", practice_aircrafts_checked);
+gs.add("practice_fake_mix_checked", practice_fake_mix_checked);
 gs.save();
 }
 /* Writes every setting to settings.srf. Called whenever one changes: the menu music volume (form_menu) and the run

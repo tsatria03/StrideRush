@@ -589,6 +589,7 @@ add_spawn_choice(labels, ids, obstacle_types[i] == "ladders" ? "real walls" : le
 }
 // Fake and real walls at random, half and half.
 add_spawn_choice(labels, ids, "mixed walls", "mixed_walls");
+add_spawn_choice(labels, ids, "fake doors and walls", "fake_doors_and_walls");
 // Animals of one kind only; "all" still mixes every kind.
 add_spawn_choice(labels, ids, "animals, birds", "animals_birds");
 add_spawn_choice(labels, ids, "animals, dogs", "animals_dogs");

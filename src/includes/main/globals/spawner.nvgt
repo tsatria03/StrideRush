@@ -208,7 +208,9 @@ for (uint i = 0; i < obstacle_types.length(); i++)
 {
 // "mixed_walls" (a debug choice, and practice's mixed walls) picks fake walls and ladders, half and half.
 bool mixed_wall = spawn_only == "mixed_walls" and (obstacle_types[i] == "walls" or obstacle_types[i] == "ladders");
-if (spawn_only != "all" and spawn_only != "practice_trampolines" and !mixed_wall and obstacle_types[i] != spawn_only) continue;
+// "fake_doors_and_walls" (a debug choice, and practice's fake doors and walls) picks fake walls and fake doors, half and half.
+bool fake_mix = spawn_only == "fake_doors_and_walls" and (obstacle_types[i] == "walls" or obstacle_types[i] == "fake_doors");
+if (spawn_only != "all" and spawn_only != "practice_trampolines" and !mixed_wall and !fake_mix and obstacle_types[i] != spawn_only) continue;
 if (obstacle_types[i] == "ladders" and !ladders_ready()) continue; // its real wall needs a walls theme too
 if (!has_joined(obstacle_types[i])) continue; // the difficulty schedule (difficulty.nvgt); a new type is an equal pick once in
 if (get_pack_sound_folders(type_folder(obstacle_types[i]) + "*").length() > 0)
