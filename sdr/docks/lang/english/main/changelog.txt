@@ -1,4 +1,5 @@
 New in 2.9.
+Added a difficulty to free runs, chosen as one starts in place of its speed and environment and changed any time with the console's modify difficulty, so damage, toughness, floor breakers, ladders, gold packs and the normal speed's top speed match an endless run of that difficulty.
 Made it so using an ammo or gold pack while you carry more than one now opens them all at once and tells you the total, while ammo packs that won't fit in a full reserve are kept.
 Made it so picking up an item from a lane now moves your inventory onto it, whether you grabbed it yourself, your item helper did, or you caught it on a slide.
 Made it so the player shop now shows its character, items and specials categories as tabs in one menu, and escape takes you back a step or out of the shop instead of a back item.

@@ -37,3 +37,4 @@ Unlocking levels.
 
 Easy is always open, and each level after it opens once you've finished 5 endless runs on the level below. A run only counts if you opened a real door and got through it before you died, so quitting, restarting or dying before your first door doesn't count, and practice runs never do. The difficulty menu tells you how each level stands, such as "Easy. Available." or "Medium. Unlocked after completing 3 more easy runs.", and choosing a locked level tells you the same and leaves you in the menu. Your progress is remembered from one launch to the next.
 Timed runs use the same five levels with their own unlocks, as described under timed runs.
+A free run can take any of the five levels, or none, whether you've unlocked it or not, and still counts nothing, as described under free runs.
