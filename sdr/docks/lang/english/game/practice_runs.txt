@@ -8,7 +8,7 @@ Practice run is in play game. Choose an obstacle, listed in the order they join 
 
 Hazards, spikes, mines, projectiles, force fields, animals, insects.
 Fake walls, real walls, mixed walls.
-Fake doors, real doors, mixed doors.
+Fake doors, real doors, mixed doors, fake doors and walls.
 Floor breakers, barriers, winds, vehicles, aircrafts.
 Trampolines, combinations, mixed obstacles.
 
@@ -16,10 +16,10 @@ Then choose a speed of 2, 2.5, 3.3, 5 or 10 steps a second, or rising.
 
 How a practice run works.
 
-The belt stays at the speed you chose for the whole run, and only that obstacle comes at you, with the same spacing as chaos. Mixed walls mixes fake and real walls, and mixed doors mixes fake and real doors, so you can practice telling them apart by their pitch. Trampolines brings a trampoline of any kind every other spawn, with an obstacle of any type in between. Mixed obstacles brings every kind at random, each about as often as the others, with each real door's key just before it, as a warm-up before an endless run.
+The belt stays at the speed you chose for the whole run, and only that obstacle comes at you, with the same spacing as chaos. Mixed walls mixes fake and real walls, and mixed doors mixes fake and real doors, so you can practice telling them apart by their pitch. Fake doors and walls mixes fake doors and fake walls, half and half, so you can practice breaking both with your weapons. Trampolines brings a trampoline of any kind every other spawn, with an obstacle of any type in between. Mixed obstacles brings every kind at random, each about as often as the others, with each real door's key just before it, as a warm-up before an endless run.
 Rising starts at 2 steps a second and speeds up every 5 seconds, twice as fast as an endless run, until it reaches 10 steps a second about 3 and a half minutes in, then stays there. If you die, you try again at the speed you'd reached, while restarting the run starts you from 2 again.
 You start with 1 life and 1 steel shield in your inventory, except when practicing hazards or floor breakers, since a shield can't save you from either. Nothing else turns up on the belt except the keys for real doors, and no slides, and no trampolines unless you're practicing them. A practice run moves between environments too, but only ones that have the obstacle you're practicing.
-You only have weapons when practicing insects, fake walls, mixed walls, fake doors, mixed doors, vehicles, aircrafts, combinations, trampolines or mixed obstacles, and then your guns never run out of reserve rounds.
+You only have weapons when practicing insects, fake walls, mixed walls, fake doors, mixed doors, fake doors and walls, vehicles, aircrafts, combinations, trampolines or mixed obstacles, and then your guns never run out of reserve rounds.
 
 Dying in practice.
 

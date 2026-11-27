@@ -1,6 +1,6 @@
 ---
 name: project_weapon_practice_plan
-description: SETTLED (2026-11-27, for 3.0, 2 sections): a practice choice, fake doors and walls, after mixed doors (aircrafts and vehicles dropped); Q&A log
+description: COMPLETE (2026-11-27, 3.0's second entry, 2 sections): a practice choice, fake doors and walls, after mixed doors (aircrafts and vehicles dropped); Q&A log
 metadata:
   type: project
 ---
@@ -40,4 +40,4 @@ PLAN SETTLED (2026-11-27): ready to commit, then build Section 1 on the go-ahead
 
 1. The choice (tests). practice.nvgt: "fake_doors_and_walls" after mixed_doors in practice_choices, practice_goal_stats walls_broken and practice_goal_stats2 fake_doors_broken, verb "break", singular "fake door or wall" with the plural "fake doors and walls", practice_passes, practice_weapon_choices, practice_env_ok() needing walls and doors, a one-time check opening it for anyone past mixed doors; its own shield as fake doors; the spawner and menu.nvgt pick fake walls and fake doors half and half (as mixed walls); the practice hint and death line of each kind; template.lng refreshed and english.lng synced.
    BUILT (2026-11-27, after f529198): practice.nvgt's arrays (22 entries each), practice_fake_mix_check() saved as practice_fake_mix_checked, available_obstacles()'s fake_mix pick, practice_goal_kind(), the debug spawn choice and debug shields list. A temporary unlock (choices up to fake doors and walls open, floor breakers on) was used for the tests and removed. Tests: 1 (the menu, floor breakers' lock line and dialog) PASSED; 2a (a weapon drawn, both kinds mixed, each kind's hint) PASSED; 2b (the death line and retry) PASSED; 3 (5 clean breaks open floor breakers) PASSED. Section 1 COMPLETE.
-2. The docks (no tests): the changelog entry on top of 3.0's block, practice_runs.txt (list, mix sentence, weapons list), floor_breakers.txt ("after you break 5 fake doors and walls").
+2. The docks (no tests): the changelog entry on top of 3.0's block, practice_runs.txt (list, mix sentence, weapons list), floor_breakers.txt ("after you break 5 fake doors and walls"). WRITTEN (2026-11-27, after efd18af): those, plus fake_doors.txt (what it mixes, what opens it, what it opens, the weapons line) and fake_walls.txt (a pointer to fake doors, the weapons line). PLAN COMPLETE.

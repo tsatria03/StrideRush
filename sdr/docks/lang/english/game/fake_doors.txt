@@ -19,6 +19,6 @@ Breaking one counts toward fake doors broken in your statistics, and crashing in
 
 Fake doors in practice and free runs.
 
-Fake doors has its own practice choice, with only fake doors to break, and mixed doors brings fake and real doors together, so you can practice telling them apart by their pitch. Fake doors opens once you've got through 5 mixed walls while practicing them, and breaking 5 fake doors while practicing opens real doors. Your weapons are drawn when practicing fake doors or mixed doors.
+Fake doors has its own practice choice, with only fake doors to break, and mixed doors brings fake and real doors together, so you can practice telling them apart by their pitch. Fake doors opens once you've got through 5 mixed walls while practicing them, and breaking 5 fake doors while practicing opens real doors. Fake doors and walls brings fake doors and fake walls together, half and half; it opens once you've got through 5 mixed doors while practicing them, and breaking 5 of either while practicing it opens floor breakers. Your weapons are drawn when practicing fake doors, mixed doors or fake doors and walls.
 
 In a free run, add fake doors from add obstacles in the console, and give each one its own health, or leave it empty for the normal health for your speed.

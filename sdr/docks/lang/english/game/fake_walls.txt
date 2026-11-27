@@ -19,6 +19,6 @@ Breaking one counts toward fake walls broken in your statistics, and crashing in
 
 Fake walls in practice and free runs.
 
-Fake walls has its own practice choice, with only fake walls to break, and mixed walls brings fake and real walls together, so you can practice telling them apart by their pitch. Fake walls opens once you've killed 5 insects while practicing them, and breaking 5 fake walls while practicing opens real walls. Your weapons are drawn when practicing fake walls or mixed walls.
+Fake walls has its own practice choice, with only fake walls to break, and mixed walls brings fake and real walls together, so you can practice telling them apart by their pitch. Fake walls opens once you've killed 5 insects while practicing them, and breaking 5 fake walls while practicing opens real walls. Fake doors and walls brings fake walls together with fake doors, half and half, as described under fake doors. Your weapons are drawn when practicing fake walls, mixed walls or fake doors and walls.
 
 In a free run, add fake walls from add obstacles in the console, and give each one its own health, or leave it empty for the normal health for your speed.

@@ -21,6 +21,6 @@ Repairing one counts toward floor breakers repaired in your statistics, and fall
 
 Floor breakers in practice and free runs.
 
-Floor breakers has its own practice choice, and like hazards, you practice it without a steel shield, since a shield can't save you from a fall. It opens once you've got through 5 mixed doors while practicing them, and repairing 5 floor breakers while practicing opens barriers. A fall in practice doesn't end the run: the death message tells you to open the corridor with a hand before you reach it, then rebuild the hole with alternating hands.
+Floor breakers has its own practice choice, and like hazards, you practice it without a steel shield, since a shield can't save you from a fall. It opens once you've broken 5 fake doors and walls while practicing them, and repairing 5 floor breakers while practicing opens barriers. A fall in practice doesn't end the run: the death message tells you to open the corridor with a hand before you reach it, then rebuild the hole with alternating hands.
 
 In a free run, add floor breakers from add obstacles in the console. With no deaths, a fall sets you down just past the floor breaker and sends another one down the belt.

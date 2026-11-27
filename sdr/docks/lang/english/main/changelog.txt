@@ -1,4 +1,5 @@
 New in 3.0.
+Added fake doors and walls to practice runs, mixing fake doors and fake walls half and half, which you break with your weapons.
 Made it so locked difficulties and modes now say what unlocks them in the same way as the practice menu, such as "Unlocked after you get through a real door in 3 more easy runs.", instead of "after completing", which sounded like you had to reach the end of a run.
 New in 2.9.
 Added some settings in the sound and speech tabs that silence the game's audio and speech while you're in another window, both off by default.
