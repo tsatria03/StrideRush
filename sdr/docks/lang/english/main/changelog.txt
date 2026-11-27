@@ -1,3 +1,5 @@
+New in 2.9.
+Made it so lists in the game's windows, such as the settings and key bindings lists, now wrap around at either end again.
 New in 2.8.
 Added a safety net to the player shop's specials, which saves you once from a hazard or floor breaker.
 Added a power crystal to the player shop's specials, which starts a random good powerup when you use it.
