@@ -58,14 +58,16 @@ return trap_folder(l.env, "ladders") + l.theme + "/";
 // The least time between rungs by the run's level: a press sooner than this is rushing it.
 double ladder_rung_min_time()
 {
-if (run_difficulty < 0) return ladder_rung_min_times[0];
-return ladder_rung_min_times[run_difficulty];
+int level = scaling_level(); // difficulty.nvgt
+if (level < 0) return ladder_rung_min_times[0];
+return ladder_rung_min_times[level];
 }
 // The time each rung allows by the run's level, easy's in practice and debug runs.
 double ladder_rung_time()
 {
-if (run_difficulty < 0) return ladder_rung_times[0];
-return ladder_rung_times[run_difficulty];
+int level = scaling_level();
+if (level < 0) return ladder_rung_times[0];
+return ladder_rung_times[level];
 }
 // A ladder needs its own theme and a walls theme for its real wall, in the current environment.
 bool ladders_ready()
@@ -82,7 +84,7 @@ l.wall_x = x + ladder_wall_gap;
 l.theme = theme;
 l.walltheme = walls[random(0, walls.length() - 1)];
 l.env = current_env;
-int level = run_difficulty < 0 ? 0 : run_difficulty; // practice and debug runs climb easy's ladders
+int level = scaling_level() < 0 ? 0 : scaling_level(); // easy's ladders with no level
 l.rungs = random(ladder_rungs_min[level], ladder_rungs_max[level]);
 l.countdown_start = x - countdown;
 practice_hint("ladders", -1, x); // practice_hints.nvgt, a practice run only

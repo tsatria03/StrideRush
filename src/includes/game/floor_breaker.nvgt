@@ -54,7 +54,7 @@ floor_breaker f;
 f.x = x;
 f.theme = theme;
 f.env = current_env;
-int level = run_difficulty < 0 ? 0 : run_difficulty; // practice and debug runs get easy's holes
+int level = scaling_level() < 0 ? 0 : scaling_level(); // easy's holes with no level (difficulty.nvgt)
 f.pieces = random(floor_pieces_min[level], floor_pieces_max[level]);
 f.countdown_start = x - countdown;
 practice_hint("floor_breakers", -1, x); // practice_hints.nvgt, a practice run only

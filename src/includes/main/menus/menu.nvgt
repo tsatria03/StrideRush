@@ -285,7 +285,7 @@ stage = 7;
 }
 else if (mode == "free")
 {
-// A free run (freerun.nvgt): its setup (speed, environment), then standing on an empty belt; back out of it to the mode menu.
+// A free run (freerun.nvgt): its setup (a difficulty), then standing on an empty belt; back out of it to the mode menu.
 if (!choose_free_setup()) continue;
 free_run = true;
 practice_choice = ""; // so no practice choice's closing line runs in it (practice_hints.nvgt)

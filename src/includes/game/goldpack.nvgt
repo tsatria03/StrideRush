@@ -197,13 +197,13 @@ if (step_time <= top) return 100;
 if (step_time >= start) return gold_pack_start_percent;
 return gold_pack_start_percent + (100 - gold_pack_start_percent) * (start - step_time) / (start - top);
 }
-/* The use key on gold packs: every one you carry opens at once, each a random amount for the level (easy's outside a
-difficulty) scaled by goldpack_percent(), spoken as one total and saved at once in an endless run so a crash can't lose
+/* The use key on gold packs: every one you carry opens at once, each a random amount for the level (easy's with no
+level) scaled by goldpack_percent(), spoken as one total and saved at once in an endless run so a crash can't lose
 it. Returns how many opened, which is all of them. */
 int use_goldpacks()
 {
 int packs = item_count("gold_pack");
-int at = run_difficulty >= 0 ? run_difficulty : 0;
+int at = scaling_level() >= 0 ? scaling_level() : 0; // a free run's own level too (difficulty.nvgt)
 int amount = 0;
 for (int i = 0; i < packs; i++) amount += random(gold_pack_min_coins[at], gold_pack_max_coins[at]) * goldpack_percent() / 100;
 p.play_stationary(get_pack_sound(goldpack_folder + "*use*"), false);
