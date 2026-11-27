@@ -4,7 +4,7 @@ A timed run plays just like an endless run on the level you choose, with the sam
 
 Starting one.
 
-Timed run, in play game after endless run, opens once you've finished 5 easy endless runs, the same time medium opens. Choosing it asks for a difficulty level.
+Timed run, in play game after endless run, opens once you've got through a real door in 5 easy endless runs, the same time medium opens. Choosing it asks for a difficulty level.
 
 The clock.
 
@@ -30,5 +30,5 @@ When a timed run ends, your results come up: the difficulty, how it ended, the t
 
 Levels and records.
 
-Timed runs have their own levels to unlock: easy is open, and each level after it opens once you've finished 3 timed runs on the level below, whether you won, ran out of time or died, while quitting or restarting doesn't count.
+Timed runs have their own levels to unlock: easy is open, and each level after it opens once you've played 3 timed runs to the end on the level below, whether you won, ran out of time or died, while quitting or restarting doesn't count.
 Timed runs are kept apart from endless runs: they never change your endless stats or difficulty unlocks. They have their own records at the end of lifetime statistics, level by level: timed runs played, wins, time-outs, deaths and your best finish.

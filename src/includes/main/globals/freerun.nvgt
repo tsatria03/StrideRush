@@ -33,12 +33,12 @@ bool free_mode_unlocked()
 {
 return difficulty_runs[2] >= difficulty_unlock_runs;
 }
-// "after completing 5 hard endless runs.", or "after completing 2 more hard endless runs." once started ("run" for 1).
+// "after you get through a real door in 5 hard endless runs.", or "in 2 more hard endless runs." once started ("run" for 1).
 string free_mode_lock_reason()
 {
 int left = difficulty_unlock_runs - difficulty_runs[2];
 bool started = difficulty_runs[2] > 0;
-return "after completing " + left + (started ? " more " : " ") + "hard endless " + (left == 1 ? "run." : "runs.");
+return "after you get through a real door in " + left + (started ? " more " : " ") + "hard endless " + (left == 1 ? "run." : "runs.");
 }
 bool free_standing()
 {

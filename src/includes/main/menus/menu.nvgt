@@ -449,8 +449,8 @@ return m.selected_item_id;
 return "";
 }
 /* The difficulty menu, after endless or timed run: the five levels in difficulty order (not alphabetical), then back.
-Each level reads as difficulty_line() puts it: "Easy. Available." or, locked, "Medium. Unlocked after completing 3 more
-easy runs."; choosing a locked level says "This difficulty is unlocked after completing ..." in a dialog and stays in
+Each level reads as difficulty_line() puts it: "Easy. Available." or, locked, "Medium. Unlocked after you get through
+a real door in 3 more easy runs."; choosing a locked level says "This difficulty is unlocked after you ..." in a dialog and stays in
 the menu, on that level. The pick isn't saved, but the cursor starts on the last level picked until the game closes,
 and restart run and replays keep the level. Returns the level's index in difficulty_names, or -1 for escape or back,
 which step back to the mode menu silently. */

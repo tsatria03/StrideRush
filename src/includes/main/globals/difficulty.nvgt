@@ -34,9 +34,9 @@ if (run_difficulty < 0 or !run_door_passed) return;
 difficulty_runs[run_difficulty] += 1;
 writegame();
 }
-/* A level's line in the difficulty menu: "Easy. Available.", or for a locked level "Medium. Unlocked after completing 3
-more easy runs." ("run" for 1), leaving out "more" when the level below is itself locked: "Hard. Unlocked after
-completing 5 medium runs." */
+/* A level's line in the difficulty menu: "Easy. Available.", or for a locked level "Medium. Unlocked after you get
+through a real door in 3 more easy runs." ("run" for 1), leaving out "more" when the level below is itself locked, in
+the practice menu's "after you" form. */
 string difficulty_line(int level)
 {
 string name = learn_upper_first(difficulty_names[level]);
@@ -48,17 +48,20 @@ string difficulty_locked_message(int level)
 {
 return "This difficulty is unlocked " + difficulty_lock_reason(level);
 }
-// The shared end of both: "after completing 3 more easy runs." ("run" for 1; no "more" while the level below is locked).
+/* The shared end of both, saying what counts: an endless run only once you've got through a real door ("after you get
+through a real door in 3 more easy runs."), a timed run however it ends but a quit or restart ("after you play 2 more
+easy timed runs to the end."). "run" for 1; no "more" while the level below is locked. */
 string difficulty_lock_reason(int level)
 {
 string below = difficulty_names[level - 1];
 bool below_open = difficulty_unlocked(level - 1);
-// In a timed run, its own counts and "timed runs": "after completing 2 more easy timed runs." (timerun.nvgt)
+// In a timed run, its own counts and "timed runs" (timerun.nvgt).
 int need = timed_run ? timed_unlock_runs : difficulty_unlock_runs;
 int have = timed_run ? timed_level_runs[level - 1] : difficulty_runs[level - 1];
 int left = below_open ? need - have : need;
-string noun = timed_run ? " timed run" : " run";
-return "after completing " + left + (below_open ? " more " : " ") + below + noun + (left == 1 ? "." : "s.");
+string runs = left + (below_open ? " more " : " ") + below + (timed_run ? " timed run" : " run") + (left == 1 ? "" : "s");
+if (timed_run) return "after you play " + runs + " to the end.";
+return "after you get through a real door in " + runs + ".";
 }
 /* True when a type or item may spawn yet: always in debug and practice runs, which have no level, and on chaos; on easy
 to insane, once step_time (the normal speed, which the speed powerups don't shift) has reached its schedule_join_times

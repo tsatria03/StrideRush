@@ -274,8 +274,8 @@ Achievement unlocked: *. *=Achievement unlocked: $1. $2
 *. Available.=$1. Available.
 *. Unlocked *=$1. Unlocked $2
 This difficulty is unlocked *=This difficulty is unlocked $1
-after completing * more *.=after completing $1 more $2.
-after completing * *.=after completing $1 $2.
+after you play * to the end.=after you play $1 to the end.
+after you get through a real door in *.=after you get through a real door in $1.
 
 // Run endings
 What would you like to do now?=What would you like to do now?
@@ -315,10 +315,10 @@ coming=coming
 continuous=continuous
 
 // Free run console
-after completing * more hard endless run.=after completing $1 more hard endless run.
-after completing * more hard endless runs.=after completing $1 more hard endless runs.
-after completing * hard endless run.=after completing $1 hard endless run.
-after completing * hard endless runs.=after completing $1 hard endless runs.
+after you get through a real door in * more hard endless run.=after you get through a real door in $1 more hard endless run.
+after you get through a real door in * more hard endless runs.=after you get through a real door in $1 more hard endless runs.
+after you get through a real door in * hard endless run.=after you get through a real door in $1 hard endless run.
+after you get through a real door in * hard endless runs.=after you get through a real door in $1 hard endless runs.
 Choose your running speed, in steps a second.=Choose your running speed, in steps a second.
 Currently set to * steps a second.=Currently set to $1 steps a second.
 Currently set to *.=Currently set to $1.
@@ -513,10 +513,10 @@ A worn belt-wide trampoline has appeared. You can't avoid it, so get ready for a
 Well done, that's all the hints for this run, so keep practicing at your own pace and trust your ears, or quit the run whenever you're ready to stop.=Well done, that's all the hints for this run, so keep practicing at your own pace and trust your ears, or quit the run whenever you're ready to stop.
 
 // Timed runs
-after completing * more easy endless run.=after completing $1 more easy endless run.
-after completing * more easy endless runs.=after completing $1 more easy endless runs.
-after completing * easy endless run.=after completing $1 easy endless run.
-after completing * easy endless runs.=after completing $1 easy endless runs.
+after you get through a real door in * more easy endless run.=after you get through a real door in $1 more easy endless run.
+after you get through a real door in * more easy endless runs.=after you get through a real door in $1 more easy endless runs.
+after you get through a real door in * easy endless run.=after you get through a real door in $1 easy endless run.
+after you get through a real door in * easy endless runs.=after you get through a real door in $1 easy endless runs.
 * seconds left.=$1 seconds left.
 You crossed the finish line.=You crossed the finish line.
 Time's up.=Time's up.

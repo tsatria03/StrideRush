@@ -9,7 +9,7 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.9: tagged V2.90 at c470a33 (10 of 10; 2026-11-27).
+## 2.9: tagged V2.90 at ce36810 (moved there from c470a33, the last entry's commit, so the memory updates after it are included; 10 of 10; 2026-11-27).
 - Focus muting (the dev, 10 of 10): settings "Mute audio when the game is not in focus" (Sound tab, after looping) and "Mute speech when the game is not in focus" (Speech tab, mid-run too), off by default, saved in settings.srf. focus_mute_check() (soundfuncts.nvgt) silences sound_master_volume while is_window_active() is false, from the run loop and joystick_menu_frame(); speak() returns early through speech_away(), buffers still keeping the lines. Tests: 2 PASSED.
 - Pistol (the dev, 9 of 10): pistol_fire_gap 100 to 200 ms, CaveDefender's pistol spam time (see [[project_tuning_history]]). Test: 1 PASSED.
 - Held Enter (the dev, 8 of 10): form.nvgt no longer waits for Enter to lift, so every form and menu repeats Enter at the keyboard's rate; resume_game() and start_run() wait for it instead (wait_for_enter_up(), pause_menu.nvgt), so it never reaches the run's item_use. Tests: 2 PASSED.

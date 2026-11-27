@@ -4,7 +4,7 @@ A free run is a sandbox: you build the run yourself, adding exactly what you wan
 
 Starting one.
 
-Free run, in play game after timed run, opens once you've finished 5 hard endless runs, the same time insane opens. First you choose a difficulty: none, easy, medium, hard, insane or chaos, every one of them, whether you've unlocked it in endless runs or not. Your run starts at 2 steps a second in a random environment, and you can change both from the console.
+Free run, in play game after timed run, opens once you've got through a real door in 5 hard endless runs, the same time insane opens. First you choose a difficulty: none, easy, medium, hard, insane or chaos, every one of them, whether you've unlocked it in endless runs or not. Your run starts at 2 steps a second in a random environment, and you can change both from the console.
 The run starts with you standing still on an empty belt, hearing only the music and ambience, with no footsteps or heartbeat. Every key still works, so you can try jumping, crouching or your hands in place. Your guns start with 50 rounds in reserve, as in an endless run, and your inventory starts empty.
 
 The console.

@@ -24,12 +24,12 @@ bool timed_mode_unlocked()
 {
 return difficulty_runs[0] >= difficulty_unlock_runs;
 }
-// "after completing 5 easy endless runs.", or "after completing 2 more easy endless runs." once started ("run" for 1).
+// "after you get through a real door in 5 easy endless runs.", or "in 2 more easy endless runs." once started ("run" for 1).
 string timed_mode_lock_reason()
 {
 int left = difficulty_unlock_runs - difficulty_runs[0];
 bool started = difficulty_runs[0] > 0;
-return "after completing " + left + (started ? " more " : " ") + "easy endless " + (left == 1 ? "run." : "runs.");
+return "after you get through a real door in " + left + (started ? " more " : " ") + "easy endless " + (left == 1 ? "run." : "runs.");
 }
 // From start_run(), after reset_run() has restarted runtimer: the clocks for this level, nothing warned.
 void reset_timed()
