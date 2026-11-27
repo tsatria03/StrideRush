@@ -28,6 +28,7 @@ text_processing_callback@ tts_default_text_processing_callback = null;
 bool speak(string text, bool interrupt = tts_default_interrupt, text_processing_callback@ processing_callback = tts_default_text_processing_callback, bool braille = true, bool translated = false) {
 	if (!translated) text = translate(text);
 	speechbuff = text;
+	if (speech_away()) return false; // muted while the game isn't in focus; a buffer has already kept the line (soundfuncts.nvgt)
 	if (@processing_callback != null) text = processing_callback(text);
 	if (braille) screen_reader_braille(text);
 	if (text.length() > 10000) {

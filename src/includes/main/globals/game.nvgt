@@ -206,6 +206,7 @@ void run_loop()
 while (running)
 {
 wait(5);
+focus_mute_check(); // silent while the game isn't in focus, if that's set (soundfuncts.nvgt)
 joystick_run_frame(); // the left stick's presses, before anything reads input (joystick.nvgt)
 // Jump and crouch first, so a jump pressed on the same frame as a step counts before that step's hazard check.
 jump_check();

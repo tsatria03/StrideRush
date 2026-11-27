@@ -72,6 +72,7 @@ held d-pad or stick taps again after joystick_repeat_delay, then every joystick_
 last menu frame means a run or a wait came between, so waiting presses are dropped. */
 void joystick_menu_frame()
 {
+focus_mute_check(); // every menu frame, joystick or not (soundfuncts.nvgt)
 if (@joy == null) return;
 uint64 now = ticks();
 if (now == joy_menu_last) return; // a subform's monitor() in the same frame

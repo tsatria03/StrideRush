@@ -23,3 +23,19 @@ string[] result = find_directories("sounds/" + path);
 if (result.length() > 0) sort_naturally(result);
 return result;
 }
+bool focus_muted = false; // the master volume is down for focus_mute_check()
+/* Every frame, from the run loop and every menu, form and dialog (joystick_menu_frame()): with "Mute audio when the game
+is not in focus" on, the master volume goes silent while another window has the focus, and back to master_volume on
+return. Turning the setting off while away brings the sound back on the next frame. */
+void focus_mute_check()
+{
+bool want = mute_audio_unfocused and !is_window_active();
+if (want == focus_muted) return;
+focus_muted = want;
+sound_master_volume = want ? -100 : master_volume;
+}
+// With "Mute speech when the game is not in focus" on, true while another window has the focus, so speak() stays quiet.
+bool speech_away()
+{
+return mute_speech_unfocused and !is_window_active();
+}

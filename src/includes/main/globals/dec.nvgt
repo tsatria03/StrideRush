@@ -21,6 +21,8 @@ bool joystick_vibration = true; // the Joystick tab: rumble on blows, lives and 
 int health_format = 0; // the Game tab: how health is spoken, 0 a percentage, 1 an amount, 2 both (lives.nvgt's format_readout())
 int shield_format = 0; // and the shield, the same way
 int master_volume = 0; // the master game volume in dB, -100 to 0, through sound_master_volume
+bool mute_audio_unfocused = false; // the Sound tab: silent while another window has the focus (focus_mute_check())
+bool mute_speech_unfocused = false; // the Speech tab: speak() says nothing while another window has the focus (speech_away())
 string soundcard = "Default"; // the chosen sound device by name, matched to sound_output_device when the settings load
 form_menu m;
 virtual_dialogs vd; // the speech buffer's review boxes use vd.info_box

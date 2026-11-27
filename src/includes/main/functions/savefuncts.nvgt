@@ -69,6 +69,14 @@ if(st.d.exists("fademode"))
 {
 fademode=st.read_int("fademode");
 }
+if(st.d.exists("mute_audio_unfocused"))
+{
+mute_audio_unfocused=st.read_bool("mute_audio_unfocused");
+}
+if(st.d.exists("mute_speech_unfocused"))
+{
+mute_speech_unfocused=st.read_bool("mute_speech_unfocused");
+}
 if(st.d.exists("ask_quit_on_escape"))
 {
 ask_quit_on_escape=st.read_bool("ask_quit_on_escape");
@@ -253,6 +261,8 @@ st.add("first_letter",first_letter);
 st.add("side_scrolling",side_scrolling);
 st.add("speak_menu_position",speak_menu_position);
 st.add("fademode",fademode);
+st.add("mute_audio_unfocused",mute_audio_unfocused);
+st.add("mute_speech_unfocused",mute_speech_unfocused);
 st.add("hrtf",hrtf);
 st.add("behind_pitch",behind_pitch);
 st.add("loop_previews",loop_previews);

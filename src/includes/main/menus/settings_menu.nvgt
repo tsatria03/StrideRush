@@ -6,7 +6,7 @@ open something of their own (reset, the sound device, the voice, the key screens
 rebuilds the window afterwards, so the unsaved ticks are carried in locals across the rebuild. */
 void settingsmenu(bool ingame = false)
 {
-bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions, new_updates = auto_check_updates, new_death_results = show_death_results, new_death_copy = show_death_copy_export, new_practice_retry = show_practice_retry, new_vibration = joystick_vibration;
+bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions, new_updates = auto_check_updates, new_death_results = show_death_results, new_death_copy = show_death_copy_export, new_practice_retry = show_practice_retry, new_vibration = joystick_vibration, new_mute_audio = mute_audio_unfocused, new_mute_speech = mute_speech_unfocused;
 // The volume sliders, in dB from min_volume to 0, shown as 0 to 100 percent.
 int new_amb_vol = ambience_volume, new_step_vol = footstep_volume, new_mus_vol = music_volume, new_heart_vol = heartbeat_volume, new_menu_vol = menumusvolume, new_master_vol = master_volume;
 int new_health_fmt = health_format, new_shield_fmt = shield_format; // the readout formats (lives.nvgt's format_readout())
@@ -33,7 +33,7 @@ int tab_sound = ingame ? -1 : 5;
 int tab_speech = ingame ? 2 : 6;
 int language_list = -1;
 string[] language_choices = {"fallback"};
-int vibration_box = -1, joy_rebind_btn = -1, joy_view_btn = -1, reset_btn = -1, view_btn = -1, rebind_btn = -1, fade_box = -1, hrtf_box = -1, device_btn = -1, loop_box = -1, menu_vol_slider = -1, master_vol_slider = -1, updates_box = -1;
+int mute_audio_box = -1, vibration_box = -1, joy_rebind_btn = -1, joy_view_btn = -1, reset_btn = -1, view_btn = -1, rebind_btn = -1, fade_box = -1, hrtf_box = -1, device_btn = -1, loop_box = -1, menu_vol_slider = -1, master_vol_slider = -1, updates_box = -1;
 if (!ingame)
 {
 /* The General tab: the language first (fallback, then every language found), then the startup update check, then
@@ -112,7 +112,7 @@ setform.assign_to_tab(variants_box, tabs, tab_menu);
 if (!ingame)
 {
 /* The Sound tab: the global volumes first (menu music and master, global rather than in-game, so here and not on the
-Game tab), then HRTF, volume fading, the learn sounds menu's looping, and the device button last. */
+Game tab), then HRTF, volume fading, the learn sounds menu's looping, muting when the game isn't in focus, and the device button last. */
 menu_vol_slider = setform.create_slider("Menu music volume,", new_menu_vol + 100, 0, 100, "percent", 1);
 setform.assign_to_tab(menu_vol_slider, tabs, tab_sound);
 master_vol_slider = setform.create_slider("Master game volume,", new_master_vol + 100, 0, 100, "percent", 1);
@@ -123,9 +123,13 @@ fade_box = setform.create_checkbox("Enable global volume fading", new_fade);
 setform.assign_to_tab(fade_box, tabs, tab_sound);
 loop_box = setform.create_checkbox("Enable looping of previewed sounds", new_loop);
 setform.assign_to_tab(loop_box, tabs, tab_sound);
+mute_audio_box = setform.create_checkbox("Mute audio when the game is not in focus", new_mute_audio);
+setform.assign_to_tab(mute_audio_box, tabs, tab_sound);
 device_btn = setform.create_button("Select sound &device. Currently set to " + soundcard);
 setform.assign_to_tab(device_btn, tabs, tab_sound);
 }
+int mute_speech_box = setform.create_checkbox("Mute speech when the game is not in focus", new_mute_speech); // the Speech tab, mid-run too
+setform.assign_to_tab(mute_speech_box, tabs, tab_speech);
 int voice_btn = setform.create_button("&Configure voice");
 setform.assign_to_tab(voice_btn, tabs, tab_speech);
 int preview_btn = setform.create_button("&Preview voice");
@@ -145,6 +149,8 @@ new_letter = setform.is_checked(letter_box);
 new_position = setform.is_checked(position_box);
 new_scroll = setform.is_checked(scroll_box);
 if (fade_box != -1) new_fade = setform.is_checked(fade_box);
+if (mute_audio_box != -1) new_mute_audio = setform.is_checked(mute_audio_box);
+new_mute_speech = setform.is_checked(mute_speech_box);
 new_behind = setform.is_checked(behind_box);
 if (hrtf_box != -1) new_hrtf = setform.is_checked(hrtf_box);
 if (loop_box != -1) new_loop = setform.is_checked(loop_box);
@@ -184,6 +190,8 @@ first_letter = new_letter;
 speak_menu_position = new_position;
 side_scrolling = new_scroll;
 if (!ingame) fademode = new_fade ? 1 : 0;
+if (!ingame) mute_audio_unfocused = new_mute_audio;
+mute_speech_unfocused = new_mute_speech;
 if (!ingame) loop_previews = new_loop;
 variant_descriptions = new_variants;
 if (!ingame) auto_check_updates = new_updates;
@@ -221,6 +229,8 @@ new_letter = first_letter;
 new_position = speak_menu_position;
 new_scroll = side_scrolling;
 new_fade = fademode == 1;
+new_mute_audio = mute_audio_unfocused;
+new_mute_speech = mute_speech_unfocused;
 new_behind = behind_pitch;
 new_hrtf = hrtf;
 new_loop = loop_previews;
@@ -309,6 +319,8 @@ first_letter = false;
 side_scrolling = false;
 speak_menu_position = false;
 fademode = 1;
+mute_audio_unfocused = false;
+mute_speech_unfocused = false;
 ask_quit_on_escape = true;
 show_death_results = true;
 show_death_copy_export = true;

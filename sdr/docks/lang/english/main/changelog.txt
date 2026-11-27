@@ -1,4 +1,5 @@
 New in 2.9.
+Added some settings in the sound and speech tabs that silence the game's audio and speech while you're in another window, both off by default.
 Made it so the pistol now fires at most five times a second instead of ten, however fast you press the fire key, while the machine gun stays as fast as before.
 Made it so holding enter in any menu now repeats at your keyboard's repeat rate, such as buying one pack after another in the player shop, while a held enter never carries into a run as you return to it.
 Added a difficulty to free runs, chosen as one starts in place of its speed and environment and changed any time with the console's modify difficulty, so damage, toughness, floor breakers, ladders, gold packs and the normal speed's top speed match an endless run of that difficulty.
