@@ -1,0 +1,60 @@
+---
+name: project_free_run_difficulty_plan
+description: SETTLED (2026-11-26, for 2.9, 3 sections, after the shop tabs plan): a free run console option scaling the run like an endless run of a chosen difficulty, before or during the run; Q&A log
+metadata:
+  type: project
+---
+
+# Free run difficulty plan
+
+Goal (the dev, 2026-11-26): "You know how things in the game are skaled by difficulty in the endless run? I wish there was a way to mimic that in the free run where you are able to change the difficulty of the run as an option after you start running, and or before you start running."
+
+Todo list entry (2026-11-26): "Add a difficulty option to a free run's console, so a free run can be scaled like an endless run of any difficulty, chosen before or during the run."
+
+## Findings
+
+run_difficulty (difficulty.nvgt) is -1 in a free run, and run_difficulty >= 0 also means "a counted endless or timed run" in many places, so a free run can't simply set it: stats_counting (stats.nvgt), the environment rules (environments.nvgt: start, eligibility, switching), the pause menu's lose-progress warning, the results menu, shown_coins() and shop_available(), the timed run code. A free run's level needs its own variable, read only by the scaling helpers.
+
+What the level scales today, and where:
+- Damage: level_percent() from difficulty_damage_percents (60/70/80/90/100), through level_damage() in take_damage(); 100 with no level.
+- Toughness: wall_spawn_hp() also uses level_percent(), so fake walls, fake doors, vehicles and aircrafts.
+- Survival items: item_percent() from difficulty_item_percents, rolled for capsules, shields and potions (survival_roll()).
+- Top speed: run_top_step_time() from difficulty_top_step_times (200/150/100/75/50); min_step_time with no level. Also caps the real door and key marks.
+- Starting speed: endless runs start at the level's speed (play_game()).
+- Spacing: run_min_floor_time and run_max_floor_time from difficulty_min/max_floor_times (set_run_difficulty()).
+- Schedule: has_joined() and schedule_join_times decide when each type joins; always true with no level and on chaos.
+- Combinations: combo_percent() from difficulty_combo_percents; no level uses the last (chaos).
+- Floor breakers: the hole's size by level (floor_breaker.nvgt), easy's with no level.
+- Ladders: rung times by level (ladder.nvgt), easy's with no level.
+- Gold packs: goldpack_percent() starts from difficulty_start_times and scales to the level's top speed; endless runs only.
+
+What a free run already sets for itself: its running speed (fixed 2 to 10 steps a second, rising, or normal, which speeds up as an endless run), its spacing (very close to very far), what comes (only what you add), and its health, lives, shield strength, gold and stats.
+
+## Open questions
+
+1. What a free run's difficulty scales.
+2. The choices and their names, and the starting choice.
+3. Where it sits in the console, and changing it while running.
+4. Setup and view current setup.
+5. The top speed when a level is chosen mid-run.
+6. Changelog wording and docks.
+7. Sections.
+
+## Q&A log
+
+- Q1, what it scales. Claude first recommended damage, toughness (wall_spawn_hp(): fake walls, fake doors, vehicles, aircrafts), floor breaker holes, ladder rung times and the normal speed's top speed, not spacing, starting speed, what comes, combinations or survival item rates (the console sets the first two, a free run brings only what you add, and the survival roll only touches random item pairs). Dev: "WHat about the gold inside packs? I thought that was scaled too". Claude had missed the amount: gold_pack_min_coins and gold_pack_max_coins per level (easy 100 to 300 up to chaos 500 to 1,500; a free run uses easy's today), besides the endless-only speed percent. Revised: gold pack amounts scale by the free run's level, at the full payout with no speed percent, since a free run's gold is never saved. Dev: "agreed". Settled: damage, toughness, floor breaker holes, ladder rung times, the normal speed's top speed and gold pack amounts; not spacing, starting speed, what comes, combinations or survival item rates.
+- Q2, the choices. Claude recommended six: no difficulty, easy, medium, hard, insane and chaos (names from difficulty_names), starting on no difficulty (the free run's level -1, today's behaviour), and all five levels choosable whatever endless has unlocked, since a free run counts nothing. Dev: "agreed. Isn't easy the exact same thing as no difficulty though?", then "I meant to say weather of that was the same as chaos". Claude: no difficulty matches chaos on damage, toughness and the 50 ms top speed, and differs on floor breaker holes, ladder rung times and gold pack amounts (easy's); against easy it differs on damage and toughness (100 against 60 percent) and top speed (50 against 200 ms). Dev: "You can keep it." Settled: no difficulty stays, first and the starting choice.
+- Q3, the console and mid-run changes. Claude recommended "modify difficulty", alphabetical between modify death mode and modify environment, standing and running; its menu of the six choices starts on the current one, choosing says "Difficulty set to hard.", escape steps back silently. Running, a new level counts from that moment (the next blow, the next gold pack opened, the next fake wall, door, car, helicopter, floor breaker or ladder to come); anything already on the belt keeps what it spawned with, like an environment switch. On normal running speed, if you're already faster than the new level's top, the belt slows to that top at once; otherwise it speeds up until it reaches it. Replays and restarts keep the level. Dev: "Do you think it's better to modify this if you are not running?" Claude compared standing only (simpler, one level per stretch, clear belt to change) with both (the dev's first wish, like the other run settings, felt at once) and kept both. Dev: "it can work while standing and moving. I say moving because you can change the speed." Settled as recommended.
+- Q4, setup and view current setup. Claude recommended the setup stay at its running speed and environment questions, with the difficulty set from the console, and a "difficulty" line after running speed in view current setup. Dev: "I think I might have a better idea. It should work like the endless nd timed runs where it asks for the difficulty, but leaves out the env and running speed." Claude: choosing free run opens a difficulty menu (no difficulty, easy to chaos, all available), back or escape returns silently to the mode menu, and the run starts standing as today on reset_free_settings()'s fixed 2 steps a second and a random environment, both changed from the console; modify difficulty stays in the console; the view line as recommended. Dev: "It should also pick the starting speed for you if possible. You can always change it later." Claude proposed a level setting normal running speed from its start (difficulty_start_times 500/450/400/350/300; 450 and 350 aren't fixed choices). Dev: "Actually nvm. I do not want it changing speed if you choose a diff mode". Settled: the setup is only the difficulty menu; choosing a level never sets the running speed, which starts at a fixed 2 steps a second; Q1 stands (starting speed not scaled); the "difficulty" line in view current setup after running speed. Q3's slow-down to a new level's top is reopened as Q5.
+- Q5, the top speed mid-run. Claude recommended dropping Q3's slow-down, so a level only stops the speed-ups. Dev: "Oh no. It can change your speed, but not if you choose it durring the set up process." So the "no speed change" rule is for the setup's choice only; a console choice may change speed. Claude asked whether that means just Q3's slow-down (kept) or more.
+ Claude recommended only the slow-down: on normal running speed, faster than the new level's top slows to it at once; otherwise your speed and its setting stay (not a jump to the level's starting speed). Dev: "I like your recommendation." Settled: Q3 stands as written.
+- Q6, speech, changelog and docks. Speech: setup intro "Choose a difficulty for your free run." (no difficulty, easy, medium, hard, insane, chaos; plain names, no lock text); console intro "Choose a difficulty. Currently set to chaos.", opening on the current one; "Difficulty set to hard.", or with the slow-down "Difficulty set to hard, and your speed slowed to 10 steps a second." One function for both, choose_free_difficulty(bool console), like choose_free_speed(). Changelog, on top of 2.9's block: "Added a difficulty to free runs, chosen as one starts in place of its speed and environment and changed any time with the console's modify difficulty, so damage, toughness, floor breakers, ladders, gold packs and the normal speed's top speed match an endless run of that difficulty." Docks: free_runs.txt intro ("It can take any difficulty, or none"), Starting one (a difficulty, then standing at a fixed 2 steps a second in a random environment, both changed from the console), the console (modify difficulty in the standing list, difficulty in view current setup's list), Your settings (a modify difficulty line: what it scales, no difficulty as before, a change counts from that moment while anything already coming keeps its own, the slow-down); difficulty.txt one sentence (a free run can take any difficulty, locked or not, and counts nothing). The todo item moves to finished. Dev: "THat all looks good". Settled.
+- Q7, sections. Claude recommended three, with the shop tabs plan built first (it was settled first) and this plan's changelog entry above it: Section 1 the scaling, Section 2 the menus, Section 3 the docks; Section 1's tests wait for Section 2, since a level can't be chosen until then. Dev: "that looks good." Settled.
+
+PLAN SETTLED (2026-11-26): all 7 questions answered; ready to commit; built after the shop tabs plan, one section per go-ahead.
+
+## Sections
+
+1. The scaling (no tests of its own; tested with Section 2). free_level in freerun.nvgt: -1 (no difficulty) to start, set by the setup and console, kept through replays and restarts. One helper returns the scaling level: run_difficulty, or free_level in a free run; level_percent() (damage and wall_spawn_hp() toughness), run_top_step_time(), the floor breaker hole and ladder rung lookups, and use_goldpack()'s amount range read it (goldpack_percent() stays endless only). free_speedup()'s normal speed stops at run_top_step_time(). run_difficulty stays -1 in a free run, so stats_counting, the environment rules, the results and pause menus and shown_coins() don't change.
+2. The menus (tests for Sections 1 and 2). choose_free_difficulty(bool console); choose_free_setup() becomes that one menu (back or escape returns silently), the run starting at reset_free_settings()'s fixed 2 steps a second and a random environment; "modify difficulty" between modify death mode and modify environment, standing and running; on normal speed, faster than the new top slows to it with the longer sentence; view current setup's "difficulty" line after running speed; template.lng refreshed and english.lng synced.
+3. The docks (no tests): the changelog entry, free_runs.txt, difficulty.txt, the todo item to finished.

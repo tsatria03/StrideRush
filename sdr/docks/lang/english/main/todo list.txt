@@ -1,6 +1,7 @@
 ####These are the things that need to be finished for future versions of the game.
 
-Nothing is waiting here right now. New bugs, planned changes and anything still to be decided will be listed here as they come up.
+****Unfinished. Make the player shop's character, items and specials categories into tabs in one menu.
+****Unfinished. Add a difficulty option to a free run's console, so a free run can be scaled like an endless run of any difficulty, chosen before or during the run.
 
 ##These are the things that are already finished from earlier versions of the game.
 
