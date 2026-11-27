@@ -323,10 +323,8 @@ while (true)
 wait(5);
 learn_preview_keys(preview);
 preview.update();
-/* Enter is handled here, not by the form, so holding Enter keeps restarting the sound. The form waits for Enter to lift
-before it counts a press, so held Enter would play just once; here every key repeat starts the sound again, the Windows
-keyboard's own repeat (key_repeating, not key_down). A pass with a repeat skips the form, and between repeats the form
-sees no repeat to act on, so it never starts its wait. */
+/* Enter is handled here, not by the form, so a press starts the sound instead of choosing the line: every key repeat
+starts it again, the Windows keyboard's own repeat (key_repeating, not key_down). A pass with a repeat skips the form. */
 if (key_repeating(KEY_RETURN) or key_repeating(KEY_NUMPAD_ENTER))
 {
 int pos = m.focused_item;

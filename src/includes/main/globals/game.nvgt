@@ -55,6 +55,7 @@ reset_run(starting_step_time, starting_life_count);
 reset_timed(); // a timed run's clocks, once runtimer has restarted (timerun.nvgt)
 start_run_stats(); // an endless run starts a fresh session (stats.nvgt)
 start_run_audio();
+wait_for_enter_up(); // the Enter that started the run, held, would otherwise carry in as the use key (pause_menu.nvgt)
 running = true;
 run_loop();
 end_run_stats(); // the session into the lifetime and saved, however the run ended (stats.nvgt)

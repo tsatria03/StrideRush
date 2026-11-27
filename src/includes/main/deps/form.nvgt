@@ -777,7 +777,7 @@ class audio_form {
 				return 2;
 		}
 		if ((focused < 0 || c_form[focused].type != ct_keyboard_area) && (focused < 0 || ((!c_form[focused].multiline_enter || !c_form[focused].multiline) && c_form[focused].type == ct_input || c_form[focused].type == ct_button || c_form[focused].type == ct_list) && key_up(KEY_LCTRL) && key_up(KEY_RCTRL) && key_up(KEY_LSHIFT) && key_up(KEY_RSHIFT)) && (key_repeating(KEY_RETURN) || key_repeating(KEY_NUMPAD_ENTER) || (autotab == 3))) {
-			while (key_down(KEY_RETURN) || key_down(KEY_NUMPAD_ENTER)) wait(5);   // hold until enter lifts so it can't bleed into the game after the form closes
+			// Enter repeats at the keyboard's own rate while held; the run waits for it to lift instead (resume_game(), pause_menu.nvgt).
 			if (focused >= 0 && c_form[focused].type == ct_input)
 			stop_speech();
 			if ((defaults == -1) && (focused > -1)) {

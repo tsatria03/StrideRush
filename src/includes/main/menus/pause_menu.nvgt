@@ -8,10 +8,17 @@ void pause_game()
 pause_timers();
 pause_pools();
 }
+/* Back to the run from any menu or window. Menus repeat Enter while it's held, so the run waits for Enter to lift first,
+or a held Enter would carry into the run as the use key. */
 void resume_game()
 {
+wait_for_enter_up();
 resume_pools();
 resume_timers();
+}
+void wait_for_enter_up()
+{
+while (key_down(KEY_RETURN) or key_down(KEY_NUMPAD_ENTER)) wait(5);
 }
 // The run's timers alone; a practice death pauses these, then the pools its own way (practice_death() in endrun.nvgt).
 void pause_timers()

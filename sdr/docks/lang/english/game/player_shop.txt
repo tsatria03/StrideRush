@@ -10,7 +10,7 @@ Your gold coins come from gold packs, as described under gold packs, and are sav
 Buying something.
 
 The player shop opens on three tabs: character, items and specials, starting on character each time you enter. Move between them with the left and right arrows on the tab panel, which shift plus tab takes you to, or press control plus tab and control plus shift plus tab from anywhere. Each tab lists what it sells, with its price and how many you can afford, such as "health potion, costs 1,000 gold coins. You can buy 3."
-Choosing one opens its own menu, which tells you how many gold coins you have. It offers packs of 1, 5, 10, 25, 50 and 100, each with its full price, then buy all, which buys as many as you can afford. Press escape to go back to the tab you came from.
+Choosing one opens its own menu, which tells you how many gold coins you have. It offers packs of 1, 5, 10, 25, 50 and 100, each with its full price, then buy all, which buys as many as you can afford. Hold enter on a pack to keep buying it, one after another, at your keyboard's repeat rate. Press escape to go back to the tab you came from.
 What you buy goes straight into your inventory, or for character upgrades, works at once, and you stay on the same line so you can buy more. If you used buy all, or can't afford another, a message tells you what you bought and takes you back to the tab, on the same line.
 If you can't afford something, you'll hear an error and be told so, and nothing is bought. Every tab always lists what it sells, even with no gold coins, so you can see what you're saving for. Press escape on a tab to leave the player shop.
 
