@@ -89,6 +89,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
+- [Weapon practice plan](plans/project_weapon_practice_plan.md) — SETTLED (2026-11-27, for 3.0, 2 sections): a practice choice, fake doors and walls, after mixed doors, half and half (aircrafts and vehicles dropped, since they can be dodged); Q&A log
 - [Free run difficulty plan](plans/project_free_run_difficulty_plan.md) — COMPLETE (2026-11-26, 2.9's seventh entry, 3 sections): a free run difficulty (none first, renamed from no difficulty), asked at setup in place of speed and environment and changed from the console, scaling damage, toughness, floor breakers, ladders, gold pack amounts and the normal speed's top; its own level variable, since run_difficulty >= 0 means a counted run; Q&A log
 - [Shop tabs plan](plans/project_shop_tabs_plan.md) — COMPLETE (2026-11-26, 2.9's fourth entry, 2 sections): the player shop's categories as form_menu tabs, SimpleFighter style, no back items, escape steps back or leaves; form_menu tabs for menus you choose from, the form's own tab panel for windows you check or change; Q&A log
 - [Shop items plan](plans/project_shop_items_plan.md) — COMPLETE (2026-11-23, 2.8's last three entries): max health, max shield strength, safety net and power crystal in the player shop; 4 sections; Q&A log
