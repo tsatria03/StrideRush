@@ -1,6 +1,6 @@
 ---
 name: project_shop_tabs_plan
-description: SETTLED (2026-11-26, for 2.9, 2 sections): the player shop's categories become form_menu tabs, SimpleFighter style, instead of a category menu leading to each list; Q&A log
+description: COMPLETE (2026-11-26, 2.9's fourth entry, 2 sections): the player shop's categories become form_menu tabs, SimpleFighter style, instead of a category menu leading to each list; Q&A log
 metadata:
   type: project
 ---
@@ -43,4 +43,4 @@ PLAN SETTLED (2026-11-26): all 7 questions answered; ready to commit, then build
 ## Sections
 
 1. The tabbed shop (shop_menu.nvgt, template.lng, english.lng). Tests. BUILT (2026-11-26, after c6f925e): shop_menu() one tabbed form_menu (tab_caption "Category", add_tab() written out three times so lang_template.py finds the names), shop_tab_contents() for each tab's ids and prices (shield stats only with a shield), saved tab and position, the welcome only on the first build of a visit; shop_open_character() and shop_category_menu() removed; shop_pack_menu() without back. Tests, in a free run: 1 (opening, the character tab, Shift+Tab to the tab panel, left and right, Ctrl+Tab) PASSED; 2 (the no-gold error back on its line, escape leaves, the next visit on character) PASSED; 3 (a purchase in the specials tab, escape back to the same line with the count lowered, no welcome) PASSED; 4 (the shield stats with and without a shield) PASSED. Section 1 COMPLETE.
-2. The docks (changelog.txt, player_shop.txt, player_stats.txt). No tests.
+2. The docks (changelog.txt, player_shop.txt, player_stats.txt). No tests. WRITTEN (2026-11-26, after 9f0e1bc): the changelog entry on top of 2.9's block (4 of 10), player_shop.txt's Buying something for tabs, escape back to the tab and out of the shop, player_stats.txt's "character tab", the todo item moved to finished. PLAN COMPLETE.

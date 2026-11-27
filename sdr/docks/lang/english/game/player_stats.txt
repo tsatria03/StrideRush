@@ -1,6 +1,6 @@
 Player stats.
 
-Your player stats are attack, defence, max health, max shield strength and shield defence. You buy them in the player shop's character category to hit harder, last longer and take less damage for the rest of your run. Every run starts with 0 points in each.
+Your player stats are attack, defence, max health, max shield strength and shield defence. You buy them in the player shop's character tab to hit harder, last longer and take less damage for the rest of your run. Every run starts with 0 points in each.
 
 What each one does.
 
