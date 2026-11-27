@@ -14,7 +14,7 @@ Be careful: if you run onto a pack in its lane, or land on it from a jump, it br
 
 Opening one.
 
-Use a gold pack from your inventory to open it, and it gives you a random number of gold coins, which depends on your level and how far into the run you are. These are the full amounts:
+Use a gold pack from your inventory to open it, and it gives you a random number of gold coins, which depends on your level and how far into the run you are. If you carry more than one, they all open at once, each paying its own amount, and you hear the total, such as "You got 482 gold coins." These are the full amounts:
 
 Easy: 100 to 300 gold coins.
 Medium: 200 to 600 gold coins.

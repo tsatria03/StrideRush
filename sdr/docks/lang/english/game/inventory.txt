@@ -6,6 +6,7 @@ How your inventory works.
 
 Items in your inventory are kept in alphabetical order, with one entry for each kind, however many you have. Powerups never go in your inventory.
 Each time you move to an item, you hear a sound placed from left to right by where it sits in the list, and its name is spoken, with how many you have when there's more than one, and its place in the list, such as "ammo packs, 3. Item 1 of 2." A steel shield or a helper also says whether it's on or off. The list wraps around, so moving past the last item takes you back to the first.
+Picking up an item from a lane, with your hands, your item helper or on a slide, moves your inventory onto it, so you can use it straight away.
 If your inventory is empty, you're told so.
 
 The keys.

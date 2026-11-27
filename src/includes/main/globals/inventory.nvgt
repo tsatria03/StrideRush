@@ -27,6 +27,12 @@ else inventory.set(item, count);
 string[] keys = inventory_keys();
 if (invpos >= int(keys.length())) invpos = int(max(0, int(keys.length()) - 1));
 }
+// Moves the cursor onto an item you have, silently: a lane pickup's, whether by hand, the item helper or a slide.
+void focus_item(const string&in item)
+{
+int at = inventory_keys().find(item);
+if (at >= 0) invpos = at;
+}
 int item_count(string item)
 {
 int count = 0;
@@ -104,13 +110,11 @@ else if (item == "safety_net") speak_buffer("Your safety net will save you from 
 else if (item == "slide" ? use_slide_item() : use_trampoline_item()) give_item(item, -1);
 return;
 }
-if (item == "ammo_pack")
+if (item == "ammo_pack" or item == "gold_pack")
 {
-if (use_ammopack()) item_used(item);
-}
-else if (item == "gold_pack")
-{
-if (use_goldpack()) item_used(item);
+// every pack you carry opens at once (ammo.nvgt, goldpack.nvgt), each one counted as used
+int opened = item == "ammo_pack" ? use_ammopacks() : use_goldpacks();
+for (int i = 0; i < opened; i++) item_used(item);
 }
 else if (is_key_item(item))
 {

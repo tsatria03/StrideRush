@@ -1,4 +1,6 @@
 New in 2.9.
+Made it so using an ammo or gold pack while you carry more than one now opens them all at once and tells you the total, while ammo packs that won't fit in a full reserve are kept.
+Made it so picking up an item from a lane now moves your inventory onto it, whether you grabbed it yourself, your item helper did, or you caught it on a slide.
 Made it so the player shop now shows its character, items and specials categories as tabs in one menu, and escape takes you back a step or out of the shop instead of a back item.
 Fixed a bug where a mixed obstacles practice run could move to an environment with no obstacles, leaving a long stretch where nothing appeared until it moved again.
 Fixed a bug where a car or helicopter's sounds, such as its death when you destroyed it, stayed centred on you as you changed lanes, instead of staying in the lane where it was.

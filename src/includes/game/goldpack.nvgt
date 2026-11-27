@@ -99,6 +99,7 @@ goldpackpool.play_stationary(get_pack_sound(goldpack_folder + "*get*"), false);
 // The player's give sound as it goes into the inventory, together with get.
 p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("gold_pack", 1);
+focus_item("gold_pack"); // the inventory moves onto what you just picked up (inventory.nvgt)
 stat_add("gold_packs_picked_up");
 speak_buffer(item_display_name("gold_pack"), "items"); // just the item's name
 return true;
@@ -196,23 +197,26 @@ if (step_time <= top) return 100;
 if (step_time >= start) return gold_pack_start_percent;
 return gold_pack_start_percent + (100 - gold_pack_start_percent) * (start - step_time) / (start - top);
 }
-/* The use key on a gold pack: a random amount for the level (easy's outside a difficulty), scaled by goldpack_percent() and
-saved at once in an endless run so a crash can't lose it. Always used. */
-bool use_goldpack()
+/* The use key on gold packs: every one you carry opens at once, each a random amount for the level (easy's outside a
+difficulty) scaled by goldpack_percent(), spoken as one total and saved at once in an endless run so a crash can't lose
+it. Returns how many opened, which is all of them. */
+int use_goldpacks()
 {
+int packs = item_count("gold_pack");
 int at = run_difficulty >= 0 ? run_difficulty : 0;
-int amount = random(gold_pack_min_coins[at], gold_pack_max_coins[at]) * goldpack_percent() / 100;
+int amount = 0;
+for (int i = 0; i < packs; i++) amount += random(gold_pack_min_coins[at], gold_pack_max_coins[at]) * goldpack_percent() / 100;
 p.play_stationary(get_pack_sound(goldpack_folder + "*use*"), false);
 speak_buffer("You got " + coins_text(amount) + ".", "items");
 if (!stats_counting)
 {
 run_coins += amount;
-return true;
+return packs;
 }
 player_coins += amount;
 stat_add("coins_earned", amount);
 writegame();
-return true;
+return packs;
 }
 // Runs every frame from item_lane_sounds() (lane.nvgt): keeps each one in its lane as you move and as it nears.
 void goldpack_lane_sounds()

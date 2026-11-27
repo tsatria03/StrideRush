@@ -96,6 +96,7 @@ stop_shield(target);
 shieldpool.play_stationary(get_pack_sound(shield_folder + "*get*"), false);
 p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("steel_shield", 1);
+focus_item("steel_shield"); // the inventory moves onto what you just picked up (inventory.nvgt)
 stat_add("steel_shields_picked_up");
 speak_buffer(item_display_name("steel_shield"), "items");
 return true;

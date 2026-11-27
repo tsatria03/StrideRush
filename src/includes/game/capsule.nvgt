@@ -57,6 +57,7 @@ stop_capsule(target);
 capsulepool.play_stationary(get_pack_sound(capsule_folder + "*get*"), false);
 p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("life_capsule", 1);
+focus_item("life_capsule"); // the inventory moves onto what you just picked up (inventory.nvgt)
 stat_add("life_capsules_picked_up");
 speak_buffer(item_display_name("life_capsule"), "items");
 return true;

@@ -58,6 +58,7 @@ stop_teleporter(target);
 teleporterpool.play_stationary(get_pack_sound(teleporter_folder + "*get*"), false);
 p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("player_teleporter", 1);
+focus_item("player_teleporter"); // the inventory moves onto what you just picked up (inventory.nvgt)
 stat_add("player_teleporters_picked_up");
 speak_buffer(item_display_name("player_teleporter"), "items");
 return true;

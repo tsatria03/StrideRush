@@ -58,6 +58,7 @@ stop_potion(target);
 potionpool.play_stationary(get_pack_sound(potion_folder + "*get*"), false);
 p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("health_potion", 1);
+focus_item("health_potion"); // the inventory moves onto what you just picked up (inventory.nvgt)
 stat_add("health_potions_picked_up");
 speak_buffer(item_display_name("health_potion"), "items");
 return true;

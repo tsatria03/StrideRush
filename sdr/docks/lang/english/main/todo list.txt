@@ -4,6 +4,8 @@
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Make it so using an ammo or gold pack while you carry more than one opens them all at once, such as "You got 482 gold coins." for 2 gold packs.
+**Finished. Make it so picking up an item from a lane moves your inventory's focus onto that item.
 **Finished. Make the player shop's character, items and specials categories into tabs in one menu.
 **Finished. Add some upgrades to increase your maximum health and shield strength in the character shop.
 **Finished. Add a player shop that you can access in the game to buy items and special helpers.
