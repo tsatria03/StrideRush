@@ -49,7 +49,7 @@ Moved here from src/includes/main/globals/tuning.nvgt's comments on 2026-11-15 (
 ## Weapons and items
 - weapon_damage_multiplier 4 (2026-11-03, while testing walls): was 2.
 - gun_start_reserve 50 (2026-11-03): was 250, lowered so ammo packs matter.
-- melee_fire_gap 200 and pistol_fire_gap 100 (2026-11-04): both were one shared 50 ms, too short for the weapon powerups to be heard.
+- melee_fire_gap 200 and pistol_fire_gap 100 (2026-11-04): both were one shared 50 ms, too short for the weapon powerups to be heard. pistol_fire_gap 200 (2026-11-26, the dev: "Please make the pistol filre a lot slower", then "I rather do 200ms, not any slower."), matching CaveDefender's pistol.art spam time of 200; the machine gun's 100 already matched its repeat time.
 - weapon_reach_time 2000 (2026-11-03).
 - bullet_tile_time 30: first 30, tried at 50, settled on 40 (2026-11-03), back to 30 (2026-11-05), so bullets stay ahead of you even at 50 ms steps.
 - Ammo packs (2026-11-02): a pack gave a flat 50 to both guns until 2026-11-03, now 5 to 10 to the gun you hold; gun_max_reserve 500 (2026-11-20, the dev), was 200 (2026-11-03), and 250 before that.

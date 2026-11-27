@@ -239,7 +239,7 @@ Each step up the keys hits harder and swings slower. The swing powerups scale bo
 const int[] melee_swing_times = {50, 100, 150, 200, 250, 300, 350, 400};
 const int[] melee_recovery_times = {25, 50, 75, 100, 125, 150, 175, 200};
 // The shortest gap between two pistol shots per Space press, and the machine gun's rate while Space is held.
-const int pistol_fire_gap = 100;
+const int pistol_fire_gap = 200;
 const int machine_gun_fire_gap = 100;
 /* How far ahead each weapon reaches, one entry per weapon in weapon_names' order (bat, boot, club, dagger, fist, hammer,
 knife, sword, machine gun, pistol), turned into tiles at the current speed. The stronger the weapon, the further. Nothing
