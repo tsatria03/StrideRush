@@ -9,7 +9,19 @@ Moved out of CLAUDE.md on 2026-11-10 (dev: "claude.md seems pritty long ... I hi
 
 Version numbering: minor versions hold 10 changelog entries, majors (x.0) 20; after x.9 comes (x+1).0, never x.10 ([[feedback_changelog_rules]]). Tags are V<major>.<minor>0 (V1.90, V2.00).
 
-## 2.8: 10 of 10 (2026-11-23). From here on, tags and releases aren't recorded ([[feedback_no_release_records]]); see git tags.
+## 2.9: tagged V2.90 at c470a33 (10 of 10; 2026-11-27).
+- Focus muting (the dev, 10 of 10): settings "Mute audio when the game is not in focus" (Sound tab, after looping) and "Mute speech when the game is not in focus" (Speech tab, mid-run too), off by default, saved in settings.srf. focus_mute_check() (soundfuncts.nvgt) silences sound_master_volume while is_window_active() is false, from the run loop and joystick_menu_frame(); speak() returns early through speech_away(), buffers still keeping the lines. Tests: 2 PASSED.
+- Pistol (the dev, 9 of 10): pistol_fire_gap 100 to 200 ms, CaveDefender's pistol spam time (see [[project_tuning_history]]). Test: 1 PASSED.
+- Held Enter (the dev, 8 of 10): form.nvgt no longer waits for Enter to lift, so every form and menu repeats Enter at the keyboard's rate; resume_game() and start_run() wait for it instead (wait_for_enter_up(), pause_menu.nvgt), so it never reaches the run's item_use. Tests: 2 PASSED.
+- Free run difficulty ([[project_free_run_difficulty_plan]], 7 of 10): free_level and scaling_level(); the setup is the difficulty menu (none, easy to chaos); modify difficulty; the normal speed's top. Tests: 5 PASSED.
+- Pack opening (the dev, 6 of 10): use_ammopacks() and use_goldpacks() open every pack you carry, ammo until the reserve is full. Tests: 2 PASSED.
+- Inventory focus (the dev, 5 of 10): focus_item() after each lane pickup (by hand, item helper or slide). Test: 1 PASSED.
+- Shop tabs ([[project_shop_tabs_plan]], 4 of 10): the player shop as one form_menu with character, items and specials tabs, no back items. Tests: 4 PASSED.
+- Practice mix environments (a bug, 3 of 10): practice_env_ok() lets mixed obstacles only start in or move to an environment with one of practice_mix_plain's kinds, so uncharted (no traps yet) no longer leaves a minute with nothing. Test: 1 PASSED.
+- Lane one-shots (a player's report, 2 of 10): keep_lane_clip() and lane_clip_sounds() (lane.nvgt) keep vehicle and aircraft one-shots (death, hurt, shoot, land) in their lane and tile. Tests: 2 PASSED.
+- List wrapping (the dev, 1 of 10): form.nvgt's wrap_lists back to true. build/version.txt 2.9.
+
+## 2.8: tagged V2.80 at 5fc9585 (10 of 10; 2026-11-23).
 - Shop items ([[project_shop_items_plan]], 8 to 10 of 10): max health (50 gold coins a point) and max shield strength (25) in the character category, bonuses added into max_health() and shield_full(); a power crystal (750, use_power_crystal()) starting a random good powerup; a safety net (10,000, safety_net_catch()) catching a hazard or floor breaker fall. Each of the last two has its own game document (54 in all). Tests: 11 PASSED across sections 1 to 3.
 - Sound paths (the dev, no entry, as players hear no difference): main/misc/game moved to main/misc/global, and the Y key's goldcheck became main/misc/player/money. The dev confirmed they all play.
 - Floor breaker ledges (the dev, 7 of 10): on_ledge() in hazard.nvgt now also covers a floor breaker's countdown steps and the ledge_after_tiles after its hole, using the environment's ledge platform. Test: 1 of 1 PASSED.
