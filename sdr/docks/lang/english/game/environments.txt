@@ -17,7 +17,7 @@ You can also hear your heartbeat, which speeds up as you run faster. It starts a
 Which environments a run visits.
 
 An environment doesn't need everything. A kind of obstacle with no sounds in an environment just doesn't come while you're there. Endless and timed runs only start in, or move to, an environment with an obstacle they can bring at that point in the run; when there's nowhere else like that yet, you stay where you are, and the ambience moves on instead.
-A practice run only moves between environments that have the obstacle you're practicing.
+A practice run only moves between environments that have the obstacle you're practicing, or for mixed obstacles, at least one of the obstacles it brings.
 
 Environments in free runs.
 

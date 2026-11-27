@@ -1,4 +1,6 @@
 New in 2.9.
+Fixed a bug where a mixed obstacles practice run could move to an environment with no obstacles, leaving a long stretch where nothing appeared until it moved again.
+Fixed a bug where a car or helicopter's sounds, such as its death when you destroyed it, stayed centred on you as you changed lanes, instead of staying in the lane where it was.
 Made it so lists in the game's windows, such as the settings and key bindings lists, now wrap around at either end again.
 New in 2.8.
 Added a safety net to the player shop's specials, which saves you once from a hazard or floor breaker.

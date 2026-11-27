@@ -102,11 +102,11 @@ if (fade == 1 or slot < 0 or slot >= int(vehiclepool.items.length())) return;
 vehiclepool.items[slot].volume_step *= fade;
 vehiclepool.items[slot].update(vehiclepool.last_listener_x, vehiclepool.last_listener_y, vehiclepool.last_listener_z, vehiclepool.last_listener_rotation, vehiclepool.max_distance);
 }
-// One of a vehicle's sounds, once, at the vehicle in its lane.
+// One of a vehicle's sounds, once, at the vehicle in its lane, and kept in that lane as you change lanes (keep_lane_clip(), lane.nvgt).
 void vehicle_sound(vehicle@ v, const string&in name, float fade = 1)
 {
 int slot = vehiclepool.play_2d(get_pack_sound(vehicle_folder(v.env) + v.theme + "/*" + name + "*"), 0, me.x, 0, vehicle_x(v), false);
-place_vehicle_sound(v, slot, fade);
+keep_lane_clip(vehiclepool, slot, v.lane, vehicle_x(v), fade);
 }
 // Still on the road ahead of you: not reached you, not broken.
 bool vehicle_active(vehicle@ v)

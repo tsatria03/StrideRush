@@ -114,11 +114,12 @@ if (h.phase != aircraft_flying or slot < 0 or slot >= int(aircraftpool.items.len
 aircraftpool.items[slot].volume_step = mover_volume_step(aircraft_speed_factor);
 aircraftpool.items[slot].update(aircraftpool.last_listener_x, aircraftpool.last_listener_y, aircraftpool.last_listener_z, aircraftpool.last_listener_rotation, aircraftpool.max_distance);
 }
-// One of an aircraft's sounds, once, at the aircraft in its lane.
+// One of an aircraft's sounds, once, at the aircraft in its lane, and kept in that lane as you change lanes (keep_lane_clip(), lane.nvgt).
 void aircraft_sound(aircraft@ h, const string&in name)
 {
 int slot = aircraftpool.play_2d(get_pack_sound(aircraft_folder(h.env) + h.theme + "/*" + name + "*"), 0, me.x, 0, aircraft_x(h), false);
-place_aircraft_sound(h, slot);
+float step = (h.phase == aircraft_flying and belt_volume_step > 0) ? mover_volume_step(aircraft_speed_factor) : -1; // as place_aircraft_sound()
+keep_lane_clip(aircraftpool, slot, h.lane, aircraft_x(h), 1, step);
 }
 // A lane toward yours, from the lane it's in.
 void aircraft_drift(aircraft@ h)

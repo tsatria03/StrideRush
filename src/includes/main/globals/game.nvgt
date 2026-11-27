@@ -225,6 +225,7 @@ aircraft_flight(); // every frame: each aircraft's flight, hover, shots and land
 if (!running) break;
 trampoline_sounds(); // every frame: lane pads follow your lane (trampoline.nvgt)
 item_lane_sounds(); // every frame: items in their lanes
+lane_clip_sounds(); // every frame: one-shot sounds kept in their lanes, such as a vehicle's death (lane.nvgt)
 speedup_check();
 powerup_timers(); // every frame, so a timed powerup ends on time
 powerup_sounds(); // every frame: powerups on the belt replay their sound on a timer

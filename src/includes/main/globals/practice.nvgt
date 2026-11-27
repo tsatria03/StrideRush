@@ -221,7 +221,15 @@ writegame();
 // Can a practice run of this choice be in this environment: its obstacle there, or for combinations, both of some pair's.
 bool practice_env_ok(const string&in env, const string&in choice)
 {
-if (choice == "mixed_obstacles") return true; // any environment, bringing whatever kinds it has (practice_mix_kinds() in spawner.nvgt)
+if (choice == "mixed_obstacles")
+{
+// any environment with at least one of the mix's kinds, bringing whatever it has (practice_mix_kinds() in spawner.nvgt)
+for (uint i = 0; i < practice_mix_plain.length(); i++)
+{
+if (env_has_type(env, practice_trap_type(practice_mix_plain[i]))) return true;
+}
+return false;
+}
 if (choice == "real_walls" or choice == "mixed_walls") return env_has_type(env, "ladders") and env_has_type(env, "walls"); // a real wall needs both
 if (choice != "combinations") return env_has_type(env, practice_trap_type(choice));
 for (uint i = 0; i < combo_firsts.length(); i++)

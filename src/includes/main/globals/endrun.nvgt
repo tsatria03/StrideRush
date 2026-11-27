@@ -81,6 +81,7 @@ clear_run_objects();
 // Every object type's destroy_all goes here.
 void clear_run_objects()
 {
+lane_clips.resize(0); // lane.nvgt
 destroy_all_hazards();
 destroy_all_spikes();
 destroy_all_mines();

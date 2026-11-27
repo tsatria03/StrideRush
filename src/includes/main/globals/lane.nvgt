@@ -80,6 +80,57 @@ pool.items[slot].y = tile;
 if (fade > 0) pool.items[slot].volume_step = fade;
 pool.items[slot].update(pool.last_listener_x, pool.last_listener_y, pool.last_listener_z, pool.last_listener_rotation, pool.max_distance);
 }
+/* A one-shot sound kept in its lane at its tile until it ends, such as a destroyed vehicle's death. Lane positions are
+relative to yours, so a clip placed only once would move with you when you change lanes. fade scales the lane's falloff
+(a vehicle's shots), or step, when 0 or more, replaces it (an aircraft flying in). */
+class lane_clip
+{
+sound_pool@ pool;
+int slot;
+sound@ handle; // the clip it was, so a slot reused by another sound is let go
+int lane;
+double tile;
+float fade = 1;
+float step = -1;
+}
+lane_clip@[] lane_clips(0);
+void keep_lane_clip(sound_pool@ pool, int slot, int lane, double tile, float fade = 1, float step = -1)
+{
+if (slot < 0 or slot >= int(pool.items.length()) or @pool.items[slot].handle == null) return;
+lane_clip c;
+@c.pool = pool;
+c.slot = slot;
+@c.handle = pool.items[slot].handle;
+c.lane = lane;
+c.tile = tile;
+c.fade = fade;
+c.step = step;
+lane_clips.insert_last(c);
+place_lane_clip(c);
+}
+void place_lane_clip(lane_clip@ c)
+{
+place_lane_sound(c.pool, c.slot, c.lane, c.tile);
+sound_pool_item@ item = c.pool.items[c.slot];
+if (c.step >= 0) item.volume_step = c.step;
+else if (c.fade != 1) item.volume_step *= c.fade;
+else return;
+item.update(c.pool.last_listener_x, c.pool.last_listener_y, c.pool.last_listener_z, c.pool.last_listener_rotation, c.pool.max_distance);
+}
+// Every frame from run_loop(): each kept clip in its lane, dropped once it has finished or its slot holds another sound.
+void lane_clip_sounds()
+{
+for (int i = int(lane_clips.length()) - 1; i >= 0; i--)
+{
+lane_clip@ c = lane_clips[i];
+if (c.slot >= int(c.pool.items.length()) or @c.pool.items[c.slot].handle != @c.handle or (!c.handle.playing and !c.pool.items[c.slot].paused))
+{
+lane_clips.remove_at(i);
+continue;
+}
+place_lane_clip(c);
+}
+}
 // Runs every frame from run_loop(): keeps every item on the belt in its lane.
 void item_lane_sounds()
 {

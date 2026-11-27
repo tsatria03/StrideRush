@@ -258,13 +258,14 @@ return type;
 }
 bool practice_mix_door_next = false; // mixed obstacles: the key was just placed, so its real door comes next
 // The kinds mixed obstacles picks from, each once, those the current environment has sounds for (17 at most, with floor breakers, vehicles and aircrafts).
+// Its kinds that need only their own sounds; practice_env_ok() (practice.nvgt) reads them too, so the mix only moves where one of them is.
+string[] practice_mix_plain = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "insects", "walls", "fake_doors", "barriers", "winds", "trampolines", "floor_breakers", "vehicles", "aircrafts"};
 string[] practice_mix_kinds()
 {
-string[] plain = {"hazards", "spikes", "mines", "projectiles", "force_fields", "animals", "insects", "walls", "fake_doors", "barriers", "winds", "trampolines", "floor_breakers", "vehicles", "aircrafts"};
 string[] kinds;
-for (uint i = 0; i < plain.length(); i++)
+for (uint i = 0; i < practice_mix_plain.length(); i++)
 {
-if (get_pack_sound_folders(type_folder(plain[i]) + "*").length() > 0) kinds.insert_last(plain[i]);
+if (get_pack_sound_folders(type_folder(practice_mix_plain[i]) + "*").length() > 0) kinds.insert_last(practice_mix_plain[i]);
 }
 if (ladders_ready()) kinds.insert_last("ladders");
 if (doors_available() and keys_available()) kinds.insert_last("real_doors");
