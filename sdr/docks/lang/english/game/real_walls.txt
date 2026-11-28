@@ -1,6 +1,6 @@
 Real walls.
 
-Real walls are tall walls you can't break, played at their normal pitch, so you can tell them from fake walls. Each one has a ladder in front of it, and the way past a real wall is to climb its ladder, hand over hand, and over the top.
+Real walls are tall walls you can't break, played at their normal pitch, so you can tell them from fake walls. A swing or a shot at one just ricochets off it with your weapon's ricochet sound, doing no damage, and nothing behind it can be hit until you're past it. Each one has a ladder in front of it, and the way past a real wall is to climb its ladder, hand over hand, and over the top.
 
 How a real wall works.
 

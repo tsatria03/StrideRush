@@ -4,7 +4,7 @@ Real doors mark your progress. As the belt picks up the pace, a real door comes 
 
 How a real door works.
 
-A real door fills the whole belt and plays at its normal pitch, while a fake door sounds slightly higher or lower. As it comes, it plays the same five-cue countdown as most obstacles, with four notes at once.
+A real door fills the whole belt and plays at its normal pitch, while a fake door sounds slightly higher or lower. Your weapons can't break a real door: a swing or a shot at one just ricochets off it with your weapon's ricochet sound, and nothing behind it can be hit until it's open. As it comes, it plays the same five-cue countdown as most obstacles, with four notes at once.
 Each real door is locked. Its key turns up on the belt earlier in the same stretch, in a random lane, so pick it up with a hand as it reaches you, and it goes in your inventory.
 While a door carries you, your footsteps and heartbeat go quiet, and you can't jump, crouch, switch lanes, use your weapons or use your inventory, until it closes behind you.
 If you crash into a real door, it takes 70 of your health, the same as any door. Even a missed door still marks the start of its faster stretch.

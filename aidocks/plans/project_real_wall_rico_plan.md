@@ -1,6 +1,6 @@
 ---
 name: project_real_wall_rico_plan
-description: SETTLED (2026-11-27, for 3.0, 2 sections): weapons ricochet off real walls with the new rico sounds (melee rico.ogg, guns rico1-12), after CaveDefender's ricochets; Q&A log
+description: COMPLETE (2026-11-27, 3.0's third entry, 2 sections): weapons ricochet off real walls and real doors with the new rico sounds (melee rico.ogg, guns rico1-12), after CaveDefender's ricochets; Q&A log
 metadata:
   type: project
 ---
@@ -34,4 +34,4 @@ PLAN SETTLED (2026-11-27): ready to commit with the 32 rico sounds, then build S
 1. The ricochets (tests): ladder.nvgt's real_wall_in_reach(reach) and real_wall_at(x) (a ladder whose real wall still stands ahead); weapon_strike() counts a real wall as the nearest target, blocking anything behind it, and the swing plays the weapon's *rico* at it instead of its hit; bullet_hits() stops a bullet on a real wall's tile with *rico* and *shell*; learn_sound_name() "rico" as "ricochet"; template.lng refreshed and english.lng synced.
    BUILT (2026-11-27, after 7a4fe23): real_wall_in_reach() and real_wall_at() in ladder.nvgt (a wall_spent wall no longer counts); weapon_strike()'s strike_ricochet, a real wall winning when nearer than or level with every other target; bullet_hits() stops a bullet on a real wall with *rico* and *shell*, after a low bullet's insect and a high one's aircraft; learn sounds' "ricochet". Tests: 1 (sword swings ricochet, no damage, the climb still needed) PASSED; 2 (pistol shots stop at the wall with varied ricochets and a shell) PASSED; 3 (learn sounds' ricochet, one entry with 12 versions for the pistol) PASSED. Section 1 COMPLETE.
    Then the dev: "Oh I forgot. This reco behavior should also apply to real doors too." Added: door.nvgt's real_door_in_reach() and real_door_at() (a real door still standing, not yet opened); weapon_strike() takes the nearer of a real wall and a real door; bullet_hits() stops on either. The docks follow: the changelog reads "a real wall or real door", and real_doors.txt gets the same sentence as real_walls.txt. Test 4 (sword and pistol ricochets off a real door, then it unlocks and opens as usual) PASSED.
-2. The docks (no tests): the changelog entry, real_walls.txt, weapons.txt.
+2. The docks (no tests): the changelog entry, real_walls.txt, weapons.txt. WRITTEN (2026-11-27, after e99db1a): the changelog entry on top of 3.0's block ("a real wall or real door"), real_walls.txt, real_doors.txt and weapons.txt. PLAN COMPLETE.
