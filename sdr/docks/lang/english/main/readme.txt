@@ -5,8 +5,8 @@ Getting started.
 
 From the main menu, choose game menu, then play game, then practice run, and pick hazards, the only obstacle open at first, where nothing can end your run. Once you've jumped over 5 hazards, endless run opens, so go back to play game, choose endless run, and pick easy, the only difficulty open at first. Learn sounds, in the game menu, lets you hear every obstacle's countdown before you meet it in a run.
 The belt carries you forward on its own, so you never press a key to move ahead. Listen in front of you: every obstacle plays a five-cue countdown as it comes, and on easy you have time to act on the last few cues.
-Press space, the up arrow or W to jump over hazards, spikes and mines, and hold alt, the down arrow or S to crouch under projectiles.
-Press the left and right shift keys, the left and right arrows, or Q and E, to switch lanes out of a barrier's way.
+Press space, the up arrow or W to jump over hazards, spikes and mines, and hold the down arrow or S to crouch under projectiles.
+Press the left and right arrows, or Q and E, to switch lanes out of a barrier's way.
 Press A for your left hand and D for your right, to switch off force fields, pick up items and open doors, and press both together to clap animals away.
 Press control or F to swing or fire your weapon at fake walls and fake doors, and the number keys to choose a different weapon.
 Press shift plus tab and tab, or I and O, to move through your inventory, and enter or U to use an item. Before each real door, pick up its key, then use it to unlock the door.

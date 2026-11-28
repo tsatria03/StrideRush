@@ -14,12 +14,12 @@ Jumping gets you over hazards, spikes and mines. If you're still on the ground w
 
 Crouching.
 
-Hold alt, the down arrow or S to crouch, or D-pad down on a joystick. Your footsteps go quiet while you're crouched, and you stand back up when you let go, or on your own after a second and a half. After standing up, you have to wait half a second before you can crouch again. Pressing jump while crouched jumps straight away.
+Hold the down arrow or S to crouch, or D-pad down on a joystick. Your footsteps go quiet while you're crouched, and you stand back up when you let go, or on your own after a second and a half. After standing up, you have to wait half a second before you can crouch again. Pressing jump while crouched jumps straight away.
 Crouching gets you under projectiles, lets your weapons reach insects, and braces you against a wind.
 
 Lanes.
 
-The belt has three lanes, left, middle and right, and every run starts in the middle one. Press left shift, the left arrow or Q to move one lane to the left, and right shift, the right arrow or E to move one lane to the right, or D-pad left and right on a joystick. You'll hear yourself turn from the lane you move into, and if you try to go past the left or right edge of the belt, you'll bump into it and stay where you are. View session statuses, in the pause menu, tells you which lane you're in.
+The belt has three lanes, left, middle and right, and every run starts in the middle one. Press the left arrow or Q to move one lane to the left, and the right arrow or E to move one lane to the right, or D-pad left and right on a joystick. You'll hear yourself turn from the lane you move into, and if you try to go past the left or right edge of the belt, you'll bump into it and stay where you are. View session statuses, in the pause menu, tells you which lane you're in.
 You can switch at any time, even in the middle of a jump or a crouch, except while a door carries you or you're rebuilding a floor breaker. Switching lanes while you climb a ladder makes you fall off.
 Most obstacles fill the whole belt, so they always sound straight ahead of you whichever lane you're in, and switching lanes won't get you past them. Barriers, winds, vehicles, aircrafts, lane trampolines and items are different: each one sits in a single lane. One in your lane sounds straight ahead, one a lane over sounds off to that side, and one two lanes over sounds further out still. Powerups fill the whole belt, so you can collect one from any lane.
 When two things that sound the same come side by side, one on each side of you, your ears can blend them into a single sound that seems to come from straight ahead. Switch lanes for a moment, and two side by side split apart straight away.

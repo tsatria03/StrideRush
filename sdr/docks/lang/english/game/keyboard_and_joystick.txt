@@ -4,12 +4,12 @@ You can play Stride Rush with the keyboard, or with a joystick or game controlle
 
 Keyboard commands.
 
-These are the keys to start with, and you can change any of them in the keyboard tab of the settings menu, though not during a run. Most keys repeat while you hold them, at your keyboard's repeat rate, and you can change any key's trigger in the keyboard tab of the settings menu. Because left and right shift also change lanes, any command that uses shift during a run, such as shift plus tab, moves you a lane as well. These are the following:
+These are the keys to start with, and you can change any of them in the keyboard tab of the settings menu, though not during a run. Most keys repeat while you hold them, at your keyboard's repeat rate, and you can change any key's trigger in the keyboard tab of the settings menu. These are the following:
 
 Space, up arrow or letter W: Jumps.
-Alt, down arrow or letter S: Crouches, to duck under projectiles and to fight insects.
-Left shift, left arrow or letter Q: Moves one lane to the left.
-Right shift, right arrow or letter E: Moves one lane to the right.
+Down arrow or letter S: Crouches, to duck under projectiles and to fight insects.
+Left arrow or letter Q: Moves one lane to the left.
+Right arrow or letter E: Moves one lane to the right.
 Letter A: Uses your left hand, to switch off a force field, open a door or pick up an item.
 Letter D: Uses your right hand, to switch off a force field, open a door or pick up an item.
 Both hand keys together, A and D: Claps, to scare away an animal. With nothing for your hands to do, a single hand makes a whoosh and a clap is just a clap.
