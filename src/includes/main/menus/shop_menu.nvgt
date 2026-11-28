@@ -43,7 +43,7 @@ for (uint t = 0; t < tabs.length(); t++)
 int tab = tabs[t];
 for (uint i = 0; i < tab_ids[t].length(); i++)
 {
-m.add_item_to_tab(tab, item_display_name(tab_ids[t][i]) + ", costs " + coins_text(tab_prices[t][i]) + ". You can buy " + thousands_text(shown_coins() / tab_prices[t][i]) + ".", tab_ids[t][i]);
+m.add_item_to_tab(tab, item_display_name(tab_ids[t][i]) + ", costs " + coins_text(tab_prices[t][i]) + ". You can buy " + thousands_text(shown_coins() / tab_prices[t][i]) + ". Description: " + shop_description(tab_ids[t][i]), tab_ids[t][i]);
 }
 }
 if (saved_tab > 0) m.set_active_tab_silent(saved_tab);
@@ -84,6 +84,37 @@ ids[2] = shop_item_ids;
 prices[2] = shop_item_prices;
 ids[3] = shop_special_ids;
 prices[3] = shop_special_prices;
+}
+/* What each thing in the shop does, said after how many you can buy. Each is a whole sentence through translate(), so the
+language template lists it as its own line; the numbers follow tuning.nvgt. */
+string shop_description(const string&in id)
+{
+if (id == "attack") return translate("Adds 1 damage to every hit from any weapon.");
+if (id == "defence") return translate("Takes 1 off every blow to your health.");
+if (id == "max_health") return translate("Adds 1 to your full and current health.");
+if (id == "max_shield_strength") return translate("Adds 1 to your shield's full and current strength, and to every new shield.");
+if (id == "shield_defence") return translate("Takes 1 off every blow to your shield.");
+if (id == "ammo_pack_helper") return translate("Opens your ammo packs into the gun you're holding while it's on.");
+if (id == "animal_helper") return translate("Claps to scare away animals while it's on.");
+if (id == "door_helper") return translate("Unlocks and opens real doors while it's on.");
+if (id == "floor_helper") return translate("Opens and repairs floor breakers while it's on.");
+if (id == "force_field_helper") return translate("Switches off force fields while it's on.");
+if (id == "gold_pack_helper") return translate("Opens your gold packs while it's on.");
+if (id == "item_helper") return translate("Picks up items in your lane while it's on.");
+if (id == "ladder_helper") return translate("Grabs and climbs real walls' ladders while it's on.");
+if (id == "master_helper") return translate("Does the jobs of all nine other helpers at once while it's on.");
+if (id == "master_helper_deluxe") return translate("Does every job the master helper does while it's on, and picks up items in every lane, not just yours.");
+if (id == "powerup_helper") return translate("Collects every powerup while it's on, whether you're on the ground or in the air.");
+if (id == "ammo_pack") return translate("Adds 5 to 10 bullets to the gun you're holding when you open it.");
+if (id == "health_potion") return translate("Heals 5 to 10 percent of your full health.");
+if (id == "life_capsule") return translate("Gives you 1 or 2 more lives.");
+if (id == "player_teleporter") return translate("Throws you 2 to 5 seconds along the belt, forward or back.");
+if (id == "steel_shield") return translate("Takes the blows in place of your health until it breaks, and switches on and off from your inventory.");
+if (id == "power_crystal") return translate("Starts a random good powerup for 15 seconds.");
+if (id == "safety_net") return translate("Saves you once from falling into a hazard or a floor breaker, by itself.");
+if (id == "slide") return translate("Puts you on a slide straight away, carrying you at double speed for 2 to 4 seconds.");
+if (id == "trampoline") return translate("Launches you on a good trampoline's flight over everything, from where you are.");
+return "";
 }
 // What a tab's things are called in its errors.
 string shop_things(const string&in word)

@@ -65,5 +65,6 @@ A3 (dev): "That works. it will be 2 sections right? docks is always the last sec
 ## Sections (PLAN SETTLED 2026-11-28)
 
 1. Code: shop_description() in shop_menu.nvgt with the 25 sentences, added to each tab line after "You can buy N."; refresh template.lng.
+   BUILT and tested 2026-11-28 (all 3 passed: every tab line ends with its description; the line after an error; the line after a purchase, with the count updated).
 2. Docks: player_shop.txt's example line and a sentence on descriptions, then the changelog entry (3.0's 14th of 20).
 
