@@ -66,9 +66,13 @@ if (format == 1) return now + " of " + full;
 if (format == 2) return percent + " percent, " + now + " of " + full;
 return percent + " percent";
 }
-// H: "70 percent health remaining, 2 lives.", or with the amount, "350 of 500 health remaining, 2 lives."
+// H: "70 percent health remaining.", or with the amount, "350 of 500 health remaining."
 void speak_health()
 {
-string life_text = lives == 1 ? "1 life." : lives + " lives.";
-speak_buffer(format_readout(health_format, player_health, max_health()) + " health remaining, " + life_text, "status");
+speak_buffer(format_readout(health_format, player_health, max_health()) + " health remaining.", "status");
+}
+// L: "3 lives.", or "1 life."
+void speak_lives()
+{
+speak_buffer(lives == 1 ? "1 life." : lives + " lives.", "status");
 }

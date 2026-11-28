@@ -27,14 +27,14 @@ else if (m.selected_item_id == "session") show_stat_lines("Session statistics me
 else show_stat_lines("Lifetime statistics menu. You can see your total stats across all of your endless runs here, then your timed run records.", lifetime_stat_lines());
 }
 }
-/* The pause menu's session statuses: what the status keys say, as "label, value" lines like the
+/* The pause menu's session statuses: what the status keys say, and your lane, as "label, value" lines like the
 session results, in every kind of run. Session results are the run's statistics; these are where you stand right now. */
 string[] session_status_lines()
 {
 string[] lines;
-string life_text = lives == 1 ? "1 life" : lives + " lives";
-// In the Game tab's health and shield formats, as H and M say them (format_readout() in lives.nvgt).
-lines.insert_last(stat_line("health", format_readout(health_format, player_health, max_health()) + ", " + life_text));
+// In the Game tab's health and shield formats, as H and M say them (format_readout() in lives.nvgt), with your lives (L) after your health.
+lines.insert_last(stat_line("health", format_readout(health_format, player_health, max_health())));
+lines.insert_last(stat_line("lives", "" + lives));
 if (!shield_in_use) lines.insert_last(stat_line("shield", "none"));
 else lines.insert_last(stat_line("shield", (shield_worn ? "" : "off, ") + format_readout(shield_format, shield_hp_left, shield_full()) + (shield_format == 0 ? "" : " endurance")));
 // Your character upgrades, in the runs that can have them.

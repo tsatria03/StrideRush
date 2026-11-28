@@ -5,7 +5,7 @@ You start each endless run with 1 life and 200 health. Obstacles that catch you 
 How health works.
 
 Spikes, mines, force fields, projectiles, fake walls, ladders, real walls, animals, insects, barriers, winds, vehicles, aircrafts and doors each take some of your health when they catch you, and you'll hear yourself get hit. Each obstacle's document gives its damage, which is the full amount: easier levels take less, as described under difficulty.
-Press H to hear how much health you have left, and how many lives, as a percentage, an amount such as 350 of 500, or both, whichever you choose in the game tab of the settings menu.
+Press H to hear how much health you have left, as a percentage, an amount such as 350 of 500, or both, whichever you choose in the game tab of the settings menu, and press L to hear how many lives you have.
 
 How lives work.
 

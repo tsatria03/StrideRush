@@ -16,10 +16,9 @@ void reset_lane()
 {
 current_lane = lane_middle;
 }
-// Runs every frame from run_input(): L, then Left/Q and Right/E.
+// Runs every frame from run_input(): Left/Q and Right/E. The lane you're in is in the pause menu's session statuses.
 void lane_input()
 {
-if (controls.action_triggered("info_lane")) speak_buffer(lane_names[current_lane] + " lane.", "status");
 if (repairing) return; // at a floor breaker's edge the lane keys do nothing
 if (climbing)
 {

@@ -20,9 +20,9 @@ Numbers 1 through 0: Draws the bat, boot, club, dagger, fist, hammer, knife, swo
 Control or letter F: Swings or fires your weapon. With the machine gun, it keeps firing.
 Letter R: Reloads your gun.
 Letter X: Announces how much ammo your gun has loaded and in reserve.
-Letter H: Announces how much health you have left, and how many lives you have, as a percentage, an amount such as 350 of 500, or both, whichever you choose in the game tab of the settings menu.
+Letter H: Announces how much health you have left, as a percentage, an amount such as 350 of 500, or both, whichever you choose in the game tab of the settings menu.
+Letter L: Announces how many lives you have.
 Letter M: Announces how strong your shield is, and whether it's off, as a percentage, an amount such as 320 of 400 endurance, or both, whichever you choose in the game tab of the settings menu.
-Letter L: Announces which lane you're in.
 Letter Z: Announces how far you've run, in steps.
 Letter C: Announces your current speed, in steps a second.
 Letter T: Announces how long you've been running for, or in a timed run, how much time is left on the clock and how long until you reach the finish line.

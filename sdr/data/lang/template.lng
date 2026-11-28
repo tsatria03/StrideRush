@@ -473,14 +473,13 @@ Joystick connected.=Joystick connected.
 Joystick disconnected.=Joystick disconnected.
 button *=button $1
 
-// Lanes
-* lane.=$1 lane.
-
 // Health and lives
 * of *=$1 of $2
 * percent, * of *=$1 percent, $2 of $3
 * percent=$1 percent
-* health remaining, *=$1 health remaining, $2
+* health remaining.=$1 health remaining.
+1 life.=1 life.
+* lives.=$1 lives.
 
 // Practice runs
 fake walls=fake walls
@@ -747,13 +746,14 @@ clear game statistics=clear game statistics
 copy all game statistics to clipboard=copy all game statistics to clipboard
 export all game statistics to file=export all game statistics to file
 health=health
+lives=lives
+lane=lane
 shield=shield
 attack=attack
 defence=defence
 max health=max health
 max shield strength=max shield strength
 shield defence=shield defence
-lane=lane
 speed=speed
 distance=distance
 time=time
