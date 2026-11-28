@@ -4,7 +4,7 @@ An item helper picks up items for you, so you don't have to press a hand for eac
 
 How an item helper works.
 
-While it's on, every item in your lane is picked up as soon as a hand could reach it, keys and gold packs included, and goes into your inventory. You still need to be in the item's lane, as items in other lanes just pass you by.
+While it's on, every item in your lane is picked up as soon as a hand could reach it, keys and gold packs included, and goes into your inventory. You still need to be in the item's lane, as items in other lanes just pass you by, unless you have the master helper deluxe, which picks up items in every lane.
 It keeps working during a trampoline flight. It does nothing on a slide, which catches the items in your lane by itself.
 
 Using one.

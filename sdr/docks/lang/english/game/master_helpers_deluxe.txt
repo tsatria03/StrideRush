@@ -1,0 +1,46 @@
+Master helpers deluxe.
+
+The master helper deluxe does every job the master helper does, and goes further: it picks up items in every lane, not just yours, and collects every powerup, whether you're on the ground or in the air. It still never moves you. It's a special you buy in the player shop for 20,000 gold coins, the most expensive thing in the shop.
+
+What it covers.
+
+While it's on, it does each of these jobs, by the same rules as the helper that normally does it, except where it says otherwise:
+
+Ammo packs: it opens the ammo packs you carry into the gun you're holding whenever its reserve has room.
+Animals: it claps as soon as an animal comes within reach of your hands, and the animal runs off. It only claps when there's an animal to scare.
+Real doors: it unlocks the next real door with the first key in your inventory once the door is in reach, then opens it as soon as a hand could. With no key, it tries the door once, and you'll hear that it's locked.
+Floor breakers: it opens the corridor as soon as a hand could. Once you reach the edge, it lays each piece with alternating hands at the fastest pace your level allows.
+Force fields: it presses a field's switch as soon as the field comes within reach of your hands, and you can run straight through.
+Gold packs: it opens every gold pack you carry as soon as you have one.
+Items: it picks up every item in every lane as soon as a hand could reach it, keys and gold packs included. An item from another lane plays its pickup sound from that lane, so you hear where it came from, and then goes into your inventory as usual.
+Powerups: it collects every powerup you reach, a ground one even if you're in the air and a flight one even if you're on the ground, so none of them breaks. It can't choose which ones you get, so bad powerups are collected too, just as they would be if you took them yourself.
+Real walls: it grabs the ladder as soon as a hand could. Once you reach it, it climbs with alternating hands at the fastest pace your level allows.
+
+The fastest pace for a rung or a floor piece depends on your level, as described under master helpers.
+You'll hear every job's normal sounds, just as if you'd done it yourself. Your own hands do nothing during a climb or a repair, so a stray press can't break its rhythm.
+
+What it doesn't cover.
+
+It doesn't protect you from damage, and it never moves you, jumps, crouches, changes lanes or fires for you. Hazards, spikes, mines, projectiles, barriers, winds, vehicles, aircrafts and insects are still up to you, and so are fake walls and fake doors, which need your weapons.
+Keys, ammo packs and gold packs are the only things it uses from your inventory, so potions, shields and everything else wait for you to use them. Your own hands still only reach your own lane.
+Be careful: switching lanes while you're on a ladder still knocks you off, and you'll take the fall and then crash into the wall.
+During a trampoline flight it only picks up items, opens your packs and collects powerups, and leaves the other jobs until you land. On a slide, the slide catches the items in every lane while it's on, not just in yours.
+
+Using one.
+
+Choose it in your inventory and use it to switch it on or off, and you'll hear its sound and be told which. Your inventory also says whether it's on, such as "master helper deluxe, on." Your inventory is locked during a climb or a repair, so switch it on before one starts.
+
+With your other helpers.
+
+While the master helper deluxe is on, all its jobs get done however your other helpers are set, with items in every lane even if the master helper or the item helper is on too, and having several on never does a job twice or any faster. Each of your other helpers keeps its own on or off setting, which you can still change. When you switch the deluxe off, those settings apply again, so a master helper or item helper you left on goes back to your lane only.
+
+Master helpers deluxe in a run.
+
+A master helper deluxe is never used up. It lasts for the rest of the run, even if you lose a life, and extra copies don't make it any stronger. It's gone when the run ends, along with the rest of your inventory.
+Everything it does counts in your statistics, just as if you'd done it yourself.
+
+Master helpers deluxe in practice and free runs.
+
+Master helpers deluxe aren't available in practice or timed runs.
+
+In a free run, you can give, set or take master helpers deluxe from modify player inventory, so you can try one without spending anything.

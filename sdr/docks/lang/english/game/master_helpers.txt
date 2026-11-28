@@ -28,9 +28,9 @@ You'll hear every job's normal sounds, just as if you'd done it yourself. Your o
 What it doesn't cover.
 
 It doesn't protect you from damage, and it never jumps, crouches, changes lanes or fires for you. Hazards, spikes, mines, projectiles, barriers, winds, vehicles, aircrafts and insects are still up to you, and so are fake walls and fake doors, which need your weapons.
-Items in other lanes still pass you by, since it can't move you. Keys, ammo packs and gold packs are the only things it uses from your inventory, so potions, shields and everything else wait for you to use them.
+Items in other lanes still pass you by, since it can't move you, while the master helper deluxe, a dearer special described under master helpers deluxe, does every job this one does with items in every lane. Keys, ammo packs and gold packs are the only things it uses from your inventory, so potions, shields and everything else wait for you to use them.
 Be careful: switching lanes while you're on a ladder still knocks you off, and you'll take the fall and then crash into the wall.
-During a trampoline flight it only picks up items, and leaves the other jobs until you land, since the flight carries you past them safely. It does nothing on a slide, which carries you past them too and catches the items in your lane by itself.
+During a trampoline flight it only picks up items and opens your packs, and leaves the other jobs until you land, since the flight carries you past them safely. It does nothing on a slide, which carries you past them too and catches the items in your lane by itself.
 
 Using one.
 

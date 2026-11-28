@@ -49,6 +49,7 @@ Gold pack helper: 2,750 gold coins. Opens your gold packs.
 Item helper: 4,000 gold coins. Picks up items in your lane.
 Ladder helper: 4,500 gold coins. Grabs and climbs real walls' ladders.
 Master helper: 15,000 gold coins. Does the jobs of all eight other helpers at once.
+Master helper deluxe: 20,000 gold coins. Does the master helper's jobs, picking up items in every lane and collecting every powerup.
 Power crystal: 750 gold coins. Starts a random good powerup when you use it.
 Safety net: 10,000 gold coins. Saves you once from a hazard or floor breaker, by itself.
 Slide: 1,250 gold coins. Using one puts you on a slide straight away.
