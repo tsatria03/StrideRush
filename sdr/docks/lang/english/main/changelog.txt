@@ -1,4 +1,5 @@
 New in 3.0.
+Removed the limit of 20 lives from life capsules, so each one now always gives you 1 or 2 more lives, however many you already have.
 Added an ammo pack helper and a gold pack helper to the player shop's specials, which open your ammo and gold packs for you while they're on, and the master helper now does both of their jobs too.
 Added ricochets for every weapon, so swinging at or shooting a real wall or real door now plays a ricochet off it instead of doing nothing, and a bullet stops there instead of flying through.
 Added fake doors and walls to practice runs, mixing fake doors and fake walls half and half, which you break with your weapons.

@@ -34,7 +34,7 @@ Moved here from src/includes/main/globals/tuning.nvgt's comments on 2026-11-15 (
 - spike_swing_min and spike_swing_max (2026-11-02).
 - mine_arm_lead_time (2026-11-02): 1 tile ahead of the countdown at 500 ms, 5 at 100 ms, 10 at 50 ms.
 - Lives and health (2026-11-03, [[project_player_health_plan]]): the damages replaced the fixed life costs (spikes 1, mines 2, doors 3) and the shield-only damages.
-- max_lives and capsules unlimited (2026-11-04); life capsules give 1 to 2 lives (2026-11-04: "between 1 to 2").
+- max_lives and capsules unlimited (2026-11-04); life capsules give 1 to 2 lives (2026-11-04: "between 1 to 2"). max_lives (20) REMOVED (2026-11-27, the dev: "please get rid of the maximim lives from life capsules."), with lives_cap(); a capsule always gives 1 to 2 lives.
 - starting_lives was 3 until 2026-11-04; debug_lives 2 since.
 - practice_unlock_count 5: the practice locks plan (2026-11-10: "just like the diff modes", [[project_practice_locks_plan]]).
 - practice_hint_limit: the practice guidance plan (2026-11-12). practice_rising_period: the rising practice plan (2026-11-12).

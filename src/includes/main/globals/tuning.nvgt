@@ -179,7 +179,6 @@ const int mine_arm_lead_min_tiles = 1;
 ends the run) does its obstacle's damage, to a worn shield first, otherwise to your health; at 0 health you lose a life
 and start the next at full health, or the run ends on your last life. Extra damage past 0 is dropped. */
 const int starting_lives = 1;
-const int max_lives = 20; // a life capsule can't take you past this; capsules themselves are unlimited
 const int life_capsule_min_lives = 1; // a life capsule gives a random min to max lives
 const int life_capsule_max_lives = 2;
 const int debug_lives = 2; // source-only debug runs of a single type start with these; "all" uses starting_lives

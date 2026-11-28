@@ -551,7 +551,7 @@ resume_game();
 }
 /* The player, set from the running console. Each number box takes 1 to 1000 (health and shield strength 1 to 2000, a reserve 0 to 1000); escape cancels.
 free_health is your full health, filled at once and on a new life; free_lives the lives you have and get back from a
-practice death, capsules adding up to the higher of max_lives or it; free_shield_full the worn shield's full strength (a
+practice death, capsules adding to it with no limit; free_shield_full the worn shield's full strength (a
 newly worn shield starts at shield_hp); each gun's reserve a set number (gun_start_reserve to start, as a normal run) or
 unlimited, kept through replays. */
 int free_health = player_hp;
@@ -562,12 +562,6 @@ int[] free_reserve_set = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50}; // gun_start_
 int max_health()
 {
 return (free_run ? free_health : player_hp) + player_max_health;
-}
-// The most lives a capsule can take you to: max_lives, or in a free run the higher of it and your set lives.
-int lives_cap()
-{
-if (free_run and free_lives > max_lives) return free_lives;
-return max_lives;
 }
 // The worn shield's full strength, for its percent (M).
 int shield_full()

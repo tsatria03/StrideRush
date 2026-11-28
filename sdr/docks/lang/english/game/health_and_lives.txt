@@ -15,7 +15,7 @@ With a joystick, you feel a rumble when you're hurt, a stronger one when you los
 
 Staying alive.
 
-A worn steel shield takes blows before your health does. Health potions heal 5 to 10 percent of your health, never past full, and life capsules give you 1 or 2 more lives, up to 20. Harder levels give you fewer shields, potions and capsules.
+A worn steel shield takes blows before your health does. Health potions heal 5 to 10 percent of your health, never past full, and life capsules give you 1 or 2 more lives, with no limit. Harder levels give you fewer shields, potions and capsules.
 Two powerups change how much a hit hurts for a while: Tough Hide halves the damage to your health, and Soft Hide doubles it.
 Defence points from the player shop take some off every blow to your health, and max health points raise your full health, as the player stats document explains. A safety net can save you once from a hazard or a floor breaker.
 
