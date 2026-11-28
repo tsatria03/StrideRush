@@ -165,8 +165,8 @@ swing_recovery = int(current_fire_gap(melee_recovery_times[w]));
 firetimer.restart();
 double target_x = weapon_strike(w, weapon_hit_damage(w));
 if (target_x < 0) return;
-// A hit: the weapon's hit at the target (the target plays its own hurt or death).
-p.play_2d(get_pack_sound(weapon_folder(w) + "*hit*"), 0, me.x, 0, target_x, false);
+// A hit: the weapon's hit at the target (the target plays its own hurt or death), or off a real wall its ricochet.
+p.play_2d(get_pack_sound(weapon_folder(w) + (strike_ricochet ? "*rico*" : "*hit*")), 0, me.x, 0, target_x, false);
 }
 // A swing still winding up ends with no hit and no sound, and the next one can start straight away.
 void cancel_swing()
@@ -190,12 +190,20 @@ int key_reach()
 {
 return reach_tiles(key_reach_time);
 }
+bool strike_ricochet = false; // the last weapon_strike() met a real wall or door: no damage, the weapon's ricochet instead of its hit
 /* The target hook. Damages the nearest target within weapon wpn's reach and returns its x, or -1 if there was nothing to
 hit. The targets are walls, fake doors, vehicles in your lane, items, insects while you're crouched, and an aircraft
-hovering in your lane while you're in the air; a new target type adds its own search here. */
+hovering in your lane while you're in the air; a new target type adds its own search here. A real wall or real door
+nearer than all of them (or level with one) takes the swing instead, unharmed: strike_ricochet is set and nothing behind
+it is hit. */
 double weapon_strike(int wpn, int damage)
 {
+strike_ricochet = false;
 int reach = weapon_reach(wpn);
+// The nearest real wall (ladder.nvgt) or real door (door.nvgt), which weapons only ricochet off.
+double real_wall = real_wall_in_reach(reach);
+double real_door = real_door_in_reach(reach);
+if (real_door >= 0 and (real_wall < 0 or real_door < real_wall)) real_wall = real_door;
 // An insect, only while you're crouched: hovering at you, or flying in within reach (insect.nvgt). Nearest still wins.
 insect@ ins = insect_in_reach(reach);
 double insx = @ins != null ? me.x + insect_distance(ins) : -1;
@@ -226,6 +234,11 @@ if (@pot != null and (best < 0 or pot.x < best)) best = pot.x;
 if (@t != null and (best < 0 or t.x < best)) best = t.x;
 if (@ins != null and (best < 0 or insx <= best)) best = insx; // a tie goes to the insect, at your head height
 if (@hc != null and (best < 0 or hcx <= best)) best = hcx; // a tie goes to the aircraft, overhead
+if (real_wall >= 0 and (best < 0 or real_wall <= best))
+{
+strike_ricochet = true;
+return real_wall;
+}
 if (best < 0) return -1;
 if (@hc != null and hcx == best) return strike_aircraft(hc, damage);
 if (@ins != null and insx == best) return strike_insect(ins, damage);

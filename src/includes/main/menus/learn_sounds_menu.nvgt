@@ -482,6 +482,7 @@ if (base == "light") return "light up";
 if (base == "on") return "switched on";
 if (base == "off") return "switched off";
 if (base == "shell") return "shell casing";
+if (base == "rico") return "ricochet";
 if (base == "empty") return "empty click";
 return base.replace("_", " ", true);
 }

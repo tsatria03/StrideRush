@@ -36,6 +36,29 @@ int loopslot = -1;
 int wallslot = -1;
 }
 ladder@[] ladders(0);
+/* Weapons can't harm a real wall: the nearest one still standing from 1 to reach tiles ahead, or -1. weapon_strike()
+(weapons.nvgt) plays a ricochet off it, and it blocks anything behind it. */
+double real_wall_in_reach(int reach)
+{
+double best = -1;
+for (uint i = 0; i < ladders.length(); i++)
+{
+if (@ladders[i] == null or ladders[i].wall_spent) continue;
+double ahead = ladders[i].wall_x - me.x;
+if (ahead < 1 or ahead > reach) continue;
+if (best < 0 or ladders[i].wall_x < best) best = ladders[i].wall_x;
+}
+return best;
+}
+// A real wall still standing on tile x, where a bullet ricochets off it and stops (bullet.nvgt).
+bool real_wall_at(double x)
+{
+for (uint i = 0; i < ladders.length(); i++)
+{
+if (@ladders[i] != null and !ladders[i].wall_spent and ladders[i].wall_x == x) return true;
+}
+return false;
+}
 bool climbing = false;
 ladder@ climb_ladder = null;
 int climb_rungs = 0; // rungs climbed so far, up to the ladder's rungs

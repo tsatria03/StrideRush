@@ -178,6 +178,29 @@ if (@doors[i] != null and !doors[i].real and doors[i].x == x and door_standing(d
 }
 return null;
 }
+/* Weapons can't harm a real door either: the nearest one still standing (not yet opened) from 1 to reach tiles ahead,
+or -1. weapon_strike() (weapons.nvgt) ricochets off it, as off a real wall, and it blocks anything behind it. */
+double real_door_in_reach(int reach)
+{
+double best = -1;
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] == null or !doors[i].real or !door_standing(doors[i])) continue;
+double ahead = doors[i].x - me.x;
+if (ahead < 1 or ahead > reach) continue;
+if (best < 0 or doors[i].x < best) best = doors[i].x;
+}
+return best;
+}
+// A real door still standing on tile x, where a bullet ricochets off it and stops (bullet.nvgt).
+bool real_door_at(double x)
+{
+for (uint i = 0; i < doors.length(); i++)
+{
+if (@doors[i] != null and doors[i].real and doors[i].x == x and door_standing(doors[i])) return true;
+}
+return false;
+}
 // The nearest standing FAKE door from 1 to reach tiles ahead, or null. Real doors are never weapon targets.
 door@ fake_door_in_reach(int reach)
 {

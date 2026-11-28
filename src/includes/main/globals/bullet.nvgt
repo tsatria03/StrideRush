@@ -99,6 +99,13 @@ aircraft@ hc = b.high ? aircraft_at_bullet(b.x) : null; // a high one, an aircra
 wall@ w = wall_at(b.x);
 if (@ins != null) target_x = strike_insect(ins, b.damage);
 else if (@hc != null) target_x = strike_aircraft(hc, b.damage);
+else if (real_wall_at(b.x) or real_door_at(b.x))
+{
+// A real wall or real door can't be harmed: the bullet stops on it with a ricochet and its shell (ladder.nvgt, door.nvgt).
+bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*rico*"), 0, me.x, 0, b.x, false);
+bulletpool.play_2d(get_pack_sound(weapon_folder(b.weapon) + "*shell*"), 0, me.x, 0, b.x, false);
+return true;
+}
 else if (@w != null) target_x = strike_wall(w, b.damage);
 else
 {
