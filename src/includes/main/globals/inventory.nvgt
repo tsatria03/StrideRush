@@ -46,6 +46,12 @@ string[] keys = inventory.get_keys();
 keys.sort_ascending();
 return keys;
 }
+// More than one of a thing as spoken: "health potions", and "master helpers deluxe", keeping deluxe last.
+string item_plural(const string&in name)
+{
+if (name.length() > 7 and name.substr(name.length() - 7) == " deluxe") return name.substr(0, name.length() - 7) + "s deluxe";
+return name + "s";
+}
 // "ammo_pack" is spoken "ammo pack".
 string item_display_name(string item)
 {
@@ -83,7 +89,7 @@ string item = keys[invpos];
 int count = item_count(item);
 string name = item_display_name(item);
 string position = "Item " + (invpos + 1) + " of " + keys.length() + ".";
-string line = count == 1 ? name : name + "s, " + count;
+string line = count == 1 ? name : item_plural(name) + ", " + count;
 if (is_helper_item(item)) line += helper_active(item) ? ", on" : ", off"; // "item helper, on. Item 1 of 2."
 else if (item == "steel_shield") line += shield_worn ? ", on" : ", off"; // "steel shields, 3, on."
 speak_buffer(line + ". " + position, "items");

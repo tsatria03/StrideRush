@@ -54,20 +54,20 @@ string key_sound_folder(doorkey@ k)
 return key_folder + k.color + "/";
 }
 // Called from hand_check() when nothing else took the press. Picks up the nearest key in its window. True if one was.
-bool pick_up_key()
+bool pick_up_key(bool any_lane = false)
 {
 doorkey@ target = null;
 for (uint i = 0; i < doorkeys.length(); i++)
 {
 if (@doorkeys[i] == null) continue;
 doorkey@ k = doorkeys[i];
-if (k.spent or k.lane != current_lane or me.x < hand_window_start(k.x, k.countdown_start) or k.x - me.x < 1) continue;
+if (k.spent or (!any_lane and k.lane != current_lane) or me.x < hand_window_start(k.x, k.countdown_start) or k.x - me.x < 1) continue;
 if (@target == null or k.x < target.x) @target = k;
 }
 if (@target == null) return false;
 target.spent = true;
 stop_key(target);
-keypool.play_stationary(get_pack_sound(key_sound_folder(target) + "*get*"), false);
+play_pickup_sound(keypool, get_pack_sound(key_sound_folder(target) + "*get*"), target.lane, target.x); // in its lane if it was taken from another (lane.nvgt)
 p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item(target.color, 1);
 focus_item(target.color); // the inventory moves onto what you just picked up (inventory.nvgt)

@@ -42,20 +42,20 @@ return;
 teleporters.insert_last(t);
 }
 // Called from hand_check() when nothing else took the press. Picks up the nearest teleporter in its window. True if one was.
-bool pick_up_teleporter()
+bool pick_up_teleporter(bool any_lane = false)
 {
 teleporter@ target = null;
 for (uint i = 0; i < teleporters.length(); i++)
 {
 if (@teleporters[i] == null) continue;
 teleporter@ t = teleporters[i];
-if (t.spent or t.lane != current_lane or me.x < hand_window_start(t.x, t.countdown_start) or t.x - me.x < 1) continue;
+if (t.spent or (!any_lane and t.lane != current_lane) or me.x < hand_window_start(t.x, t.countdown_start) or t.x - me.x < 1) continue;
 if (@target == null or t.x < target.x) @target = t;
 }
 if (@target == null) return false;
 target.spent = true;
 stop_teleporter(target);
-teleporterpool.play_stationary(get_pack_sound(teleporter_folder + "*get*"), false);
+play_pickup_sound(teleporterpool, get_pack_sound(teleporter_folder + "*get*"), target.lane, target.x); // in its lane if it was taken from another (lane.nvgt)
 p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("player_teleporter", 1);
 focus_item("player_teleporter"); // the inventory moves onto what you just picked up (inventory.nvgt)

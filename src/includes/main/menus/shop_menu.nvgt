@@ -133,7 +133,7 @@ return;
 string shop_item_words(const string&in name, int64 amount)
 {
 if (name == "attack" or name == "defence" or name == "max health" or name == "max shield strength" or name == "shield defence") return name + (amount == 1 ? " point" : " points");
-return amount == 1 ? name : name + "s";
+return amount == 1 ? name : item_plural(name); // inventory.nvgt
 }
 // Not enough coins: the error sound and its dialog.
 void shop_error(const string&in message)

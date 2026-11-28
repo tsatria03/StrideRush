@@ -805,7 +805,7 @@ if (key != "" and key != "keys")
 {
 give_item(key, n);
 string name = item_display_name(key); // "red key"
-speak_buffer(n + " " + (n == 1 ? name : name + "s") + " given.", "misc");
+speak_buffer(n + " " + (n == 1 ? name : item_plural(name)) + " given.", "misc");
 return true;
 }
 free_give_kind(type, n);
@@ -848,7 +848,7 @@ int have = item_count(item);
 int taken = n > have ? have : n;
 give_item(item, -taken);
 string name = item_display_name(item); // "health potion"
-speak_buffer(taken + " " + (taken == 1 ? name : name + "s") + " taken.", "misc");
+speak_buffer(taken + " " + (taken == 1 ? name : item_plural(name)) + " taken.", "misc");
 return true;
 }
 /* Modify player inventory: give items, set items and take items, then back, which steps back to the console silently.
@@ -941,7 +941,7 @@ if (key != "" and key != "keys")
 {
 free_set_item(key, n);
 string name = item_display_name(key); // "red key"
-speak_buffer("You now have " + n + " " + (n == 1 ? name : name + "s") + ".", "misc");
+speak_buffer("You now have " + n + " " + (n == 1 ? name : item_plural(name)) + ".", "misc");
 return true;
 }
 free_set_kind(type, n);

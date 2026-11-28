@@ -80,20 +80,20 @@ return;
 shields.insert_last(s);
 }
 // Called from hand_check() when nothing else took the press. Picks up the nearest shield in its window. True if one was.
-bool pick_up_shield()
+bool pick_up_shield(bool any_lane = false)
 {
 shield@ target = null;
 for (uint i = 0; i < shields.length(); i++)
 {
 if (@shields[i] == null) continue;
 shield@ s = shields[i];
-if (s.spent or s.lane != current_lane or me.x < hand_window_start(s.x, s.countdown_start) or s.x - me.x < 1) continue;
+if (s.spent or (!any_lane and s.lane != current_lane) or me.x < hand_window_start(s.x, s.countdown_start) or s.x - me.x < 1) continue;
 if (@target == null or s.x < target.x) @target = s;
 }
 if (@target == null) return false;
 target.spent = true;
 stop_shield(target);
-shieldpool.play_stationary(get_pack_sound(shield_folder + "*get*"), false);
+play_pickup_sound(shieldpool, get_pack_sound(shield_folder + "*get*"), target.lane, target.x); // in its lane if it was taken from another (lane.nvgt)
 p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("steel_shield", 1);
 focus_item("steel_shield"); // the inventory moves onto what you just picked up (inventory.nvgt)

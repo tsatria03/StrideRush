@@ -43,7 +43,7 @@ return;
 ammopacks.insert_last(a);
 }
 // Called from hand_check() when no force field or door took the press. Picks up the nearest pack in its window. True if one was.
-bool pick_up_ammopack()
+bool pick_up_ammopack(bool any_lane = false)
 {
 ammopack@ target = null;
 double target_dist = 0;
@@ -51,7 +51,7 @@ for (uint i = 0; i < ammopacks.length(); i++)
 {
 if (@ammopacks[i] == null) continue;
 ammopack@ a = ammopacks[i];
-if (a.spent or a.lane != current_lane or me.x < hand_window_start(a.x, a.countdown_start) or a.x - me.x < 1) continue;
+if (a.spent or (!any_lane and a.lane != current_lane) or me.x < hand_window_start(a.x, a.countdown_start) or a.x - me.x < 1) continue;
 if (@target == null or a.x - me.x < target_dist)
 {
 @target = a;
@@ -61,7 +61,7 @@ target_dist = a.x - me.x;
 if (@target == null) return false; // nothing in reach: the press can still pick up a key
 target.spent = true;
 stop_ammopack(target);
-ammopackpool.play_stationary(get_pack_sound(ammopack_folder + "*get*"), false);
+play_pickup_sound(ammopackpool, get_pack_sound(ammopack_folder + "*get*"), target.lane, target.x); // in its lane if it was taken from another (lane.nvgt)
 // The player's give sound as it goes into the inventory, together with get.
 p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("ammo_pack", 1);

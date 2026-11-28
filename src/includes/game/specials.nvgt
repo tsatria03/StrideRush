@@ -7,9 +7,10 @@ the floor helper opens a floor breaker the same way, then each climbs or repairs
 pace the level allows, while your own hands do nothing there. The ammo pack helper opens the ammo packs you carry into
 the drawn gun whenever its reserve has room, and the gold pack helper opens every gold pack you carry, as the use key
 would (pack_helpers_update()). The master helper does all eight jobs while it's on, and each other helper keeps its own
-setting underneath. */
-const string[] helper_items = {"ammo_pack_helper", "animal_helper", "door_helper", "floor_helper", "force_field_helper", "gold_pack_helper", "item_helper", "ladder_helper", "master_helper"};
-bool[] helpers_on(9); // one per helper_items entry
+setting underneath. The master helper deluxe does the same eight, but picks up items in every lane, never moving you,
+and collects every powerup whichever way you reach it (powerup_check() in powerup.nvgt). */
+const string[] helper_items = {"ammo_pack_helper", "animal_helper", "door_helper", "floor_helper", "force_field_helper", "gold_pack_helper", "item_helper", "ladder_helper", "master_helper", "master_helper_deluxe"};
+bool[] helpers_on(10); // one per helper_items entry
 
 bool is_helper_item(const string&in item)
 {
@@ -20,10 +21,10 @@ bool helper_active(const string&in item)
 int at = helper_items.find(item);
 return at >= 0 and helpers_on[at];
 }
-// Whether a helper's job is being done: by that helper, or by the master helper. helper_active() is its own setting.
+// Whether a helper's job is being done: by that helper, the master helper or the master helper deluxe. helper_active() is its own setting.
 bool helper_working(const string&in item)
 {
-return helper_active(item) or helper_active("master_helper");
+return helper_active(item) or helper_active("master_helper") or helper_active("master_helper_deluxe");
 }
 void set_helper(const string&in item, bool on)
 {
@@ -117,13 +118,14 @@ return;
 }
 if (helper_working("item_helper"))
 {
-pick_up_ammopack();
-pick_up_goldpack();
-pick_up_key();
-pick_up_shield();
-pick_up_capsule();
-pick_up_potion();
-pick_up_teleporter();
+bool every_lane = helper_active("master_helper_deluxe"); // every lane, not just yours
+pick_up_ammopack(every_lane);
+pick_up_goldpack(every_lane);
+pick_up_key(every_lane);
+pick_up_shield(every_lane);
+pick_up_capsule(every_lane);
+pick_up_potion(every_lane);
+pick_up_teleporter(every_lane);
 }
 pack_helpers_update(); // after the item helper, so a pack it just picked up opens at once
 if (flying) return; // a flight carries you past doors, force fields and animals

@@ -104,19 +104,21 @@ slide_folder_now = slide_folder(s);
 slidepool.play_stationary(get_pack_sound(slide_folder_now + "*start*"), false);
 slide_moveslot = slidepool.play_stationary(get_pack_sound(slide_folder_now + "*move*"), true);
 }
-/* Every frame from run_loop(): on a slide, the items in your lane are caught (each pick-up takes the nearest one in your
+/* Every frame from run_loop(): on a slide, the items in your lane (every lane with the master helper deluxe) are caught (each pick-up takes the nearest one in your
 lane within reach, so they're caught as they arrive), and the ride ends on time with its stop sound. */
 void slide_update()
 {
 if (!sliding) return;
-// Each item caught counts in its own pick-up statistic and, here, as an item caught on a slide.
-if (pick_up_ammopack()) stat_add("slide_items_caught");
-if (pick_up_goldpack()) stat_add("slide_items_caught");
-if (pick_up_key()) stat_add("slide_items_caught");
-if (pick_up_shield()) stat_add("slide_items_caught");
-if (pick_up_capsule()) stat_add("slide_items_caught");
-if (pick_up_potion()) stat_add("slide_items_caught");
-if (pick_up_teleporter()) stat_add("slide_items_caught");
+/* Each item caught counts in its own pick-up statistic and, here, as an item caught on a slide; with the master helper
+deluxe on, the slide catches them in every lane (specials.nvgt). */
+bool every_lane = helper_active("master_helper_deluxe");
+if (pick_up_ammopack(every_lane)) stat_add("slide_items_caught");
+if (pick_up_goldpack(every_lane)) stat_add("slide_items_caught");
+if (pick_up_key(every_lane)) stat_add("slide_items_caught");
+if (pick_up_shield(every_lane)) stat_add("slide_items_caught");
+if (pick_up_capsule(every_lane)) stat_add("slide_items_caught");
+if (pick_up_potion(every_lane)) stat_add("slide_items_caught");
+if (pick_up_teleporter(every_lane)) stat_add("slide_items_caught");
 if (runtimer.elapsed < slide_end_at) return;
 sliding = false;
 if (slide_moveslot > -1) slidepool.destroy_sound(slide_moveslot);

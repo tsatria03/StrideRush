@@ -77,7 +77,7 @@ return;
 goldpacks.insert_last(a);
 }
 // Called from hand_check() when no force field or door took the press, after ammo packs. Picks up the nearest pack in its window. True if one was.
-bool pick_up_goldpack()
+bool pick_up_goldpack(bool any_lane = false)
 {
 goldpack@ target = null;
 double target_dist = 0;
@@ -85,7 +85,7 @@ for (uint i = 0; i < goldpacks.length(); i++)
 {
 if (@goldpacks[i] == null) continue;
 goldpack@ a = goldpacks[i];
-if (a.spent or a.lane != current_lane or me.x < hand_window_start(a.x, a.countdown_start) or a.x - me.x < 1) continue;
+if (a.spent or (!any_lane and a.lane != current_lane) or me.x < hand_window_start(a.x, a.countdown_start) or a.x - me.x < 1) continue;
 if (@target == null or a.x - me.x < target_dist)
 {
 @target = a;
@@ -95,7 +95,7 @@ target_dist = a.x - me.x;
 if (@target == null) return false; // nothing in reach: the press can still pick up a key
 target.spent = true;
 stop_goldpack(target);
-goldpackpool.play_stationary(get_pack_sound(goldpack_folder + "*get*"), false);
+play_pickup_sound(goldpackpool, get_pack_sound(goldpack_folder + "*get*"), target.lane, target.x); // in its lane if it was taken from another (lane.nvgt)
 // The player's give sound as it goes into the inventory, together with get.
 p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("gold_pack", 1);

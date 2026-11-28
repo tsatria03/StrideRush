@@ -131,6 +131,18 @@ continue;
 place_lane_clip(c);
 }
 }
+/* An item's pickup sound: centred as always from your own lane, or from another lane (the master helper deluxe) in that
+lane at the item, kept there as you move (keep_lane_clip()). */
+void play_pickup_sound(sound_pool@ pool, const string&in clip, int lane, double tile)
+{
+if (lane == current_lane)
+{
+pool.play_stationary(clip, false);
+return;
+}
+int slot = pool.play_2d(clip, 0, me.x, 0, tile, false);
+keep_lane_clip(pool, slot, lane, tile);
+}
 // Runs every frame from run_loop(): keeps every item on the belt in its lane.
 void item_lane_sounds()
 {

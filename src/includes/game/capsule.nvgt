@@ -41,20 +41,20 @@ return;
 capsules.insert_last(lc);
 }
 // Called from hand_check() when nothing else took the press. Picks up the nearest capsule in its window. True if one was.
-bool pick_up_capsule()
+bool pick_up_capsule(bool any_lane = false)
 {
 lifecapsule@ target = null;
 for (uint i = 0; i < capsules.length(); i++)
 {
 if (@capsules[i] == null) continue;
 lifecapsule@ lc = capsules[i];
-if (lc.spent or lc.lane != current_lane or me.x < hand_window_start(lc.x, lc.countdown_start) or lc.x - me.x < 1) continue;
+if (lc.spent or (!any_lane and lc.lane != current_lane) or me.x < hand_window_start(lc.x, lc.countdown_start) or lc.x - me.x < 1) continue;
 if (@target == null or lc.x < target.x) @target = lc;
 }
 if (@target == null) return false;
 target.spent = true;
 stop_capsule(target);
-capsulepool.play_stationary(get_pack_sound(capsule_folder + "*get*"), false);
+play_pickup_sound(capsulepool, get_pack_sound(capsule_folder + "*get*"), target.lane, target.x); // in its lane if it was taken from another (lane.nvgt)
 p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("life_capsule", 1);
 focus_item("life_capsule"); // the inventory moves onto what you just picked up (inventory.nvgt)
