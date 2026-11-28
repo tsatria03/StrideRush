@@ -53,6 +53,10 @@ if(st.d.exists("behind_pitch"))
 {
 behind_pitch=st.read_bool("behind_pitch");
 }
+if(st.d.exists("item_give_sounds"))
+{
+item_give_sounds=st.read_bool("item_give_sounds");
+}
 if(st.d.exists("loop_previews"))
 {
 loop_previews=st.read_bool("loop_previews");
@@ -268,6 +272,7 @@ st.add("mute_audio_unfocused",mute_audio_unfocused);
 st.add("mute_speech_unfocused",mute_speech_unfocused);
 st.add("hrtf",hrtf);
 st.add("behind_pitch",behind_pitch);
+st.add("item_give_sounds",item_give_sounds);
 st.add("loop_previews",loop_previews);
 st.add("variant_descriptions",variant_descriptions);
 st.add("auto_check_updates",auto_check_updates);

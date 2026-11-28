@@ -68,7 +68,7 @@ if (@target == null) return false;
 target.spent = true;
 stop_key(target);
 play_pickup_sound(keypool, get_pack_sound(key_sound_folder(target) + "*get*"), target.lane, target.x); // in its lane if it was taken from another (lane.nvgt)
-p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
+if (item_give_sounds) p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item(target.color, 1);
 focus_item(target.color); // the inventory moves onto what you just picked up (inventory.nvgt)
 stat_add("keys_picked_up");

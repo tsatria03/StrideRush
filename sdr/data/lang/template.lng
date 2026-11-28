@@ -692,6 +692,7 @@ Percentage. Example, 80 percent.=Percentage. Example, 80 percent.
 Amount. Example, 320 of 400 endurance.=Amount. Example, 320 of 400 endurance.
 Percentage and amount. Example, 80 percent, 320 of 400 endurance.=Percentage and amount. Example, 80 percent, 320 of 400 endurance.
 Enable behind pitch decrease=Enable behind pitch decrease
+Enable item giving sounds=Enable item giving sounds
 Ask to quit the run when pressing escape=Ask to quit the run when pressing escape
 Show session results after dying=Show session results after dying
 Show copy and export options after dying=Show copy and export options after dying

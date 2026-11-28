@@ -1,4 +1,5 @@
 New in 3.0.
+Added a setting in the game tab to turn off the sound you hear as an item goes into your inventory when you pick it up, which is on by default.
 Added buy 250, buy 500 and buy 1,000 options to everything in the player shop, after buy 100.
 Added a helpers tab to the player shop, after the character tab, which holds every helper, while the specials tab keeps the power crystal, safety net, slide and trampoline.
 Removed alt from the default crouch keys and left and right shift from the default lane change keys, so shift combinations such as shift plus tab no longer move you a lane.

@@ -63,7 +63,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Don't run or build the game](general/feedback_dont_run_or_build_the_game.md) — never launch or compile; the dev verifies
 - [Verify code while fixing](general/feedback_verify_code_while_fixing.md) — locate by symbol, confirm the finding, flag adjacent bugs
 - [No release records](general/feedback_no_release_records.md) — record version tags and their commits (2026-11-27), never GitHub releases; read git tags and build/version.txt for the current version
-- [Check git log](general/feedback_check_git_log_for_commits.md) — always check the latest commit before each section; the dev commits between turns; never commit unless asked
+- [Check git log](general/feedback_check_git_log_for_commits.md) — always check the latest commit before each section and at the start of every coding message (2026-11-28); the dev commits between turns; never commit unless asked
 - [Stage commits before big changes](general/feedback_stage_commits_before_big_changes.md) — flag a commit break point before a risky stage; before a big commit, say how many changes git shows and what they are
 - [CLAUDE.md length](general/feedback_claudemd_length.md) — lean dispatcher under 10,000 chars (40,000 until 2026-11-10); detail goes in aidocks
 - [Commit messages from the changelog](general/feedback_commit_messages_from_changelog.md) — the dev uses a feature's changelog entry as its commit message; suggest it when flagging a commit point; don't rewrite old commits unless asked

@@ -6,7 +6,7 @@ open something of their own (reset, the sound device, the voice, the key screens
 rebuilds the window afterwards, so the unsaved ticks are carried in locals across the rebuild. */
 void settingsmenu(bool ingame = false)
 {
-bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions, new_updates = auto_check_updates, new_death_results = show_death_results, new_death_copy = show_death_copy_export, new_practice_retry = show_practice_retry, new_vibration = joystick_vibration, new_mute_audio = mute_audio_unfocused, new_mute_speech = mute_speech_unfocused;
+bool new_ask = ask_quit_on_escape, new_wrap = menuwrap, new_letter = first_letter, new_position = speak_menu_position, new_scroll = side_scrolling, new_fade = fademode == 1, new_behind = behind_pitch, new_hrtf = hrtf, new_loop = loop_previews, new_variants = variant_descriptions, new_updates = auto_check_updates, new_death_results = show_death_results, new_death_copy = show_death_copy_export, new_practice_retry = show_practice_retry, new_vibration = joystick_vibration, new_mute_audio = mute_audio_unfocused, new_mute_speech = mute_speech_unfocused, new_gives = item_give_sounds;
 // The volume sliders, in dB from min_volume to 0, shown as 0 to 100 percent.
 int new_amb_vol = ambience_volume, new_step_vol = footstep_volume, new_mus_vol = music_volume, new_heart_vol = heartbeat_volume, new_menu_vol = menumusvolume, new_master_vol = master_volume;
 int new_health_fmt = health_format, new_shield_fmt = shield_format; // the readout formats (lives.nvgt's format_readout())
@@ -72,9 +72,11 @@ setform.add_list_item(shield_fmt_list, "Amount. Example, 320 of 400 endurance.")
 setform.add_list_item(shield_fmt_list, "Percentage and amount. Example, 80 percent, 320 of 400 endurance.");
 setform.set_list_position(shield_fmt_list, new_shield_fmt);
 setform.assign_to_tab(shield_fmt_list, tabs, tab_game);
-// After the lists: the "Enable" checkbox first (behind pitch decrease), then the Escape question.
+// After the lists: the two "Enable" checkboxes first (behind pitch decrease, item giving sounds), then the Escape question.
 int behind_box = setform.create_checkbox("Enable behind pitch decrease", new_behind);
 setform.assign_to_tab(behind_box, tabs, tab_game);
+int gives_box = setform.create_checkbox("Enable item giving sounds", new_gives);
+setform.assign_to_tab(gives_box, tabs, tab_game);
 int ask_box = setform.create_checkbox("Ask to quit the run when pressing escape", new_ask);
 setform.assign_to_tab(ask_box, tabs, tab_game);
 // The three death settings after the Escape question, all on by default.
@@ -152,6 +154,7 @@ if (fade_box != -1) new_fade = setform.is_checked(fade_box);
 if (mute_audio_box != -1) new_mute_audio = setform.is_checked(mute_audio_box);
 new_mute_speech = setform.is_checked(mute_speech_box);
 new_behind = setform.is_checked(behind_box);
+new_gives = setform.is_checked(gives_box);
 if (hrtf_box != -1) new_hrtf = setform.is_checked(hrtf_box);
 if (loop_box != -1) new_loop = setform.is_checked(loop_box);
 new_variants = setform.is_checked(variants_box);
@@ -204,6 +207,7 @@ shield_format = new_shield_fmt;
 apply_volume_settings(new_amb_vol, new_mus_vol, new_heart_vol, new_menu_vol, new_master_vol, new_step_vol); // volumes change only on save
 behind_pitch = new_behind;
 apply_behind_pitch();
+item_give_sounds = new_gives;
 if (!ingame)
 {
 hrtf = new_hrtf;
@@ -232,6 +236,7 @@ new_fade = fademode == 1;
 new_mute_audio = mute_audio_unfocused;
 new_mute_speech = mute_speech_unfocused;
 new_behind = behind_pitch;
+new_gives = item_give_sounds;
 new_hrtf = hrtf;
 new_loop = loop_previews;
 new_variants = variant_descriptions;
@@ -332,6 +337,7 @@ language = "fallback";
 load_language(language);
 behind_pitch = true;
 apply_behind_pitch();
+item_give_sounds = true;
 hrtf = true;
 sound_global_hrtf = hrtf;
 loop_previews = true;

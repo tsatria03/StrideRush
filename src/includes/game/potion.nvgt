@@ -56,7 +56,7 @@ if (@target == null) return false;
 target.spent = true;
 stop_potion(target);
 play_pickup_sound(potionpool, get_pack_sound(potion_folder + "*get*"), target.lane, target.x); // in its lane if it was taken from another (lane.nvgt)
-p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
+if (item_give_sounds) p.play_stationary(get_pack_sound("main/misc/player/*give*"), false);
 give_item("health_potion", 1);
 focus_item("health_potion"); // the inventory moves onto what you just picked up (inventory.nvgt)
 stat_add("health_potions_picked_up");
