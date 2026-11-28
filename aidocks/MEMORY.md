@@ -90,6 +90,7 @@ The [[name]] links across these memories resolve to aidocks/general/<name>.md or
 - [Presets need a driving need](general/feedback_presets_need_driving_need.md) — no presets or type abstractions without a real pain point
 
 ## Plans
+- [Shop descriptions plan](plans/project_shop_descriptions_plan.md) — SETTLED (2026-11-28, for 3.0, 2 sections, docks last): a "Description:" after "You can buy N." on every player shop line, after CookieCraze; all 25 descriptions approved; Q&A log
 - [Powerup helper plan](plans/project_powerup_helper_plan.md) — COMPLETE (2026-11-27, 3.0's seventh entry, 2 sections, 3,250): a helper collecting every powerup, ground or air, the master helpers doing it too; Q&A log
 - [Master helper deluxe plan](plans/project_master_helper_deluxe_plan.md) — COMPLETE (2026-11-27, 3.0's sixth entry, 2 sections, 20,000): the master helper's eight jobs with items collected in every lane, never moving you (began as the item helper deluxe); Q&A log
 - [Pack helpers plan](plans/project_pack_helpers_plan.md) — COMPLETE (2026-11-27, 3.0's fourth entry, 2 sections): an ammo pack helper (2,250) and a gold pack helper (2,750) in the player shop, the master helper taking both jobs; Q&A log

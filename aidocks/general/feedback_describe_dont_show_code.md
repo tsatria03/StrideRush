@@ -7,6 +7,8 @@ metadata:
 
 When a feature takes several sections, give the whole plan in one message: how many sections, and for each one the classes and functions it adds with a one-line explanation. Don't show the actual code. Then build one section per go-ahead, without recapping its plan.
 
+Docks are always their own last section, even for a one-section code change (dev, 2026-11-28: "docks is always the last section"). So the smallest plan is two sections: code, then docks with the changelog entry.
+
 **Why:** the dev reviews the real files after each section. Code pasted into chat is redundant and clutters the screen-reader read-through. Carried over from SimpleFighter.
 
 **How to apply:** save the plan in aidocks/plans/ ([[feedback_memory_folder_layout]]). Each section still waits for a go-ahead ([[feedback_confirm_before_implementing]]) and ends with [[feedback_list_modified_files]].
