@@ -6,11 +6,12 @@ field's switch, and the animal helper claps at an animal, as soon as a hand coul
 the floor helper opens a floor breaker the same way, then each climbs or repairs with alternating hands at the fastest
 pace the level allows, while your own hands do nothing there. The ammo pack helper opens the ammo packs you carry into
 the drawn gun whenever its reserve has room, and the gold pack helper opens every gold pack you carry, as the use key
-would (pack_helpers_update()). The master helper does all eight jobs while it's on, and each other helper keeps its own
-setting underneath. The master helper deluxe does the same eight, but picks up items in every lane, never moving you,
-and collects every powerup whichever way you reach it (powerup_check() in powerup.nvgt). */
-const string[] helper_items = {"ammo_pack_helper", "animal_helper", "door_helper", "floor_helper", "force_field_helper", "gold_pack_helper", "item_helper", "ladder_helper", "master_helper", "master_helper_deluxe"};
-bool[] helpers_on(10); // one per helper_items entry
+would (pack_helpers_update()). The master helper does all nine jobs while it's on, and each other helper keeps its own
+setting underneath. The powerup helper collects every powerup whichever way you reach it (powerup_check() in
+powerup.nvgt), and both master helpers do that too. The master helper deluxe does the same jobs as the master helper,
+but picks up items in every lane, never moving you. */
+const string[] helper_items = {"ammo_pack_helper", "animal_helper", "door_helper", "floor_helper", "force_field_helper", "gold_pack_helper", "item_helper", "ladder_helper", "master_helper", "master_helper_deluxe", "powerup_helper"};
+bool[] helpers_on(11); // one per helper_items entry
 
 bool is_helper_item(const string&in item)
 {

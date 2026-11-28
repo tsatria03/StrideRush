@@ -158,7 +158,7 @@ if (!pu.spent)
 {
 if (me.x == pu.x)
 {
-if (pu.flight != is_grounded() or helper_active("master_helper_deluxe")) collect_powerup(pu); // the master helper deluxe takes either kind either way (specials.nvgt)
+if (pu.flight != is_grounded() or helper_working("powerup_helper")) collect_powerup(pu); // the powerup helper, or either master helper, takes either kind either way (specials.nvgt)
 else break_powerup(pu); // jumped over a ground one, or ran under a flight one: it breaks
 }
 else if (me.x > pu.x) pu.spent = true;

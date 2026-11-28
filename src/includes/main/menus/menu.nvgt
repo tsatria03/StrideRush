@@ -419,7 +419,7 @@ else m.add_item("Endless run. Unlocked " + endless_lock_reason(), "endless");
 if (timed_mode_unlocked()) m.add_item("Timed run. This mode gives you a countdown clock: clean passes add time, hits take it away, and you win by reaching the finish line before your time runs out.", "timed");
 else m.add_item("Timed run. Unlocked " + timed_mode_lock_reason(), "timed");
 // Free run, open once insane is (freerun.nvgt).
-if (free_mode_unlocked()) m.add_item("Free run. This mode lets you set up a run however you like, choosing the obstacles, the speed and more, and change it at any time from the free run console, with no difficulty and nothing counted toward your progress.", "free");
+if (free_mode_unlocked()) m.add_item("Free run. This mode lets you set up a run however you like, choosing the obstacles, the speed and more, and change it at any time from the free run console, with nothing counted toward your progress.", "free");
 else m.add_item("Free run. Unlocked " + free_mode_lock_reason(), "free");
 // Practice run, last.
 m.add_item("Practice run. This mode lets you practice one kind of obstacle at a time, for as long as you like. If you die, you try again from just past what caught you, and nothing you do here counts toward your progress, apart from unlocking the next obstacle to practice.", "practice");
