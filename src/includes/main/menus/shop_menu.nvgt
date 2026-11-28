@@ -1,6 +1,6 @@
 /* The shop: slash or F8 during an endless, debug or free run pauses it and opens this menu, with the open and close sounds through
 dlgplay(), so enter skips either one. It lists its categories, each category its things with their prices, and each
-thing a pack menu: buy 1, 5, 10, 25, 50 or 100, then buy all you can afford. Its categories are tabs in one menu. An endless run spends your saved coins and a
+thing a pack menu: buy 1, 5, 10, 25, 50 or 100, then buy all you can afford. Its categories are tabs in one menu: character, helpers, items and specials. An endless run spends your saved coins and a
 debug or free run its own temporary ones (shown_coins()), and what you buy goes straight into your inventory, or for the character category, straight onto you. Its sounds go through temp, which keeps playing while the run is paused. */
 const string shop_sounds = "main/misc/store/";
 
@@ -10,9 +10,9 @@ bool shop_available()
 return stats_counting or (run_difficulty < 0 and !practice_run);
 }
 // The shop's tabs, in order, as shop_menu() adds them.
-const string[] shop_tab_names = {"character", "items", "specials"};
+const string[] shop_tab_names = {"character", "helpers", "items", "specials"};
 /* The run_input() key: pauses the run, runs the shop until you leave it, and resumes. The shop is one tabbed menu
-(form_menu's tabs): character, items and specials, each listing its things with their prices and how many you can afford.
+(form_menu's tabs): character, helpers, items and specials, each listing its things with their prices and how many you can afford.
 There are no back items; escape leaves. Leaving a pack menu rebuilds the tabs, so the counts are current, and brings you
 back to the same tab and line; each visit opens on the character tab. Every tab always lists what it sells, so you can see
 what you're saving for, and choosing something you can't afford gives an error. */
@@ -35,6 +35,7 @@ m.tab_caption = "Category";
 // Written out one by one, in order, so the language template finds the names.
 int[] tabs;
 tabs.insert_last(m.add_tab("character"));
+tabs.insert_last(m.add_tab("helpers"));
 tabs.insert_last(m.add_tab("items"));
 tabs.insert_last(m.add_tab("specials"));
 for (uint t = 0; t < tabs.length(); t++)
@@ -77,10 +78,12 @@ if (is_shield_stat(shop_character_ids[i]) and !has_a_shield()) continue;
 ids[0].insert_last(shop_character_ids[i]);
 prices[0].insert_last(shop_character_prices[i]);
 }
-ids[1] = shop_item_ids;
-prices[1] = shop_item_prices;
-ids[2] = shop_special_ids;
-prices[2] = shop_special_prices;
+ids[1] = shop_helper_ids;
+prices[1] = shop_helper_prices;
+ids[2] = shop_item_ids;
+prices[2] = shop_item_prices;
+ids[3] = shop_special_ids;
+prices[3] = shop_special_prices;
 }
 // What a tab's things are called in its errors.
 string shop_things(const string&in word)

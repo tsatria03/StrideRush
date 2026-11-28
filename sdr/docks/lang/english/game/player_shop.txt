@@ -1,6 +1,6 @@
 Player shop.
 
-The player shop is where you spend your gold coins during an endless or free run, on character upgrades that work at once, and on items and specials that go straight into your inventory.
+The player shop is where you spend your gold coins during an endless or free run, on character upgrades that work at once, and on helpers, items and specials that go straight into your inventory.
 
 Getting there.
 
@@ -9,7 +9,7 @@ Your gold coins come from gold packs, as described under gold packs, and are sav
 
 Buying something.
 
-The player shop opens on three tabs: character, items and specials, starting on character each time you enter. Move between them with the left and right arrows on the tab panel, which shift plus tab takes you to, or press control plus tab and control plus shift plus tab from anywhere. Each tab lists what it sells, with its price and how many you can afford, such as "health potion, costs 1,000 gold coins. You can buy 3."
+The player shop opens on four tabs: character, helpers, items and specials, starting on character each time you enter. Move between them with the left and right arrows on the tab panel, which shift plus tab takes you to, or press control plus tab and control plus shift plus tab from anywhere. Each tab lists what it sells, with its price and how many you can afford, such as "health potion, costs 1,000 gold coins. You can buy 3."
 Choosing one opens its own menu, which tells you how many gold coins you have. It offers packs of 1, 5, 10, 25, 50 and 100, each with its full price, then buy all, which buys as many as you can afford. Hold enter on a pack to keep buying it, one after another, at your keyboard's repeat rate. Press escape to go back to the tab you came from.
 What you buy goes straight into your inventory, or for character upgrades, works at once, and you stay on the same line so you can buy more. If you used buy all, or can't afford another, a message tells you what you bought and takes you back to the tab, on the same line.
 If you can't afford something, you'll hear an error and be told so, and nothing is bought. Every tab always lists what it sells, even with no gold coins, so you can see what you're saving for. Press escape on a tab to leave the player shop.
@@ -24,21 +24,9 @@ Max health: 50 gold coins. Adds 1 to your full and current health.
 Max shield strength: 25 gold coins. Adds 1 to your shield's full and current strength, and to every new shield, and is only listed while you have a steel shield.
 Shield defence: 200 gold coins. Takes 1 off every blow to your shield, and is only listed while you have a steel shield.
 
-Items.
+Helpers.
 
-Items work just as they do when you find them on the belt, as each one's document explains. Keys and gold packs aren't sold.
-
-Ammo pack: 500 gold coins.
-Health potion: 1,000 gold coins.
-Life capsule: 5,000 gold coins.
-Player teleporter: 1,500 gold coins.
-Steel shield: 2,000 gold coins.
-
-Specials.
-
-Specials are only ever bought, and never turn up on the belt. They wait in your inventory until you use them, and like everything in your inventory, they're gone when the run ends.
-
-Helpers do the work of your hands for you. Each helper, the power crystal and the safety net has its own document under game in the documentation menu, named after it, such as animal helpers.
+Helpers do the work of your hands for you, and each one has its own document under game in the documentation menu, named after it, such as animal helpers. Like specials, they're only ever bought, and they wait in your inventory until you switch them on.
 
 Ammo pack helper: 2,250 gold coins. Opens your ammo packs into the gun you're holding.
 Animal helper: 3,000 gold coins. Claps to scare away animals.
@@ -51,12 +39,29 @@ Ladder helper: 4,500 gold coins. Grabs and climbs real walls' ladders.
 Master helper: 15,000 gold coins. Does the jobs of all nine other helpers at once.
 Master helper deluxe: 20,000 gold coins. Does the master helper's jobs, picking up items in every lane.
 Powerup helper: 3,250 gold coins. Collects every powerup, on the ground or in the air.
+
+Items.
+
+Items work just as they do when you find them on the belt, as each one's document explains. Keys and gold packs aren't sold.
+
+Ammo pack: 500 gold coins.
+Health potion: 1,000 gold coins.
+Life capsule: 5,000 gold coins.
+Player teleporter: 1,500 gold coins.
+Steel shield: 2,000 gold coins.
+
+Specials.
+
+Specials are the other things that are only ever bought and never turn up on the belt: the power crystal, the safety net, the slide and the trampoline. They wait in your inventory until you use them, and like everything in your inventory, they're gone when the run ends.
+
+The power crystal and the safety net each have their own document under game in the documentation menu, named after them.
+
 Power crystal: 750 gold coins. Starts a random good powerup when you use it.
 Safety net: 10,000 gold coins. Saves you once from a hazard or floor breaker, by itself.
 Slide: 1,250 gold coins. Using one puts you on a slide straight away.
 Trampoline: 1,750 gold coins. Using one launches you on a good trampoline's flight from where you are.
 
-Using specials.
+Using helpers and specials.
 
 Using a helper switches it on or off, and your inventory tells you which, such as "item helper, on." A helper is never used up. It lasts for the rest of the run, even if you lose a life, and extra copies don't make it any stronger.
 A slide or a trampoline is used up when you use it. You can't use one while a slide or a trampoline flight is already carrying you, and it stays in your inventory for later.
