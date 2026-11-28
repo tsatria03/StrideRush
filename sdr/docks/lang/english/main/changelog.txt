@@ -1,4 +1,5 @@
 New in 3.0.
+Added an ammo pack helper and a gold pack helper to the player shop's specials, which open your ammo and gold packs for you while they're on, and the master helper now does both of their jobs too.
 Added ricochets for every weapon, so swinging at or shooting a real wall or real door now plays a ricochet off it instead of doing nothing, and a bullet stops there instead of flying through.
 Added fake doors and walls to practice runs, mixing fake doors and fake walls half and half, which you break with your weapons.
 Made it so locked difficulties and modes now say what unlocks them in the same way as the practice menu, such as "Unlocked after you get through a real door in 3 more easy runs.", instead of "after completing", which sounded like you had to reach the end of a run.

@@ -1,0 +1,24 @@
+Ammo pack helpers.
+
+An ammo pack helper opens your ammo packs for you, so your gun's reserve fills up without you having to find the pack in your inventory and use it. It's a special you buy in the player shop for 2,250 gold coins.
+
+How an ammo pack helper works.
+
+While it's on, whenever you carry ammo packs and the gun you're holding has room in its reserve, it opens them into that gun, one after another, just as using them yourself would. You hear the use sound once and the total, such as "You got 23 rounds of ammo."
+With a melee weapon drawn, or a gun whose reserve is already full, it waits quietly and keeps your packs, then opens them the moment you draw a gun with room. If the reserve fills up partway, the packs that didn't fit stay in your inventory.
+It waits while a door carries you, while you climb a ladder or repair a floor breaker, and on a slide, the same times you can't use your inventory yourself, and catches up as soon as you're free.
+
+Using one.
+
+Choose it in your inventory and use it to switch it on or off, and you'll hear its sound and be told which. Your inventory also says whether it's on, such as "ammo pack helper, on." You can still open ammo packs yourself while it's off.
+
+Ammo pack helpers in a run.
+
+An ammo pack helper is never used up. It lasts for the rest of the run, even if you lose a life, and extra copies don't make it any stronger. It's gone when the run ends, along with the rest of your inventory.
+Every ammo pack it opens counts in your statistics, just as if you'd opened it yourself.
+
+Ammo pack helpers in practice and free runs.
+
+Ammo pack helpers aren't available in practice or timed runs.
+
+In a free run, you can give, set or take ammo pack helpers from modify player inventory, so you can try one without spending anything.

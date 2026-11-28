@@ -40,13 +40,15 @@ Specials are only ever bought, and never turn up on the belt. They wait in your 
 
 Helpers do the work of your hands for you. Each helper, the power crystal and the safety net has its own document under game in the documentation menu, named after it, such as animal helpers.
 
+Ammo pack helper: 2,250 gold coins. Opens your ammo packs into the gun you're holding.
 Animal helper: 3,000 gold coins. Claps to scare away animals.
 Door helper: 3,500 gold coins. Unlocks and opens real doors.
 Floor helper: 5,500 gold coins. Opens and repairs floor breakers.
 Force field helper: 2,500 gold coins. Switches off force fields.
+Gold pack helper: 2,750 gold coins. Opens your gold packs.
 Item helper: 4,000 gold coins. Picks up items in your lane.
 Ladder helper: 4,500 gold coins. Grabs and climbs real walls' ladders.
-Master helper: 15,000 gold coins. Does the jobs of all six other helpers at once.
+Master helper: 15,000 gold coins. Does the jobs of all eight other helpers at once.
 Power crystal: 750 gold coins. Starts a random good powerup when you use it.
 Safety net: 10,000 gold coins. Saves you once from a hazard or floor breaker, by itself.
 Slide: 1,250 gold coins. Using one puts you on a slide straight away.

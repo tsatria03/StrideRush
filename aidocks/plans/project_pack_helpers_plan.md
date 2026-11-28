@@ -1,6 +1,6 @@
 ---
 name: project_pack_helpers_plan
-description: SETTLED (2026-11-27, for 3.0, 2 sections): two new player shop helpers, the ammo pack helper and the gold pack helper, opening packs for you, with the master helper taking both jobs; Q&A log
+description: COMPLETE (2026-11-27, 3.0's fourth entry, 2 sections): two new player shop helpers, the ammo pack helper and the gold pack helper, opening packs for you, with the master helper taking both jobs; Q&A log
 metadata:
   type: project
 ---
@@ -39,4 +39,4 @@ PLAN SETTLED (2026-11-27): ready to commit, then build Section 1 on the go-ahead
 
 1. The helpers (tests): specials.nvgt's helper_items gains "ammo_pack_helper" and "gold_pack_helper" (helpers_on 9), their jobs in helpers_update() through helper_working() (so the master helper does both), the ammo helper calling use_ammopacks() only while a gun is drawn with reserve room, the gold helper use_goldpacks(), each removing what opened as use_item() does (item_used()), and both waiting while the inventory is locked (a door's carry, a ladder, a repair, a slide); tuning.nvgt's shop_special_ids and shop_special_prices (ammo pack helper 2,250 first, gold pack helper 2,750 between the force field and item helpers); freebelt.nvgt's free_bought_ids; template.lng refreshed and english.lng synced.
    BUILT (2026-11-27, after 5d9ca58): helper_items in alphabetical order with helpers_on(9); pack_helpers_update() called from helpers_update() after the item helper (so a pack it picks up opens the same frame); tuning.nvgt's prices; freebelt.nvgt's three lists. Tests, in a debug run on all at 500: 1 (the specials order and prices) PASSED; 2 (the gold pack helper opens a picked-up pack, off keeps it) PASSED; 3 (the ammo pack helper waits with the fist drawn, opens on drawing the pistol, then on pickup) PASSED; 4 (the master helper doing both jobs) SKIPPED, the dev: "You can skip this test. I'll test it myself when I unlock free run", since it costs 15,000 and helper_working() is the same check every helper's job uses. Then the dev unlocked free run and ran it: "I unlocked free run, and tested it. passed". Test 4 PASSED. Section 1 COMPLETE.
-2. The docks (no tests): the changelog entry, ammo_pack_helpers.txt, gold_pack_helpers.txt, master_helpers.txt, player_shop.txt.
+2. The docks (no tests): the changelog entry, ammo_pack_helpers.txt, gold_pack_helpers.txt, master_helpers.txt, player_shop.txt. WRITTEN (2026-11-27, after f53591b): the changelog entry on top of 3.0's block; both new documents in item_helpers.txt's format (the gold one on keeping it off early in an endless run); master_helpers.txt (eight other helpers, 13,000 less, the two job lines, keys and both packs the only things it uses); player_shop.txt's list and the master line. PLAN COMPLETE.

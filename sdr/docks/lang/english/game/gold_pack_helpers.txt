@@ -1,0 +1,24 @@
+Gold pack helpers.
+
+A gold pack helper opens your gold packs for you, so your gold coins come in without you having to find the pack in your inventory and use it. It's a special you buy in the player shop for 2,750 gold coins.
+
+How a gold pack helper works.
+
+While it's on, it opens every gold pack you carry as soon as you have one, just as using them yourself would, and you hear the total, such as "You got 482 gold coins."
+It waits while a door carries you, while you climb a ladder or repair a floor breaker, and on a slide, the same times you can't use your inventory yourself, and catches up as soon as you're free.
+In an endless run, a gold pack pays less early on and more as the belt speeds up, as described under gold packs, and a gold pack helper opens each pack straight away. So you might keep it off at the start of a run, saving your packs for later, and switch it on once you're near your level's top speed.
+
+Using one.
+
+Choose it in your inventory and use it to switch it on or off, and you'll hear its sound and be told which. Your inventory also says whether it's on, such as "gold pack helper, on." Switching it on opens any gold packs you're already carrying.
+
+Gold pack helpers in a run.
+
+A gold pack helper is never used up. It lasts for the rest of the run, even if you lose a life, and extra copies don't make it any stronger. It's gone when the run ends, along with the rest of your inventory.
+Every gold pack it opens counts in your statistics, and its gold counts toward gold coins earned, just as if you'd opened it yourself.
+
+Gold pack helpers in practice and free runs.
+
+Gold pack helpers aren't available in practice or timed runs.
+
+In a free run, you can give, set or take gold pack helpers from modify player inventory, so you can try one without spending anything. A free run's gold packs pay their full amount at any speed.

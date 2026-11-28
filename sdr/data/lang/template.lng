@@ -1459,6 +1459,7 @@ Twenty seconds to start, and everything comes at once. Every clean pass counts.=
 // Document names
 achievements=achievements
 aircrafts=aircrafts
+ammo pack helpers=ammo pack helpers
 ammo packs=ammo packs
 animal helpers=animal helpers
 animals=animals
@@ -1474,6 +1475,7 @@ floor helpers=floor helpers
 force field helpers=force field helpers
 force fields=force fields
 free runs=free runs
+gold pack helpers=gold pack helpers
 gold packs=gold packs
 hazards=hazards
 health and lives=health and lives
