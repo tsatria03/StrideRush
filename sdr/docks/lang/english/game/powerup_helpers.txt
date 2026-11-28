@@ -1,0 +1,24 @@
+Powerup helpers.
+
+A powerup helper collects powerups for you, so you never have to time a jump for one or watch it break. It's a special you buy in the player shop for 3,250 gold coins.
+
+How a powerup helper works.
+
+While it's on, it collects every powerup you reach, a ground one even if you're in the air and a flight one even if you're on the ground, so none of them breaks. Powerups don't sit in a lane, so it works whichever lane you're in.
+It can't choose which powerups you get, so bad ones are collected too, just as they would be if you took them yourself. You can't tell a good powerup from a bad one until it's collected, as described under powerups.
+It keeps working during a trampoline flight and on a slide.
+
+Using one.
+
+Choose it in your inventory and use it to switch it on or off, and you'll hear its sound and be told which. Your inventory also says whether it's on, such as "powerup helper, on." Switch it off whenever you'd rather avoid a powerup, such as by jumping over a ground one.
+
+Powerup helpers in a run.
+
+A powerup helper is never used up. It lasts for the rest of the run, even if you lose a life, and extra copies don't make it any stronger. It's gone when the run ends, along with the rest of your inventory.
+Every powerup it collects counts in your statistics, just as if you'd collected it yourself.
+
+Powerup helpers in practice and free runs.
+
+Powerup helpers aren't available in practice or timed runs.
+
+In a free run, you can give, set or take powerup helpers from modify player inventory, so you can try one without spending anything.

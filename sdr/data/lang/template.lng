@@ -1495,6 +1495,7 @@ player shop=player shop
 player stats=player stats
 player teleporters=player teleporters
 power crystals=power crystals
+powerup helpers=powerup helpers
 practice runs=practice runs
 projectiles=projectiles
 real doors=real doors

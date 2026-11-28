@@ -1,6 +1,6 @@
 Master helpers deluxe.
 
-The master helper deluxe does every job the master helper does, and goes further: it picks up items in every lane, not just yours, and collects every powerup, whether you're on the ground or in the air. It still never moves you. It's a special you buy in the player shop for 20,000 gold coins, the most expensive thing in the shop.
+The master helper deluxe does every job the master helper does, and goes further: it picks up items in every lane, not just yours. It still never moves you. It's a special you buy in the player shop for 20,000 gold coins, the most expensive thing in the shop.
 
 What it covers.
 
@@ -13,8 +13,8 @@ Floor breakers: it opens the corridor as soon as a hand could. Once you reach th
 Force fields: it presses a field's switch as soon as the field comes within reach of your hands, and you can run straight through.
 Gold packs: it opens every gold pack you carry as soon as you have one.
 Items: it picks up every item in every lane as soon as a hand could reach it, keys and gold packs included. An item from another lane plays its pickup sound from that lane, so you hear where it came from, and then goes into your inventory as usual.
-Powerups: it collects every powerup you reach, a ground one even if you're in the air and a flight one even if you're on the ground, so none of them breaks. It can't choose which ones you get, so bad powerups are collected too, just as they would be if you took them yourself.
 Real walls: it grabs the ladder as soon as a hand could. Once you reach it, it climbs with alternating hands at the fastest pace your level allows.
+Powerups: as the powerup helper does, it collects every powerup you reach, a ground one even if you're in the air and a flight one even if you're on the ground, so none of them breaks. It can't choose which ones you get, so bad powerups are collected too, just as they would be if you took them yourself.
 
 The fastest pace for a rung or a floor piece depends on your level, as described under master helpers.
 You'll hear every job's normal sounds, just as if you'd done it yourself. Your own hands do nothing during a climb or a repair, so a stray press can't break its rhythm.

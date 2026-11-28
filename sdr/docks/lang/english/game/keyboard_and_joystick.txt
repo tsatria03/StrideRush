@@ -4,7 +4,7 @@ You can play Stride Rush with the keyboard, or with a joystick or game controlle
 
 Keyboard commands.
 
-These are the keys to start with, and you can change any of them in the keyboard tab of the settings menu, though not during a run. Because left and right shift also change lanes, any command that uses shift during a run, such as shift plus tab, moves you a lane as well. These are the following:
+These are the keys to start with, and you can change any of them in the keyboard tab of the settings menu, though not during a run. Most keys repeat while you hold them, at your keyboard's repeat rate, and you can change any key's trigger in the keyboard tab of the settings menu. Because left and right shift also change lanes, any command that uses shift during a run, such as shift plus tab, moves you a lane as well. These are the following:
 
 Space, up arrow or letter W: Jumps.
 Alt, down arrow or letter S: Crouches, to duck under projectiles and to fight insects.

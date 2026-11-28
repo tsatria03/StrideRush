@@ -4,7 +4,7 @@ Powerups are passive pickups that give you a good or bad effect for a while. Unl
 
 How a powerup works.
 
-A ground powerup sits on the belt, and you collect it by running onto it, so jumping over it skips it. A flight powerup floats above the belt, with its own sound repeating a little more slowly, and you collect it by being in the air as you reach it, so running underneath misses it. A powerup you miss either way breaks with a sound of its own, except while the master helper deluxe is on, which collects every powerup whichever way you reach it.
+A ground powerup sits on the belt, and you collect it by running onto it, so jumping over it skips it. A flight powerup floats above the belt, with its own sound repeating a little more slowly, and you collect it by being in the air as you reach it, so running underneath misses it. A powerup you miss either way breaks with a sound of its own, except while a powerup helper is on, which collects every powerup whichever way you reach it, as the master helper and the master helper deluxe also do.
 Powerups don't sit in a lane, so you can collect one whichever lane you're in.
 When you collect one, you hear it and its name is spoken. Its effect lasts 15 seconds, and you're told when it wears off.
 

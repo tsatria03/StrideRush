@@ -1,4 +1,6 @@
 New in 3.0.
+Made it so holding the jump, lane change, hand, ammo, reload, readout and speech buffer copy and export keys now repeats them at your keyboard's repeat rate.
+Added a powerup helper to the player shop's specials, which collects every powerup for you whether you're on the ground or in the air, and the master helper now does this too.
 Added a master helper deluxe to the player shop's specials, which does every job the master helper does, picks up items in every lane, not just yours, and collects every powerup whether you're on the ground or in the air, without ever moving you.
 Removed the limit of 20 lives from life capsules, so each one now always gives you 1 or 2 more lives, however many you already have.
 Added an ammo pack helper and a gold pack helper to the player shop's specials, which open your ammo and gold packs for you while they're on, and the master helper now does both of their jobs too.
