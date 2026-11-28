@@ -26,7 +26,7 @@ Max health: 50 gold coins.
 Max shield strength: 25 gold coins.
 Shield defence: 200 gold coins.
 
-Each one has the usual packs of 1, 5, 10, 25, 50, 100, 500 and 1,000, then buy all, and a pack of 5 gives you 5 points. There's no limit to how many points you can have.
+Each one has the usual packs of 1, 5, 10, 25, 50, 100, 250, 500 and 1,000, then buy all, and a pack of 5 gives you 5 points. There's no limit to how many points you can have.
 Your points work the moment you buy them, and they don't go into your inventory, so there's nothing to choose or use.
 Max shield strength and shield defence are only listed while you have a steel shield in your inventory, on or off. Any points you've already bought stay yours when a shield breaks, and work again on your next one.
 

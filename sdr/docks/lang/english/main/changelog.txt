@@ -1,5 +1,5 @@
 New in 3.0.
-Added buy 500 and buy 1,000 options to everything in the player shop, after buy 100.
+Added buy 250, buy 500 and buy 1,000 options to everything in the player shop, after buy 100.
 Added a helpers tab to the player shop, after the character tab, which holds every helper, while the specials tab keeps the power crystal, safety net, slide and trampoline.
 Removed alt from the default crouch keys and left and right shift from the default lane change keys, so shift combinations such as shift plus tab no longer move you a lane.
 Made it so H now tells you only your health and L your lives, while the lane you're in has moved to view session statuses in the pause menu, which now lists your health, lives and lane separately.

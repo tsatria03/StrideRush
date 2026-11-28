@@ -1,6 +1,6 @@
 /* The shop: slash or F8 during an endless, debug or free run pauses it and opens this menu, with the open and close sounds through
 dlgplay(), so enter skips either one. It lists its categories, each category its things with their prices, and each
-thing a pack menu: buy 1, 5, 10, 25, 50, 100, 500 or 1,000, then buy all you can afford. Its categories are tabs in one menu: character, helpers, items and specials. An endless run spends your saved coins and a
+thing a pack menu: buy 1, 5, 10, 25, 50, 100, 250, 500 or 1,000, then buy all you can afford. Its categories are tabs in one menu: character, helpers, items and specials. An endless run spends your saved coins and a
 debug or free run its own temporary ones (shown_coins()), and what you buy goes straight into your inventory, or for the character category, straight onto you. Its sounds go through temp, which keeps playing while the run is paused. */
 const string shop_sounds = "main/misc/store/";
 
